@@ -44,9 +44,11 @@ export function Layout({ children }: { children: React.ReactNode }) {
       <header className="sticky top-0 z-50 border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/80">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 flex items-center justify-between h-14">
           <Link href="/" className="flex items-center gap-2 group" data-testid="link-home-logo">
-            <div className="w-7 h-7 rounded-md bg-primary flex items-center justify-center text-primary-foreground text-xs font-bold font-mono shrink-0">
-              B
-            </div>
+            <img
+              src="/icon.png"
+              alt="BPMN for Mermaid icon"
+              className="w-7 h-7 rounded-md shrink-0 object-cover"
+            />
             <span className="font-semibold text-sm text-foreground hidden sm:inline">
               BPMN for Mermaid
             </span>

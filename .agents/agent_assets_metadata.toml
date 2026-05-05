@@ -1,0 +1,8 @@
+uploads = []
+outputs = []
+
+[[generated]]
+id = "ioiDHK8R5ARFpGRNVzbl0"
+uri = "file://artifacts/mermaid-diagram-bpmn/src/assets/icon.png"
+type = "image"
+title = "generated_image"

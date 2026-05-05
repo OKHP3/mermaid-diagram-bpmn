@@ -25,9 +25,17 @@ export default function Home() {
             Concept capture — plugin prototype
           </div>
 
-          <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight text-foreground leading-tight" data-testid="heading-hero">
-            BPMN for Mermaid
-          </h1>
+          <div className="flex items-center gap-5 mb-2">
+            <img
+              src="/icon.png"
+              alt="BPMN for Mermaid"
+              className="w-16 h-16 rounded-xl object-cover shrink-0 ring-1 ring-border shadow-sm"
+              data-testid="img-hero-icon"
+            />
+            <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight text-foreground leading-tight" data-testid="heading-hero">
+              BPMN for Mermaid
+            </h1>
+          </div>
 
           <p className="mt-4 text-xl text-primary font-mono font-medium" data-testid="text-dsl-keyword">
             bpmn-beta
