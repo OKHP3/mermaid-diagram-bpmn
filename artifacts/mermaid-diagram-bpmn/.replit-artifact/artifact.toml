@@ -1,0 +1,31 @@
+kind = "web"
+previewPath = "/"
+title = "BPMN for Mermaid"
+version = "1.0.0"
+id = "artifacts/mermaid-diagram-bpmn"
+router = "path"
+
+[[integratedSkills]]
+name = "react-vite"
+version = "1.0.0"
+
+[[services]]
+name = "web"
+paths = [ "/" ]
+localPort = 20820
+
+[services.development]
+run = "pnpm --filter @workspace/mermaid-diagram-bpmn run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/mermaid-diagram-bpmn", "run", "build" ]
+publicDir = "artifacts/mermaid-diagram-bpmn/dist/public"
+serve = "static"
+
+[[services.production.rewrites]]
+from = "/*"
+to = "/index.html"
+
+[services.env]
+PORT = "20820"
+BASE_PATH = "/"
