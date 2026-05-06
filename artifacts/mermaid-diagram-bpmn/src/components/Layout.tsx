@@ -54,8 +54,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
             <img
               src={`${import.meta.env.BASE_URL}icon.png`}
               alt="BPMN for Mermaid icon"
-              className="w-7 h-7 rounded-md object-cover ring-1"
-              style={{ ringColor: "rgba(255,255,255,0.12)" }}
+              className="w-7 h-7 rounded-md object-cover ring-1 ring-white/10"
             />
             <span
               className="font-semibold text-sm hidden sm:inline"

@@ -1,0 +1,17 @@
+bpmn-beta
+accTitle: Parallel Task Processing
+accDescr: Work is split in parallel across two service tasks and then joined before completion.
+
+start s1 "Trigger"
+and g1 "Split"
+task:service t1 "Run Background Job"
+task:service t2 "Send Notification"
+and g2 "Join"
+end e1 "Complete"
+
+s1 --> g1
+g1 --> t1
+g1 --> t2
+t1 --> g2
+t2 --> g2
+g2 --> e1

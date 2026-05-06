@@ -1,25 +1,29 @@
 const MVP_SCOPE = [
   "Start events",
   "End events",
+  "Generic tasks",
   "User tasks",
   "Service tasks",
   "Script tasks",
+  "Receive tasks",
+  "Send tasks",
   "Exclusive gateways (XOR)",
   "Parallel gateways (AND)",
   "Inclusive gateways (OR)",
   "Sequence flows",
   "Conditional sequence flow labels",
   "Default sequence flow marker",
-  "Accessibility title (accTitle)",
-  "Accessibility description (accDescr)",
-  "Theme-aware SVG styling",
-  "Auto left-to-right layout",
-];
-
-const DEFERRED = [
   "Pools",
   "Lanes (one-level)",
   "Message flows",
+  "Accessibility title (accTitle)",
+  "Accessibility description (accDescr)",
+  "Theme-aware SVG styling via getStyles()",
+  "Auto left-to-right layout",
+  "Pool/lane-aware layout",
+];
+
+const DEFERRED = [
   "Intermediate events",
   "Timer / message / error markers",
   "Call activities",
@@ -57,7 +61,7 @@ const CONTRIBUTION_STEPS = [
   {
     n: "03",
     title: "Build the external plugin",
-    body: "Implement mermaid-diagram-bpmn as a registerDiagram() plugin. Parser, renderer, layout, shape library, styles, accessibility.",
+    body: "Implement mermaid-diagram-bpmn as a registerExternalDiagrams() plugin. Parser, renderer, layout, shape library, styles, accessibility.",
   },
   {
     n: "04",
@@ -104,7 +108,7 @@ export default function Roadmap() {
           </div>
           <ul className="divide-y divide-border">
             {MVP_SCOPE.map(item => (
-              <li key={item} className="flex items-center gap-3 px-4 py-2.5 bg-card" data-testid={`item-scope-${item.toLowerCase().replace(/\s+/g, '-')}`}>
+              <li key={item} className="flex items-center gap-3 px-4 py-2.5 bg-card" data-testid={`item-scope-${item.toLowerCase().replace(/[\s/()]+/g, '-')}`}>
                 <span className="w-3.5 h-3.5 rounded-full bg-primary/20 border border-primary/40 flex-shrink-0 flex items-center justify-center">
                   <span className="w-1.5 h-1.5 rounded-full bg-primary" />
                 </span>
@@ -121,7 +125,7 @@ export default function Roadmap() {
           </div>
           <ul className="divide-y divide-border">
             {DEFERRED.map(item => (
-              <li key={item} className="flex items-center gap-3 px-4 py-2.5 bg-card" data-testid={`item-deferred-${item.toLowerCase().replace(/\s+/g, '-')}`}>
+              <li key={item} className="flex items-center gap-3 px-4 py-2.5 bg-card" data-testid={`item-deferred-${item.toLowerCase().replace(/[\s/()]+/g, '-')}`}>
                 <span className="w-3.5 h-3.5 rounded-full border border-border flex-shrink-0" />
                 <span className="text-xs text-muted-foreground">{item}</span>
               </li>
@@ -141,7 +145,7 @@ export default function Roadmap() {
         </p>
         <p className="text-xs text-muted-foreground leading-relaxed mt-2">
           Features are deferred, not abandoned. Each item in the deferred list has a natural implementation
-          order. Pools and lanes come first after the base shapes stabilize. Message flows follow pools.
+          order. Intermediate events and subprocesses come next after the base pool/lane/flow set stabilizes.
           Execution semantics are a separate effort and may never be in scope for a Mermaid diagram type.
         </p>
       </div>

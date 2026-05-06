@@ -1,0 +1,29 @@
+bpmn-beta
+accTitle: Purchase Order Collaboration
+accDescr: Buyer and supplier pools exchange a purchase order via cross-pool message flow.
+
+pool buyer "Buyer" {
+  lane req "Requester" {
+    start s1 "Need Identified"
+    task:user t1 "Submit PO Request"
+  }
+  lane mgr "Manager" {
+    task:user t2 "Review Request"
+    xor g1 "Approved?"
+    end e2 "Rejected"
+  }
+  s1 --> t1
+  t1 --> t2
+  t2 --> g1
+  g1 --> e2: "no"
+}
+
+pool supplier "Supplier" {
+  task:receive t3 "Receive PO"
+  task t4 "Acknowledge PO"
+  end e1 "PO Acknowledged"
+  t3 --> t4
+  t4 --> e1
+}
+
+g1 ~~> t3

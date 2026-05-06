@@ -2,12 +2,12 @@ import { useState } from "react";
 import { BpmnRenderer } from "@/lib/bpmn-renderer";
 import { BPMN_EXAMPLES, DEFAULT_EXAMPLE_ID } from "@/lib/bpmn-examples";
 import { AlertCircle } from "lucide-react";
-import { parseBpmn } from "@/lib/bpmn-parser";
+import { parse } from "@/lib/bpmn-parser";
 
 function getParseError(source: string): string | null {
   try {
-    const g = parseBpmn(source);
-    if (g.nodes.length === 0 && source.trim().length > 10) {
+    const db = parse(source);
+    if (db.getNodes().length === 0 && source.trim().length > 10) {
       return "No nodes found. Check your syntax — each node must be on its own line.";
     }
     return null;
@@ -75,7 +75,7 @@ export default function Playground() {
       {/* Two-panel workspace */}
       <div className="flex-1 flex flex-col md:flex-row min-h-0 max-w-7xl mx-auto w-full">
 
-        {/* Source panel — forge terminal dark */}
+        {/* Source panel */}
         <div
           className="flex flex-col md:w-1/2 border-b md:border-b-0 md:border-r min-h-[280px] md:min-h-0"
           style={{ borderColor: "#2a3124" }}
@@ -113,7 +113,7 @@ export default function Playground() {
           )}
         </div>
 
-        {/* Preview panel — warm paper */}
+        {/* Preview panel */}
         <div className="flex flex-col md:w-1/2 min-h-[320px] md:min-h-0 bg-card">
           <div className="flex items-center gap-2 px-4 py-2 border-b border-border bg-muted/30">
             <span className="forge-eyebrow">Diagram preview</span>
