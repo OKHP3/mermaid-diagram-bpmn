@@ -4,20 +4,9 @@ import tailwindcss from "@tailwindcss/vite";
 import path from "path";
 import runtimeErrorOverlay from "@replit/vite-plugin-runtime-error-modal";
 
-export default defineConfig(async ({ command }) => {
-  const isBuild = command === "build";
-
-  // PORT is only required for dev / preview; not needed during production builds.
-  const rawPort = process.env.PORT;
-  if (!isBuild && !rawPort) {
-    throw new Error(
-      "PORT environment variable is required but was not provided.",
-    );
-  }
-  const port = Number(rawPort || "3000");
-  if (!isBuild && (Number.isNaN(port) || port <= 0)) {
-    throw new Error(`Invalid PORT value: "${rawPort}"`);
-  }
+export default defineConfig(async ({ command: _command }) => {
+  // PORT is only used for the dev server; fall back to 3000 if not set (e.g. during CI builds).
+  const port = Number(process.env.PORT || "3000");
 
   // BASE_PATH defaults to "/" — GitHub Pages CI sets it to "/mermaid-diagram-bpmn/"
   const basePath = process.env.BASE_PATH || "/";
