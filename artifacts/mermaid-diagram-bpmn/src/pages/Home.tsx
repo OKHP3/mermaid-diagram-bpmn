@@ -30,7 +30,7 @@ export default function Home() {
           {/* Title lockup */}
           <div className="flex items-center gap-5 mb-1">
             <img
-              src="/icon.png"
+              src={`${import.meta.env.BASE_URL}icon.png`}
               alt="BPMN for Mermaid"
               className="w-16 h-16 rounded-xl object-cover shrink-0 shadow-md"
               data-testid="img-hero-icon"

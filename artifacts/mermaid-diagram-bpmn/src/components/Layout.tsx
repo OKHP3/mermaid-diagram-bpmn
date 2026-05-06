@@ -52,7 +52,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2.5 shrink-0" data-testid="link-home-logo">
             <img
-              src="/icon.png"
+              src={`${import.meta.env.BASE_URL}icon.png`}
               alt="BPMN for Mermaid icon"
               className="w-7 h-7 rounded-md object-cover ring-1"
               style={{ ringColor: "rgba(255,255,255,0.12)" }}
