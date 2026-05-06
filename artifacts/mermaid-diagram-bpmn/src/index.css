@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,700;0,9..144,800;1,9..144,700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
 @import "tailwindcss";
 @import "tw-animate-css";
 @plugin "@tailwindcss/typography";
@@ -18,30 +18,26 @@
 
   --color-popover: hsl(var(--popover));
   --color-popover-foreground: hsl(var(--popover-foreground));
-  --color-popover-border: hsl(var(--popover-border));
 
   --color-primary: hsl(var(--primary));
   --color-primary-foreground: hsl(var(--primary-foreground));
-  --color-primary-border: var(--primary-border);
 
   --color-secondary: hsl(var(--secondary));
   --color-secondary-foreground: hsl(var(--secondary-foreground));
-  --color-secondary-border: var(--secondary-border);
 
   --color-muted: hsl(var(--muted));
   --color-muted-foreground: hsl(var(--muted-foreground));
-  --color-muted-border: var(--muted-border);
 
   --color-accent: hsl(var(--accent));
   --color-accent-foreground: hsl(var(--accent-foreground));
-  --color-accent-border: var(--accent-border);
+  --color-accent-border: hsl(var(--accent-border));
 
   --color-destructive: hsl(var(--destructive));
   --color-destructive-foreground: hsl(var(--destructive-foreground));
-  --color-destructive-border: var(--destructive-border);
 
   --font-sans: var(--app-font-sans);
   --font-mono: var(--app-font-mono);
+  --font-display: var(--app-font-display);
 
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
@@ -51,98 +47,138 @@
 
 :root {
   --app-font-sans: 'Inter', system-ui, sans-serif;
+  --app-font-display: 'Fraunces', Georgia, serif;
   --app-font-mono: 'JetBrains Mono', 'Menlo', monospace;
   --radius: 0.5rem;
 
-  --background: 210 40% 98%;
-  --foreground: 222 47% 11%;
+  /* OverKill Hill — always-dark header, never theme-responsive */
+  --okh-header-bg: #1c2118;
+  --okh-header-text: #e6dfc9;
+  --okh-header-muted: rgba(230, 223, 201, 0.52);
+  --okh-header-border: #2a3124;
+  --okh-header-active: #c24d1e;
+  --okh-header-hover: rgba(255, 255, 255, 0.07);
 
-  --card: 0 0% 100%;
-  --card-foreground: 222 47% 11%;
-  --card-border: 214 32% 91%;
+  /* Light mode — OKH warm paper palette */
+  --background: 40 24% 92%;        /* warm field  #f0ece4 */
+  --foreground: 28 45% 8%;         /* espresso    #1d1108 */
 
-  --popover: 0 0% 100%;
-  --popover-foreground: 222 47% 11%;
-  --popover-border: 214 32% 91%;
+  --card: 42 50% 97%;               /* warm paper  #faf7f1 */
+  --card-foreground: 28 45% 8%;
+  --card-border: 38 28% 80%;
 
-  --primary: 173 80% 36%;
+  --popover: 42 50% 97%;
+  --popover-foreground: 28 45% 8%;
+
+  --primary: 19 73% 44%;            /* rust-orange #c24d1e */
   --primary-foreground: 0 0% 100%;
-  --primary-border: hsl(173 80% 30%);
 
-  --secondary: 210 40% 94%;
-  --secondary-foreground: 222 47% 11%;
-  --secondary-border: hsl(210 40% 88%);
+  --secondary: 38 22% 88%;
+  --secondary-foreground: 28 45% 8%;
 
-  --muted: 210 40% 94%;
-  --muted-foreground: 215 16% 47%;
-  --muted-border: hsl(210 40% 88%);
+  --muted: 38 20% 89%;
+  --muted-foreground: 33 18% 44%;   /* warm gray */
 
-  --accent: 173 60% 92%;
-  --accent-foreground: 173 80% 25%;
-  --accent-border: hsl(173 60% 80%);
+  --accent: 36 70% 91%;             /* amber tint  #f7ecce */
+  --accent-foreground: 19 60% 22%;  /* dark rust */
+  --accent-border: 36 50% 78%;
 
-  --destructive: 0 84% 60%;
+  --destructive: 0 78% 55%;
   --destructive-foreground: 0 0% 100%;
-  --destructive-border: hsl(0 84% 50%);
 
-  --border: 214 32% 91%;
-  --input: 214 32% 91%;
-  --ring: 173 80% 36%;
+  --border: 38 28% 80%;
+  --input: 38 28% 80%;
+  --ring: 19 73% 44%;
 }
 
 .dark {
-  --background: 222 47% 8%;
-  --foreground: 210 40% 95%;
+  --background: 88 18% 9%;
+  --foreground: 38 28% 88%;
 
-  --card: 222 47% 11%;
-  --card-foreground: 210 40% 95%;
-  --card-border: 217 32% 18%;
+  --card: 88 15% 13%;
+  --card-foreground: 38 28% 88%;
+  --card-border: 88 12% 20%;
 
-  --popover: 222 47% 11%;
-  --popover-foreground: 210 40% 95%;
-  --popover-border: 217 32% 18%;
+  --popover: 88 15% 13%;
+  --popover-foreground: 38 28% 88%;
 
-  --primary: 173 72% 44%;
-  --primary-foreground: 222 47% 5%;
-  --primary-border: hsl(173 72% 36%);
+  --primary: 19 73% 58%;
+  --primary-foreground: 0 0% 100%;
 
-  --secondary: 217 32% 17%;
-  --secondary-foreground: 210 40% 95%;
-  --secondary-border: hsl(217 32% 22%);
+  --secondary: 88 12% 18%;
+  --secondary-foreground: 38 28% 88%;
 
-  --muted: 217 32% 17%;
-  --muted-foreground: 215 20% 60%;
-  --muted-border: hsl(217 32% 22%);
+  --muted: 88 12% 18%;
+  --muted-foreground: 38 18% 56%;
 
-  --accent: 173 30% 20%;
-  --accent-foreground: 173 72% 60%;
-  --accent-border: hsl(173 30% 28%);
+  --accent: 19 28% 22%;
+  --accent-foreground: 19 73% 66%;
+  --accent-border: 19 28% 32%;
 
-  --destructive: 0 62% 40%;
-  --destructive-foreground: 210 40% 95%;
-  --destructive-border: hsl(0 62% 30%);
+  --destructive: 0 62% 45%;
+  --destructive-foreground: 0 0% 100%;
 
-  --border: 217 32% 18%;
-  --input: 217 32% 18%;
-  --ring: 173 72% 44%;
+  --border: 88 12% 20%;
+  --input: 88 12% 20%;
+  --ring: 19 73% 58%;
 }
 
 @layer base {
-  * {
-    @apply border-border;
-  }
-  body {
-    @apply font-sans antialiased bg-background text-foreground;
-  }
-  code, pre, textarea.code-area {
-    font-family: var(--app-font-mono);
-  }
+  * { @apply border-border; }
+  body { @apply font-sans antialiased bg-background text-foreground; }
+  h1, h2 { font-family: var(--app-font-display); }
+  code, pre, textarea.code-area { font-family: var(--app-font-mono); }
 }
 
 @layer utilities {
-  .diagram-grid {
+  /* Blueprint grid — applied to page body area */
+  .forge-grid {
     background-image:
-      radial-gradient(circle, hsl(var(--border)) 1px, transparent 1px);
+      linear-gradient(hsla(30, 30%, 38%, 0.055) 1px, transparent 1px),
+      linear-gradient(90deg, hsla(30, 30%, 38%, 0.055) 1px, transparent 1px);
+    background-size: 32px 32px;
+  }
+  .dark .forge-grid {
+    background-image:
+      linear-gradient(hsla(90, 30%, 60%, 0.065) 1px, transparent 1px),
+      linear-gradient(90deg, hsla(90, 30%, 60%, 0.065) 1px, transparent 1px);
+    background-size: 32px 32px;
+  }
+
+  /* Dot grid for diagram preview panel */
+  .diagram-grid {
+    background-image: radial-gradient(circle, hsl(var(--border)) 1px, transparent 1px);
     background-size: 24px 24px;
+  }
+
+  /* Always-dark forge terminal code editor */
+  .code-panel {
+    background-color: #141a11;
+    color: #d4ccb2;
+  }
+  .code-panel::placeholder { color: rgba(212, 204, 178, 0.3); }
+
+  .code-panel-tab {
+    background-color: #1c2118;
+    border-color: #2a3124 !important;
+    color: rgba(230, 223, 201, 0.55);
+  }
+
+  /* OKH rust pill button variant */
+  .btn-forge {
+    @apply inline-flex items-center gap-2 px-6 py-2.5 rounded-full bg-primary text-primary-foreground text-sm font-semibold hover:opacity-90 active:scale-95 transition-all;
+  }
+  .btn-forge-outline {
+    @apply inline-flex items-center gap-2 px-6 py-2.5 rounded-full border-2 border-foreground/20 bg-card text-foreground text-sm font-semibold hover:border-primary/50 hover:text-primary transition-colors;
+  }
+
+  /* Forge eyebrow label */
+  .forge-eyebrow {
+    @apply text-xs font-mono font-semibold tracking-[0.2em] uppercase text-muted-foreground;
+  }
+
+  /* Rust accent left border for callouts */
+  .forge-callout {
+    @apply border-l-4 border-primary pl-5 py-1;
   }
 }

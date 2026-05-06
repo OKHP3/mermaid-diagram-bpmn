@@ -25,10 +25,7 @@ export default function Playground() {
 
   function selectExample(id: string) {
     const ex = BPMN_EXAMPLES.find(e => e.id === id);
-    if (ex) {
-      setSource(ex.source);
-      setActiveExample(id);
-    }
+    if (ex) { setSource(ex.source); setActiveExample(id); }
   }
 
   function handleSourceChange(val: string) {
@@ -38,31 +35,34 @@ export default function Playground() {
 
   return (
     <div className="flex flex-col flex-1 h-full">
-      {/* Header */}
-      <div className="border-b border-border px-4 sm:px-6 py-4">
+
+      {/* Sub-header */}
+      <div className="border-b border-border px-4 sm:px-6 py-4 bg-card/70">
         <div className="max-w-7xl mx-auto">
-          <h1 className="text-lg font-semibold text-foreground" data-testid="heading-playground">
-            bpmn-beta Playground
-          </h1>
+          <div className="flex items-baseline gap-3">
+            <h1 className="text-lg font-bold text-foreground" data-testid="heading-playground">
+              bpmn-beta Playground
+            </h1>
+            <span className="forge-eyebrow">Proof-of-concept · No bpmn-js</span>
+          </div>
           <p className="text-xs text-muted-foreground mt-0.5">
-            Write bpmn-beta DSL source on the left. The diagram renders live on the right.
-            This is a minimal proof-of-concept renderer — no external BPMN library.
+            Write bpmn-beta DSL source on the left — the diagram renders live on the right.
           </p>
         </div>
       </div>
 
       {/* Example selector */}
-      <div className="border-b border-border px-4 sm:px-6 py-2 bg-muted/30">
+      <div className="border-b border-border px-4 sm:px-6 py-2.5 bg-muted/30">
         <div className="max-w-7xl mx-auto flex flex-wrap gap-2 items-center">
-          <span className="text-xs text-muted-foreground font-mono mr-1 shrink-0">Examples:</span>
+          <span className="forge-eyebrow mr-1 shrink-0">Examples</span>
           {BPMN_EXAMPLES.map(ex => (
             <button
               key={ex.id}
               onClick={() => selectExample(ex.id)}
-              className={`px-3 py-1 rounded-md text-xs font-medium transition-colors ${
+              className={`px-3 py-1 rounded-full text-xs font-medium transition-all ${
                 activeExample === ex.id
-                  ? "bg-primary text-primary-foreground"
-                  : "border border-border bg-card text-muted-foreground hover:text-foreground hover:border-primary/40"
+                  ? "bg-primary text-primary-foreground shadow-sm"
+                  : "border border-border bg-card text-muted-foreground hover:text-foreground hover:border-primary/40 hover:shadow-sm"
               }`}
               data-testid={`button-example-${ex.id}`}
             >
@@ -72,21 +72,30 @@ export default function Playground() {
         </div>
       </div>
 
-      {/* Panels */}
+      {/* Two-panel workspace */}
       <div className="flex-1 flex flex-col md:flex-row min-h-0 max-w-7xl mx-auto w-full">
-        {/* Source panel */}
-        <div className="flex flex-col md:w-1/2 border-b md:border-b-0 md:border-r border-border min-h-[280px] md:min-h-0">
-          <div className="flex items-center justify-between px-4 py-2 border-b border-border bg-muted/30">
-            <span className="text-xs font-mono text-muted-foreground">source.bpmn-beta</span>
+
+        {/* Source panel — forge terminal dark */}
+        <div
+          className="flex flex-col md:w-1/2 border-b md:border-b-0 md:border-r min-h-[280px] md:min-h-0"
+          style={{ borderColor: "#2a3124" }}
+        >
+          <div
+            className="code-panel-tab flex items-center justify-between px-4 py-2 border-b"
+            style={{ borderColor: "#2a3124" }}
+          >
+            <span className="text-xs font-mono" style={{ color: "rgba(230, 223, 201, 0.5)" }}>
+              source.bpmn-beta
+            </span>
             {parseError && (
-              <span className="flex items-center gap-1 text-xs text-destructive" data-testid="text-parse-error">
+              <span className="flex items-center gap-1 text-xs" style={{ color: "#e87c5c" }} data-testid="text-parse-error">
                 <AlertCircle size={11} />
                 Parse error
               </span>
             )}
           </div>
           <textarea
-            className="flex-1 p-4 bg-card text-foreground font-mono text-xs resize-none focus:outline-none leading-relaxed code-area"
+            className="flex-1 p-4 text-sm resize-none focus:outline-none leading-relaxed code-area code-panel"
             value={source}
             onChange={e => handleSourceChange(e.target.value)}
             spellCheck={false}
@@ -94,17 +103,21 @@ export default function Playground() {
             data-testid="textarea-bpmn-source"
           />
           {parseError && (
-            <div className="px-4 py-2 border-t border-destructive/30 bg-destructive/5 text-xs text-destructive font-mono" data-testid="text-parse-error-detail">
+            <div
+              className="px-4 py-2 border-t text-xs font-mono"
+              style={{ borderColor: "#4a2018", background: "rgba(194,77,30,0.12)", color: "#e87c5c" }}
+              data-testid="text-parse-error-detail"
+            >
               {parseError}
             </div>
           )}
         </div>
 
-        {/* Renderer panel */}
-        <div className="flex flex-col md:w-1/2 min-h-[320px] md:min-h-0">
+        {/* Preview panel — warm paper */}
+        <div className="flex flex-col md:w-1/2 min-h-[320px] md:min-h-0 bg-card">
           <div className="flex items-center gap-2 px-4 py-2 border-b border-border bg-muted/30">
-            <span className="text-xs font-mono text-muted-foreground">diagram preview</span>
-            <span className="ml-auto text-xs text-muted-foreground/60">proof-of-concept renderer · no bpmn-js</span>
+            <span className="forge-eyebrow">Diagram preview</span>
+            <span className="ml-auto text-xs text-muted-foreground/50 font-mono">bpmn-beta renderer</span>
           </div>
           <div className="flex-1 diagram-grid overflow-hidden" data-testid="div-diagram-preview">
             <BpmnRenderer source={source} />
@@ -114,10 +127,10 @@ export default function Playground() {
 
       {/* Footer note */}
       {activeExample && (
-        <div className="border-t border-border px-4 sm:px-6 py-3 bg-muted/30">
+        <div className="border-t border-border px-4 sm:px-6 py-3 bg-card/70">
           <div className="max-w-7xl mx-auto">
             <p className="text-xs text-muted-foreground">
-              <span className="font-medium text-foreground">
+              <span className="font-semibold text-foreground">
                 {BPMN_EXAMPLES.find(e => e.id === activeExample)?.name}
               </span>
               {" — "}
