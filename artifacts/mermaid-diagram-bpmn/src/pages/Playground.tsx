@@ -53,17 +53,13 @@ export default function Playground() {
 
       {/* Example selector */}
       <div className="border-b border-border px-4 sm:px-6 py-2.5 bg-muted/30">
-        <div className="max-w-7xl mx-auto flex flex-wrap gap-2 items-center">
+        <div className="max-w-7xl mx-auto forge-tabs">
           <span className="forge-eyebrow mr-1 shrink-0">Examples</span>
           {BPMN_EXAMPLES.map(ex => (
             <button
               key={ex.id}
               onClick={() => selectExample(ex.id)}
-              className={`px-3 py-1 rounded-full text-xs font-medium transition-all ${
-                activeExample === ex.id
-                  ? "bg-primary text-primary-foreground shadow-sm"
-                  : "border border-border bg-card text-muted-foreground hover:text-foreground hover:border-primary/40 hover:shadow-sm"
-              }`}
+              className={activeExample === ex.id ? "forge-tab-active" : "forge-tab"}
               data-testid={`button-example-${ex.id}`}
             >
               {ex.name}
@@ -80,10 +76,7 @@ export default function Playground() {
           className="flex flex-col md:w-1/2 border-b md:border-b-0 md:border-r min-h-[280px] md:min-h-0"
           style={{ borderColor: "#2a3124" }}
         >
-          <div
-            className="code-panel-tab flex items-center justify-between px-4 py-2 border-b"
-            style={{ borderColor: "#2a3124" }}
-          >
+          <div className="forge-code-panel-tab flex items-center justify-between px-4 py-2 border-b">
             <span className="text-xs font-mono" style={{ color: "rgba(230, 223, 201, 0.5)" }}>
               source.bpmn-beta
             </span>
@@ -95,7 +88,7 @@ export default function Playground() {
             )}
           </div>
           <textarea
-            className="flex-1 p-4 text-sm resize-none focus:outline-none leading-relaxed code-area code-panel"
+            className="flex-1 p-4 text-sm resize-none focus:outline-none leading-relaxed code-area forge-code-panel"
             value={source}
             onChange={e => handleSourceChange(e.target.value)}
             spellCheck={false}
@@ -105,7 +98,7 @@ export default function Playground() {
           {parseError && (
             <div
               className="px-4 py-2 border-t text-xs font-mono"
-              style={{ borderColor: "#4a2018", background: "rgba(194,77,30,0.12)", color: "#e87c5c" }}
+              style={{ borderColor: "#4a2018", background: "rgba(196,106,44,0.12)", color: "#e87c5c" }}
               data-testid="text-parse-error-detail"
             >
               {parseError}

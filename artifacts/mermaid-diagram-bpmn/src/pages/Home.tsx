@@ -22,12 +22,10 @@ export default function Home() {
       <section className="max-w-7xl mx-auto w-full px-4 sm:px-6 py-16 md:py-24">
         <div className="max-w-3xl">
 
-          {/* Forge eyebrow */}
           <p className="forge-eyebrow mb-5" data-testid="badge-status">
             The Forge — Contributor Prototype
           </p>
 
-          {/* Title lockup */}
           <div className="flex items-center gap-5 mb-1">
             <img
               src={`${import.meta.env.BASE_URL}icon.png`}
@@ -43,19 +41,17 @@ export default function Home() {
             </h1>
           </div>
 
-          {/* DSL keyword */}
           <p className="mt-4 font-mono font-medium text-lg text-primary" data-testid="text-dsl-keyword">
             bpmn-beta
           </p>
 
-          {/* Tagline */}
           <p className="mt-5 text-base text-muted-foreground leading-relaxed max-w-2xl">
             A Mermaid-native diagram type for business process modeling. Text-first, version-controllable,
             Markdown-compatible. Write BPMN the way you write flowcharts — then commit it.
           </p>
 
           {/* Project thesis card */}
-          <div className="mt-7 p-5 rounded-xl border border-border bg-card shadow-sm">
+          <div className="mt-7 forge-card">
             <p className="forge-eyebrow mb-2 text-primary/70">Project thesis</p>
             <p className="text-sm text-foreground leading-relaxed">
               Mermaid has a material diagram-type gap: BPMN 2.0 is not represented as a native syntax.
@@ -69,11 +65,11 @@ export default function Home() {
 
           {/* CTAs */}
           <div className="mt-7 flex flex-wrap gap-3">
-            <Link href="/playground" className="btn-forge" data-testid="button-open-playground">
+            <Link href="/playground" className="forge-btn-primary" data-testid="button-open-playground">
               Open Playground
               <ArrowRight size={15} />
             </Link>
-            <Link href="/dsl" className="btn-forge-outline" data-testid="button-dsl-reference">
+            <Link href="/dsl" className="forge-btn-outline" data-testid="button-dsl-reference">
               DSL Reference
             </Link>
           </div>
@@ -105,11 +101,11 @@ export default function Home() {
           {PRINCIPLES.map(p => (
             <div
               key={p.title}
-              className="p-5 rounded-xl border border-border bg-card shadow-sm hover:shadow-md transition-shadow"
+              className="forge-card hover:shadow-md transition-shadow"
               data-testid={`card-principle-${p.title.toLowerCase()}`}
             >
               <p.icon size={17} className="text-primary mb-3" />
-              <p className="font-semibold text-sm text-foreground mb-1.5">{p.title}</p>
+              <p className="forge-card-title mb-1.5">{p.title}</p>
               <p className="text-xs text-muted-foreground leading-relaxed">{p.body}</p>
             </div>
           ))}

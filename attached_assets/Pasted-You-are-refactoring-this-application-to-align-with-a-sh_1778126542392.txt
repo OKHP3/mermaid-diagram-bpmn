@@ -1,0 +1,158 @@
+You are refactoring this application to align with a shared OverKill Hill P³ visual system used across multiple companion apps.
+
+Primary objective:
+Make this app look intentionally designed by the same creator as the companion OverKill Hill P³ Mermaid application, not like a one-off AI-generated UI.
+
+Design system name:
+OKH Forge UI System
+
+Target visual language:
+- Warm paper background
+- Deep forge/blueprint header
+- Rust-orange primary action color
+- Teal/green structural accent
+- Dark code/workbench panels
+- Subtle blueprint/grid texture
+- Serious toolbench utility
+- Low-gloss, high-clarity interface
+- Technical but human-authored
+- More “productized prototype” than “generic generated dashboard”
+
+Do not merely tweak colors.
+Create a small reusable design layer.
+
+Required work:
+
+1. Locate the current global CSS file, likely src/index.css.
+2. Refactor the global design tokens into a clearly marked shared section named:
+
+   OKH Forge UI System v0.1.0
+
+3. Normalize the following tokens:
+   - background
+   - foreground
+   - card
+   - card foreground
+   - border
+   - muted
+   - muted foreground
+   - primary
+   - primary foreground
+   - accent
+   - accent foreground
+   - ring
+   - code panel background
+   - code panel foreground
+   - header background
+   - header foreground
+   - header muted
+   - header border
+   - radius
+   - shadow scale
+   - grid texture
+
+4. Use the following canonical brand palette as the starting point:
+
+   --okh-forge-bg: #f0ebe5;
+   --okh-forge-paper: #f6f2ee;
+   --okh-forge-ink: #0f172a;
+   --okh-forge-teal: #1c3a34;
+   --okh-forge-rust: #c46a2c;
+   --okh-forge-amber: #e6a03c;
+   --okh-forge-code-bg: #0f1f1c;
+   --okh-forge-code-fg: #d4c9b5;
+
+5. Standardize these CSS utility classes across the app:
+
+   .forge-header
+   .forge-shell
+   .forge-main
+   .forge-grid
+   .forge-card
+   .forge-card-title
+   .forge-eyebrow
+   .forge-status-pill
+   .forge-code-panel
+   .forge-btn-primary
+   .forge-btn-outline
+   .forge-btn-accent
+   .forge-tabs
+   .forge-tab
+   .forge-tab-active
+   .forge-footer
+
+6. Replace one-off or inconsistent class names where practical.
+   For example:
+   - replace .btn-forge with .forge-btn-primary
+   - replace .btn-forge-outline with .forge-btn-outline
+   - replace .code-panel with .forge-code-panel
+   - preserve compatibility only if needed by aliasing old class names to new ones
+
+7. Normalize typography:
+   - Use one sans font consistently for app UI.
+   - Use one display font consistently for major headings.
+   - Use one mono font consistently for code/editor surfaces.
+   - Avoid mixing unrelated display styles between companion apps.
+
+8. Normalize layout rhythm:
+   - consistent page max-width
+   - consistent card padding
+   - consistent section spacing
+   - consistent mobile header behavior
+   - consistent footer structure
+
+9. Normalize buttons:
+   - primary buttons use rust-orange
+   - outline buttons use warm paper/card background
+   - accent buttons use subtle rust tint
+   - consistent border radius
+   - consistent hover/focus/disabled states
+   - accessible focus-visible ring
+
+10. Normalize code/editor panels:
+   - dark green/forge background
+   - mono font
+   - warm code foreground
+   - consistent placeholder color
+   - consistent focus treatment
+
+11. Normalize header:
+   - always-dark header
+   - same background across companion apps
+   - app title on left
+   - compact app badge beside title
+   - nav/tabs use the same active and hover language
+   - theme toggle, if present, uses the same placement and interaction style
+
+12. Normalize background texture:
+   - use one subtle blueprint grid implementation
+   - same grid size and opacity across both light and dark mode
+
+13. Preserve all existing functionality.
+   Do not remove tabs, routes, Mermaid rendering, examples, export behavior, DSL/reference content, or app-specific features.
+
+14. After refactor, run:
+   pnpm install
+   pnpm typecheck
+   pnpm build
+
+15. Fix any TypeScript, Vite, Tailwind, or runtime errors introduced by the refactor.
+
+16. Add or update a short documentation note:
+
+   docs/design-system.md
+
+   It should explain:
+   - what OKH Forge UI System is
+   - which files contain the shared styling
+   - which classes are canonical
+   - which tokens are safe to change
+   - how to keep this app visually aligned with sibling OKH apps
+
+Acceptance criteria:
+- The app should still function exactly as before.
+- The UI should look like part of the same OverKill Hill P³ application family.
+- CSS should be easier for humans and future AI assistants to inspect.
+- The global CSS should not be an unreadable one-line blob.
+- Shared primitives should be named consistently.
+- App-specific branding should remain, but only as a thin accent layer on top of the shared design system.

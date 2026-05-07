@@ -5,38 +5,41 @@
 
 @custom-variant dark (&:is(.dark *));
 
+/* ------------------------------------------------------------------ *
+   Tailwind color bridge — maps semantic HSL vars into Tailwind tokens
+ * ------------------------------------------------------------------ */
 @theme inline {
-  --color-background: hsl(var(--background));
-  --color-foreground: hsl(var(--foreground));
-  --color-border: hsl(var(--border));
-  --color-input: hsl(var(--input));
-  --color-ring: hsl(var(--ring));
+  --color-background:         hsl(var(--background));
+  --color-foreground:         hsl(var(--foreground));
+  --color-border:             hsl(var(--border));
+  --color-input:              hsl(var(--input));
+  --color-ring:               hsl(var(--ring));
 
-  --color-card: hsl(var(--card));
-  --color-card-foreground: hsl(var(--card-foreground));
-  --color-card-border: hsl(var(--card-border));
+  --color-card:               hsl(var(--card));
+  --color-card-foreground:    hsl(var(--card-foreground));
+  --color-card-border:        hsl(var(--card-border));
 
-  --color-popover: hsl(var(--popover));
+  --color-popover:            hsl(var(--popover));
   --color-popover-foreground: hsl(var(--popover-foreground));
 
-  --color-primary: hsl(var(--primary));
+  --color-primary:            hsl(var(--primary));
   --color-primary-foreground: hsl(var(--primary-foreground));
 
-  --color-secondary: hsl(var(--secondary));
+  --color-secondary:          hsl(var(--secondary));
   --color-secondary-foreground: hsl(var(--secondary-foreground));
 
-  --color-muted: hsl(var(--muted));
-  --color-muted-foreground: hsl(var(--muted-foreground));
+  --color-muted:              hsl(var(--muted));
+  --color-muted-foreground:   hsl(var(--muted-foreground));
 
-  --color-accent: hsl(var(--accent));
-  --color-accent-foreground: hsl(var(--accent-foreground));
-  --color-accent-border: hsl(var(--accent-border));
+  --color-accent:             hsl(var(--accent));
+  --color-accent-foreground:  hsl(var(--accent-foreground));
+  --color-accent-border:      hsl(var(--accent-border));
 
-  --color-destructive: hsl(var(--destructive));
+  --color-destructive:        hsl(var(--destructive));
   --color-destructive-foreground: hsl(var(--destructive-foreground));
 
-  --font-sans: var(--app-font-sans);
-  --font-mono: var(--app-font-mono);
+  --font-sans:    var(--app-font-sans);
+  --font-mono:    var(--app-font-mono);
   --font-display: var(--app-font-display);
 
   --radius-sm: calc(var(--radius) - 4px);
@@ -45,84 +48,117 @@
   --radius-xl: calc(var(--radius) + 4px);
 }
 
+/* ================================================================== *
+   OKH FORGE UI SYSTEM v0.1.0
+   Canonical design tokens shared across all OverKill Hill P³ apps.
+   ------------------------------------------------------------------ *
+   Brand primitives:  --okh-forge-*        (raw hex, app-agnostic)
+   Header tokens:     --okh-header-*       (always-dark surface)
+   Semantic tokens:   --background et al.  (light / dark via HSL)
+   Shadow scale:      --forge-shadow-*
+   Typography:        --app-font-*
+   ================================================================== */
+
 :root {
-  --app-font-sans: 'Inter', system-ui, sans-serif;
+  /* ---- Brand primitives ----------------------------------------- */
+  --okh-forge-bg:      #f0ebe5;   /* warm field — page background   */
+  --okh-forge-paper:   #f6f2ee;   /* warm paper — card surface      */
+  --okh-forge-ink:     #0f172a;   /* deep ink — body text           */
+  --okh-forge-teal:    #1c3a34;   /* forge teal — structural accent */
+  --okh-forge-rust:    #c46a2c;   /* rust-orange — primary action   */
+  --okh-forge-amber:   #e6a03c;   /* amber — secondary accent       */
+  --okh-forge-code-bg: #0f1f1c;   /* dark workbench — code panels   */
+  --okh-forge-code-fg: #d4c9b5;   /* warm parchment — code text     */
+
+  /* ---- Typography ----------------------------------------------- */
+  --app-font-sans:    'Inter', system-ui, sans-serif;
   --app-font-display: 'Fraunces', Georgia, serif;
-  --app-font-mono: 'JetBrains Mono', 'Menlo', monospace;
+  --app-font-mono:    'JetBrains Mono', 'Menlo', monospace;
+
+  /* ---- Radius ---------------------------------------------------- */
   --radius: 0.5rem;
 
-  /* OverKill Hill — always-dark header, never theme-responsive */
-  --okh-header-bg: #1c2118;
-  --okh-header-text: #e6dfc9;
-  --okh-header-muted: rgba(230, 223, 201, 0.52);
+  /* ---- Shadow scale --------------------------------------------- */
+  --forge-shadow-sm: 0 1px 2px rgba(15, 23, 42, 0.06);
+  --forge-shadow-md: 0 2px 8px rgba(15, 23, 42, 0.10);
+  --forge-shadow-lg: 0 4px 16px rgba(15, 23, 42, 0.14);
+
+  /* ---- Header — always-dark, never theme-responsive ------------- */
+  --okh-header-bg:     #1c2118;
+  --okh-header-text:   #e6dfc9;
+  --okh-header-muted:  rgba(230, 223, 201, 0.52);
   --okh-header-border: #2a3124;
-  --okh-header-active: #c24d1e;
-  --okh-header-hover: rgba(255, 255, 255, 0.07);
+  --okh-header-active: var(--okh-forge-rust);
+  --okh-header-hover:  rgba(255, 255, 255, 0.07);
 
-  /* Light mode — OKH warm paper palette */
-  --background: 40 24% 92%;        /* warm field  #f0ece4 */
-  --foreground: 28 45% 8%;         /* espresso    #1d1108 */
+  /* ---- Semantic tokens — light mode ----------------------------- */
+  --background:              40 24% 92%;   /* warm field  #f0ece4 */
+  --foreground:              28 45%  8%;   /* espresso    #1d1108 */
 
-  --card: 42 50% 97%;               /* warm paper  #faf7f1 */
-  --card-foreground: 28 45% 8%;
-  --card-border: 38 28% 80%;
+  --card:                    42 50% 97%;   /* warm paper  #faf7f1 */
+  --card-foreground:         28 45%  8%;
+  --card-border:             38 28% 80%;
 
-  --popover: 42 50% 97%;
-  --popover-foreground: 28 45% 8%;
+  --popover:                 42 50% 97%;
+  --popover-foreground:      28 45%  8%;
 
-  --primary: 19 73% 44%;            /* rust-orange #c24d1e */
-  --primary-foreground: 0 0% 100%;
+  --primary:                 25 62% 47%;   /* rust-orange #c46a2c */
+  --primary-foreground:       0  0% 100%;
 
-  --secondary: 38 22% 88%;
-  --secondary-foreground: 28 45% 8%;
+  --secondary:               38 22% 88%;
+  --secondary-foreground:    28 45%  8%;
 
-  --muted: 38 20% 89%;
-  --muted-foreground: 33 18% 44%;   /* warm gray */
+  --muted:                   38 20% 89%;
+  --muted-foreground:        33 18% 44%;
 
-  --accent: 36 70% 91%;             /* amber tint  #f7ecce */
-  --accent-foreground: 19 60% 22%;  /* dark rust */
-  --accent-border: 36 50% 78%;
+  --accent:                  36 70% 91%;   /* amber tint  #f7ecce */
+  --accent-foreground:       19 60% 22%;   /* dark rust             */
+  --accent-border:           36 50% 78%;
 
-  --destructive: 0 78% 55%;
-  --destructive-foreground: 0 0% 100%;
+  --destructive:              0 78% 55%;
+  --destructive-foreground:   0  0% 100%;
 
-  --border: 38 28% 80%;
-  --input: 38 28% 80%;
-  --ring: 19 73% 44%;
+  --border:                  38 28% 80%;
+  --input:                   38 28% 80%;
+  --ring:                    25 62% 47%;
 }
 
 .dark {
-  --background: 88 18% 9%;
-  --foreground: 38 28% 88%;
+  /* ---- Semantic tokens — dark mode ------------------------------ */
+  --background:              88 18%  9%;
+  --foreground:              38 28% 88%;
 
-  --card: 88 15% 13%;
-  --card-foreground: 38 28% 88%;
-  --card-border: 88 12% 20%;
+  --card:                    88 15% 13%;
+  --card-foreground:         38 28% 88%;
+  --card-border:             88 12% 20%;
 
-  --popover: 88 15% 13%;
-  --popover-foreground: 38 28% 88%;
+  --popover:                 88 15% 13%;
+  --popover-foreground:      38 28% 88%;
 
-  --primary: 19 73% 58%;
-  --primary-foreground: 0 0% 100%;
+  --primary:                 25 62% 60%;
+  --primary-foreground:       0  0% 100%;
 
-  --secondary: 88 12% 18%;
-  --secondary-foreground: 38 28% 88%;
+  --secondary:               88 12% 18%;
+  --secondary-foreground:    38 28% 88%;
 
-  --muted: 88 12% 18%;
-  --muted-foreground: 38 18% 56%;
+  --muted:                   88 12% 18%;
+  --muted-foreground:        38 18% 56%;
 
-  --accent: 19 28% 22%;
-  --accent-foreground: 19 73% 66%;
-  --accent-border: 19 28% 32%;
+  --accent:                  19 28% 22%;
+  --accent-foreground:       25 62% 70%;
+  --accent-border:           19 28% 32%;
 
-  --destructive: 0 62% 45%;
-  --destructive-foreground: 0 0% 100%;
+  --destructive:              0 62% 45%;
+  --destructive-foreground:   0  0% 100%;
 
-  --border: 88 12% 20%;
-  --input: 88 12% 20%;
-  --ring: 19 73% 58%;
+  --border:                  88 12% 20%;
+  --input:                   88 12% 20%;
+  --ring:                    25 62% 60%;
 }
 
+/* ================================================================== *
+   Base layer — global resets and typography
+ * ================================================================== */
 @layer base {
   * { @apply border-border; }
   body { @apply font-sans antialiased bg-background text-foreground; }
@@ -130,8 +166,64 @@
   code, pre, textarea.code-area { font-family: var(--app-font-mono); }
 }
 
+/* ================================================================== *
+   OKH Forge UI System — canonical utility classes
+   ------------------------------------------------------------------ *
+   Layout structural classes
+     .forge-header        always-dark sticky header surface
+     .forge-shell         full-height page wrapper
+     .forge-main          flex-1 main content area with grid texture
+     .forge-footer        always-dark footer surface
+
+   Content classes
+     .forge-grid          blueprint grid background texture
+     .forge-card          standard content card
+     .forge-card-title    section title inside a card
+     .forge-eyebrow       small-caps mono label above headings
+     .forge-callout       rust left-border emphasis block
+     .forge-status-pill   inline status badge
+
+   Code surfaces
+     .forge-code-panel        dark code/editor background
+     .forge-code-panel-tab    dark tab bar above a code panel
+
+   Buttons
+     .forge-btn-primary   rust-orange filled pill button
+     .forge-btn-outline   warm-paper bordered pill button
+     .forge-btn-accent    amber-tinted subtle button
+
+   Tab navigation
+     .forge-tabs          horizontal tab row
+     .forge-tab           individual tab item
+     .forge-tab-active    active tab state
+ * ================================================================== */
+
 @layer utilities {
-  /* Blueprint grid — applied to page body area */
+
+  /* ---- Layout --------------------------------------------------- */
+
+  .forge-shell {
+    @apply min-h-screen flex flex-col bg-background text-foreground;
+  }
+
+  .forge-header {
+    @apply sticky top-0 z-50;
+    background: var(--okh-header-bg);
+    border-bottom: 1px solid var(--okh-header-border);
+  }
+
+  .forge-main {
+    @apply flex-1 flex flex-col;
+  }
+
+  .forge-footer {
+    @apply border-t;
+    background: var(--okh-header-bg);
+    border-color: var(--okh-header-border);
+  }
+
+  /* ---- Blueprint grid texture ----------------------------------- */
+
   .forge-grid {
     background-image:
       linear-gradient(hsla(30, 30%, 38%, 0.055) 1px, transparent 1px),
@@ -151,34 +243,90 @@
     background-size: 24px 24px;
   }
 
-  /* Always-dark forge terminal code editor */
-  .code-panel {
-    background-color: #141a11;
-    color: #d4ccb2;
-  }
-  .code-panel::placeholder { color: rgba(212, 204, 178, 0.3); }
+  /* ---- Content -------------------------------------------------- */
 
-  .code-panel-tab {
-    background-color: #1c2118;
-    border-color: #2a3124 !important;
-    color: rgba(230, 223, 201, 0.55);
+  .forge-card {
+    @apply p-5 rounded-xl border border-border bg-card;
+    box-shadow: var(--forge-shadow-sm);
   }
 
-  /* OKH rust pill button variant */
-  .btn-forge {
-    @apply inline-flex items-center gap-2 px-6 py-2.5 rounded-full bg-primary text-primary-foreground text-sm font-semibold hover:opacity-90 active:scale-95 transition-all;
-  }
-  .btn-forge-outline {
-    @apply inline-flex items-center gap-2 px-6 py-2.5 rounded-full border-2 border-foreground/20 bg-card text-foreground text-sm font-semibold hover:border-primary/50 hover:text-primary transition-colors;
+  .forge-card-title {
+    @apply text-sm font-semibold text-foreground;
   }
 
-  /* Forge eyebrow label */
   .forge-eyebrow {
     @apply text-xs font-mono font-semibold tracking-[0.2em] uppercase text-muted-foreground;
   }
 
-  /* Rust accent left border for callouts */
   .forge-callout {
     @apply border-l-4 border-primary pl-5 py-1;
   }
+
+  .forge-status-pill {
+    @apply inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full border text-xs font-medium;
+  }
+
+  /* ---- Code surfaces -------------------------------------------- */
+
+  .forge-code-panel {
+    background-color: var(--okh-forge-code-bg);
+    color: var(--okh-forge-code-fg);
+    font-family: var(--app-font-mono);
+  }
+  .forge-code-panel::placeholder {
+    color: rgba(212, 201, 181, 0.30);
+  }
+
+  .forge-code-panel-tab {
+    background-color: #1c2118;
+    border-color: #2a3124 !important;
+    color: rgba(230, 223, 201, 0.55);
+    font-family: var(--app-font-mono);
+  }
+
+  /* ---- Buttons -------------------------------------------------- */
+
+  .forge-btn-primary {
+    @apply inline-flex items-center gap-2 px-6 py-2.5 rounded-full
+           bg-primary text-primary-foreground
+           text-sm font-semibold
+           hover:opacity-90 active:scale-95
+           transition-all;
+    box-shadow: var(--forge-shadow-sm);
+  }
+
+  .forge-btn-outline {
+    @apply inline-flex items-center gap-2 px-6 py-2.5 rounded-full
+           border-2 border-foreground/20 bg-card text-foreground
+           text-sm font-semibold
+           hover:border-primary/50 hover:text-primary
+           transition-colors;
+  }
+
+  .forge-btn-accent {
+    @apply inline-flex items-center gap-2 px-5 py-2 rounded-full
+           bg-accent border border-accent-border text-accent-foreground
+           text-sm font-semibold
+           hover:opacity-90
+           transition-all;
+  }
+
+  /* ---- Tabs ----------------------------------------------------- */
+
+  .forge-tabs {
+    @apply flex flex-wrap gap-2 items-center;
+  }
+
+  .forge-tab {
+    @apply px-3 py-1 rounded-full text-xs font-medium transition-all
+           border border-border bg-card text-muted-foreground
+           hover:text-foreground hover:border-primary/40 hover:shadow-sm;
+  }
+
+  .forge-tab-active {
+    @apply px-3 py-1 rounded-full text-xs font-medium
+           bg-primary text-primary-foreground;
+    box-shadow: var(--forge-shadow-sm);
+  }
+
 }

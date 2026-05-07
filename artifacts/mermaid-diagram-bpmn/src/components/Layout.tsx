@@ -40,13 +40,10 @@ export function Layout({ children }: { children: React.ReactNode }) {
   const [location] = useLocation();
 
   return (
-    <div className="min-h-screen flex flex-col bg-background text-foreground">
+    <div className="forge-shell">
 
-      {/* OKH-style always-dark sticky header */}
-      <header
-        className="sticky top-0 z-50"
-        style={{ background: "var(--okh-header-bg)", borderBottom: "1px solid var(--okh-header-border)" }}
-      >
+      {/* OKH Forge header — always-dark, sticky */}
+      <header className="forge-header">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 flex items-center justify-between h-14">
 
           {/* Logo */}
@@ -151,7 +148,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
                   style={{
                     color: isActive ? "var(--okh-header-active)" : "var(--okh-header-text)",
                     fontWeight: isActive ? 600 : 400,
-                    background: isActive ? "rgba(194,77,30,0.12)" : "transparent",
+                    background: isActive ? "rgba(196,106,44,0.12)" : "transparent",
                   }}
                 >
                   {link.label}
@@ -163,15 +160,12 @@ export function Layout({ children }: { children: React.ReactNode }) {
       </header>
 
       {/* Page body — forge blueprint grid texture */}
-      <main className="flex-1 flex flex-col forge-grid">
+      <main className="forge-main forge-grid">
         {children}
       </main>
 
-      {/* Footer */}
-      <footer
-        className="border-t border-border py-6 px-4"
-        style={{ background: "var(--okh-header-bg)", borderColor: "var(--okh-header-border)" }}
-      >
+      {/* Forge footer */}
+      <footer className="forge-footer py-6 px-4">
         <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-2 text-xs">
           <span style={{ color: "var(--okh-header-muted)" }}>
             <code className="font-mono" style={{ color: "var(--okh-header-text)" }}>mermaid-diagram-bpmn</code>
@@ -182,7 +176,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
               href="https://github.com/mermaid-js/mermaid/issues/7699"
               target="_blank"
               rel="noopener noreferrer"
-              className="hover:text-white transition-colors"
+              className="transition-colors"
               style={{ color: "var(--okh-header-muted)" }}
               onMouseEnter={e => (e.currentTarget.style.color = "var(--okh-header-text)")}
               onMouseLeave={e => (e.currentTarget.style.color = "var(--okh-header-muted)")}
