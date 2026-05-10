@@ -13,7 +13,7 @@ const NAV_LINKS = [
 
 const GITHUB_REPO = "https://github.com/OKHP3/mermaid-diagram-bpmn";
 const GITHUB_PAGES = "https://okhp3.github.io/mermaid-diagram-bpmn/";
-const NOTION_SPEC  = "https://www.notion.so/overkillhill/BPMN-for-Mermaid-bpmn-beta-Diagram-Type-Proposal-357812e0ced481c88b20d2eb493dc775";
+const DOCS_URL     = "https://github.com/OKHP3/mermaid-diagram-bpmn/tree/main/artifacts/mermaid-diagram-bpmn/docs";
 const OKH_SITE     = "https://overkillhill.com";
 
 function useDarkMode() {
@@ -240,16 +240,16 @@ export function Layout({ children }: { children: React.ReactNode }) {
               GitHub Pages
             </a>
             <a
-              href={NOTION_SPEC}
+              href={DOCS_URL}
               target="_blank"
               rel="noopener noreferrer"
               className="transition-colors"
               style={{ color: "var(--okh-header-muted)" }}
               onMouseEnter={e => (e.currentTarget.style.color = "var(--okh-header-text)")}
               onMouseLeave={e => (e.currentTarget.style.color = "var(--okh-header-muted)")}
-              data-testid="link-notion-spec"
+              data-testid="link-spec-docs"
             >
-              Notion spec
+              Spec docs
             </a>
             <a
               href="https://github.com/mermaid-js/mermaid/issues/7699"
