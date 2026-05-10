@@ -1,0 +1,18 @@
+bpmn-beta
+accTitle: Purchase Request Approval
+accDescr: A manager reviews a request and either approves or rejects it via an exclusive gateway.
+
+start s1 "Request Raised"
+task:user t1 "Review Request"
+xor g1 "Approved?"
+task:service t2 "Issue Purchase Order"
+task:user t3 "Notify Rejection"
+end e1 "Order Issued"
+end e2 "Rejected"
+
+s1 --> t1
+t1 --> g1
+g1 --> t2: "yes"
+g1 --> t3: "no"
+t2 --> e1
+t3 ==> e2

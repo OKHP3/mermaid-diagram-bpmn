@@ -1,13 +1,14 @@
 import { useState } from "react";
 import { BpmnRenderer } from "@/lib/bpmn-renderer";
 import { BPMN_EXAMPLES, DEFAULT_EXAMPLE_ID } from "@/lib/bpmn-examples";
-import { AlertCircle } from "lucide-react";
-import { parseBpmn } from "@/lib/bpmn-parser";
+import { AlertCircle, FlaskConical } from "lucide-react";
+import { parse } from "@/lib/bpmn-parser";
+import { StatusRibbon } from "@/components/StatusRibbon";
 
 function getParseError(source: string): string | null {
   try {
-    const g = parseBpmn(source);
-    if (g.nodes.length === 0 && source.trim().length > 10) {
+    const db = parse(source);
+    if (db.getNodes().length === 0 && source.trim().length > 10) {
       return "No nodes found. Check your syntax — each node must be on its own line.";
     }
     return null;
@@ -22,10 +23,11 @@ export default function Playground() {
   const [activeExample, setActiveExample] = useState<string | null>(defaultExample.id);
 
   const parseError = getParseError(source);
+  const activeExampleDef = BPMN_EXAMPLES.find(e => e.id === activeExample);
 
   function selectExample(id: string) {
     const ex = BPMN_EXAMPLES.find(e => e.id === id);
-    if (ex) { setSource(ex.source); setActiveExample(id); }
+    if (ex) { setSource(ex.source); setActiveExample(ex.id); }
   }
 
   function handleSourceChange(val: string) {
@@ -35,6 +37,9 @@ export default function Playground() {
 
   return (
     <div className="flex flex-col flex-1 h-full">
+
+      {/* Status ribbon */}
+      <StatusRibbon />
 
       {/* Sub-header */}
       <div className="border-b border-border px-4 sm:px-6 py-4 bg-card/70">
@@ -53,37 +58,47 @@ export default function Playground() {
 
       {/* Example selector */}
       <div className="border-b border-border px-4 sm:px-6 py-2.5 bg-muted/30">
-        <div className="max-w-7xl mx-auto flex flex-wrap gap-2 items-center">
+        <div className="max-w-7xl mx-auto forge-tabs">
           <span className="forge-eyebrow mr-1 shrink-0">Examples</span>
           {BPMN_EXAMPLES.map(ex => (
             <button
               key={ex.id}
               onClick={() => selectExample(ex.id)}
-              className={`px-3 py-1 rounded-full text-xs font-medium transition-all ${
-                activeExample === ex.id
-                  ? "bg-primary text-primary-foreground shadow-sm"
-                  : "border border-border bg-card text-muted-foreground hover:text-foreground hover:border-primary/40 hover:shadow-sm"
-              }`}
+              className={`${activeExample === ex.id ? "forge-tab-active" : "forge-tab"} flex items-center gap-1.5`}
               data-testid={`button-example-${ex.id}`}
             >
               {ex.name}
+              {ex.experimental && (
+                <FlaskConical size={9} className={activeExample === ex.id ? "opacity-80" : "text-amber-500"} aria-label="Experimental" />
+              )}
             </button>
           ))}
         </div>
       </div>
 
+      {/* Experimental notice */}
+      {activeExampleDef?.experimental && (
+        <div
+          className="px-4 sm:px-6 py-2 flex items-center gap-2 text-xs"
+          style={{ background: "rgba(230,160,60,0.08)", borderBottom: "1px solid rgba(230,160,60,0.2)" }}
+        >
+          <FlaskConical size={11} className="text-amber-600 shrink-0" />
+          <span className="text-foreground/80">
+            <span className="font-semibold text-foreground">Experimental support.</span>
+            {" "}Pools and lanes render with known layout limitations — cross-lane flow ordering and message flow routing are approximate.
+          </span>
+        </div>
+      )}
+
       {/* Two-panel workspace */}
       <div className="flex-1 flex flex-col md:flex-row min-h-0 max-w-7xl mx-auto w-full">
 
-        {/* Source panel — forge terminal dark */}
+        {/* Source panel */}
         <div
           className="flex flex-col md:w-1/2 border-b md:border-b-0 md:border-r min-h-[280px] md:min-h-0"
           style={{ borderColor: "#2a3124" }}
         >
-          <div
-            className="code-panel-tab flex items-center justify-between px-4 py-2 border-b"
-            style={{ borderColor: "#2a3124" }}
-          >
+          <div className="forge-code-panel-tab flex items-center justify-between px-4 py-2 border-b">
             <span className="text-xs font-mono" style={{ color: "rgba(230, 223, 201, 0.5)" }}>
               source.bpmn-beta
             </span>
@@ -95,7 +110,7 @@ export default function Playground() {
             )}
           </div>
           <textarea
-            className="flex-1 p-4 text-sm resize-none focus:outline-none leading-relaxed code-area code-panel"
+            className="flex-1 p-4 text-sm resize-none focus:outline-none leading-relaxed code-area forge-code-panel"
             value={source}
             onChange={e => handleSourceChange(e.target.value)}
             spellCheck={false}
@@ -105,7 +120,7 @@ export default function Playground() {
           {parseError && (
             <div
               className="px-4 py-2 border-t text-xs font-mono"
-              style={{ borderColor: "#4a2018", background: "rgba(194,77,30,0.12)", color: "#e87c5c" }}
+              style={{ borderColor: "#4a2018", background: "rgba(196,106,44,0.12)", color: "#e87c5c" }}
               data-testid="text-parse-error-detail"
             >
               {parseError}
@@ -113,10 +128,16 @@ export default function Playground() {
           )}
         </div>
 
-        {/* Preview panel — warm paper */}
+        {/* Preview panel */}
         <div className="flex flex-col md:w-1/2 min-h-[320px] md:min-h-0 bg-card">
           <div className="flex items-center gap-2 px-4 py-2 border-b border-border bg-muted/30">
             <span className="forge-eyebrow">Diagram preview</span>
+            {activeExampleDef?.experimental && (
+              <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full border border-amber-300 bg-amber-50 dark:bg-amber-900/20 text-amber-700 dark:text-amber-400 text-xs font-medium">
+                <FlaskConical size={9} />
+                Experimental
+              </span>
+            )}
             <span className="ml-auto text-xs text-muted-foreground/50 font-mono">bpmn-beta renderer</span>
           </div>
           <div className="flex-1 diagram-grid overflow-hidden" data-testid="div-diagram-preview">
@@ -126,15 +147,16 @@ export default function Playground() {
       </div>
 
       {/* Footer note */}
-      {activeExample && (
+      {activeExampleDef && (
         <div className="border-t border-border px-4 sm:px-6 py-3 bg-card/70">
           <div className="max-w-7xl mx-auto">
             <p className="text-xs text-muted-foreground">
-              <span className="font-semibold text-foreground">
-                {BPMN_EXAMPLES.find(e => e.id === activeExample)?.name}
-              </span>
+              <span className="font-semibold text-foreground">{activeExampleDef.name}</span>
               {" — "}
-              {BPMN_EXAMPLES.find(e => e.id === activeExample)?.description}
+              {activeExampleDef.description}
+              {activeExampleDef.experimental && (
+                <span className="ml-2 text-amber-600 font-medium">· Experimental support — layout approximations apply.</span>
+              )}
             </p>
           </div>
         </div>
