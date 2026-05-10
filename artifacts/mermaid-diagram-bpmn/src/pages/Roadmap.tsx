@@ -1,3 +1,5 @@
+import { CheckCheck, FlaskConical, Clock, Wrench, GitBranch, Database, Puzzle, Palette, Shield, AlignVerticalJustifyStart } from "lucide-react";
+
 const MVP_SCOPE = [
   "Start events",
   "End events",
@@ -85,6 +87,77 @@ const CONTRIBUTION_STEPS = [
   },
 ];
 
+interface ReadinessStep {
+  icon: React.ElementType;
+  title: string;
+  current: string;
+  target: string;
+  status: "done" | "experimental" | "planned";
+}
+
+const READINESS_STEPS: ReadinessStep[] = [
+  {
+    icon: GitBranch,
+    title: "Parser",
+    current: "Hand-written line parser with stack-based block parsing for pools and lanes.",
+    target: "Formal Langium grammar with error recovery, better diagnostics, and upstream Mermaid compatibility.",
+    status: "experimental",
+  },
+  {
+    icon: Database,
+    title: "DiagramDB",
+    current: "BpmnDb class with typed add/get API — nodes, flows, pools, lanes, accessibility metadata.",
+    target: "Stable public API surface, frozen before upstream proposal. Must match Mermaid's internal DiagramDB contract.",
+    status: "experimental",
+  },
+  {
+    icon: Puzzle,
+    title: "Mermaid External Diagram API",
+    current: "Prototype renders standalone in a Vite app. Not wired to Mermaid's registerExternalDiagrams() yet.",
+    target: "Full registerExternalDiagrams() integration — detector, parser, DB accessor, renderer all registered.",
+    status: "planned",
+  },
+  {
+    icon: Palette,
+    title: "Theme integration via getStyles()",
+    current: "getStyles(BpmnThemeOptions) emits a CSS block. Uses a fixed LIGHT_THEME constant, not live Mermaid theme vars.",
+    target: "Read Mermaid's primaryColor, lineColor, nodeBorder, etc. at render time. Respect user theme config.",
+    status: "experimental",
+  },
+  {
+    icon: Shield,
+    title: "Parser-enforced BPMN domain rules",
+    current: "Parser accepts any syntactically valid line. No semantic validation (e.g. gateway fan-in/fan-out rules).",
+    target: "Meaningful errors for invalid BPMN patterns. Gateway rules, event lifecycle constraints, lane membership.",
+    status: "planned",
+  },
+  {
+    icon: AlignVerticalJustifyStart,
+    title: "Deterministic pool/lane layout",
+    current: "Heuristic topological layout per lane. Cross-lane flow ordering is approximate. Pool widths may not align.",
+    target: "Constraint-based layout that aligns pool widths, respects cross-lane dependencies, routes message flows around pool boundaries.",
+    status: "planned",
+  },
+];
+
+const STATUS_CONFIG = {
+  done: {
+    icon: CheckCheck,
+    label: "Done",
+    pill: "text-emerald-700 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-900/20 border-emerald-200 dark:border-emerald-800",
+  },
+  experimental: {
+    icon: FlaskConical,
+    label: "Experimental",
+    pill: "text-amber-700 dark:text-amber-400 bg-amber-50 dark:bg-amber-900/20 border-amber-200 dark:border-amber-800",
+  },
+  planned: {
+    icon: Clock,
+    label: "Planned",
+    pill: "text-primary/80 bg-primary/8 border-primary/25",
+  },
+};
+
 export default function Roadmap() {
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 py-12">
@@ -150,6 +223,48 @@ export default function Roadmap() {
         </p>
       </div>
 
+      {/* Contribution-readiness roadmap */}
+      <div className="mb-14">
+        <div className="mb-6">
+          <h2 className="text-base font-semibold text-foreground" data-testid="heading-readiness-roadmap">
+            Contribution-readiness roadmap
+          </h2>
+          <p className="mt-1.5 text-xs text-muted-foreground max-w-2xl leading-relaxed">
+            What needs to change in each module before this prototype is ready to propose upstream to Mermaid.
+            Each row shows the current prototype state and the target state required for a credible PR.
+          </p>
+        </div>
+
+        <div className="flex flex-col gap-3">
+          {READINESS_STEPS.map((step) => {
+            const cfg = STATUS_CONFIG[step.status];
+            const StatusIcon = cfg.icon;
+            return (
+              <div key={step.title} className="rounded-lg border border-border bg-card overflow-hidden">
+                <div className="flex items-center gap-3 px-4 py-3 border-b border-border bg-muted/20">
+                  <step.icon size={14} className="text-primary shrink-0" />
+                  <span className="text-sm font-semibold text-foreground">{step.title}</span>
+                  <span className={`ml-auto inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full border text-xs font-medium ${cfg.pill}`}>
+                    <StatusIcon size={9} />
+                    {cfg.label}
+                  </span>
+                </div>
+                <div className="grid md:grid-cols-2 divide-y md:divide-y-0 md:divide-x divide-border">
+                  <div className="px-4 py-3">
+                    <p className="forge-eyebrow mb-1.5" style={{ fontSize: "0.6rem" }}>Current (prototype)</p>
+                    <p className="text-xs text-muted-foreground leading-relaxed">{step.current}</p>
+                  </div>
+                  <div className="px-4 py-3">
+                    <p className="forge-eyebrow mb-1.5 text-primary/60" style={{ fontSize: "0.6rem" }}>Target (contribution-ready)</p>
+                    <p className="text-xs text-foreground leading-relaxed">{step.target}</p>
+                  </div>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+
       {/* Contribution path */}
       <div>
         <h2 className="text-base font-semibold text-foreground mb-6" data-testid="heading-contribution-path">
@@ -171,6 +286,24 @@ export default function Roadmap() {
             ))}
           </div>
         </div>
+      </div>
+
+      {/* Wrench note */}
+      <div className="mt-12 p-4 rounded-lg border border-border bg-muted/30 flex items-start gap-3">
+        <Wrench size={14} className="text-muted-foreground shrink-0 mt-0.5" />
+        <p className="text-xs text-muted-foreground leading-relaxed">
+          This roadmap is the working state of the prototype, not a formal commitment. The canonical
+          strategy document lives in{" "}
+          <a
+            href="https://www.notion.so/overkillhill/BPMN-for-Mermaid-bpmn-beta-Diagram-Type-Proposal-357812e0ced481c88b20d2eb493dc775"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-primary underline-offset-2 hover:underline font-medium"
+          >
+            Notion
+          </a>
+          . If they disagree, Notion wins.
+        </p>
       </div>
     </div>
   );

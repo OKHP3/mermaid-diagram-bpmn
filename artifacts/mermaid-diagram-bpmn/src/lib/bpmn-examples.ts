@@ -9,6 +9,7 @@ export interface BpmnExample {
   name: string;
   description: string;
   source: string;
+  experimental?: boolean;
 }
 
 export const BPMN_EXAMPLES: BpmnExample[] = [
@@ -29,6 +30,7 @@ export const BPMN_EXAMPLES: BpmnExample[] = [
     name: 'Pool & lanes',
     description: 'Two pools — Buyer and Supplier — exchanging a cross-pool message flow.',
     source: example03,
+    experimental: true,
   },
   {
     id: '04-multi-event',

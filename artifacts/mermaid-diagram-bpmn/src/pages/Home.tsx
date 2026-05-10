@@ -1,5 +1,6 @@
 import { Link } from "wouter";
-import { ArrowRight, GitBranch, FileCode2, Layers, CheckCircle2, ExternalLink } from "lucide-react";
+import { ArrowRight, GitBranch, FileCode2, Layers, CheckCircle2, ExternalLink, CheckCheck, FlaskConical, Clock, XCircle } from "lucide-react";
+import { StatusRibbon } from "@/components/StatusRibbon";
 
 const PRINCIPLES = [
   { icon: FileCode2, title: "Text-First", body: "Write BPMN as code. Version-control it, diff it, review it in pull requests. No proprietary file formats." },
@@ -14,9 +15,88 @@ const RELATED_ISSUES = [
   { id: "#660", title: "Older BPMN 2.0 diagram request", url: "https://github.com/mermaid-js/mermaid/issues/660" },
 ];
 
+const SUPPORT_MATRIX = {
+  implemented: [
+    "Start events",
+    "End events",
+    "Generic tasks",
+    "User tasks (person marker)",
+    "Service tasks (gear marker)",
+    "Script tasks (script marker)",
+    "Receive tasks (envelope marker)",
+    "Send tasks (filled envelope)",
+    "XOR gateways",
+    "AND gateways",
+    "OR gateways",
+    "Sequence flows (-->)",
+    "Conditional flow labels",
+    "Default flow marker (==>)",
+    "accTitle / accDescr directives",
+    "Auto left-to-right layout",
+    "Theme-aware SVG styling",
+  ],
+  experimental: [
+    "Pools (headers, containers)",
+    "Lanes (one level deep)",
+    "Message flows (~~>)",
+    "Pool/lane-aware layout",
+    "Cross-pool flow routing",
+  ],
+  planned: [
+    "Formal Langium grammar",
+    "Mermaid registerExternalDiagrams() integration",
+    "Intermediate events",
+    "Timer / message / error markers",
+    "Deterministic pool/lane layout",
+    "Full Mermaid theme variable binding",
+    "Parser-enforced BPMN domain rules",
+    "Shape extraction from renderer",
+  ],
+  outOfScope: [
+    "BPMN XML import / export",
+    "Full BPMN 2.0 execution semantics",
+    "bpmn-js runtime dependency",
+    "Choreography diagrams",
+    "Conversation diagrams",
+    "Event subprocesses",
+    "Complex gateways",
+  ],
+};
+
+interface MatrixColProps {
+  icon: React.ElementType;
+  label: string;
+  items: string[];
+  iconClass: string;
+  headerClass: string;
+}
+
+function MatrixCol({ icon: Icon, label, items, iconClass, headerClass }: MatrixColProps) {
+  return (
+    <div className="rounded-lg border border-border overflow-hidden">
+      <div className={`px-3 py-2.5 border-b border-border flex items-center gap-2 ${headerClass}`}>
+        <Icon size={13} className={iconClass} />
+        <span className="text-xs font-semibold text-foreground">{label}</span>
+        <span className="ml-auto text-xs text-muted-foreground font-mono">{items.length}</span>
+      </div>
+      <ul className="divide-y divide-border">
+        {items.map(item => (
+          <li key={item} className="px-3 py-1.5 text-xs text-foreground bg-card flex items-start gap-2">
+            <Icon size={10} className={`${iconClass} mt-0.5 shrink-0`} />
+            {item}
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
 export default function Home() {
   return (
     <div className="flex flex-col">
+
+      {/* Status ribbon */}
+      <StatusRibbon />
 
       {/* Hero */}
       <section className="max-w-7xl mx-auto w-full px-4 sm:px-6 py-16 md:py-24">
@@ -89,31 +169,75 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Design principles */}
+      {/* Current support matrix */}
       <section className="max-w-7xl mx-auto w-full px-4 sm:px-6 py-14">
-        <h2
-          className="text-xl font-bold text-foreground mb-7"
-          data-testid="heading-principles"
-        >
-          Design principles
-        </h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          {PRINCIPLES.map(p => (
-            <div
-              key={p.title}
-              className="forge-card hover:shadow-md transition-shadow"
-              data-testid={`card-principle-${p.title.toLowerCase()}`}
-            >
-              <p.icon size={17} className="text-primary mb-3" />
-              <p className="forge-card-title mb-1.5">{p.title}</p>
-              <p className="text-xs text-muted-foreground leading-relaxed">{p.body}</p>
-            </div>
-          ))}
+        <div className="mb-6">
+          <h2 className="text-xl font-bold text-foreground" data-testid="heading-support-matrix">
+            Current support
+          </h2>
+          <p className="mt-1.5 text-sm text-muted-foreground max-w-2xl">
+            What the prototype renders today, what is experimental, what is on the roadmap, and what is explicitly outside scope.
+          </p>
+        </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
+          <MatrixCol
+            icon={CheckCheck}
+            label="Implemented"
+            items={SUPPORT_MATRIX.implemented}
+            iconClass="text-emerald-600 dark:text-emerald-400"
+            headerClass="bg-emerald-50/60 dark:bg-emerald-900/20"
+          />
+          <MatrixCol
+            icon={FlaskConical}
+            label="Experimental"
+            items={SUPPORT_MATRIX.experimental}
+            iconClass="text-amber-600 dark:text-amber-400"
+            headerClass="bg-amber-50/60 dark:bg-amber-900/20"
+          />
+          <MatrixCol
+            icon={Clock}
+            label="Planned"
+            items={SUPPORT_MATRIX.planned}
+            iconClass="text-primary/70"
+            headerClass="bg-primary/5"
+          />
+          <MatrixCol
+            icon={XCircle}
+            label="Out of scope (v1)"
+            items={SUPPORT_MATRIX.outOfScope}
+            iconClass="text-muted-foreground/60"
+            headerClass="bg-muted/50"
+          />
+        </div>
+      </section>
+
+      {/* Design principles */}
+      <section className="border-t border-border bg-card/40">
+        <div className="max-w-7xl mx-auto w-full px-4 sm:px-6 py-14">
+          <h2
+            className="text-xl font-bold text-foreground mb-7"
+            data-testid="heading-principles"
+          >
+            Design principles
+          </h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            {PRINCIPLES.map(p => (
+              <div
+                key={p.title}
+                className="forge-card hover:shadow-md transition-shadow"
+                data-testid={`card-principle-${p.title.toLowerCase()}`}
+              >
+                <p.icon size={17} className="text-primary mb-3" />
+                <p className="forge-card-title mb-1.5">{p.title}</p>
+                <p className="text-xs text-muted-foreground leading-relaxed">{p.body}</p>
+              </div>
+            ))}
+          </div>
         </div>
       </section>
 
       {/* DSL preview */}
-      <section className="max-w-7xl mx-auto w-full px-4 sm:px-6 pb-14">
+      <section className="max-w-7xl mx-auto w-full px-4 sm:px-6 py-14">
         <div className="grid md:grid-cols-2 gap-8 items-start">
           <div>
             <h2 className="text-xl font-bold text-foreground mb-3">What bpmn-beta looks like</h2>

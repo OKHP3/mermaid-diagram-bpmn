@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "wouter";
-import { Moon, Sun, Menu, X } from "lucide-react";
+import { Moon, Sun, Menu, X, Github } from "lucide-react";
 
 const NAV_LINKS = [
   { href: "/", label: "Home" },
@@ -10,6 +10,11 @@ const NAV_LINKS = [
   { href: "/roadmap", label: "Roadmap" },
   { href: "/about", label: "About" },
 ];
+
+const GITHUB_REPO = "https://github.com/OKHP3/mermaid-diagram-bpmn";
+const GITHUB_PAGES = "https://okhp3.github.io/mermaid-diagram-bpmn/";
+const NOTION_SPEC  = "https://www.notion.so/overkillhill/BPMN-for-Mermaid-bpmn-beta-Diagram-Type-Proposal-357812e0ced481c88b20d2eb493dc775";
+const OKH_SITE     = "https://overkillhill.com";
 
 function useDarkMode() {
   const [dark, setDark] = useState(() => {
@@ -105,7 +110,23 @@ export function Layout({ children }: { children: React.ReactNode }) {
           </nav>
 
           {/* Right side controls */}
-          <div className="flex items-center gap-1.5">
+          <div className="flex items-center gap-1">
+            {/* GitHub link */}
+            <a
+              href={GITHUB_REPO}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="p-2 rounded transition-colors"
+              style={{ color: "var(--okh-header-muted)" }}
+              onMouseEnter={e => (e.currentTarget.style.background = "var(--okh-header-hover)")}
+              onMouseLeave={e => (e.currentTarget.style.background = "transparent")}
+              aria-label="GitHub repository"
+              data-testid="link-github-header"
+            >
+              <Github size={15} />
+            </a>
+
+            {/* Theme toggle */}
             <button
               onClick={() => setDark(d => !d)}
               className="p-2 rounded transition-colors"
@@ -117,6 +138,8 @@ export function Layout({ children }: { children: React.ReactNode }) {
             >
               {dark ? <Sun size={15} /> : <Moon size={15} />}
             </button>
+
+            {/* Mobile menu toggle */}
             <button
               className="md:hidden p-2 rounded transition-colors"
               style={{ color: "var(--okh-header-muted)" }}
@@ -155,6 +178,21 @@ export function Layout({ children }: { children: React.ReactNode }) {
                 </Link>
               );
             })}
+            <div
+              className="mt-2 pt-2 flex items-center gap-3"
+              style={{ borderTop: "1px solid var(--okh-header-border)" }}
+            >
+              <a
+                href={GITHUB_REPO}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded text-xs"
+                style={{ color: "var(--okh-header-muted)" }}
+              >
+                <Github size={12} />
+                GitHub
+              </a>
+            </div>
           </nav>
         )}
       </header>
@@ -165,13 +203,54 @@ export function Layout({ children }: { children: React.ReactNode }) {
       </main>
 
       {/* Forge footer */}
-      <footer className="forge-footer py-6 px-4">
-        <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-2 text-xs">
+      <footer className="forge-footer py-5 px-4">
+        <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-xs">
+
+          {/* Left — identity */}
           <span style={{ color: "var(--okh-header-muted)" }}>
             <code className="font-mono" style={{ color: "var(--okh-header-text)" }}>mermaid-diagram-bpmn</code>
             {" — "}contributor prototype · OverKill Hill P³
           </span>
-          <span className="flex items-center gap-4" style={{ color: "var(--okh-header-muted)" }}>
+
+          {/* Right — links */}
+          <div className="flex flex-wrap items-center gap-x-4 gap-y-1.5" style={{ color: "var(--okh-header-muted)" }}>
+            <a
+              href={GITHUB_REPO}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-1 transition-colors hover:text-white"
+              style={{ color: "var(--okh-header-muted)" }}
+              onMouseEnter={e => (e.currentTarget.style.color = "var(--okh-header-text)")}
+              onMouseLeave={e => (e.currentTarget.style.color = "var(--okh-header-muted)")}
+              data-testid="link-github-footer"
+            >
+              <Github size={11} />
+              GitHub repo
+            </a>
+            <a
+              href={GITHUB_PAGES}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="transition-colors"
+              style={{ color: "var(--okh-header-muted)" }}
+              onMouseEnter={e => (e.currentTarget.style.color = "var(--okh-header-text)")}
+              onMouseLeave={e => (e.currentTarget.style.color = "var(--okh-header-muted)")}
+              data-testid="link-github-pages"
+            >
+              GitHub Pages
+            </a>
+            <a
+              href={NOTION_SPEC}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="transition-colors"
+              style={{ color: "var(--okh-header-muted)" }}
+              onMouseEnter={e => (e.currentTarget.style.color = "var(--okh-header-text)")}
+              onMouseLeave={e => (e.currentTarget.style.color = "var(--okh-header-muted)")}
+              data-testid="link-notion-spec"
+            >
+              Notion spec
+            </a>
             <a
               href="https://github.com/mermaid-js/mermaid/issues/7699"
               target="_blank"
@@ -185,7 +264,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
               mermaid#7699
             </a>
             <a
-              href="https://overkillhill.com"
+              href={OKH_SITE}
               target="_blank"
               rel="noopener noreferrer"
               className="transition-colors"
@@ -195,7 +274,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
             >
               overkillhill.com
             </a>
-          </span>
+          </div>
         </div>
       </footer>
     </div>
