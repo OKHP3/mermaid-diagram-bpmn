@@ -261,7 +261,6 @@ export default function Playground() {
                 transformOrigin: "0 0",
                 width: "100%",
                 height: "100%",
-                willChange: "transform",
               }}
             >
               <BpmnRenderer source={source} />
