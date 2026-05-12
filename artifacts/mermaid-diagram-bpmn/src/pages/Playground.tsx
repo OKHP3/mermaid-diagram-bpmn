@@ -1,9 +1,12 @@
-import { useState } from "react";
+import { useState, useRef, useEffect, useCallback } from "react";
 import { BpmnRenderer } from "@/lib/bpmn-renderer";
 import { BPMN_EXAMPLES, DEFAULT_EXAMPLE_ID } from "@/lib/bpmn-examples";
-import { AlertCircle, FlaskConical } from "lucide-react";
+import { AlertCircle, FlaskConical, ZoomIn, ZoomOut, Maximize2 } from "lucide-react";
 import { parse } from "@/lib/bpmn-parser";
 import { StatusRibbon } from "@/components/StatusRibbon";
+
+const MIN_SCALE = 0.15;
+const MAX_SCALE = 8;
 
 function getParseError(source: string): string | null {
   try {
@@ -25,9 +28,76 @@ export default function Playground() {
   const parseError = getParseError(source);
   const activeExampleDef = BPMN_EXAMPLES.find(e => e.id === activeExample);
 
+  // ── Pan / zoom state ────────────────────────────────────────────────────────
+  const [viewState, setViewState] = useState({ scale: 1, tx: 0, ty: 0 });
+  const [isDragging, setIsDragging] = useState(false);
+  const canvasRef = useRef<HTMLDivElement>(null);
+  const dragRef = useRef<{ mx: number; my: number; tx: number; ty: number } | null>(null);
+
+  // Wheel zoom — must be non-passive to call preventDefault
+  useEffect(() => {
+    const el = canvasRef.current;
+    if (!el) return;
+    const handler = (e: WheelEvent) => {
+      e.preventDefault();
+      const rect = el.getBoundingClientRect();
+      const mx = e.clientX - rect.left;
+      const my = e.clientY - rect.top;
+      const factor = e.deltaY < 0 ? 1.12 : 1 / 1.12;
+      setViewState(vs => {
+        const newScale = Math.min(MAX_SCALE, Math.max(MIN_SCALE, vs.scale * factor));
+        const ratio = newScale / vs.scale;
+        return { scale: newScale, tx: mx + ratio * (vs.tx - mx), ty: my + ratio * (vs.ty - my) };
+      });
+    };
+    el.addEventListener("wheel", handler, { passive: false });
+    return () => el.removeEventListener("wheel", handler);
+  }, []);
+
+  function handleMouseDown(e: React.MouseEvent) {
+    if (e.button !== 0) return;
+    setIsDragging(true);
+    dragRef.current = { mx: e.clientX, my: e.clientY, tx: viewState.tx, ty: viewState.ty };
+  }
+
+  function handleMouseMove(e: React.MouseEvent) {
+    if (!dragRef.current) return;
+    const dx = e.clientX - dragRef.current.mx;
+    const dy = e.clientY - dragRef.current.my;
+    setViewState(vs => ({ ...vs, tx: dragRef.current!.tx + dx, ty: dragRef.current!.ty + dy }));
+  }
+
+  function handlePanEnd() {
+    setIsDragging(false);
+    dragRef.current = null;
+  }
+
+  // Zoom buttons — centered on the viewport midpoint
+  const zoomStep = useCallback((factor: number) => {
+    const el = canvasRef.current;
+    if (!el) return;
+    const { width, height } = el.getBoundingClientRect();
+    const cx = width / 2;
+    const cy = height / 2;
+    setViewState(vs => {
+      const newScale = Math.min(MAX_SCALE, Math.max(MIN_SCALE, vs.scale * factor));
+      const ratio = newScale / vs.scale;
+      return { scale: newScale, tx: cx + ratio * (vs.tx - cx), ty: cy + ratio * (vs.ty - cy) };
+    });
+  }, []);
+
+  function resetView() {
+    setViewState({ scale: 1, tx: 0, ty: 0 });
+  }
+
+  // ── Example / source handlers ───────────────────────────────────────────────
   function selectExample(id: string) {
     const ex = BPMN_EXAMPLES.find(e => e.id === id);
-    if (ex) { setSource(ex.source); setActiveExample(ex.id); }
+    if (ex) {
+      setSource(ex.source);
+      setActiveExample(ex.id);
+      resetView();
+    }
   }
 
   function handleSourceChange(val: string) {
@@ -35,6 +105,7 @@ export default function Playground() {
     setActiveExample(null);
   }
 
+  // ── Render ──────────────────────────────────────────────────────────────────
   return (
     <div className="flex flex-col flex-1 h-full">
 
@@ -130,7 +201,9 @@ export default function Playground() {
 
         {/* Preview panel */}
         <div className="flex flex-col md:w-1/2 min-h-[320px] md:min-h-0 bg-card">
-          <div className="flex items-center gap-2 px-4 py-2 border-b border-border bg-muted/30">
+
+          {/* Preview toolbar */}
+          <div className="flex items-center gap-2 px-3 py-1.5 border-b border-border bg-muted/30 shrink-0">
             <span className="forge-eyebrow">Diagram preview</span>
             {activeExampleDef?.experimental && (
               <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full border border-amber-300 bg-amber-50 dark:bg-amber-900/20 text-amber-700 dark:text-amber-400 text-xs font-medium">
@@ -138,10 +211,68 @@ export default function Playground() {
                 Experimental
               </span>
             )}
-            <span className="ml-auto text-xs text-muted-foreground/50 font-mono">bpmn-beta renderer</span>
+
+            {/* Zoom controls */}
+            <div className="ml-auto flex items-center gap-0.5">
+              <span className="text-xs text-muted-foreground font-mono tabular-nums w-10 text-right mr-1">
+                {Math.round(viewState.scale * 100)}%
+              </span>
+              <button
+                onClick={() => zoomStep(1 / 1.2)}
+                title="Zoom out (scroll wheel)"
+                aria-label="Zoom out"
+                className="p-1.5 rounded hover:bg-muted/70 text-muted-foreground hover:text-foreground transition-colors"
+              >
+                <ZoomOut size={13} />
+              </button>
+              <button
+                onClick={resetView}
+                title="Reset view"
+                aria-label="Reset view"
+                className="p-1.5 rounded hover:bg-muted/70 text-muted-foreground hover:text-foreground transition-colors"
+              >
+                <Maximize2 size={13} />
+              </button>
+              <button
+                onClick={() => zoomStep(1.2)}
+                title="Zoom in (scroll wheel)"
+                aria-label="Zoom in"
+                className="p-1.5 rounded hover:bg-muted/70 text-muted-foreground hover:text-foreground transition-colors"
+              >
+                <ZoomIn size={13} />
+              </button>
+            </div>
           </div>
-          <div className="flex-1 diagram-grid overflow-hidden" data-testid="div-diagram-preview">
-            <BpmnRenderer source={source} />
+
+          {/* Pan / zoom canvas */}
+          <div
+            ref={canvasRef}
+            className="flex-1 diagram-grid overflow-hidden relative select-none"
+            style={{ cursor: isDragging ? "grabbing" : "grab" }}
+            onMouseDown={handleMouseDown}
+            onMouseMove={handleMouseMove}
+            onMouseUp={handlePanEnd}
+            onMouseLeave={handlePanEnd}
+            data-testid="div-diagram-preview"
+          >
+            <div
+              style={{
+                transform: `translate(${viewState.tx}px, ${viewState.ty}px) scale(${viewState.scale})`,
+                transformOrigin: "0 0",
+                width: "100%",
+                height: "100%",
+                willChange: "transform",
+              }}
+            >
+              <BpmnRenderer source={source} />
+            </div>
+
+            {/* Hint — visible only at default zoom */}
+            {viewState.scale === 1 && viewState.tx === 0 && viewState.ty === 0 && (
+              <div className="absolute bottom-2 right-3 text-xs text-muted-foreground/40 font-mono pointer-events-none select-none">
+                scroll to zoom · drag to pan
+              </div>
+            )}
           </div>
         </div>
       </div>
