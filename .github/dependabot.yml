@@ -1,0 +1,39 @@
+# Dependabot configuration for BPMN for Mermaid
+# BPMN for Mermaid is a personal OverKill Hill P³ project by Jamie Hill.
+#
+# Update policy:
+# - Dependabot opens PRs for npm and GitHub Actions dependency updates.
+# - CI runs typecheck and test on each PR (see .github/workflows/ci.yml).
+# - All PRs require human review and merge.
+# - Mermaid major version upgrades require manual review of the plugin contract
+#   in src/lib/bpmn-plugin.ts and docs/mermaid-compatibility.md before merging.
+
+version: 2
+updates:
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+    open-pull-requests-limit: 5
+    labels:
+      - "dependencies"
+      - "npm"
+    commit-message:
+      prefix: "chore(deps)"
+    ignore:
+      # Mermaid major version upgrades require plugin contract review — handle manually.
+      - dependency-name: "mermaid"
+        update-types: ["version-update:semver-major"]
+
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+    open-pull-requests-limit: 5
+    labels:
+      - "dependencies"
+      - "github-actions"
+    commit-message:
+      prefix: "chore(actions)"
