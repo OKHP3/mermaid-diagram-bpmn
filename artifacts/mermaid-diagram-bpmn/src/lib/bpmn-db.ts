@@ -28,6 +28,16 @@ export interface BpmnLane {
   poolId: string;
 }
 
+/**
+ * Typed diagram store for bpmn-beta diagrams.
+ *
+ * Implements the Mermaid DiagramDB interface so the class can be used
+ * directly as the `db` field in a DiagramDefinition (registerExternalDiagrams).
+ *
+ * Required DiagramDB methods (from mermaid/src/diagram-api/types.ts):
+ *   clear, setAccTitle, getAccTitle, setAccDescription, getAccDescription,
+ *   setDiagramTitle, getDiagramTitle, setDiagramId, bindFunctions, getConfig
+ */
 export class BpmnDb {
   private _nodes: BpmnNode[] = [];
   private _flows: BpmnFlow[] = [];
@@ -35,55 +45,55 @@ export class BpmnDb {
   private _lanes: BpmnLane[] = [];
   private _accTitle?: string;
   private _accDescription?: string;
+  private _diagramTitle?: string;
+  private _diagramId?: string;
 
-  addNode(node: BpmnNode): void {
-    this._nodes.push(node);
-  }
+  // ---- BPMN-specific mutators ------------------------------------------------
 
-  addFlow(flow: BpmnFlow): void {
-    this._flows.push(flow);
-  }
+  addNode(node: BpmnNode): void { this._nodes.push(node); }
+  addFlow(flow: BpmnFlow): void { this._flows.push(flow); }
+  addPool(pool: BpmnPool): void { this._pools.push(pool); }
+  addLane(lane: BpmnLane): void { this._lanes.push(lane); }
 
-  addPool(pool: BpmnPool): void {
-    this._pools.push(pool);
-  }
+  // ---- BPMN-specific accessors -----------------------------------------------
 
-  addLane(lane: BpmnLane): void {
-    this._lanes.push(lane);
-  }
+  getNodes(): BpmnNode[] { return this._nodes; }
+  getFlows(): BpmnFlow[] { return this._flows; }
+  getPools(): BpmnPool[] { return this._pools; }
+  getLanes(): BpmnLane[] { return this._lanes; }
 
-  setAccTitle(title: string): void {
-    this._accTitle = title;
-  }
+  // ---- Mermaid DiagramDB interface -------------------------------------------
+  // These match the optional fields of DiagramDB in mermaid/src/diagram-api/types.ts.
 
-  setAccDescription(desc: string): void {
-    this._accDescription = desc;
-  }
+  /** Accessibility title — emitted as <title> in SVG. */
+  setAccTitle(title: string): void { this._accTitle = title; }
+  getAccTitle(): string | undefined { return this._accTitle; }
 
-  getNodes(): BpmnNode[] {
-    return this._nodes;
-  }
+  /** Accessibility description — emitted as <desc> in SVG. */
+  setAccDescription(desc: string): void { this._accDescription = desc; }
+  getAccDescription(): string | undefined { return this._accDescription; }
 
-  getFlows(): BpmnFlow[] {
-    return this._flows;
-  }
+  /** Human-readable diagram title (separate from accessibility title). */
+  setDiagramTitle(title: string): void { this._diagramTitle = title; }
+  getDiagramTitle(): string { return this._diagramTitle ?? ''; }
 
-  getPools(): BpmnPool[] {
-    return this._pools;
-  }
+  /** Called by Mermaid to inject the SVG element id so the db can store it. */
+  setDiagramId(id: string): void { this._diagramId = id; }
+  getDiagramId(): string | undefined { return this._diagramId; }
 
-  getLanes(): BpmnLane[] {
-    return this._lanes;
-  }
+  /**
+   * Called by Mermaid after rendering to bind interactive event handlers.
+   * No-op for bpmn-beta (read-only SVG; no interactive bindings in v1).
+   */
+  bindFunctions(_element: Element): void { /* no-op */ }
 
-  getAccTitle(): string | undefined {
-    return this._accTitle;
-  }
+  /**
+   * Returns the diagram config subset.
+   * bpmn-beta has no per-diagram config overrides in v1.
+   */
+  getConfig(): undefined { return undefined; }
 
-  getAccDescription(): string | undefined {
-    return this._accDescription;
-  }
-
+  /** Reset all state. Called by the parser before each new parse. */
   clear(): void {
     this._nodes = [];
     this._flows = [];
@@ -91,5 +101,7 @@ export class BpmnDb {
     this._lanes = [];
     this._accTitle = undefined;
     this._accDescription = undefined;
+    this._diagramTitle = undefined;
+    this._diagramId = undefined;
   }
 }

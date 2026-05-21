@@ -36,6 +36,7 @@ export function getStyles(options: BpmnThemeOptions): string {
   `;
 }
 
+// Used by the playground (CSS custom properties are resolved by Tailwind in the browser DOM).
 export const LIGHT_THEME: BpmnThemeOptions = {
   lineColor: 'hsl(var(--foreground))',
   mainBkg: 'hsl(var(--card))',
@@ -44,3 +45,35 @@ export const LIGHT_THEME: BpmnThemeOptions = {
   textColor: 'hsl(var(--foreground))',
   primaryColor: 'hsl(var(--primary))',
 };
+
+// Fallback theme with concrete values for Mermaid's SVG context where CSS
+// custom properties defined by Tailwind are not available.
+export const MERMAID_FALLBACK_THEME: BpmnThemeOptions = {
+  lineColor: '#333333',
+  mainBkg: '#ffffff',
+  nodeBorder: '#999999',
+  clusterBkg: '#efefef',
+  textColor: '#333333',
+  primaryColor: '#1890ff',
+};
+
+/**
+ * Build a BpmnThemeOptions object from Mermaid's themeVariables config block.
+ *
+ * Mermaid passes its resolved themeVariables to the diagram's `styles` provider.
+ * The keys below match Mermaid's own theme variable names:
+ *   https://mermaid.js.org/config/theming.html
+ *
+ * Falls back to MERMAID_FALLBACK_THEME values for any missing key.
+ */
+export function buildMermaidTheme(themeVariables?: Record<string, string>): BpmnThemeOptions {
+  const v = themeVariables ?? {};
+  return {
+    primaryColor:  v['primaryColor']      ?? MERMAID_FALLBACK_THEME.primaryColor,
+    lineColor:     v['lineColor']         ?? v['edgeLabelBackground'] ?? MERMAID_FALLBACK_THEME.lineColor,
+    mainBkg:       v['mainBkg']           ?? v['primaryColor']        ?? MERMAID_FALLBACK_THEME.mainBkg,
+    nodeBorder:    v['nodeBorder']        ?? v['lineColor']           ?? MERMAID_FALLBACK_THEME.nodeBorder,
+    clusterBkg:    v['clusterBkg']        ?? MERMAID_FALLBACK_THEME.clusterBkg,
+    textColor:     v['textColor']         ?? v['primaryTextColor']    ?? MERMAID_FALLBACK_THEME.textColor,
+  };
+}
