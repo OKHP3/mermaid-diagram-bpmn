@@ -6,9 +6,20 @@
 
 This document defines the technical and design standards that all DSL features, parser behavior, rendering, and documentation in BPMN for Mermaid must conform to.
 
-## Authoritative standard
+## Dual-compliance requirement
 
-All rendered notation in this project must conform to the **OMG BPMN 2.0.2 Formal Specification**:
+This project has two co-equal hard requirements. **Failure on either side produces a failed document. Neither standard takes priority over the other.**
+
+| Standard | Authority | Failure condition |
+|---|---|---|
+| **Mermaid rendering** | Mermaid `registerExternalDiagrams()` API | Plugin throws, SVG does not render, or output is visually broken in a Mermaid-compatible host |
+| **BPMN 2.0.2 notation** | OMG BPMN 2.0.2 Formal Specification — Descriptive Conformance Sub-Class (Section 2.1) | A rendered element deviates from the spec notation without a decision log entry |
+
+When these two requirements create tension, open a `docs/decisions.md` entry and document the trade-off explicitly. Do not silently favour one over the other.
+
+## Authoritative standards
+
+**BPMN notation standard:**
 
 | Resource | Location |
 |---|---|
@@ -17,7 +28,16 @@ All rendered notation in this project must conform to the **OMG BPMN 2.0.2 Forma
 | BPMN standard home | https://www.bpmn.org/ |
 | OMG specification page | https://www.omg.org/spec/BPMN/2.0.2/PDF |
 
-This project targets the **Descriptive Conformance Sub-Class** (spec Section 2.1). Any element outside that class requires a `docs/decisions.md` entry before implementation.
+**Mermaid rendering standard:**
+
+| Resource | Location |
+|---|---|
+| Plugin contract | `src/lib/bpmn-plugin.ts` |
+| Compatibility reference | `docs/mermaid-compatibility.md` |
+| Mermaid API docs | https://mermaid.js.org |
+| Governance constant | `MERMAID_VERSION_TARGET` in `bpmn-plugin.ts` |
+
+This project targets the **Descriptive Conformance Sub-Class** (BPMN spec Section 2.1). Any element outside that class requires a `docs/decisions.md` entry before implementation.
 
 ---
 

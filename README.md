@@ -12,9 +12,18 @@ Mermaid has a material diagram-type gap: BPMN 2.0 is not represented as a native
 
 [https://okhp3.github.io/mermaid-diagram-bpmn](https://okhp3.github.io/mermaid-diagram-bpmn)
 
-## BPMN standard
+## Standards compliance
 
-The diagrams produced by this project conform to the **OMG BPMN 2.0.2 formal specification** — Descriptive Conformance Sub-Class (Section 2.1). Every rendered shape, marker, flow type, and gateway symbol is grounded in the official notation standard.
+`bpmn-beta` has two co-equal hard requirements. Failure on either side produces a failed document:
+
+| Requirement | What it means | Failure condition |
+|---|---|---|
+| **Mermaid rendering** | The output must render correctly via Mermaid's `registerExternalDiagrams()` API and in any Mermaid-compatible host (GitHub, Notion, live editor) | SVG does not render, plugin throws, or output is visually broken |
+| **BPMN 2.0.2 notation** | Every shape, marker, flow line, and gateway symbol must match the OMG BPMN 2.0.2 formal specification (Descriptive Conformance Sub-Class, Section 2.1) | A notation element deviates from the spec without a documented decision |
+
+Neither standard takes priority. A diagram that renders correctly in Mermaid but uses wrong BPMN notation is as broken as one that follows BPMN notation but fails to render.
+
+**BPMN specification resources:**
 
 | Resource | Link |
 |---|---|

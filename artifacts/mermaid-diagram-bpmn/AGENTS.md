@@ -43,22 +43,32 @@ When adding a new BPMN element type:
 
 Do not break this sequence. Do not add rendering logic to the parser or layout logic to the renderer.
 
-## BPMN notation compliance
+## Dual-compliance requirement
 
-Every rendered element — shapes, markers, flow lines, arrowheads, gateway symbols — must conform to the **OMG BPMN 2.0.2 formal specification**:
+This project has two co-equal hard requirements. **Neither takes priority over the other. A failure on either side is a failed document.**
 
-- **Specification file:** `standards/OMG-BPMN-2.0.2-formal-specification.pdf` (included in this repo)
-- **Compliance reference:** `standards/BPMN-SPEC-REFERENCE.md` (section-by-section guide for contributors)
-- **Standard home:** https://www.bpmn.org/
-- **OMG spec page:** https://www.omg.org/spec/BPMN/2.0.2/PDF
+| Requirement | Standard | Failure condition |
+|---|---|---|
+| **Mermaid rendering** | Mermaid `registerExternalDiagrams()` API contract | Plugin throws, SVG does not render, or output breaks in any Mermaid-compatible host |
+| **BPMN notation** | OMG BPMN 2.0.2 formal specification — Descriptive Conformance Sub-Class (Section 2.1) | A rendered shape, marker, or flow deviates from the spec without a documented decision |
 
-When adding or modifying a rendered shape or flow:
-1. Look up the element in `standards/BPMN-SPEC-REFERENCE.md` to find the relevant spec section
-2. Verify the visual marker, shape, and line style against the specification appendix (Appendix B)
-3. If your rendering deviates from the spec, document the reason in `docs/decisions.md` — do not silently deviate
-4. Do not invent notation. If an element isn't in the spec, it belongs in a decision log entry, not in the renderer
+A diagram that renders correctly in Mermaid but uses wrong BPMN notation is as broken as one that follows the spec but fails to render. Do not trade one off against the other.
 
-The project targets the **Descriptive Conformance Sub-Class** (spec Section 2.1). Elements outside that class require explicit scope approval.
+**BPMN specification resources:**
+- Specification file: `standards/OMG-BPMN-2.0.2-formal-specification.pdf` (included in this repo)
+- Compliance map: `standards/BPMN-SPEC-REFERENCE.md`
+- Standard home: https://www.bpmn.org/
+- OMG spec: https://www.omg.org/spec/BPMN/2.0.2/PDF
+
+**Mermaid compatibility resources:**
+- Plugin contract: `src/lib/bpmn-plugin.ts`
+- Compatibility reference: `docs/mermaid-compatibility.md`
+- Governance constant: `MERMAID_VERSION_TARGET` in `bpmn-plugin.ts`
+
+When adding or modifying any rendered element, both checks are required:
+1. Look up the element in `standards/BPMN-SPEC-REFERENCE.md` — verify shape, marker, and line style against the spec
+2. Verify the plugin draw function produces valid SVG that Mermaid can inject into the page
+3. If either standard requires a deviation from the other, open a `docs/decisions.md` entry — do not resolve the tension silently
 
 ## DSL governance
 

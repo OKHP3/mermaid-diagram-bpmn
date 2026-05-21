@@ -27,15 +27,27 @@
 
 ---
 
+## Dual-compliance requirement
+
+`bpmn-beta` has two co-equal hard requirements. **Both must be satisfied. Neither takes priority.**
+
+| Requirement | What it means |
+|---|---|
+| **Mermaid rendering compliance** | Output must render correctly via Mermaid's `registerExternalDiagrams()` API and in all Mermaid-compatible hosts (GitHub, Notion, live editor). See `docs/mermaid-compatibility.md`. |
+| **BPMN notation compliance** | Every shape, marker, flow line, and gateway symbol must match this specification. A diagram that renders in Mermaid but uses incorrect BPMN notation is a failed document. |
+
+A diagram that renders correctly in Mermaid but violates BPMN notation is a failed document. A diagram that follows BPMN notation but fails to render in Mermaid is equally a failed document.
+
 ## Why this spec is here
 
-The `bpmn-beta` DSL renders BPMN diagrams. Every shape, marker, flow type, gateway symbol, and event marker that this project renders must be grounded in the OMG BPMN 2.0.2 notation standard — not invented independently.
+Every shape, marker, flow type, gateway symbol, and event marker that this project renders must be grounded in the OMG BPMN 2.0.2 notation standard — not invented independently.
 
 Including the spec in the repository means:
 - Contributors can verify notation correctness without leaving the repo
 - AI agents working on this codebase can resolve notation questions against the authoritative source
 - Reviewers can cite a specific section when flagging a notation deviation
 - The project's compliance claims are traceable to a concrete document
+- When Mermaid and BPMN notation requirements create tension, the spec is the starting point for the decision log entry
 
 ---
 
