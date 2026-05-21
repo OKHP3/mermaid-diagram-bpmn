@@ -1,0 +1,651 @@
+You are operating in PLAN MODE.
+
+Do not modify code, create files, delete files, refactor, install packages, run migrations, or change configuration unless I explicitly approve the plan in a later step.
+
+Your task is to perform a Prototype-to-Product Retrospective on this Repl.
+
+The goal is to reverse-engineer what this effort has become so far, reconstruct the completed work into an as-built product record, identify the trendline and directionality of the product, and propose the next logical roadmap.
+
+This Repl began organically as an idea, spark, experiment, prototype, or informal build. There may not have been a formal PRD, project charter, roadmap, issue list, product strategy, or architecture document at the beginning.
+
+Treat the current Repl as the source of truth, but also incorporate any optional Notion, GitHub, deployment, or documentation links I provide below.
+
+---
+
+## 0. Project Inputs
+
+Use the following inputs if provided. If any are blank, continue with the current Repl and clearly list what could not be verified.
+
+### Core Repl
+- Repl name: [INSERT_REPL_NAME]
+- Repl URL: [INSERT_REPL_URL_IF_RELEVANT]
+- Current deployment URL, if any: [INSERT_DEPLOYMENT_URL]
+- Current known purpose in my words: [INSERT_SHORT_DESCRIPTION_OR_SPARK]
+- Current target user or audience, if known: [INSERT_TARGET_USER]
+- Current product category, if known: [INSERT_PRODUCT_CATEGORY]
+
+### Optional External Artifacts
+- GitHub repository URL: [INSERT_GITHUB_REPO_URL_OR_BLANK]
+- Notion project page URL: [INSERT_NOTION_PAGE_URL_OR_BLANK]
+- Notion PRD / notes / research URL: [INSERT_NOTION_ARTIFACT_URLS_OR_BLANK]
+- GitHub issues / PRs / discussions URL: [INSERT_GITHUB_ARTIFACT_URLS_OR_BLANK]
+- Other relevant links: [INSERT_OTHER_LINKS_OR_BLANK]
+
+### Desired Analysis Depth
+Use this depth unless the available evidence makes it impractical:
+
+- Depth: [LIGHT / STANDARD / DEEP / EXHAUSTIVE]
+
+Definitions:
+- LIGHT = concise summary, key findings, immediate next steps.
+- STANDARD = full but not excessive retrospective.
+- DEEP = detailed product, technical, and roadmap analysis.
+- EXHAUSTIVE = maximum evidence extraction, detailed ledgers, full roadmap, technical debt map, and documentation architecture.
+
+### Planning Horizon
+Use this forward-looking roadmap horizon:
+
+- Roadmap horizon: [2 WEEKS / 30 DAYS / 90 DAYS / 6 MONTHS]
+
+---
+
+## 1. Mission
+
+Perform a structured analysis of the Repl as an emergent software product.
+
+Do not assume there was a formal plan. Instead, infer the product definition from:
+
+1. The current codebase.
+2. File structure.
+3. Application behavior.
+4. UI flows.
+5. Data models.
+6. Package dependencies.
+7. Configuration.
+8. Environment assumptions.
+9. README or documentation.
+10. Comments or TODOs.
+11. Test files, if any.
+12. Deployment structure.
+13. Database/schema artifacts, if any.
+14. Git history, commits, branches, issues, or PRs if GitHub is available.
+15. Notion notes, project pages, embedded specs, research pages, or planning notes if Notion links are available.
+16. Replit Agent history or plan history if visible.
+17. Any other artifacts present in the workspace.
+
+Your output should help me answer:
+
+> “What did we actually build, what requirements does it imply, what direction is it pointing, and what should we build next?”
+
+---
+
+## 2. Required Operating Rules
+
+Follow these rules strictly.
+
+### Do Not Hallucinate
+If a detail cannot be verified, label it as an inference, assumption, or open question.
+
+### Use Evidence Labels
+Every major finding should be classified as one of:
+
+- Verified: directly supported by files, behavior, docs, commits, issues, or visible artifacts.
+- Inferred: strongly suggested by implementation or repeated patterns.
+- Speculative: plausible, but needs confirmation.
+- Unknown: not enough evidence.
+
+### Preserve Uncertainty
+Do not rewrite messy prototype history into fake clean project history. The point is to recover the real shape of the work, not pretend it was planned perfectly.
+
+### Separate As-Built From Proposed
+Keep current completed functionality separate from future recommendations.
+
+Use these labels:
+
+- AS-BUILT = what exists now.
+- IMPLIED = what the current implementation suggests.
+- GAP = what is missing or incomplete.
+- RECOMMENDED = what should happen next.
+
+### Plan Mode Only
+Do not implement. Produce the analysis and a proposed documentation plan only.
+
+---
+
+## 3. Deliverable 1 — Executive Summary
+
+Create an executive summary with the following:
+
+1. What this Repl appears to be.
+2. What problem it appears to solve.
+3. What has already been built.
+4. Why it has crossed from prototype into project/product territory.
+5. What its strongest product direction appears to be.
+6. What the next productization step should be.
+7. The top 3 risks or unresolved questions.
+
+Use direct, plain language. Do not over-market the work.
+
+---
+
+## 4. Deliverable 2 — Prototype Origin Reconstruction
+
+Reconstruct the likely origin story of the effort.
+
+Include:
+
+- Original spark or concept, if visible.
+- Earliest apparent intent.
+- How the Repl evolved from experiment into structured application.
+- Major inflection points.
+- The “combustion point” where the effort became product-shaped.
+- Whether the current result looks like:
+  - proof of concept,
+  - working prototype,
+  - MVP,
+  - internal tool,
+  - public product candidate,
+  - technical demo,
+  - platform foundation,
+  - documentation site,
+  - utility app,
+  - or something else.
+
+If the origin is not visible, state that clearly and infer cautiously from current evidence.
+
+---
+
+## 5. Deliverable 3 — Product Archaeology Ledger
+
+Create a Product Archaeology Ledger.
+
+This is the core reconstruction table. Use the current Repl and any linked artifacts to infer completed work.
+
+Use this format:
+
+| ID | Evidence Source | Observed Artifact / Behavior | Inferred Completed Task | Resulting Capability | Derived Requirement | Confidence | Follow-Up |
+|---|---|---|---|---|---|---|---|
+
+Guidance:
+
+- Evidence Source should cite the file, folder, visible feature, documentation artifact, GitHub issue, commit, PR, Notion page, or deployment behavior when available.
+- Observed Artifact / Behavior should describe what is actually present.
+- Inferred Completed Task should translate that evidence into work performed.
+- Resulting Capability should describe what the product can now do.
+- Derived Requirement should rewrite the completed capability as a retrospective requirement.
+- Confidence should be High, Medium, or Low.
+- Follow-Up should identify validation, cleanup, or next work.
+
+Example requirement style:
+
+> The system shall allow users to create, edit, and persist project records.
+
+Do not over-infer. If the evidence is weak, label confidence as Low.
+
+---
+
+## 6. Deliverable 4 — As-Built Capability Inventory
+
+Create a structured inventory of current capabilities.
+
+Group capabilities into meaningful product areas, such as:
+
+- User interface.
+- Navigation.
+- Authentication.
+- Data entry.
+- Data storage.
+- Import/export.
+- Visualization.
+- AI-assisted behavior.
+- Search.
+- Filtering.
+- Reporting.
+- Admin/configuration.
+- Integrations.
+- Deployment.
+- Documentation.
+- Developer tooling.
+- Testing.
+- Error handling.
+- Security/privacy.
+
+For each capability, include:
+
+| Capability | Status | Evidence | Product Value | Maturity | Notes |
+|---|---|---|---|---|---|
+
+Status values:
+
+- Complete
+- Partial
+- Prototype
+- Broken / uncertain
+- Planned but not visible
+- Not present
+
+Maturity values:
+
+- Experimental
+- Functional
+- Stable
+- Product-ready
+- Needs hardening
+
+---
+
+## 7. Deliverable 5 — Retrospective Requirements Document
+
+Reverse-engineer an As-Built PRD from the current implementation.
+
+Organize requirements as:
+
+### Functional Requirements
+What the system currently does or clearly intends to do.
+
+### Non-Functional Requirements
+Performance, reliability, security, maintainability, usability, accessibility, scalability, portability, observability, and deployment requirements.
+
+### Data Requirements
+Entities, schemas, records, file formats, persistence expectations, import/export needs, validation rules, and retention assumptions.
+
+### User Experience Requirements
+Navigation, workflows, states, feedback messages, onboarding, empty states, and user interaction patterns.
+
+### Integration Requirements
+GitHub, Notion, APIs, external services, embedded tools, deployment targets, environment variables, or future connectors.
+
+### Documentation Requirements
+README, setup docs, user guide, architecture notes, changelog, roadmap, known limitations, and contribution guide.
+
+For each requirement, include:
+
+| Req ID | Requirement | Type | Source / Evidence | Current Status | Confidence |
+|---|---|---|---|---|---|
+
+Use IDs like:
+
+- FR-001
+- NFR-001
+- DATA-001
+- UX-001
+- INT-001
+- DOC-001
+
+---
+
+## 8. Deliverable 6 — Architecture and Implementation Summary
+
+Analyze the current technical shape of the Repl.
+
+Include:
+
+1. Tech stack.
+2. Runtime model.
+3. Frontend structure.
+4. Backend structure, if present.
+5. API structure, if present.
+6. Database or persistence model, if present.
+7. Authentication and authorization, if present.
+8. Key dependencies.
+9. Build and deployment process.
+10. Configuration and environment variables.
+11. Major files and folders.
+12. Any architectural smells or fragile areas.
+13. Any areas where the implementation is stronger than expected.
+14. Any areas where prototype shortcuts are visible.
+
+Create a simple architecture summary in text.
+
+If useful, include a Mermaid diagram recommendation, but do not implement it unless asked.
+
+---
+
+## 9. Deliverable 7 — User Flows and Use Cases
+
+Identify the major user flows supported by the current app.
+
+For each flow, include:
+
+| Flow ID | User Goal | Entry Point | Main Steps | Current Support | Gaps | Product Importance |
+|---|---|---|---|---|---|---|
+
+Then produce a short list of likely use cases:
+
+| Use Case | Actor | Goal | Current Support | Notes |
+|---|---|---|---|---|
+
+Separate confirmed flows from inferred flows.
+
+---
+
+## 10. Deliverable 8 — Decision and Tradeoff Register
+
+Create a decision register based on visible implementation choices.
+
+Use this format:
+
+| Decision ID | Decision / Tradeoff | Evidence | Likely Rationale | Consequence | Keep / Revisit |
+|---|---|---|---|---|---|
+
+Examples:
+
+- Chosen framework.
+- Local storage vs database.
+- Static site vs full-stack app.
+- Manual data entry vs import.
+- No authentication yet.
+- Single-user assumptions.
+- Styling framework choice.
+- API design pattern.
+- File-based configuration.
+- Lack of automated tests.
+- Deployment approach.
+
+Do not assume intent where there is no evidence. Use “likely rationale” when inferring.
+
+---
+
+## 11. Deliverable 9 — Technical Debt and Hardening Map
+
+Identify technical debt and product hardening work.
+
+Group findings into:
+
+- Code quality.
+- Architecture.
+- Security.
+- Data integrity.
+- Error handling.
+- State management.
+- Performance.
+- Testing.
+- Documentation.
+- Deployment.
+- Observability.
+- UX polish.
+- Accessibility.
+- Maintainability.
+- Dependency risk.
+
+Use this format:
+
+| Debt ID | Area | Issue | Impact | Severity | Recommended Fix | Effort |
+|---|---|---|---|---|---|---|
+
+Severity:
+
+- Critical
+- High
+- Medium
+- Low
+
+Effort:
+
+- Small
+- Medium
+- Large
+- Unknown
+
+---
+
+## 12. Deliverable 10 — Product Directionality Analysis
+
+This is one of the most important sections.
+
+Analyze the trendline of the work so far.
+
+Answer:
+
+1. What is this product becoming?
+2. What is it moving away from?
+3. What pattern repeats across the implementation?
+4. What user problem keeps becoming more central?
+5. What capability seems to have the most gravity?
+6. What should not be overbuilt yet?
+7. What should be formalized next?
+8. What is the likely product thesis?
+
+Write a clear directionality statement.
+
+Use this format:
+
+> Based on the current implementation, this Repl appears to be evolving from [starting form] into [emerging product form], with the strongest gravity around [core capability / user value]. The next logical productization move is [next move], not [tempting distraction].
+
+Also include:
+
+### Product Direction Options
+
+| Option | Description | Pros | Cons | Recommended? |
+|---|---|---|---|---|
+
+Include at least 3 strategic paths:
+
+1. Conservative hardening path.
+2. Feature expansion path.
+3. Platform / ecosystem path.
+
+Then recommend one.
+
+---
+
+## 13. Deliverable 11 — Productization Gap Analysis
+
+Evaluate how far this is from being a managed product.
+
+Use this scorecard:
+
+| Area | Current Maturity | Required for Productization | Gap | Priority |
+|---|---|---|---|---|
+
+Areas:
+
+- Product definition.
+- Target users.
+- Core workflows.
+- UX clarity.
+- Data model.
+- Security/privacy.
+- Error handling.
+- Testing.
+- Deployment.
+- Documentation.
+- Maintainability.
+- Roadmap.
+- Support model.
+- Analytics/feedback.
+- Governance.
+
+Maturity values:
+
+- 0 = absent
+- 1 = rough prototype
+- 2 = working prototype
+- 3 = MVP candidate
+- 4 = product-ready
+- 5 = mature product
+
+---
+
+## 14. Deliverable 12 — Forward Roadmap
+
+Create a roadmap based on the as-built state and directionality analysis.
+
+Use the selected roadmap horizon from the inputs.
+
+Create phases:
+
+### Phase 1 — Stabilize
+Near-term fixes, documentation, cleanup, and validation.
+
+### Phase 2 — Clarify
+Product definition, user flows, requirements, design decisions, and scope boundaries.
+
+### Phase 3 — Extend
+New features and enhancements that align with the trendline.
+
+### Phase 4 — Productize
+Testing, deployment, security, analytics, support, onboarding, and maintainability.
+
+Use this table:
+
+| Phase | Deliverable | Description | Source / Rationale | Priority | Effort | Dependencies |
+|---|---|---|---|---|---|---|
+
+Priority:
+
+- P0 = must do now
+- P1 = should do next
+- P2 = valuable but not urgent
+- P3 = backlog / someday
+
+---
+
+## 15. Deliverable 13 — Recommended Backlog
+
+Create an actionable backlog from the roadmap.
+
+Use this format:
+
+| Backlog ID | Title | User Story / Task | Acceptance Criteria | Priority | Effort | Type |
+|---|---|---|---|---|---|---|
+
+Types:
+
+- Feature
+- Bug
+- Refactor
+- Documentation
+- Test
+- Research
+- Design
+- Architecture
+- DevOps
+- Security
+- Data
+- UX
+
+Acceptance criteria should be specific enough that a later Replit implementation plan can act on them.
+
+---
+
+## 16. Deliverable 14 — Documentation Artifact Plan
+
+Recommend a documentation package for this Repl.
+
+Do not create these files yet. Propose them.
+
+Suggested files:
+
+- docs/prototype-to-product-retrospective.md
+- docs/as-built-prd.md
+- docs/product-archaeology-ledger.md
+- docs/productization-roadmap.md
+- docs/technical-debt-register.md
+- docs/architecture-summary.md
+- docs/decision-register.md
+- docs/open-questions.md
+- CHANGELOG.md
+- README.md updates
+
+For each proposed document, include:
+
+| Document | Purpose | Recommended Filename | Should Create Now? | Notes |
+|---|---|---|---|---|
+
+Also recommend whether this Repl needs:
+
+- A README refresh.
+- A formal PRD.
+- A roadmap.
+- A GitHub issue backlog.
+- A Notion project page.
+- A Mermaid architecture diagram.
+- A deployment checklist.
+- A release notes file.
+- A user guide.
+- A maintainer guide.
+
+---
+
+## 17. Deliverable 15 — External Artifact Sync Plan
+
+If GitHub and/or Notion links were provided, recommend how to sync the retrospective outputs across Replit, GitHub, and Notion.
+
+Use this format:
+
+| Destination | Recommended Artifact | Purpose | Sync Method | Notes |
+|---|---|---|---|---|
+
+Consider:
+
+- Replit should hold implementation-adjacent docs.
+- GitHub should hold durable technical documentation, issues, roadmap, and changelog.
+- Notion should hold narrative strategy, research, product thinking, planning pages, and executive summaries.
+
+If external links cannot be accessed, list exactly what I should paste or export into this Repl to improve the retrospective.
+
+---
+
+## 18. Deliverable 16 — Open Questions
+
+List unresolved questions that must be answered before the next implementation cycle.
+
+Group into:
+
+- Product questions.
+- User questions.
+- Technical questions.
+- Data questions.
+- UX questions.
+- Security/privacy questions.
+- Deployment questions.
+- Business/model questions.
+- Documentation questions.
+
+Use this format:
+
+| Question ID | Question | Why It Matters | Recommended Owner | Blocks Next Step? |
+|---|---|---|---|---|
+
+---
+
+## 19. Deliverable 17 — Recommended Next Prompt
+
+End by writing the next prompt I should give you after reviewing this plan.
+
+Provide two versions:
+
+### Version A — Documentation Creation Prompt
+A prompt that tells you to create the proposed documentation artifacts.
+
+### Version B — Productization Implementation Prompt
+A prompt that tells you to begin implementing the first approved roadmap phase.
+
+Both prompts must be specific to this Repl based on your findings.
+
+---
+
+## 20. Final Output Format
+
+Return the full result in this order:
+
+1. Executive Summary
+2. Prototype Origin Reconstruction
+3. Product Archaeology Ledger
+4. As-Built Capability Inventory
+5. Retrospective Requirements / As-Built PRD
+6. Architecture and Implementation Summary
+7. User Flows and Use Cases
+8. Decision and Tradeoff Register
+9. Technical Debt and Hardening Map
+10. Product Directionality Analysis
+11. Productization Gap Analysis
+12. Forward Roadmap
+13. Recommended Backlog
+14. Documentation Artifact Plan
+15. External Artifact Sync Plan
+16. Open Questions
+17. Recommended Next Prompt
+
+Remember: Plan Mode only. Do not modify files yet.
