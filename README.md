@@ -12,6 +12,17 @@ Mermaid has a material diagram-type gap: BPMN 2.0 is not represented as a native
 
 [https://okhp3.github.io/mermaid-diagram-bpmn](https://okhp3.github.io/mermaid-diagram-bpmn)
 
+## BPMN standard
+
+The diagrams produced by this project conform to the **OMG BPMN 2.0.2 formal specification** — Descriptive Conformance Sub-Class (Section 2.1). Every rendered shape, marker, flow type, and gateway symbol is grounded in the official notation standard.
+
+| Resource | Link |
+|---|---|
+| BPMN standard home | https://www.bpmn.org/ |
+| OMG BPMN 2.0.2 specification | https://www.omg.org/spec/BPMN/2.0.2/PDF |
+| Specification PDF (in this repo) | [`standards/OMG-BPMN-2.0.2-formal-specification.pdf`](./standards/OMG-BPMN-2.0.2-formal-specification.pdf) |
+| Compliance reference | [`standards/BPMN-SPEC-REFERENCE.md`](./standards/BPMN-SPEC-REFERENCE.md) |
+
 ## Related reading
 
 - [Notion proposal](https://www.notion.so/overkillhill/BPMN-for-Mermaid-bpmn-beta-Diagram-Type-Proposal-357812e0ced481c88b20d2eb493dc775) — full design spec, decisions, and engagement strategy

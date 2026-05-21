@@ -13,11 +13,21 @@ This document is a plain-language summary for internal project governance. It is
 
 ---
 
-## 1. Relationship to the OMG BPMN 2.0 specification
+## 1. Relationship to the OMG BPMN 2.0.2 specification
 
-BPMN 2.0 is a standard published by the Object Management Group (OMG) and also published as ISO/IEC 19510. The specification itself is publicly available at [omg.org/spec/BPMN](https://www.omg.org/spec/BPMN/).
+BPMN 2.0.2 is a standard published by the Object Management Group (OMG) (document formal/2013-12-09) and also published as ISO/IEC 19510:2013.
 
-**BPMN for Mermaid is not a conformant BPMN 2.0 implementation.** It implements a named, documented subset of the notation for the purpose of text-first diagram authoring — specifically the "Descriptive Conformance" tier (simplified events, tasks, gateways, sequence flows, pools, and lanes).
+**Official specification links:**
+- Standard home: https://www.bpmn.org/
+- OMG specification page: https://www.omg.org/spec/BPMN/
+- BPMN 2.0.2 PDF: https://www.omg.org/spec/BPMN/2.0.2/PDF
+- Original OMG document: http://www.omg.org/cgi-bin/doc?dtc/10-06-02
+
+A copy of the specification PDF is included in this repository at `standards/OMG-BPMN-2.0.2-formal-specification.pdf`. OMG publishes its specifications for free public use; including a copy here is consistent with their standard distribution policy and provides an offline reference for contributors and AI agents working in this codebase.
+
+**BPMN for Mermaid targets the Descriptive Conformance Sub-Class** defined in BPMN 2.0.2 Section 2.1. This is the subset intended for human-readable process documentation. It does not implement BPMN execution semantics, choreography, or conversation diagrams.
+
+Rendered elements (shapes, markers, flow lines) are required to conform to the notation defined in the specification. See `standards/BPMN-SPEC-REFERENCE.md` for the section-by-section compliance map.
 
 Use of BPMN element names and notation (start event, end event, gateway, task, lane, pool, sequence flow, message flow) does not require a license from OMG. These are standardized vocabulary terms describing a shared diagramming notation. Their use in a diagram rendering tool does not constitute publication of the standard itself.
 

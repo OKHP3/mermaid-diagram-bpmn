@@ -43,6 +43,23 @@ When adding a new BPMN element type:
 
 Do not break this sequence. Do not add rendering logic to the parser or layout logic to the renderer.
 
+## BPMN notation compliance
+
+Every rendered element — shapes, markers, flow lines, arrowheads, gateway symbols — must conform to the **OMG BPMN 2.0.2 formal specification**:
+
+- **Specification file:** `standards/OMG-BPMN-2.0.2-formal-specification.pdf` (included in this repo)
+- **Compliance reference:** `standards/BPMN-SPEC-REFERENCE.md` (section-by-section guide for contributors)
+- **Standard home:** https://www.bpmn.org/
+- **OMG spec page:** https://www.omg.org/spec/BPMN/2.0.2/PDF
+
+When adding or modifying a rendered shape or flow:
+1. Look up the element in `standards/BPMN-SPEC-REFERENCE.md` to find the relevant spec section
+2. Verify the visual marker, shape, and line style against the specification appendix (Appendix B)
+3. If your rendering deviates from the spec, document the reason in `docs/decisions.md` — do not silently deviate
+4. Do not invent notation. If an element isn't in the spec, it belongs in a decision log entry, not in the renderer
+
+The project targets the **Descriptive Conformance Sub-Class** (spec Section 2.1). Elements outside that class require explicit scope approval.
+
 ## DSL governance
 
 - The header keyword is `bpmn-beta` — always. Not `bpmn`. Not `bpmn-diagram`.

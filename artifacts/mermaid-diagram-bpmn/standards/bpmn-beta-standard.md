@@ -6,6 +6,19 @@
 
 This document defines the technical and design standards that all DSL features, parser behavior, rendering, and documentation in BPMN for Mermaid must conform to.
 
+## Authoritative standard
+
+All rendered notation in this project must conform to the **OMG BPMN 2.0.2 Formal Specification**:
+
+| Resource | Location |
+|---|---|
+| Specification PDF (local copy) | [`OMG-BPMN-2.0.2-formal-specification.pdf`](./OMG-BPMN-2.0.2-formal-specification.pdf) |
+| Section-by-section compliance map | [`BPMN-SPEC-REFERENCE.md`](./BPMN-SPEC-REFERENCE.md) |
+| BPMN standard home | https://www.bpmn.org/ |
+| OMG specification page | https://www.omg.org/spec/BPMN/2.0.2/PDF |
+
+This project targets the **Descriptive Conformance Sub-Class** (spec Section 2.1). Any element outside that class requires a `docs/decisions.md` entry before implementation.
+
 ---
 
 ## 1. Identity standard
