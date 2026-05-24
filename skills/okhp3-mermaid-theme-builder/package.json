@@ -1,0 +1,30 @@
+{
+  "name": "okhp3-mermaid-theme-builder",
+  "version": "0.3.0",
+  "description": "Agent Skill — visual governance for Mermaid diagrams. Palettes, themeVariables, renderer profiles, prompt scaffolds.",
+  "type": "module",
+  "license": "MIT",
+  "author": "OverKill Hill P3",
+  "homepage": "https://okhp3.github.io/mermaid-theme-builder/",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/OKHP3/mermaid-theme-builder"
+  },
+  "scripts": {
+    "test": "node --test tests/validate-skill.test.mjs tests/detect-diagram.test.mjs tests/apply-theme.test.mjs",
+    "validate": "node --test tests/validate-skill.test.mjs",
+    "test:detect": "node --test tests/detect-diagram.test.mjs",
+    "test:apply": "node --test tests/apply-theme.test.mjs"
+  },
+  "keywords": [
+    "mermaid",
+    "diagram",
+    "theme",
+    "palette",
+    "themeVariables",
+    "prompt-scaffold",
+    "agent-skill",
+    "visual-governance",
+    "okhp3"
+  ]
+}

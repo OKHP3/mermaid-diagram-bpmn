@@ -88,16 +88,24 @@ pnpm --filter @workspace/mermaid-diagram-bpmn run test
 pnpm --filter @workspace/mermaid-diagram-bpmn run typecheck
 ```
 
-## Agent Skill
+## Agent Skills
 
-This repository includes a SKILL.md-compatible agent skill at `skills/okhp3-bpmn-for-mermaid/`.
+> The playground is for people. The skills are for agents. The prompt scaffolds are for everyone else.
 
-The skill delivers bpmn-beta DSL generation, validation, and normalization to any SKILL.md-compatible
-agent (Claude, GitHub Copilot, Cursor, VS Code, Gemini CLI, OpenAI Codex) without requiring the browser playground.
+This repository includes two SKILL.md-compatible agent skills under `skills/`:
+
+| Skill | Path | Trigger domain |
+|---|---|---|
+| `okhp3-bpmn-for-mermaid` | `skills/okhp3-bpmn-for-mermaid/` | bpmn-beta generation, validation, normalization, repair |
+| `okhp3-mermaid-theme-builder` | `skills/okhp3-mermaid-theme-builder/` | Palette application, themeVariables, prompt scaffolds, renderer profiles |
 
 **Install:** Copy the `skills/` folder into your project or agent workspace.  
-**Configure:** Point your agent to discover skills from the local path per [agentskills.io](https://agentskills.io).  
-**Trigger example:** "Convert these process notes into a bpmn-beta diagram with pools and lanes, then validate it."
+**Configure:** Point your agent to discover skills from the local path per [agentskills.io](https://agentskills.io).
+
+**Trigger examples:**
+- "Convert these process notes into a bpmn-beta diagram with pools and lanes, then validate it." → `okhp3-bpmn-for-mermaid`
+- "Apply the Ocean Depth palette to this diagram and give me a prompt scaffold." → `okhp3-mermaid-theme-builder`
+- "Generate a bpmn-beta diagram for this workflow, then theme it with the OKH P³ palette." → both skills compose
 
 A companion lightweight skill is also available at `skills/bpmn-for-mermaid/` — a smaller reference-only package
 without scripts or tests, suited for agents with tighter context budgets.

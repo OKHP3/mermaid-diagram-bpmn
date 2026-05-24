@@ -1,0 +1,36 @@
+classDiagram
+    accTitle: Order Domain Model
+    accDescr: Core entities in an e-commerce order management system
+
+    class Order {
+        +String orderId
+        +Date createdAt
+        +OrderStatus status
+        +calculateTotal() Decimal
+        +cancel() void
+    }
+
+    class OrderLine {
+        +String productId
+        +int quantity
+        +Decimal unitPrice
+        +getSubtotal() Decimal
+    }
+
+    class Customer {
+        +String customerId
+        +String email
+        +String name
+        +getOrders() Order[]
+    }
+
+    class Product {
+        +String productId
+        +String name
+        +Decimal price
+        +int stockLevel
+    }
+
+    Customer "1" --> "0..*" Order : places
+    Order "1" *-- "1..*" OrderLine : contains
+    OrderLine "0..*" --> "1" Product : references

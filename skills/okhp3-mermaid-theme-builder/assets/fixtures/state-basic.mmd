@@ -1,0 +1,13 @@
+stateDiagram-v2
+    accTitle: Order Lifecycle
+    accDescr: State transitions for an e-commerce order
+
+    [*] --> Draft
+    Draft --> Submitted : submit()
+    Submitted --> UnderReview : assign reviewer
+    UnderReview --> Approved : approve()
+    UnderReview --> Rejected : reject()
+    Approved --> Fulfilled : fulfill()
+    Fulfilled --> [*]
+    Rejected --> Draft : revise()
+    Rejected --> [*] : cancel()

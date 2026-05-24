@@ -1,0 +1,385 @@
+{
+  "version": "0.3.0",
+  "mermaidMinVersion": "10.0.0",
+  "totalVariables": 21,
+  "variables": [
+    {
+      "name": "primaryColor",
+      "semanticRole": "Primary node/task fill color",
+      "families": {
+        "flowchart": "full",
+        "sequence": "full",
+        "class": "full",
+        "gantt": "none",
+        "er": "full",
+        "state": "full",
+        "pie": "none",
+        "journey": "partial",
+        "bpmn-beta": "full",
+        "mindmap": "partial",
+        "xychart-beta": "full"
+      },
+      "quirks": "In Sequence diagrams, applies to actor box fill. In Gantt, task bar fills use internal rotation — primaryColor has no effect on task bars."
+    },
+    {
+      "name": "primaryTextColor",
+      "semanticRole": "Text inside primary nodes",
+      "families": {
+        "flowchart": "full",
+        "sequence": "full",
+        "class": "full",
+        "gantt": "partial",
+        "er": "full",
+        "state": "full",
+        "pie": "partial",
+        "journey": "partial",
+        "bpmn-beta": "full",
+        "mindmap": "partial",
+        "xychart-beta": "full"
+      },
+      "quirks": "Gantt: applies to axis labels. Pie: applies to label text only, not segment labels in all renderers."
+    },
+    {
+      "name": "primaryBorderColor",
+      "semanticRole": "Border of primary nodes",
+      "families": {
+        "flowchart": "full",
+        "sequence": "full",
+        "class": "full",
+        "gantt": "none",
+        "er": "full",
+        "state": "full",
+        "pie": "none",
+        "journey": "none",
+        "bpmn-beta": "full",
+        "mindmap": "none",
+        "xychart-beta": "partial"
+      },
+      "quirks": "Sequence: applies to actor box border."
+    },
+    {
+      "name": "secondaryColor",
+      "semanticRole": "Secondary node fill (gateways, alternate nodes)",
+      "families": {
+        "flowchart": "full",
+        "sequence": "full",
+        "class": "partial",
+        "gantt": "none",
+        "er": "partial",
+        "state": "partial",
+        "pie": "none",
+        "journey": "none",
+        "bpmn-beta": "full",
+        "mindmap": "partial",
+        "xychart-beta": "partial"
+      },
+      "quirks": "Sequence: applies to activation box fill. bpmn-beta: applies to gateway diamond fill."
+    },
+    {
+      "name": "secondaryTextColor",
+      "semanticRole": "Text on secondary nodes",
+      "families": {
+        "flowchart": "full",
+        "sequence": "partial",
+        "class": "partial",
+        "gantt": "none",
+        "er": "partial",
+        "state": "partial",
+        "pie": "none",
+        "journey": "none",
+        "bpmn-beta": "full",
+        "mindmap": "none",
+        "xychart-beta": "partial"
+      },
+      "quirks": null
+    },
+    {
+      "name": "secondaryBorderColor",
+      "semanticRole": "Border of secondary nodes",
+      "families": {
+        "flowchart": "full",
+        "sequence": "partial",
+        "class": "partial",
+        "gantt": "none",
+        "er": "partial",
+        "state": "partial",
+        "pie": "none",
+        "journey": "none",
+        "bpmn-beta": "partial",
+        "mindmap": "none",
+        "xychart-beta": "partial"
+      },
+      "quirks": null
+    },
+    {
+      "name": "tertiaryColor",
+      "semanticRole": "Accent or highlight fill (notes, third-tier nodes)",
+      "families": {
+        "flowchart": "full",
+        "sequence": "full",
+        "class": "partial",
+        "gantt": "none",
+        "er": "partial",
+        "state": "partial",
+        "pie": "none",
+        "journey": "none",
+        "bpmn-beta": "partial",
+        "mindmap": "partial",
+        "xychart-beta": "partial"
+      },
+      "quirks": "Sequence: applies to note background fill."
+    },
+    {
+      "name": "tertiaryTextColor",
+      "semanticRole": "Text on tertiary elements",
+      "families": {
+        "flowchart": "full",
+        "sequence": "full",
+        "class": "partial",
+        "gantt": "none",
+        "er": "partial",
+        "state": "partial",
+        "pie": "none",
+        "journey": "none",
+        "bpmn-beta": "partial",
+        "mindmap": "none",
+        "xychart-beta": "partial"
+      },
+      "quirks": "Sequence: applies to note text."
+    },
+    {
+      "name": "tertiaryBorderColor",
+      "semanticRole": "Border of tertiary elements",
+      "families": {
+        "flowchart": "full",
+        "sequence": "partial",
+        "class": "partial",
+        "gantt": "none",
+        "er": "partial",
+        "state": "partial",
+        "pie": "none",
+        "journey": "none",
+        "bpmn-beta": "partial",
+        "mindmap": "none",
+        "xychart-beta": "partial"
+      },
+      "quirks": null
+    },
+    {
+      "name": "background",
+      "semanticRole": "Diagram canvas background",
+      "families": {
+        "flowchart": "full",
+        "sequence": "full",
+        "class": "full",
+        "gantt": "full",
+        "er": "full",
+        "state": "full",
+        "pie": "full",
+        "journey": "full",
+        "bpmn-beta": "full",
+        "mindmap": "full",
+        "xychart-beta": "full"
+      },
+      "quirks": "Universally supported across all families."
+    },
+    {
+      "name": "mainBkg",
+      "semanticRole": "Primary node background (often redundant with primaryColor)",
+      "families": {
+        "flowchart": "full",
+        "sequence": "partial",
+        "class": "full",
+        "gantt": "none",
+        "er": "full",
+        "state": "full",
+        "pie": "none",
+        "journey": "none",
+        "bpmn-beta": "full",
+        "mindmap": "partial",
+        "xychart-beta": "partial"
+      },
+      "quirks": "Must be included even when it duplicates primaryColor — some renderers prefer mainBkg over primaryColor for node backgrounds."
+    },
+    {
+      "name": "nodeBorder",
+      "semanticRole": "Default border for all node types",
+      "families": {
+        "flowchart": "full",
+        "sequence": "partial",
+        "class": "full",
+        "gantt": "none",
+        "er": "full",
+        "state": "full",
+        "pie": "none",
+        "journey": "none",
+        "bpmn-beta": "full",
+        "mindmap": "none",
+        "xychart-beta": "partial"
+      },
+      "quirks": null
+    },
+    {
+      "name": "clusterBkg",
+      "semanticRole": "Subgraph / cluster / pool background",
+      "families": {
+        "flowchart": "full",
+        "sequence": "none",
+        "class": "none",
+        "gantt": "none",
+        "er": "none",
+        "state": "partial",
+        "pie": "none",
+        "journey": "none",
+        "bpmn-beta": "full",
+        "mindmap": "none",
+        "xychart-beta": "none"
+      },
+      "quirks": "Primarily relevant for flowchart subgraphs and bpmn-beta pool/lane containers."
+    },
+    {
+      "name": "clusterBorder",
+      "semanticRole": "Subgraph / cluster / pool border",
+      "families": {
+        "flowchart": "full",
+        "sequence": "none",
+        "class": "none",
+        "gantt": "none",
+        "er": "none",
+        "state": "partial",
+        "pie": "none",
+        "journey": "none",
+        "bpmn-beta": "full",
+        "mindmap": "none",
+        "xychart-beta": "none"
+      },
+      "quirks": "Primarily relevant for flowchart subgraphs and bpmn-beta pool/lane containers."
+    },
+    {
+      "name": "lineColor",
+      "semanticRole": "Edge / flow arrow color",
+      "families": {
+        "flowchart": "full",
+        "sequence": "full",
+        "class": "full",
+        "gantt": "partial",
+        "er": "full",
+        "state": "full",
+        "pie": "none",
+        "journey": "partial",
+        "bpmn-beta": "full",
+        "mindmap": "partial",
+        "xychart-beta": "full"
+      },
+      "quirks": "In bpmn-beta: applies to sequence flow and message flow arrow color. In Sequence: applies to arrow lines."
+    },
+    {
+      "name": "edgeLabelBackground",
+      "semanticRole": "Background behind edge condition labels",
+      "families": {
+        "flowchart": "full",
+        "sequence": "none",
+        "class": "none",
+        "gantt": "none",
+        "er": "partial",
+        "state": "partial",
+        "pie": "none",
+        "journey": "none",
+        "bpmn-beta": "full",
+        "mindmap": "none",
+        "xychart-beta": "none"
+      },
+      "quirks": "Primarily relevant for flowchart edge labels (e.g., 'yes'/'no' condition labels) and bpmn-beta flow condition labels."
+    },
+    {
+      "name": "fontFamily",
+      "semanticRole": "Font stack for all text labels",
+      "families": {
+        "flowchart": "full",
+        "sequence": "partial",
+        "class": "full",
+        "gantt": "full",
+        "er": "full",
+        "state": "full",
+        "pie": "full",
+        "journey": "partial",
+        "bpmn-beta": "full",
+        "mindmap": "full",
+        "xychart-beta": "full"
+      },
+      "quirks": "Include the full stack with fallback: 'Segoe UI, sans-serif'. Some renderers may ignore custom fonts due to CSP restrictions."
+    },
+    {
+      "name": "fontSize",
+      "semanticRole": "Base font size for all labels (include unit)",
+      "families": {
+        "flowchart": "full",
+        "sequence": "full",
+        "class": "full",
+        "gantt": "full",
+        "er": "full",
+        "state": "full",
+        "pie": "full",
+        "journey": "full",
+        "bpmn-beta": "full",
+        "mindmap": "full",
+        "xychart-beta": "full"
+      },
+      "quirks": "Must include unit: use '14px' not '14'. Universally supported."
+    },
+    {
+      "name": "labelBackground",
+      "semanticRole": "Background behind floating labels",
+      "families": {
+        "flowchart": "full",
+        "sequence": "partial",
+        "class": "partial",
+        "gantt": "partial",
+        "er": "partial",
+        "state": "partial",
+        "pie": "none",
+        "journey": "partial",
+        "bpmn-beta": "partial",
+        "mindmap": "none",
+        "xychart-beta": "partial"
+      },
+      "quirks": null
+    },
+    {
+      "name": "labelTextColor",
+      "semanticRole": "Text color for floating labels",
+      "families": {
+        "flowchart": "full",
+        "sequence": "partial",
+        "class": "partial",
+        "gantt": "partial",
+        "er": "partial",
+        "state": "partial",
+        "pie": "partial",
+        "journey": "partial",
+        "bpmn-beta": "partial",
+        "mindmap": "none",
+        "xychart-beta": "partial"
+      },
+      "quirks": null
+    },
+    {
+      "name": "titleColor",
+      "semanticRole": "Diagram title and accTitle text color",
+      "families": {
+        "flowchart": "full",
+        "sequence": "full",
+        "class": "full",
+        "gantt": "full",
+        "er": "full",
+        "state": "full",
+        "pie": "full",
+        "journey": "full",
+        "bpmn-beta": "full",
+        "mindmap": "full",
+        "xychart-beta": "full"
+      },
+      "quirks": "Universally supported across all families. Applies to accTitle text in all diagram types."
+    }
+  ]
+}

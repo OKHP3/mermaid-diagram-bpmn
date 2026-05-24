@@ -1,0 +1,138 @@
+[
+  {
+    "id": "mermaid-live",
+    "display": "Mermaid Live Editor",
+    "url": "https://mermaid.live",
+    "themeVariables": "full",
+    "initBlock": true,
+    "darkLightMode": "manual-toggle",
+    "fontFamily": true,
+    "configLevel": "inline-init",
+    "notes": "Reference renderer. Use to validate palette output before targeting other platforms."
+  },
+  {
+    "id": "mermaid-ai",
+    "display": "Mermaid.ai",
+    "url": "https://mermaid.ai",
+    "themeVariables": "full",
+    "initBlock": true,
+    "darkLightMode": "manual-toggle",
+    "fontFamily": true,
+    "configLevel": "inline-init",
+    "notes": "Full init block support. Good secondary validation target."
+  },
+  {
+    "id": "github",
+    "display": "GitHub Markdown",
+    "url": "https://github.com",
+    "themeVariables": "partial",
+    "initBlock": false,
+    "darkLightMode": "system-forced",
+    "fontFamily": false,
+    "configLevel": "application-level-only",
+    "advisory": "GitHub strips %%{init}%% blocks. Diagrams render with GitHub's forced theme. Theming via init block has no effect. Use the themeVariables JSON export with mermaid.initialize() at the application level if you control the site config.",
+    "notes": "Standard GitHub README files and issue comments cannot be themed."
+  },
+  {
+    "id": "gitlab",
+    "display": "GitLab Markdown",
+    "url": "https://gitlab.com",
+    "themeVariables": "partial",
+    "initBlock": false,
+    "darkLightMode": "system-forced",
+    "fontFamily": false,
+    "configLevel": "application-level-only",
+    "advisory": "GitLab strips %%{init}%% blocks similarly to GitHub. Platform-enforced theme applies.",
+    "notes": "Same restrictions as GitHub for standard Markdown files."
+  },
+  {
+    "id": "notion",
+    "display": "Notion",
+    "url": "https://notion.so",
+    "themeVariables": "none",
+    "initBlock": false,
+    "darkLightMode": "none",
+    "fontFamily": false,
+    "configLevel": "not-available",
+    "advisory": "Notion does not support Mermaid themeVariables or %%{init}%% blocks. Diagrams render with Notion's default Mermaid appearance. No workaround is available within Notion's editor. Consider exporting as a styled SVG image from mermaid.live and embedding the image instead.",
+    "notes": "No theming of any kind is possible for Notion-hosted diagrams."
+  },
+  {
+    "id": "obsidian",
+    "display": "Obsidian",
+    "url": "https://obsidian.md",
+    "themeVariables": "full",
+    "initBlock": true,
+    "darkLightMode": "vault-theme-adaptive",
+    "fontFamily": true,
+    "configLevel": "inline-init",
+    "notes": "Best themeVariables support among Markdown host applications. Test with both light and dark vault themes."
+  },
+  {
+    "id": "confluence",
+    "display": "Confluence",
+    "url": "https://www.atlassian.com/software/confluence",
+    "themeVariables": "partial",
+    "initBlock": "plugin-dependent",
+    "darkLightMode": "confluence-theme",
+    "fontFamily": "plugin-dependent",
+    "configLevel": "plugin-config",
+    "advisory": "Confluence Mermaid support depends on the installed plugin. Official Atlassian Mermaid plugin v1.3+ respects %%{init}%% blocks. Older or third-party plugins may not. Check your plugin version and test in your Confluence instance.",
+    "notes": "Plugin version is the critical variable."
+  },
+  {
+    "id": "vscode",
+    "display": "VS Code Preview",
+    "url": "https://code.visualstudio.com",
+    "themeVariables": "full",
+    "initBlock": true,
+    "darkLightMode": "editor-theme",
+    "fontFamily": true,
+    "configLevel": "inline-init",
+    "notes": "Requires Mermaid Preview extension or equivalent. Current extension versions fully respect init blocks."
+  },
+  {
+    "id": "docusaurus",
+    "display": "Docusaurus",
+    "url": "https://docusaurus.io",
+    "themeVariables": "full",
+    "initBlock": true,
+    "darkLightMode": "site-theme-adaptive",
+    "fontFamily": true,
+    "configLevel": "mermaid-initialize-or-inline",
+    "notes": "Configure via themeConfig.mermaid.options.themeVariables in docusaurus.config.js. Inline init blocks also work in MDX."
+  },
+  {
+    "id": "vitepress",
+    "display": "VitePress",
+    "url": "https://vitepress.dev",
+    "themeVariables": "full",
+    "initBlock": true,
+    "darkLightMode": "site-theme-adaptive",
+    "fontFamily": true,
+    "configLevel": "mermaid-initialize-or-inline",
+    "notes": "Configure via markdown.mermaidOptions in vitepress.config.ts. Inline init blocks respected."
+  },
+  {
+    "id": "mermaid-cli",
+    "display": "Mermaid CLI (mmdc)",
+    "url": "https://github.com/mermaid-js/mermaid-cli",
+    "themeVariables": "full",
+    "initBlock": true,
+    "darkLightMode": "flag-specified",
+    "fontFamily": true,
+    "configLevel": "config-file-or-inline",
+    "notes": "Use --configFile for site-wide theming or embed %%{init}%% inline. Ideal for CI/CD diagram generation pipelines."
+  },
+  {
+    "id": "backstage",
+    "display": "Backstage",
+    "url": "https://backstage.io",
+    "themeVariables": "partial",
+    "initBlock": "plugin-dependent",
+    "darkLightMode": "backstage-theme",
+    "fontFamily": "partial",
+    "configLevel": "plugin-config",
+    "notes": "Depends on Backstage Mermaid plugin version. Recent versions support themeVariables via plugin config. Init blocks may not be respected."
+  }
+]
