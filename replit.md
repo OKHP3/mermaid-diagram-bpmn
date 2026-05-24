@@ -2,6 +2,10 @@
 
 A contributor-facing prototype and documentation workspace for a Mermaid-native `bpmn-beta` diagram type. Serves as the development environment before the GitHub repository is created.
 
+## Related work
+
+- Andreas Emrich (DFKI) filed [mermaid-js/mermaid#7699](https://github.com/mermaid-js/mermaid/issues/7699) on 2026-05-02 with a metadata-heavy DSL proposal. Our `bpmn-beta` is a deliberately readable alternative. See Notion proposal for engagement strategy.
+
 ## Run & Operate
 
 - `pnpm run typecheck` — full typecheck across all packages
@@ -33,7 +37,7 @@ A contributor-facing prototype and documentation workspace for a Mermaid-native 
   - `__tests__/` — unit tests (detector, db, parser) + corpus tests
 - `artifacts/mermaid-diagram-bpmn/examples/` — 5 canonical `.mmd` fixture files
 - `artifacts/mermaid-diagram-bpmn/src/pages/` — Home, Playground, Architecture, DslReference, Roadmap, About
-- `_unused/` — template scaffolding (api-spec, api-client-react, api-zod, db) moved here
+- `_unused/README.md` — documents unused template scaffolding (api-spec, api-client-react, api-zod, db removed; api-server and mockup-sandbox retained as Replit workflow artifacts)
 
 ## Architecture decisions
 

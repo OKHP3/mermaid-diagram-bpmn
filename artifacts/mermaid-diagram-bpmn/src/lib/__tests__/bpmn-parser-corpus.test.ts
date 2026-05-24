@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { readFileSync } from 'fs';
+import { readFileSync, readdirSync } from 'fs';
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
 import { parse } from '../bpmn-parser';
@@ -11,6 +11,38 @@ const EXAMPLES_DIR = join(__dirname, '../../../examples');
 function loadExample(filename: string): string {
   return readFileSync(join(EXAMPLES_DIR, filename), 'utf-8');
 }
+
+// ---------------------------------------------------------------------------
+// Snapshot tests — auto-discover every .mmd in examples/.
+// To add a new corpus fixture: drop a .mmd into examples/ and run:
+//   pnpm --filter @workspace/mermaid-diagram-bpmn run test -- -u
+// The snapshot is created on first run and checked on subsequent runs.
+// ---------------------------------------------------------------------------
+
+const mmdFiles = readdirSync(EXAMPLES_DIR)
+  .filter(f => f.endsWith('.mmd'))
+  .sort();
+
+for (const file of mmdFiles) {
+  describe(`snapshot: ${file}`, () => {
+    it('parses to a stable DB state', () => {
+      const db = parse(loadExample(file));
+      expect({
+        nodes: db.getNodes(),
+        flows: db.getFlows(),
+        pools: db.getPools(),
+        lanes: db.getLanes(),
+        accTitle: db.getAccTitle(),
+        accDescription: db.getAccDescription(),
+      }).toMatchSnapshot();
+    });
+  });
+}
+
+// ---------------------------------------------------------------------------
+// Invariant tests — named structural assertions per example.
+// These capture the human-readable intent behind each fixture.
+// ---------------------------------------------------------------------------
 
 describe('corpus: 01-linear-process.mmd', () => {
   it('parses without error', () => {
