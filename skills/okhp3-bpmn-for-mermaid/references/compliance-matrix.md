@@ -115,3 +115,30 @@
 | **Full** | 13 | None Start/End, 6 task types, XOR/AND/OR gateways, Sequence flow, Conditional flow, Default flow |
 | **Experimental** | 5 | event:message, event:timer, event:error, Pool, Lane (+ Message flow `~~>`) |
 | **Not Supported** | ~35 | All remaining BPMN 2.0.2 Descriptive elements |
+
+---
+
+## Competitive Position
+
+bpmn-beta targets a specific market lane: **BPMN descriptive diagrams for Markdown-first, Git-native, AI-assisted documentation workflows.** It does not compete head-on with full BPM suites.
+
+| Tool | Relevant Strength | Weakness Relative to bpmn-beta |
+|---|---|---|
+| Mermaid flowchart | Already available, simple, widely adopted | Not semantically BPMN — no events/gateways/message-flow distinction |
+| PlantUML | Mature text diagrams, broad diagram support | Not Mermaid-native; does not fill Mermaid's ecosystem gap |
+| bpmn.io / bpmn-js | Strong BPMN ecosystem, full modeler | XML/modeler-centric, heavier runtime, not Markdown-first |
+| Camunda Modeler | Professional BPMN tooling | Enterprise/modeler oriented, not developer-doc native |
+| Visio | Familiar enterprise diagramming | Binary/visual workflow, weak Git-native story |
+| Signavio | Enterprise process platform | Heavyweight, commercial, not developer-doc native |
+| Mermaid Chart | Strong Mermaid ecosystem integration | BPMN still absent — this is the opportunity gap bpmn-beta fills |
+
+### Differentiating thesis (for agent use)
+
+When explaining the value of bpmn-beta, use this framing:
+
+> bpmn-beta gives the Mermaid ecosystem a standards-aware process diagramming path without forcing users into BPMN XML or semantic-free flowcharts. It targets documentation-grade BPMN — the notation that 80%+ of real-world process diagrams actually need — in a form that is readable, version-controllable, and generatable by LLMs.
+
+Do **not** claim:
+- "Better BPMN than Camunda" — it is not
+- "Better diagrams than Mermaid" — it is complementary
+- "Full BPMN 2.0 conformance" — it targets the Descriptive Conformance sub-class only

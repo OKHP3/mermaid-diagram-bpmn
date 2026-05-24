@@ -128,6 +128,38 @@ The current parser is a line-by-line regex parser — not a formal grammar (no J
 
 ---
 
+---
+
+## Intentional Limitations (Not Bugs)
+
+Some limitations are deliberate design decisions, not defects. Agents must not present these as future fixes — they are architectural choices.
+
+| Limitation | Status | Rationale |
+|---|---|---|
+| No BPMN XML import/export | Intentional for v1 | User writes lightweight DSL, not BPMN XML. XML is deliberately decoupled from diagram authoring. This keeps bundle size small and avoids coupling to BPMN runtime tooling. |
+| No execution semantics | Intentional | The target is descriptive diagramming, not workflow execution. Execution semantics are also likely never in scope for a Mermaid diagram type. |
+| No formal conformance certification | Intentional | The project explicitly avoids claiming full BPMN 2.0 conformance. It targets the Descriptive Conformance sub-class only. Overclaiming erodes credibility. |
+| No bpmn-js dependency | Intentional | bpmn-js is a comprehensive BPMN toolkit with different design goals. Using it would couple the project to a heavyweight runtime and different rendering philosophy, and would disqualify it from Mermaid's contribution bar. |
+
+---
+
+## Next-Priority Technical Work
+
+Before proposing this plugin upstream, the following hardening steps are required (in approximate priority order):
+
+1. **Convert parser to Langium** — replace the hand-written line parser with a formal Langium grammar. Add error recovery, better diagnostics, LSP support.
+2. **Package as Mermaid external diagram plugin** — add `detector`, `loader`, and plugin entry point compatible with `registerExternalDiagrams()`.
+3. **Add invalid syntax fixtures** — test corpus of inputs that should fail with specific error messages. Currently, invalid syntax is silently skipped.
+4. **Add visual regression tests** — renderer snapshot tests to catch shape regressions.
+5. **Formalize pool/lane/message-flow validation** — structural errors for misplaced message flows, unclosed blocks, and nested lanes.
+6. **Improve layout determinism** — constraint-based layout that aligns pool widths and routes message flows around pool boundaries.
+7. **Add export-to-SVG/PNG download** — allows users to save rendered diagrams without a screenshot.
+8. **Document bundle size and dependency posture** — required for Mermaid contribution bar review.
+9. **LLM benchmark prompts** — give identical process prompts to major LLMs and compare whether they produce valid `bpmn-beta`. Validates AI-generation-readiness claim.
+10. **Engage Mermaid community** — comment on issue #7699 with prototype link and ask for syntax feedback before locking the DSL.
+
+---
+
 ## How to Report Issues or Contribute
 
 - GitHub Issues: https://github.com/OKHP3/mermaid-diagram-bpmn/issues

@@ -221,6 +221,31 @@ export default function Architecture() {
           Upstream inclusion can be proposed after the syntax, renderer, and test suite are stable.
         </p>
       </div>
+
+      {/* System combination thesis */}
+      <div className="mt-6 p-5 rounded-lg border border-border bg-card">
+        <p className="text-sm font-medium text-foreground mb-3">The defensible system combination</p>
+        <p className="text-xs text-muted-foreground leading-relaxed mb-4">
+          The value of this project is not in any single layer — BPMN is a public standard, Mermaid already exists, SVG rendering is well-understood.
+          The value is in the <strong className="text-foreground">specific combination and pipeline</strong>:
+        </p>
+        <ol className="flex flex-col gap-2">
+          {[
+            ["DSL", "A readable, Mermaid-native bpmn-beta syntax — human-readable, Markdown-compatible, AI-generatable, and semantically richer than a generic flowchart."],
+            ["Parser", "Converts DSL text into a structured BPMN data model. Encodes BPMN-specific rules (e.g. message flows must be top-level) directly in the authoring language."],
+            ["BpmnDb", "Parser-independent representation of nodes, flows, pools, lanes, and metadata. Renderer-independent — supports future parser and layout backends without rewriting downstream layers."],
+            ["Layout engine", "Deterministic placement in flat or pool/lane mode. Not yet mature, but establishes the pipeline and demonstrates a workable, extensible layout path."],
+            ["SVG renderer", "Draws BPMN-correct visual shapes directly in React — no bpmn-js runtime dependency. Accessible SVG with role, title, and desc."],
+            ["Playground", "Proof that non-developers can use the system. Live editor, example selector, parse error detection, status ribbon, pan/zoom — a complete authoring and validation environment."],
+            ["Docs & contribution framework", "Roadmap, DSL reference, architecture docs, and a progressive contribution path toward Mermaid External Diagram API packaging."],
+          ].map(([name, desc], i) => (
+            <li key={name} className="flex gap-3 text-xs">
+              <span className="font-mono text-primary font-bold shrink-0 w-4">{i + 1}.</span>
+              <span><strong className="text-foreground">{name}</strong> — <span className="text-muted-foreground">{desc}</span></span>
+            </li>
+          ))}
+        </ol>
+      </div>
     </div>
   );
 }

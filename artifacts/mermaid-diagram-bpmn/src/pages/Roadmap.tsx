@@ -63,25 +63,35 @@ const CONTRIBUTION_STEPS = [
   {
     n: "03",
     title: "Build the external plugin",
-    body: "Implement mermaid-diagram-bpmn as a registerExternalDiagrams() plugin. Parser, renderer, layout, shape library, styles, accessibility.",
+    body: "Implement mermaid-diagram-bpmn as a registerExternalDiagrams() plugin. Add detector, loader, and plugin entry point. Parser, renderer, layout, shape library, styles, accessibility.",
   },
   {
     n: "04",
     title: "Document supported elements",
-    body: "Publish a clear supported element matrix. Name deferred features explicitly. Avoid overclaiming compliance.",
+    body: "Publish a clear supported element matrix. Name deferred features explicitly. Avoid overclaiming compliance. Add CONTRIBUTING, SECURITY, and CODE_OF_CONDUCT files.",
   },
   {
     n: "05",
-    title: "Collect examples and feedback",
-    body: "Publish real process examples. Gather usage patterns. Identify the 20% of features covering 80% of use cases.",
+    title: "Convert parser to Langium",
+    body: "Replace hand-written line parser with a formal Langium grammar. Add error recovery, better diagnostics, LSP support, and upstream Mermaid compatibility. Establish Langium parity branch before replacing the prototype parser.",
   },
   {
     n: "06",
-    title: "Harden quality gates",
-    body: "Add parser tests, renderer snapshots, visual regression tests, accessibility checks. Pass all Mermaid quality standards.",
+    title: "Collect examples and feedback",
+    body: "Publish real process examples. Add LLM benchmark prompts — give identical process prompts to ChatGPT, Claude, and Gemini and compare whether they produce valid bpmn-beta. Gather usage patterns and identify the 20% of features covering 80% of use cases.",
   },
   {
     n: "07",
+    title: "Harden quality gates",
+    body: "Add parser tests, renderer snapshots, visual regression tests, invalid syntax fixtures, and accessibility checks. Formalize pool/lane/message-flow validation. Document bundle size and dependency posture. Pass all Mermaid quality standards.",
+  },
+  {
+    n: "08",
+    title: "Polish commercial readiness",
+    body: "Add a demo GIF or screenshots. Add export-to-SVG/PNG download. Improve layout determinism. Add comparison matrix against PlantUML, bpmn.io, flowchart, and Visio. Engage Mermaid community on issue #7699 with prototype link.",
+  },
+  {
+    n: "09",
     title: "Propose upstream inclusion",
     body: "Once syntax is stable and tests are solid, open a formal Mermaid PR proposing bpmn as a core diagram type.",
   },

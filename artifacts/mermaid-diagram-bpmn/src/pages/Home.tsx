@@ -1,6 +1,34 @@
 import { Link } from "wouter";
-import { ArrowRight, GitBranch, FileCode2, Layers, CheckCircle2, ExternalLink, CheckCheck, FlaskConical, Clock, XCircle } from "lucide-react";
+import { ArrowRight, GitBranch, FileCode2, Layers, CheckCircle2, ExternalLink, CheckCheck, FlaskConical, Clock, XCircle, Users, Building2, Bot, BookOpen, GitPullRequest } from "lucide-react";
 import { StatusRibbon } from "@/components/StatusRibbon";
+
+const MARKET_WEDGE = [
+  { icon: Building2, segment: "Enterprise architects", pain: "Need process diagrams beside architecture docs", fit: "Git-native text diagrams fit architecture repositories" },
+  { icon: Users, segment: "Process analysts", pain: "Need BPMN semantics without heavy tooling", fit: "Readable DSL reduces tool friction" },
+  { icon: FileCode2, segment: "Developers", pain: "Need process context in READMEs and ADRs", fit: "Markdown-compatible syntax fits dev workflows" },
+  { icon: Bot, segment: "AI tool builders", pain: "Need reliable structured output", fit: "DSL is short, regular, and LLM-friendly" },
+  { icon: BookOpen, segment: "Documentation teams", pain: "Need diagrams that can be reviewed and updated", fit: "Text diffs and pull requests replace screenshots" },
+  { icon: GitPullRequest, segment: "Open-source maintainers", pain: "Need lightweight examples and docs", fit: "No proprietary BPMN tooling required" },
+];
+
+const DISTINCTIONS = [
+  {
+    versus: "Mermaid flowchart",
+    difference: "Flowchart is generic shape syntax. bpmn-beta is domain-specific process notation — it encodes BPMN concepts (events, activities, gateways, sequence flows, message flows, pools, lanes) directly into the syntax and data model.",
+  },
+  {
+    versus: "BPMN XML tools",
+    difference: "BPMN XML tools optimize for standard interchange and execution tooling. bpmn-beta optimizes for readable authoring, version control, documentation, and AI generation. XML import/export is explicitly out of v1 scope.",
+  },
+  {
+    versus: "bpmn-js",
+    difference: "bpmn-js is a comprehensive BPMN modeler/renderer ecosystem with different design goals. bpmn-beta is a lightweight Mermaid-native path that keeps bundle size manageable and avoids coupling to a heavier runtime.",
+  },
+  {
+    versus: "PlantUML",
+    difference: "PlantUML has broad text-diagram support but is not Mermaid-native. bpmn-beta is aimed specifically at filling Mermaid's own native BPMN gap — where Markdown-first adoption already exists.",
+  },
+];
 
 const PRINCIPLES = [
   { icon: FileCode2, title: "Text-First", body: "Write BPMN as code. Version-control it, diff it, review it in pull requests. No proprietary file formats." },
@@ -125,6 +153,10 @@ export default function Home() {
             bpmn-beta
           </p>
 
+          <p className="mt-3 text-xs font-semibold uppercase tracking-widest text-muted-foreground/60">
+            Standards-aware · Text-first · Git-native
+          </p>
+
           <p className="mt-5 text-base text-muted-foreground leading-relaxed max-w-2xl">
             A Mermaid-native diagram type for business process modeling. Text-first, version-controllable,
             Markdown-compatible. Write BPMN the way you write flowcharts — then commit it.
@@ -153,6 +185,26 @@ export default function Home() {
               DSL Reference
             </Link>
           </div>
+        </div>
+      </section>
+
+      {/* Problem statement */}
+      <section className="border-t border-border">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-14">
+          <h2 className="text-xl font-bold text-foreground mb-3">The problem</h2>
+          <p className="text-sm text-muted-foreground max-w-3xl leading-relaxed mb-6">
+            Business process diagrams occupy an awkward tooling space. At one end are heavyweight BPMN platforms —
+            Visio, Signavio, Camunda Modeler, Bizagi, bpmn.io — visually powerful but hostile to Markdown-first
+            documentation workflows, pull requests, and AI-generated artifacts. At the other end are Mermaid flowcharts,
+            which are excellent for general-purpose boxes-and-arrows but semantically weak for BPMN.
+            Flowcharts do not enforce distinctions between events, activities, gateways, sequence flows,
+            message flows, pools, lanes, and process boundaries.
+          </p>
+          <blockquote className="forge-callout text-sm text-foreground leading-relaxed max-w-3xl">
+            Business users, architects, analysts, developers, and AI systems need a way to express BPMN-like
+            process diagrams as clean text that can live in documentation repositories, render in browsers,
+            and remain readable without exposing users to BPMN XML.
+          </blockquote>
         </div>
       </section>
 
@@ -236,6 +288,44 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Market wedge */}
+      <section className="border-t border-border">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-14">
+          <h2 className="text-xl font-bold text-foreground mb-2">Who it's for</h2>
+          <p className="text-sm text-muted-foreground mb-6 max-w-2xl leading-relaxed">
+            The target is not "people who want another BPMN modeler." The precise market is process diagrams
+            that belong in Markdown, Git, documentation portals, architecture repositories, and AI workbenches.
+          </p>
+          <div className="rounded-lg border border-border overflow-hidden">
+            <div className="overflow-x-auto">
+              <table className="w-full text-xs">
+                <thead>
+                  <tr className="border-b border-border bg-muted/50">
+                    <th className="text-left px-4 py-3 font-semibold text-muted-foreground uppercase tracking-wide">Segment</th>
+                    <th className="text-left px-4 py-3 font-semibold text-muted-foreground uppercase tracking-wide">Pain</th>
+                    <th className="text-left px-4 py-3 font-semibold text-muted-foreground uppercase tracking-wide">Why bpmn-beta fits</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {MARKET_WEDGE.map((row, i) => (
+                    <tr key={row.segment} className={`border-b border-border last:border-0 ${i % 2 === 0 ? "bg-card" : "bg-muted/10"}`}>
+                      <td className="px-4 py-3 align-top">
+                        <div className="flex items-center gap-2">
+                          <row.icon size={12} className="text-primary shrink-0" />
+                          <span className="font-semibold text-foreground">{row.segment}</span>
+                        </div>
+                      </td>
+                      <td className="px-4 py-3 text-muted-foreground align-top leading-relaxed">{row.pain}</td>
+                      <td className="px-4 py-3 text-foreground align-top leading-relaxed">{row.fit}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* DSL preview */}
       <section className="max-w-7xl mx-auto w-full px-4 sm:px-6 py-14">
         <div className="grid md:grid-cols-2 gap-8 items-start">
@@ -285,6 +375,25 @@ g1 --> t2: "yes"
 g1 --> t3: "no"
 t2 --> e1
 t3 ==> e2`}</pre>
+          </div>
+        </div>
+      </section>
+
+      {/* Why not X? */}
+      <section className="border-t border-border">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-14">
+          <h2 className="text-xl font-bold text-foreground mb-2">Why not existing tools?</h2>
+          <p className="text-sm text-muted-foreground mb-6 max-w-2xl leading-relaxed">
+            Each tool in this space solves a different problem. bpmn-beta is not trying to replace any of them —
+            it fills a specific gap: BPMN descriptive diagrams for Markdown-first, Git-native, AI-assisted documentation.
+          </p>
+          <div className="grid md:grid-cols-2 gap-4">
+            {DISTINCTIONS.map(d => (
+              <div key={d.versus} className="forge-card">
+                <p className="text-xs font-mono text-primary font-bold mb-2">vs. {d.versus}</p>
+                <p className="text-xs text-muted-foreground leading-relaxed">{d.difference}</p>
+              </div>
+            ))}
           </div>
         </div>
       </section>
