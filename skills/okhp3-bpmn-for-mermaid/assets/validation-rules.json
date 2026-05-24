@@ -1,0 +1,123 @@
+[
+  {
+    "rule-id": "VR-001",
+    "category": "structure",
+    "description": "Every diagram must have at least one start event",
+    "standard": "BPMN-2.0.2",
+    "type": "existence",
+    "severity": "error",
+    "check": "count(elements where kind='event' and position='start') >= 1",
+    "message": "No start event found. Add a 'start [id] \"[Label]\"' declaration."
+  },
+  {
+    "rule-id": "VR-002",
+    "category": "structure",
+    "description": "Every diagram must have at least one end event",
+    "standard": "BPMN-2.0.2",
+    "type": "existence",
+    "severity": "error",
+    "check": "count(elements where kind='event' and position='end') >= 1",
+    "message": "No end event found. Add an 'end [id] \"[Label]\"' declaration."
+  },
+  {
+    "rule-id": "VR-003",
+    "category": "reference-integrity",
+    "description": "All flow source IDs must reference a declared element",
+    "standard": "BPMN-2.0.2",
+    "type": "reference",
+    "severity": "error",
+    "check": "every flow.source in element-ids",
+    "message": "Flow source '[id]' is not a declared element. Declare the element before the flow, or correct the ID."
+  },
+  {
+    "rule-id": "VR-004",
+    "category": "reference-integrity",
+    "description": "All flow target IDs must reference a declared element",
+    "standard": "BPMN-2.0.2",
+    "type": "reference",
+    "severity": "error",
+    "check": "every flow.target in element-ids",
+    "message": "Flow target '[id]' is not a declared element. Declare the element before the flow, or correct the ID."
+  },
+  {
+    "rule-id": "VR-005",
+    "category": "cardinality",
+    "description": "XOR gateways must have at least two outgoing sequence flows",
+    "standard": "BPMN-2.0.2",
+    "type": "cardinality",
+    "severity": "error",
+    "check": "for each xor: count(flows where source=xor.id) >= 2",
+    "message": "XOR gateway '[id]' has fewer than 2 outgoing flows. Add a second outgoing flow with a condition label."
+  },
+  {
+    "rule-id": "VR-006",
+    "category": "labeling",
+    "description": "XOR gateway outgoing flows must each have a condition label",
+    "standard": "BPMN-2.0.2",
+    "type": "labeling",
+    "severity": "error",
+    "check": "for each xor: all outgoing flows have a label",
+    "message": "XOR gateway '[id]' has an outgoing flow without a condition label. Add a label: '[source] --> [target]: \"condition\"'."
+  },
+  {
+    "rule-id": "VR-007",
+    "category": "connectivity",
+    "description": "Every declared element must appear in at least one flow (no orphan elements)",
+    "standard": "BPMN-2.0.2",
+    "type": "connectivity",
+    "severity": "error",
+    "check": "every element.id appears in at least one flow as source or target",
+    "message": "Element '[id]' ([keyword]) is an orphan — it does not appear in any flow. Connect it to the process flow."
+  },
+  {
+    "rule-id": "VR-008",
+    "category": "pool-isolation",
+    "description": "Sequence flows must not cross pool boundaries",
+    "standard": "BPMN-2.0.2",
+    "type": "containment",
+    "severity": "error",
+    "check": "for each --> flow: source.poolId == target.poolId or source.poolId is null or target.poolId is null",
+    "message": "Sequence flow from '[source]' to '[target]' crosses a pool boundary. Use a '~~>' message flow at the top level instead."
+  },
+  {
+    "rule-id": "VR-009",
+    "category": "syntax",
+    "description": "Pool and lane brackets must be balanced (all opened blocks must be closed)",
+    "standard": "Mermaid-11.15",
+    "type": "syntax",
+    "severity": "error",
+    "check": "contextStack.length == 0 at end of parse",
+    "message": "Unbalanced brackets: [n] block(s) were opened but not closed. Add the missing '}' for each open pool or lane block."
+  },
+  {
+    "rule-id": "VR-010",
+    "category": "syntax",
+    "description": "All element and flow labels must be enclosed in double quotes",
+    "standard": "Mermaid-11.15",
+    "type": "syntax",
+    "severity": "error",
+    "check": "every label token is a double-quoted string",
+    "message": "Label '[value]' is not double-quoted. Wrap it in double quotes: \"[value]\"."
+  },
+  {
+    "rule-id": "VR-011",
+    "category": "syntax",
+    "description": "Reserved keywords must not be used as element IDs",
+    "standard": "Mermaid-11.15",
+    "type": "naming",
+    "severity": "error",
+    "reserved": ["pool", "lane", "start", "end", "task", "xor", "and", "or", "event", "message"],
+    "check": "no element ID is in the reserved keyword list",
+    "message": "ID '[id]' is a reserved keyword and cannot be used as an element ID. Rename it (e.g., '[id]_node' or a semantic name)."
+  },
+  {
+    "rule-id": "VR-012",
+    "category": "cardinality",
+    "description": "AND (parallel) gateway splits must have a corresponding AND join, unless parallel paths each terminate in separate end events",
+    "standard": "BPMN-2.0.2",
+    "type": "pairing",
+    "severity": "warning",
+    "check": "for each and-gateway with 2+ outgoing flows: there exists an and-gateway with 2+ incoming flows that re-merges all split paths, or all split paths end in separate end events",
+    "message": "AND split gateway '[id]' may be missing a corresponding AND join. Verify parallel paths are properly rejoined or each ends in a separate end event."
+  }
+]

@@ -65,17 +65,19 @@ pnpm --filter @workspace/mermaid-diagram-bpmn run dev
 
 Then open the preview at `/`.
 
-## Agent Skills
+## Agent Skill
 
-This repository includes a SKILL.md-compatible agent skill under `skills/bpmn-for-mermaid/`.
+This repository includes a SKILL.md-compatible agent skill at `skills/okhp3-bpmn-for-mermaid/`.
 
-The skill delivers the core logic of this tool to any SKILL.md-compatible agent platform
-(Claude, Claude Code, GitHub Copilot, Cursor, VS Code, Gemini CLI, OpenAI Codex, and others)
-without requiring the browser UI.
+The skill delivers bpmn-beta DSL generation, validation, and normalization to any SKILL.md-compatible
+agent (Claude, GitHub Copilot, Cursor, VS Code, Gemini CLI, OpenAI Codex) without requiring the browser playground.
 
-**To use:** Place the `skills/` folder in your project or agent workspace and configure
-your agent to discover skills from the local path. See [agentskills.io](https://agentskills.io)
-for platform-specific integration guides.
+**Install:** Copy the `skills/` folder into your project or agent workspace.  
+**Configure:** Point your agent to discover skills from the local path per [agentskills.io](https://agentskills.io).  
+**Trigger example:** "Convert these process notes into a bpmn-beta diagram with pools and lanes, then validate it."
+
+A companion lightweight skill is also available at `skills/bpmn-for-mermaid/` — a smaller reference-only package
+without scripts or tests, suited for agents with tighter context budgets.
 
 ## License
 

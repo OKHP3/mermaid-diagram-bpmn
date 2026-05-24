@@ -1,0 +1,47 @@
+bpmn-beta
+accTitle: Cross-Pool Vendor Collaboration
+accDescr: Company procurement sends a purchase order to a vendor. The vendor reviews and either accepts, sending an acknowledgement back, or rejects, sending a rejection notice.
+
+pool company "Company" {
+
+  lane proc "Procurement" {
+    start s1 "Vendor Need Identified"
+    task:user t1 "Create Purchase Order"
+    task:send t2 "Send PO to Vendor"
+    task:receive t7 "Receive Vendor Response"
+    xor g2 "Response?"
+    end e1 "PO Accepted"
+    end e2 "PO Rejected: Resubmit"
+  }
+
+  s1 --> t1
+  t1 --> t2
+  t2 --> t7
+  t7 --> g2
+  g2 --> e1: "accepted"
+  g2 --> e2: "rejected"
+}
+
+pool vendor "Vendor" {
+
+  lane vendor_ops "Vendor Operations" {
+    task:receive t3 "Receive Purchase Order"
+    task:user t4 "Review PO Terms"
+    xor g1 "Acceptable?"
+    task:service t5 "Send Acceptance"
+    task:service t6 "Send Rejection Notice"
+    end e3 "PO Processed"
+  }
+
+  t3 --> t4
+  t4 --> g1
+  g1 --> t5: "yes"
+  g1 --> t6: "no"
+  t5 --> e3
+  t6 --> e3
+}
+
+%% Message flows between pools — top level
+t2 ~~> t3
+t5 ~~> t7
+t6 ~~> t7

@@ -1,0 +1,40 @@
+bpmn-beta
+accTitle: Support Ticket Triage
+accDescr: Customer submits a support ticket. Support team triages priority, handles high-priority tickets with parallel notification, and resolves all tickets before closing.
+
+pool support "Customer Support" {
+
+  lane customer "Customer" {
+    start s1 "Support Ticket Submitted"
+    task:user t1 "Describe Issue"
+    task:receive t8 "Receive Resolution Confirmation"
+    end e1 "Issue Resolved"
+  }
+
+  lane support_team "Support Team" {
+    task:user t2 "Review Ticket"
+    xor g1 "Priority?"
+    and g2 "Parallel Notify"
+    task:service t3 "Alert On-Call Engineer"
+    task:service t4 "Create Escalation Ticket"
+    and g3 "Notifications Complete"
+    task:user t5 "Resolve High-Priority Issue"
+    task:user t6 "Resolve Standard Issue"
+    task:service t7 "Send Resolution to Customer"
+  }
+
+  s1 --> t1
+  t1 --> t2
+  t2 --> g1
+  g1 --> g2: "high"
+  g1 --> t6: "standard"
+  g2 --> t3
+  g2 --> t4
+  t3 --> g3
+  t4 --> g3
+  g3 --> t5
+  t5 --> t7
+  t6 --> t7
+  t7 --> t8
+  t8 --> e1
+}

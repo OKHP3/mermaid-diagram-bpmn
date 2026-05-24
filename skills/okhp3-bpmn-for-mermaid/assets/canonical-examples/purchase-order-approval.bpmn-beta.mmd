@@ -1,0 +1,31 @@
+bpmn-beta
+accTitle: Purchase Order Approval
+accDescr: Requester submits a PO request. Manager reviews and approves or rejects. Procurement issues the PO on approval.
+
+pool po_process "Purchase Order Process" {
+
+  lane requester "Requester" {
+    start s1 "PO Request Submitted"
+    task:user t1 "Submit PO Request"
+    end e2 "Request Rejected"
+  }
+
+  lane manager "Manager" {
+    task:user t2 "Review PO Request"
+    xor g1 "Approved?"
+    task:service t4 "Send Rejection Notice"
+  }
+
+  lane procurement "Procurement" {
+    task:service t3 "Issue Purchase Order"
+    end e1 "PO Issued"
+  }
+
+  s1 --> t1
+  t1 --> t2
+  t2 --> g1
+  g1 --> t3: "yes"
+  g1 --> t4: "no"
+  t3 --> e1
+  t4 --> e2
+}

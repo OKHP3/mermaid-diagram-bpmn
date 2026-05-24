@@ -1,0 +1,42 @@
+bpmn-beta
+accTitle: Employee Onboarding
+accDescr: HR initiates onboarding and runs a background check. If the check passes, IT and HR complete setup tasks in parallel. The hiring manager confirms the new hire is ready to start.
+
+pool onboarding "Employee Onboarding" {
+
+  lane hr "HR" {
+    start s1 "Onboarding Initiated"
+    task:service t1 "Send Offer Documentation"
+    task:service t2 "Run Background Check"
+    xor g1 "Background Check?"
+    end e_fail "Onboarding Terminated"
+    task:user t5 "Complete Orientation Paperwork"
+  }
+
+  lane it "IT" {
+    task:service t3 "Provision System Accounts"
+    task:service t4 "Provision Equipment"
+  }
+
+  lane hiring_manager "Hiring Manager" {
+    and g2 "Parallel Setup Tasks"
+    and g3 "Setup Complete"
+    task:user t6 "Review Onboarding Checklist"
+    task:user t7 "Confirm New Hire Ready"
+    end e1 "New Hire Onboarded"
+  }
+
+  s1 --> t1
+  t1 --> t2
+  t2 --> g1
+  g1 --> e_fail: "fail"
+  g1 --> g2: "pass"
+  g2 --> t3
+  g2 --> t5
+  t3 --> t4
+  t4 --> g3
+  t5 --> g3
+  g3 --> t6
+  t6 --> t7
+  t7 --> e1
+}
