@@ -1,0 +1,1231 @@
+# Product Requirements Document
+## OKHP3 Agent Skills — SKILL.md Companion Deliverables
+### Projects: Mermaid Theme Builder · BPMN for Mermaid
+
+**Document Owner:** OverKill Hill P³  
+**Version:** 1.0  
+**Date:** May 2026  
+**Status:** Ready for Replit execution  
+**Build Environments:** Replit (mermaid-theme-builder), Replit (BPMN-for-Mermaid)  
+**Target Standard:** Agent Skills Open Standard — agentskills.io (published December 2025)
+
+---
+
+## 1. Executive Summary
+
+This document defines the requirements, file structure, and complete content for two SKILL.md companion deliverables — one for each of the two OverKill Hill P³ React/Tailwind/TypeScript applications currently hosted on GitHub Pages and Replit. Each skill packages the logic, vocabulary, rules, and export behavior of its parent application into a headless, agent-consumable format that any SKILL.md-compatible platform can load and execute without the UI.
+
+The practical effect: users working inside Claude, Claude Code, GitHub Copilot, Cursor, VS Code, Gemini CLI, OpenAI Codex, or any other adopting platform can trigger Mermaid theming or bpmn-beta generation natively inside their existing workflow, with no browser tab required. The visual tools remain the primary demonstration and trust surface. The skills become the distribution layer.
+
+**Skills to produce:**
+
+| Skill | Parent Application | Trigger Domain |
+|---|---|---|
+| `mermaid-theme` | Mermaid Theme Builder | Diagram theming, palette application, prompt scaffold export |
+| `bpmn-for-mermaid` | BPMN for Mermaid | Business process to bpmn-beta DSL generation and validation |
+
+**Delivery model:** Each skill lives inside its existing GitHub repository under a `skills/` subfolder. No new repositories required. Each skill is self-contained and independently discoverable.
+
+---
+
+## 2. Background and Context
+
+### 2.1 Parent Applications
+
+**Mermaid Theme Builder** (`github.com/OKHP3/mermaid-theme-builder`) is a browser-only React + Vite + Mermaid.js visual governance utility. Its core loop is: paste Mermaid code, detect diagram family, apply a named palette, preview live across diagram types, and export as a `themeVariables` block, a Markdown style bootstrap, or an LLM prompt scaffold. It ships four built-in palettes (Ocean Depth, Forest Sage, Slate Ember, Violet Mist) and four brand presets (OKH P³, Glee-fully, AskJamie, Neutral Enterprise). It is 100% client-side, MIT licensed, and currently at v0.3 with v0.5 on the active roadmap.
+
+**BPMN for Mermaid** (`github.com/OKHP3/mermaid-diagram-bpmn`) is a Mermaid-native `bpmn-beta` diagram type proposal. Its core proposition is a clean DSL that maps BPMN 2.0 Descriptive Conformance subset elements (start/end events, tasks, gateways, sequence flows, pools, lanes) into Mermaid-style text syntax. It targets: AI-generatability, Git-native storage, readable-without-tooling, and correct BPMN visual notation without bpmn-js. Currently prototype-stage with a hand-written parser and SVG renderer.
+
+### 2.2 Why Skills, Not Just the Apps
+
+The browser tools solve the visual/interactive use case. They don't solve the in-agent use case. A practitioner working in Claude Code to document a business process has no way to pull the bpmn-beta DSL spec into context and produce valid output on first try. A team standardizing on a Mermaid palette has no agent-side mechanism to enforce that palette across generated diagrams in Cursor or GitHub Copilot. The skills bridge that gap without replacing or competing with the visual tools — they extend reach into toolchains where a browser tab is not the right answer.
+
+### 2.3 What SKILL.md Provides
+
+A SKILL.md is a folder containing one required file (the `SKILL.md` itself, with YAML frontmatter for machine-readable metadata and a Markdown body for agent instructions) and optional supporting subfolders: `references/` for documentation the agent loads on demand, `assets/` for templates and data files, and `examples/` for sample inputs and outputs. The agent reads only the frontmatter metadata at all times (for triggering) and loads the full body and supporting files only when the skill activates. This keeps context overhead near zero until the skill is needed.
+
+---
+
+## 3. Scope
+
+### 3.1 In Scope
+
+- Full SKILL.md file content for both skills, written to the agentskills.io open standard
+- Complete folder and file structure for integration into each existing GitHub repo
+- Content for all supporting files: references, assets, examples
+- Integration guidance for placing skills inside existing monorepo structures
+- Replit build and deployment instructions for generating and testing the skill files
+- Cross-platform compatibility notes for the six highest-adoption SKILL.md platforms
+
+### 3.2 Out of Scope
+
+- Changes to the existing React/Vite application code
+- Bundled executable scripts (the skills ship as instruction-only; script bundling is a v2 consideration)
+- Publication to a centralized skills registry (future milestone)
+- ChatGPT or Perplexity system-prompt packaging (separate deliverable; different format)
+- New GitHub repositories for the skills (they live inside existing repos)
+
+### 3.3 Assumptions
+
+- Both GitHub repos remain under `OKHP3/` organization
+- MIT license applies to the skill files as it does to the parent applications
+- Replit will be used to generate, test, and commit the files back to the respective GitHub repos
+- The BPMN skill references the bpmn-beta DSL at its current prototype vocabulary (v0.1 scope), not the planned Langium grammar phase
+- The theme skill uses the 21-variable `themeVariables` surface currently documented on the Mermaid Theme Builder project page
+
+---
+
+## 4. SKILL.md Standard Reference
+
+### 4.1 Required File Structure (Minimum Viable Skill)
+
+```
+skill-name/
+  SKILL.md
+```
+
+### 4.2 Recommended File Structure (Full Skill)
+
+```
+skill-name/
+  SKILL.md
+  references/
+    [domain-reference-docs].md
+  assets/
+    [templates, JSON data, config stubs]
+  examples/
+    [sample inputs and annotated outputs]
+```
+
+### 4.3 SKILL.md File Format
+
+```markdown
+---
+name: [lowercase-hyphens, 1-64 chars, must match directory name]
+description: [1-1024 chars, what the skill does and when an agent should use it]
+license: [license name or path to bundled license file]
+compatibility: [optional, max 500 chars, environment constraints]
+metadata:
+  version: [semver]
+  author: [string]
+  tags: [comma-separated]
+---
+
+[Markdown body — agent instructions, workflow, output format, constraints, rules]
+```
+
+### 4.4 Loading Behavior
+
+Agents keep only the frontmatter in context at all times. The full Markdown body loads when the skill is triggered. Supporting files in `references/`, `assets/`, and `examples/` are loaded on demand when the body instructions reference them. This means the skill can bundle substantial reference material without imposing context cost until it's actually needed.
+
+### 4.5 Triggering Behavior
+
+The `description` field is the primary trigger surface. It must be written to match the natural language patterns a user would use when they need this capability. Agents pattern-match against the description to decide whether to load the skill. Verbs matter. Nouns matter. The description is not documentation — it is a routing instruction.
+
+---
+
+## 5. Skill 1 — `mermaid-theme`
+
+### 5.1 Purpose
+
+The `mermaid-theme` skill delivers the palette application, themeVariables generation, and prompt scaffold export logic of the Mermaid Theme Builder application without the browser UI. It enables any compatible agent to: accept a Mermaid code block and a palette selection, produce a complete `themeVariables` configuration block, wrap the input diagram in the styled output, generate a Markdown style bootstrap, and generate a reusable LLM prompt scaffold that causes future AI diagram generation to stay on-brand.
+
+### 5.2 Repository Integration
+
+```
+mermaid-theme-builder/           ← existing repo root
+  artifacts/                     ← existing
+  lib/                           ← existing
+  skills/                        ← NEW top-level folder
+    mermaid-theme/               ← skill directory (name matches frontmatter)
+      SKILL.md                   ← required
+      references/
+        theme-variables.md       ← complete themeVariables reference
+        renderer-compat.md       ← per-renderer compatibility matrix
+        palette-spec.md          ← palette color definitions (all 8 palettes)
+      assets/
+        palettes.json            ← machine-readable palette data
+        prompt-scaffold.md       ← prompt scaffold template
+      examples/
+        flowchart-ocean-depth.md ← annotated input/output example
+        sequence-okh-p3.md       ← annotated input/output example
+  README.md                      ← existing (update to reference skills/)
+  package.json                   ← existing
+```
+
+### 5.3 Complete SKILL.md Content
+
+```markdown
+---
+name: mermaid-theme
+description: Apply a named color palette or custom themeVariables to Mermaid diagram code. Use this skill when the user wants to style, theme, or color a Mermaid diagram; when they want a themeVariables block for a Mermaid diagram; when they want a prompt scaffold that enforces a palette for future AI-generated diagrams; when they ask about Mermaid theming, CSS variables for Mermaid, or on-brand diagram output. Also use when a user pastes Mermaid code and asks for it to look consistent with a brand or color scheme.
+license: MIT
+metadata:
+  version: 0.3.0
+  author: OverKill Hill P³
+  tags: mermaid, diagram, theme, palette, css-variables, prompt-scaffold, visual-governance
+---
+
+## Overview
+
+This skill applies consistent visual theming to Mermaid diagram code. It identifies the diagram family, selects or constructs a palette, generates a complete Mermaid `themeVariables` configuration block, wraps the input diagram in the styled output, and optionally produces a Markdown style bootstrap or LLM prompt scaffold.
+
+The output is platform-ready Mermaid code with embedded theming — not a description of what theming would look like.
+
+---
+
+## Workflow
+
+Execute this workflow in order. Do not skip steps.
+
+### Step 1 — Identify or Accept Input Diagram
+
+If the user has provided Mermaid code, use it as-is. If they have described a diagram they want created, generate it first using standard Mermaid syntax, then proceed with theming.
+
+If no diagram is present and none is described, ask for one before continuing.
+
+### Step 2 — Detect Diagram Family
+
+Read the first non-whitespace keyword after the opening code fence to determine the diagram family:
+
+| Keyword(s) | Family | Theme Behavior |
+|---|---|---|
+| `flowchart`, `graph` | Flowchart | Full themeVariables support |
+| `sequenceDiagram` | Sequence | Limited — themeVariables apply to actors and labels; some properties ignored |
+| `classDiagram` | Class | Full themeVariables support |
+| `gantt` | Gantt | Background and label colors apply; node fills do not |
+| `erDiagram` | ER | Full themeVariables support |
+| `stateDiagram-v2`, `stateDiagram` | State | Full themeVariables support |
+| `pie` | Pie | Background and font apply; segment colors use internal rotation |
+| `journey` | Journey | Label and background colors apply |
+| `bpmn-beta` | BPMN (OverKill Hill P³) | Full themeVariables support via Mermaid Theme Integration |
+| `mindmap` | Mindmap | Limited support — base colors only |
+| `xychart-beta` | XY Chart | Full themeVariables support |
+
+Note the family in your working context. The Sequence and Gantt families have reduced compatibility — flag this in your output.
+
+### Step 3 — Select or Build Palette
+
+#### Named Palettes (Built-in)
+
+If the user names a palette or a brand, use the definitions from the palette reference in `assets/palettes.json` or from the table below.
+
+**Ocean Depth**
+```
+primaryColor: #0d4f6c
+primaryTextColor: #e8f4f8
+primaryBorderColor: #1a7da8
+secondaryColor: #1a7da8
+secondaryTextColor: #ffffff
+secondaryBorderColor: #2aa8d4
+tertiaryColor: #2aa8d4
+tertiaryTextColor: #0d2d3a
+tertiaryBorderColor: #5cc8e8
+background: #0a2535
+mainBkg: #0d4f6c
+nodeBorder: #1a7da8
+clusterBkg: #0d2d3a
+clusterBorder: #1a7da8
+lineColor: #5cc8e8
+edgeLabelBackground: #0d2d3a
+fontFamily: 'Segoe UI', sans-serif
+fontSize: 14px
+labelBackground: #0d2d3a
+labelTextColor: #e8f4f8
+titleColor: #5cc8e8
+```
+
+**Forest Sage**
+```
+primaryColor: #2d5016
+primaryTextColor: #f0f7e6
+primaryBorderColor: #4a8025
+secondaryColor: #4a8025
+secondaryTextColor: #ffffff
+secondaryBorderColor: #6fa832
+tertiaryColor: #6fa832
+tertiaryTextColor: #1a2e0a
+tertiaryBorderColor: #96cc55
+background: #1a2e0a
+mainBkg: #2d5016
+nodeBorder: #4a8025
+clusterBkg: #1a2e0a
+clusterBorder: #4a8025
+lineColor: #96cc55
+edgeLabelBackground: #1a2e0a
+fontFamily: 'Segoe UI', sans-serif
+fontSize: 14px
+labelBackground: #1a2e0a
+labelTextColor: #f0f7e6
+titleColor: #96cc55
+```
+
+**Slate Ember**
+```
+primaryColor: #3d2b1f
+primaryTextColor: #f5ede8
+primaryBorderColor: #c46a2c
+secondaryColor: #c46a2c
+secondaryTextColor: #ffffff
+secondaryBorderColor: #e08545
+tertiaryColor: #e08545
+tertiaryTextColor: #1f1510
+tertiaryBorderColor: #f5a96a
+background: #1f1510
+mainBkg: #3d2b1f
+nodeBorder: #c46a2c
+clusterBkg: #1f1510
+clusterBorder: #c46a2c
+lineColor: #f5a96a
+edgeLabelBackground: #1f1510
+fontFamily: 'Segoe UI', sans-serif
+fontSize: 14px
+labelBackground: #1f1510
+labelTextColor: #f5ede8
+titleColor: #f5a96a
+```
+
+**Violet Mist**
+```
+primaryColor: #3d1a5c
+primaryTextColor: #f3ecff
+primaryBorderColor: #7b3fa0
+secondaryColor: #7b3fa0
+secondaryTextColor: #ffffff
+secondaryBorderColor: #a361c9
+tertiaryColor: #a361c9
+tertiaryTextColor: #1e0a30
+tertiaryBorderColor: #c99de0
+background: #1e0a30
+mainBkg: #3d1a5c
+nodeBorder: #7b3fa0
+clusterBkg: #1e0a30
+clusterBorder: #7b3fa0
+lineColor: #c99de0
+edgeLabelBackground: #1e0a30
+fontFamily: 'Segoe UI', sans-serif
+fontSize: 14px
+labelBackground: #1e0a30
+labelTextColor: #f3ecff
+titleColor: #c99de0
+```
+
+**OKH P³ (OverKill Hill brand)**
+```
+primaryColor: #2a2320
+primaryTextColor: #f5ede8
+primaryBorderColor: #c46a2c
+secondaryColor: #3d2b1f
+secondaryTextColor: #f5ede8
+secondaryBorderColor: #c46a2c
+tertiaryColor: #4a7c6f
+tertiaryTextColor: #ffffff
+tertiaryBorderColor: #5e9e8e
+background: #1a1510
+mainBkg: #2a2320
+nodeBorder: #c46a2c
+clusterBkg: #1a1510
+clusterBorder: #4a7c6f
+lineColor: #c46a2c
+edgeLabelBackground: #1a1510
+fontFamily: 'Segoe UI', sans-serif
+fontSize: 14px
+labelBackground: #1a1510
+labelTextColor: #f5ede8
+titleColor: #c46a2c
+```
+
+**Glee-fully**
+```
+primaryColor: #e8735a
+primaryTextColor: #ffffff
+primaryBorderColor: #c45840
+secondaryColor: #4a9e8e
+secondaryTextColor: #ffffff
+secondaryBorderColor: #357a6c
+tertiaryColor: #f5c842
+tertiaryTextColor: #1a1a1a
+tertiaryBorderColor: #d4a820
+background: #faf7f2
+mainBkg: #f5ede8
+nodeBorder: #e8735a
+clusterBkg: #f0f7f5
+clusterBorder: #4a9e8e
+lineColor: #c45840
+edgeLabelBackground: #faf7f2
+fontFamily: 'Segoe UI', sans-serif
+fontSize: 14px
+labelBackground: #faf7f2
+labelTextColor: #2a1f1a
+titleColor: #c45840
+```
+
+**AskJamie**
+```
+primaryColor: #3a7a8a
+primaryTextColor: #ffffff
+primaryBorderColor: #2a5f6d
+secondaryColor: #e8d5b0
+secondaryTextColor: #2a1f1a
+secondaryBorderColor: #c4b090
+tertiaryColor: #6a9e98
+tertiaryTextColor: #ffffff
+tertiaryBorderColor: #4a7e78
+background: #f8f4ec
+mainBkg: #eef5f7
+nodeBorder: #3a7a8a
+clusterBkg: #f0ede8
+clusterBorder: #6a9e98
+lineColor: #2a5f6d
+edgeLabelBackground: #f8f4ec
+fontFamily: 'Segoe UI', sans-serif
+fontSize: 14px
+labelBackground: #f8f4ec
+labelTextColor: #1a2e30
+titleColor: #2a5f6d
+```
+
+**Neutral Enterprise**
+```
+primaryColor: #2c3e50
+primaryTextColor: #ffffff
+primaryBorderColor: #1a252f
+secondaryColor: #3498db
+secondaryTextColor: #ffffff
+secondaryBorderColor: #2176ae
+tertiaryColor: #7f8c8d
+tertiaryTextColor: #ffffff
+tertiaryBorderColor: #5d6d7e
+background: #f8f9fa
+mainBkg: #ecf0f1
+nodeBorder: #2c3e50
+clusterBkg: #dfe6e9
+clusterBorder: #7f8c8d
+lineColor: #2c3e50
+edgeLabelBackground: #f8f9fa
+fontFamily: 'Segoe UI', sans-serif
+fontSize: 14px
+labelBackground: #f8f9fa
+labelTextColor: #2c3e50
+titleColor: #2c3e50
+```
+
+#### Custom Palette
+
+If the user provides specific colors (hex, HSL, RGB, or descriptive), construct a coherent palette by:
+
+1. Treating the user's primary color as `primaryColor` and `mainBkg`
+2. Deriving `primaryBorderColor` as a 15% darker variant
+3. Setting `primaryTextColor` to white (#ffffff) for dark primaries, near-black (#1a1a1a) for light primaries — verify minimum 4.5:1 contrast ratio
+4. Setting `secondaryColor` to a 30% lighter or hue-shifted variant of primary
+5. Setting `tertiaryColor` to a complementary or analogous hue 60-120 degrees away
+6. Setting `background` to a dark desaturated variant of primary for dark themes, or near-white (#f8f8f8) for light themes
+7. Setting `lineColor` to a bright accent — often the tertiary at 20% more saturation
+8. Setting `clusterBkg` to the background color darkened by 10%
+
+State any derivation assumptions explicitly in your output.
+
+### Step 4 — Generate the themeVariables Block
+
+Produce the complete configuration block in this format:
+
+```javascript
+%%{init: {
+  'theme': 'base',
+  'themeVariables': {
+    'primaryColor': '[value]',
+    'primaryTextColor': '[value]',
+    'primaryBorderColor': '[value]',
+    'secondaryColor': '[value]',
+    'secondaryTextColor': '[value]',
+    'secondaryBorderColor': '[value]',
+    'tertiaryColor': '[value]',
+    'tertiaryTextColor': '[value]',
+    'tertiaryBorderColor': '[value]',
+    'background': '[value]',
+    'mainBkg': '[value]',
+    'nodeBorder': '[value]',
+    'clusterBkg': '[value]',
+    'clusterBorder': '[value]',
+    'lineColor': '[value]',
+    'edgeLabelBackground': '[value]',
+    'fontFamily': '[value]',
+    'fontSize': '[value]',
+    'labelBackground': '[value]',
+    'labelTextColor': '[value]',
+    'titleColor': '[value]'
+  }
+}}%%
+```
+
+### Step 5 — Produce Styled Diagram Code
+
+Prepend the `%%{init:...}%%` block to the user's Mermaid code. Output the complete, copy-paste-ready result inside a fenced Mermaid code block.
+
+```
+```mermaid
+%%{init: { 'theme': 'base', 'themeVariables': { ... } }}%%
+[original diagram code]
+```
+```
+
+If the diagram family has reduced compatibility (Sequence, Gantt, Pie, Journey, Mindmap), include a one-line renderer note immediately after the code block:
+
+> Renderer note: [Family] diagrams have partial themeVariables support. [Specific limitation]. Verify output in your target renderer.
+
+### Step 6 — Export Options
+
+Produce whichever exports the user requested, or all three if no specific export was requested.
+
+**Export A: Standalone themeVariables JSON**
+
+Produce a clean JSON object (no wrapping %%{init}%% syntax) for use in `mermaid.initialize()`:
+
+```json
+{
+  "theme": "base",
+  "themeVariables": {
+    "primaryColor": "[value]",
+    ...
+  }
+}
+```
+
+**Export B: Markdown Style Bootstrap**
+
+A Markdown-embeddable block the user can paste before any diagram in a document to establish the theme:
+
+```markdown
+<!-- Mermaid Theme: [palette name] — OverKill Hill P³ -->
+<!-- Apply this init block before each diagram or set globally in your Mermaid config -->
+
+%%{init: { 'theme': 'base', 'themeVariables': { [all 21 variables] } }}%%
+```
+
+Include a usage note: "Paste this block immediately before each Mermaid code fence in Markdown documents. For site-wide application, pass the themeVariables object to `mermaid.initialize()` in your site's configuration file."
+
+**Export C: LLM Prompt Scaffold**
+
+A reusable prompt prefix that instructs any LLM to generate on-brand Mermaid diagrams on first try:
+
+```
+When generating Mermaid diagrams for this conversation, always include the following theme initialization block at the top of every diagram:
+
+%%{init: { 'theme': 'base', 'themeVariables': { [all 21 variables] } }}%%
+
+Rules:
+- Always use 'theme': 'base' as the base theme. Never use 'default', 'dark', 'forest', or 'neutral'.
+- Preserve all themeVariables exactly as provided. Do not substitute, approximate, or omit any variable.
+- Place the %%{init}%% block on the first line of the Mermaid code, before the diagram type keyword.
+- For flowchart diagrams, also add classDef definitions for any nodes that need semantic color differentiation beyond the base palette.
+- Do not add inline style declarations that override themeVariables unless explicitly requested.
+```
+
+---
+
+## Renderer Compatibility Reference
+
+Load `references/renderer-compat.md` for the full compatibility matrix. Summary for inline use:
+
+| Renderer | themeVariables | %%{init}%% block | Notes |
+|---|---|---|---|
+| Mermaid Live Editor (mermaid.live) | Full | Yes | Reference renderer |
+| Mermaid.ai (mermaid.ai) | Full | Yes | Full init block support |
+| GitHub Markdown | Partial | No | Strips %%{init}%%; uses GitHub's forced theme |
+| GitLab Markdown | Partial | No | Similar to GitHub |
+| Notion | None | No | Renders diagram only, no theming |
+| Obsidian | Full | Yes | Best markdown renderer for theming |
+| Confluence | Partial | Plugin-dependent | Check your Mermaid plugin version |
+| VS Code preview | Full | Yes | With Mermaid extension |
+| Docusaurus | Full | Yes | Via mermaid.initialize() config |
+| VitePress | Full | Yes | Via markdown.mermaidOptions config |
+
+When the user's target renderer is GitHub, GitLab, Notion, or Confluence, add a renderer advisory after the styled output: "Note: [renderer] does not support the %%{init}%% theming block. Your diagram will render with the platform's default theme. Use the themeVariables JSON export to configure theming at the application level if you have access to Mermaid initialization."
+
+---
+
+## Output Formatting Rules
+
+- Always produce the full styled diagram code first, then the exports the user requested.
+- Never truncate the themeVariables block. All 21 variables must appear in every output.
+- Do not editorialize about color choices unless the user asks for feedback on their palette.
+- If you derive a custom palette, state the derivation rules you applied in one compact paragraph before the output.
+- Keep explanatory text minimal. The output is the product.
+```
+
+### 5.4 Supporting File: `references/theme-variables.md`
+
+This file contains the complete 21-variable themeVariables reference table (variable name, effect, which diagram families it affects, and known rendering quirks). Content is drawn from the Mermaid Theme Builder project page variable table plus extended compatibility notes from Mermaid.js official documentation.
+
+**Replit instruction:** Generate this file by expanding the variable table published at `overkillhill.com/projects/mermaid-theme-builder/` with a third column (Diagram Families Affected) and a fourth column (Rendering Quirks). Populate from Mermaid.js docs at `mermaid.js.org/config/theming.html`.
+
+### 5.5 Supporting File: `references/renderer-compat.md`
+
+Full compatibility matrix covering 12 renderers across 8 theming properties: themeVariables support, %%{init}%% block support, dark/light mode handling, fontFamily compliance, embedded vs. application-level config, and known version dependencies.
+
+**Replit instruction:** Build this as a comprehensive Markdown table. Source from Mermaid.js docs and community-reported behavior in the Mermaid GitHub discussions.
+
+### 5.6 Supporting File: `references/palette-spec.md`
+
+Narrative documentation for all 8 palettes — origin story, intended use context, contrast rationale, and recommended diagram families. The OKH P³ palette section includes the brand relationship between the palette and the OverKill Hill P³ design token system.
+
+### 5.7 Supporting File: `assets/palettes.json`
+
+Machine-readable JSON array containing all 8 palettes. Structure:
+
+```json
+[
+  {
+    "name": "ocean-depth",
+    "display": "Ocean Depth",
+    "brand": null,
+    "theme": "dark",
+    "themeVariables": {
+      "primaryColor": "#0d4f6c",
+      ...
+    }
+  },
+  {
+    "name": "okh-p3",
+    "display": "OKH P³",
+    "brand": "overkillhill",
+    "theme": "dark",
+    "themeVariables": { ... }
+  }
+]
+```
+
+**Replit instruction:** Generate from the 8 palette definitions in the SKILL.md body above. Validate JSON before writing.
+
+### 5.8 Supporting File: `assets/prompt-scaffold.md`
+
+Parameterized prompt scaffold template with `{{PALETTE_NAME}}` and `{{THEME_VARIABLES_JSON}}` placeholders, usable as a Jinja/Handlebars-style template in downstream tooling.
+
+### 5.9 Supporting Files: `examples/`
+
+Two annotated example files:
+
+**`examples/flowchart-ocean-depth.md`** — Shows a simple three-node flowchart as raw input, then as styled output with Ocean Depth applied, with inline callouts explaining which variable produced which visual result.
+
+**`examples/sequence-okh-p3.md`** — Shows a sequence diagram with OKH P³ applied, with a renderer note about the Sequence family's partial compatibility, demonstrating how the skill flags this in output.
+
+---
+
+## 6. Skill 2 — `bpmn-for-mermaid`
+
+### 6.1 Purpose
+
+The `bpmn-for-mermaid` skill delivers the DSL specification, generation rules, and validation logic of the BPMN for Mermaid prototype application without the browser playground. It enables any compatible agent to: accept a natural-language or structured description of a business process, produce valid `bpmn-beta` Mermaid syntax on first try, validate existing bpmn-beta syntax against the DSL spec, and explain or document bpmn-beta constructs.
+
+This skill directly addresses the core value proposition of the parent application: AI-generatability without syntax repair loops.
+
+### 6.2 Repository Integration
+
+```
+mermaid-diagram-bpmn/            ← existing repo root
+  .agents/                       ← existing
+  .github/workflows/             ← existing
+  artifacts/                     ← existing
+  attached_assets/               ← existing
+  lib/                           ← existing
+  scripts/                       ← existing
+  skills/                        ← NEW top-level folder
+    bpmn-for-mermaid/            ← skill directory
+      SKILL.md                   ← required
+      references/
+        dsl-spec.md              ← complete bpmn-beta DSL specification
+        bpmn-element-map.md      ← BPMN 2.0 element-to-DSL mapping table
+        known-limitations.md     ← honest scope documentation
+      assets/
+        element-vocabulary.json  ← machine-readable DSL element definitions
+        validation-rules.json    ← parser validation rules as structured data
+      examples/
+        purchase-order.md        ← canonical PO approval flow (input + output)
+        incident-response.md     ← IT incident handling flow
+        employee-onboarding.md   ← HR process with multiple pools
+  README.md                      ← existing (update to reference skills/)
+```
+
+### 6.3 Complete SKILL.md Content
+
+```markdown
+---
+name: bpmn-for-mermaid
+description: Generate, validate, or explain business process diagrams using the bpmn-beta Mermaid diagram type. Use this skill when the user describes a business process and wants a diagram; when they ask for a BPMN diagram; when they want to convert a flowchart or process description to BPMN notation; when they ask for bpmn-beta syntax, DSL, or Mermaid BPMN; when they want to validate existing bpmn-beta code; or when they want to understand BPMN elements like tasks, gateways, events, pools, or lanes in Mermaid format. Also use when the user references the OverKill Hill P³ BPMN DSL.
+license: MIT
+metadata:
+  version: 0.1.0
+  author: OverKill Hill P³
+  tags: bpmn, mermaid, bpmn-beta, business-process, process-modeling, dsl, workflow, lanes, pools, gateways
+---
+
+## Overview
+
+This skill generates and validates `bpmn-beta` Mermaid diagrams — the OverKill Hill P³ BPMN-native diagram type for Mermaid. The DSL maps BPMN 2.0 Descriptive Conformance subset elements to a clean, text-first syntax that is readable by process analysts and generatable by LLMs without syntax repair.
+
+The output is valid, copy-paste-ready bpmn-beta syntax inside a Mermaid code fence — not a description, not a flowchart approximation, not XML.
+
+---
+
+## DSL Reference
+
+### Diagram Declaration
+
+Every bpmn-beta diagram starts with:
+
+```
+bpmn-beta
+```
+
+Optional metadata on the following lines (before any pool or top-level elements):
+
+```
+accTitle: [Diagram title — used by screen readers and export tools]
+accDescr: [Longer description — optional]
+```
+
+### Event Keywords
+
+| Keyword | BPMN Element | Shape | Usage |
+|---|---|---|---|
+| `start` | Start event (none) | Thin circle | One per primary process path |
+| `end` | End event (none) | Thick circle | One or more per lane |
+| `event:message` | Message intermediate event | Circle + envelope | Sent/received messages |
+| `event:timer` | Timer intermediate event | Circle + clock | Time-triggered steps |
+| `event:error` | Error end event | Thick circle + lightning | Error termination |
+
+Syntax:
+
+```
+start    [id]  "[label]"
+end      [id]  "[label]"
+event:message [id] "[label]"
+event:timer   [id] "[label]"
+event:error   [id] "[label]"
+```
+
+### Task Keywords
+
+| Keyword | BPMN Element | Marker | Usage |
+|---|---|---|---|
+| `task` | Abstract task | Rounded rectangle | Generic step, type unspecified |
+| `task:user` | User task | Person icon | Human-performed work |
+| `task:service` | Service task | Gear icon | Automated/system step |
+| `task:script` | Script task | Scroll icon | Script execution |
+
+Syntax:
+
+```
+task         [id]  "[label]"
+task:user    [id]  "[label]"
+task:service [id]  "[label]"
+task:script  [id]  "[label]"
+```
+
+### Gateway Keywords
+
+| Keyword | BPMN Element | Shape | Routing |
+|---|---|---|---|
+| `xor` | Exclusive gateway | Diamond + X | One path only |
+| `and` | Parallel gateway | Diamond + + | All paths simultaneously |
+| `or` | Inclusive gateway | Diamond + O | One or more paths |
+
+Syntax:
+
+```
+xor [id] "[label]"
+and [id] "[label]"
+or  [id] "[label]"
+```
+
+### Sequence Flow
+
+All sequence flows use `-->`. Edge labels go after a colon on the same line:
+
+```
+[source-id] --> [target-id]
+[source-id] --> [target-id]: "[condition label]"
+```
+
+Labels on gateway outgoing flows are the condition that selects that path.
+
+### Pool and Lane Structure
+
+Pools contain lanes. Lanes contain elements and flows. The pool keyword wraps everything.
+
+```
+pool [pool-id] "[Pool Label]" {
+
+  lane [lane-id] "[Lane Label]" {
+    [elements declared here]
+  }
+
+  lane [lane-id-2] "[Lane Label 2]" {
+    [elements declared here]
+  }
+
+  [flows declared here — both within and crossing lanes]
+}
+```
+
+Flow declarations inside the pool block but outside any lane block are legal. This is the preferred location for cross-lane flows since they are not owned by a single lane.
+
+Flows can be declared inside a lane block (if both source and target are in that lane) or in the pool block body (for cross-lane flows). Both patterns are valid.
+
+### Message Flow (Between Pools)
+
+For diagrams with multiple pools:
+
+```
+pool [pool-a] "[Pool A]" { ... }
+pool [pool-b] "[Pool B]" { ... }
+
+message [source-id] --> [target-id]: "[message label]"
+```
+
+Message flow is experimental in the current prototype renderer. Use it for DSL specification purposes but verify SVG output in the playground.
+
+---
+
+## Generation Workflow
+
+Execute in order. Do not skip steps.
+
+### Step 1 — Extract Process Information
+
+From the user's input (natural language description, existing flowchart, table, bullet list, or prose):
+
+- Identify the actors or systems involved (these become lanes or pools)
+- Identify the trigger (start event — what initiates the process)
+- Identify the end state(s) (end events — what conditions terminate the process)
+- List all work steps (tasks — what each actor does)
+- Identify all decision points (gateways — where the path branches)
+- Identify all decision outcomes (gateway outgoing flows and their conditions)
+- Identify any automated or system steps (service tasks)
+- Identify any human approval or review steps (user tasks)
+- Identify message exchanges between separate organizational units (message flows)
+
+If any of these are ambiguous, state your assumptions explicitly before producing the diagram — do not ask clarifying questions that would stall output. Make a reasonable interpretation and label it.
+
+### Step 2 — Determine Structural Model
+
+Decide:
+
+- **Single pool, multiple lanes:** One organization, multiple roles or departments. Use when all actors are inside one company or system boundary.
+- **Multiple pools:** Two or more organizations. Use when message flows cross organizational boundaries (customer to vendor, company to partner, system to external service).
+- **No pool/lane wrapper:** Use only for simple linear processes with one actor or when the user explicitly wants a flat model.
+
+For business process documentation in professional contexts, default to single pool with multiple lanes unless the process is explicitly cross-organizational.
+
+### Step 3 — Assign IDs
+
+Assign short, lowercase, hyphen-free IDs to all elements before writing the DSL. Convention:
+
+- Start events: `s1`, `s2`
+- End events: `e1`, `e2`
+- Tasks: `t1`, `t2`, `t3` (or semantic IDs like `review`, `approve`)
+- Gateways: `g1`, `g2` (or semantic IDs like `approved`, `threshold-met`)
+- Intermediate events: `ev1`, `ev2`
+
+IDs must be unique within the diagram. Keep them short — they appear in flow declarations repeatedly.
+
+### Step 4 — Write the DSL
+
+Apply all rules from the DSL Reference section above. Additional constraints:
+
+- Every diagram must have at least one `start` event and at least one `end` event.
+- Every `xor` gateway must have at least two outgoing flows, each with a condition label.
+- Every `and` gateway (split) must have a corresponding `and` gateway (join) that re-merges the parallel paths, unless the parallel paths terminate in separate end events.
+- No orphan elements — every element must appear in at least one flow declaration.
+- No circular flows in the first pass. If the process has loops (retry, rework, repeat), model them with a second gateway that branches back to the rework start point.
+- Declare all flows at the pool level (outside individual lane blocks) for cross-lane flows. Only declare flows inside a lane block if both source and target are definitively within that lane.
+
+### Step 5 — Self-Validate
+
+Before outputting, check:
+
+- [ ] `bpmn-beta` on line 1
+- [ ] All IDs referenced in flows are declared as elements
+- [ ] All `xor` gateways have at least two outgoing labeled flows
+- [ ] No element is an island (appears in no flow)
+- [ ] Pool and lane brackets are properly nested and closed
+- [ ] All string labels are in double quotes
+- [ ] No reserved keywords used as IDs (`pool`, `lane`, `start`, `end`, `task`, `xor`, `and`, `or`, `message`)
+
+If any check fails, correct before outputting.
+
+### Step 6 — Output
+
+Produce the complete bpmn-beta diagram inside a fenced code block:
+
+```mermaid
+bpmn-beta
+accTitle: [descriptive title]
+
+pool [id] "[label]" {
+
+  lane [id] "[label]" {
+    [elements]
+  }
+
+  [cross-lane flows]
+}
+```
+
+Follow the code block immediately with a compact element inventory:
+
+**Elements:** [n] tasks, [n] events, [n] gateways, [n] lanes, [n] pools  
+**Flows:** [n] sequence flows[, n message flows if applicable]
+
+---
+
+## Validation Workflow
+
+When the user provides existing bpmn-beta code for validation:
+
+1. Check every element declaration for correct keyword spelling
+2. Check every flow for existence of both source and target IDs
+3. Check gateway cardinality (xor: ≥2 outgoing; and: matching split/join unless deliberate)
+4. Check bracket nesting (pool > lane, all closed)
+5. Check that all labels are double-quoted
+6. Report issues as a numbered list: `[Line N] [Issue description] — [Correction]`
+7. Produce a corrected version if issues were found
+
+---
+
+## Explanation Workflow
+
+When the user asks what a bpmn-beta element does, how to use a specific construct, or how the DSL maps to BPMN 2.0:
+
+1. State the element name and its BPMN 2.0 equivalent
+2. Show the syntax in a code block
+3. Give a one-sentence usage rule
+4. Show a minimal working example (3–5 elements, 2–3 flows) in a fenced code block
+
+Do not reproduce the full DSL reference in an explanation response. Answer the specific question.
+
+---
+
+## Scope Boundaries
+
+Always be honest about these constraints:
+
+**In scope:**
+- BPMN 2.0 Descriptive Conformance subset: start/end events, user/service/script tasks, XOR/AND/OR gateways, sequence flows, pools, lanes
+- Message intermediate events, timer intermediate events, error end events
+- Message flows between pools
+
+**Not in scope (do not generate):**
+- Boundary events on tasks
+- Transaction subprocesses
+- Compensation events
+- Data objects and data stores
+- Choreography diagrams
+- Conversation diagrams
+- BPMN XML import or export
+- Process engine semantics (bpmn-beta is descriptive, not executable)
+
+If the user requests an out-of-scope element, state clearly that it is outside the current DSL scope and offer the closest available approximation with a note explaining the difference.
+
+---
+
+## Mermaid Theme Integration
+
+bpmn-beta diagrams honor Mermaid themeVariables. If the user also has a theme palette (from the `mermaid-theme` skill or otherwise), prepend the `%%{init}%%` block before the `bpmn-beta` keyword:
+
+```mermaid
+%%{init: { 'theme': 'base', 'themeVariables': { ... } }}%%
+bpmn-beta
+accTitle: [title]
+...
+```
+
+If no theme is specified, output the diagram without any init block. Do not default to a specific palette.
+
+---
+
+## Output Rules
+
+- Always produce the complete, syntactically valid bpmn-beta diagram — never a partial sketch.
+- Never produce bpmn-beta syntax from memory of BPMN XML or other tools. Use only the keywords and patterns defined in this skill.
+- If you are uncertain about a process step's correct classification (task type or gateway type), use `task` or `xor` as the conservative default and note your assumption.
+- Do not produce flowchart syntax as a substitute for bpmn-beta. They are different diagram types with different semantics.
+- The output is the product. Keep explanation text minimal unless the user asks for explanation.
+```
+
+### 6.4 Supporting File: `references/dsl-spec.md`
+
+The complete formal DSL specification for bpmn-beta, written as a developer-facing reference document. This is distinct from the SKILL.md body (which is instruction-oriented) — the spec is the authoritative grammar source.
+
+Content includes: BNF-style grammar notation for each element type, full keyword table, ID naming rules, flow declaration rules, nesting rules, and reserved word list.
+
+**Replit instruction:** Extract and formalize from the DSL Reference section of the overkillhill.com/projects/bpmn-for-mermaid/ project page and from the GitHub repo's existing DSL documentation. Expand into BNF notation for the pool/lane/element/flow grammar.
+
+### 6.5 Supporting File: `references/bpmn-element-map.md`
+
+Two-way mapping table: BPMN 2.0 standard element name → bpmn-beta keyword (and vice versa). Covers all elements in the Descriptive Conformance subset plus a third column listing elements that are out of scope for v1 with a brief "closest approximation" note.
+
+### 6.6 Supporting File: `references/known-limitations.md`
+
+The honest scope document. What bpmn-beta is. What it isn't. Current prototype parser limitations. Elements that are specified but not yet fully rendered (pools/lanes experimental status). The gap between the hand-written prototype parser and the planned Langium grammar. This is a trust document — ship it because the parent application ships it.
+
+### 6.7 Supporting File: `assets/element-vocabulary.json`
+
+Machine-readable JSON array of all bpmn-beta elements:
+
+```json
+[
+  {
+    "keyword": "task:user",
+    "bpmn-equivalent": "User Task",
+    "bpmn-element-type": "Task",
+    "shape": "Rounded rectangle with person icon",
+    "scope": "v1",
+    "experimental": false,
+    "syntax": "task:user [id] \"[label]\""
+  },
+  ...
+]
+```
+
+### 6.8 Supporting File: `assets/validation-rules.json`
+
+Machine-readable JSON array of validation rules for use in downstream tooling or scripts:
+
+```json
+[
+  {
+    "rule-id": "VR-001",
+    "description": "All flow source IDs must be declared elements",
+    "type": "reference-integrity",
+    "severity": "error"
+  },
+  {
+    "rule-id": "VR-002",
+    "description": "XOR gateways must have at least two outgoing flows",
+    "type": "cardinality",
+    "severity": "error"
+  },
+  ...
+]
+```
+
+### 6.9 Supporting Files: `examples/`
+
+Three annotated example files, each containing: the business context (one paragraph), the natural-language process description used as input, the generated bpmn-beta output, and inline callouts explaining why each element was chosen.
+
+**`examples/purchase-order.md`** — The canonical PO approval flow from the project page. Three participants, one XOR gateway, one rejection path. Serves as the "Hello World" reference for the skill.
+
+**`examples/incident-response.md`** — IT incident handling with a timer event triggering escalation and an AND gateway for parallel notification. Demonstrates intermediate events and parallel routing.
+
+**`examples/employee-onboarding.md`** — HR process with three lanes (HR, IT, Hiring Manager) and cross-lane flows. Demonstrates the recommended cross-lane flow declaration pattern and multi-outcome end events.
+
+---
+
+## 7. Shared Requirements
+
+### 7.1 License File
+
+Both skills inherit the MIT license from their parent repositories. Each skill directory should include an explicit `LICENSE` file (can be a symlink to the root LICENSE or a copy). This satisfies the `license` frontmatter field with a local path reference:
+
+```yaml
+license: LICENSE
+```
+
+### 7.2 README Update (Both Repos)
+
+Each repository's root `README.md` must be updated to include a `## Agent Skills` section:
+
+```markdown
+## Agent Skills
+
+This repository includes a SKILL.md-compatible agent skill under `skills/[skill-name]/`.
+
+The skill delivers the core logic of this tool to any SKILL.md-compatible agent platform
+(Claude, Claude Code, GitHub Copilot, Cursor, VS Code, Gemini CLI, OpenAI Codex, and others)
+without requiring the browser UI.
+
+**To use:** Place the `skills/` folder in your project or agent workspace and configure
+your agent to discover skills from the local path. See [agentskills.io](https://agentskills.io)
+for platform-specific integration guides.
+```
+
+### 7.3 Cross-Skill Reference
+
+The `mermaid-theme` SKILL.md already references the bpmn-beta diagram family in its diagram detection table and in the Output Export C scaffold rules. The `bpmn-for-mermaid` SKILL.md already references the `mermaid-theme` skill in its Theme Integration section. This cross-referencing is intentional — the two skills compose naturally when both are loaded in an agent context.
+
+A user generating a bpmn-beta diagram who also has `mermaid-theme` loaded gets a themed diagram in one pass. Neither skill requires the other; both work standalone.
+
+---
+
+## 8. Platform Compatibility
+
+### 8.1 Confirmed Adopters (as of December 2025 open standard publication)
+
+All six platforms listed below have confirmed SKILL.md support and will load these skills without modification:
+
+| Platform | Load Mechanism | Trigger Behavior | Notes |
+|---|---|---|---|
+| Claude / Claude Code | Skills directory configuration | Frontmatter description match | Lazy-loads body on trigger |
+| GitHub Copilot | `.github/skills/` or workspace skills path | Description-based routing | VS Code extension handles loading |
+| VS Code (Copilot Chat) | Workspace `.skills/` folder | Same as Copilot | Shared implementation |
+| Cursor | `skills/` in project root | Description match | Reads frontmatter at project open |
+| Gemini CLI | `~/.gemini/skills/` or project `skills/` | Description match | Open-source implementation |
+| OpenAI Codex | `skills/` in working directory | Description match | Confirmed via openai/skills repo |
+
+### 8.2 Platform-Specific Placement
+
+These skills live in `skills/` inside each respective repo, which satisfies the project-local placement convention for VS Code, Cursor, Gemini CLI, and Codex. For GitHub Copilot, a symlink or copy to `.github/skills/` may be needed depending on Copilot's workspace discovery path at implementation time — verify against current Copilot docs before committing.
+
+### 8.3 Cross-Platform Testing Protocol
+
+After Replit generates the skill files, test each skill on at minimum:
+
+1. Claude (claude.ai or Claude Code) — load via skills directory, trigger with natural language prompt
+2. VS Code with Copilot Chat — drop `skills/` in workspace root, trigger from chat
+3. Cursor — place in project root, open project, trigger from agent mode
+
+Document any triggering failures (skill not loading) vs. output failures (skill loaded but produced incorrect output) separately. Triggering failures usually indicate a `description` field that doesn't match the platform's routing patterns. Output failures indicate instruction body issues.
+
+---
+
+## 9. Replit Build Instructions
+
+### 9.1 Sequence of Operations
+
+Replit should execute the following in order. These are atomic steps — each should complete and verify before the next begins.
+
+**Step 1 — Mermaid Theme Builder skill scaffold**
+
+```
+In the mermaid-theme-builder Replit project:
+
+1. Create directory: skills/mermaid-theme/
+2. Create directory: skills/mermaid-theme/references/
+3. Create directory: skills/mermaid-theme/assets/
+4. Create directory: skills/mermaid-theme/examples/
+5. Write skills/mermaid-theme/SKILL.md — use exact content from PRD Section 5.3
+6. Write skills/mermaid-theme/references/theme-variables.md — per Section 5.4 spec
+7. Write skills/mermaid-theme/references/renderer-compat.md — per Section 5.5 spec
+8. Write skills/mermaid-theme/references/palette-spec.md — per Section 5.6 spec
+9. Write skills/mermaid-theme/assets/palettes.json — per Section 5.7 spec (derive from palette definitions in SKILL.md body)
+10. Write skills/mermaid-theme/assets/prompt-scaffold.md — per Section 5.8 spec
+11. Write skills/mermaid-theme/examples/flowchart-ocean-depth.md — per Section 5.9 spec
+12. Write skills/mermaid-theme/examples/sequence-okh-p3.md — per Section 5.9 spec
+13. Copy root LICENSE to skills/mermaid-theme/LICENSE
+14. Update README.md — add ## Agent Skills section per Section 7.2
+```
+
+**Step 2 — BPMN for Mermaid skill scaffold**
+
+```
+In the mermaid-diagram-bpmn Replit project:
+
+1. Create directory: skills/bpmn-for-mermaid/
+2. Create directory: skills/bpmn-for-mermaid/references/
+3. Create directory: skills/bpmn-for-mermaid/assets/
+4. Create directory: skills/bpmn-for-mermaid/examples/
+5. Write skills/bpmn-for-mermaid/SKILL.md — use exact content from PRD Section 6.3
+6. Write skills/bpmn-for-mermaid/references/dsl-spec.md — per Section 6.4 spec
+7. Write skills/bpmn-for-mermaid/references/bpmn-element-map.md — per Section 6.5 spec
+8. Write skills/bpmn-for-mermaid/references/known-limitations.md — per Section 6.6 spec
+9. Write skills/bpmn-for-mermaid/assets/element-vocabulary.json — per Section 6.7 spec
+10. Write skills/bpmn-for-mermaid/assets/validation-rules.json — per Section 6.8 spec
+11. Write skills/bpmn-for-mermaid/examples/purchase-order.md — per Section 6.9 spec
+12. Write skills/bpmn-for-mermaid/examples/incident-response.md — per Section 6.9 spec
+13. Write skills/bpmn-for-mermaid/examples/employee-onboarding.md — per Section 6.9 spec
+14. Copy root LICENSE to skills/bpmn-for-mermaid/LICENSE
+15. Update README.md — add ## Agent Skills section per Section 7.2
+```
+
+**Step 3 — Validation**
+
+```
+For each SKILL.md file produced:
+
+1. Confirm YAML frontmatter is valid YAML (no syntax errors)
+2. Confirm `name` field matches the directory name exactly
+3. Confirm `description` field is between 1 and 1024 characters
+4. Confirm `metadata` block is present with version and author
+5. Confirm the Markdown body renders without errors
+6. Confirm all referenced supporting files exist at their stated paths
+
+For each JSON asset file:
+1. Validate JSON syntax (parseable, no trailing commas)
+2. Confirm all palette names in palettes.json match the named palettes in SKILL.md
+3. Confirm all element keywords in element-vocabulary.json match the DSL Reference table in SKILL.md
+```
+
+**Step 4 — Git commit**
+
+```
+For each repo:
+1. Stage all files in skills/
+2. Stage updated README.md
+3. Commit with message: "feat: add SKILL.md agent skill — [skill-name] v0.x.0"
+4. Push to main
+```
+
+### 9.2 File Size Targets
+
+| File | Expected Size | Flag If Exceeded |
+|---|---|---|
+| SKILL.md (mermaid-theme) | 8–14 KB | >20 KB suggests bloat |
+| SKILL.md (bpmn-for-mermaid) | 10–16 KB | >22 KB suggests bloat |
+| palettes.json | 6–10 KB | — |
+| element-vocabulary.json | 3–6 KB | — |
+| validation-rules.json | 2–4 KB | — |
+| Each references/*.md | 3–8 KB | — |
+| Each examples/*.md | 2–5 KB | — |
+
+### 9.3 Replit Agent Prompt (Template)
+
+When initiating the build in Replit Agent, use this prompt structure:
+
+```
+Build the SKILL.md agent skill package for [mermaid-theme / bpmn-for-mermaid].
+
+PRD location: [paste this document or link it]
+
+Deliverables:
+- Create the skills/ directory structure exactly as specified in PRD Section [5.2 / 6.2]
+- Write all files with content specified in PRD Sections [5.3–5.9 / 6.3–6.9]
+- Run validation checks from PRD Section 9.1 Step 3
+- Do not modify any existing application code
+- Do not modify package.json, tsconfig.json, or any build configuration
+- Commit with the message format in PRD Section 9.1 Step 4
+
+The skills/ folder is additive — it does not affect the existing build pipeline.
+```
+
+---
+
+## 10. Risks and Mitigations
+
+| Risk | Likelihood | Impact | Mitigation |
+|---|---|---|---|
+| SKILL.md standard evolves between this PRD and build execution | Medium | Low | Frontmatter fields are backward-compatible by design; monitor agentskills.io changelog |
+| Platform-specific discovery paths differ from documented convention | Medium | Medium | Test on at least two platforms before declaring done; treat discovery path as a config variable per platform |
+| bpmn-beta parser limitations misrepresented in skill output | Low | High | known-limitations.md is mandatory; SKILL.md body scope boundaries section must be shipped verbatim |
+| Palette hex values drift between SKILL.md body and palettes.json | Medium | Medium | Replit validation step 3 must confirm consistency; treat SKILL.md body as source of truth |
+| Agent produces invalid bpmn-beta despite skill instructions | Low | Medium | Step 5 self-validation checklist in SKILL.md body is the primary mitigation; examples/ directory provides correction reference |
+| Skills not discovered by target platforms due to path convention differences | Medium | Low | Document per-platform placement in the README update; skill content is correct regardless of discovery |
+
+---
+
+## 11. Success Criteria
+
+**Functional:** A compatible agent loaded with `mermaid-theme` accepts a plain Mermaid flowchart, a palette name, and produces a complete `%%{init}%%`-prefixed styled diagram without any additional prompting.
+
+**Functional:** A compatible agent loaded with `bpmn-for-mermaid` accepts a natural-language description of a business process and produces valid, self-consistent bpmn-beta syntax that passes all validation checks in Step 5 of the generation workflow.
+
+**Structural:** Both `skills/` directories match the structures specified in Sections 5.2 and 6.2 exactly. All files exist. No files are empty.
+
+**Integrity:** `palettes.json` and SKILL.md palette definitions produce identical hex values for the same palette name. `element-vocabulary.json` and SKILL.md DSL Reference produce identical keyword sets.
+
+**Compatibility:** Both skills load and trigger correctly in Claude Code or VS Code Copilot Chat without configuration beyond placing the `skills/` folder in the workspace root.
+
+---
+
+*End of Document*  
+*OverKill Hill P³ · overkillhill.com · May 2026*

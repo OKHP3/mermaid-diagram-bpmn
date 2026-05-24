@@ -65,6 +65,18 @@ pnpm --filter @workspace/mermaid-diagram-bpmn run dev
 
 Then open the preview at `/`.
 
+## Agent Skills
+
+This repository includes a SKILL.md-compatible agent skill under `skills/bpmn-for-mermaid/`.
+
+The skill delivers the core logic of this tool to any SKILL.md-compatible agent platform
+(Claude, Claude Code, GitHub Copilot, Cursor, VS Code, Gemini CLI, OpenAI Codex, and others)
+without requiring the browser UI.
+
+**To use:** Place the `skills/` folder in your project or agent workspace and configure
+your agent to discover skills from the local path. See [agentskills.io](https://agentskills.io)
+for platform-specific integration guides.
+
 ## License
 
 MIT — see [LICENSE](./LICENSE).
