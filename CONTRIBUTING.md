@@ -22,7 +22,7 @@ Both must pass before submitting a PR. CI enforces this on every push.
 
 ```
 artifacts/mermaid-diagram-bpmn/
-├── src/lib/          ← parser, layout, renderer, plugin (all contributions here)
+├── src/lib/          ← parser, layout, renderer (all contributions here)
 ├── src/pages/        ← playground and documentation pages
 ├── examples/         ← canonical .mmd fixture files
 ├── docs/             ← project documentation
@@ -31,16 +31,25 @@ artifacts/mermaid-diagram-bpmn/
 
 ## Brand and identity rules
 
-See `AGENTS.md`. Do not claim full BPMN 2.0 compliance. Do not use `bpmn` (without `-beta`) as the DSL keyword anywhere. The public title is "BPMN for Mermaid".
+See `AGENTS.md`. Do not claim full BPMN 2.0 compliance. Do not use `bpmn` (without `-beta`) as the DSL keyword anywhere. The public title is "BPMN for Mermaid" — not "bpmn-beta tool" or any name with "beta" in the product title.
+
+## Current implementation status
+
+| Category | Elements |
+|---|---|
+| **Implemented** | `start`, `end`; `task`, `task:user`, `task:service`, `task:script`, `task:receive`, `task:send`; `xor`, `and`, `or`; sequence flow `-->`, conditional label, default flow `==>`; `accTitle`/`accDescr`; auto layout; theme-aware SVG styling |
+| **Experimental** | `pool`, `lane`, message flow `~~>`, pool/lane-aware layout, cross-pool routing |
+| **Planned** | Intermediate events, timer/message/error markers, text annotations, associations, Langium grammar, Mermaid External Diagram API packaging, `getStyles` theme variable binding, parser-enforced BPMN domain rules |
+| **Out of scope (v1)** | BPMN XML import/export, executable semantics, `bpmn-js` runtime dependency, choreography, conversation, complex gateways, event subprocesses |
 
 ## Dual-compliance requirement
 
 Every rendered element must satisfy both standards equally — neither takes priority:
 
-- **Mermaid rendering**: output must render correctly in all Mermaid-compatible hosts
-- **BPMN 2.0.2 notation**: shapes, markers, and flows must match the OMG specification
+- **Mermaid rendering**: output must render correctly in all Mermaid-compatible hosts. Plugin v1 target: `registerExternalDiagrams()`. Current state: standalone React app with direct SVG renderer.
+- **BPMN 2.0.2 notation**: shapes, markers, and flows must match the OMG specification.
 
-See `artifacts/mermaid-diagram-bpmn/standards/BPMN-SPEC-REFERENCE.md` for the element-by-element compliance map.
+See [`artifacts/mermaid-diagram-bpmn/standards/BPMN-SPEC-REFERENCE.md`](./artifacts/mermaid-diagram-bpmn/standards/BPMN-SPEC-REFERENCE.md) for the element-by-element compliance map.
 
 ## What we accept
 
@@ -57,22 +66,33 @@ See `artifacts/mermaid-diagram-bpmn/standards/BPMN-SPEC-REFERENCE.md` for the el
 - BPMN XML import or export
 - Backend server, user accounts, or cloud storage
 - New element types outside the Descriptive Conformance subset without a `docs/decisions.md` entry
+- Breaking DSL changes without a minor version bump and decision log entry
 
 ## Adding a new element type
 
 1. Add typed interface to `bpmn-db.ts`
 2. Add parsing logic to `bpmn-parser.ts`
 3. Add layout dimensions to `bpmn-layout.ts`
-4. Add SVG rendering to `bpmn-renderer.tsx` AND `bpmn-plugin.ts` draw function
+4. Add SVG rendering to `bpmn-renderer.tsx`
 5. Add CSS class to `bpmn-styles.ts`
 6. Add an example to `examples/` and update `bpmn-examples.ts`
 7. Add unit tests to `src/lib/__tests__/`
 8. Update the support matrix on the Home page and in `docs/dsl-spec.md`
-9. Verify notation against `standards/BPMN-SPEC-REFERENCE.md`
+9. Verify notation against `artifacts/mermaid-diagram-bpmn/standards/BPMN-SPEC-REFERENCE.md`
 
 ## DSL changes
 
 Any change to the DSL syntax requires a `docs/decisions.md` entry, updated `docs/dsl-spec.md`, and parser tests.
+
+## Project surfaces
+
+| Surface | URL |
+|---|---|
+| Public project page | https://overkillhill.com/projects/bpmn-for-mermaid/ |
+| GitHub repository | https://github.com/OKHP3/mermaid-diagram-bpmn |
+| Public playground | https://okhp3.github.io/mermaid-diagram-bpmn |
+| Replit dev surface | https://replit.com/t/overkill-hill/repls/BPMN-for-Mermaid |
+| Notion specification | https://www.notion.so/overkillhill/BPMN-for-Mermaid-bpmn-beta-Diagram-Type-Proposal-357812e0ced481c88b20d2eb493dc775 |
 
 ## License
 

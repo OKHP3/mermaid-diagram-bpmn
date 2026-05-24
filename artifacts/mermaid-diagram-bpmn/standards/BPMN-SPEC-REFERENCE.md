@@ -31,12 +31,12 @@
 
 `bpmn-beta` has two co-equal hard requirements. **Both must be satisfied. Neither takes priority.**
 
-| Requirement | What it means |
-|---|---|
-| **Mermaid rendering compliance** | Output must render correctly via Mermaid's `registerExternalDiagrams()` API and in all Mermaid-compatible hosts (GitHub, Notion, live editor). See `docs/mermaid-compatibility.md`. |
-| **BPMN notation compliance** | Every shape, marker, flow line, and gateway symbol must match this specification. A diagram that renders in Mermaid but uses incorrect BPMN notation is a failed document. |
+| Requirement | What it means | Acceptance target |
+|---|---|---|
+| **Mermaid rendering compliance** | Output must render correctly in all Mermaid-compatible hosts (GitHub, Notion, live editor) | Plugin v1 target: render via `registerExternalDiagrams()`. Current state: standalone React app with direct SVG renderer and GitHub Pages playground. |
+| **BPMN notation compliance** | Every shape, marker, flow line, and gateway symbol must match this specification | Ongoing — all rendered elements must match the OMG BPMN 2.0.2 spec |
 
-A diagram that renders correctly in Mermaid but violates BPMN notation is a failed document. A diagram that follows BPMN notation but fails to render in Mermaid is equally a failed document.
+A diagram that renders correctly but uses wrong BPMN notation is a failed document. A diagram that follows correct notation but fails to render is equally failed. Neither standard takes priority.
 
 ## Why this spec is here
 
@@ -69,11 +69,11 @@ Including the spec in the repository means:
 | Parallel Gateway (AND) | 13.1.4 | ✅ Implemented (`and`) |
 | Inclusive Gateway (OR) | 13.1.3 | ✅ Implemented (`or`) |
 | Sequence Flow | 9.1 | ✅ Implemented (`-->`) |
-| Conditional Flow | 9.1.3 | ✅ Implemented (`-->|"label"|`) |
+| Conditional Flow | 9.1.3 | ✅ Implemented (`source --> target: "label"`) |
 | Default Flow | 9.1.4 | ✅ Implemented (`==>`) |
-| Message Flow | 9.2 | ✅ Implemented (`~~>`) |
-| Pool | 8.2 | ✅ Implemented (experimental) |
-| Lane | 8.3 | ✅ Implemented (experimental) |
+| Message Flow | 9.2 | 🟡 Experimental (`~~>`) |
+| Pool | 8.2 | 🟡 Experimental |
+| Lane | 8.3 | 🟡 Experimental |
 | Message Intermediate Event | 10.4.3 | 🔵 Planned |
 | Timer Start Event | 10.4.1 | 🔵 Planned |
 | Data Object | 10.6 | ⬜ Deferred |
@@ -83,7 +83,7 @@ Including the spec in the repository means:
 | Conversation | 12.x | ⬜ Out of scope |
 | Collaboration | 8.x | ⬜ Out of scope |
 
-Legend: ✅ Implemented · 🔵 Planned · ⬜ Deferred/Out of scope
+Legend: ✅ Implemented · 🟡 Experimental · 🔵 Planned · ⬜ Deferred/Out of scope
 
 ---
 
@@ -105,7 +105,7 @@ When adding, modifying, or reviewing a rendered element, consult the relevant se
 
 ## Notation compliance rules
 
-These rules apply to every element rendered by `bpmn-renderer.tsx` and `bpmn-plugin.ts`:
+These rules apply to every element rendered by `bpmn-renderer.tsx`:
 
 1. **Start events** — thin single-line circle, no fill marker for "None" type (spec 10.4.1)
 2. **End events** — thick single-line circle (spec 10.4.2)
@@ -125,7 +125,7 @@ Any deviation from these rules in a PR must cite a specific rationale and a `doc
 
 ## Accessing the specification
 
-The PDF included at `standards/OMG-BPMN-2.0.2-formal-specification.pdf` is the full formal specification. It is publicly available from OMG at no cost:
+The PDF included at `artifacts/mermaid-diagram-bpmn/standards/OMG-BPMN-2.0.2-formal-specification.pdf` is the full formal specification. It is publicly available from OMG at no cost:
 
 - Direct PDF download: https://www.omg.org/spec/BPMN/2.0.2/PDF
 - Specification home: https://www.omg.org/spec/BPMN/
