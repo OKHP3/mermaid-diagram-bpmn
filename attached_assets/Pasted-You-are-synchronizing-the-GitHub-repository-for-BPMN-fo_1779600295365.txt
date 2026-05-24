@@ -1,0 +1,47 @@
+You are synchronizing the GitHub repository for BPMN for Mermaid.
+
+Primary objective:
+Align README, CONTRIBUTING, standards references, docs, and package-facing language with the current implementation state and the public OverKill Hill project page.
+
+Canonical current implementation:
+- src/pages/Home.tsx support matrix is the current status source.
+- docs/dsl-spec.md is the current DSL syntax source.
+- src/lib/bpmn-parser.ts is the current parser capability source.
+- src/lib/bpmn-examples.ts is the current example catalog source.
+
+Required changes:
+
+1. Fix README standards links.
+   - README currently links to standards/BPMN-SPEC-REFERENCE.md and standards/OMG-BPMN-2.0.2-formal-specification.pdf.
+   - Actual standards path is artifacts/mermaid-diagram-bpmn/standards/.
+   - Either move/copy the standards directory to repo root or update README links to the actual artifact path.
+   - Prefer a repo-root standards/README.md if that improves discoverability, but do not duplicate large files unnecessarily.
+
+2. Reframe dual-compliance language.
+   - Do not say the current prototype already renders through Mermaid registerExternalDiagrams().
+   - Say this is the acceptance target for plugin v1.
+   - Current status: hand-written parser, direct SVG renderer, GitHub Pages playground.
+   - Future target: Mermaid External Diagram API integration.
+
+3. Fix conditional flow syntax in BPMN-SPEC-REFERENCE.md.
+   - Replace `-->|"label"|` with the current syntax: `source --> target: "label"`.
+
+4. Normalize status labels across README, CONTRIBUTING, docs, and standards.
+   - Implemented: start/end events; task, task:user, task:service, task:script, task:receive, task:send; xor/and/or; sequence flow; conditional label; default flow; accTitle/accDescr; auto layout; theme-aware SVG styling.
+   - Experimental: pool, lane, message flow, pool/lane layout, cross-pool routing.
+   - Planned: intermediate events, timer/message/error markers, associations, text annotations, Langium grammar, Mermaid External Diagram API packaging, getStyles theme binding, parser-enforced BPMN domain rules.
+   - Out of scope v1: BPMN XML import/export, executable semantics, bpmn-js runtime dependency, choreography, conversation, complex gateways, event subprocesses.
+
+5. Fix Replit/public surface links.
+   - Replit build surface should be https://replit.com/t/overkill-hill/repls/BPMN-for-Mermaid.
+   - Public project page should be https://overkillhill.com/projects/bpmn-for-mermaid/.
+   - GitHub Pages demo should point to the working route. If /playground does not resolve, use root until routing is fixed.
+
+6. Add or update a “Project Surfaces” section in README.
+   - Public page: https://overkillhill.com/projects/bpmn-for-mermaid/
+   - GitHub repo: https://github.com/OKHP3/mermaid-diagram-bpmn
+   - Public playground: working GitHub Pages URL
+   - Replit dev surface: https://replit.com/t/overkill-hill/repls/BPMN-for-Mermaid
+   - Notion book spine: https://www.notion.so/overkillhill/BPMN-for-Mermaid-bpmn-beta-Diagram-Type-Proposal-357812e0ced481c88b20d2eb493dc775
+
+7. Keep MIT license unchanged.
