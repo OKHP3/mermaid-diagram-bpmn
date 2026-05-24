@@ -1,0 +1,723 @@
+# Best-of Replit execution package: OKHP3 diagram skills
+
+## Executive verdict
+
+Use **Proposal B as the architectural spine**, **Proposal A as the content-detail reservoir**, and **Proposal C only for tactical validation-script ideas**.
+
+Do **not** let Replit execute Proposal C as-is. It contains a critical factual drift: it treats `bpmn-beta` as if Mermaid v11.15 ships a native BPMN diagram type. Your own BPMN project page says the opposite: this is a prototype, pools/lanes/message-flow support is experimental, Langium grammar and Mermaid External Diagram API packaging are roadmap items, and it is not yet a production Mermaid plugin. ([OverKill Hill P³™][1]) Mermaid v11.15 release notes list new items like Event Modeling, flowchart datastore shape, architecture layout knobs, class namespace support, and Sankey improvements, but I found no BPMN entry in the release notes. ([GitHub][2])
+
+The best answer is:
+
+```text
+/apps stay human-facing
+/skills become agent-facing
+/shared logic becomes reusable core
+/prompt packs remain universal fallback
+```
+
+---
+
+## 1. Comparison of the three attached results
+
+I am labeling these by attachment because the filenames do not identify model origin.
+
+| Proposal       | File                     | Strongest value                                                                                                                                                                                                                                       | Main problem                                                                                                                                                     | Verdict                                                      |
+| -------------- | ------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------ |
+| **Proposal A** | `Pasted markdown.md`     | Best long-form SKILL content, especially for current `bpmn-beta` DSL shape, output rules, theme handoff, and Replit sequence. It correctly frames the BPMN skill around your prototype vocabulary rather than pretending native Mermaid BPMN exists.  | Too much content belongs directly in `SKILL.md`; should be moved into references/assets to obey progressive disclosure discipline.                               | **Use as content source.**                                   |
+| **Proposal B** | `Pasted markdown (2).md` | Best architecture: two independent skills, `skills/<skill-name>/`, scripts, tests, assets, references, extraction from UI components, packaging, and acceptance criteria.                                                                             | Less immediately executable because much of the `SKILL.md` content is outline-level, not full body.                                                              | **Use as structural spine.**                                 |
+| **Proposal C** | `Pasted markdown (3).md` | Good instincts around validation scripts and diagram-type matrices. It explicitly asks Replit for runnable validators.                                                                                                                                | Uses singular `/skill/`, puts non-spec fields at top level, overclaims platform adoption, and incorrectly claims Mermaid v11.15 has shipped `bpmn-beta` syntax.  | **Salvage only scripts/examples ideas. Reject core claims.** |
+
+---
+
+## 2. Best-of decisions
+
+### Decision 1 — Use `/skills/`, not `/skill/`
+
+The Agent Skills spec defines a skill as a directory containing `SKILL.md`, with optional `scripts/`, `references/`, and `assets/` directories. ([Agent Skills][3]) Use:
+
+```text
+skills/okhp3-mermaid-theme-builder/
+skills/okhp3-bpmn-for-mermaid/
+```
+
+Do **not** use:
+
+```text
+skill/
+```
+
+Singular `skill/` is not fatal, but it is less scalable and less aligned to multi-skill repo conventions.
+
+### Decision 2 — Use specific OKHP3 names
+
+Use:
+
+```yaml
+name: okhp3-mermaid-theme-builder
+name: okhp3-bpmn-for-mermaid
+```
+
+Not:
+
+```yaml
+name: mermaid-theme
+name: bpmn-for-mermaid
+```
+
+Reason: `mermaid-theme` is clean but too generic. `okhp3-mermaid-theme-builder` and `okhp3-bpmn-for-mermaid` are more discoverable, defensible, and brand-scoped. The Agent Skills spec requires names to be lowercase, hyphenated, max 64 characters, and match the parent directory. ([Agent Skills][3])
+
+### Decision 3 — Keep `SKILL.md` lean
+
+The spec recommends splitting longer content into referenced files and keeping the main `SKILL.md` under 500 lines; metadata and description stay loaded for discovery, full instructions load on activation, and resources load only as needed. ([Agent Skills][3])
+
+So:
+
+```text
+SKILL.md = routing + workflow + output rules
+references/ = deep docs
+assets/ = machine-readable registries
+scripts/ = deterministic helpers
+tests/ = proof it works
+```
+
+### Decision 4 — Include scripts, but keep them local and deterministic
+
+Proposal A’s instruction-only approach is safe, but underpowered. Proposal B’s script/test structure is better. Proposal C’s script ideas are useful, but should be implemented as `.mjs` modules with fixtures and tests rather than ad hoc one-off files. 
+
+### Decision 5 — BPMN must be “prototype DSL,” not “Mermaid 11.15 shipped syntax”
+
+Your repo says Mermaid has a BPMN gap and that the credible path is a dedicated `bpmn-beta` plugin, later proposed upstream after syntax stabilizes. ([GitHub][4]) Your project page also says this is not executable BPMN, not XML round-tripping, not full BPMN 2.0 conformance, and not yet a production Mermaid plugin. ([OverKill Hill P³™][1])
+
+That language must govern the skill.
+
+---
+
+# 3. Replit package A — Mermaid Theme Builder Skill
+
+Use this package against:
+
+```text
+https://replit.com/t/overkill-hill/repls/Mermaid-Theme-Builder/
+https://github.com/OKHP3/mermaid-theme-builder
+```
+
+The repo already describes Mermaid Theme Builder as visual governance for AI-generated Mermaid diagrams, with diagram-family detection, renderer profiles, palette presets, prompt scaffold exports, and fully client-side operation. ([GitHub][5]) The public page confirms the same app contract: live preview, diagram family detection, multi-format export, prompt scaffold generation, renderer capability notes, seven built-in palettes, and no server-side data collection. ([OverKill Hill P³™][6])
+
+## Replit Prompt A1 — Plan Mode audit
+
+```text
+You are working in the existing Mermaid Theme Builder Replit/GitHub project:
+
+Repo: https://github.com/OKHP3/mermaid-theme-builder
+Live tool: https://okhp3.github.io/mermaid-theme-builder/#apply
+Project page: https://overkillhill.com/projects/mermaid-theme-builder/
+
+Enter Plan Mode first. Do not modify files yet.
+
+Goal:
+Create a SKILL.md-compatible Agent Skill that packages Mermaid Theme Builder’s logic without the React/Tailwind UI. The web app remains the human-facing product. The skill becomes the agent-facing product surface.
+
+Use this target folder:
+
+skills/okhp3-mermaid-theme-builder/
+
+Audit the repo and produce:
+
+docs/skill-readiness-audit.md
+
+The audit must identify:
+
+1. Existing reusable non-React logic:
+   - diagram family detection
+   - theme/palette registry
+   - renderer profiles
+   - prompt scaffold generation
+   - themeVariables generation
+   - classDef generation
+   - extract mode / theme extraction logic
+   - compatibility warnings
+
+2. UI-coupled logic that should be extracted or mirrored into pure modules.
+
+3. Existing files that should feed the skill:
+   - palette data
+   - renderer parity matrix
+   - diagram capability registry
+   - example Mermaid diagrams
+   - prompt scaffold templates
+   - standards or docs pages
+
+4. Existing files that should NOT be included:
+   - stale research dumps
+   - raw brainstorm docs
+   - duplicate generated artifacts
+   - private or employer-related material
+
+5. Required skill package structure.
+
+6. Implementation plan with exact file list.
+
+Constraints:
+- Do not include BFS, Builders FirstSource, employer-owned examples, employer colors, or employer references.
+- Keep the skill focused on the public OverKill Hill P3 / Mermaid Theme Builder project.
+- Do not change app behavior in this audit phase.
+- Do not add backend services.
+- Do not add telemetry.
+- Do not touch production UI files unless later explicitly needed for documentation links.
+- Treat the Agent Skills spec as the contract: SKILL.md at skill root, required name and description frontmatter, optional license/compatibility/metadata/allowed-tools, and optional references/assets/scripts folders.
+
+The audit should conclude with a concrete build checklist.
+```
+
+## Replit Prompt A2 — Build the skill package
+
+```text
+You are working in the Mermaid Theme Builder repository.
+
+Build the Agent Skills package at:
+
+skills/okhp3-mermaid-theme-builder/
+
+This package must be additive. Do not refactor the app UI. Do not change runtime behavior of the existing React/Vite application except for README/documentation links.
+
+Create this structure:
+
+skills/okhp3-mermaid-theme-builder/
+├── SKILL.md
+├── README.md
+├── LICENSE
+├── package.json
+├── references/
+│   ├── palette-contract.md
+│   ├── diagram-family-rules.md
+│   ├── mermaid-renderer-profiles.md
+│   ├── output-format-contract.md
+│   ├── prompt-scaffold-patterns.md
+│   └── scope-firewall.md
+├── assets/
+│   ├── palettes.json
+│   ├── renderer-profiles.json
+│   ├── theme-variable-map.json
+│   └── fixtures/
+│       ├── flowchart-basic.mmd
+│       ├── sequence-basic.mmd
+│       ├── class-basic.mmd
+│       ├── state-basic.mmd
+│       └── gantt-basic.mmd
+├── scripts/
+│   ├── detect-diagram.mjs
+│   ├── normalize-mermaid.mjs
+│   ├── apply-theme.mjs
+│   ├── validate-theme.mjs
+│   └── generate-prompt-scaffold.mjs
+└── tests/
+    ├── validate-skill.test.mjs
+    ├── detect-diagram.test.mjs
+    ├── apply-theme.test.mjs
+    └── fixtures/
+
+SKILL.md requirements:
+- Keep SKILL.md concise and under 500 lines.
+- Use valid YAML frontmatter.
+- The name field must be exactly: okhp3-mermaid-theme-builder
+- The parent directory must match the name field.
+- Put non-standard data such as author, version, homepage, repository, and tags under metadata.
+- Do not use non-spec top-level keys like version, triggers, homepage, repository, or keywords outside metadata.
+- The description must explain both what the skill does and when to use it.
+
+Use this frontmatter shape:
+
+---
+name: okhp3-mermaid-theme-builder
+description: Apply reusable visual governance to Mermaid diagrams. Use this skill when the user wants to style, theme, normalize, validate, or export Mermaid code with palettes, themeVariables, classDefs, renderer-safe compatibility notes, Markdown bootstrap blocks, AI prompt scaffolds, or target-renderer output profiles.
+license: MIT
+metadata:
+  author: OverKill Hill P3
+  project: Mermaid Theme Builder
+  version: "0.1.0"
+  homepage: https://okhp3.github.io/mermaid-theme-builder/
+  repository: https://github.com/OKHP3/mermaid-theme-builder
+  category: diagram-governance
+---
+
+SKILL.md body must include:
+1. Purpose
+2. When to use
+3. When not to use
+4. Required workflow:
+   - extract Mermaid code
+   - normalize wrapper/fence noise
+   - detect diagram family
+   - select palette
+   - select renderer profile
+   - apply themeVariables and classDefs when appropriate
+   - validate output
+   - return requested format
+5. Output modes:
+   - styled-mermaid
+   - theme-bootstrap
+   - prompt-scaffold
+   - theme-json
+   - validation-report
+   - before-after-report
+6. Output rules:
+   - preserve diagram semantics
+   - never invent unsupported Mermaid theme variables
+   - warn when renderer support is uncertain
+   - do not claim identical rendering across all Mermaid hosts
+   - put renderer warnings after output, not before
+7. References section pointing to files in references/
+8. Scripts section explaining when to use scripts/
+
+Assets:
+- Build palettes.json from the current app’s real palette source of truth, not from memory.
+- Include utility palettes and OKHP3/Glee-fully/AskJamie presets if they exist in the app.
+- Include renderer-profiles.json using the current renderer profiles from the app or docs.
+- Include theme-variable-map.json with only validated Mermaid themeVariables used by the app.
+- Include fixtures from existing examples where possible.
+
+Scripts:
+- detect-diagram.mjs: accepts Mermaid code and returns { family, keyword, confidence, warnings }.
+- normalize-mermaid.mjs: strips code fences, removes surrounding prose, preserves Mermaid content.
+- apply-theme.mjs: accepts Mermaid code, palette id, renderer id, output mode; returns styled code plus report.
+- validate-theme.mjs: validates hex values, known themeVariables, fontSize, fontFamily, and renderer warnings.
+- generate-prompt-scaffold.mjs: emits an LLM prompt scaffold using selected palette and renderer target.
+- Scripts must run locally without network access.
+- Scripts must not import React components, Tailwind, browser DOM APIs, or UI state.
+
+References:
+- palette-contract.md: palette schema and semantic token logic.
+- diagram-family-rules.md: how theming differs by diagram family.
+- mermaid-renderer-profiles.md: renderer compatibility matrix and warning policy.
+- output-format-contract.md: exact formats for styled Mermaid, JSON, bootstrap, and prompt scaffold.
+- prompt-scaffold-patterns.md: reusable prompt-pack formats.
+- scope-firewall.md: personal OKHP3 project only; no BFS or employer-owned material.
+
+README:
+- Add a root README section titled “Agent Skill”.
+- Link to skills/okhp3-mermaid-theme-builder/.
+- Explain that the app is for people, the skill is for agents, and prompt scaffolds are the universal fallback.
+
+Acceptance criteria:
+- pnpm test or the repo’s current test command still passes.
+- pnpm build or the repo’s current build command still passes.
+- SKILL.md validates against Agent Skills naming/frontmatter rules.
+- No BFS, Builders FirstSource, employer examples, employer colors, or employer references appear in the skill package.
+- All JSON assets parse successfully.
+- At least five fixture tests pass: flowchart, sequence, class, state, and gantt or timeline.
+- The skill can be zipped as dist/okhp3-mermaid-theme-builder-skill.zip.
+```
+
+## Replit Prompt A3 — Validate and package
+
+```text
+Now add validation and packaging support for the Mermaid Theme Builder Agent Skill.
+
+Create or update scripts so the repo can run:
+
+pnpm skill:validate
+pnpm skill:test
+pnpm skill:package
+
+If the repo’s package policy prefers another command naming convention, follow the existing convention but document it.
+
+Validation must check:
+1. skills/okhp3-mermaid-theme-builder/SKILL.md exists.
+2. YAML frontmatter parses.
+3. name equals okhp3-mermaid-theme-builder.
+4. parent directory equals the name field.
+5. description is non-empty and <=1024 characters.
+6. references listed in SKILL.md exist.
+7. JSON assets parse.
+8. scripts execute on sample fixtures.
+9. no BFS / Builders FirstSource strings exist anywhere inside the skill package.
+10. no React/Tailwind/UI imports appear in skill scripts.
+
+Packaging must create:
+
+dist/okhp3-mermaid-theme-builder-skill.zip
+
+The zip should contain the skill directory itself, not the entire repo.
+
+Update docs/agent-skills.md with:
+- installation concept
+- platform caveat that SKILL.md support is not universal
+- manual prompt-pack fallback
+- example trigger prompts
+- example output modes
+
+Do not add backend services.
+Do not add telemetry.
+Do not alter production app behavior.
+```
+
+---
+
+# 4. Replit package B — BPMN for Mermaid Skill
+
+Use this package against:
+
+```text
+https://replit.com/t/overkill-hill/repls/BPMN-for-Mermaid
+https://github.com/OKHP3/mermaid-diagram-bpmn
+```
+
+The repo describes BPMN for Mermaid as a readable, text-first DSL and states that `bpmn-beta` is unstable and subject to change. ([GitHub][4]) The project page says the prototype currently supports core BPMN primitives, uses a hand-written parser, renders SVG directly without `bpmn-js`, and treats pool/lane/message-flow support as experimental. ([OverKill Hill P³™][1])
+
+## Replit Prompt B1 — Plan Mode audit
+
+```text
+You are working in the existing BPMN for Mermaid Replit/GitHub project:
+
+Repo: https://github.com/OKHP3/mermaid-diagram-bpmn
+Live playground: https://okhp3.github.io/mermaid-diagram-bpmn/playground
+Project page: https://overkillhill.com/projects/bpmn-for-mermaid/
+
+Enter Plan Mode first. Do not modify files yet.
+
+Goal:
+Create a SKILL.md-compatible Agent Skill that packages the BPMN for Mermaid project’s DSL rules, validation logic, examples, and scope boundaries without the React playground UI.
+
+Use this target folder:
+
+skills/okhp3-bpmn-for-mermaid/
+
+Critical framing:
+- Do not describe bpmn-beta as a shipped Mermaid v11.15 native diagram type.
+- Do not claim full BPMN 2.0.2 conformance.
+- Do not claim executable BPMN.
+- Do not claim BPMN XML import/export.
+- Do not claim production Mermaid plugin status.
+- Frame bpmn-beta as the OKHP3 prototype DSL and descriptive subset proposal.
+- Respect the project’s current status: prototype parser, direct SVG renderer, experimental pools/lanes/message flows, Langium and External Diagram API packaging on roadmap.
+
+Audit the repo and produce:
+
+docs/skill-readiness-audit.md
+
+The audit must identify:
+
+1. Existing reusable non-React logic:
+   - parser
+   - validator
+   - normalizer, if any
+   - DSL examples
+   - element vocabulary
+   - renderer constraints
+   - scope/deferred feature docs
+   - theme integration points
+
+2. UI-coupled logic that should be extracted or mirrored into pure modules.
+
+3. Existing files that should feed the skill:
+   - DSL reference
+   - architecture notes
+   - roadmap
+   - canonical examples
+   - validation rules
+   - standards references
+
+4. Existing files that should NOT be included:
+   - stale research notes
+   - full BPMN spec dumps unless summarized
+   - private or employer-related material
+   - broad BPMN concepts outside the current descriptive subset unless placed in “unsupported/deferred”
+
+5. Required skill package structure.
+
+6. Implementation plan with exact file list.
+
+Constraints:
+- No BFS, Builders FirstSource, employer-owned examples, employer colors, or employer references.
+- Keep the skill scoped to the public OKHP3 BPMN for Mermaid project.
+- Do not touch production UI in this audit phase.
+- Treat the Agent Skills spec as the contract: SKILL.md at skill root, required name and description frontmatter, optional license/compatibility/metadata/allowed-tools, and optional references/assets/scripts folders.
+
+The audit should end with a build checklist.
+```
+
+## Replit Prompt B2 — Build the skill package
+
+```text
+You are working in the BPMN for Mermaid repository.
+
+Build the Agent Skills package at:
+
+skills/okhp3-bpmn-for-mermaid/
+
+This package must be additive. Do not refactor the React playground UI. Do not change runtime behavior except for README/documentation links.
+
+Create this structure:
+
+skills/okhp3-bpmn-for-mermaid/
+├── SKILL.md
+├── README.md
+├── LICENSE
+├── package.json
+├── references/
+│   ├── bpmn-beta-dsl-reference.md
+│   ├── bpmn-descriptive-subset-map.md
+│   ├── mermaid-plugin-roadmap-contract.md
+│   ├── parser-validation-rules.md
+│   ├── pool-lane-message-flow-rules.md
+│   ├── theming-integration.md
+│   ├── unsupported-and-deferred-features.md
+│   └── scope-firewall.md
+├── assets/
+│   ├── bpmn-element-vocabulary.json
+│   ├── validation-rules.json
+│   ├── canonical-examples/
+│   │   ├── purchase-order-approval.bpmn-beta.mmd
+│   │   ├── support-ticket-triage.bpmn-beta.mmd
+│   │   ├── quote-to-order.bpmn-beta.mmd
+│   │   └── cross-pool-message-flow.bpmn-beta.mmd
+│   └── invalid-fixtures/
+│       ├── missing-end-event.bpmn-beta.mmd
+│       ├── undeclared-flow-target.bpmn-beta.mmd
+│       ├── unlabeled-xor-branches.bpmn-beta.mmd
+│       └── unsupported-boundary-event.bpmn-beta.mmd
+├── scripts/
+│   ├── validate-bpmn-beta.mjs
+│   ├── normalize-bpmn-beta.mjs
+│   ├── lint-process-model.mjs
+│   ├── generate-element-inventory.mjs
+│   └── repair-bpmn-beta.mjs
+└── tests/
+    ├── validate-skill.test.mjs
+    ├── validate-bpmn-beta.test.mjs
+    ├── normalize-bpmn-beta.test.mjs
+    └── fixtures/
+
+SKILL.md requirements:
+- Keep SKILL.md concise and under 500 lines.
+- Use valid YAML frontmatter.
+- The name field must be exactly: okhp3-bpmn-for-mermaid
+- The parent directory must match the name field.
+- Put non-standard data such as author, version, homepage, repository, and tags under metadata.
+- Do not use non-spec top-level keys like version, triggers, homepage, repository, or keywords outside metadata.
+- The description must explain both what the skill does and when to use it.
+
+Use this frontmatter shape:
+
+---
+name: okhp3-bpmn-for-mermaid
+description: Generate, validate, normalize, repair, and explain OKHP3 bpmn-beta diagrams for BPMN-style process modeling in Mermaid-compatible text form. Use this skill when the user wants to convert process notes into bpmn-beta, validate BPMN for Mermaid syntax, check descriptive BPMN subset support, repair pool/lane/message-flow issues, or prepare process diagrams for Mermaid theming.
+license: MIT
+metadata:
+  author: OverKill Hill P3
+  project: BPMN for Mermaid
+  version: "0.1.0"
+  homepage: https://okhp3.github.io/mermaid-diagram-bpmn/
+  repository: https://github.com/OKHP3/mermaid-diagram-bpmn
+  category: process-diagramming
+  status: prototype-dsl
+---
+
+SKILL.md body must include:
+1. Purpose
+2. When to use
+3. When not to use
+4. Current status:
+   - bpmn-beta is the OKHP3 prototype DSL
+   - not native Mermaid core
+   - not production plugin yet
+   - not executable BPMN
+   - not BPMN XML import/export
+   - not full BPMN 2.0 conformance
+5. Required workflow:
+   - determine generation / validation / normalization / repair / explanation mode
+   - extract process facts
+   - identify roles, events, tasks, gateways, flows, pools, lanes
+   - generate or inspect bpmn-beta
+   - validate against supported descriptive subset
+   - report unsupported or deferred BPMN concepts
+   - return corrected bpmn-beta code and concise notes
+6. Output rules:
+   - always start diagram code with bpmn-beta, unless a Mermaid init block is intentionally prepended
+   - use current project DSL syntax from the repo, not invented Mermaid-native BPMN syntax
+   - use stable IDs
+   - use double-quoted labels
+   - sequence flows remain within pool/process scope
+   - message flows are used for cross-pool communication when supported or flagged experimental
+   - include accTitle and accDescr when possible
+7. Theme integration:
+   - optionally prepare output for okhp3-mermaid-theme-builder
+   - do not require the theming skill
+8. References section pointing to references/
+9. Scripts section explaining when to use scripts/
+
+Important:
+Use the current repo/project DSL syntax as source of truth. The public example uses this style:
+
+bpmn-beta
+accTitle: Purchase Request Approval
+
+start s1 "Request Raised"
+task:user t1 "Review Request"
+xor g1 "Approved?"
+task:service t2 "Issue PO"
+end e1 "Done"
+
+s1 --> t1
+t1 --> g1
+g1 --> t2: "yes"
+g1 --> e1: "no"
+t2 --> e1
+
+Do not use invented syntax such as:
+task("Task Label")@{ type: "userTask" }
+gateway("Decision")@{ type: "exclusive" }
+event("Start")@{ type: "startEvent", trigger: "none" }
+
+That syntax is not the current OKHP3 bpmn-beta DSL.
+
+References:
+- bpmn-beta-dsl-reference.md: formal syntax, IDs, labels, flow operators, pools, lanes, examples.
+- bpmn-descriptive-subset-map.md: supported BPMN descriptive subset and closest approximations.
+- mermaid-plugin-roadmap-contract.md: current prototype vs future Langium / External Diagram API / upstream contribution path.
+- parser-validation-rules.md: syntax and model integrity checks.
+- pool-lane-message-flow-rules.md: current and experimental containment/flow rules.
+- theming-integration.md: how Mermaid themeVariables may prepend bpmn-beta output.
+- unsupported-and-deferred-features.md: boundary events, subprocesses, transactions, data objects/stores, choreography, conversation diagrams, XML, runtime execution, and other deferred items.
+- scope-firewall.md: personal OKHP3 project only; no BFS or employer-owned material.
+
+Assets:
+- bpmn-element-vocabulary.json must include only currently supported or intentionally documented experimental bpmn-beta elements.
+- validation-rules.json must identify severity: error, warning, info.
+- canonical examples must pass validation.
+- invalid fixtures must fail with clear diagnostics.
+
+Scripts:
+- validate-bpmn-beta.mjs: validates syntax, declarations, flow references, gateway branch labels, start/end presence, unsupported features.
+- normalize-bpmn-beta.mjs: normalizes spacing, ID style, label quotation, and section order without changing semantics.
+- lint-process-model.mjs: checks process-modeling smell issues such as orphan nodes, unreachable nodes, dead ends, unlabeled XOR branches.
+- generate-element-inventory.mjs: returns counts by element type, lane, pool, and flow type.
+- repair-bpmn-beta.mjs: proposes safe repairs for common validation failures.
+- Scripts must run locally without network access.
+- Scripts must not import React components, browser DOM APIs, or UI state.
+
+README:
+- Add a root README section titled “Agent Skill”.
+- Link to skills/okhp3-bpmn-for-mermaid/.
+- Explain that the playground is for people, the skill is for agents, and prompt-pack fallback is for platforms without SKILL.md support.
+
+Acceptance criteria:
+- pnpm test or the repo’s current test command still passes.
+- pnpm build or the repo’s current build command still passes.
+- SKILL.md validates against Agent Skills naming/frontmatter rules.
+- No BFS, Builders FirstSource, employer examples, employer colors, or employer references appear in the skill package.
+- All JSON assets parse successfully.
+- At least four canonical examples pass validation.
+- At least four invalid fixtures fail with clear diagnostics.
+- The skill never describes bpmn-beta as native Mermaid v11.15 core syntax.
+- The skill can be zipped as dist/okhp3-bpmn-for-mermaid-skill.zip.
+```
+
+## Replit Prompt B3 — Validate and package
+
+```text
+Now add validation and packaging support for the BPMN for Mermaid Agent Skill.
+
+Create or update scripts so the repo can run:
+
+pnpm skill:validate
+pnpm skill:test
+pnpm skill:package
+
+If the repo’s package policy prefers another command naming convention, follow the existing convention but document it.
+
+Validation must check:
+1. skills/okhp3-bpmn-for-mermaid/SKILL.md exists.
+2. YAML frontmatter parses.
+3. name equals okhp3-bpmn-for-mermaid.
+4. parent directory equals the name field.
+5. description is non-empty and <=1024 characters.
+6. references listed in SKILL.md exist.
+7. JSON assets parse.
+8. scripts execute on canonical examples and invalid fixtures.
+9. no BFS / Builders FirstSource strings exist anywhere inside the skill package.
+10. no React/UI imports appear in skill scripts.
+11. no file claims bpmn-beta is native Mermaid core or shipped Mermaid v11.15 syntax.
+12. unsupported/deferred features are documented and validated as warnings or errors.
+
+Packaging must create:
+
+dist/okhp3-bpmn-for-mermaid-skill.zip
+
+The zip should contain the skill directory itself, not the entire repo.
+
+Update docs/agent-skills.md with:
+- installation concept
+- platform caveat that SKILL.md support is not universal
+- manual prompt-pack fallback
+- example trigger prompts
+- example validation prompts
+- example output modes
+
+Do not add backend services.
+Do not add telemetry.
+Do not alter production app behavior.
+```
+
+---
+
+# 5. What I would not ship
+
+## Do not ship Proposal C’s BPMN syntax claims
+
+Reject this style:
+
+```text
+task("Task Label")@{ type: "userTask" }
+gateway("Decision")@{ type: "exclusive" }
+event("Start")@{ type: "startEvent", trigger: "none" }
+```
+
+Your current DSL is:
+
+```text
+task:user t1 "Review Request"
+xor g1 "Approved?"
+start s1 "Request Raised"
+```
+
+The current public BPMN page and GitHub README use that text-first syntax. ([OverKill Hill P³™][1])
+
+## Do not stuff full reference manuals into `SKILL.md`
+
+Move long material into:
+
+```text
+references/
+assets/
+examples/
+```
+
+That is exactly what progressive disclosure is for. ([Agent Skills][3])
+
+## Do not make scripts the only source of truth
+
+The skill must remain useful even when a host cannot execute local scripts. Scripts are accelerators. `SKILL.md` plus curated references are the durable interface.
+
+---
+
+# 6. Final operating model
+
+Use this internal positioning everywhere:
+
+```text
+The apps are for people.
+The skills are for agents.
+The prompt packs are for everyone else.
+The repos are the source of truth.
+The Repls are the manufacturing floor.
+```
+
+That keeps the architecture clean and the brand story intact.
+
+[1]: https://overkillhill.com/projects/bpmn-for-mermaid/ "BPMN for Mermaid | OverKill Hill P³™"
+[2]: https://github.com/mermaid-js/mermaid/releases "Releases · mermaid-js/mermaid · GitHub"
+[3]: https://agentskills.io/specification "Specification - Agent Skills"
+[4]: https://github.com/OKHP3/mermaid-diagram-bpmn "GitHub - OKHP3/mermaid-diagram-bpmn: A contributor-facing prototype workspace for BPMN for Mermaid, exploring a text-first bpmn-beta diagram type with live examples, DSL reference, architecture notes, roadmap, and an initial SVG rendering proof of concept for core BPMN shapes. · GitHub"
+[5]: https://github.com/OKHP3/mermaid-theme-builder "GitHub - OKHP3/mermaid-theme-builder: Visual theme builder for Mermaid diagrams — paste, theme, preview, and export. Reduces follow-on AI prompts with pre-prompt scaffolding. · GitHub"
+[6]: https://overkillhill.com/projects/mermaid-theme-builder/ "Mermaid Theme Builder | OverKill Hill P³™"
