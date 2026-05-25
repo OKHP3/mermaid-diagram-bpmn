@@ -1,95 +1,120 @@
-# AGENTS.md — BPMN for Mermaid
+# Agent Context — BPMN for Mermaid / BP-SKILL
 
-Guidance for AI agents, automated tools, and contributors working on this repository.
+## What this repository is
 
-> For artifact-specific deep-dive rules (module pipeline, DSL grammar, parser safety), see
-> [`artifacts/mermaid-diagram-bpmn/AGENTS.md`](./artifacts/mermaid-diagram-bpmn/AGENTS.md).
+This repository contains three things:
 
----
+1. bpmn-beta — a text-first DSL for BPMN process diagrams, targeting upstream Mermaid contribution.
+2. A seven-page React/Vite playground app deployed to GitHub Pages.
+3. BP-SKILL v0.3 — a 15-skill Business Process Agent Skill Suite in the agentskills.io format.
 
-## Project identity
-
-**BPMN for Mermaid** (`mermaid-diagram-bpmn`) is a personal [OverKill Hill P³](https://overkillhill.com) project by Jamie Hill. It is a contributor-facing prototype for a Mermaid-native `bpmn-beta` diagram type. It is not affiliated with Mermaid, Mermaid Chart, Mermaid.ai, the OMG BPMN standards body, or any third-party brand.
-
-## Canonical disclaimer
-
-Always include this disclaimer in README and major docs:
-
-> BPMN for Mermaid is a personal OverKill Hill P³ project by Jamie Hill. It is not affiliated with the mermaid-js maintainers, Mermaid Chart, Mermaid.ai, or any standards body. It implements a documented descriptive subset of BPMN 2.0 — it does not claim full BPMN 2.0 compliance.
+For artifact-specific deep-dive rules (module pipeline, DSL grammar, parser safety), see [`artifacts/mermaid-diagram-bpmn/AGENTS.md`](./artifacts/mermaid-diagram-bpmn/AGENTS.md).
 
 ---
 
-## Repository layout
-
-This is a pnpm monorepo. The primary artifact is `mermaid-diagram-bpmn`. Other artifacts (`api-server`, `mockup-sandbox`) are scaffolding and are unused by the frontend.
+## Repository structure
 
 ```
-/
-├── artifacts/mermaid-diagram-bpmn/   ← PRIMARY: all source, docs, examples, standards
-│   ├── src/lib/                      ← bpmn-detector, bpmn-parser, bpmn-layout, bpmn-renderer, bpmn-styles, bpmn-plugin
-│   ├── docs/                         ← project documentation
-│   ├── examples/                     ← canonical .mmd fixture files
-│   └── standards/                    ← bpmn-beta-standard.md, parser-safety-checklist.md, OMG spec PDF
-├── .github/
-│   ├── copilot-instructions.md       ← Copilot-specific rules
-│   ├── dependabot.yml
-│   └── workflows/
-│       ├── ci.yml                    ← typecheck + test on every push/PR
-│       └── deploy.yml                ← GitHub Pages deploy on main
-└── scripts/
-    └── post-merge.sh                 ← runs after task-agent merges
+artifacts/mermaid-diagram-bpmn/src/   React application source (Vite, wouter, Tailwind CSS v4)
+artifacts/mermaid-diagram-bpmn/src/lib/  bpmn-beta parser, layout, renderer, styles, detector
+public/skills/                        Generated SKILL.md files — DO NOT edit by hand
+public/context/                       Variable layer templates — DO NOT edit by hand
+skills/                               BP-SKILL agent skill packages (source of truth)
+context/                              Variable layer templates (source of truth)
+evals/                                Eval fixtures and rubrics
+docs/                                 Human-readable documentation
 ```
+
+---
+
+## Build commands
+
+```
+pnpm install                                                  Install dependencies
+pnpm --filter @workspace/mermaid-diagram-bpmn run dev         Start development server
+pnpm build                                                    Build all packages
+pnpm run typecheck                                            Typecheck all packages
+pnpm --filter @workspace/mermaid-diagram-bpmn run test        Run test suite
+pnpm --filter @workspace/mermaid-diagram-bpmn run skill:generate   Generate public/skills/ from skills/ source
+```
+
+---
+
+## Critical conventions
+
+- bpmn-beta DSL syntax source of truth: the parser in `artifacts/mermaid-diagram-bpmn/src/lib/bpmn-parser.ts`
+- Correct syntax: `task:user t1 "Review Request"`
+- Never use: `task("Label")@{ type: "userTask" }` — that is not bpmn-beta syntax
+- bpmn-beta is a prototype DSL, not native Mermaid core syntax
+- Do not embed BABOK, BPM CBOK, or APQC copyrighted content anywhere
+- Do not include BFS, Builders FirstSource, or employer content anywhere
+- All new React components must match existing styling tokens exactly (forge-card, forge-btn-primary, etc.)
+- All new skills must pass `pnpm --filter @workspace/mermaid-diagram-bpmn run skill:validate` before commit
+- `public/skills/` and `public/context/` are generated — always run `pnpm --filter @workspace/mermaid-diagram-bpmn run skill:generate` after editing `skills/` or `context/`
+
+---
+
+## Key files
+
+```
+artifacts/mermaid-diagram-bpmn/src/data/skills-registry.ts   Canonical data source for all 15 skills
+artifacts/mermaid-diagram-bpmn/src/pages/AgentSkills.tsx     Skills browser page
+artifacts/mermaid-diagram-bpmn/src/pages/SkillDetail.tsx     Individual skill detail page
+artifacts/mermaid-diagram-bpmn/scripts/generate-skill-files.mjs  Pre-build asset generator
+skills/                                                       BP-SKILL SKILL.md source files
+context/                                                      Variable layer template source files
+docs/bp-skill-overview.md                                     BP-SKILL practitioner introduction
+docs/pns-schema.md                                            PNS.md canonical schema reference
+docs/variable-layer-guide.md                                  Variable layer configuration guide
+docs/agent-skills-install.md                                  Platform-specific install instructions
+```
+
+---
+
+## What the playground app does
+
+```
+/             Home
+/playground   Live bpmn-beta parser and SVG renderer
+/dsl          DSL reference tables
+/architecture Architecture and design decisions
+/roadmap      Development roadmap
+/skills       BP-SKILL agent skills browser
+/skills/:id   Individual skill detail page
+/about        About the project
+```
+
+---
+
+## GitHub Pages deployment
+
+```
+Base URL:     https://okhp3.github.io/mermaid-diagram-bpmn/
+Branch:       gh-pages
+Build output: dist/
+Vite base:    /mermaid-diagram-bpmn/
+```
+
+---
+
+## Scope constraints
+
+This is an OverKill Hill P3 personal brand project. Keep it:
+
+- MIT licensed (code) / CC-BY-4.0 (docs)
+- Free of employer, BFS, or Builders FirstSource content
+- Scoped to the public OKHP3 bpmn-beta and BP-SKILL work only
+- No bpmn-js runtime dependency — SVG rendering is hand-written
+- No backend server — all processing is client-side
+- No BPMN XML import or export
 
 ---
 
 ## Dual-compliance requirement
 
-This project has two co-equal hard requirements. **Neither takes priority. A failure on either side is a failed document.**
+Every bpmn-beta rendered element must satisfy both:
 
-| Requirement | Standard | Failure condition |
-|---|---|---|
-| **Mermaid rendering** | Mermaid `registerExternalDiagrams()` API | Plugin throws, SVG does not render, or output breaks in any Mermaid-compatible host |
-| **BPMN 2.0.2 notation** | OMG BPMN 2.0.2 formal specification — Descriptive Conformance Sub-Class (Section 2.1) | A rendered shape, marker, or flow deviates from the spec without a documented decision |
+1. Mermaid rendering — output renders via `registerExternalDiagrams()` in all Mermaid-compatible hosts
+2. BPMN 2.0.2 notation — shapes, markers, and flow lines match the OMG BPMN 2.0.2 Descriptive Conformance Sub-Class (Section 2.1)
 
-- Spec PDF (in repo): `artifacts/mermaid-diagram-bpmn/standards/OMG-BPMN-2.0.2-formal-specification.pdf`
-- Compliance map: `artifacts/mermaid-diagram-bpmn/standards/BPMN-SPEC-REFERENCE.md`
-- Standard home: https://www.bpmn.org/
-- OMG spec: https://www.omg.org/spec/BPMN/2.0.2/PDF
-
----
-
-## Architecture constraints
-
-Never add to `artifacts/mermaid-diagram-bpmn/`:
-- `bpmn-js` runtime dependency — SVG rendering is hand-written
-- BPMN XML import or export (out of scope for v1)
-- Backend server — all processing is client-side
-- LLM inference or AI API calls
-- User authentication or accounts
-
-## Module pipeline (do not collapse stages)
-
-```
-detect → parse → layout → render → styles
-bpmn-detector.ts → bpmn-parser.ts → bpmn-layout.ts → bpmn-renderer.tsx → bpmn-styles.ts
-```
-
-`BpmnDb` is the canonical data store. Parser populates it. Layout and renderer read from it.
-
----
-
-## Monorepo rules
-
-- All work on the bpmn frontend goes in `artifacts/mermaid-diagram-bpmn/`
-- Do not add routes, DB schemas, or API logic to `artifacts/api-server/` for the bpmn frontend — it is client-side only
-- Shared tooling (TypeScript, Vitest, ESLint) lives at workspace root
-- `pnpm --filter @workspace/mermaid-diagram-bpmn run test` must pass before every commit
-- `pnpm --filter @workspace/mermaid-diagram-bpmn run typecheck` must pass before every commit
-
----
-
-## Versioning governance
-
-- `MERMAID_VERSION_TARGET` in `artifacts/mermaid-diagram-bpmn/src/lib/bpmn-plugin.ts` tracks Mermaid API compatibility
-- Update this constant whenever the Mermaid target version changes
-- Version format: `0.MINOR.PATCH` until first npm publish
+A failure on either side is a failed document. Neither requirement takes priority.

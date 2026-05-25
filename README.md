@@ -1,186 +1,277 @@
-# BPMN for Mermaid
+# BPMN for Mermaid — bpmn-beta + BP-SKILL Agent Suite
 
-A Mermaid-native diagram type for business process modeling using a readable, text-first DSL. Write BPMN the way you write flowcharts — then commit it.
+**Text-first. Standards-aware. Git-native.**
 
-**Status: Prototype. DSL is unstable and subject to change.**
+Three things live in this repository:
 
-## Project thesis
+1. **bpmn-beta** — a text-first DSL for BPMN process diagrams, designed as a Mermaid diagram-type contribution. No XML. No bpmn-js. Write process models as a Markdown code fence.
 
-Mermaid has a material diagram-type gap: BPMN 2.0 is not represented as a native syntax. The credible path is not to force BPMN through `flowchart`, but to create a dedicated `bpmn-beta` plugin implementing a documented descriptive subset — and later propose upstream inclusion once the syntax stabilizes.
+2. **A seven-page React playground app** — live parser, SVG renderer, DSL reference, architecture notes, roadmap, Agent Skills browser, and individual skill detail pages. Deployed at [okhp3.github.io/mermaid-diagram-bpmn](https://okhp3.github.io/mermaid-diagram-bpmn/).
 
-## Project surfaces
+3. **BP-SKILL v0.3** — a 15-skill Business Process Agent Skill Suite packaged in the [Agent Skills open standard](https://agentskills.io) (agentskills.io). bpmn-beta is the visual output layer of a complete business process documentation methodology.
 
-| Surface | URL |
-|---|---|
-| Public project page | https://overkillhill.com/projects/bpmn-for-mermaid/ |
-| GitHub repository | https://github.com/OKHP3/mermaid-diagram-bpmn |
-| Public playground | https://okhp3.github.io/mermaid-diagram-bpmn |
-| Replit dev surface | https://replit.com/t/overkill-hill/repls/BPMN-for-Mermaid |
-| Notion specification | https://www.notion.so/overkillhill/BPMN-for-Mermaid-bpmn-beta-Diagram-Type-Proposal-357812e0ced481c88b20d2eb493dc775 |
+---
 
-## Current implementation status
-
-| Category | Elements |
-|---|---|
-| **Implemented** | `start`, `end`; `task`, `task:user`, `task:service`, `task:script`, `task:receive`, `task:send`; `xor`, `and`, `or`; sequence flow `-->`, conditional label, default flow `==>`; `accTitle`/`accDescr`; auto left-to-right layout; theme-aware SVG styling |
-| **Experimental** | `pool`, `lane`, message flow `~~>`, pool/lane-aware layout, cross-pool routing |
-| **Planned** | Intermediate events, timer/message/error markers, text annotations, associations, Langium grammar, Mermaid External Diagram API packaging, `getStyles` theme variable binding, parser-enforced BPMN domain rules |
-| **Out of scope (v1)** | BPMN XML import/export, executable semantics, `bpmn-js` runtime dependency, choreography, conversation, complex gateways, event subprocesses |
-
-## Standards compliance
-
-`bpmn-beta` has two co-equal hard requirements. Both must be satisfied — neither takes priority:
-
-| Requirement | What it means | Acceptance target |
-|---|---|---|
-| **Mermaid rendering** | Output must render correctly in all Mermaid-compatible hosts (GitHub, Notion, live editor) | Plugin v1 target: render via `registerExternalDiagrams()`. Current state: standalone React app with direct SVG renderer and GitHub Pages playground. |
-| **BPMN 2.0.2 notation** | Every shape, marker, flow line, and gateway symbol must match the OMG BPMN 2.0.2 formal specification (Descriptive Conformance Sub-Class, Section 2.1) | Ongoing — all rendered elements must match the spec |
-
-**BPMN specification resources:**
-
-| Resource | Link |
-|---|---|
-| BPMN standard home | https://www.bpmn.org/ |
-| OMG BPMN 2.0.2 specification | https://www.omg.org/spec/BPMN/2.0.2/PDF |
-| Specification PDF (in this repo) | [`artifacts/mermaid-diagram-bpmn/standards/OMG-BPMN-2.0.2-formal-specification.pdf`](./artifacts/mermaid-diagram-bpmn/standards/OMG-BPMN-2.0.2-formal-specification.pdf) |
-| Compliance reference | [`artifacts/mermaid-diagram-bpmn/standards/BPMN-SPEC-REFERENCE.md`](./artifacts/mermaid-diagram-bpmn/standards/BPMN-SPEC-REFERENCE.md) |
-| Standards index | [`standards/README.md`](./standards/README.md) |
-
-## Related reading
-
-- [Notion specification](https://www.notion.so/overkillhill/BPMN-for-Mermaid-bpmn-beta-Diagram-Type-Proposal-357812e0ced481c88b20d2eb493dc775) — full design spec, decisions, and engagement strategy
-- [Mermaid issue #7699](https://github.com/mermaid-js/mermaid/issues/7699) — existing BPMN support request
-- [Mermaid issue #2623](https://github.com/mermaid-js/mermaid/issues/2623) — BPMN support discussion
-- [OMG BPMN 2.0 spec](https://www.omg.org/spec/BPMN/) — official standard
-
-## Quick example
+## What bpmn-beta looks like
 
 ```
 bpmn-beta
-accTitle: Purchase Request Approval
+accTitle: Purchase Order Approval
 
-start s1 "Request Raised"
-task:user t1 "Review Request"
-xor g1 "Approved?"
-task:service t2 "Issue PO"
-end e1 "Done"
+pool company "Company" {
+  lane requester "Requester" {
+    start     s1  "Need Identified"
+    task:user t1  "Submit Purchase Request"
+  }
 
-s1 --> t1
-t1 --> g1
-g1 --> t2: "yes"
-g1 --> e1: "no"
-t2 --> e1
+  lane manager "Manager" {
+    task:user t2  "Review Request"
+    xor       g1  "Approved?"
+    end       e2  "Rejected"
+  }
+
+  lane procurement "Procurement" {
+    task:service t3  "Create Purchase Order"
+    end          e1  "PO Issued"
+  }
+
+  s1 --> t1
+  t1 --> t2
+  t2 --> g1
+  g1 --> t3: "yes"
+  g1 --> e2: "no"
+  t3 --> e1
+}
 ```
 
-## Getting started
+Paste this into the [live playground](https://okhp3.github.io/mermaid-diagram-bpmn/playground) to see the SVG output.
 
-```bash
-pnpm install
-pnpm --filter @workspace/mermaid-diagram-bpmn run dev
-```
+---
 
-Then open the preview at `/`.
+## Project surfaces
 
-## Run tests
-
-```bash
-pnpm --filter @workspace/mermaid-diagram-bpmn run test
-pnpm --filter @workspace/mermaid-diagram-bpmn run typecheck
-```
-
-## A — Agent Skill Suite (BP-SKILL v0.2)
-
-> The playground is for people. The skills are for agents. The context files are for both.
-
-This repository ships a SKILL.md-compatible **Business Process Agent Skill Suite** under `skills/`. The three core skills cover the full process documentation lifecycle; supporting skills and context files complete the suite.
-
-### Core pipeline
-
-```
-okhp3-process-discovery  →  okhp3-process-narrative  →  okhp3-bpmn-for-mermaid
-        ↓ pir.yaml                  ↓ pns.yaml                  ↓ bpmn-beta.mmd
-```
-
-### Skill catalogue
-
-| Skill | Path | `bp_skill_version` | Trigger domain |
-|---|---|---|---|
-| `okhp3-process-discovery` | `skills/okhp3-process-discovery/` | 0.2.0 | BABOK v3-aligned process elicitation; produces PIR + stakeholder register |
-| `okhp3-process-narrative` | `skills/okhp3-process-narrative/` | 0.2.0 | ISO 9001 §4.4.1 / BABOK process narrative; produces PNS, SIPOC, RACI |
-| `okhp3-bpmn-for-mermaid` | `skills/okhp3-bpmn-for-mermaid/` | 0.2.0 | bpmn-beta generation, validation, normalization, repair |
-| `okhp3-mermaid-theme-builder` | `skills/okhp3-mermaid-theme-builder/` | — | Palette application, themeVariables, prompt scaffolds, renderer profiles |
-
-### Context files (`context/`)
-
-Nine structured Markdown files (schema v0.2) that skills read at session initialization to tailor output without per-session prompting:
-
-| File | Purpose | Consumed by |
-|---|---|---|
-| `organization-profile.md` | Org name, type, language, process owner title | all three core skills |
-| `sector-context.md` | APQC PCF category, regulatory vocabulary | all three core skills |
-| `regional-context.md` | Jurisdiction, currency, date format, locale compliance | all three core skills |
-| `role-dictionary.md` | Canonical role IDs → titles + departments | all three core skills |
-| `process-taxonomy.md` | Process hierarchy + APQC PCF mappings | all three core skills |
-| `compliance-controls-registry.md` | Standing compliance controls (SOX, ISO 9001, GDPR…) | process-narrative |
-| `integration-registry.md` | Enterprise systems catalogue + task type hints | process-narrative, bpmn-for-mermaid |
-| `notation-preferences.md` | Diagram formatting conventions + layout defaults | bpmn-for-mermaid |
-| `business-glossary-and-rulebook.md` | Canonical terms + standing business rules | all three core skills |
-
-**Install:** Copy `skills/` and `context/` into your project or agent workspace.  
-**Configure:** Point your agent to discover skills from the local path per [agentskills.io](https://agentskills.io).
-
-### Excluded skills
-
-Three skill categories were explicitly evaluated and excluded from the BP-SKILL v0.2 suite:
-
-| Excluded skill | Rationale |
+| Surface | Purpose |
 |---|---|
-| **BPMN 2.0 XML import/export** | Requires a BPMN process engine dependency (bpmn-js or equivalent). Out of scope: the suite targets text-first authoring, not execution. |
-| **Choreography and conversation modeling** | Outside the Descriptive Conformance subset. Choreography diagrams require a separate participant interaction model not supported in `bpmn-beta`. |
-| **Multi-instance / call activity / event subprocess** | Complex BPMN constructs that require execution semantics to be meaningful. Deferred to a future BPMN conformance tier above Descriptive. |
+| [Live Playground](https://okhp3.github.io/mermaid-diagram-bpmn/playground) | In-browser bpmn-beta parser and SVG renderer |
+| [Agent Skills Browser](https://okhp3.github.io/mermaid-diagram-bpmn/skills) | Browse, explore, and download the BP-SKILL suite |
+| [DSL Reference](https://okhp3.github.io/mermaid-diagram-bpmn/dsl) | Full element vocabulary and syntax rules |
+| [Architecture](https://okhp3.github.io/mermaid-diagram-bpmn/architecture) | Parser design, renderer decisions, plugin path |
+| [Roadmap](https://okhp3.github.io/mermaid-diagram-bpmn/roadmap) | What ships next |
+| [Project page](https://overkillhill.com/projects/bpmn-for-mermaid/) | OverKill Hill P3 project home |
+| [Replit](https://replit.com/t/overkill-hill/repls/BPMN-for-Mermaid) | Active development environment |
+| [Notion spec](https://www.notion.so/overkillhill/BPMN-for-Mermaid-bpmn-beta-Diagram-Type-Proposal-357812e0ced481c88b20d2eb493dc775) | PRD, DSL spec, architecture decisions |
 
-**Trigger examples:**
-- "I need to document this purchase approval process from scratch." → `okhp3-process-discovery`
-- "Turn this PIR into a formal process narrative with RACI and SIPOC." → `okhp3-process-narrative`
-- "Convert these process notes into a bpmn-beta diagram with pools and lanes, then validate it." → `okhp3-bpmn-for-mermaid`
-- "Apply the Ocean Depth palette to this diagram and give me a prompt scaffold." → `okhp3-mermaid-theme-builder`
-- "Document this workflow end-to-end: elicit the process, write the narrative, then generate the BPMN diagram." → all three core skills compose in sequence
+---
 
-## B — Why This Is Not Just a Diagram DSL
+## Repository structure
 
-Most BPMN tooling draws a hard line: either you get an XML-heavy process engine format (BPMN 2.0 XML, bpmn-js) or you get a loose approximation in a general-purpose diagram tool (flowchart, swimlane). Neither is designed for the text-first, version-controlled, LLM-assisted documentation workflow that engineering and operations teams actually use.
+```
+mermaid-diagram-bpmn/
+  artifacts/mermaid-diagram-bpmn/
+    src/                       React/Vite application source
+      data/skills-registry.ts  Canonical skill data (15 skills, 9 var files, PNS schema)
+      pages/AgentSkills.tsx    Skills browser page
+      pages/SkillDetail.tsx    Individual skill detail page
+    public/
+      skills/                  Generated SKILL.md files (one per skill)
+      context/                 Generated variable layer templates
+    scripts/
+      generate-skill-files.mjs Pre-build asset generator
+  skills/                      BP-SKILL agent skill packages (source of truth)
+    process-intake-and-scope/
+    stakeholder-and-role-mapping/
+    elicitation-and-interview-facilitation/
+    as-is-process-capture/
+    process-narrative-authoring/
+    visual-process-modeling/
+    process-gap-and-exception-analysis/
+    future-state-and-change-strategy/
+    decision-model-authoring/
+    process-validation-and-quality-scoring/
+    process-measures-and-controls-definition/
+    sop-and-work-instruction-generation/
+    raci-and-governance-matrix-generation/
+    sipoc-generation/
+    publication-and-handoff-packaging/
+  context/                     Variable layer configuration templates (source of truth)
+  docs/                        Extended documentation
+  evals/                       BP-SKILL quality evaluation suite
+```
 
-`bpmn-beta` is the diagram layer of a deliberate stack:
+---
 
-1. **Discovery** — structured elicitation produces a machine-readable PIR (BABOK v3-aligned)
-2. **Narrative** — PIR becomes a PNS document with ISO 9001 process-box semantics, RACI, SIPOC, KPIs, and controls — a defensible process document, not just a box-and-arrow sketch
-3. **Visual** — PNS drives the bpmn-beta diagram; every shape is traceable to a documented process element
+## BP-SKILL Agent Skill Suite
 
-The agent skills enforce this stack. The context files eliminate the per-session re-specification of organizational constants. The result is process documentation that is simultaneously human-readable, agent-producible, version-controllable, and notation-compliant.
+Skills are the AI analogue of SOPs — executable, version-controlled, portable instruction sets that auto-activate on semantic match.
 
-## C — Ecosystem Position
+BP-SKILL packages the full business process documentation lifecycle as 15 SKILL.md files conforming to the [Agent Skills open standard](https://agentskills.io).
 
-| Tool | Role | Relationship |
-|---|---|---|
-| **Mermaid** | Diagram rendering host | `bpmn-beta` targets `registerExternalDiagrams()` for upstream inclusion |
-| **bpmn-js** | Full BPMN 2.0 execution tooling | Explicit non-dependency — different design goal (authoring vs execution) |
-| **BABOK v3** | Elicitation standard | `okhp3-process-discovery` implements BABOK §4 + §10 techniques |
-| **ISO 9001:2015** | Process governance standard | `okhp3-process-narrative` produces §4.4.1-compatible process documentation |
-| **BPM CBOK v4** | Process management body of knowledge | Lifecycle framing for the three-skill pipeline |
-| **APQC PCF** | Process taxonomy standard | `process-taxonomy.md` context file uses PCF category numbers |
-| **agentskills.io** | Skill discovery and distribution | SKILL.md format target; `bp_skill_version` field aligns with registry schema |
+**Compatible with:** Claude Code, OpenAI Codex, GitHub Copilot, Gemini CLI, Cursor, VS Code, and any other Agent Skills-compatible platform.
 
-The `bpmn-beta` DSL is the **notation bridge** — it gives the agent skill suite a concrete, verifiable output format that satisfies both BPMN 2.0.2 Descriptive Conformance notation rules and Mermaid's text-first rendering model. Neither standard is subordinated to the other.
+### The pipeline
+
+```
+LAYER 1 — DISCOVERY
+  01 process-intake-and-scope                   [core]
+  02 stakeholder-and-role-mapping               [core]
+  03 elicitation-and-interview-facilitation     [core]
+
+LAYER 2 — NARRATIVE
+  04 as-is-process-capture                      [core]
+  05 process-narrative-authoring                [core]
+  07 process-gap-and-exception-analysis         [core]
+  08 future-state-and-change-strategy           [extension]
+  10 process-validation-and-quality-scoring     [core]
+
+LAYER 3 — VISUAL AND DECISION MODELING
+  06 visual-process-modeling                    [core]
+  09 decision-model-authoring                   [extension]
+
+LAYER 4 — OPERATIONAL
+  11 process-measures-and-controls-definition   [extension]
+  12 sop-and-work-instruction-generation        [core]
+
+LAYER 5 — GOVERNANCE
+  13 raci-and-governance-matrix-generation      [core]
+  14 sipoc-generation                           [core]
+
+LAYER 6 — PUBLICATION
+  15 publication-and-handoff-packaging          [core]
+```
+
+The central handoff artifact is `PNS.md` — a Process Narrative Specification that every skill either reads or enriches, creating a validated pipeline rather than a collection of disconnected prompts.
+
+### Standards alignment
+
+| Standard | What it governs in BP-SKILL |
+|---|---|
+| BABOK v3 (IIBA) | Elicitation, requirements analysis, solution evaluation |
+| BPM CBOK v4.0 (ABPMP) | Process lifecycle phases, knowledge areas |
+| APQC PCF v7.4 | Process taxonomy and classification |
+| BPMN 2.0.2 (OMG) | Visual process notation |
+| DMN 1.4 (OMG) | Decision model notation |
+| ISO 9001:2015 | Documented information requirements |
+| IEEE/ISO/IEC 29148:2018 | Requirements information quality |
+
+### Quick install
+
+Install a single skill:
+
+```bash
+mkdir -p skills/process-narrative-authoring
+curl -o skills/process-narrative-authoring/SKILL.md \
+  https://okhp3.github.io/mermaid-diagram-bpmn/skills/process-narrative-authoring/SKILL.md
+```
+
+Browse and download individual skills at:
+[okhp3.github.io/mermaid-diagram-bpmn/skills](https://okhp3.github.io/mermaid-diagram-bpmn/skills)
+
+See [docs/agent-skills-install.md](./docs/agent-skills-install.md) for platform-specific install instructions and full suite download.
+
+### Variable layer
+
+The 9 context files in `context/` tailor the suite to your organisation:
+
+| File | Purpose |
+|---|---|
+| `organization-profile.md` | Company, industry, maturity, regulatory environment |
+| `sector-context.md` | Industry vocabulary, standards, APQC mapping |
+| `regional-context.md` | Jurisdiction, language, compliance frameworks |
+| `role-dictionary.md` | Named roles with stable IDs and RACI defaults |
+| `process-taxonomy.md` | APQC PCF hierarchy with dual v7.4/v8.0 IDs |
+| `notation-preferences.md` | Diagram notation, renderer targets, palette |
+| `compliance-controls-registry.md` | Control IDs, frameworks, approval gates |
+| `integration-registry.md` | Named systems with stable IDs |
+| `business-glossary-and-rulebook.md` | Controlled vocabulary and business rules |
+
+Download all 9 templates at:
+[okhp3.github.io/mermaid-diagram-bpmn/skills](https://okhp3.github.io/mermaid-diagram-bpmn/skills)
+
+---
+
+## bpmn-beta prototype — current status
+
+| Feature | Status |
+|---|---|
+| Core BPMN primitives (start/end events, tasks, gateways, sequence flows) | Working |
+| Hand-written line-by-line parser | Working |
+| Direct SVG renderer — no bpmn-js dependency | Working |
+| Pool and lane containment | Experimental |
+| Message flows | Experimental |
+| Langium grammar | Roadmap |
+| Mermaid External Diagram API packaging | Roadmap |
+| getStyles / theme-variable integration | Roadmap |
+| Upstream Mermaid core PR | Future — after v1.0 stabilises |
+
+---
+
+## What bpmn-beta is — and is not
+
+**It is:**
+
+- A readable DSL for the BPMN 2.0 Descriptive Conformance subset
+- Text-first, Git-native, works inside a Markdown code fence
+- AI-generatable — designed to be writable by LLMs without syntax repair
+- A Mermaid diagram-type contribution proposal (not a commercial product)
+
+**It is not:**
+
+- Executable BPMN — no process engine, no token simulation
+- BPMN XML import or export
+- Full BPMN 2.0 conformance — choreography, boundary events, transactions, and data objects are out of scope for v1
+- A production Mermaid plugin yet — upstream contribution comes after the DSL stabilises and the Langium parser is built
+
+---
+
+## Development
+
+```bash
+# Install dependencies
+pnpm install
+
+# Start dev server (runs the React playground app)
+pnpm --filter @workspace/mermaid-diagram-bpmn run dev
+
+# Build for production
+pnpm build
+
+# Run all tests
+pnpm --filter @workspace/mermaid-diagram-bpmn run test
+
+# Typecheck all packages
+pnpm run typecheck
+
+# Generate all SKILL.md files from the registry into public/
+pnpm --filter @workspace/mermaid-diagram-bpmn run skill:generate
+```
+
+---
+
+## Contributing
+
+This project welcomes contributions in three areas:
+
+**bpmn-beta DSL** — syntax proposals, shape corrections, pool/lane improvements. Open an issue first to discuss syntax changes before submitting a PR, since syntax stability is the gating concern for upstream Mermaid submission.
+
+**BP-SKILL agent skills** — new skills, skill improvements, additional variable file schemas, eval fixtures. Read [docs/bp-skill-contributing.md](./docs/bp-skill-contributing.md) before submitting.
+
+**React playground app** — UI improvements, new pages, accessibility. Match the existing component patterns and styling tokens exactly.
+
+All contributions must pass `pnpm --filter @workspace/mermaid-diagram-bpmn run test`, `pnpm run typecheck`, and `pnpm build` before review.
+
+---
 
 ## License
 
-MIT — see [LICENSE](./LICENSE).
+Code: MIT
+Documentation (docs/, SKILL.md files): CC-BY-4.0
 
-## Manual actions required (project owner)
+---
 
-Two surface updates require manual action outside this repository:
+## Built by
 
-1. **GitHub repo description** — Update in GitHub Settings → About to:  
-   `A text-first bpmn-beta diagram type for Mermaid — readable BPMN process diagrams, no XML, no bpmn-js. Includes Business Process Agent Skill Suite: process discovery, narrative specification, and bpmn-beta visual modeling skills (SKILL.md / agentskills.io format).`
+OverKill Hill P3 — [overkillhill.com](https://overkillhill.com)
 
-2. **overkillhill.com project page** — Add an inline `[experimental]` label on the pool/lane canonical DSL example in the status checklist section, matching the callout now present in the playground DSL Reference page.
+BP-SKILL is proposed as a domain extension to the Agent Skills open standard. It is not affiliated with IIBA, ABPMP, APQC, OMG, or ISO. Standards are referenced by name and section number only.
+
+> BPMN for Mermaid is a personal OverKill Hill P3 project by Jamie Hill. It is not affiliated with the mermaid-js maintainers, Mermaid Chart, Mermaid.ai, or any standards body. It implements a documented descriptive subset of BPMN 2.0 — it does not claim full BPMN 2.0 compliance.
