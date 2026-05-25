@@ -2,14 +2,14 @@
 name: okhp3-process-narrative
 description: Author and validate a Process Narrative Specification (PNS) from a PIR and stakeholder register. Use this skill when you have a completed Process Intake Record (PIR) from okhp3-process-discovery and need to produce a structured narrative document that anchors ISO 9001 §4.4.1 process-box semantics, BABOK Core Concept Model, RACI matrix, SIPOC table, business rules, decision points, KPIs, and controls. The PNS is the authoritative input for okhp3-bpmn-for-mermaid.
 license: MIT
-consumes: pir.yaml, stakeholder-register.yaml
-produces: pns.yaml, sipoc.md, raci.md, business-rules.md
-depends_on: okhp3-process-discovery
 metadata:
   version: 0.1.0
   author: OverKill Hill P³
   category: process-documentation
   tags: process-narrative, pns, iso9001, babok, raci, sipoc, business-rules, kpis, process-modeling
+  consumes: "pir.yaml, stakeholder-register.yaml"
+  produces: "pns.yaml, pns.md, sipoc.md, raci.md"
+  depends_on: ["okhp3-process-discovery"]
 ---
 
 ## Purpose

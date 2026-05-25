@@ -15,7 +15,7 @@ const REQUIRED_SECTIONS = [
   'process_box', 'activity_sequence', 'roles_and_raci',
   'business_rules', 'decision_points', 'exception_paths',
   'kpis', 'systems_and_integrations', 'controls_and_compliance',
-  'open_questions', 'revision_history',
+  'open_questions', 'revision_history', 'validation',
 ];
 const BABOK_FIELDS = ['change', 'need', 'solution', 'stakeholders', 'value', 'context'];
 const SUBORDINATE_CONJUNCTIONS = ['When ', 'If ', 'After ', 'Before ', 'Once ', 'While '];
@@ -66,12 +66,24 @@ export function validatePns(pns) {
   rules_fired.push('V2');
 
   const activities = (sections.activity_sequence && sections.activity_sequence.activities) || [];
+  const definedRoleIds = new Set(
+    ((sections.roles_and_raci && sections.roles_and_raci.roles) || [])
+      .map((r) => r && r.role_id ? String(r.role_id).trim() : '')
+      .filter(Boolean)
+  );
+
   for (const act of activities) {
-    if (!act.description || String(act.description).trim() === '') {
+    const desc = String(act.description || '').trim();
+    if (!desc) {
       errors.push(`[V2] Activity "${act.id || '(no id)'}" is missing a description`);
+    } else if (desc.length < 10) {
+      errors.push(`[V2] Activity "${act.id || '(no id)'}" description is too short to be substantive (< 10 chars)`);
     }
-    if (!act.actor_role_id || String(act.actor_role_id).trim() === '') {
+    const roleId = String(act.actor_role_id || '').trim();
+    if (!roleId) {
       errors.push(`[V2] Activity "${act.id || '(no id)'}" is missing actor_role_id`);
+    } else if (definedRoleIds.size > 0 && !definedRoleIds.has(roleId)) {
+      errors.push(`[V2] Activity "${act.id || '(no id)'}" actor_role_id "${roleId}" is not defined in roles_and_raci.roles`);
     }
   }
 
@@ -104,6 +116,28 @@ export function validatePns(pns) {
   for (const id of activityIds) {
     if (!raciActivityIds.has(id)) {
       errors.push(`[V3] Activity "${id}" has no RACI entry`);
+    }
+  }
+
+  // All defined roles must appear somewhere in the RACI matrix (R, A, C, or I)
+  if (raciMatrix.length > 0 && definedRoleIds.size > 0) {
+    const rolesInMatrix = new Set();
+    for (const entry of raciMatrix) {
+      if (entry.accountable) rolesInMatrix.add(String(entry.accountable).trim());
+      for (const r of (Array.isArray(entry.responsible) ? entry.responsible : [])) {
+        if (r) rolesInMatrix.add(String(r).trim());
+      }
+      for (const r of (Array.isArray(entry.consulted) ? entry.consulted : [])) {
+        if (r) rolesInMatrix.add(String(r).trim());
+      }
+      for (const r of (Array.isArray(entry.informed) ? entry.informed : [])) {
+        if (r) rolesInMatrix.add(String(r).trim());
+      }
+    }
+    for (const roleId of definedRoleIds) {
+      if (!rolesInMatrix.has(roleId)) {
+        errors.push(`[V3] Role "${roleId}" is defined in roles_and_raci.roles but does not appear in any RACI entry`);
+      }
     }
   }
 
@@ -143,14 +177,28 @@ export function validatePns(pns) {
   rules_fired.push('V6');
 
   const decisionPoints = Array.isArray(sections.decision_points) ? sections.decision_points : [];
+  const exceptionPaths = Array.isArray(sections.exception_paths) ? sections.exception_paths : [];
+  const activityIdSet = new Set(activityIds);
+
+  // If decision points exist, at least one exception path must be documented
+  if (decisionPoints.length > 0 && exceptionPaths.length === 0) {
+    errors.push('[V6] Process has decision points but no exception paths — document at least one exception path');
+  }
+
   for (const dp of decisionPoints) {
     const outcomes = Array.isArray(dp.outcomes) ? dp.outcomes : [];
     if (outcomes.length < 2) {
       errors.push(`[V6] Decision point "${dp.id || '(no id)'}" must have at least 2 outcomes — found ${outcomes.length}`);
     }
+    // Each outcome with a next_activity must reference an existing activity
+    for (const outcome of outcomes) {
+      const nextAct = outcome && outcome.next_activity ? String(outcome.next_activity).trim() : '';
+      if (nextAct && !activityIdSet.has(nextAct)) {
+        errors.push(`[V6] Decision "${dp.id || '(no id)'}" outcome "${outcome.label || ''}" references unknown activity "${nextAct}"`);
+      }
+    }
   }
 
-  const exceptionPaths = Array.isArray(sections.exception_paths) ? sections.exception_paths : [];
   for (const ep of exceptionPaths) {
     if (!ep.handling || String(ep.handling).trim() === '') {
       errors.push(`[V6] Exception path "${ep.id || '(no id)'}" is missing a handling procedure`);
@@ -165,13 +213,17 @@ export function validatePns(pns) {
     warnings.push('[V7] controls_and_compliance is empty — add at least one control or document a waiver');
   } else {
     const coveredActivities = new Set();
+    let hasGlobalWaiver = false;
     for (const ctrl of controls) {
       const covered = Array.isArray(ctrl.activities_covered) ? ctrl.activities_covered : [];
       for (const id of covered) coveredActivities.add(id);
+      if (ctrl.waiver && String(ctrl.waiver).trim() !== '') hasGlobalWaiver = true;
     }
-    for (const id of activityIds) {
-      if (!coveredActivities.has(id)) {
-        warnings.push(`[V7] Activity "${id}" is not covered by any control entry`);
+    if (!hasGlobalWaiver) {
+      for (const id of activityIds) {
+        if (!coveredActivities.has(id)) {
+          warnings.push(`[V7] Activity "${id}" is not covered by any control entry`);
+        }
       }
     }
   }

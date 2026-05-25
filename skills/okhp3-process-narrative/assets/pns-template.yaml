@@ -120,8 +120,7 @@ sections:
       date: ""
       author_role: ""
       summary: Initial draft
-
-validation:
-  pns_quality_score: null
-  ready_for_publication: null
-  ready_for_bpmn_modeling: null
+  validation:
+    pns_quality_score: null
+    ready_for_publication: null
+    ready_for_bpmn_modeling: null

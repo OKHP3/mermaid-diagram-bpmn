@@ -274,8 +274,7 @@ sections:
       date: "2026-05-25"
       author_role: Business Analyst
       summary: Initial PNS drafted from PIR proc-002 (support triage intake)
-
-validation:
-  pns_quality_score: null
-  ready_for_publication: null
-  ready_for_bpmn_modeling: null
+  validation:
+    pns_quality_score: null
+    ready_for_publication: null
+    ready_for_bpmn_modeling: null

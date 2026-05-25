@@ -57,23 +57,19 @@ test('quote-to-order fixture parses correctly', () => {
   assert.ok(pns.sections.kpis, 'kpis must be present');
 });
 
-test('all three fixtures have 11 authored sections + top-level validation', () => {
-  const AUTHORED_SECTIONS = [
+test('all three fixtures have all 12 sections inside sections block', () => {
+  const ALL_SECTIONS = [
     'process_box', 'activity_sequence', 'roles_and_raci', 'business_rules',
     'decision_points', 'exception_paths', 'kpis', 'systems_and_integrations',
-    'controls_and_compliance', 'open_questions', 'revision_history',
+    'controls_and_compliance', 'open_questions', 'revision_history', 'validation',
   ];
   for (const [name, pns] of Object.entries(FIXTURES)) {
-    for (const key of AUTHORED_SECTIONS) {
+    for (const key of ALL_SECTIONS) {
       assert.ok(
         Object.prototype.hasOwnProperty.call(pns.sections || {}, key),
         `${name} fixture missing section: ${key}`
       );
     }
-    assert.ok(
-      Object.prototype.hasOwnProperty.call(pns, 'validation'),
-      `${name} fixture missing top-level validation block`
-    );
   }
 });
 
@@ -227,6 +223,46 @@ test('V7: empty controls_and_compliance triggers warning (not error)', () => {
   const result = validatePns(pns);
   assert.equal(result.errors.filter((e) => e.includes('[V7]')).length, 0, 'V7 must not produce errors');
   assert.ok(result.warnings.some((w) => w.includes('[V7]')), 'V7 must produce a warning');
+});
+
+test('V3: role defined in roles list but absent from all RACI entries triggers error', () => {
+  const pns = structuredClone(FIXTURES.purchaseApproval);
+  pns.sections.roles_and_raci.roles.push({ role_id: 'ghost_role', role_name: 'Ghost Role' });
+  const result = validatePns(pns);
+  assert.ok(!result.valid);
+  assert.ok(result.errors.some((e) => e.includes('[V3]') && e.includes('ghost_role')));
+});
+
+test('V2: actor_role_id not in defined roles triggers error', () => {
+  const pns = structuredClone(FIXTURES.purchaseApproval);
+  pns.sections.activity_sequence.activities[0].actor_role_id = 'unknown_role';
+  const result = validatePns(pns);
+  assert.ok(!result.valid);
+  assert.ok(result.errors.some((e) => e.includes('[V2]') && e.includes('actor_role_id')));
+});
+
+test('V6: decision_points with no exception_paths triggers error', () => {
+  const pns = structuredClone(FIXTURES.purchaseApproval);
+  pns.sections.exception_paths = [];
+  const result = validatePns(pns);
+  assert.ok(!result.valid);
+  assert.ok(result.errors.some((e) => e.includes('[V6]') && e.includes('exception path')));
+});
+
+test('V6: outcome referencing unknown activity triggers error', () => {
+  const pns = structuredClone(FIXTURES.purchaseApproval);
+  pns.sections.decision_points[0].outcomes[0].next_activity = 'act-nonexistent';
+  const result = validatePns(pns);
+  assert.ok(!result.valid);
+  assert.ok(result.errors.some((e) => e.includes('[V6]') && e.includes('act-nonexistent')));
+});
+
+test('V1: missing sections.validation triggers error', () => {
+  const pns = structuredClone(FIXTURES.purchaseApproval);
+  delete pns.sections.validation;
+  const result = validatePns(pns);
+  assert.ok(!result.valid);
+  assert.ok(result.errors.some((e) => e.includes('[V1]') && e.includes('validation')));
 });
 
 // ─── Quality scoring — fixtures ───────────────────────────────────────────────
