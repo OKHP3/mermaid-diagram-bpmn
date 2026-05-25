@@ -1,0 +1,149 @@
+pir_version: "0.1"
+process_id: proc-002
+process_name: Customer Support Ticket Triage
+process_owner: Support Team Lead
+department: Customer Support
+elicitation_method: workshop
+elicitation_date: "2026-05-16"
+elicited_by: Business Analyst
+status: complete
+
+trigger:
+  description: A customer submits a support request through any supported channel.
+  event_type: message
+
+actors:
+  - role_id: customer
+    role_name: Customer
+    department: External
+    type: initiator
+    interest: speed — wants their issue resolved as quickly as possible
+    influence: low
+  - role_id: agent
+    role_name: Support Agent (Tier 1)
+    department: Customer Support
+    type: performer
+    interest: outcome quality — wants to resolve tickets accurately and efficiently
+    influence: medium
+  - role_id: specialist
+    role_name: Support Specialist (Tier 2)
+    department: Customer Support
+    type: performer
+    interest: outcome quality — handles complex or escalated issues
+    influence: medium
+  - role_id: lead
+    role_name: Support Team Lead
+    department: Customer Support
+    type: approver
+    interest: compliance — ensures SLA adherence and correct escalation paths
+    influence: high
+  - role_id: ticketsys
+    role_name: Ticketing System
+    department: IT
+    type: system
+    interest: outcome quality — routes and tracks tickets automatically
+    influence: low
+
+inputs:
+  - id: in-01
+    name: Customer Support Request
+    source: Customer
+    format: email, web form, or phone call transcription
+  - id: in-02
+    name: Customer Account Record
+    source: CRM
+    format: API lookup
+
+outputs:
+  - id: out-01
+    name: Resolved Ticket
+    consumer: Customer
+    format: email notification + ticket closure record
+  - id: out-02
+    name: Escalated Ticket
+    consumer: Support Specialist
+    format: ticket record with triage notes
+
+steps:
+  - id: step-01
+    description: Receive and log the customer support request in the ticketing system.
+    actor_role_id: ticketsys
+    system: Ticketing System
+  - id: step-02
+    description: Review the ticket and classify it by category and priority.
+    actor_role_id: agent
+    system: Ticketing System
+  - id: step-03
+    description: Look up the customer account to confirm entitlement and service level.
+    actor_role_id: agent
+    system: CRM
+  - id: step-04
+    description: Attempt first-contact resolution using the knowledge base.
+    actor_role_id: agent
+    system: Knowledge Base
+  - id: step-05
+    description: Escalate the ticket to Tier 2 with triage notes if resolution is not achieved.
+    actor_role_id: agent
+    system: Ticketing System
+  - id: step-06
+    description: Investigate and resolve the escalated issue, documenting the solution.
+    actor_role_id: specialist
+    system: Ticketing System
+  - id: step-07
+    description: Send resolution confirmation to the customer and close the ticket.
+    actor_role_id: agent
+    system: Ticketing System
+
+exceptions:
+  - id: exc-01
+    description: Customer disputes the resolution and requests further review.
+    trigger: Customer responds to closure notification indicating the issue is not resolved.
+    handling: Ticket is reopened and assigned back to Tier 2 with a priority upgrade.
+  - id: exc-02
+    description: Ticket breaches the SLA response window without action.
+    trigger: Ticket has not been responded to within the SLA deadline.
+    handling: Ticketing system automatically escalates to Support Team Lead for intervention.
+
+business_rules:
+  - id: br-01
+    description: All tickets must be acknowledged within 4 business hours of receipt regardless of priority.
+    source: contract
+  - id: br-02
+    description: Priority 1 tickets must be escalated to Tier 2 within 1 hour if not resolved at Tier 1.
+    source: policy
+  - id: br-03
+    description: Tickets from customers on a Premium SLA must be assigned to Tier 2 directly without a Tier 1 resolution attempt.
+    source: contract
+
+systems:
+  - name: Ticketing System
+    role: processor
+    integration_type: ui
+  - name: CRM
+    role: source
+    integration_type: api
+  - name: Knowledge Base
+    role: source
+    integration_type: ui
+
+controls:
+  - id: ctrl-01
+    type: validation
+    description: SLA countdown starts automatically at ticket creation; breach triggers automatic escalation.
+    enforced_by: Ticketing System
+  - id: ctrl-02
+    type: audit
+    description: All ticket state transitions are logged with timestamps and agent ID.
+    enforced_by: Ticketing System
+
+open_questions:
+  - id: oq-01
+    question: Is there a defined process for tickets that require cross-department coordination (e.g. Billing + Support)?
+    owner: Support Team Lead
+  - id: oq-02
+    question: What is the maximum number of reopens allowed before a ticket is escalated to management review?
+    owner: Support Team Lead
+
+validation:
+  completeness_score: null
+  ready_for_narrative: null

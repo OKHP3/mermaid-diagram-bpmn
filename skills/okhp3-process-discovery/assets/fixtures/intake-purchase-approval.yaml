@@ -1,0 +1,129 @@
+pir_version: "0.1"
+process_id: proc-001
+process_name: Purchase Request Approval
+process_owner: Finance Manager
+department: Finance
+elicitation_method: interview
+elicitation_date: "2026-05-15"
+elicited_by: Business Analyst
+status: complete
+
+trigger:
+  description: An employee identifies a need to purchase goods or services and submits a purchase request.
+  event_type: manual
+
+actors:
+  - role_id: req
+    role_name: Requester
+    department: Any department
+    type: initiator
+    interest: speed — wants the request processed quickly so work can proceed
+    influence: low
+  - role_id: mgr
+    role_name: Department Manager
+    department: Requester's department
+    type: approver
+    interest: cost control — wants to ensure spend is justified and within budget
+    influence: high
+  - role_id: finance
+    role_name: Finance Clerk
+    department: Finance
+    type: performer
+    interest: compliance — wants to ensure all purchases follow procurement policy
+    influence: medium
+  - role_id: vendor
+    role_name: Vendor
+    department: External
+    type: notified
+    interest: outcome quality — wants accurate PO details to fulfill the order
+    influence: low
+
+inputs:
+  - id: in-01
+    name: Purchase Request Form
+    source: Requester
+    format: form
+  - id: in-02
+    name: Budget Code
+    source: Department Manager
+    format: reference code
+
+outputs:
+  - id: out-01
+    name: Purchase Order
+    consumer: Vendor
+    format: document
+  - id: out-02
+    name: Rejection Notification
+    consumer: Requester
+    format: email
+
+steps:
+  - id: step-01
+    description: Submit the completed purchase request form with item details and estimated cost.
+    actor_role_id: req
+    system: Procurement Portal
+  - id: step-02
+    description: Review the purchase request for budget availability and business justification.
+    actor_role_id: mgr
+    system: Procurement Portal
+  - id: step-03
+    description: Approve or reject the purchase request with a written reason.
+    actor_role_id: mgr
+    system: Procurement Portal
+  - id: step-04
+    description: Create the purchase order in the finance system upon approval.
+    actor_role_id: finance
+    system: ERP
+  - id: step-05
+    description: Send the purchase order to the vendor and notify the requester.
+    actor_role_id: finance
+    system: ERP
+
+exceptions:
+  - id: exc-01
+    description: Purchase request exceeds the department manager's approval threshold.
+    trigger: Request amount is above the manager's delegated authority limit.
+    handling: Escalate to VP Finance for secondary approval before proceeding.
+  - id: exc-02
+    description: Preferred vendor is not on the approved vendor list.
+    trigger: Vendor name does not match the approved vendor register.
+    handling: Finance Clerk contacts Requester to select an approved vendor or initiates vendor onboarding.
+
+business_rules:
+  - id: br-01
+    description: Purchase requests above $5,000 require VP Finance approval in addition to Department Manager approval.
+    source: policy
+  - id: br-02
+    description: All purchases must reference a valid budget code from the current fiscal year.
+    source: policy
+  - id: br-03
+    description: Purchases may only be made from vendors on the approved vendor register unless a waiver is granted.
+    source: policy
+
+systems:
+  - name: Procurement Portal
+    role: processor
+    integration_type: ui
+  - name: ERP
+    role: destination
+    integration_type: ui
+
+controls:
+  - id: ctrl-01
+    type: approval
+    description: Department Manager approval required before PO creation.
+    enforced_by: Procurement Portal
+  - id: ctrl-02
+    type: validation
+    description: Budget code validated against current fiscal year codes before request can be submitted.
+    enforced_by: Procurement Portal
+
+open_questions:
+  - id: oq-01
+    question: What is the exact dollar threshold for VP Finance escalation — is $5,000 inclusive or exclusive?
+    owner: Finance Manager
+
+validation:
+  completeness_score: null
+  ready_for_narrative: null
