@@ -228,21 +228,16 @@ if (process.argv[1] && process.argv[1].endsWith('validate-pir.mjs')) {
     process.exit(0);
   }
   const { readFileSync } = await import('node:fs');
-  const { resolve } = await import('node:path');
+  const { resolve, dirname: pathDirname } = await import('node:path');
+  const { fileURLToPath: ftu } = await import('node:url');
+  const __cliDir = pathDirname(ftu(import.meta.url));
+  const { parseYaml } = await import(resolve(__cliDir, 'parse-yaml-minimal.mjs'));
   try {
     const raw = readFileSync(resolve(file), 'utf8');
-    // Minimal YAML parser for flat + nested objects — uses js-native fallback
     let pir;
     try {
-      const { parseYaml } = await import('../scripts/parse-yaml-minimal.mjs').catch(() => ({ parseYaml: null }));
-      if (parseYaml) {
-        pir = parseYaml(raw);
-      } else {
-        // Fallback: eval-free YAML not available; require user to pass JSON
-        throw new Error('YAML parsing requires parse-yaml-minimal.mjs or a JSON input');
-      }
+      pir = parseYaml(raw);
     } catch {
-      // Try JSON
       pir = JSON.parse(raw);
     }
     const result = validatePir(pir);

@@ -13,7 +13,7 @@ The following must never appear in any skill output, example PIRs, or reference 
 - Employer-owned process examples, internal workflows, or proprietary terminology
 - Internal system names, tool names, or confidential process details from any organization
 - Process descriptions that were encountered in a workplace context and are not general knowledge
-- Any identifiers associated with BFS or similar organizations
+- Any employer-specific identifiers, brand names, or organizational references
 
 **Rationale:** This skill is MIT-licensed for public use. Employer-owned content violates IP and confidentiality expectations.
 
@@ -43,7 +43,7 @@ Never report `ready_for_narrative: true` unless `completeness_score >= 70`. Neve
 Before delivering any PIR or stakeholder register:
 
 - [ ] No employer-owned content
-- [ ] No BFS identifiers or terminology
+- [ ] No proprietary identifiers or employer-specific terminology
 - [ ] No invented business rules or actor roles
 - [ ] No fabricated standards citations
 - [ ] Completeness score accurately reflects populated sections

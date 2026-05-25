@@ -109,14 +109,17 @@ if (process.argv[1] && process.argv[1].endsWith('generate-stakeholder-register.m
     process.exit(0);
   }
   const { readFileSync } = await import('node:fs');
-  const { resolve } = await import('node:path');
+  const { resolve, dirname: pathDirname } = await import('node:path');
+  const { fileURLToPath: ftu } = await import('node:url');
+  const __cliDir = pathDirname(ftu(import.meta.url));
+  const { parseYaml } = await import(resolve(__cliDir, 'parse-yaml-minimal.mjs'));
   try {
     const raw = readFileSync(resolve(file), 'utf8');
     let pir;
     try {
-      pir = JSON.parse(raw);
+      pir = parseYaml(raw);
     } catch {
-      throw new Error('Input must be JSON (YAML parsing requires an external parser)');
+      pir = JSON.parse(raw);
     }
     const result = generateStakeholderRegister(pir);
     if (!result.valid) {

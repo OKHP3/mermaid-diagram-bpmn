@@ -4,7 +4,7 @@
  * Pure ESM, no external dependencies.
  *
  * Usage: node scripts/score-intake-completeness.mjs <pir.yaml>
- * Exports: scoreIntakeCompleteness(pir: object): { score, ready_for_narrative, breakdown, warnings[] }
+ * Exports: scoreIntakeCompleteness(pir: object): { valid, errors[], warnings[], score, ready_for_narrative, breakdown }
  */
 
 // ─── Scoring weights ──────────────────────────────────────────────────────────
@@ -49,7 +49,8 @@ export function scoreIntakeCompleteness(pir) {
   let totalScore = 0;
 
   if (!pir || typeof pir !== 'object') {
-    return { score: 0, ready_for_narrative: false, breakdown: {}, warnings: ['Input is not a valid object'] };
+    const err = 'Input is not a valid object';
+    return { valid: false, errors: [err], warnings: [], score: 0, ready_for_narrative: false, breakdown: {} };
   }
 
   // process_name (5 pts)
@@ -197,10 +198,12 @@ export function scoreIntakeCompleteness(pir) {
   }
 
   return {
+    valid: true,
+    errors: [],
+    warnings,
     score: totalScore,
     ready_for_narrative: ready,
     breakdown,
-    warnings,
   };
 }
 
@@ -213,14 +216,17 @@ if (process.argv[1] && process.argv[1].endsWith('score-intake-completeness.mjs')
     process.exit(0);
   }
   const { readFileSync } = await import('node:fs');
-  const { resolve } = await import('node:path');
+  const { resolve, dirname: pathDirname } = await import('node:path');
+  const { fileURLToPath: ftu } = await import('node:url');
+  const __cliDir = pathDirname(ftu(import.meta.url));
+  const { parseYaml } = await import(resolve(__cliDir, 'parse-yaml-minimal.mjs'));
   try {
     const raw = readFileSync(resolve(file), 'utf8');
     let pir;
     try {
-      pir = JSON.parse(raw);
+      pir = parseYaml(raw);
     } catch {
-      throw new Error('Input must be JSON (YAML parsing requires an external parser)');
+      pir = JSON.parse(raw);
     }
     const result = scoreIntakeCompleteness(pir);
     console.log(`Completeness Score: ${result.score}/100`);
