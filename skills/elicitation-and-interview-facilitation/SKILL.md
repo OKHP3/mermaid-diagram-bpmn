@@ -9,6 +9,7 @@ metadata:
   status: core
   version: "0.1.0"
   author: OverKill Hill P³
+  project: "BP-SKILL: Business Process Agent Skill Suite"
   category: process-analysis
   standards_refs:
     - "BABOK v3 §4 (Elicitation and Collaboration)"

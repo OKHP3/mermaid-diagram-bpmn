@@ -9,6 +9,7 @@ metadata:
   status: core
   version: "0.1.0"
   author: OverKill Hill P³
+  project: "BP-SKILL: Business Process Agent Skill Suite"
   category: process-analysis
   standards_refs:
     - "BABOK v3 §4 (Elicitation and Collaboration)"
@@ -16,6 +17,7 @@ metadata:
     - "BABOK v3 §10.25 (Interviews)"
     - "BPM CBOK v4 §4 (Process Modelling)"
     - "ISO 9001:2015 §4.4 (Quality Management System and its processes)"
+  consumes: "request-brief.md, organization-profile.md, process-taxonomy.md (optional)"
   produces: "pir.yaml, scope-statement.md"
   depends_on: []
   tags: process-intake, scope-definition, elicitation, BABOK, PIR, business-analysis, intake, process-boundary

@@ -6,12 +6,12 @@
  *
  * Usage: node scripts/package-skills.mjs [--dry-run]
  *
- * Produces:
- *   dist/bp-skill-okhp3-process-discovery-v0.1.zip
- *   dist/bp-skill-okhp3-process-narrative-v0.1.zip
- *   dist/bp-skill-okhp3-bpmn-for-mermaid-v0.1.zip
- *   dist/bp-skill-okhp3-mermaid-theme-builder-v0.1.zip
- *   dist/bp-skill-suite-v0.1.zip         (discovery + narrative + bpmn + context/)
+ * Individual skill archives (one per skill):
+ *   dist/bp-skill-<slug>-v0.1.zip   (19 skills total)
+ *
+ * Complete suite archive:
+ *   dist/bp-skill-suite-complete-v0.2.zip
+ *     — all 19 skills/ + context/ + evals/ (BP-SKILL v0.2 spec)
  */
 
 import { ZipArchive } from 'archiver';
@@ -31,6 +31,7 @@ const DRY_RUN = process.argv.includes('--dry-run');
 /**
  * @param {string} outPath  — destination .zip path
  * @param {Array<{srcDir: string, entryName: string}>} dirs — directories to include
+ * @param {string[]} [excludePatterns] — sub-path fragments to exclude from all dirs
  * @returns {Promise<{path: string, bytes: number}>}
  */
 async function createZip(outPath, dirs) {
@@ -113,30 +114,31 @@ for (const skillName of skillDirs) {
   }
 }
 
-// ─── Combined BP suite ZIP ────────────────────────────────────────────────────
+// ─── Complete BP-SKILL suite ZIP (all skills + context/ + evals/) ─────────────
 
-const suiteZipPath = join(distDir, 'bp-skill-suite-v0.1.zip');
-const suiteSkills = [
-  'okhp3-process-discovery',
-  'okhp3-process-narrative',
-  'okhp3-bpmn-for-mermaid',
-].filter(s => existsSync(join(skillsDir, s)));
+const suiteZipName = 'bp-skill-suite-complete-v0.2.zip';
+const suiteZipPath = join(distDir, suiteZipName);
+const contextDir   = join(repoRoot, 'context');
+const evalsDir     = join(repoRoot, 'evals');
 
-const contextDir = join(repoRoot, 'context');
 const suiteDirs = [
-  ...suiteSkills.map(s => ({ srcDir: join(skillsDir, s), entryName: s })),
+  // All skills (every subdirectory of skills/)
+  ...skillDirs.map(s => ({ srcDir: join(skillsDir, s), entryName: join('skills', s) })),
+  // Context variable files
   ...(existsSync(contextDir) ? [{ srcDir: contextDir, entryName: 'context' }] : []),
+  // Eval suite rubrics + fixtures
+  ...(existsSync(evalsDir)   ? [{ srcDir: evalsDir,   entryName: 'evals'   }] : []),
 ];
 
 if (suiteDirs.length === 0) {
-  console.warn('⚠  No BP suite skills found — skipping suite ZIP');
+  console.warn('⚠  No BP suite content found — skipping suite ZIP');
 } else {
   const result = await createZip(suiteZipPath, suiteDirs);
 
   if (DRY_RUN) {
-    console.log(`  bp-skill-suite-v0.1.zip: ${result.files} file(s) [dry-run — nothing written]`);
+    console.log(`  ${suiteZipName}: ${result.files} file(s) [dry-run — nothing written]`);
   } else {
-    console.log(`✔ dist/bp-skill-suite-v0.1.zip (${fmt(result.bytes)})`);
+    console.log(`✔ dist/${suiteZipName} (${fmt(result.bytes)})`);
     created.push(suiteZipPath);
   }
 }

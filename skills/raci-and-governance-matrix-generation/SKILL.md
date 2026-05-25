@@ -9,6 +9,7 @@ metadata:
   status: core
   version: "0.1.0"
   author: OverKill Hill P³
+  project: "BP-SKILL: Business Process Agent Skill Suite"
   category: process-governance
   standards_refs:
     - "PMI PMBOK v7 §2.2 (Stakeholder Performance Domain)"

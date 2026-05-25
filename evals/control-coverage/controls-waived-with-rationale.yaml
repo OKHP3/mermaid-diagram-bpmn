@@ -3,7 +3,7 @@ process_id: proc-pa-001
 process_name: Purchase Approval Process
 process_owner_role_id: manager
 version: "1.0"
-status: draft
+status: modeled
 babok_core_concepts:
   change: The organisation needs a formal purchase approval workflow to replace ad hoc approvals.
   need: A structured approval process ensuring policy compliance and audit trail readiness.

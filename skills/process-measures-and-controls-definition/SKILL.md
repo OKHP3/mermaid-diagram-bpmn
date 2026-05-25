@@ -9,6 +9,7 @@ metadata:
   status: recommended-extension
   version: "0.1.0"
   author: OverKill Hill P³
+  project: "BP-SKILL: Business Process Agent Skill Suite"
   category: process-governance
   standards_refs:
     - "ISO 9001:2015 §9.1 (Monitoring, measurement, analysis and evaluation)"

@@ -9,6 +9,7 @@ metadata:
   status: core
   version: "0.1.0"
   author: OverKill Hill P³
+  project: "BP-SKILL: Business Process Agent Skill Suite"
   category: process-diagramming
   standards_refs:
     - "BPMN 2.0.2 Descriptive Conformance Sub-Class (OMG formal/2013-12-09)"

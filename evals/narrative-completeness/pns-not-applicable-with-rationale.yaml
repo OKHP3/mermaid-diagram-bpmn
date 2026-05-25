@@ -3,7 +3,7 @@ process_id: proc-onboard-001
 process_name: New Employee System Access Provisioning
 process_owner_role_id: it-manager
 version: "1.0"
-status: draft
+status: modeled
 babok_core_concepts:
   change: IT onboarding requires a repeatable and audited system access provisioning workflow.
   need: A structured provisioning process that ensures new employees receive correct access on day one.

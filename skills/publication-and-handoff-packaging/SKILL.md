@@ -9,6 +9,7 @@ metadata:
   status: core
   version: "0.1.0"
   author: OverKill Hill P³
+  project: "BP-SKILL: Business Process Agent Skill Suite"
   category: process-publication
   standards_refs:
     - "ISO 9001:2015 §7.5 (Documented information)"

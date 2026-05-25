@@ -16,22 +16,33 @@
  */
 
 /**
- * The canonical 9-state PNS lifecycle in order.
+ * The canonical 9-state PNS lifecycle in order (BP-SKILL v0.2 spec — normative).
+ * State names match the skill that sets each state:
+ *   draft-intake      ← process-intake-and-scope
+ *   scoped            ← stakeholder-and-role-mapping
+ *   elicited          ← elicitation-and-interview-facilitation
+ *   documented-as-is  ← as-is-process-capture
+ *   modeled           ← process-narrative-authoring
+ *   analyzed          ← process-gap-and-exception-analysis
+ *   validated         ← process-validation-and-quality-scoring
+ *   packaged          ← publication-and-handoff-packaging
+ *   published         ← publication-and-handoff-packaging (after approval gate)
+ *
  * A valid transition moves exactly one step forward.
  * Re-entering the same state (noop) is allowed with a warning.
  * Backward transitions (rollback) produce an error.
  * Skipping states produces an error.
  */
 const PNS_STATES = [
-  'draft',
-  'elicitation',
+  'draft-intake',
   'scoped',
-  'structured',
-  'narrative',
-  'review',
-  'approved',
+  'elicited',
+  'documented-as-is',
+  'modeled',
+  'analyzed',
+  'validated',
+  'packaged',
   'published',
-  'archived',
 ];
 
 const STATE_SET   = new Set(PNS_STATES);

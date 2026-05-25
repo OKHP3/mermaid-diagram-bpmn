@@ -3,7 +3,7 @@ process_id: proc-002
 process_name: Support Triage
 process_owner_role_id: support_lead
 version: "1.0"
-status: draft
+status: modeled
 effective_date: "2026-06-01"
 review_cycle: quarterly
 retention_period: 2 years

@@ -3,7 +3,7 @@ process_id: proc-003
 process_name: Quote to Order
 process_owner_role_id: sales_manager
 version: "1.0"
-status: draft
+status: modeled
 effective_date: "2026-06-01"
 review_cycle: semi-annual
 retention_period: 5 years

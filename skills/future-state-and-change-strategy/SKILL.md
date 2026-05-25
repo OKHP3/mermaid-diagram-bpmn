@@ -9,6 +9,7 @@ metadata:
   status: recommended-extension
   version: "0.1.0"
   author: OverKill Hill P³
+  project: "BP-SKILL: Business Process Agent Skill Suite"
   category: process-improvement
   standards_refs:
     - "BPM CBOK v4 §7 (Process Transformation)"

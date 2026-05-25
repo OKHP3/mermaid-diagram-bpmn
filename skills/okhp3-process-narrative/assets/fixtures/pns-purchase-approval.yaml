@@ -3,7 +3,7 @@ process_id: proc-001
 process_name: Purchase Approval
 process_owner_role_id: finance_mgr
 version: "1.0"
-status: draft
+status: modeled
 effective_date: "2026-06-01"
 review_cycle: annual
 retention_period: 3 years

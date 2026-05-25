@@ -10,7 +10,17 @@
 import { loadFile } from './parse-yaml-minimal.mjs';
 
 const REQUIRED_TOP_LEVEL = ['pns_version', 'process_id', 'process_name', 'process_owner_role_id', 'version', 'status'];
-const VALID_STATUSES = ['draft', 'review', 'approved', 'published'];
+const VALID_STATUSES = [
+  'draft-intake',
+  'scoped',
+  'elicited',
+  'documented-as-is',
+  'modeled',
+  'analyzed',
+  'validated',
+  'packaged',
+  'published',
+];
 const REQUIRED_SECTIONS = [
   'process_box', 'activity_sequence', 'roles_and_raci',
   'business_rules', 'decision_points', 'exception_paths',
