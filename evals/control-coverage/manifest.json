@@ -1,0 +1,14 @@
+{
+  "category": "control-coverage",
+  "description": "Controls and compliance coverage across all activities",
+  "v_rule": "V7",
+  "validator_module": "skills/okhp3-process-narrative/scripts/validate-pns.mjs",
+  "validator_fn": "validatePns",
+  "fixture_type": "yaml",
+  "fail_on_warnings_matching": "[V7]",
+  "fixtures": [
+    { "file": "controls-fully-mapped.yaml",          "expected": "pass" },
+    { "file": "controls-waived-with-rationale.yaml", "expected": "pass" },
+    { "file": "controls-unmapped.yaml",              "expected": "fail" }
+  ]
+}

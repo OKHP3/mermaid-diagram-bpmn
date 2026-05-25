@@ -1,0 +1,82 @@
+pir_version: "0.1"
+process_id: proc-pa-001
+process_name: Purchase Approval
+process_owner: Procurement Manager
+department: Procurement
+elicitation_method: interview
+status: complete
+
+trigger:
+  description: Employee submits a purchase request for goods or services exceeding the budget threshold.
+  event_type: manual
+
+actors:
+  - role_id: requestor
+    role_name: Requestor
+    type: initiator
+    influence: medium
+  - role_id: manager
+    role_name: Line Manager
+    type: approver
+    influence: high
+  - role_id: procurement
+    role_name: Procurement Officer
+    type: performer
+    influence: medium
+
+inputs:
+  - id: in-001
+    name: Purchase Request Form
+  - id: in-002
+    name: Budget Allocation Report
+
+outputs:
+  - id: out-001
+    name: Approved Purchase Order
+  - id: out-002
+    name: Rejection Notification
+
+steps:
+  - id: stp-001
+    description: Submit purchase request with cost justification and supplier details.
+    actor_role_id: requestor
+  - id: stp-002
+    description: Review purchase request against available budget and procurement policy.
+    actor_role_id: manager
+  - id: stp-003
+    description: Create and issue purchase order to the nominated supplier in the ERP system.
+    actor_role_id: procurement
+
+exceptions:
+  - id: exc-001
+    description: Request rejected by manager due to insufficient budget or policy violation.
+  - id: exc-002
+    description: Preferred supplier unavailable or quote exceeds approved amount.
+
+business_rules:
+  - id: br-001
+    description: All purchases above two thousand dollars require explicit manager approval.
+    source: policy
+  - id: br-002
+    description: Purchase orders must reference an approved supplier from the vendor register.
+    source: policy
+
+systems:
+  - name: ERP System
+    role: processor
+    integration_type: api
+  - name: Approval Workflow Tool
+    role: notification
+    integration_type: ui
+
+controls:
+  - id: ctrl-001
+    type: approval
+    description: Manager approval required as a gate before any purchase order is created.
+  - id: ctrl-002
+    type: audit
+    description: All purchase orders are logged in the ERP system for quarterly audit review.
+
+validation:
+  completeness_score: 92
+  ready_for_narrative: true

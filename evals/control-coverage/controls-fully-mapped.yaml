@@ -1,0 +1,123 @@
+pns_version: "0.1"
+process_id: proc-pa-001
+process_name: Purchase Approval Process
+process_owner_role_id: manager
+version: "1.0"
+status: draft
+babok_core_concepts:
+  change: The organisation needs a formal purchase approval workflow to replace ad hoc approvals.
+  need: A structured approval process ensuring policy compliance and audit trail readiness.
+  solution: A three-step workflow with requester submission, manager gate, and procurement execution.
+  stakeholders: Requestors, line managers, procurement officers, and finance auditors involved in purchasing.
+  value: Reduced unauthorised spend and faster cycle times through clear role assignments and approvals.
+  context: Corporate procurement policy mandates manager approval for all purchases above the threshold.
+sections:
+  process_box:
+    trigger: Employee submits a purchase request for goods or services exceeding budget threshold.
+    inputs:
+      - name: Purchase Request Form
+        source: Requestor
+    outputs:
+      - name: Approved Purchase Order
+        consumer: Supplier
+    criteria: Request approved and purchase order issued within two business days of submission.
+    resources: ERP system and approval workflow tooling.
+    responsibilities: Manager approves requests, Procurement creates purchase orders.
+    risks: Delayed approvals, duplicate orders, budget overruns.
+  activity_sequence:
+    activities:
+      - id: act-001
+        description: Submit purchase request with full cost justification to line manager.
+        actor_role_id: requestor
+      - id: act-002
+        description: Review purchase request against budget and policy criteria then approve or reject.
+        actor_role_id: manager
+      - id: act-003
+        description: Create and issue the approved purchase order to the nominated supplier.
+        actor_role_id: procurement
+  roles_and_raci:
+    roles:
+      - role_id: requestor
+        role_name: Requestor
+      - role_id: manager
+        role_name: Line Manager
+      - role_id: procurement
+        role_name: Procurement Officer
+    raci_matrix:
+      - activity_id: act-001
+        responsible:
+          - requestor
+        accountable: manager
+        consulted:
+          - procurement
+        informed: []
+      - activity_id: act-002
+        responsible:
+          - manager
+        accountable: manager
+        consulted: []
+        informed:
+          - requestor
+      - activity_id: act-003
+        responsible:
+          - procurement
+        accountable: procurement
+        consulted: []
+        informed:
+          - requestor
+          - manager
+  business_rules:
+    - id: br-001
+      description: All purchases above two thousand dollars require explicit manager approval before processing.
+      source: Procurement Policy v3.1
+  decision_points:
+    - id: dp-001
+      description: Manager evaluates the purchase request against available budget and policy compliance.
+      activity_id: act-002
+      criteria: Budget available and request meets policy requirements.
+      outcomes:
+        - label: Approved
+          next_activity: act-003
+        - label: Rejected
+          next_activity: act-001
+  exception_paths:
+    - id: ep-001
+      description: Purchase request rejected due to budget overrun or policy violation.
+      trigger: Budget exhausted for cost centre or request does not meet policy.
+      handling: Requestor revises and resubmits or escalates to department head for override.
+      owner_role_id: manager
+      escalation_path: Department Head review within one business day.
+  kpis:
+    - id: kpi-001
+      name: Approval Cycle Time
+      formula: Date purchase order issued minus date request submitted measured in business days.
+      data_source: ERP workflow module transaction log
+      target: 2 business days
+      frequency: monthly
+  systems_and_integrations:
+    - system_name: ERP System
+      role: processor
+      integration_type: api
+      activities_supported:
+        - act-002
+        - act-003
+  controls_and_compliance:
+    - id: ctrl-001
+      type: preventive
+      description: Manager approval gate required before any purchase order creation can proceed.
+      standard_ref: ISO 9001 s8.4.1
+      activities_covered:
+        - act-001
+        - act-002
+        - act-003
+      waiver: ""
+  open_questions: []
+  revision_history:
+    - version: "1.0"
+      date: "2026-05-25"
+      author_role: manager
+      summary: Initial draft with full control coverage across all three activities.
+  validation:
+    pns_quality_score: 88
+    ready_for_publication: false
+    ready_for_bpmn_modeling: true

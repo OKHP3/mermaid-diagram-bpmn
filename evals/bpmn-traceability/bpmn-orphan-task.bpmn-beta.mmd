@@ -1,0 +1,18 @@
+bpmn-beta
+# pns:act-001
+start S1 "Request Submitted"
+# pns:act-001
+task T1 "Submit Purchase Request"
+# pns:act-002
+task T2 "Review and Approve Request"
+# pns:act-002
+xor GW1 "Approval Decision"
+task T3 "Create Purchase Order"
+# pns:act-003
+end E1 "PO Issued"
+S1 --> T1
+T1 --> T2
+T2 --> GW1
+GW1 --> T1: "Rejected"
+GW1 --> T3: "Approved"
+T3 --> E1

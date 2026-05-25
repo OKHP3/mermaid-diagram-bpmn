@@ -1,0 +1,11 @@
+{
+  "category": "bpmn-traceability",
+  "description": "Every BPMN task/event has a pns:act-NNN trace comment",
+  "v_rule": "bpmn-trace",
+  "validator_type": "bpmn-trace",
+  "fixture_type": "mmd",
+  "fixtures": [
+    { "file": "bpmn-all-steps-traced.bpmn-beta.mmd", "expected": "pass" },
+    { "file": "bpmn-orphan-task.bpmn-beta.mmd",      "expected": "fail" }
+  ]
+}

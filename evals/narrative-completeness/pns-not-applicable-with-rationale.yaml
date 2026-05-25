@@ -1,0 +1,95 @@
+pns_version: "0.1"
+process_id: proc-onboard-001
+process_name: New Employee System Access Provisioning
+process_owner_role_id: it-manager
+version: "1.0"
+status: draft
+babok_core_concepts:
+  change: IT onboarding requires a repeatable and audited system access provisioning workflow.
+  need: A structured provisioning process that ensures new employees receive correct access on day one.
+  solution: A two-step provisioning workflow where HR triggers and IT executes access setup in the identity system.
+  stakeholders: HR administrators, IT provisioning team, new employees, and IT security team.
+  value: Consistent access provisioning reduces first-day delays and eliminates manual follow-up requests.
+  context: All new employee system access must be provisioned through the approved identity management platform.
+sections:
+  process_box:
+    trigger: HR submits a completed new employee starter form to the IT provisioning team.
+    inputs:
+      - name: New Employee Starter Form
+        source: HR Administrator
+    outputs:
+      - name: Provisioned User Account
+        consumer: New Employee
+    criteria: User account created and access confirmed before new employee start date.
+    resources: Identity management platform and HR information system.
+    responsibilities: HR initiates, IT provisions and confirms.
+    risks: Delayed provisioning, incorrect access levels, missed required systems.
+  activity_sequence:
+    activities:
+      - id: act-001
+        description: Submit completed new employee starter form with required access profile to IT.
+        actor_role_id: hr-admin
+      - id: act-002
+        description: Create user account and assign access profile in the identity management platform.
+        actor_role_id: it-provisioner
+  roles_and_raci:
+    roles:
+      - role_id: hr-admin
+        role_name: HR Administrator
+      - role_id: it-provisioner
+        role_name: IT Provisioner
+      - role_id: it-manager
+        role_name: IT Manager
+    raci_matrix:
+      - activity_id: act-001
+        responsible:
+          - hr-admin
+        accountable: it-manager
+        consulted: []
+        informed:
+          - it-provisioner
+      - activity_id: act-002
+        responsible:
+          - it-provisioner
+        accountable: it-manager
+        consulted: []
+        informed:
+          - hr-admin
+  business_rules:
+    - id: br-001
+      description: All access provisioning must reference an approved access profile from the access catalogue.
+      source: IT Security Policy v2.4
+  decision_points: []
+  exception_paths: []
+  kpis:
+    - id: kpi-001
+      name: Provisioning Lead Time
+      formula: Date account confirmed minus date starter form received measured in business hours.
+      data_source: IT service management system ticket log
+      target: 4 business hours
+      frequency: monthly
+  systems_and_integrations:
+    - system_name: Identity Management Platform
+      role: processor
+      integration_type: api
+      activities_supported:
+        - act-002
+  controls_and_compliance:
+    - id: ctrl-001
+      type: validation
+      description: IT manager reviews all provisioned accounts weekly against the active starter forms register.
+      standard_ref: ISO 27001 A.9.2.1
+      activities_covered:
+        - act-001
+        - act-002
+      waiver: ""
+  open_questions: []
+  revision_history:
+    - version: "1.0"
+      date: "2026-05-25"
+      author_role: it-manager
+      summary: Initial draft - single happy path process, no decision points or exception paths applicable.
+  validation:
+    pns_quality_score: 84
+    ready_for_publication: false
+    ready_for_bpmn_modeling: true

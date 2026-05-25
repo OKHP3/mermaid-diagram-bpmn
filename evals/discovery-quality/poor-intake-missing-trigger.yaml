@@ -1,0 +1,36 @@
+pir_version: "0.1"
+process_id: proc-pa-002
+process_name: Purchase Approval
+process_owner: Procurement Manager
+department: Procurement
+elicitation_method: interview
+status: draft
+
+actors:
+  - role_id: requestor
+    role_name: Requestor
+    type: initiator
+    influence: medium
+  - role_id: manager
+    role_name: Line Manager
+    type: approver
+    influence: high
+
+inputs:
+  - id: in-001
+    name: Purchase Request Form
+
+outputs:
+  - id: out-001
+    name: Approved Purchase Order
+
+steps:
+  - id: stp-001
+    description: Submit purchase request to line manager for review.
+    actor_role_id: requestor
+  - id: stp-002
+    description: Review and approve or reject the purchase request.
+    actor_role_id: manager
+  - id: stp-003
+    description: Create purchase order upon approval.
+    actor_role_id: manager

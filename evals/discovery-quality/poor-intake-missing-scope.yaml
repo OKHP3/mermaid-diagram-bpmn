@@ -1,0 +1,32 @@
+pir_version: "0.1"
+process_id: proc-pa-003
+process_name: Purchase Approval
+process_owner: Procurement Manager
+department: Procurement
+elicitation_method: interview
+status: draft
+
+trigger:
+  description: Employee raises a purchase need for goods or services.
+  event_type: manual
+
+actors:
+  - role_id: requestor
+    role_name: Requestor
+    type: initiator
+    influence: medium
+  - role_id: manager
+    role_name: Line Manager
+    type: approver
+    influence: high
+
+steps:
+  - id: stp-001
+    description: Submit purchase request with cost justification.
+    actor_role_id: requestor
+  - id: stp-002
+    description: Review and approve the purchase request.
+    actor_role_id: manager
+  - id: stp-003
+    description: Create purchase order in ERP system.
+    actor_role_id: manager
