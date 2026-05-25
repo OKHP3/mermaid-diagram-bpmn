@@ -251,6 +251,65 @@ function validateSkill(skillDir) {
   if (noOverclaims) pass(`${p} C11: no overclaims`);
 }
 
+// ─── C13: Context file v0.2 schema validation ─────────────────────────────────
+function validateContextFiles() {
+  const p = '[context]';
+  const contextDir = join(repoRoot, 'context');
+  if (!existsSync(contextDir)) {
+    fail(`${p} C13: context/ directory exists`, 'context/ directory not found');
+    return;
+  }
+
+  const contextFiles = readdirSync(contextDir).filter(f => f.endsWith('.md'));
+  if (contextFiles.length === 0) {
+    fail(`${p} C13: context/ has files`, 'No .md files in context/');
+    return;
+  }
+
+  // document_type and schema_version must be non-empty
+  const V2_NON_EMPTY = ['document_type', 'schema_version'];
+  // owner, last_reviewed, applicability must be present (key exists); empty string is ok (template placeholder)
+  const V2_PRESENT = ['owner', 'last_reviewed', 'applicability'];
+  let allOk = true;
+
+  for (const file of contextFiles) {
+    const filePath = join(contextDir, file);
+    const content = readFileSync(filePath, 'utf8');
+    const fm = parseFrontmatter(content);
+    if (!fm) {
+      fail(`${p} C13: ${file} has frontmatter`, 'No --- delimited frontmatter block found');
+      allOk = false;
+      continue;
+    }
+
+    for (const field of V2_NON_EMPTY) {
+      if (!fm[field]) {
+        fail(`${p} C13: ${file} v0.2 schema`, `Missing or empty required field: ${field}`);
+        allOk = false;
+      }
+    }
+
+    for (const field of V2_PRESENT) {
+      if (fm[field] === undefined) {
+        fail(`${p} C13: ${file} v0.2 schema`, `Missing required field (may be empty): ${field}`);
+        allOk = false;
+      }
+    }
+
+    if (fm.schema_version && fm.schema_version !== '0.2.0') {
+      fail(`${p} C13: ${file} schema_version`, `Expected "0.2.0", got "${fm.schema_version}"`);
+      allOk = false;
+    }
+
+    if (content.includes('bp_skill_variable_type:')) {
+      fail(`${p} C13: ${file} no v0.1 keys`, 'Contains deprecated key bp_skill_variable_type');
+      allOk = false;
+    }
+  }
+
+  if (allOk) pass(`${p} C13: ${contextFiles.length} context file(s) pass v0.2 schema check`);
+}
+
 // ─── C12: Pipeline contract integrity ─────────────────────────────────────────
 function validatePipelineContract() {
   const p = '[pipeline]';
@@ -300,6 +359,7 @@ console.log(`Validating ${skillDirs.length} skill(s) in skills/ ...\n`);
 for (const dir of skillDirs) {
   validateSkill(dir);
 }
+validateContextFiles();
 validatePipelineContract();
 
 console.log('\n─── Results ─────────────────────────────────────────────────────────');

@@ -47,9 +47,9 @@ If absent, skills default to generic APQC mappings and do not apply sector-speci
 ### Example Populated Instance
 
 ```yaml
-bp_skill_variable_type: sector-context
-version: "0.1.0"
-last_updated: "2026-05-25"
+document_type: sector-context
+schema_version: "0.2.0"
+last_reviewed: "2026-05-25"
 owner: "Business Architecture Team"
 applies_to: "okhp3-process-discovery, okhp3-process-narrative, okhp3-bpmn-for-mermaid"
 

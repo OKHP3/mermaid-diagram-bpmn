@@ -53,9 +53,9 @@ If absent, skills use these defaults:
 ### Example Populated Instance
 
 ```yaml
-bp_skill_variable_type: notation-preferences
-version: "0.1.0"
-last_updated: "2026-05-25"
+document_type: notation-preferences
+schema_version: "0.2.0"
+last_reviewed: "2026-05-25"
 owner: "Enterprise Architecture"
 applies_to: "okhp3-bpmn-for-mermaid"
 

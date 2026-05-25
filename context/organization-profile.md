@@ -49,9 +49,9 @@ Skills must not hallucinate org-specific details if this file is absent. Proceed
 ### Example Populated Instance
 
 ```yaml
-bp_skill_variable_type: organization-profile
-version: "0.1.0"
-last_updated: "2026-05-25"
+document_type: organization-profile
+schema_version: "0.2.0"
+last_reviewed: "2026-05-25"
 owner: "Operations Excellence Team"
 applies_to: "okhp3-process-discovery, okhp3-process-narrative, okhp3-bpmn-for-mermaid"
 

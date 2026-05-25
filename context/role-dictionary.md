@@ -50,9 +50,9 @@ Skills must not invent role_ids not in this dictionary for formal PNS documents.
 ### Example Populated Instance
 
 ```yaml
-bp_skill_variable_type: role-dictionary
-version: "0.1.0"
-last_updated: "2026-05-25"
+document_type: role-dictionary
+schema_version: "0.2.0"
+last_reviewed: "2026-05-25"
 owner: "Enterprise Architecture"
 applies_to: "okhp3-process-discovery, okhp3-process-narrative, okhp3-bpmn-for-mermaid"
 

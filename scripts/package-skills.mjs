@@ -7,11 +7,11 @@
  * Usage: node scripts/package-skills.mjs [--dry-run]
  *
  * Produces:
- *   dist/okhp3-process-discovery-skill.zip
- *   dist/okhp3-process-narrative-skill.zip
- *   dist/okhp3-bpmn-for-mermaid-skill.zip
- *   dist/okhp3-mermaid-theme-builder-skill.zip
- *   dist/okhp3-bp-skill-suite-v0.2.zip  (discovery + narrative + bpmn + context/)
+ *   dist/bp-skill-okhp3-process-discovery-v0.1.zip
+ *   dist/bp-skill-okhp3-process-narrative-v0.1.zip
+ *   dist/bp-skill-okhp3-bpmn-for-mermaid-v0.1.zip
+ *   dist/bp-skill-okhp3-mermaid-theme-builder-v0.1.zip
+ *   dist/bp-skill-suite-v0.1.zip         (discovery + narrative + bpmn + context/)
  */
 
 import { ZipArchive } from 'archiver';
@@ -99,7 +99,7 @@ const skillDirs = readdirSync(skillsDir, { withFileTypes: true })
   .sort();
 
 for (const skillName of skillDirs) {
-  const outName = `${skillName}-skill.zip`;
+  const outName = `bp-skill-${skillName}-v0.1.zip`;
   const outPath = join(distDir, outName);
   const srcDir = join(skillsDir, skillName);
 
@@ -115,7 +115,7 @@ for (const skillName of skillDirs) {
 
 // ─── Combined BP suite ZIP ────────────────────────────────────────────────────
 
-const suiteZipPath = join(distDir, 'okhp3-bp-skill-suite-v0.2.zip');
+const suiteZipPath = join(distDir, 'bp-skill-suite-v0.1.zip');
 const suiteSkills = [
   'okhp3-process-discovery',
   'okhp3-process-narrative',
@@ -134,9 +134,9 @@ if (suiteDirs.length === 0) {
   const result = await createZip(suiteZipPath, suiteDirs);
 
   if (DRY_RUN) {
-    console.log(`  okhp3-bp-skill-suite-v0.2.zip: ${result.files} file(s) [dry-run — nothing written]`);
+    console.log(`  bp-skill-suite-v0.1.zip: ${result.files} file(s) [dry-run — nothing written]`);
   } else {
-    console.log(`✔ dist/okhp3-bp-skill-suite-v0.2.zip (${fmt(result.bytes)})`);
+    console.log(`✔ dist/bp-skill-suite-v0.1.zip (${fmt(result.bytes)})`);
     created.push(suiteZipPath);
   }
 }

@@ -129,6 +129,16 @@ Nine structured Markdown files (schema v0.2) that skills read at session initial
 **Install:** Copy `skills/` and `context/` into your project or agent workspace.  
 **Configure:** Point your agent to discover skills from the local path per [agentskills.io](https://agentskills.io).
 
+### Excluded skills
+
+Three skill categories were explicitly evaluated and excluded from the BP-SKILL v0.2 suite:
+
+| Excluded skill | Rationale |
+|---|---|
+| **BPMN 2.0 XML import/export** | Requires a BPMN process engine dependency (bpmn-js or equivalent). Out of scope: the suite targets text-first authoring, not execution. |
+| **Choreography and conversation modeling** | Outside the Descriptive Conformance subset. Choreography diagrams require a separate participant interaction model not supported in `bpmn-beta`. |
+| **Multi-instance / call activity / event subprocess** | Complex BPMN constructs that require execution semantics to be meaningful. Deferred to a future BPMN conformance tier above Descriptive. |
+
 **Trigger examples:**
 - "I need to document this purchase approval process from scratch." → `okhp3-process-discovery`
 - "Turn this PIR into a formal process narrative with RACI and SIPOC." → `okhp3-process-narrative`

@@ -160,6 +160,35 @@ This limited a new contributor's ability to understand the full scope of the sui
 
 ---
 
+---
+
+### Issue 9 — `artifacts/` namespace collision with pnpm monorepo
+
+**Finding:** The BP-SKILL pipeline produces process artifacts (PIR YAML, PNS documents, BPMN diagrams) as file outputs. The original spec named these outputs under an `artifacts/` directory. This path collides with the pnpm monorepo's `artifacts/` directory, which contains deployable applications (`artifacts/mermaid-diagram-bpmn/`, `artifacts/api-server/`). Placing BP-SKILL process outputs under `artifacts/` would:
+- Mix deployable app code with ephemeral process documents in the same directory tree
+- Cause confusion in CI/CD tooling (Vite builds, workflow scripts) that scan `artifacts/`
+- Create merge conflicts if multiple concurrent process documentation sessions write to the same directory
+
+**Decision:** BP-SKILL process artifact output is placed under `process-artifacts/<process-id>/` at the repository root, not under `artifacts/`. This is a hard namespace boundary:
+
+```
+artifacts/                        ← pnpm monorepo app code; never touch
+  mermaid-diagram-bpmn/
+  api-server/
+process-artifacts/                ← BP-SKILL process outputs; created by Task #10
+  <process-id>/
+    pir.yaml
+    stakeholder-register.yaml
+    pns.yaml
+    bpmn-beta.mmd
+```
+
+**No directory needs to be created in Task #9.** The `process-artifacts/` directory is scaffolded in Task #10 (skill suite build) when the first process ID conventions are established.
+
+**Impact:** All skill output path documentation, fixture conventions, and README examples in Task #10 must use `process-artifacts/<process-id>/` not `artifacts/<process-id>/`.
+
+---
+
 ## Scope Firewall
 
 This audit contains no employer-identifying information. All process examples use fictional organizational names. No proprietary process content appears in any skill, context file, or fixture.

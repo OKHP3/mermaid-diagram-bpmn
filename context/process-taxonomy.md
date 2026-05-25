@@ -55,9 +55,9 @@ If absent, skills use `proc-` prefix and start numbering at 001.
 ### Example Populated Instance
 
 ```yaml
-bp_skill_variable_type: process-taxonomy
-version: "0.1.0"
-last_updated: "2026-05-25"
+document_type: process-taxonomy
+schema_version: "0.2.0"
+last_reviewed: "2026-05-25"
 owner: "Process Excellence COE"
 applies_to: "okhp3-process-discovery, okhp3-process-narrative, okhp3-bpmn-for-mermaid"
 

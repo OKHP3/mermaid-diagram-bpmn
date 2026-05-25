@@ -48,9 +48,9 @@ If absent, skills use ISO 8601 dates, generic currency references, and do not ap
 ### Example Populated Instance
 
 ```yaml
-bp_skill_variable_type: regional-context
-version: "0.1.0"
-last_updated: "2026-05-25"
+document_type: regional-context
+schema_version: "0.2.0"
+last_reviewed: "2026-05-25"
 owner: "Legal and Compliance"
 applies_to: "okhp3-process-discovery, okhp3-process-narrative, okhp3-bpmn-for-mermaid"
 

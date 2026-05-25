@@ -51,9 +51,9 @@ Skills must not modify registry entries. They may propose additions to the regis
 ### Example Populated Instance
 
 ```yaml
-bp_skill_variable_type: compliance-controls-registry
-version: "0.1.0"
-last_updated: "2026-05-25"
+document_type: compliance-controls-registry
+schema_version: "0.2.0"
+last_reviewed: "2026-05-25"
 owner: "Internal Audit"
 applies_to: "okhp3-process-narrative"
 
