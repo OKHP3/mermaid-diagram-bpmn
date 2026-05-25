@@ -147,34 +147,21 @@ export function repairBpmnBeta(source) {
       }
     }
   });
-  const dupRenames = new Map();
+  // Rename only the duplicate declaration lines.  Intentionally do NOT
+  // remap flow references: the first occurrence keeps its ID and all
+  // existing flows remain valid.  The renamed duplicate will be orphaned
+  // (VR-007) but VR-003/VR-004 (undeclared ID in flow) will no longer fire.
   for (const [id, lineIndices] of seenIds) {
     if (lineIndices.length > 1) {
       for (let k = 1; k < lineIndices.length; k++) {
         const newId = `${id}_dup${k + 1}`;
-        // Replace the ID in the declaration line using ELEMENT_DECL_FULL_RE
         const m = lines[lineIndices[k]].match(ELEMENT_DECL_FULL_RE);
         if (m && m[2] === id) {
           lines[lineIndices[k]] = `${m[1]}${newId}${m[3]}`;
-          dupRenames.set(id, newId);
-          repairs.push(`R4: Renamed duplicate ID '${id}' at line ${lineIndices[k] + 1} → '${newId}'`);
+          repairs.push(`R4: Renamed duplicate ID '${id}' at line ${lineIndices[k] + 1} → '${newId}' (orphaned — add flows manually)`);
         }
       }
     }
-  }
-  // Propagate R4 renames to flow lines
-  if (dupRenames.size > 0) {
-    lines = lines.map(line => {
-      const t = line.trim();
-      if (/-->|==>|~~>/.test(t)) {
-        let updated = line;
-        for (const [oldId, newId] of dupRenames) {
-          updated = replaceIdOutsideQuotes(updated, oldId, newId);
-        }
-        return updated;
-      }
-      return line;
-    });
   }
 
   // ── R5 + R6: Missing start / end events ──────────────────────────────────

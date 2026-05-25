@@ -290,3 +290,64 @@ test('repairBpmnBeta: inserts stub end when missing', async () => {
   assert.ok(result.repaired.includes('end '), 'repaired must include an end event');
   assert.ok(result.repairs_applied.some(r => r.startsWith('R6')), 'must record R6 repair');
 });
+
+// ─── R3 / R4 targeted tests ───────────────────────────────────────────────────
+
+test('repairBpmnBeta R3: sanitizes IDs with hyphens and propagates rename to flows', async () => {
+  const { repairBpmnBeta } = await import('../scripts/repair-bpmn-beta.mjs');
+  const input = [
+    'bpmn-beta',
+    'start s1 "Start"',
+    'task:user my-task "Do Work"',
+    'end e1 "End"',
+    's1 --> my-task',
+    'my-task --> e1',
+  ].join('\n');
+  const result = repairBpmnBeta(input);
+  assert.ok(result.repairs_applied.some(r => r.startsWith('R3')), 'must record R3 repair');
+  assert.ok(!result.repaired.includes('my-task'), 'hyphenated ID must no longer appear');
+  assert.ok(result.repaired.includes('my_task'), 'sanitized ID must appear in declaration');
+  const flowLines = result.repaired.split('\n').filter(l => /-->/.test(l));
+  assert.ok(flowLines.every(l => !l.includes('my-task')), 'flow refs must also use sanitized ID');
+  const noVr003_4 = result.errors.filter(e => e.ruleId === 'VR-003' || e.ruleId === 'VR-004');
+  assert.equal(noVr003_4.length, 0, 'no VR-003/VR-004 after R3 repair');
+});
+
+test('repairBpmnBeta R4: renames duplicate declaration without rewriting flow references', async () => {
+  const { repairBpmnBeta } = await import('../scripts/repair-bpmn-beta.mjs');
+  const input = [
+    'bpmn-beta',
+    'start s1 "Start"',
+    'task:user t1 "First"',
+    'task:user t1 "Duplicate"',
+    'end e1 "End"',
+    's1 --> t1',
+    't1 --> e1',
+  ].join('\n');
+  const result = repairBpmnBeta(input);
+  assert.ok(result.repairs_applied.some(r => r.startsWith('R4')), 'must record R4 repair');
+  assert.ok(result.repaired.includes('t1_dup2'), 'second declaration must be renamed to t1_dup2');
+  const flowLines = result.repaired.split('\n').filter(l => /-->/.test(l));
+  assert.ok(flowLines.every(l => !l.includes('t1_dup2')), 'existing flow refs must still reference original t1, not t1_dup2');
+  const noVr003_4 = result.errors.filter(e => e.ruleId === 'VR-003' || e.ruleId === 'VR-004');
+  assert.equal(noVr003_4.length, 0, 'no VR-003/VR-004 after R4 repair — first occurrence keeps its flows');
+});
+
+test('repairBpmnBeta R3+R4: dots-in-ID sanitized AND duplicate renamed without cross-contamination', async () => {
+  const { repairBpmnBeta } = await import('../scripts/repair-bpmn-beta.mjs');
+  const input = [
+    'bpmn-beta',
+    'start s1 "Start"',
+    'task:user a.b "Task AB"',
+    'task:user a.b "Task AB dup"',
+    'end e1 "End"',
+    's1 --> a.b',
+    'a.b --> e1',
+  ].join('\n');
+  const result = repairBpmnBeta(input);
+  assert.ok(result.repairs_applied.some(r => r.startsWith('R3')), 'R3 must fire for dot in ID');
+  assert.ok(result.repairs_applied.some(r => r.startsWith('R4')), 'R4 must fire for duplicate');
+  assert.ok(!result.repaired.includes('a.b'), 'dotted ID must be fully replaced');
+  const noVr003_4 = result.errors.filter(e => e.ruleId === 'VR-003' || e.ruleId === 'VR-004');
+  assert.equal(noVr003_4.length, 0, 'no VR-003/VR-004 after combined R3+R4 repair');
+});
