@@ -2,6 +2,8 @@
 name: process-validation-and-quality-scoring
 description: Orchestrate the full V1–V9 validation suite across all BP-SKILL process artifacts and produce a 0-100 quality score with band classification. Use this skill when the user wants to validate a complete process documentation set before publication; when they ask "is this ready to publish", "validate the process docs", "run the quality check", or "what is the quality score". Produces a validation report with per-artifact scores, rule-level findings, band classification (A–D), and a publication gate verdict.
 license: MIT
+homepage: https://github.com/overkillhill/mermaid-diagram-bpmn/tree/main/skills/process-validation-and-quality-scoring
+repository: https://github.com/overkillhill/mermaid-diagram-bpmn
 metadata:
   bp_skill_version: "0.2.0"
   status: core
