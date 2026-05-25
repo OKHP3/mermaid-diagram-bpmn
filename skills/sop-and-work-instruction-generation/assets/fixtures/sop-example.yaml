@@ -1,0 +1,44 @@
+sop_metadata_version: "0.1"
+process_id: proc-purchase-approval
+document_id: OKHP3-SOP-proc-purchase-approval-v1.0
+version: "1.0"
+status: approved
+created_date: "2026-05-10"
+effective_date: "2026-05-15"
+review_date: "2027-05-15"
+owner_role: Finance Manager
+approved_by_role: Director
+
+sections_generated:
+  - header
+  - purpose_and_scope
+  - definitions
+  - responsibilities
+  - procedure_steps
+  - exception_handling
+  - business_rules
+  - related_documents
+  - revision_history
+
+related_documents:
+  - type: PIR
+    document_id: proc-purchase-approval
+    filename: pir.yaml
+  - type: PNS
+    document_id: proc-purchase-approval
+    filename: pns.yaml
+  - type: BPMN Diagram
+    document_id: proc-purchase-approval
+    filename: bpmn-beta.mmd
+  - type: RACI Matrix
+    document_id: proc-purchase-approval
+    filename: raci.md
+  - type: SIPOC Table
+    document_id: proc-purchase-approval
+    filename: sipoc.md
+
+revision_history:
+  - version: "1.0"
+    date: "2026-05-10"
+    author_role: Business Analyst
+    summary: Initial approved version following PNS completion and stakeholder review

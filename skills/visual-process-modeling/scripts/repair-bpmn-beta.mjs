@@ -1,0 +1,1 @@
+../../okhp3-bpmn-for-mermaid/scripts/repair-bpmn-beta.mjs

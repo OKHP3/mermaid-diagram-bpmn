@@ -1,0 +1,33 @@
+model_version: "0.1"
+process_id: proc-purchase-approval
+diagram_file: bpmn-beta.mmd
+generated_from: pns.yaml
+generated_date: "2026-05-10"
+direction: LR
+
+validation:
+  validate_bpmn_beta: pass
+  normalize_bpmn_beta: pass
+  lint_process_model: pass
+  has_lanes: true
+  gateway_count: 1
+
+pools:
+  - pool_id: pool-finance
+    pool_name: Purchase Approval
+    lanes:
+      - lane_id: lane-requester
+        lane_name: Requester
+        activities: [act-001]
+      - lane_id: lane-finance-manager
+        lane_name: Finance Manager
+        activities: [act-002, act-003, act-005]
+      - lane_id: lane-procurement
+        lane_name: Procurement Officer
+        activities: [act-004]
+
+dmn_trigger:
+  triggered: false
+  gateway_count: 1
+  threshold: 3
+  reason: Gateway count below DMN trigger threshold of 3

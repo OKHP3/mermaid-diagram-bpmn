@@ -1,0 +1,1 @@
+../../okhp3-process-narrative/scripts/validate-pns.mjs

@@ -1,0 +1,77 @@
+future_state_version: "0.1"
+process_id: proc-purchase-approval
+design_date: "2026-05-05"
+designed_by_role: Business Analyst
+source_artifact: gap-analysis.yaml
+
+resolved_gaps:
+  - gap_id: gap-001
+    resolution: Add a 2-business-day SLA for Director approval enforced via ERP Portal escalation workflow
+    change_item_id: ci-001
+
+  - gap_id: gap-002
+    resolution: Create standard notification email template and automate dispatch on approval or rejection event
+    change_item_id: ci-002
+
+to_be_steps:
+  - id: act-001
+    description: Submit purchase request form with vendor quote attached
+    actor_role_id: role-requester
+    systems: [ERP Portal]
+    confidence: confirmed
+
+  - id: act-002
+    description: Review purchase request for completeness and policy compliance
+    actor_role_id: role-finance-manager
+    systems: [ERP Portal]
+    confidence: confirmed
+
+  - id: act-003
+    description: Approve or reject the purchase request within defined SLA
+    actor_role_id: role-finance-manager
+    systems: [ERP Portal]
+    confidence: confirmed
+
+  - id: act-003b
+    description: Escalate purchase request to Director queue if amount exceeds $10,000
+    actor_role_id: role-finance-manager
+    systems: [ERP Portal]
+    confidence: confirmed
+    notes: ERP Portal to auto-route; SLA of 2 business days applies from escalation timestamp
+
+  - id: act-004
+    description: Issue approved purchase order to vendor
+    actor_role_id: role-procurement
+    systems: [ERP Portal, Email]
+    confidence: confirmed
+
+  - id: act-005
+    description: Send automated outcome notification to requester
+    actor_role_id: role-finance-manager
+    systems: [ERP Portal]
+    confidence: confirmed
+    notes: Automated trigger replaces manual email
+
+open_assumptions:
+  - assumption_id: asm-001
+    description: ERP Portal supports automated escalation triggers — not yet confirmed with IT
+    confidence: assumed
+    resolution_owner: role-procurement
+    target_resolution_date: "2026-06-01"
+
+change_items:
+  - change_item_id: ci-001
+    change_type: modify
+    description: Add 2-business-day SLA to Director escalation path; enforce via ERP Portal workflow
+    effort: medium
+    risk: low
+    dependencies: []
+    owner_role: role-finance-manager
+
+  - change_item_id: ci-002
+    change_type: automate
+    description: Replace manual notification email with automated ERP Portal trigger on approval or rejection event
+    effort: medium
+    risk: low
+    dependencies: [ci-001]
+    owner_role: role-procurement

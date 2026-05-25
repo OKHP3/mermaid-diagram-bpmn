@@ -1,0 +1,1 @@
+../../okhp3-process-discovery/scripts/generate-stakeholder-register.mjs

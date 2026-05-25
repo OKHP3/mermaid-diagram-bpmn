@@ -1,0 +1,1 @@
+../../okhp3-bpmn-for-mermaid/scripts/normalize-bpmn-beta.mjs
