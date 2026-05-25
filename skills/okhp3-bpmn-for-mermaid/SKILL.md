@@ -22,6 +22,9 @@ metadata:
     - pools and lanes
     - process modeling
     - mermaid native BPMN
+  consumes: "pns.yaml"
+  depends_on: ["okhp3-process-narrative"]
+  produces: "bpmn-beta.mmd"
 ---
 
 ## Purpose
@@ -29,6 +32,39 @@ metadata:
 This skill generates and validates `bpmn-beta` Mermaid diagrams — the OverKill Hill P³ BPMN-native diagram type for Mermaid. It maps BPMN 2.0 Descriptive Conformance subset elements to a clean, text-first syntax that process analysts can read and LLMs can produce without syntax repair loops.
 
 The output is valid, copy-paste-ready bpmn-beta syntax in a Mermaid code fence — not a flowchart approximation, not BPMN XML, not a description.
+
+## Pipeline Integration
+
+This skill is the third and final layer of the Business Process Agent Skill Suite:
+
+```
+okhp3-process-discovery → okhp3-process-narrative → okhp3-bpmn-for-mermaid
+```
+
+**Consumes:** `pns.yaml` (output from `okhp3-process-narrative`)  
+**Produces:** `bpmn-beta.mmd` — a valid, copy-paste-ready bpmn-beta Mermaid diagram
+
+**Input mapping from PNS to diagram:**
+
+| PNS field | bpmn-beta construct |
+|---|---|
+| `sections.process_box.inputs` / `outputs` | Start / end event labels |
+| `sections.activity_sequence.activities[].actor_role_id` | Lane assignment |
+| `sections.activity_sequence.activities[].description` | Task label |
+| `sections.decision_points[]` | `xor` gateways with labeled outcome flows |
+| `sections.exception_paths[]` | Additional `end` events with error labels |
+| `sections.roles_and_raci.roles[]` | Pool / lane structure |
+| `sections.systems_and_integrations[]` | `task:service` or `task:receive` assignments |
+
+**Recommended generation order:**
+1. Map `roles_and_raci.roles` → lanes (single org) or pools (multi-org)
+2. Map `activity_sequence.activities` → tasks (use `task:service` when a system is the primary actor)
+3. Map `decision_points` → `xor` gateways with condition labels from `outcomes[].label`
+4. Map `exception_paths` → additional `end` events with the exception label
+5. Anchor `start` / `end` to `process_box.inputs` and `process_box.outputs`
+6. Connect with `-->` flows; use `~~>` only if the process crosses an organizational boundary
+
+---
 
 ## Dual Compliance Requirement
 
@@ -415,3 +451,4 @@ Load when deterministic processing is needed:
 - `scripts/normalize-bpmn-beta.mjs` — canonical formatting
 - `scripts/lint-process-model.mjs` — process modeling quality checks
 - `scripts/generate-element-inventory.mjs` — element count and type summary
+- `scripts/repair-bpmn-beta.mjs` — auto-repair for common repairable errors (missing header, unquoted labels, hyphenated IDs, duplicates, missing start/end)

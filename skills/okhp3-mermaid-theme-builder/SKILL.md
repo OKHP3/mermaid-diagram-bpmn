@@ -9,6 +9,7 @@ metadata:
   homepage: https://okhp3.github.io/mermaid-theme-builder/
   repository: https://github.com/OKHP3/mermaid-theme-builder
   category: diagram-governance
+  produces: "styled-mermaid.md"
 ---
 
 ## Purpose

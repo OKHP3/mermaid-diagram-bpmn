@@ -101,6 +101,7 @@ const REQUIRED_SCRIPTS = [
   'scripts/normalize-bpmn-beta.mjs',
   'scripts/lint-process-model.mjs',
   'scripts/generate-element-inventory.mjs',
+  'scripts/repair-bpmn-beta.mjs',
 ];
 
 for (const script of REQUIRED_SCRIPTS) {
@@ -147,6 +148,7 @@ const REQUIRED_EXAMPLES = [
   'assets/canonical-examples/support-ticket-triage.bpmn-beta.mmd',
   'assets/canonical-examples/employee-onboarding.bpmn-beta.mmd',
   'assets/canonical-examples/cross-pool-collaboration.bpmn-beta.mmd',
+  'assets/canonical-examples/quote-to-order.bpmn-beta.mmd',
 ];
 
 for (const example of REQUIRED_EXAMPLES) {
@@ -194,15 +196,97 @@ test('SKILL.md references all 7 required reference files', () => {
   }
 });
 
-test('SKILL.md references all 4 required script files', () => {
+test('SKILL.md references all 5 required script files', () => {
   const content = readFileSync(resolve(skillRoot, 'SKILL.md'), 'utf8');
   const scripts = [
     'validate-bpmn-beta.mjs',
     'normalize-bpmn-beta.mjs',
     'lint-process-model.mjs',
     'generate-element-inventory.mjs',
+    'repair-bpmn-beta.mjs',
   ];
   for (const script of scripts) {
     assert.ok(content.includes(script), `SKILL.md must reference: ${script}`);
   }
+});
+
+// ─── Pipeline metadata ────────────────────────────────────────────────────────
+
+function parseFrontmatterFm(content) {
+  const m = content.match(/^---\n([\s\S]*?)\n---/);
+  if (!m) return {};
+  const fm = {};
+  for (const line of m[1].split('\n')) {
+    const colon = line.indexOf(':');
+    if (colon === -1) continue;
+    const key = line.slice(0, colon).trim();
+    const val = line.slice(colon + 1).trim().replace(/^["']|["']$/g, '');
+    if (key && !key.startsWith('#') && !key.startsWith('-')) fm[key] = val;
+  }
+  return fm;
+}
+
+test('SKILL.md pipeline metadata: consumes pns.yaml', () => {
+  const content = readFileSync(resolve(skillRoot, 'SKILL.md'), 'utf8');
+  const fm = parseFrontmatterFm(content);
+  assert.ok(
+    (fm.consumes || '').includes('pns.yaml'),
+    `metadata.consumes must reference pns.yaml — got: "${fm.consumes}"`
+  );
+});
+
+test('SKILL.md pipeline metadata: depends_on okhp3-process-narrative', () => {
+  const content = readFileSync(resolve(skillRoot, 'SKILL.md'), 'utf8');
+  const fm = parseFrontmatterFm(content);
+  assert.ok(
+    (fm.depends_on || '').includes('okhp3-process-narrative'),
+    `metadata.depends_on must reference okhp3-process-narrative — got: "${fm.depends_on}"`
+  );
+});
+
+test('SKILL.md pipeline metadata: produces bpmn-beta.mmd', () => {
+  const content = readFileSync(resolve(skillRoot, 'SKILL.md'), 'utf8');
+  const fm = parseFrontmatterFm(content);
+  assert.ok(
+    (fm.produces || '').includes('bpmn-beta.mmd'),
+    `metadata.produces must reference bpmn-beta.mmd — got: "${fm.produces}"`
+  );
+});
+
+// ─── repair-bpmn-beta.mjs export contract ────────────────────────────────────
+
+test('repair-bpmn-beta.mjs exports repairBpmnBeta function', async () => {
+  const { repairBpmnBeta } = await import('../scripts/repair-bpmn-beta.mjs');
+  assert.equal(typeof repairBpmnBeta, 'function', 'repairBpmnBeta must be a function');
+});
+
+test('repairBpmnBeta returns { valid, errors, warnings, repaired, repairs_applied }', async () => {
+  const { repairBpmnBeta } = await import('../scripts/repair-bpmn-beta.mjs');
+  const result = repairBpmnBeta('bpmn-beta\nstart s1 "Start"\ntask:user t1 "Do Work"\nend e1 "End"\ns1 --> t1\nt1 --> e1');
+  assert.ok(Object.prototype.hasOwnProperty.call(result, 'valid'), 'must have valid');
+  assert.ok(Object.prototype.hasOwnProperty.call(result, 'errors'), 'must have errors');
+  assert.ok(Object.prototype.hasOwnProperty.call(result, 'warnings'), 'must have warnings');
+  assert.ok(Object.prototype.hasOwnProperty.call(result, 'repaired'), 'must have repaired');
+  assert.ok(Object.prototype.hasOwnProperty.call(result, 'repairs_applied'), 'must have repairs_applied');
+});
+
+test('repairBpmnBeta: adds missing bpmn-beta header', async () => {
+  const { repairBpmnBeta } = await import('../scripts/repair-bpmn-beta.mjs');
+  const result = repairBpmnBeta('start s1 "Start"\ntask:user t1 "Work"\nend e1 "End"\ns1 --> t1\nt1 --> e1');
+  assert.ok(result.repaired.includes('bpmn-beta'), 'repaired must include bpmn-beta header');
+  assert.ok(result.repairs_applied.some(r => r.startsWith('R1')), 'must record R1 repair');
+});
+
+test('repairBpmnBeta: inserts stub start when missing', async () => {
+  const { repairBpmnBeta } = await import('../scripts/repair-bpmn-beta.mjs');
+  const result = repairBpmnBeta('bpmn-beta\ntask:user t1 "Work"\nend e1 "End"\nt1 --> e1');
+  assert.ok(result.repaired.includes('start '), 'repaired must include a start event');
+  assert.ok(result.repairs_applied.some(r => r.startsWith('R5')), 'must record R5 repair');
+});
+
+test('repairBpmnBeta: inserts stub end when missing', async () => {
+  const { repairBpmnBeta } = await import('../scripts/repair-bpmn-beta.mjs');
+  const result = repairBpmnBeta('bpmn-beta\nstart s1 "Start"\ntask:user t1 "Work"\ns1 --> t1');
+  assert.ok(result.repaired.includes('end '), 'repaired must include an end event');
+  assert.ok(result.repairs_applied.some(r => r.startsWith('R6')), 'must record R6 repair');
 });

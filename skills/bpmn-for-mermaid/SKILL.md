@@ -6,6 +6,7 @@ metadata:
   version: 0.1.0
   author: OverKill Hill P³
   tags: bpmn, mermaid, bpmn-beta, business-process, process-modeling, dsl, workflow, lanes, pools, gateways
+  produces: "bpmn-beta.mmd"
 ---
 
 ## Overview

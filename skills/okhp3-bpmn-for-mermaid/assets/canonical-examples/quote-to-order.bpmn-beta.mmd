@@ -1,0 +1,42 @@
+bpmn-beta
+accTitle: Quote to Order
+accDescr: Sales representative gathers requirements and generates a quote. Discounts above threshold require Sales Manager approval. Finance validates credit before the quote is sent. Accepted quotes are converted to confirmed sales orders.
+
+pool q2o "Quote to Order" {
+
+  lane rep "Sales Representative" {
+    start s1 "Customer Inquiry Received"
+    task:user t1 "Gather Customer Requirements and Confirm Product Specifications"
+    task:user t2 "Generate Quote with Line Items, Pricing, and Applicable Discount"
+    task:user t5 "Send Quote to Customer and Record Delivery in CRM"
+    task:user t6 "Convert Accepted Quote to Confirmed Sales Order in ERP"
+    end e1 "Sales Order Confirmed"
+    end e3 "Quote Declined by Customer"
+  }
+
+  lane mgr "Sales Manager" {
+    xor g1 "Discount Above Threshold?"
+    task:user t3 "Review and Approve Discount Above Standard Threshold"
+  }
+
+  lane finance "Finance" {
+    task:service t4 "Validate Customer Credit Limit Before Issuing Quote"
+    xor g2 "Credit Approved?"
+    xor g3 "Quote Accepted by Customer?"
+    end e2 "Quote Withdrawn: Credit Declined"
+  }
+
+  s1 --> t1
+  t1 --> t2
+  t2 --> g1
+  g1 --> t3: "yes — above threshold"
+  g1 --> t4: "no — within limit"
+  t3 --> t4
+  t4 --> g2
+  g2 --> t5: "approved"
+  g2 --> e2: "declined"
+  t5 --> g3
+  g3 --> t6: "accepted"
+  g3 --> e3: "declined"
+  t6 --> e1
+}
