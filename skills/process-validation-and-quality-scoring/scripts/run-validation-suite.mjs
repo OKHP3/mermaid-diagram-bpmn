@@ -8,28 +8,9 @@
  * Named exports: runValidationSuite(opts) → { valid, errors, warnings, report }
  */
 
-/**
- * Lightweight structural checks — returns pass/fail per rule without importing heavy validators.
- * Full validation uses the actual validate-pir.mjs / validate-pns.mjs scripts from okhp3 skills.
- */
-function checkV8(pir) {
-  const errors = [];
-  const warnings = [];
-  const validation = pir?.validation || {};
-  const score = typeof validation.completeness_score === 'number' ? validation.completeness_score : -1;
-  const ready = validation.ready_for_narrative;
+const BLOCKING_RULES = new Set(['V1', 'V2', 'V3', 'V5', 'V6', 'V8']);
 
-  if (score < 0) errors.push('V8: pir.validation.completeness_score is missing or not a number');
-  else if (score < 70) errors.push(`V8: PIR completeness_score is ${score} — must be ≥70`);
-
-  if (ready !== true) {
-    if (score >= 70) warnings.push('V8: ready_for_narrative is not explicitly true despite score ≥70');
-    else errors.push('V8: ready_for_narrative is not true');
-  }
-
-  return { rule: 'V8', severity: 'error', status: errors.length === 0 ? 'pass' : 'fail', errors, warnings };
-}
-
+// ─── V1: PNS schema completeness ─────────────────────────────────────────────
 function checkV1(pns) {
   const errors = [];
   if (!pns) { errors.push('V1: pns is null or undefined'); return { rule: 'V1', severity: 'error', status: 'fail', errors, warnings: [] }; }
@@ -46,6 +27,7 @@ function checkV1(pns) {
   return { rule: 'V1', severity: 'error', status: errors.length === 0 ? 'pass' : 'fail', errors, warnings: [] };
 }
 
+// ─── V2: Activity/rule completeness ──────────────────────────────────────────
 function checkV2(pns) {
   const errors = [];
   const activities = pns?.activity_sequence?.activities || [];
@@ -60,6 +42,7 @@ function checkV2(pns) {
   return { rule: 'V2', severity: 'error', status: errors.length === 0 ? 'pass' : 'fail', errors, warnings: [] };
 }
 
+// ─── V3: RACI coverage ───────────────────────────────────────────────────────
 function checkV3(pns) {
   const errors = [];
   const matrix = pns?.roles_and_raci?.raci_matrix || [];
@@ -78,6 +61,33 @@ function checkV3(pns) {
   return { rule: 'V3', severity: 'error', status: errors.length === 0 ? 'pass' : 'fail', errors, warnings: [] };
 }
 
+// ─── V4: Activity description style (warning) ────────────────────────────────
+const SUBORDINATE_CONJUNCTIONS = ['when ', 'if ', 'after ', 'before ', 'while '];
+
+function checkV4(pns) {
+  const warnings = [];
+  const activities = pns?.activity_sequence?.activities || [];
+  for (const a of activities) {
+    const desc = typeof a.description === 'string' ? a.description : '';
+    if (!desc) continue;
+    if (desc.includes(';')) {
+      warnings.push(`V4: activity "${a.id}" description contains a semicolon — split into separate activities`);
+    }
+    if (desc.length > 200) {
+      warnings.push(`V4: activity "${a.id}" description exceeds 200 characters (${desc.length})`);
+    }
+    const lower = desc.trimStart().toLowerCase();
+    for (const conj of SUBORDINATE_CONJUNCTIONS) {
+      if (lower.startsWith(conj)) {
+        warnings.push(`V4: activity "${a.id}" description begins with subordinate conjunction "${conj.trim()}" — rewrite as imperative`);
+        break;
+      }
+    }
+  }
+  return { rule: 'V4', severity: 'warning', status: warnings.length === 0 ? 'pass' : 'warn', errors: [], warnings };
+}
+
+// ─── V5: KPI measurability ───────────────────────────────────────────────────
 function checkV5(pns) {
   const errors = [];
   const kpis = Array.isArray(pns?.kpis) ? pns.kpis : [];
@@ -88,6 +98,7 @@ function checkV5(pns) {
   return { rule: 'V5', severity: 'error', status: errors.length === 0 ? 'pass' : 'fail', errors, warnings: [] };
 }
 
+// ─── V6: Decision/exception completeness ─────────────────────────────────────
 function checkV6(pns) {
   const errors = [];
   const dps = Array.isArray(pns?.decision_points) ? pns.decision_points : [];
@@ -103,10 +114,63 @@ function checkV6(pns) {
   return { rule: 'V6', severity: 'error', status: errors.length === 0 ? 'pass' : 'fail', errors, warnings: [] };
 }
 
+// ─── V7: Controls coverage (warning) ─────────────────────────────────────────
+function checkV7(pns) {
+  const warnings = [];
+  if (!Array.isArray(pns?.controls_and_compliance) || pns.controls_and_compliance.length === 0) {
+    warnings.push('V7: controls_and_compliance is empty — add at least one control');
+  }
+  return { rule: 'V7', severity: 'warning', status: warnings.length === 0 ? 'pass' : 'warn', errors: [], warnings };
+}
+
+// ─── V8: PIR completeness gate ───────────────────────────────────────────────
+function checkV8(pir) {
+  const errors = [];
+  const warnings = [];
+  const validation = pir?.validation || {};
+  const score = typeof validation.completeness_score === 'number' ? validation.completeness_score : -1;
+  const ready = validation.ready_for_narrative;
+
+  if (score < 0) errors.push('V8: pir.validation.completeness_score is missing or not a number');
+  else if (score < 70) errors.push(`V8: PIR completeness_score is ${score} — must be ≥70`);
+
+  if (ready !== true) {
+    if (score >= 70) warnings.push('V8: ready_for_narrative is not explicitly true despite score ≥70');
+    else errors.push('V8: ready_for_narrative is not true');
+  }
+
+  return { rule: 'V8', severity: 'error', status: errors.length === 0 ? 'pass' : 'fail', errors, warnings };
+}
+
+// ─── V9: BPMN structural soundness (warning) ─────────────────────────────────
+const BPMN_HEADER_RE = /^\s*bpmn-beta\b/m;
+const BPMN_NODE_RE = /\b(start|end|task|event|gateway)\b/i;
+const BPMN_FLOW_RE = /--?>|~~>/;
+
+function checkV9(bpmn) {
+  const warnings = [];
+  if (!bpmn || typeof bpmn !== 'string' || bpmn.trim().length === 0) {
+    return { rule: 'V9', severity: 'warning', status: 'warn', errors: [], warnings: ['V9: bpmn is empty or not a string'] };
+  }
+  if (!BPMN_HEADER_RE.test(bpmn)) {
+    warnings.push('V9: bpmn-beta diagram is missing the "bpmn-beta" header keyword');
+  }
+  if (!BPMN_NODE_RE.test(bpmn)) {
+    warnings.push('V9: bpmn-beta diagram has no recognisable node types (start/end/task/event/gateway)');
+  }
+  if (!BPMN_FLOW_RE.test(bpmn)) {
+    warnings.push('V9: bpmn-beta diagram has no flow arrows (-->, ->>, ~~>)');
+  }
+  if (!bpmn.includes('lane ') && !bpmn.includes('pool ')) {
+    warnings.push('V9: bpmn-beta diagram has no pool or lane definitions — consider adding swimlanes');
+  }
+  return { rule: 'V9', severity: 'warning', status: warnings.length === 0 ? 'pass' : 'warn', errors: [], warnings };
+}
+
+// ─── Scoring helpers ──────────────────────────────────────────────────────────
 function scorePns(pns) {
   const stored = pns?.validation?.pns_quality_score;
   if (typeof stored === 'number') return stored;
-  // Rough heuristic if score not present
   let score = 0;
   if (pns?.process_box?.trigger) score += 15;
   const acts = pns?.activity_sequence?.activities || [];
@@ -119,6 +183,7 @@ function scorePns(pns) {
   return score;
 }
 
+// ─── Main export ──────────────────────────────────────────────────────────────
 /**
  * @param {{ pir?: object, pns?: object, bpmn?: string }} opts
  * @returns {{ valid: boolean, errors: string[], warnings: string[], report: object }}
@@ -127,9 +192,9 @@ export function runValidationSuite(opts = {}) {
   const { pir, pns, bpmn } = opts;
   const errors = [];
   const warnings = [];
-
   const rulesRun = [];
 
+  // V8: PIR gate — always run
   const v8 = checkV8(pir || {});
   rulesRun.push(v8);
 
@@ -137,42 +202,35 @@ export function runValidationSuite(opts = {}) {
     rulesRun.push(checkV1(pns));
     rulesRun.push(checkV2(pns));
     rulesRun.push(checkV3(pns));
+    rulesRun.push(checkV4(pns));   // V4: style warnings (was missing)
     rulesRun.push(checkV5(pns));
     rulesRun.push(checkV6(pns));
-
-    const v7Warnings = [];
-    if (!Array.isArray(pns.controls_and_compliance) || pns.controls_and_compliance.length === 0) {
-      v7Warnings.push('V7: controls_and_compliance is empty');
-    }
-    rulesRun.push({ rule: 'V7', severity: 'warning', status: v7Warnings.length === 0 ? 'pass' : 'warn', errors: [], warnings: v7Warnings });
+    rulesRun.push(checkV7(pns));
   } else {
     warnings.push('pns not provided — V1–V7 checks skipped');
   }
 
   if (bpmn) {
-    const hasLane = bpmn.includes('lane ');
-    rulesRun.push({
-      rule: 'V9', severity: 'warning',
-      status: hasLane ? 'pass' : 'warn',
-      errors: [],
-      warnings: hasLane ? [] : ['V9: bpmn-beta diagram has no lane definitions'],
-    });
+    rulesRun.push(checkV9(bpmn));
   } else {
     warnings.push('bpmn not provided — V9 check skipped');
   }
 
-  // Collect all errors/warnings
+  // Collect all rule-level errors/warnings into top-level arrays
   for (const r of rulesRun) {
     errors.push(...r.errors);
     warnings.push(...r.warnings);
   }
 
-  // Compute scores
+  // Scores
   const pirScore = v8.status === 'pass' ? 100 : 30;
   const pnsScore = pns ? scorePns(pns) : 0;
-  const bpmnScore = bpmn ? (bpmn.includes('lane ') ? 100 : 50) : 0;
+  const bpmnScore = bpmn
+    ? (checkV9(bpmn).status === 'pass' ? 100 : 60)
+    : 0;
 
-  const weights = pns ? (bpmn ? { pir: 0.2, pns: 0.6, bpmn: 0.2 } : { pir: 0.25, pns: 0.75, bpmn: 0 })
+  const weights = pns
+    ? (bpmn ? { pir: 0.2, pns: 0.6, bpmn: 0.2 } : { pir: 0.25, pns: 0.75, bpmn: 0 })
     : { pir: 1, pns: 0, bpmn: 0 };
 
   const composite = Math.round(
@@ -180,27 +238,33 @@ export function runValidationSuite(opts = {}) {
   );
 
   const band = composite >= 90 ? 'A' : composite >= 75 ? 'B' : composite >= 50 ? 'C' : 'D';
-  const readyForPublication = band === 'A' || band === 'B';
+
+  // Publication gate: band must be A or B AND no blocking-rule errors
+  const hasBlockingErrors = rulesRun.some(r => BLOCKING_RULES.has(r.rule) && r.status === 'fail');
+  const readyForPublication = (band === 'A' || band === 'B') && !hasBlockingErrors;
 
   const report = {
-    rules_run: rulesRun.map(r => ({ rule_id: r.rule, severity: r.severity, status: r.status, findings: [...r.errors, ...r.warnings] })),
+    rules_run: rulesRun.map(r => ({
+      rule_id: r.rule,
+      severity: r.severity,
+      status: r.status,
+      findings: [...r.errors, ...r.warnings],
+    })),
     artifact_scores: { pir: pirScore, pns: pns ? pnsScore : null, bpmn: bpmn ? bpmnScore : null },
     composite_score: composite,
     band,
     ready_for_publication: readyForPublication,
-    blocking_errors: errors,
+    blocking_errors: errors.filter((_, i) => {
+      const src = rulesRun.find(r => BLOCKING_RULES.has(r.rule) && r.errors.includes(errors[i]));
+      return src !== undefined;
+    }),
     recommendations: warnings,
   };
 
-  return {
-    valid: errors.length === 0,
-    errors,
-    warnings,
-    report,
-  };
+  return { valid: errors.length === 0, errors, warnings, report };
 }
 
-// ─── CLI entrypoint ──────────────────────────────────────────────────────────
+// ─── CLI entrypoint ───────────────────────────────────────────────────────────
 if (process.argv[1] && new URL(import.meta.url).pathname === process.argv[1]) {
   const result = runValidationSuite({});
   console.log('Composite score:', result.report.composite_score, '| Band:', result.report.band);
