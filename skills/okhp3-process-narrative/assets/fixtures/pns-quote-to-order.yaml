@@ -1,0 +1,311 @@
+pns_version: "0.1"
+process_id: proc-003
+process_name: Quote to Order
+process_owner_role_id: sales_manager
+version: "1.0"
+status: draft
+effective_date: "2026-06-01"
+review_cycle: semi-annual
+retention_period: 5 years
+apqc_pcf_mapping: "4.2 — Manage sales orders"
+
+babok_core_concepts:
+  change: An uncommitted customer pricing inquiry is transformed into a confirmed sales order with a binding delivery commitment, changing the organization's revenue pipeline and fulfillment obligation state.
+  need: Sales representatives lack a structured workflow for converting informal customer pricing discussions into legally binding orders, creating revenue leakage and fulfillment mismatches.
+  solution: A structured quote generation, customer approval, and order confirmation workflow backed by CRM and ERP integration that converts validated customer requirements into committed sales orders.
+  stakeholders: Sales Representatives initiating quotes, customers reviewing and accepting, Sales Manager approving discounts, Finance validating credit, Operations committing fulfillment dates.
+  value: Shortens quote-to-order cycle time; reduces pricing errors through ERP-validated quote generation; improves forecast accuracy by converting pipeline probability to committed orders.
+  context: Operates within a B2B sales environment; quotes above discount threshold require Sales Manager approval; order commitments are binding under standard commercial terms; subject to credit limit controls.
+
+sections:
+  process_box:
+    trigger: Sales Representative initiates a quote request for a prospective or existing customer
+    inputs:
+      - name: Customer requirements document or verbal briefing
+        source: Customer communicated to Sales Representative
+      - name: Approved product catalog and pricing
+        source: ERP product and pricing master data
+      - name: Customer credit status
+        source: Finance credit assessment in ERP
+    outputs:
+      - name: Confirmed sales order
+        consumer: Operations team for fulfillment scheduling
+      - name: Customer order confirmation
+        consumer: Customer (external)
+      - name: CRM pipeline update
+        consumer: Sales Manager and Finance for forecasting
+    criteria: Quote delivered to customer within 24 hours of request; order confirmed within 48 hours of customer acceptance; all orders traceable to an approved quote reference
+    resources: CRM, ERP, Sales Representative selling capacity, Finance credit check access
+    responsibilities: Sales Manager (process owner and discount approver); Sales Representative (quote author and customer interface); Finance (credit validation); Operations (delivery commitment)
+    risks: Pricing errors due to outdated catalog; commitment made on items with insufficient inventory; credit extension to customer exceeding approved limit
+
+  activity_sequence:
+    activities:
+      - id: act-01
+        description: Gather customer requirements and confirm product specifications for the quote
+        actor_role_id: rep
+        inputs:
+          - Customer requirements brief
+          - Product catalog
+        outputs:
+          - Requirements summary
+        systems:
+          - CRM
+        preconditions: Customer account exists in CRM or is created before proceeding
+        postconditions: Requirements summary attached to the CRM opportunity record
+      - id: act-02
+        description: Generate quote with line items, pricing, and applicable discount from ERP
+        actor_role_id: rep
+        inputs:
+          - Requirements summary
+          - ERP pricing master
+          - Approved discount schedule
+        outputs:
+          - Draft quote document
+        systems:
+          - ERP
+          - CRM
+        preconditions: Requirements summary is attached to CRM opportunity
+        postconditions: Draft quote is generated with a unique quote reference number in ERP
+      - id: act-03
+        description: Obtain Sales Manager approval when quote includes discount above the standard threshold
+        actor_role_id: sales_manager
+        inputs:
+          - Draft quote document
+          - Margin impact report
+        outputs:
+          - Approval decision
+        systems:
+          - ERP
+        preconditions: Quote discount percentage exceeds the standard approval threshold
+        postconditions: Approval or rejection recorded against quote reference in ERP
+      - id: act-04
+        description: Validate customer credit limit before issuing quote to ensure order can be fulfilled
+        actor_role_id: finance
+        inputs:
+          - Draft quote document
+          - Customer credit record
+        outputs:
+          - Credit validation note
+        systems:
+          - ERP
+        preconditions: Draft quote is available with total order value
+        postconditions: Credit hold flag cleared or raised on the customer account
+      - id: act-05
+        description: Send quote to customer and record delivery in CRM for follow-up tracking
+        actor_role_id: rep
+        inputs:
+          - Approved quote document
+          - Credit validation clearance
+        outputs:
+          - Delivered quote
+          - CRM follow-up task
+        systems:
+          - CRM
+          - Email
+        preconditions: Quote is approved (if discount applies) and credit is cleared
+        postconditions: Customer has received the quote; CRM follow-up task is scheduled
+      - id: act-06
+        description: Convert accepted quote to a confirmed sales order in ERP
+        actor_role_id: rep
+        inputs:
+          - Customer acceptance confirmation
+          - Approved quote reference
+        outputs:
+          - Confirmed sales order
+          - Order acknowledgement to customer
+        systems:
+          - ERP
+          - CRM
+        preconditions: Customer has communicated acceptance of the quote
+        postconditions: Sales order created in ERP; CRM opportunity marked as closed-won; Operations notified
+
+  roles_and_raci:
+    roles:
+      - role_id: rep
+        role_name: Sales Representative
+      - role_id: customer
+        role_name: Customer
+      - role_id: sales_manager
+        role_name: Sales Manager
+      - role_id: finance
+        role_name: Finance (Credit)
+      - role_id: operations
+        role_name: Operations
+    raci_matrix:
+      - activity_id: act-01
+        responsible:
+          - rep
+        accountable: rep
+        consulted:
+          - customer
+        informed:
+          - sales_manager
+      - activity_id: act-02
+        responsible:
+          - rep
+        accountable: sales_manager
+        consulted:
+          - finance
+        informed:
+          - customer
+      - activity_id: act-03
+        responsible:
+          - sales_manager
+        accountable: sales_manager
+        consulted:
+          - rep
+        informed:
+          - finance
+      - activity_id: act-04
+        responsible:
+          - finance
+        accountable: finance
+        consulted:
+          - sales_manager
+        informed:
+          - rep
+      - activity_id: act-05
+        responsible:
+          - rep
+        accountable: sales_manager
+        consulted:
+          - customer
+        informed:
+          - operations
+      - activity_id: act-06
+        responsible:
+          - rep
+        accountable: sales_manager
+        consulted:
+          - finance
+          - operations
+        informed:
+          - customer
+
+  business_rules:
+    - id: br-01
+      description: Discounts exceeding 15% of list price require Sales Manager written approval before the quote is issued
+      source: Sales Policy SP-04 §2.1
+      applies_to: act-03
+      rationale: Discounts above 15% materially reduce margin; senior review ensures strategic intent rather than ad-hoc negotiation
+    - id: br-02
+      description: Quotes issued to customers with an active credit hold must not be converted to orders until the hold is resolved
+      source: Finance Credit Policy CP-07 §3.3
+      applies_to: act-04
+      rationale: Converting a quote to order for a credit-held customer creates irrecoverable receivables risk
+    - id: br-03
+      description: All quote references must be generated from ERP; manually formatted quotes are not valid for order conversion
+      source: Revenue Recognition Policy RR-02
+      applies_to: act-02
+      rationale: ERP-generated quotes provide the audit trail required for revenue recognition under IFRS 15
+
+  decision_points:
+    - id: dp-01
+      description: Determine whether the quote discount requires Sales Manager approval
+      activity_id: act-02
+      criteria: Quote discount percentage compared against the standard approval threshold from ERP pricing rules
+      outcomes:
+        - label: Discount within standard threshold
+          next_activity: act-04
+        - label: Discount exceeds threshold — approval required
+          next_activity: act-03
+    - id: dp-02
+      description: Determine whether customer credit status permits order fulfillment
+      activity_id: act-04
+      criteria: Customer credit exposure after this order compared against approved credit limit in ERP
+      outcomes:
+        - label: Credit cleared
+          next_activity: act-05
+        - label: Credit hold triggered
+          next_activity: act-04
+    - id: dp-03
+      description: Determine whether customer accepts or declines the quote
+      activity_id: act-05
+      criteria: Customer communicates acceptance or declines within the quote validity period
+      outcomes:
+        - label: Customer accepts
+          next_activity: act-06
+        - label: Customer declines or does not respond
+          next_activity: act-05
+
+  exception_paths:
+    - id: ep-01
+      description: Quote validity expires before customer responds
+      trigger: Quote validity date passes without customer acceptance or rejection recorded in CRM
+      handling: Sales Representative contacts customer for decision; quote re-issued with updated pricing if product catalog has changed since original issue
+      owner_role_id: rep
+      escalation_path: Sales Manager reviews opportunity status after second expiry; decision to continue pursuit or close opportunity
+    - id: ep-02
+      description: ERP pricing master is outdated at time of quote generation
+      trigger: Finance or Operations flags a discrepancy between the issued quote price and the current ERP price at order conversion
+      handling: Quote voided; corrected quote generated from current ERP master and re-sent to customer with explanation
+      owner_role_id: sales_manager
+      escalation_path: Sales Manager approves exception if customer disputes price correction; Finance documents variance
+
+  kpis:
+    - id: kpi-01
+      name: Quote-to-Order Conversion Rate
+      formula: (Quotes converted to confirmed orders / Total quotes issued) x 100
+      data_source: ERP quote and sales order records linked by quote reference
+      target: 40%
+      frequency: monthly
+    - id: kpi-02
+      name: Quote Cycle Time
+      formula: Average of (quote delivery timestamp - quote request timestamp) in hours
+      data_source: CRM opportunity event log
+      target: under 24 hours
+      frequency: weekly
+
+  systems_and_integrations:
+    - system_name: CRM
+      role: processor
+      integration_type: ui
+      activities_supported:
+        - act-01
+        - act-02
+        - act-05
+        - act-06
+    - system_name: ERP
+      role: repository
+      integration_type: api
+      activities_supported:
+        - act-02
+        - act-03
+        - act-04
+        - act-06
+
+  controls_and_compliance:
+    - id: ctrl-01
+      type: preventive
+      description: ERP enforces discount threshold rule — quotes above threshold cannot be issued without approval workflow completion
+      standard_ref: Sales Policy SP-04 §2.1
+      activities_covered:
+        - act-02
+        - act-03
+      waiver: ""
+    - id: ctrl-02
+      type: preventive
+      description: Credit hold flag in ERP blocks order conversion for customers with outstanding credit issues
+      standard_ref: Finance Credit Policy CP-07 §3.3
+      activities_covered:
+        - act-04
+        - act-06
+      waiver: ""
+
+  open_questions:
+    - id: oq-01
+      question: Should multi-year contract quotes follow the same workflow, or require a separate approval chain for commitments exceeding 12 months?
+      owner_role_id: sales_manager
+      target_resolution_date: "2026-06-20"
+
+  revision_history:
+    - version: "1.0"
+      date: "2026-05-25"
+      author_role: Business Analyst
+      summary: Initial PNS drafted from PIR proc-003 (quote-to-order intake)
+
+validation:
+  pns_quality_score: null
+  ready_for_publication: null
+  ready_for_bpmn_modeling: null

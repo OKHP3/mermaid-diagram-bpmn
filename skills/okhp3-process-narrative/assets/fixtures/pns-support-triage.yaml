@@ -1,0 +1,281 @@
+pns_version: "0.1"
+process_id: proc-002
+process_name: Support Triage
+process_owner_role_id: support_lead
+version: "1.0"
+status: draft
+effective_date: "2026-06-01"
+review_cycle: quarterly
+retention_period: 2 years
+apqc_pcf_mapping: "8.2 — Manage customer service requests"
+
+babok_core_concepts:
+  change: An unassigned customer incident transitions to an acknowledged, categorized, and routed support ticket with an assigned agent and documented resolution path.
+  need: Customer-reported incidents remain unresolved and untracked until assigned to a qualified agent, creating response time risk and customer satisfaction degradation.
+  solution: A structured triage workflow that classifies incoming incidents by priority and technical domain, assigns them to qualified agents, and escalates within defined SLA windows.
+  stakeholders: Customers submitting incidents, Support Agents resolving them, Support Lead overseeing SLA compliance, Engineering team handling escalations, Product team tracking reported defects.
+  value: Reduces mean time to first response; improves first-contact resolution rate; provides audit trail for SLA compliance reporting; surfaces recurring defect patterns for engineering.
+  context: Operates within a customer-facing support portal environment; SLA targets governed by customer contracts; escalation paths integrated with engineering ticket tracking system.
+
+sections:
+  process_box:
+    trigger: Customer submits a support ticket via the customer portal or email
+    inputs:
+      - name: Customer support ticket
+        source: Customer via support portal or email-to-ticket integration
+      - name: Customer account record
+        source: CRM system lookup by ticket submitter ID
+    outputs:
+      - name: Categorized and assigned support ticket
+        consumer: Assigned support agent
+      - name: Acknowledgement notification
+        consumer: Customer
+      - name: Escalation ticket
+        consumer: Engineering team (when applicable)
+    criteria: Every submitted ticket acknowledged within 15 minutes; categorized and assigned within 30 minutes; SLA clock started on acknowledgement
+    resources: Support Portal, CRM, Engineering ticketing system, Support Agent capacity matrix
+    responsibilities: Support Lead (process owner, escalation authority); Support Agent (triage and resolution); Engineering (L3 escalation handler)
+    risks: SLA breach due to backlog; misclassification routing tickets to wrong agent skill set; duplicate tickets consuming agent capacity
+
+  activity_sequence:
+    activities:
+      - id: act-01
+        description: Receive and log incoming support ticket from portal or email integration
+        actor_role_id: support_system
+        inputs:
+          - Customer submission
+        outputs:
+          - Logged ticket with reference number
+        systems:
+          - Support Portal
+        preconditions: Customer has an active account in the support portal
+        postconditions: Ticket is logged with timestamp; SLA clock initialized; customer receives acknowledgement number
+      - id: act-02
+        description: Categorize ticket by issue type and determine priority level
+        actor_role_id: support_agent
+        inputs:
+          - Logged ticket
+          - Customer account record
+        outputs:
+          - Categorized ticket with priority tag
+        systems:
+          - Support Portal
+          - CRM
+        preconditions: Ticket is in the new queue
+        postconditions: Ticket has category and priority assigned; routing logic can execute
+      - id: act-03
+        description: Assign ticket to the agent with the matching skill set and available capacity
+        actor_role_id: support_lead
+        inputs:
+          - Categorized ticket
+          - Agent skill matrix
+          - Current queue depth per agent
+        outputs:
+          - Assigned ticket
+        systems:
+          - Support Portal
+        preconditions: Ticket is categorized and prioritized
+        postconditions: Agent notified; ticket appears in assigned agent's queue; assignment logged
+      - id: act-04
+        description: Investigate issue and attempt resolution within the assigned SLA window
+        actor_role_id: support_agent
+        inputs:
+          - Assigned ticket
+          - Knowledge base articles
+          - System access logs
+        outputs:
+          - Resolution notes
+          - Customer communication
+        systems:
+          - Support Portal
+          - Knowledge Base
+        preconditions: Ticket is assigned to the agent
+        postconditions: Resolution documented; customer updated; ticket marked resolved or escalated
+      - id: act-05
+        description: Escalate ticket to engineering team when issue exceeds L2 resolution capability
+        actor_role_id: support_lead
+        inputs:
+          - Unresolved ticket
+          - Agent investigation notes
+        outputs:
+          - Engineering escalation ticket
+          - Customer escalation notification
+        systems:
+          - Engineering Ticketing System
+          - Support Portal
+        preconditions: Agent confirms issue is beyond L2 capability or SLA is at risk
+        postconditions: Engineering ticket created and linked; customer notified of escalation; SLA clock transferred
+
+  roles_and_raci:
+    roles:
+      - role_id: customer
+        role_name: Customer
+      - role_id: support_agent
+        role_name: Support Agent
+      - role_id: support_lead
+        role_name: Support Lead
+      - role_id: support_system
+        role_name: Support Portal (automated)
+      - role_id: engineering
+        role_name: Engineering Team
+    raci_matrix:
+      - activity_id: act-01
+        responsible:
+          - support_system
+        accountable: support_lead
+        consulted: []
+        informed:
+          - customer
+      - activity_id: act-02
+        responsible:
+          - support_agent
+        accountable: support_lead
+        consulted:
+          - customer
+        informed:
+          - support_lead
+      - activity_id: act-03
+        responsible:
+          - support_lead
+        accountable: support_lead
+        consulted:
+          - support_agent
+        informed:
+          - support_agent
+      - activity_id: act-04
+        responsible:
+          - support_agent
+        accountable: support_lead
+        consulted:
+          - engineering
+        informed:
+          - customer
+      - activity_id: act-05
+        responsible:
+          - support_lead
+        accountable: support_lead
+        consulted:
+          - support_agent
+        informed:
+          - customer
+          - engineering
+
+  business_rules:
+    - id: br-01
+      description: P1 (Critical) tickets must be assigned to an agent within 5 minutes of receipt
+      source: Customer SLA Agreement — Tier 1 §3.2
+      applies_to: act-03
+      rationale: P1 issues indicate service outages or data risk; delay causes compounding customer impact
+    - id: br-02
+      description: Tickets unresolved after 80% of SLA window must be flagged for Support Lead review
+      source: Support Operations Runbook v2.1
+      applies_to: act-04
+      rationale: Early warning enables proactive escalation before SLA breach
+    - id: br-03
+      description: Duplicate tickets must be linked to the primary ticket and closed without new SLA assignment
+      source: Support Operations Runbook v2.1 §4.3
+      applies_to: act-02
+      rationale: Duplicate SLA clocks artificially inflate queue volume and misrepresent backlog
+
+  decision_points:
+    - id: dp-01
+      description: Determine whether the categorized ticket is a duplicate of an existing open ticket
+      activity_id: act-02
+      criteria: Ticket matches existing open ticket by customer account, issue description similarity, and affected system
+      outcomes:
+        - label: Duplicate identified
+          next_activity: act-02
+        - label: Unique ticket confirmed
+          next_activity: act-03
+    - id: dp-02
+      description: Determine whether the ticket can be resolved at L2 or requires engineering escalation
+      activity_id: act-04
+      criteria: Agent has exhausted knowledge base and L2 diagnostic tools without resolution; issue requires code-level investigation
+      outcomes:
+        - label: Resolved at L2
+          next_activity: act-04
+        - label: Escalation required
+          next_activity: act-05
+
+  exception_paths:
+    - id: ep-01
+      description: SLA breach — ticket not assigned within required window
+      trigger: SLA assignment window expires without an agent assignment recorded
+      handling: Support Portal triggers automatic alert to Support Lead; ticket promoted to P1 regardless of original priority; assigned immediately
+      owner_role_id: support_lead
+      escalation_path: Support Manager notified if breach exceeds 30 minutes; root cause documented in incident log
+    - id: ep-02
+      description: Customer unreachable during resolution attempt
+      trigger: Agent attempts contact three times within 48 hours with no customer response
+      handling: Ticket placed in pending-customer status; SLA clock paused; automated reminder sent to customer every 24 hours for up to 5 days
+      owner_role_id: support_agent
+      escalation_path: Ticket closed as resolved-no-response after 5 days of no customer contact; customer notified by email
+
+  kpis:
+    - id: kpi-01
+      name: Mean Time to First Response (MTTR-1)
+      formula: Sum of (first agent response timestamp - ticket submission timestamp) / Total tickets
+      data_source: Support Portal response audit log
+      target: under 15 minutes
+      frequency: weekly
+    - id: kpi-02
+      name: First Contact Resolution Rate (FCR)
+      formula: (Tickets resolved on first agent contact / Total tickets handled) x 100
+      data_source: Support Portal resolution and re-open event log
+      target: 70%
+      frequency: monthly
+
+  systems_and_integrations:
+    - system_name: Support Portal
+      role: processor
+      integration_type: ui
+      activities_supported:
+        - act-01
+        - act-02
+        - act-03
+        - act-04
+        - act-05
+    - system_name: CRM
+      role: repository
+      integration_type: api
+      activities_supported:
+        - act-02
+    - system_name: Engineering Ticketing System
+      role: notifier
+      integration_type: api
+      activities_supported:
+        - act-05
+
+  controls_and_compliance:
+    - id: ctrl-01
+      type: detective
+      description: Automated SLA breach alert triggered when 80% of SLA window is consumed without resolution
+      standard_ref: ISO 9001 §9.1.2
+      activities_covered:
+        - act-04
+        - act-05
+      waiver: ""
+    - id: ctrl-02
+      type: preventive
+      description: Duplicate ticket detection check applied automatically on new ticket categorization
+      standard_ref: Support Operations Runbook v2.1 §4.3
+      activities_covered:
+        - act-02
+      waiver: ""
+
+  open_questions:
+    - id: oq-01
+      question: Should P2 tickets with no update for more than 4 hours auto-escalate to L2 supervision, or remain with the assigned agent?
+      owner_role_id: support_lead
+      target_resolution_date: "2026-06-15"
+
+  revision_history:
+    - version: "1.0"
+      date: "2026-05-25"
+      author_role: Business Analyst
+      summary: Initial PNS drafted from PIR proc-002 (support triage intake)
+
+validation:
+  pns_quality_score: null
+  ready_for_publication: null
+  ready_for_bpmn_modeling: null

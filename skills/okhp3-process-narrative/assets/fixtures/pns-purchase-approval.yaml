@@ -1,0 +1,257 @@
+pns_version: "0.1"
+process_id: proc-001
+process_name: Purchase Approval
+process_owner_role_id: finance_mgr
+version: "1.0"
+status: draft
+effective_date: "2026-06-01"
+review_cycle: annual
+retention_period: 3 years
+apqc_pcf_mapping: "13.1 — Procure materials and services"
+
+babok_core_concepts:
+  change: An unvalidated spend request is transformed into an authorized purchase order or a documented rejection, changing the organization's committed expenditure state.
+  need: Uncontrolled purchasing exposes the organization to budget overruns and unauthorized vendor relationships; a governed approval workflow addresses this risk.
+  solution: A structured purchase request and approval workflow enforced through the Procurement Portal, ensuring each spend item is reviewed against budget and policy before commitment.
+  stakeholders: Employees submitting requests, Finance Manager approving, Finance Clerks processing, Vendors receiving orders, internal Audit monitoring compliance.
+  value: Reduces unauthorized spend by enforcing approval thresholds; improves audit traceability; SLA compliance rate targets 95% of requests processed within one business day.
+  context: Operates within an ERP-governed procurement environment subject to financial authorization controls; cross-functional between requesting departments and Finance.
+
+sections:
+  process_box:
+    trigger: Employee submits a purchase request form via the Procurement Portal
+    inputs:
+      - name: Purchase request form
+        source: Employee submitting via Procurement Portal
+      - name: Budget code and cost center
+        source: Employee-provided during form submission
+    outputs:
+      - name: Approved purchase order
+        consumer: Vendor onboarding and accounts payable
+      - name: Rejection notification
+        consumer: Requesting employee
+    criteria: Purchase order issued or rejection communicated within one business day of submission; all approved orders traceable to a valid budget code
+    resources: Procurement Portal, ERP system, Finance Manager review capacity
+    responsibilities: Finance Manager (process owner and approver); Finance Clerk (processor and data entry); Employee (initiator)
+    risks: Budget overrun due to duplicate requests; unauthorized vendor engagement; SLA breach from review backlog
+
+  activity_sequence:
+    activities:
+      - id: act-01
+        description: Submit purchase request form with required fields and supporting documentation
+        actor_role_id: employee
+        inputs:
+          - Purchase need description
+          - Budget code
+        outputs:
+          - Submitted purchase request
+        systems:
+          - Procurement Portal
+        preconditions: Employee is authenticated in the Procurement Portal
+        postconditions: Request is logged with a unique reference number and routed to Finance queue
+      - id: act-02
+        description: Review purchase request for completeness and policy compliance
+        actor_role_id: finance_clerk
+        inputs:
+          - Submitted purchase request
+          - Vendor approved status
+        outputs:
+          - Review assessment note
+        systems:
+          - Procurement Portal
+          - ERP
+        preconditions: Request is in Finance queue
+        postconditions: Review note attached; request escalated or recommended for decision
+      - id: act-03
+        description: Approve or reject the purchase request based on budget availability and policy rules
+        actor_role_id: finance_mgr
+        inputs:
+          - Review assessment note
+          - Budget availability report
+        outputs:
+          - Approval decision
+        systems:
+          - ERP
+        preconditions: Finance Clerk review note is attached
+        postconditions: Decision recorded; request status updated in ERP
+      - id: act-04
+        description: Issue purchase order and notify vendor upon approval
+        actor_role_id: finance_clerk
+        inputs:
+          - Approval decision
+        outputs:
+          - Purchase order
+          - Vendor notification
+        systems:
+          - ERP
+          - Email
+        preconditions: Approval decision is recorded as approved
+        postconditions: PO number assigned; vendor notified; request status set to ordered
+      - id: act-05
+        description: Notify requesting employee of rejection with documented reason
+        actor_role_id: finance_clerk
+        inputs:
+          - Rejection decision
+        outputs:
+          - Rejection notification
+        systems:
+          - Procurement Portal
+          - Email
+        preconditions: Approval decision is recorded as rejected
+        postconditions: Employee notified; request status set to rejected; reason recorded
+
+  roles_and_raci:
+    roles:
+      - role_id: employee
+        role_name: Requesting Employee
+      - role_id: finance_clerk
+        role_name: Finance Clerk
+      - role_id: finance_mgr
+        role_name: Finance Manager
+      - role_id: audit
+        role_name: Internal Audit
+    raci_matrix:
+      - activity_id: act-01
+        responsible:
+          - employee
+        accountable: employee
+        consulted:
+          - finance_clerk
+        informed:
+          - finance_mgr
+      - activity_id: act-02
+        responsible:
+          - finance_clerk
+        accountable: finance_mgr
+        consulted:
+          - employee
+        informed:
+          - audit
+      - activity_id: act-03
+        responsible:
+          - finance_mgr
+        accountable: finance_mgr
+        consulted:
+          - finance_clerk
+        informed:
+          - employee
+      - activity_id: act-04
+        responsible:
+          - finance_clerk
+        accountable: finance_mgr
+        consulted: []
+        informed:
+          - employee
+          - audit
+      - activity_id: act-05
+        responsible:
+          - finance_clerk
+        accountable: finance_mgr
+        consulted: []
+        informed:
+          - employee
+
+  business_rules:
+    - id: br-01
+      description: Purchase requests above $5,000 require Finance Manager approval
+      source: Financial Authorization Policy v3.2
+      applies_to: act-03
+      rationale: Spend above this threshold carries material budget risk requiring senior oversight
+    - id: br-02
+      description: Only vendors on the approved vendor list may be used for new purchase orders
+      source: Procurement Policy §4.1
+      applies_to: act-02
+      rationale: Unauthorized vendors expose the organization to quality, compliance, and payment risks
+    - id: br-03
+      description: Purchase requests must include a valid budget code before advancing to review
+      source: Finance Operations Procedure FO-12
+      applies_to: act-01
+      rationale: Requests without a valid budget code cannot be allocated to the correct cost center
+
+  decision_points:
+    - id: dp-01
+      description: Finance Manager approves or rejects the purchase request
+      activity_id: act-03
+      criteria: Budget availability confirmed, vendor approved, policy compliance verified, amount within approval authority
+      outcomes:
+        - label: Approved
+          next_activity: act-04
+        - label: Rejected
+          next_activity: act-05
+
+  exception_paths:
+    - id: ep-01
+      description: Duplicate purchase request submitted
+      trigger: Finance Clerk detects identical request (same employee, vendor, amount) within 30 days
+      handling: Flag request as duplicate in Procurement Portal; notify employee; close duplicate without processing
+      owner_role_id: finance_clerk
+      escalation_path: Finance Manager reviews if employee disputes duplicate determination
+    - id: ep-02
+      description: Approval authority limit exceeded
+      trigger: Request amount exceeds Finance Manager approval limit
+      handling: Escalate to Finance Director for approval; SLA extended by one business day
+      owner_role_id: finance_mgr
+      escalation_path: Finance Director approval required; documented in ERP audit trail
+
+  kpis:
+    - id: kpi-01
+      name: Purchase Request SLA Compliance Rate
+      formula: (Requests processed within 1 business day / Total requests) x 100
+      data_source: Procurement Portal workflow timestamps
+      target: 95%
+      frequency: monthly
+    - id: kpi-02
+      name: Unauthorized Vendor Rate
+      formula: (POs issued to non-approved vendors / Total POs issued) x 100
+      data_source: ERP purchase order records vs. approved vendor list
+      target: 0%
+      frequency: monthly
+
+  systems_and_integrations:
+    - system_name: Procurement Portal
+      role: processor
+      integration_type: ui
+      activities_supported:
+        - act-01
+        - act-02
+        - act-05
+    - system_name: ERP
+      role: repository
+      integration_type: api
+      activities_supported:
+        - act-02
+        - act-03
+        - act-04
+
+  controls_and_compliance:
+    - id: ctrl-01
+      type: preventive
+      description: Mandatory budget code validation before request submission is accepted
+      standard_ref: ISO 9001 §8.4.1
+      activities_covered:
+        - act-01
+      waiver: ""
+    - id: ctrl-02
+      type: detective
+      description: Monthly audit report of all purchase orders against approved vendor list
+      standard_ref: ISO 9001 §9.1.1
+      activities_covered:
+        - act-04
+      waiver: ""
+
+  open_questions:
+    - id: oq-01
+      question: Should requests between $1,000 and $5,000 require a second reviewer before Finance Manager decision?
+      owner_role_id: finance_mgr
+      target_resolution_date: "2026-06-15"
+
+  revision_history:
+    - version: "1.0"
+      date: "2026-05-25"
+      author_role: Business Analyst
+      summary: Initial PNS drafted from PIR proc-001 (purchase approval intake)
+
+validation:
+  pns_quality_score: null
+  ready_for_publication: null
+  ready_for_bpmn_modeling: null
