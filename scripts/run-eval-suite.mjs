@@ -208,8 +208,9 @@ async function runCategory(categoryName) {
 
   const passed = results.filter(r => r.passed).length;
   const failed = results.filter(r => !r.passed).length;
+  const weight = typeof manifest.weight === 'number' ? manifest.weight : 20;
 
-  return { category: categoryName, skipped: false, fixtures: results, passed, failed };
+  return { category: categoryName, skipped: false, fixtures: results, passed, failed, weight };
 }
 
 // ─── Main ─────────────────────────────────────────────────────────────────────
@@ -233,6 +234,8 @@ console.log(`\n${BOLD}BP-SKILL Eval Suite${RESET}  (${categoryNames.length} cate
 
 let totalPass = 0;
 let totalFail = 0;
+let aggregateScore = 0;
+let totalWeight = 0;
 
 for (const name of categoryNames) {
   const cat = await runCategory(name);
@@ -242,11 +245,17 @@ for (const name of categoryNames) {
     continue;
   }
 
+  const catPassRate = cat.fixtures.length > 0 ? cat.passed / cat.fixtures.length : 0;
+  const catScore = Math.round(catPassRate * cat.weight);
+  aggregateScore += catScore;
+  totalWeight += cat.weight;
+
   const catLabel = cat.failed === 0
     ? `${GREEN}${BOLD}PASS${RESET}`
     : `${RED}${BOLD}FAIL${RESET}`;
 
-  console.log(`  ${catLabel}  ${BOLD}${name}${RESET}  (${cat.passed}/${cat.fixtures.length} fixtures)`);
+  const scoreStr = `${DIM}[${catScore}/${cat.weight}pts]${RESET}`;
+  console.log(`  ${catLabel}  ${BOLD}${name}${RESET}  (${cat.passed}/${cat.fixtures.length} fixtures)  ${scoreStr}`);
 
   for (const f of cat.fixtures) {
     const icon = f.passed ? ok(f.file) : fail(f.file);
@@ -274,6 +283,10 @@ const grandLabel = totalFail === 0
   : `${RED}${BOLD}FAILURES${RESET}`;
 
 const totalFixtures = totalPass + totalFail;
-console.log(`\n  ${grandLabel}  ${totalPass}/${totalFixtures} fixtures passed\n`);
+const scorePct = totalWeight > 0 ? aggregateScore : 0;
+const scoreColor = scorePct >= 80 ? GREEN : scorePct >= 60 ? YELLOW : RED;
+
+console.log(`\n  ${grandLabel}  ${totalPass}/${totalFixtures} fixtures passed`);
+console.log(`  ${BOLD}Aggregate score: ${scoreColor}${scorePct}/${totalWeight}${RESET}\n`);
 
 process.exit(totalFail > 0 ? 1 : 0);

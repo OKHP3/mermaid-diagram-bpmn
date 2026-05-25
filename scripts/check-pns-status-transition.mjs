@@ -4,8 +4,15 @@
  * Enforces the 9-state PNS lifecycle.
  * Rejects any transition that skips a state or goes backwards.
  *
- * Usage: node scripts/check-pns-status-transition.mjs <current_status> <proposed_status>
- * Export: checkPnsStatusTransition(current, proposed) → { valid, errors, warnings, current_status, proposed_status }
+ * Usage (two-string form):
+ *   node scripts/check-pns-status-transition.mjs <current_status> <proposed_status>
+ *
+ * Usage (PNS-file form — reads current status from the PNS YAML document):
+ *   node scripts/check-pns-status-transition.mjs <pns.yaml> <proposed_status>
+ *
+ * Exports:
+ *   checkPnsStatusTransition(current, proposed) → { valid, errors, warnings, current_status, proposed_status }
+ *   checkPnsStatusTransitionFromFile(pnsFilePath, proposedStatus) → Promise<same>
  */
 
 /**
@@ -27,10 +34,12 @@ const PNS_STATES = [
   'archived',
 ];
 
-const STATE_SET = new Set(PNS_STATES);
+const STATE_SET   = new Set(PNS_STATES);
 const STATE_INDEX = new Map(PNS_STATES.map((s, i) => [s, i]));
 
 /**
+ * Validate a status transition given two explicit status strings.
+ *
  * @param {string} current   Current PNS status
  * @param {string} proposed  Proposed PNS status
  * @returns {{ valid: boolean, errors: string[], warnings: string[], current_status: string, proposed_status: string }}
@@ -90,16 +99,91 @@ export function checkPnsStatusTransition(current, proposed) {
   };
 }
 
+/**
+ * Read the current PNS status from a YAML document and validate the proposed transition.
+ * Reads the top-level `status` field from the PNS file.
+ *
+ * @param {string} pnsFilePath   Path to the PNS YAML (or JSON) document
+ * @param {string} proposedStatus  Proposed new status string
+ * @returns {Promise<{ valid: boolean, errors: string[], warnings: string[], current_status: string, proposed_status: string, source_file: string }>}
+ */
+export async function checkPnsStatusTransitionFromFile(pnsFilePath, proposedStatus) {
+  const { readFileSync, existsSync } = await import('node:fs');
+  const { resolve, dirname } = await import('node:path');
+  const { fileURLToPath } = await import('node:url');
+  const here = dirname(fileURLToPath(import.meta.url));
+  const absPath = resolve(pnsFilePath);
+
+  if (!existsSync(absPath)) {
+    return {
+      valid: false,
+      errors: [`PNS file not found: ${pnsFilePath}`],
+      warnings: [],
+      current_status: '',
+      proposed_status: String(proposedStatus || '').trim().toLowerCase(),
+      source_file: pnsFilePath,
+    };
+  }
+
+  let pns;
+  const raw = readFileSync(absPath, 'utf8');
+  if (absPath.endsWith('.json')) {
+    pns = JSON.parse(raw);
+  } else {
+    const { parseYaml } = await import(
+      resolve(here, '../skills/okhp3-process-narrative/scripts/parse-yaml-minimal.mjs')
+    );
+    pns = parseYaml(raw);
+  }
+
+  const currentStatus = String(pns && pns.status ? pns.status : '').trim();
+  if (!currentStatus) {
+    return {
+      valid: false,
+      errors: [`PNS file "${pnsFilePath}" has no top-level "status" field`],
+      warnings: [],
+      current_status: '',
+      proposed_status: String(proposedStatus || '').trim().toLowerCase(),
+      source_file: pnsFilePath,
+    };
+  }
+
+  const result = checkPnsStatusTransition(currentStatus, proposedStatus);
+  return { ...result, source_file: pnsFilePath };
+}
+
+// ─── CLI ──────────────────────────────────────────────────────────────────────
+
 if (process.argv[1] && new URL(import.meta.url).pathname === process.argv[1]) {
-  const [, , current, proposed] = process.argv;
-  if (!current || !proposed) {
-    console.log('Usage: node check-pns-status-transition.mjs <current_status> <proposed_status>');
+  const arg1 = process.argv[2];
+  const arg2 = process.argv[3];
+
+  if (!arg1 || !arg2) {
+    console.log('Usage (two-string form):');
+    console.log('  node check-pns-status-transition.mjs <current_status> <proposed_status>');
+    console.log('');
+    console.log('Usage (PNS-file form — reads current status from document):');
+    console.log('  node check-pns-status-transition.mjs <pns.yaml> <proposed_status>');
+    console.log('');
     console.log(`States: ${PNS_STATES.join(' → ')}`);
     process.exit(0);
   }
-  const result = checkPnsStatusTransition(current, proposed);
+
+  const isPnsFile = arg1.endsWith('.yaml') || arg1.endsWith('.yml') || arg1.endsWith('.json');
+
+  let result;
+  if (isPnsFile) {
+    result = await checkPnsStatusTransitionFromFile(arg1, arg2);
+    if (result.source_file) {
+      console.log(`PNS file: ${result.source_file}`);
+    }
+  } else {
+    result = checkPnsStatusTransition(arg1, arg2);
+  }
+
   console.log(`Transition: ${result.current_status} → ${result.proposed_status}`);
   console.log(`Valid: ${result.valid}`);
+
   if (result.errors.length > 0) {
     for (const e of result.errors) console.error(`  ERROR: ${e}`);
     process.exit(1);

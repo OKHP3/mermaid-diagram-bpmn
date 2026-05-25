@@ -5,6 +5,7 @@
   "validator_module": "skills/okhp3-process-narrative/scripts/validate-pns.mjs",
   "validator_fn": "validatePns",
   "fixture_type": "yaml",
+  "weight": 20,
   "fixtures": [
     { "file": "role-dict-complete.yaml",            "expected": "pass" },
     { "file": "role-dict-provisional-declared.yaml","expected": "pass" },
