@@ -43,11 +43,12 @@ jobs:
         run: pnpm --filter @workspace/mermaid-diagram-bpmn run build
         env:
           NODE_ENV: production
+          BASE_PATH: /mermaid-diagram-bpmn/
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: artifacts/mermaid-diagram-bpmn/dist
+          path: artifacts/mermaid-diagram-bpmn/dist/public
 
   deploy:
     environment:
