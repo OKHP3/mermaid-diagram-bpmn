@@ -9,6 +9,7 @@ const NAV_LINKS = [
   { href: "/architecture", label: "Architecture" },
   { href: "/roadmap", label: "Roadmap" },
   { href: "/about", label: "About" },
+  { href: "/skills", label: "Agent Skills" },
 ];
 
 const GITHUB_REPO = "https://github.com/OKHP3/mermaid-diagram-bpmn";
@@ -78,7 +79,9 @@ export function Layout({ children }: { children: React.ReactNode }) {
           {/* Desktop nav */}
           <nav className="hidden md:flex items-center gap-0.5" aria-label="Main navigation">
             {NAV_LINKS.map(link => {
-              const isActive = location === link.href;
+              const isActive = link.href === "/skills"
+                ? location === "/skills" || location.startsWith("/skills/")
+                : location === link.href;
               return (
                 <Link
                   key={link.href}
@@ -161,7 +164,9 @@ export function Layout({ children }: { children: React.ReactNode }) {
             style={{ borderTop: "1px solid var(--okh-header-border)" }}
           >
             {NAV_LINKS.map(link => {
-              const isActive = location === link.href;
+              const isActive = link.href === "/skills"
+                ? location === "/skills" || location.startsWith("/skills/")
+                : location === link.href;
               return (
                 <Link
                   key={link.href}

@@ -1,0 +1,1071 @@
+# BP-SKILL Agent Skills — React UI Integration Prompt
+
+## For: <https://github.com/OKHP3/mermaid-diagram-bpmn>
+
+## Deployed: <https://okhp3.github.io/mermaid-diagram-bpmn/>
+
+## Featured: <https://overkillhill.com/projects/bpmn-for-mermaid/>
+
+-----
+
+You are working in the existing BPMN for Mermaid React/Vite application:
+
+```
+Repo:        https://github.com/OKHP3/mermaid-diagram-bpmn
+Live app:    https://okhp3.github.io/mermaid-diagram-bpmn/
+Project page: https://overkillhill.com/projects/bpmn-for-mermaid/
+Replit:      https://replit.com/t/overkill-hill/repls/BPMN-for-Mermaid
+```
+
+Enter Plan Mode first. Read the full existing codebase before modifying
+anything. Do not break any existing functionality.
+
+-----
+
+## WHAT THIS PROMPT BUILDS
+
+The existing app has six pages: Home, Playground, DSL Reference,
+Architecture, Roadmap, About. This prompt adds a seventh: Agent Skills.
+
+The Agent Skills page and its sub-components form a fully featured
+browser and download portal for the BP-SKILL v0.3 suite — 15 SKILL.md
+files, 9 variable layer templates, the Process Narrative Specification
+(PNS) schema, and the eval suite — all embedded as static data and
+downloadable as individual files or as a bundled zip.
+
+The goal is to make the app serve three audiences simultaneously:
+
+1. Human practitioners who want to understand what the suite does
+1. Developers who want to install individual skills or the full suite
+1. AI agents browsing the standards context and downloading skills
+
+-----
+
+## PHASE 1 — PLAN MODE: READ THE EXISTING APP
+
+Before writing a single line of code, read and document:
+
+1. Current routing setup (React Router, basename, all existing routes)
+1. Existing nav component — exact structure, styling tokens, active state
+1. Existing page component structure — layout wrapper, page container,
+   heading conventions, section patterns
+1. Existing color system — CSS variables or Tailwind tokens used
+1. Existing typography — font imports, heading/body hierarchy
+1. Existing component library — any shared Card, Button, Badge, Code,
+   Table components
+1. Existing motion/animation patterns — transitions, scroll reveals,
+   hover states
+1. Vite config — base path, build output, any aliases
+1. Package.json — all dependencies, build/dev/deploy scripts
+1. GitHub Pages deployment mechanism — which branch, which workflow,
+   any CNAME
+
+Produce docs/ui-integration-audit.md with all findings before proceeding.
+Do not write any UI code until this audit is approved.
+
+-----
+
+## PHASE 2 — DATA LAYER: SKILL REGISTRY
+
+Before building any UI components, build the data layer.
+All skill data is static — no network requests, no backend.
+Create src/data/skills-registry.js (or .ts if the project uses TypeScript).
+
+This file exports a single SKILLS constant — an array of 15 skill objects
+plus supporting constants for the variable layer and PNS schema.
+
+### Skill object schema (one per skill):
+
+```js
+{
+  id: "process-intake-and-scope",       // matches directory name
+  name: "process-intake-and-scope",     // agentskills.io spec name
+  displayName: "Process Intake & Scope", // human-readable
+  status: "core",                        // "core" | "recommended-extension"
+  layer: 1,                              // 1 = Discovery, 2 = Narrative,
+                                         // 3 = Visual/Decision, 4 = Operational
+                                         // 5 = Governance, 6 = Publication
+  layerLabel: "Discovery",
+  pipelineOrder: 1,                      // 1–15, ordering in the pipeline
+  description: "...",                    // ≤ 1024 chars — the SKILL.md description field
+  purpose: "...",                        // 2–3 sentence prose purpose
+  triggerPhrases: [                      // what the user says to activate it
+    "document a process",
+    "map a workflow",
+    "define process scope"
+  ],
+  consumes: ["pir.yaml (optional)", "organization-profile.md"],
+  produces: ["PNS.md [status: draft-intake]", "pir.yaml"],
+  dependsOn: [],
+  standardsRefs: [
+    "BABOK v3 §3.1–3.4",
+    "BPM CBOK v4.0 Phase 1",
+    "APQC PCF v7.4"
+  ],
+  installCommand: "# In your agent's skills/ directory:\nmkdir process-intake-and-scope && ...",
+  skillMdPreview: "---\nname: process-intake-and-scope\n...", // first 30 lines
+  tags: ["discovery", "intake", "babok", "apqc"],
+  compatibleWith: ["Claude Code", "OpenAI Codex", "GitHub Copilot",
+                   "Gemini CLI", "Cursor", "VS Code"]
+}
+```
+
+### The 15 skill objects must be authored with this exact data:
+
+SKILL 01
+id: process-intake-and-scope
+displayName: Process Intake & Scope
+status: core
+layer: 1 / Discovery
+pipelineOrder: 1
+description: “Establish the process candidate, request type, sponsor,
+business objective, in-scope and out-of-scope boundaries, urgency,
+target audience, and initial APQC PCF taxonomy placement. Use this
+skill when a user makes any request to discover, document, improve,
+audit, hand off, or publish a business process.”
+triggerPhrases: [“document a process”, “map a workflow”,
+“define process scope”, “what processes do we have”,
+“I need to capture how we do X”]
+consumes: [“request brief”, “organization-profile.md”,
+“process-taxonomy.md (optional)”]
+produces: [“PNS.md [draft-intake]”, “pir.yaml”]
+dependsOn: []
+standardsRefs: [“BABOK v3 §3.1–3.4”, “BABOK v3 §6.1”,
+“BPM CBOK v4.0 Phase 1 (Alignment to Strategy and Goals)”,
+“APQC PCF v7.4”]
+
+SKILL 02
+id: stakeholder-and-role-mapping
+displayName: Stakeholder & Role Mapping
+status: core
+layer: 1 / Discovery
+pipelineOrder: 2
+description: “Identify named stakeholders, operational roles, decision
+authorities, handoff owners, and separation-of-duties implications.
+Use this skill when a scoped process involves more than one role or
+crosses a functional boundary.”
+triggerPhrases: [“who owns this process”, “identify stakeholders”,
+“RACI for this process”, “who do I talk to”,
+“map roles and responsibilities”]
+consumes: [“PNS.md [draft-intake]”, “role-dictionary.md”,
+“organization-profile.md”]
+produces: [“PNS.md [scoped] with stakeholder register”]
+dependsOn: [“process-intake-and-scope”]
+standardsRefs: [“BABOK v3 §3.2”, “BABOK v3 Technique §10.39”,
+“BABOK v3 Technique §10.43”,
+“BPM CBOK v4.0 KA 8”, “BPMN 2.0.2 Clause 10.8”]
+
+SKILL 03
+id: elicitation-and-interview-facilitation
+displayName: Elicitation & Interview Facilitation
+status: core
+layer: 1 / Discovery
+pipelineOrder: 3
+description: “Run structured discovery interviews, workshops, or
+observation-guided sessions that surface the actual process, not the
+idealised one. Use this skill when a scoped process has incomplete
+factual evidence or when interviews or workshops are requested.”
+triggerPhrases: [“interview the stakeholders”, “facilitate a workshop”,
+“what questions should I ask”, “help me run discovery”,
+“elicit the requirements”]
+consumes: [“PNS.md [scoped]”, “stakeholder register”,
+“sector-context.md”]
+produces: [“PNS.md [elicited] with source-attributed evidence,
+contradiction log, confidence scores, open questions”]
+dependsOn: [“stakeholder-and-role-mapping”]
+standardsRefs: [“BABOK v3 §4”, “BABOK v3 Technique §10.25”,
+“BABOK v3 Technique §10.50”, “BABOK v3 Technique §10.18”,
+“BPM CBOK v4.0 KA 3”]
+
+SKILL 04
+id: as-is-process-capture
+displayName: As-Is Process Capture
+status: core
+layer: 2 / Narrative
+pipelineOrder: 4
+description: “Transform elicited evidence into a normalised current-state
+process representation with stable step IDs. Use this skill when
+sufficient evidence exists to describe the current process steps,
+actors, triggers, and outputs.”
+triggerPhrases: [“document the current state”, “as-is process”,
+“capture the existing workflow”, “map how it works today”,
+“baseline the process”]
+consumes: [“PNS.md [elicited]”, “optional SOPs/screenshots/BPMN files”]
+produces: [“PNS.md [documented-as-is] with act-NNN step IDs,
+exception placeholders, system touchpoints”]
+dependsOn: [“elicitation-and-interview-facilitation”]
+standardsRefs: [“BABOK v3 §7.1–7.3”,
+“BPM CBOK v4.0 KA 2 (Process Modeling)”,
+“BPM CBOK v4.0 KA 3 (Process Analysis)”]
+
+SKILL 05
+id: process-narrative-authoring
+displayName: Process Narrative Authoring
+status: core
+layer: 2 / Narrative
+pipelineOrder: 5
+description: “Author the canonical Process Narrative Specification
+(PNS.md) — the expository prose document that drives the entire suite.
+Use this skill when as-is process capture is materially complete and
+a formally structured narrative document is needed.”
+triggerPhrases: [“write the process narrative”, “author the PNS”,
+“document this formally”, “write the process specification”,
+“create the process document”]
+consumes: [“PNS.md [documented-as-is]”,
+“business-glossary-and-rulebook.md”]
+produces: [“PNS.md [modeled] — versioned, ISO 9001 §4.4.1 conformant,
+13 required sections complete”]
+dependsOn: [“as-is-process-capture”]
+standardsRefs: [“BABOK v3 §7.1–7.6”, “ISO 9001:2015 §4.4.1”,
+“ISO 9001:2015 §7.5”, “IEEE/ISO/IEC 29148:2018”,
+“BPM CBOK v4.0 KA 2”]
+
+SKILL 06
+id: visual-process-modeling
+displayName: Visual Process Modeling
+status: core
+layer: 3 / Visual Modeling
+pipelineOrder: 6
+description: “Generate conforming visual models from the Process
+Narrative Specification. Use this skill when a complete PNS.md exists
+and a BPMN diagram, bpmn-beta rendering, or other visual representation
+is requested.”
+triggerPhrases: [“create a BPMN diagram”, “visualise this process”,
+“draw the swim lanes”, “generate the bpmn-beta”,
+“make a process diagram”]
+consumes: [“PNS.md [modeled]”, “notation-preferences.md”,
+“role-dictionary.md”, “integration-registry.md”]
+produces: [“BPMN 2.0.2 canonical artifact”,
+“bpmn-beta source (when renderer_target = mermaid_bpmn_beta)”,
+“optional DMN if ≥ 3 policy-logic gateway branches detected”]
+dependsOn: [“process-narrative-authoring”]
+standardsRefs: [“BPMN 2.0.2 / ISO 19510 Clauses 2, 7, 9, 10”,
+“BPM CBOK v4.0 KA 2”]
+
+SKILL 07
+id: process-gap-and-exception-analysis
+displayName: Gap & Exception Analysis
+status: core
+layer: 2 / Narrative
+pipelineOrder: 7
+description: “Identify failure modes, undocumented variants, bottlenecks,
+policy conflicts, control weaknesses, and divergence between intended
+and actual practice. Use this skill when a modeled process requires
+quality analysis, improvement prioritisation, or risk review.”
+triggerPhrases: [“find the gaps”, “analyse exceptions”,
+“what could go wrong”, “process risk review”,
+“identify improvement opportunities”]
+consumes: [“PNS.md [modeled]”, “compliance-controls-registry.md”,
+“organization-profile.md”]
+produces: [“PNS.md [analyzed] with issue log, gap register,
+exception catalog, remediation candidates”]
+dependsOn: [“process-narrative-authoring”]
+standardsRefs: [“BABOK v3 §8 (Solution Evaluation)”,
+“BPM CBOK v4.0 KA 3”, “BPM CBOK v4.0 KA 6”,
+“ISO 9001:2015 §10”]
+
+SKILL 08
+id: future-state-and-change-strategy
+displayName: Future-State & Change Strategy
+status: recommended-extension
+layer: 2 / Narrative
+pipelineOrder: 8
+description: “Define the target-state process and change approach.
+Use this skill when gap analysis is complete and process improvement,
+redesign, or transformation is in scope. SCOPE LIMIT: covers process
+redesign only — not organisational change management, Prosci/ADKAR,
+training design, or communications planning.”
+triggerPhrases: [“design the future state”, “to-be process”,
+“process improvement plan”, “what should the process become”,
+“redesign this workflow”]
+consumes: [“PNS.md [analyzed]”, “gap analysis output”,
+“organization-profile.md”, “process-taxonomy.md”,
+“integration-registry.md”]
+produces: [“PNS.md updated with future-state sections,
+transition assumptions, change-strategy notes”]
+dependsOn: [“process-gap-and-exception-analysis”]
+standardsRefs: [“BABOK v3 §6.2–6.4”,
+“BPM CBOK v4.0 Phase 2 (Architect Changes)”,
+“BPM CBOK v4.0 Phase 3 (Develop Initiatives)”]
+
+SKILL 09
+id: decision-model-authoring
+displayName: Decision Model Authoring
+status: recommended-extension
+layer: 3 / Visual Modeling
+pipelineOrder: 9
+description: “Externalise decision logic from prose and BPMN gateways
+into formal DMN 1.4 structures. Use this skill when a PNS contains
+three or more gateway branches carrying policy logic, approval
+criteria, or scoring thresholds (MUST trigger), or when decision
+tables are explicitly requested (optional trigger).”
+triggerPhrases: [“create decision tables”, “model the decision logic”,
+“DMN for this process”, “externalise the business rules”,
+“decision model”]
+consumes: [“PNS.md [modeled or analyzed]”,
+“business-glossary-and-rulebook.md”,
+“compliance-controls-registry.md”, “notation-preferences.md”]
+produces: [“DMN 1.4 DRD (Level 1 normatively)”,
+“decision tables in Markdown”,
+“stable decision IDs tracing to PNS rule set IDs”]
+dependsOn: [“process-narrative-authoring”]
+standardsRefs: [“OMG DMN 1.4 (April 2023)”,
+“BPM CBOK v4.0 KA 4 (Process Design)”]
+
+SKILL 10
+id: process-validation-and-quality-scoring
+displayName: Validation & Quality Scoring
+status: core
+layer: 2 / Narrative
+pipelineOrder: 10
+description: “Test internal consistency, stakeholder alignment, standards
+conformance, completeness, and evidence strength. Produces a 0–100
+quality score and a defect list. Use this skill whenever a narrative
+and any derived models exist and a quality gate is needed.”
+triggerPhrases: [“validate this process”, “score the PNS”,
+“quality check”, “is this ready to publish”,
+“review the process document”]
+consumes: [“PNS.md [modeled or analyzed]”,
+“BPMN/DMN artifacts (if present)”, “all context files”]
+produces: [“Quality scorecard (0–100)”,
+“Defect list with V1–V9 validation results”,
+“Publication approval recommendation”,
+“PNS.md [validated] status update”]
+dependsOn: [“process-narrative-authoring”]
+standardsRefs: [“BABOK v3 §5 (Requirements Life Cycle Management)”,
+“ISO 9001:2015 §4.4.1”,
+“IEEE/ISO/IEC 29148:2018”]
+
+SKILL 11
+id: process-measures-and-controls-definition
+displayName: Measures & Controls Definition
+status: recommended-extension
+layer: 4 / Operational
+pipelineOrder: 11
+description: “Define KPIs, SLAs, control points, approvals, and retained
+evidence requirements so the process can be governed after publication.
+Required for BPM CBOK v4.0 Phase 5 (Measure Success) conformance. Use
+this skill when a validated process is intended for operation, audit,
+or transformation tracking.”
+triggerPhrases: [“define the KPIs”, “add controls to this process”,
+“what metrics should we track”, “governance requirements”,
+“SLA definition”]
+consumes: [“PNS.md [validated]”, “compliance-controls-registry.md”,
+“organization-profile.md”]
+produces: [“Metrics-and-controls section in PNS.md”,
+“Optional control matrix artifact”]
+dependsOn: [“process-validation-and-quality-scoring”]
+standardsRefs: [
+“BPM CBOK v4.0 KA 5 (Process Performance Management)”,
+“BPM CBOK v4.0 Phase 5 (Measure Success)”,
+“ISO 9001:2015 §4.4 and §7.5”,
+“BABOK v3 Technique §10.28 (Metrics and KPIs)”]
+
+SKILL 12
+id: sop-and-work-instruction-generation
+displayName: SOP & Work Instruction Generation
+status: core
+layer: 4 / Operational
+pipelineOrder: 12
+description: “Generate ISO 9001-conformant SOPs and role-specific Work
+Instructions from the validated process narrative. SOPs define what
+happens, who does it, and in what sequence. Work Instructions define
+step-by-step how to perform a specific task. All WIs trace back to
+their parent SOP and PNS step IDs. Use this skill when a validated
+narrative is intended for operational use.”
+triggerPhrases: [“write the SOP”, “create work instructions”,
+“generate the procedure”, “document the steps”,
+“operational documentation”]
+consumes: [“PNS.md [validated]”, “organization-profile.md”,
+“regional-context.md”, “compliance-controls-registry.md”,
+“role-dictionary.md”]
+produces: [“sop/<process-id>/SOP-<n>.md (Tier 2: governance-oriented)”,
+“sop/<process-id>/WI-<role>-<step>.md (Tier 3: execution-oriented)”,
+“All WIs carry parent_sop_id and source_step_ids[] traceability”]
+dependsOn: [“process-validation-and-quality-scoring”]
+standardsRefs: [“ISO 9001:2015 §7.5.1–§7.5.3”,
+“BPM CBOK v4.0 KA 4 (Process Design)”]
+
+SKILL 13
+id: raci-and-governance-matrix-generation
+displayName: RACI & Governance Matrix
+status: core
+layer: 5 / Governance
+pipelineOrder: 13
+description: “Generate accountability structures for execution, approval,
+consultation, and information flows. Enforces exactly one Accountable
+role per task (RACI-V01). Supports RASCI variant. Use this skill when
+a multi-role process has shared ownership, approval requirements, or
+governance ambiguity.”
+triggerPhrases: [“build the RACI”, “who is accountable”,
+“responsibility matrix”, “governance matrix”,
+“accountability chart”]
+consumes: [“PNS.md”, “role-dictionary.md”, “organization-profile.md”]
+produces: [“governance/<process-id>/RACI.md”,
+“governance/<process-id>/RACI.csv”,
+“RACI-V01 diagnostic if one-A-per-task rule violated”]
+dependsOn: [“stakeholder-and-role-mapping”]
+standardsRefs: [“BABOK v3 Technique §10.39 (Roles and Permissions Matrix)”,
+“BPM CBOK v4.0 KA 8 (Process Management Organisation)”]
+
+SKILL 14
+id: sipoc-generation
+displayName: SIPOC Generation
+status: core
+layer: 5 / Governance
+pipelineOrder: 14
+description: “Produce a high-level Supplier-Input-Process-Output-Customer
+view for executive communication and process chartering. Uses Six Sigma
+DMAIC completion sequence (Outputs first, then Customers, then backfill
+Inputs and Suppliers). Process column limited to 3–7 steps. Use this
+skill when a process boundary summary is needed for stakeholder
+communication or portfolio classification.”
+triggerPhrases: [“create a SIPOC”, “high-level process view”,
+“executive process summary”, “process boundary diagram”,
+“SIPOC chart”]
+consumes: [“PNS.md (preferred)”, “pir.yaml (early-stage use)”]
+produces: [“governance/<process-id>/SIPOC.md”,
+“governance/<process-id>/SIPOC.yaml”,
+“Five columns: S–I–P–O–C, 3–7 process steps, APQC IDs attached”]
+dependsOn: [“process-intake-and-scope”]
+standardsRefs: [“BABOK v3 Technique §10.42 (Scope Modelling)”,
+“Six Sigma DMAIC Define phase”,
+“ISO 9001:2015 §4.4”]
+
+SKILL 15
+id: publication-and-handoff-packaging
+displayName: Publication & Handoff Packaging
+status: core
+layer: 6 / Publication
+pipelineOrder: 15
+description: “Package the approved process artifact set for reuse,
+review, audit, and downstream implementation. Compiles a versioned,
+signed publication bundle with manifest, approvals, changelog, and
+all derived artifacts. Use this skill when a validated process is
+ready for formal handoff, publication, or archiving.”
+triggerPhrases: [“publish this process”, “package for handoff”,
+“create the publication bundle”, “finalise and archive”,
+“sign off the process”]
+consumes: [“PNS.md [validated]”, “all derived artifacts”,
+“all context references”, “approval metadata”]
+produces: [“artifacts/<process-id>/publication/”,
+“MANIFEST.yaml”, “APPROVALS.yaml”, “CHANGELOG.md”,
+“Complete bundle: PNS + BPMN/DMN + SOPs + WIs + RACI + SIPOC”]
+dependsOn: [“process-validation-and-quality-scoring”]
+standardsRefs: [“ISO 9001:2015 §7.5.3 (Control of documented information)”,
+“BPM CBOK v4.0 KA 1 and KA 9”,
+“agentskills.io packaging conventions”]
+
+### Supporting data: pipeline layers
+
+```js
+export const PIPELINE_LAYERS = [
+  { id: 1, label: "Discovery", color: "#4A9EBF",
+    description: "Intake, stakeholder mapping, elicitation" },
+  { id: 2, label: "Narrative", color: "#7B68EE",
+    description: "As-is capture, PNS authoring, gap analysis, validation" },
+  { id: 3, label: "Visual Modeling", color: "#5BA08A",
+    description: "BPMN diagrams, DMN decision tables" },
+  { id: 4, label: "Operational", color: "#CC8B30",
+    description: "SOPs, Work Instructions, measures" },
+  { id: 5, label: "Governance", color: "#C0645A",
+    description: "RACI matrices, SIPOC" },
+  { id: 6, label: "Publication", color: "#777777",
+    description: "Versioned bundled handoff" }
+];
+```
+
+### Supporting data: variable layer files (9 items)
+
+```js
+export const VARIABLE_FILES = [
+  {
+    id: "organization-profile",
+    filename: "organization-profile.md",
+    displayName: "Organization Profile",
+    description: "Company name, industry (NAICS), size tier, regulatory environment, process maturity level. Read by intake, validation, controls, and publication skills.",
+    requiredFields: ["company_name","industry","size_tier","operating_regions","regulatory_environment","process_maturity_level"],
+    usedBy: ["process-intake-and-scope","process-validation-and-quality-scoring","process-measures-and-controls-definition","sop-and-work-instruction-generation","publication-and-handoff-packaging"]
+  },
+  {
+    id: "sector-context",
+    filename: "sector-context.md",
+    displayName: "Sector Context",
+    description: "Industry-specific vocabulary, regulatory standards, common process patterns, APQC PCF sector mapping. Normalises terminology for elicitation and narrative skills.",
+    requiredFields: ["sector_name","domain_vocabulary","applicable_standards","common_process_patterns","sector_apqc_mapping"],
+    usedBy: ["elicitation-and-interview-facilitation","process-narrative-authoring","process-validation-and-quality-scoring"]
+  },
+  {
+    id: "regional-context",
+    filename: "regional-context.md",
+    displayName: "Regional Context",
+    description: "Jurisdiction, language, regulatory bodies, compliance frameworks, date/currency/measurement conventions. Required for any cross-border or regulated process.",
+    requiredFields: ["jurisdictions","primary_language","regulatory_bodies","compliance_frameworks","date_format","currency_code","measurement_system"],
+    usedBy: ["sop-and-work-instruction-generation","publication-and-handoff-packaging"]
+  },
+  {
+    id: "role-dictionary",
+    filename: "role-dictionary.md",
+    displayName: "Role Dictionary",
+    description: "Named roles with stable IDs, responsibilities, authority levels, RACI defaults, and system access profiles. The canonical source of truth for every role referenced across the suite.",
+    requiredFields: ["role_id","display_name","responsibilities","authority_level","raci_default","system_access_profile"],
+    usedBy: ["stakeholder-and-role-mapping","visual-process-modeling","sop-and-work-instruction-generation","raci-and-governance-matrix-generation","process-validation-and-quality-scoring"]
+  },
+  {
+    id: "process-taxonomy",
+    filename: "process-taxonomy.md",
+    displayName: "Process Taxonomy",
+    description: "APQC PCF hierarchy mapping with dual v7.4/v8.0 element IDs, internal naming conventions, process ownership structure. Enables benchmarking and cross-process reporting.",
+    requiredFields: ["taxonomy_name","apqc_version","hierarchy","internal_naming_rules","ownership_structure"],
+    usedBy: ["process-intake-and-scope","sipoc-generation","publication-and-handoff-packaging"]
+  },
+  {
+    id: "notation-preferences",
+    filename: "notation-preferences.md",
+    displayName: "Notation Preferences",
+    description: "Preferred diagram notation, renderer targets (bpmn-beta, bpmn.io, DrawIO), output formats, theme and palette defaults. Visual modeling and decision skills read this first.",
+    requiredFields: ["primary_notation","renderer_targets","output_formats","theme_defaults"],
+    usedBy: ["visual-process-modeling","decision-model-authoring"]
+  },
+  {
+    id: "compliance-controls-registry",
+    filename: "compliance-controls-registry.md",
+    displayName: "Compliance & Controls Registry",
+    description: "Control IDs, source frameworks (SOX, HIPAA, ISO 9001, GDPR, NIST), mandatory approval gates, evidence requirements, audit frequencies, and the publication quality threshold.",
+    requiredFields: ["control_id","source_framework","control_objective","mandatory_approval_gate","evidence_requirements","audit_frequency","publication_quality_threshold"],
+    usedBy: ["process-gap-and-exception-analysis","process-measures-and-controls-definition","sop-and-work-instruction-generation","process-validation-and-quality-scoring","publication-and-handoff-packaging"]
+  },
+  {
+    id: "integration-registry",
+    filename: "integration-registry.md",
+    displayName: "Integration Registry",
+    description: "Named systems with stable IDs, system types, vendors, owners, integration patterns (API sync/async, file batch, RPA, EDI). Keeps system references consistent across all skills.",
+    requiredFields: ["system_id","display_name","system_type","vendor","system_owner_role_id","integration_patterns"],
+    usedBy: ["as-is-process-capture","visual-process-modeling","future-state-and-change-strategy","publication-and-handoff-packaging"]
+  },
+  {
+    id: "business-glossary-and-rulebook",
+    filename: "business-glossary-and-rulebook.md",
+    displayName: "Business Glossary & Rulebook",
+    description: "Controlled vocabulary (term IDs, definitions, sources, synonyms, prohibited terms) plus business rules (rule IDs, statements, authority, affected process areas). Prevents vocabulary drift across all skills.",
+    requiredFields: ["term_id","term","definition","source","rule_id","statement","source_authority","affected_process_areas"],
+    usedBy: ["process-narrative-authoring","decision-model-authoring","process-validation-and-quality-scoring","publication-and-handoff-packaging"]
+  }
+];
+```
+
+### Supporting data: PNS status lifecycle (10 states)
+
+```js
+export const PNS_LIFECYCLE = [
+  { status: "draft-intake", setBy: "process-intake-and-scope", order: 1 },
+  { status: "scoped", setBy: "stakeholder-and-role-mapping", order: 2 },
+  { status: "elicited", setBy: "elicitation-and-interview-facilitation", order: 3 },
+  { status: "documented-as-is", setBy: "as-is-process-capture", order: 4 },
+  { status: "modeled", setBy: "process-narrative-authoring", order: 5 },
+  { status: "analyzed", setBy: "process-gap-and-exception-analysis", order: 6 },
+  { status: "validated", setBy: "process-validation-and-quality-scoring", order: 7 },
+  { status: "packaged", setBy: "publication-and-handoff-packaging", order: 8 },
+  { status: "published", setBy: "publication-and-handoff-packaging", order: 9 },
+  { status: "deprecated", setBy: "authorized role post-publication", order: 10 }
+];
+```
+
+-----
+
+## PHASE 3 — ROUTING: ADD THE AGENT SKILLS ROUTE
+
+Add `/skills` to the React Router configuration, preserving all
+existing routes. The route tree after this change:
+
+```
+/          → Home (existing)
+/playground → Playground (existing)
+/dsl        → DSL Reference (existing)
+/architecture → Architecture (existing)
+/roadmap    → Roadmap (existing)
+/about      → About (existing)
+/skills     → Agent Skills (NEW — this prompt)
+/skills/:skillId → Individual Skill Detail (NEW — this prompt)
+```
+
+The basename must remain consistent with the existing Vite base config
+and GitHub Pages deployment. Do not change the basename.
+
+Add “Skills” or “Agent Skills” to the existing navigation component,
+matching the exact styling of existing nav items. The active state must
+use the same mechanism as existing routes.
+
+-----
+
+## PHASE 4 — PAGE ARCHITECTURE
+
+The `/skills` route renders a page with four major sections, each
+reachable by anchor or scroll, plus a sticky header with section tabs.
+
+### Section A — The Standard
+
+The opening section of the Agent Skills page. Establishes authority
+before showing any skill cards. This is the positioning text — must
+sound like a practitioner wrote it, not marketing copy.
+
+Content to render:
+
+Headline: “Skills are the AI analogue of SOPs.”
+
+Sub-headline: “BP-SKILL packages the full business process
+documentation lifecycle as 15 portable agent skills, aligned to
+BABOK v3, BPM CBOK v4.0, APQC PCF v7.4, BPMN 2.0.2, DMN 1.4,
+and ISO 9001:2015.”
+
+Body paragraph: “The Agent Skills open standard (agentskills.io)
+defines a SKILL.md file format for packaging reusable AI agent
+capabilities as modular, portable, filesystem-resident instruction
+sets. As of May 2026, the format is adopted by Claude Code, OpenAI
+Codex, GitHub Copilot, Gemini CLI, Cursor, VS Code, and 30+ other
+platforms. The business process analysis domain has been absent from
+that ecosystem — until now.”
+
+Gap callout (styled as a stat or callout block): “The public Agent
+Skills ecosystem contains 89,000+ skills. Zero implement a BABOK
+knowledge area. BP-SKILL is the first standards-conformant, lifecycle-
+complete business process agent skill suite.”
+
+Compatible platforms badge row: Show logos or text badges for
+Claude Code, OpenAI Codex, GitHub Copilot, Gemini CLI, Cursor, VS Code.
+Label: “Works on all Agent Skills-compatible platforms.”
+
+CTA buttons:
+Primary: “Browse the 15 Skills ↓” (scrolls to Section B)
+Secondary: “Download the Suite” (triggers full zip download)
+Tertiary: “View on agentskills.io” (external link, opens new tab)
+
+### Section B — The Pipeline
+
+A visual pipeline diagram showing how all 15 skills connect, with the
+PNS.md as the central handoff artifact. This is the most important
+visual on the page — it must immediately communicate that BP-SKILL is
+a coherent methodology, not a collection of independent prompts.
+
+Design requirements:
+
+- Horizontal pipeline or left-to-right flow on desktop
+- Vertical accordion/step-list on mobile
+- Six layer swim-lanes colour-coded to PIPELINE_LAYERS data
+- Each skill is a node in the pipeline, showing:
+  - Skill number and display name
+  - Status badge (CORE or EXTENSION)
+  - Layer colour accent
+  - Click/tap → navigates to /skills/:skillId
+- Arrows showing consumes/produces relationships between skills
+- PNS.md shown as a persistent bar or artifact that flows through
+  the center of the pipeline, with status labels (draft-intake →
+  scoped → elicited → … → published) marking progression
+- The 10 PNS lifecycle states shown along the PNS bar with dotted
+  connectors to the skills that set each state
+- Tooltip or popover on hover/tap showing the skill’s trigger phrases
+- Legend for Core vs Extension, and for each layer colour
+
+Implementation note: This pipeline diagram is a custom SVG or a
+carefully structured CSS flex/grid layout — not a third-party chart
+library. It must match the existing app’s visual language exactly.
+
+### Section C — Skill Browser
+
+A filterable, searchable grid of all 15 skill cards.
+
+Filter controls (above the grid):
+
+- All Skills | Core Only | Extensions Only (toggle group)
+- Layer filter: All | Discovery | Narrative | Visual Modeling |
+  Operational | Governance | Publication (tabs or pills)
+- Search input: filters by displayName, description, triggerPhrases,
+  standardsRefs, tags — real-time client-side filtering, no network
+
+Skill card design:
+Each card renders the following from the SKILLS registry:
+- Layer colour bar across the top of the card (4px)
+- Pipeline order number (small, muted, top-right)
+- Status badge: “CORE” (solid) or “EXTENSION” (outlined/dashed)
+- displayName as card heading
+- Layer label as a small pill
+- description (truncated to ~120 chars with expand)
+- standardsRefs: up to 3 shown as small mono chips,
+“+N more” if there are additional ones
+- Two rows of metadata in a compact grid:
+Consumes: [artifact list]
+Produces: [artifact list]
+- Trigger phrases: show 2–3 as quoted italic phrases
+- Two buttons at card bottom:
+“View Details” → navigates to /skills/:skillId
+“Download SKILL.md” → downloads the SKILL.md file for this skill
+
+Card hover state: subtle lift (box-shadow), border colour shifts to
+layer colour, pipeline order indicator brightens.
+
+Grid layout: 3 columns on desktop, 2 on tablet, 1 on mobile.
+Cards in the same layer group animate in together with a stagger.
+
+### Section D — Variable Layer
+
+A separate sub-section below the skill grid, titled:
+“The Variable Layer — 9 Configuration Files That Tailor the Suite”
+
+Opening paragraph:
+“The 15 skills operate on shared process knowledge, but every
+organisation has different terminology, roles, systems, regulations,
+and taxonomies. The Variable Layer is a set of 9 context files that
+live alongside the skills and tell them how to interpret your world.
+They are not SKILL.md files — they are structured Markdown documents
+with YAML frontmatter that skills read to adapt their behaviour.”
+
+Render a 3-column card grid (2 on tablet, 1 on mobile) of the 9
+variable file cards. Each card shows:
+
+- Filename as monospace heading
+- displayName as human label
+- description
+- Required fields as a small mono list (max 5 shown, “+N more” if longer)
+- “Used by N skills” badge (computed from usedBy array length)
+- “Download Template” button → downloads the template .md file
+
+Below the variable card grid, add:
+“Don’t want to configure from scratch? Download the full context/
+template pack with minimal viable defaults pre-populated.”
+Button: “Download context/ Template Pack” → downloads context-templates.zip
+
+### Section E — PNS Schema Viewer
+
+A collapsible section titled:
+“The Process Narrative Specification — The Handoff Artifact”
+
+Opening paragraph:
+“Every skill in BP-SKILL either reads or writes a single central
+document: PNS.md. It is not a template — it is a schema-enforced
+structured document aligned to ISO 9001 §4.4.1, BABOK Core Concept
+Model, and IEEE/ISO/IEC 29148. It is what makes BP-SKILL a pipeline
+rather than a pile of disconnected prompts.”
+
+The PNS lifecycle visualised as a horizontal step tracker, showing all
+10 states in sequence, with the skill name that sets each state shown
+beneath each state pill.
+
+The 13 required PNS sections listed as an accordion or numbered list,
+each expandable to show:
+
+- Section number and title
+- What it documents
+- The standard it satisfies
+- Whether it can be marked “Not Applicable” and under what conditions
+
+The PNS YAML frontmatter schema shown as a syntax-highlighted code block.
+
+Button: “Download PNS.md Template” → downloads pns-template.yaml
+
+-----
+
+## PHASE 5 — INDIVIDUAL SKILL DETAIL PAGE
+
+Route: `/skills/:skillId`
+
+Renders a full-page detail view for a single skill, derived from the
+SKILLS registry using the skillId URL parameter.
+
+If skillId does not match any skill, render a 404-within-page state
+with a “Back to All Skills” link.
+
+### Detail page layout:
+
+#### Header section
+
+- Back breadcrumb: “← Agent Skills”
+- Pipeline order badge (e.g. “Skill 06 of 15”)
+- Layer label pill with layer colour
+- Status badge: CORE or EXTENSION
+- displayName as h1
+- description as lead paragraph
+
+#### Overview grid (2-column on desktop)
+
+Left column:
+- Purpose (full prose)
+- Trigger Phrases: rendered as a vertical list of quoted phrases
+in a styled box — each phrase is something the user might say
+to activate this skill
+- Compatible With: platform badge row
+
+Right column:
+- Pipeline position diagram — a mini 3-node excerpt of the full
+pipeline showing: upstream skill → THIS SKILL → downstream skill(s)
+with named arrows (consumes / produces)
+- Consumes: list with artifact types
+- Produces: list with artifact types
+
+#### Standards References
+
+A table with three columns:
+Standard | Section | Relevance
+One row per standardsRef, with the section expanded to plain English.
+
+#### SKILL.md Preview
+
+A syntax-highlighted code block showing the SKILL.md frontmatter and
+the first section of the body. A “Show full SKILL.md” expand toggle
+reveals the complete content.
+
+Immediately below: “Download SKILL.md” button (primary CTA).
+
+#### Installation Instructions
+
+A tabbed code block showing install commands for each major platform:
+Tab: Claude Code
+code: mkdir -p skills/{skillId} && curl -o skills/{skillId}/SKILL.md …
+Tab: OpenAI Codex
+code: codex skills install {skillId} (or equivalent)
+Tab: GitHub Copilot
+code: gh copilot skill install {skillId} (or equivalent)
+Tab: Gemini CLI
+(equivalent install method)
+Tab: Manual
+code: Download SKILL.md and place in your skills/<skill-name>/
+directory alongside the skill’s references/ and assets/ folders.
+
+Note below the install tabs:
+“The agentskills.io open standard defines the SKILL.md format.
+Install paths vary by platform — see agentskills.io for current
+platform-specific guidance.”
+
+#### Related Skills
+
+A horizontal row of 2–4 related skill mini-cards showing:
+
+- Upstream dependency skills (from dependsOn)
+- Downstream skills that depend on this one (computed from SKILLS data)
+  Each mini-card is clickable → navigates to that skill’s detail page.
+
+#### Variable Files Used
+
+A compact list of which context files this skill reads,
+each linking to the Variable Layer section on the main /skills page.
+
+-----
+
+## PHASE 6 — DOWNLOAD FUNCTIONALITY
+
+All download functionality is client-side only. No backend. No API.
+Files are generated or loaded from static assets at build time.
+
+### Download architecture
+
+Option A (preferred if skill files are static assets):
+Store each SKILL.md in public/skills/{skillId}/SKILL.md
+Store each variable template in public/context/{filename}
+Store pns-template.yaml in public/
+Use fetch() to retrieve the file, then trigger a blob download.
+
+Option B (if generating content client-side):
+Generate each SKILL.md content from the SKILLS registry data
+(frontmatter + body template). Use Blob and URL.createObjectURL
+for download. This is acceptable for skill previews but the actual
+SKILL.md files in the repo are the canonical source.
+
+### Individual skill download
+
+Button: “Download SKILL.md”
+Filename: SKILL.md
+Content: the full SKILL.md for that skill
+MIME type: text/markdown
+
+### Variable file download
+
+Button: “Download Template”
+Filename: {filename} (e.g., organization-profile.md)
+Content: the variable file template
+
+### Full suite download
+
+Button: “Download the Suite”
+Filename: bp-skill-suite-v0.3.zip
+Content: zip of all 15 SKILL.md files in skills/ tree + all 9
+context/ templates + pns-template.yaml + README.md for the suite
+Implementation: Use JSZip (if already in dependencies) or fflate
+(lightweight). Build the zip from static assets fetched at download
+time. Show a loading state while the zip is being assembled.
+
+### Context template pack download
+
+Button: “Download context/ Template Pack”
+Filename: bp-skill-context-templates-v0.3.zip
+Content: all 9 variable file templates as a flat zip
+
+All downloads include a README.md in the zip root that says:
+“BP-SKILL v0.3 — Business Process Agent Skill Suite
+An open-standard domain extension to agentskills.io
+Built by OverKill Hill P³™ — overkillhill.com
+Source: github.com/OKHP3/mermaid-diagram-bpmn
+Licensed MIT (code) / CC-BY-4.0 (documentation)”
+
+-----
+
+## PHASE 7 — HOME PAGE INTEGRATION
+
+Do not redesign the existing Home page. Add one new section to it
+that teases the Agent Skills suite without disrupting the existing
+flow.
+
+Position: after the existing “What’s working, what’s not” section
+and before the existing “Why This Exists” section — or at whatever
+position fits best given the existing DOM structure.
+
+Section title: “Agent Skills — BP-SKILL Suite”
+
+Content:
+“bpmn-beta is the visual output layer of a complete business process
+documentation methodology, packaged as 15 portable Agent Skills.
+Skills are the AI analogue of SOPs — executable, version-controlled,
+and platform-portable.”
+
+Three stat/highlight blocks in a row:
+15 Skills | Covers Full Lifecycle
+9 Variable Files | Tailored to Your Context
+6 Standards | BABOK · CBOK · APQC · BPMN · DMN · ISO 9001
+
+CTA: “Explore the Agent Skills Suite →” → navigates to /skills
+
+-----
+
+## PHASE 8 — SEO AND META
+
+Add correct meta tags to the /skills route and all skill detail routes.
+
+/skills page:
+
+  <title>Agent Skills — BP-SKILL Suite | BPMN for Mermaid</title>
+  <meta name="description" content="15 portable SKILL.md agent skills
+    for the full business process lifecycle. Aligned to BABOK v3, BPM
+    CBOK v4.0, APQC PCF v7.4, BPMN 2.0.2, DMN 1.4, and ISO 9001:2015.
+    Works with Claude Code, OpenAI Codex, GitHub Copilot, Gemini CLI,
+    Cursor, and VS Code." />
+  Open Graph tags matching the above.
+
+/skills/:skillId pages:
+
+  <title>{displayName} — Agent Skill | BPMN for Mermaid</title>
+  <meta name="description" content="{first 160 chars of description}" />
+  Open Graph tags.
+
+-----
+
+## PHASE 9 — STATIC ASSET GENERATION
+
+At build time or in the Replit pre-build step, generate the actual
+SKILL.md files and variable templates into public/skills/ and
+public/context/ so the download buttons have real files to serve.
+
+Use the SKILLS registry as the source of truth. Each SKILL.md must
+be a complete, spec-conformant file — not just a stub. The frontmatter
+must exactly match the agentskills.io schema:
+name, description, license, metadata (with bp_skill_version,
+version, author, project, homepage, repository, standards_refs,
+consumes, produces, depends_on, status).
+
+The SKILL.md body for each skill must include at minimum:
+
+## Purpose
+
+## When to Use
+
+## When NOT to Use
+
+## Trigger Conditions
+
+## Required Workflow
+
+## Input Contract
+
+## Output Contract
+
+## Standards References
+
+## Handoff
+
+All 15 SKILL.md files must be generated before the build runs.
+Add a pnpm skill:generate script (or equivalent) that writes these
+files to public/skills/{skillId}/SKILL.md.
+
+Similarly generate all 9 variable file templates to public/context/.
+
+-----
+
+## PHASE 10 — VALIDATE AND DEPLOY
+
+After building all UI components and generating all static assets:
+
+1. Confirm all existing routes still work: /, /playground, /dsl,
+   /architecture, /roadmap, /about.
+1. Confirm /skills renders without errors.
+1. Confirm /skills/process-intake-and-scope renders correctly.
+1. Confirm /skills/nonexistent shows the 404-within-page state.
+1. Confirm all 15 individual skill detail pages render from the registry.
+1. Confirm all download buttons trigger file downloads with correct
+   filenames and content.
+1. Confirm the full suite download produces a valid zip with all 15
+   SKILL.md files.
+1. Confirm navigation active state correctly highlights “Skills” when
+   on any /skills route.
+1. Confirm responsive layout at 375px, 768px, 1024px, 1440px.
+1. Confirm no existing test suite failures: pnpm test.
+1. Confirm pnpm build produces no errors.
+1. Deploy to gh-pages branch. Confirm /skills is live at:
+   <https://okhp3.github.io/mermaid-diagram-bpmn/skills>
+
+-----
+
+## CONSTRAINTS (all phases)
+
+- No backend services; no API calls except for static asset fetches
+- No changes to existing page behavior or existing routes
+- All new code is additive — do not refactor existing components
+  unless a naming collision forces it (document the collision)
+- No BFS, Builders FirstSource, employer-owned examples, employer
+  colors, or employer references in any generated content
+- Skills are described as OKHP3 prototype DSL tools — bpmn-beta is
+  never described as native Mermaid core, production plugin, or
+  executable BPMN
+- bpmn-beta DSL syntax examples must use current repo syntax:
+  task:user t1 “Review Request”
+  NOT: task(“Label”)@{ type: “userTask” }
+- Standards content (BABOK, BPM CBOK, APQC PCF) is referenced by
+  name and section number only — never reproduced
+- The page must remain 100% client-side rendered and statically
+  deployable to GitHub Pages
+- JSZip or fflate may be added as a new dependency for zip generation
+  if not already present — no other new runtime dependencies without
+  justification
+
+-----
+
+## ACCEPTANCE CRITERIA
+
+□ /skills page renders with all 4 sections (Standard, Pipeline,
+Skill Browser, Variable Layer) plus PNS schema viewer
+□ All 15 skill cards appear in the browser with correct data
+□ Filter by layer works correctly for all 6 layers
+□ Filter by core/extension works correctly
+□ Search filters cards in real time
+□ Each skill card “View Details” link navigates to /skills/:skillId
+□ Each skill detail page renders with all required sections
+□ Pipeline diagram shows all 15 skills in correct order with
+layer colouring and PNS.md lifecycle states
+□ All 15 individual SKILL.md downloads work with correct filenames
+□ All 9 variable file template downloads work
+□ Full suite zip downloads with all 15 SKILL.md files inside
+□ Context template pack zip downloads correctly
+□ “Download the Suite” button on Section A works
+□ Home page new section renders and links to /skills
+□ Navigation shows “Skills” link with correct active state on /skills routes
+□ All existing pages still work
+□ Responsive at 375px, 768px, 1024px, 1440px
+□ pnpm build passes with no errors
+□ pnpm test passes with no regressions
+□ Deployed and live at okhp3.github.io/mermaid-diagram-bpmn/skills

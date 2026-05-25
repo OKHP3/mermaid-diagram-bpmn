@@ -263,6 +263,58 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Agent Skills tease */}
+      <section className="border-t border-border bg-gradient-to-br from-card/60 to-primary/4">
+        <div className="max-w-7xl mx-auto w-full px-4 sm:px-6 py-14">
+          <div className="flex flex-col lg:flex-row gap-8 items-start">
+            {/* Left: copy */}
+            <div className="flex-1 max-w-2xl">
+              <p className="forge-eyebrow mb-3">BP-SKILL v0.3 · Agent Skills</p>
+              <h2 className="text-xl font-bold text-foreground mb-3 leading-snug">
+                15 portable agent skills for the full process lifecycle.
+              </h2>
+              <p className="text-sm text-muted-foreground leading-relaxed mb-4">
+                The Agent Skills open standard defines SKILL.md files as portable, filesystem-resident
+                instruction sets for AI agents. BP-SKILL brings standards-conformant business process
+                methodology — BABOK v3, BPM CBOK v4.0, APQC PCF v7.4, BPMN 2.0.2, DMN 1.4, ISO 9001 — into
+                that ecosystem for the first time.
+              </p>
+              <blockquote className="forge-callout mb-5">
+                <p className="text-xs font-semibold text-foreground mb-0.5">89,000+ skills in the public ecosystem.</p>
+                <p className="text-xs text-muted-foreground">Zero implement a BABOK knowledge area. BP-SKILL is first.</p>
+              </blockquote>
+              <Link href="/skills" className="forge-btn-primary inline-flex items-center gap-2">
+                Browse the 15 Skills <ArrowRight size={14} />
+              </Link>
+            </div>
+
+            {/* Right: pipeline snippet */}
+            <div className="shrink-0 w-full lg:w-72">
+              <div className="forge-card p-3 space-y-1.5">
+                <p className="text-[9px] font-mono uppercase tracking-widest text-muted-foreground/60 mb-2">
+                  Pipeline overview
+                </p>
+                {[
+                  { n: "01", name: "Process Intake & Scope",           layer: "#4A9EBF" },
+                  { n: "05", name: "Process Narrative Authoring",       layer: "#7B68EE" },
+                  { n: "06", name: "Visual Process Modeling",           layer: "#5BA08A" },
+                  { n: "12", name: "SOP & Work Instruction Generation", layer: "#CC8B30" },
+                  { n: "13", name: "RACI & Governance Matrix",          layer: "#C0645A" },
+                  { n: "15", name: "Publication & Handoff Packaging",   layer: "#777777" },
+                ].map((row) => (
+                  <div key={row.n} className="flex items-center gap-2.5">
+                    <div className="w-1 h-5 rounded-full shrink-0" style={{ background: row.layer }} />
+                    <span className="text-[9px] font-mono text-muted-foreground/50 shrink-0 w-4">{row.n}</span>
+                    <span className="text-[10px] text-foreground font-medium leading-tight">{row.name}</span>
+                  </div>
+                ))}
+                <p className="text-[9px] text-muted-foreground/40 pt-1 font-mono">+9 more skills …</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Design principles */}
       <section className="border-t border-border bg-card/40">
         <div className="max-w-7xl mx-auto w-full px-4 sm:px-6 py-14">
