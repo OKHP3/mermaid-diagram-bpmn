@@ -92,24 +92,35 @@ pnpm --filter @workspace/mermaid-diagram-bpmn run typecheck
 
 > The playground is for people. The skills are for agents. The prompt scaffolds are for everyone else.
 
-This repository includes two SKILL.md-compatible agent skills under `skills/`:
+This repository ships a five-skill SKILL.md-compatible agent suite under `skills/`. Three skills cover the full business process documentation lifecycle (Discovery → Narrative → Visual); two cover diagram-specific concerns.
 
 | Skill | Path | Trigger domain |
 |---|---|---|
+| `okhp3-process-discovery` | `skills/okhp3-process-discovery/` | BABOK-aligned process elicitation; produces PIR and stakeholder register *(coming soon)* |
+| `okhp3-process-narrative` | `skills/okhp3-process-narrative/` | ISO 9001 / BABOK process narrative authoring; produces PNS, SIPOC, RACI *(coming soon)* |
 | `okhp3-bpmn-for-mermaid` | `skills/okhp3-bpmn-for-mermaid/` | bpmn-beta generation, validation, normalization, repair |
 | `okhp3-mermaid-theme-builder` | `skills/okhp3-mermaid-theme-builder/` | Palette application, themeVariables, prompt scaffolds, renderer profiles |
+| `bpmn-for-mermaid` | `skills/bpmn-for-mermaid/` | Lightweight reference-only skill; no scripts or tests — for agents with tight context budgets |
 
 **Install:** Copy the `skills/` folder into your project or agent workspace.  
 **Configure:** Point your agent to discover skills from the local path per [agentskills.io](https://agentskills.io).
 
 **Trigger examples:**
+- "I need to document this purchase approval process from scratch." → `okhp3-process-discovery`
+- "Turn this PIR into a formal process narrative with RACI and SIPOC." → `okhp3-process-narrative`
 - "Convert these process notes into a bpmn-beta diagram with pools and lanes, then validate it." → `okhp3-bpmn-for-mermaid`
 - "Apply the Ocean Depth palette to this diagram and give me a prompt scaffold." → `okhp3-mermaid-theme-builder`
-- "Generate a bpmn-beta diagram for this workflow, then theme it with the OKH P³ palette." → both skills compose
-
-A companion lightweight skill is also available at `skills/bpmn-for-mermaid/` — a smaller reference-only package
-without scripts or tests, suited for agents with tighter context budgets.
+- "Document this workflow end-to-end: elicit the process, write the narrative, then generate the BPMN diagram." → all three process skills compose in sequence
 
 ## License
 
 MIT — see [LICENSE](./LICENSE).
+
+## Manual actions required (project owner)
+
+Two surface updates require manual action outside this repository:
+
+1. **GitHub repo description** — Update in GitHub Settings → About to:  
+   `A text-first bpmn-beta diagram type for Mermaid — readable BPMN process diagrams, no XML, no bpmn-js. Includes Business Process Agent Skill Suite: process discovery, narrative specification, and bpmn-beta visual modeling skills (SKILL.md / agentskills.io format).`
+
+2. **overkillhill.com project page** — Add an inline `[experimental]` label on the pool/lane canonical DSL example in the status checklist section, matching the callout now present in the playground DSL Reference page.

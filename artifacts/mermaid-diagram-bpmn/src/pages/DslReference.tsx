@@ -140,6 +140,15 @@ function CodeBlock({ title, code }: { title: string; code: string }) {
   );
 }
 
+function ExperimentalCallout({ children }: { children: React.ReactNode }) {
+  return (
+    <div className="flex gap-3 p-3 rounded-md border border-amber-500/30 bg-amber-500/5 text-xs leading-relaxed mb-4">
+      <span className="shrink-0 font-semibold text-amber-600 dark:text-amber-400">[Experimental]</span>
+      <span className="text-muted-foreground">{children}</span>
+    </div>
+  );
+}
+
 export default function DslReference() {
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 py-12">
@@ -216,6 +225,11 @@ export default function DslReference() {
       {/* Pools and lanes */}
       <section className="mb-10">
         <h2 className="text-base font-semibold text-foreground mb-3" data-testid="heading-pools">Pools and lanes</h2>
+        <ExperimentalCallout>
+          Pool and lane syntax is experimental. The rendering engine supports it, but layout behavior across complex
+          multi-pool diagrams may be inconsistent. Verify output in the Playground before relying on it.
+          The syntax and containment rules may change before the grammar stabilizes.
+        </ExperimentalCallout>
         <p className="text-xs text-muted-foreground mb-3 leading-relaxed">
           Pools represent process participants. Lanes subdivide a pool into responsibility areas.
           Nodes inside a lane are automatically assigned to that pool and lane.
@@ -223,7 +237,10 @@ export default function DslReference() {
         </p>
         <RefTable rows={POOL_LANE_SYNTAX} />
         <div className="mt-4">
-          <CodeBlock title="pool-lane-collaboration.bpmn-beta" code={POOL_EXAMPLE} />
+          <ExperimentalCallout>
+            The example below uses experimental pool/lane syntax. Rendering may vary across diagram sizes.
+          </ExperimentalCallout>
+          <CodeBlock title="pool-lane-collaboration.bpmn-beta [experimental]" code={POOL_EXAMPLE} />
         </div>
       </section>
 
