@@ -11,6 +11,7 @@
 import { readFileSync, existsSync, readdirSync } from 'node:fs';
 import { resolve, join, dirname, basename } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { spawnSync } from 'node:child_process';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const repoRoot = resolve(__dirname, '..');
@@ -189,6 +190,35 @@ function validateSkill(skillDir) {
     }
   }
   if (noUI) pass(`${p} C9: no React/DOM imports in scripts`);
+
+  // C9b: Run validate script against canonical fixtures (executable-on-fixtures check)
+  const validateScript = existsSync(scriptsDir)
+    ? readdirSync(scriptsDir).find(f => f.startsWith('validate-') && f.endsWith('.mjs'))
+    : null;
+  const examplesDir = join(skillDir, 'assets', 'canonical-examples');
+  if (validateScript && existsSync(examplesDir)) {
+    const fixtures = readdirSync(examplesDir).filter(f => f.endsWith('.mmd'));
+    if (fixtures.length > 0) {
+      const scriptPath = join(scriptsDir, validateScript);
+      const fixturePath = join(examplesDir, fixtures[0]);
+      const proc = spawnSync(process.execPath, [scriptPath, fixturePath], {
+        encoding: 'utf8',
+        timeout: 10000,
+      });
+      if (proc.status !== 0) {
+        fail(
+          `${p} C9b: validate script passes on fixture`,
+          `${validateScript} exited ${proc.status} on ${fixtures[0]}:\n${(proc.stdout || '') + (proc.stderr || '')}`
+        );
+      } else {
+        pass(`${p} C9b: ${validateScript} passes on ${fixtures[0]}`);
+      }
+    } else {
+      pass(`${p} C9b: no fixtures to test against (skipped)`);
+    }
+  } else {
+    pass(`${p} C9b: no validate script to execute (skipped)`);
+  }
 
   // C10: Employer name firewall
   if (content.includes(FORBIDDEN_EMPLOYER)) {

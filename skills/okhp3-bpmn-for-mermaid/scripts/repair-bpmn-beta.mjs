@@ -18,9 +18,19 @@ import { validateBpmnBeta } from './validate-bpmn-beta.mjs';
 
 const INIT_BLOCK_RE = /%%\{[\s\S]*?\}%%/g;
 const ELEMENT_KEYWORDS_RE = /^(start|end|event:[a-z:]+|task(?::[a-z]+)?|xor|or|and)\s+/;
-const ELEMENT_DECL_RE = /^(\s*)(start|end|event:[a-z:]+|task(?::[a-z]+)?|xor|or|and)\s+([a-zA-Z][a-zA-Z0-9_-]*)(.*)?$/;
+// Matches any element declaration: captures (indent+keyword+space, id, rest)
+const ELEMENT_DECL_FULL_RE = /^(\s*(?:start|end|event:[a-z:]+|task(?::[a-z]+)?|xor|or|and)\s+)([^\s]+)((?:\s+.*)?)$/;
 const UNQUOTED_LABEL_RE = /^(\s*(?:start|end|event:[a-z:]+|task(?::[a-z]+)?|xor|or|and)\s+[a-zA-Z][a-zA-Z0-9_-]*\s+)([^"\n{].+)$/;
-const HYPHEN_ID_DECL_RE = /^(\s*(?:start|end|event:[a-z:]+|task(?::[a-z]+)?|xor|or|and)\s+)([a-zA-Z][a-zA-Z0-9_]*(?:-[a-zA-Z0-9_]+)+)(\s+.*)?$/;
+
+/** Return true if an ID contains characters outside [a-zA-Z0-9_] */
+function hasInvalidIdChars(id) {
+  return /[^a-zA-Z0-9_]/.test(id);
+}
+
+/** Replace all invalid ID characters with underscores, collapsing runs */
+function sanitizeId(id) {
+  return id.replace(/[^a-zA-Z0-9_]+/g, '_').replace(/^_+|_+$/g, '') || 'id_auto';
+}
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
@@ -93,20 +103,23 @@ export function repairBpmnBeta(source) {
     return line;
   });
 
-  // ── R3: IDs with hyphens in declarations → underscores ───────────────────
+  // ── R3: Element IDs with non-alphanumeric/non-underscore characters ──────
+  // Uses ELEMENT_DECL_FULL_RE to extract (prefix, id, rest) and sanitizes the ID.
   const idRenames = new Map();
   lines = lines.map((line, i) => {
-    const m = line.match(HYPHEN_ID_DECL_RE);
-    if (m) {
-      const oldId = m[2];
-      const newId = oldId.replace(/-/g, '_');
-      if (!idRenames.has(oldId)) idRenames.set(oldId, newId);
-      repairs.push(`R3: Line ${i + 1}: renamed ID '${oldId}' → '${newId}' (hyphens → underscores)`);
-      return `${m[1]}${newId}${m[3] || ''}`;
-    }
-    return line;
+    const trimmed = line.trim();
+    if (!ELEMENT_KEYWORDS_RE.test(trimmed)) return line;
+    const m = line.match(ELEMENT_DECL_FULL_RE);
+    if (!m) return line;
+    const [, prefix, rawId, rest] = m;
+    if (!hasInvalidIdChars(rawId)) return line;
+    const newId = sanitizeId(rawId);
+    if (newId === rawId) return line;
+    if (!idRenames.has(rawId)) idRenames.set(rawId, newId);
+    repairs.push(`R3: Line ${i + 1}: sanitized ID '${rawId}' → '${newId}' (invalid chars → underscores)`);
+    return `${prefix}${newId}${rest}`;
   });
-  // Apply renames to all flow/reference lines
+  // Apply R3 renames to all flow/reference lines
   if (idRenames.size > 0) {
     lines = lines.map(line => {
       const t = line.trim();
@@ -121,7 +134,8 @@ export function repairBpmnBeta(source) {
     });
   }
 
-  // ── R4: Duplicate element IDs ─────────────────────────────────────────────
+  // ── R4: Duplicate element IDs → rename duplicate occurrences ─────────────
+  // After renaming, propagate the new IDs to all flow references.
   const seenIds = new Map();
   lines.forEach((line, i) => {
     const trimmed = line.trim();
@@ -133,15 +147,34 @@ export function repairBpmnBeta(source) {
       }
     }
   });
+  const dupRenames = new Map();
   for (const [id, lineIndices] of seenIds) {
     if (lineIndices.length > 1) {
       for (let k = 1; k < lineIndices.length; k++) {
         const newId = `${id}_dup${k + 1}`;
-        const re = new RegExp(`(?<=(^\\s*(?:start|end|event:[a-z:]+|task(?::[a-z]+)?|xor|or|and)\\s+))${escapeRegex(id)}\\b`);
-        lines[lineIndices[k]] = lines[lineIndices[k]].replace(re, newId);
-        repairs.push(`R4: Renamed duplicate ID '${id}' at line ${lineIndices[k] + 1} → '${newId}'`);
+        // Replace the ID in the declaration line using ELEMENT_DECL_FULL_RE
+        const m = lines[lineIndices[k]].match(ELEMENT_DECL_FULL_RE);
+        if (m && m[2] === id) {
+          lines[lineIndices[k]] = `${m[1]}${newId}${m[3]}`;
+          dupRenames.set(id, newId);
+          repairs.push(`R4: Renamed duplicate ID '${id}' at line ${lineIndices[k] + 1} → '${newId}'`);
+        }
       }
     }
+  }
+  // Propagate R4 renames to flow lines
+  if (dupRenames.size > 0) {
+    lines = lines.map(line => {
+      const t = line.trim();
+      if (/-->|==>|~~>/.test(t)) {
+        let updated = line;
+        for (const [oldId, newId] of dupRenames) {
+          updated = replaceIdOutsideQuotes(updated, oldId, newId);
+        }
+        return updated;
+      }
+      return line;
+    });
   }
 
   // ── R5 + R6: Missing start / end events ──────────────────────────────────
