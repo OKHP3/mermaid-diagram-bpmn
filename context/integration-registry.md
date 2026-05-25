@@ -1,9 +1,10 @@
 ---
-bp_skill_variable_type: integration-registry
-version: "0.1.0"
-last_updated: ""
+document_type: integration-registry
+schema_version: "0.2.0"
 owner: ""
+last_reviewed: ""
 applies_to: "okhp3-process-narrative, okhp3-bpmn-for-mermaid"
+applicability: []
 ---
 
 ## Integration Registry

@@ -3,11 +3,16 @@ name: okhp3-bpmn-for-mermaid
 description: Generate, validate, normalize, and explain Mermaid-native bpmn-beta diagrams for BPMN-style process modeling. Use this skill when the user wants to convert process notes into a diagram; when they ask for BPMN, a process flow, a swimlane diagram, a workflow diagram, or bpmn-beta syntax; when they want to validate or repair existing bpmn-beta code; when they mention pools, lanes, gateways, tasks, events, or BPMN 2.0; when they want a Mermaid-native process model they can commit to a repo; when they ask about bpmn-beta keywords, DSL rules, or process modeling in Mermaid.
 license: MIT
 metadata:
+  bp_skill_version: "0.2.0"
+  status: core
   version: 0.1.0
   author: OverKill Hill P³
   homepage: https://okhp3.github.io/mermaid-diagram-bpmn/playground
   repository: https://github.com/OKHP3/mermaid-diagram-bpmn
   category: process-diagramming
+  standards_refs:
+    - "BPMN 2.0.2 Descriptive Conformance Sub-Class (OMG formal/2013-12-09)"
+    - "Mermaid 11.x External Diagram API"
   tags: bpmn, mermaid, bpmn-beta, business-process, process-modeling, dsl, workflow, lanes, pools, gateways, okhp3
   triggers:
     - create a BPMN diagram

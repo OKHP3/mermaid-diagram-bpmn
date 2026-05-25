@@ -1,9 +1,10 @@
 ---
-bp_skill_variable_type: compliance-controls-registry
-version: "0.1.0"
-last_updated: ""
+document_type: compliance-controls-registry
+schema_version: "0.2.0"
 owner: ""
+last_reviewed: ""
 applies_to: "okhp3-process-narrative"
+applicability: []
 ---
 
 ## Compliance Controls Registry

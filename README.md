@@ -88,21 +88,45 @@ pnpm --filter @workspace/mermaid-diagram-bpmn run test
 pnpm --filter @workspace/mermaid-diagram-bpmn run typecheck
 ```
 
-## Agent Skills
+## A — Agent Skill Suite (BP-SKILL v0.2)
 
-> The playground is for people. The skills are for agents. The prompt scaffolds are for everyone else.
+> The playground is for people. The skills are for agents. The context files are for both.
 
-This repository ships a five-skill SKILL.md-compatible agent suite under `skills/`. Three skills cover the full business process documentation lifecycle (Discovery → Narrative → Visual); two cover diagram-specific concerns.
+This repository ships a SKILL.md-compatible **Business Process Agent Skill Suite** under `skills/`. The three core skills cover the full process documentation lifecycle; supporting skills and context files complete the suite.
 
-| Skill | Path | Trigger domain |
+### Core pipeline
+
+```
+okhp3-process-discovery  →  okhp3-process-narrative  →  okhp3-bpmn-for-mermaid
+        ↓ pir.yaml                  ↓ pns.yaml                  ↓ bpmn-beta.mmd
+```
+
+### Skill catalogue
+
+| Skill | Path | `bp_skill_version` | Trigger domain |
+|---|---|---|---|
+| `okhp3-process-discovery` | `skills/okhp3-process-discovery/` | 0.2.0 | BABOK v3-aligned process elicitation; produces PIR + stakeholder register |
+| `okhp3-process-narrative` | `skills/okhp3-process-narrative/` | 0.2.0 | ISO 9001 §4.4.1 / BABOK process narrative; produces PNS, SIPOC, RACI |
+| `okhp3-bpmn-for-mermaid` | `skills/okhp3-bpmn-for-mermaid/` | 0.2.0 | bpmn-beta generation, validation, normalization, repair |
+| `okhp3-mermaid-theme-builder` | `skills/okhp3-mermaid-theme-builder/` | — | Palette application, themeVariables, prompt scaffolds, renderer profiles |
+
+### Context files (`context/`)
+
+Nine structured Markdown files (schema v0.2) that skills read at session initialization to tailor output without per-session prompting:
+
+| File | Purpose | Consumed by |
 |---|---|---|
-| `okhp3-process-discovery` | `skills/okhp3-process-discovery/` | BABOK-aligned process elicitation; produces PIR and stakeholder register *(coming soon)* |
-| `okhp3-process-narrative` | `skills/okhp3-process-narrative/` | ISO 9001 / BABOK process narrative authoring; produces PNS, SIPOC, RACI *(coming soon)* |
-| `okhp3-bpmn-for-mermaid` | `skills/okhp3-bpmn-for-mermaid/` | bpmn-beta generation, validation, normalization, repair |
-| `okhp3-mermaid-theme-builder` | `skills/okhp3-mermaid-theme-builder/` | Palette application, themeVariables, prompt scaffolds, renderer profiles |
-| `bpmn-for-mermaid` | `skills/bpmn-for-mermaid/` | Lightweight reference-only skill; no scripts or tests — for agents with tight context budgets |
+| `organization-profile.md` | Org name, type, language, process owner title | all three core skills |
+| `sector-context.md` | APQC PCF category, regulatory vocabulary | all three core skills |
+| `regional-context.md` | Jurisdiction, currency, date format, locale compliance | all three core skills |
+| `role-dictionary.md` | Canonical role IDs → titles + departments | all three core skills |
+| `process-taxonomy.md` | Process hierarchy + APQC PCF mappings | all three core skills |
+| `compliance-controls-registry.md` | Standing compliance controls (SOX, ISO 9001, GDPR…) | process-narrative |
+| `integration-registry.md` | Enterprise systems catalogue + task type hints | process-narrative, bpmn-for-mermaid |
+| `notation-preferences.md` | Diagram formatting conventions + layout defaults | bpmn-for-mermaid |
+| `business-glossary-and-rulebook.md` | Canonical terms + standing business rules | all three core skills |
 
-**Install:** Copy the `skills/` folder into your project or agent workspace.  
+**Install:** Copy `skills/` and `context/` into your project or agent workspace.  
 **Configure:** Point your agent to discover skills from the local path per [agentskills.io](https://agentskills.io).
 
 **Trigger examples:**
@@ -110,7 +134,33 @@ This repository ships a five-skill SKILL.md-compatible agent suite under `skills
 - "Turn this PIR into a formal process narrative with RACI and SIPOC." → `okhp3-process-narrative`
 - "Convert these process notes into a bpmn-beta diagram with pools and lanes, then validate it." → `okhp3-bpmn-for-mermaid`
 - "Apply the Ocean Depth palette to this diagram and give me a prompt scaffold." → `okhp3-mermaid-theme-builder`
-- "Document this workflow end-to-end: elicit the process, write the narrative, then generate the BPMN diagram." → all three process skills compose in sequence
+- "Document this workflow end-to-end: elicit the process, write the narrative, then generate the BPMN diagram." → all three core skills compose in sequence
+
+## B — Why This Is Not Just a Diagram DSL
+
+Most BPMN tooling draws a hard line: either you get an XML-heavy process engine format (BPMN 2.0 XML, bpmn-js) or you get a loose approximation in a general-purpose diagram tool (flowchart, swimlane). Neither is designed for the text-first, version-controlled, LLM-assisted documentation workflow that engineering and operations teams actually use.
+
+`bpmn-beta` is the diagram layer of a deliberate stack:
+
+1. **Discovery** — structured elicitation produces a machine-readable PIR (BABOK v3-aligned)
+2. **Narrative** — PIR becomes a PNS document with ISO 9001 process-box semantics, RACI, SIPOC, KPIs, and controls — a defensible process document, not just a box-and-arrow sketch
+3. **Visual** — PNS drives the bpmn-beta diagram; every shape is traceable to a documented process element
+
+The agent skills enforce this stack. The context files eliminate the per-session re-specification of organizational constants. The result is process documentation that is simultaneously human-readable, agent-producible, version-controllable, and notation-compliant.
+
+## C — Ecosystem Position
+
+| Tool | Role | Relationship |
+|---|---|---|
+| **Mermaid** | Diagram rendering host | `bpmn-beta` targets `registerExternalDiagrams()` for upstream inclusion |
+| **bpmn-js** | Full BPMN 2.0 execution tooling | Explicit non-dependency — different design goal (authoring vs execution) |
+| **BABOK v3** | Elicitation standard | `okhp3-process-discovery` implements BABOK §4 + §10 techniques |
+| **ISO 9001:2015** | Process governance standard | `okhp3-process-narrative` produces §4.4.1-compatible process documentation |
+| **BPM CBOK v4** | Process management body of knowledge | Lifecycle framing for the three-skill pipeline |
+| **APQC PCF** | Process taxonomy standard | `process-taxonomy.md` context file uses PCF category numbers |
+| **agentskills.io** | Skill discovery and distribution | SKILL.md format target; `bp_skill_version` field aligns with registry schema |
+
+The `bpmn-beta` DSL is the **notation bridge** — it gives the agent skill suite a concrete, verifiable output format that satisfies both BPMN 2.0.2 Descriptive Conformance notation rules and Mermaid's text-first rendering model. Neither standard is subordinated to the other.
 
 ## License
 

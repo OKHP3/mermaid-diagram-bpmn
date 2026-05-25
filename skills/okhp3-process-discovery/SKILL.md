@@ -3,9 +3,16 @@ name: okhp3-process-discovery
 description: Conduct structured process discovery using BABOK v3 elicitation techniques. Use this skill when the user wants to document a business process from scratch; when they describe a workflow, procedure, or set of steps and need it structured; when they ask for a process intake, scope a process, map stakeholders, or capture business rules; when they say "help me document this process" or "let's scope out this workflow"; when you need a Process Intake Record or stakeholder register as input for okhp3-process-narrative or okhp3-bpmn-for-mermaid.
 license: MIT
 metadata:
+  bp_skill_version: "0.2.0"
+  status: core
   version: 0.1.0
   author: OverKill Hill P³
   category: process-analysis
+  standards_refs:
+    - "BABOK v3 §4 (Elicitation and Collaboration)"
+    - "BABOK v3 §10.14 (Document Analysis)"
+    - "BABOK v3 §10.25 (Interviews)"
+    - "BPM CBOK v4 §4 (Process Modelling)"
   produces: pir.yaml, stakeholder-register.yaml
   depends_on: []
   tags: process-discovery, elicitation, BABOK, PIR, stakeholder-register, business-analysis, intake, process-modeling

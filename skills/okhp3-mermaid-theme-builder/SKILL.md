@@ -3,6 +3,8 @@ name: okhp3-mermaid-theme-builder
 description: Apply reusable visual governance to Mermaid diagrams. Use this skill when the user wants to style, theme, normalize, validate, or export Mermaid code with palettes, themeVariables, classDefs, renderer-safe compatibility notes, Markdown bootstrap blocks, AI prompt scaffolds, or target-renderer output profiles. Also use when a user pastes Mermaid code and asks for consistent or on-brand output.
 license: MIT
 metadata:
+  bp_skill_version: "0.2.0"
+  status: supporting
   author: OverKill Hill P3
   project: Mermaid Theme Builder
   version: "0.3.0"

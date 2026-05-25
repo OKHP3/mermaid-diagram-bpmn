@@ -1,9 +1,10 @@
 ---
-bp_skill_variable_type: notation-preferences
-version: "0.1.0"
-last_updated: ""
+document_type: notation-preferences
+schema_version: "0.2.0"
 owner: ""
+last_reviewed: ""
 applies_to: "okhp3-bpmn-for-mermaid"
+applicability: []
 ---
 
 ## Notation Preferences

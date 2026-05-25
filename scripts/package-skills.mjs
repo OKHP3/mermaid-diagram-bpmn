@@ -11,7 +11,7 @@
  *   dist/okhp3-process-narrative-skill.zip
  *   dist/okhp3-bpmn-for-mermaid-skill.zip
  *   dist/okhp3-mermaid-theme-builder-skill.zip
- *   dist/okhp3-bp-skill-suite-v0.1.zip  (discovery + narrative + bpmn + variables/)
+ *   dist/okhp3-bp-skill-suite-v0.2.zip  (discovery + narrative + bpmn + context/)
  */
 
 import { ZipArchive } from 'archiver';
@@ -115,17 +115,17 @@ for (const skillName of skillDirs) {
 
 // ─── Combined BP suite ZIP ────────────────────────────────────────────────────
 
-const suiteZipPath = join(distDir, 'okhp3-bp-skill-suite-v0.1.zip');
+const suiteZipPath = join(distDir, 'okhp3-bp-skill-suite-v0.2.zip');
 const suiteSkills = [
   'okhp3-process-discovery',
   'okhp3-process-narrative',
   'okhp3-bpmn-for-mermaid',
 ].filter(s => existsSync(join(skillsDir, s)));
 
-const variablesDir = join(repoRoot, 'variables');
+const contextDir = join(repoRoot, 'context');
 const suiteDirs = [
   ...suiteSkills.map(s => ({ srcDir: join(skillsDir, s), entryName: s })),
-  ...(existsSync(variablesDir) ? [{ srcDir: variablesDir, entryName: 'variables' }] : []),
+  ...(existsSync(contextDir) ? [{ srcDir: contextDir, entryName: 'context' }] : []),
 ];
 
 if (suiteDirs.length === 0) {
@@ -134,9 +134,9 @@ if (suiteDirs.length === 0) {
   const result = await createZip(suiteZipPath, suiteDirs);
 
   if (DRY_RUN) {
-    console.log(`  okhp3-bp-skill-suite-v0.1.zip: ${result.files} file(s) [dry-run — nothing written]`);
+    console.log(`  okhp3-bp-skill-suite-v0.2.zip: ${result.files} file(s) [dry-run — nothing written]`);
   } else {
-    console.log(`✔ dist/okhp3-bp-skill-suite-v0.1.zip (${fmt(result.bytes)})`);
+    console.log(`✔ dist/okhp3-bp-skill-suite-v0.2.zip (${fmt(result.bytes)})`);
     created.push(suiteZipPath);
   }
 }

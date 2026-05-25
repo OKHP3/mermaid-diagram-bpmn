@@ -76,7 +76,7 @@ function parseFrontmatter(content) {
 // ─── Extract file references from SKILL.md body ───────────────────────────────
 function extractFileRefs(content) {
   const refs = new Set();
-  const re = /`((?:references|scripts|assets|variables)\/[^\s`]+\.[a-zA-Z0-9]+)`/g;
+  const re = /`((?:references|scripts|assets|context)\/[^\s`]+\.[a-zA-Z0-9]+)`/g;
   let m;
   while ((m = re.exec(content)) !== null) {
     refs.add(m[1]);
@@ -142,6 +142,13 @@ function validateSkill(skillDir) {
     fail(`${p} C5: produces field present`, 'metadata.produces missing or empty');
   } else {
     pass(`${p} C5: produces="${fm.produces}"`);
+  }
+
+  // C5b: bp_skill_version present (required for BP-SKILL v0.2 skills)
+  if (!(fm.bp_skill_version || '')) {
+    fail(`${p} C5b: bp_skill_version present`, 'metadata.bp_skill_version missing or empty');
+  } else {
+    pass(`${p} C5b: bp_skill_version="${fm.bp_skill_version}"`);
   }
 
   // C6: consumes present if depends_on is set (treat [], "", and absent as "not set")
