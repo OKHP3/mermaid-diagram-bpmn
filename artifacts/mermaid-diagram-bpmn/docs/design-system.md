@@ -97,9 +97,12 @@ Defined for light mode in `:root` and overridden for dark mode in `.dark`.
 | Class | Use |
 |-------|-----|
 | `.forge-nav-link` | Desktop nav link — muted at rest, header-text + hover-bg on hover |
-| `.forge-nav-link--active` | Active route state — header-text color, hover-bg, semibold |
+| `.forge-nav-link--active` | Desktop active route — header-text color, hover-bg, semibold |
+| `.forge-nav-active-indicator` | Active-route underline `<span>` — rust-orange bar below active link |
 | `.forge-icon-btn` | Header icon button (GitHub, theme toggle, menu) — muted at rest, text + bg on hover |
-| `.forge-footer-link` | Footer and mobile-menu link — muted at rest, header-text on hover |
+| `.forge-mobile-nav-link` | Mobile menu link — header-text at rest, transparent background |
+| `.forge-mobile-nav-link--active` | Mobile active route — rust-orange color, semibold, tinted background |
+| `.forge-footer-link` | Footer and mobile-menu GitHub link — muted at rest, header-text on hover |
 
 ### Content
 

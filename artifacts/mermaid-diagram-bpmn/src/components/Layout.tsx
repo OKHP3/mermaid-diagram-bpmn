@@ -92,10 +92,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
                 >
                   {link.label}
                   {isActive && (
-                    <span
-                      className="absolute bottom-0 left-3 right-3 h-0.5 rounded-full"
-                      style={{ background: "var(--okh-header-active)" }}
-                    />
+                    <span className="forge-nav-active-indicator absolute bottom-0 left-3 right-3 h-0.5 rounded-full" />
                   )}
                 </Link>
               );
@@ -153,12 +150,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
                   key={link.href}
                   href={link.href}
                   onClick={() => setMenuOpen(false)}
-                  className="px-3 py-2.5 rounded text-sm"
-                  style={{
-                    color: isActive ? "var(--okh-header-active)" : "var(--okh-header-text)",
-                    fontWeight: isActive ? 600 : 400,
-                    background: isActive ? "rgba(196,106,44,0.12)" : "transparent",
-                  }}
+                  className={`px-3 py-2.5 rounded text-sm forge-mobile-nav-link${isActive ? " forge-mobile-nav-link--active" : ""}`}
                 >
                   {link.label}
                 </Link>

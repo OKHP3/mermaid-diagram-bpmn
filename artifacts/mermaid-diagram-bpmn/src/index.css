@@ -263,6 +263,25 @@
     color: var(--okh-header-text);
   }
 
+  /* ---- Mobile nav links (always-dark surface) ------------------- */
+
+  .forge-mobile-nav-link {
+    color: var(--okh-header-text);
+    font-weight: 400;
+    background: transparent;
+  }
+  .forge-mobile-nav-link--active {
+    color: var(--okh-header-active);
+    font-weight: 600;
+    background: rgba(196, 106, 44, 0.12);
+  }
+
+  /* ---- Active-route underline indicator ------------------------- */
+
+  .forge-nav-active-indicator {
+    background: var(--okh-header-active);
+  }
+
   /* ---- Blueprint grid texture ----------------------------------- */
 
   .forge-grid {
