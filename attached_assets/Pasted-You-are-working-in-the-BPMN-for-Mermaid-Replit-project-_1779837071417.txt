@@ -1,0 +1,87 @@
+You are working in the BPMN for Mermaid Replit project connected to https://github.com/OKHP3/mermaid-diagram-bpmn.
+
+Mission:
+Refactor the application styling and project presentation so BPMN for Mermaid is visually aligned with OverKill Hill P³ and Mermaid Theme Builder, while remaining the more technical, standards-aware sibling.
+
+Primary references:
+- Main site: https://overkillhill.com/
+- Canonical CSS: https://github.com/OKHP3/OverKill-Hill/blob/main/assets/css/theme.css
+- Mermaid Theme Builder sibling: https://github.com/OKHP3/mermaid-theme-builder
+- BPMN project page: https://overkillhill.com/projects/bpmn-for-mermaid/
+- Notion source: https://www.notion.so/overkillhill/BPMN-for-Mermaid-bpmn-beta-Diagram-Type-Proposal-357812e0ced481c88b20d2eb493dc775
+
+Current product truth:
+BPMN for Mermaid is an external Mermaid-compatible `bpmn-beta` diagram prototype and proposal path. It explores a readable, text-first BPMN 2.0 descriptive subset. It should not claim native Mermaid support, full BPMN compliance, or official Mermaid acceptance.
+
+Do not change:
+- Parser behavior
+- Renderer behavior
+- BPMN DSL semantics
+- Existing examples
+- Plugin contract
+- GitHub Pages deployment behavior
+- Tests, except to correct stale claims or documentation drift
+
+Brand relationship:
+This app should not look identical to Mermaid Theme Builder. It should feel like the technical/specification sibling from the same OKH workbench:
+- Mermaid Theme Builder = visual governance workbench
+- BPMN for Mermaid = structural/notation extension prototype
+- Both = OverKill Hill P³, industrial blueprint, rust-orange action, dark forge surfaces, warm paper surfaces, technical clarity
+
+Canonical design tokens:
+Normalize to the OKH Forge identity:
+- Forge teal / dark header: #1c3a34
+- Rust-orange primary action: #c46a2c
+- Amber secondary accent: #e6a03c
+- Warm paper card surface: #f6f2ee
+- Warm paper field: #f0ebe5
+- Deep ink: #0f172a
+- Dark workbench/code surface: #0f1f1c
+- Espresso/dark industrial surfaces aligned with theme.css
+
+Typography:
+Align with OverKill Hill:
+- Display/major headings: Alfa Slab One or OKH heading token
+- Body/UI: DM Sans
+- Code/DSL/technical: JetBrains Mono
+Avoid a separate Inter/Fraunces identity unless explicitly scoped and justified. The sibling relationship should be governed, not accidental.
+
+Tasks:
+1. Audit src/index.css, layout components, page components, docs/design-system.md, README, and standards docs for styling and claim drift.
+2. Normalize the header/footer:
+   - Always-dark OKH Forge treatment
+   - Rust-orange active state
+   - No separate olive/black dialect unless it maps back to OKH tokens
+3. Normalize TSX styling:
+   - Remove avoidable inline styles for hover/color
+   - Replace presentational onMouseEnter/onMouseLeave mutations with class-based hover/focus styles
+   - Use named Forge classes for header links, nav items, footer links, badges, cards, buttons, and callouts
+4. Preserve BPMN-specific identity through content and layout, not unmanaged colors or fonts.
+5. Confirm all public claims use safe language:
+   - Use “external Mermaid-compatible `bpmn-beta` prototype”
+   - Use “documented BPMN 2.0 descriptive subset”
+   - Do not use “full BPMN support”
+   - Do not use “BPMN 2.0 compliant”
+   - Do not imply official Mermaid adoption
+6. Ensure the UI distinguishes this project from Theme Builder:
+   - More specification/proposal language
+   - More visible DSL/reference emphasis
+   - Clear route to GitHub issue/community feedback
+   - But same OKH Forge design foundation
+7. Update docs/design-system.md:
+   - State that raw OKH brand primitives are fixed
+   - State that semantic tokens may vary only within the sibling design contract
+   - State that BPMN for Mermaid is the structural/proposal sibling to Mermaid Theme Builder
+8. Run lint/build/tests.
+9. Provide a summary of:
+   - Brand-token corrections
+   - Typography corrections
+   - Claim corrections
+   - Any files that still contain hardcoded visual styling requiring later cleanup
+
+Acceptance criteria:
+- App still builds and runs
+- Parser and renderer behavior unchanged
+- Visual identity clearly belongs to OverKill Hill P³
+- It no longer looks like a different design desk from Mermaid Theme Builder
+- Public claims are contribution-safe and Mermaid-community-safe
