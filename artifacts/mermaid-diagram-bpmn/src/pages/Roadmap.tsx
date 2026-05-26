@@ -523,16 +523,9 @@ export default function Roadmap() {
         <Wrench size={14} className="text-muted-foreground shrink-0 mt-0.5" />
         <p className="text-xs text-muted-foreground leading-relaxed">
           This roadmap is the working state of the prototype, not a formal commitment. The canonical
-          strategy document lives in{" "}
-          <a
-            href="https://www.notion.so/overkillhill/BPMN-for-Mermaid-bpmn-beta-Diagram-Type-Proposal-357812e0ced481c88b20d2eb493dc775"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-primary underline-offset-2 hover:underline font-medium"
-          >
-            Notion
-          </a>
-          . If they disagree, Notion wins.
+          strategy document is{" "}
+          <code className="font-mono text-xs bg-muted px-1 rounded">docs/strategy.md</code>
+          {" "}in this repository. If they disagree, that file wins.
         </p>
       </div>
     </div>

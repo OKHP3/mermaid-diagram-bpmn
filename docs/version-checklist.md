@@ -170,4 +170,4 @@ When a criterion is met: change `[ ]` to `[x]`. When a version's last criterion 
 2. `scripts/generate-skill-files.mjs` — the `bp_skill_version` field in the generated frontmatter template
 3. All 15 `skills/*/SKILL.md` source files — `bp_skill_version` in frontmatter (use `sed -i`)
 
-If this file and Notion disagree, this file wins for version criteria. Notion is for strategy and engagement notes.
+If this file and `docs/strategy.md` disagree, this file wins for version criteria. Strategy and engagement notes live in `docs/strategy.md`.

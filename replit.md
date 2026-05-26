@@ -80,4 +80,4 @@ A contributor-facing prototype and documentation workspace for a Mermaid-native 
 - Mermaid diagram extension API: https://mermaid.js.org
 - Mermaid BPMN issue #7699: https://github.com/mermaid-js/mermaid/issues/7699
 - OMG BPMN 2.0 spec: https://www.omg.org/spec/BPMN/
-- Related work (Notion): https://www.notion.so/overkillhill/BPMN-for-Mermaid-bpmn-beta-Diagram-Type-Proposal-357812e0ced481c88b20d2eb493dc775
+- Strategy and positioning: docs/strategy.md

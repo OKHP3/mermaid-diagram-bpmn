@@ -58,8 +58,8 @@ Paste this into the [live playground](https://okhp3.github.io/mermaid-diagram-bp
 | [Architecture](https://okhp3.github.io/mermaid-diagram-bpmn/architecture) | Parser design, renderer decisions, plugin path |
 | [Roadmap](https://okhp3.github.io/mermaid-diagram-bpmn/roadmap) | What ships next |
 | [Project page](https://overkillhill.com/projects/bpmn-for-mermaid/) | OverKill Hill P3 project home |
-| [Replit](https://replit.com/t/overkill-hill/repls/BPMN-for-Mermaid) | Active development environment |
-| [Notion spec](https://www.notion.so/overkillhill/BPMN-for-Mermaid-bpmn-beta-Diagram-Type-Proposal-357812e0ced481c88b20d2eb493dc775) | PRD, DSL spec, architecture decisions |
+| [Strategy doc](docs/strategy.md) | Positioning, thesis, upstream engagement plan |
+| [Version checklist](docs/version-checklist.md) | Completion criteria for each release |
 
 ---
 

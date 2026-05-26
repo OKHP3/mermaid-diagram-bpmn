@@ -93,8 +93,8 @@ DSL syntax is unstable before v1.0. Proposals are welcome — breaking changes r
 | Public project page | https://overkillhill.com/projects/bpmn-for-mermaid/ |
 | GitHub repository | https://github.com/OKHP3/mermaid-diagram-bpmn |
 | Public playground | https://okhp3.github.io/mermaid-diagram-bpmn |
-| Replit dev surface | https://replit.com/t/overkill-hill/repls/BPMN-for-Mermaid |
-| Notion specification | https://www.notion.so/overkillhill/BPMN-for-Mermaid-bpmn-beta-Diagram-Type-Proposal-357812e0ced481c88b20d2eb493dc775 |
+| Strategy doc | docs/strategy.md |
+| Version checklist | docs/version-checklist.md |
 
 ## License
 

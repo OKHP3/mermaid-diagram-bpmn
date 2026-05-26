@@ -164,6 +164,6 @@ Before proposing this plugin upstream, the following hardening steps are require
 
 - GitHub Issues: https://github.com/OKHP3/mermaid-diagram-bpmn/issues
 - Playground: https://okhp3.github.io/mermaid-diagram-bpmn/playground
-- Notion proposal: https://www.notion.so/overkillhill/BPMN-for-Mermaid-bpmn-beta-Diagram-Type-Proposal-357812e0ced481c88b20d2eb493dc775
+- Strategy and positioning: docs/strategy.md
 
 Priority contribution areas: Langium grammar, dagre layout integration, event:* keyword parsing, BPMN XML round-trip exploration.
