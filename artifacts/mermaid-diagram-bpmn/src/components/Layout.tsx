@@ -10,6 +10,7 @@ const NAV_LINKS = [
   { href: "/roadmap", label: "Roadmap" },
   { href: "/about", label: "About" },
   { href: "/skills", label: "Agent Skills" },
+  { href: "/walkthrough", label: "Walkthrough" },
 ];
 
 const GITHUB_REPO = "https://github.com/OKHP3/mermaid-diagram-bpmn";

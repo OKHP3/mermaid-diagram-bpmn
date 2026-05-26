@@ -283,9 +283,14 @@ export default function Home() {
                 <p className="text-xs font-semibold text-foreground mb-0.5">89,000+ skills in the public ecosystem.</p>
                 <p className="text-xs text-muted-foreground">Zero implement a BABOK knowledge area. BP-SKILL is first.</p>
               </blockquote>
-              <Link href="/skills" className="forge-btn-primary inline-flex items-center gap-2">
-                Browse the 15 Skills <ArrowRight size={14} />
-              </Link>
+              <div className="flex flex-wrap gap-3">
+                <Link href="/skills" className="forge-btn-primary inline-flex items-center gap-2">
+                  Browse the 15 Skills <ArrowRight size={14} />
+                </Link>
+                <Link href="/walkthrough" className="forge-btn-outline inline-flex items-center gap-2">
+                  End-to-End Walkthrough <ArrowRight size={14} />
+                </Link>
+              </div>
             </div>
 
             {/* Right: pipeline snippet */}

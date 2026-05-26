@@ -1,4 +1,5 @@
-import { ExternalLink, AlertTriangle } from "lucide-react";
+import { Link } from "wouter";
+import { ExternalLink, AlertTriangle, ArrowRight } from "lucide-react";
 
 interface Decision {
   id: string;
@@ -227,6 +228,18 @@ export default function About() {
         <h2 className="text-base font-semibold text-foreground mb-4" data-testid="heading-how-to-contribute">
           How to get involved
         </h2>
+        <div className="forge-card max-w-2xl mb-6 flex items-start justify-between gap-4">
+          <div>
+            <p className="text-sm font-semibold text-foreground mb-1">New to the project?</p>
+            <p className="text-xs text-muted-foreground leading-relaxed">
+              The BP-SKILL Suite Walkthrough shows how all 15 skills connect — from intake to publication —
+              in a single bpmn-beta pipeline diagram and step-by-step handoff table.
+            </p>
+          </div>
+          <Link href="/walkthrough" className="forge-btn-primary shrink-0 inline-flex items-center gap-2 text-xs">
+            Suite Walkthrough <ArrowRight size={12} />
+          </Link>
+        </div>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           {[
             {

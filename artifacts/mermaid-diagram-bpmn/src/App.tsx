@@ -8,6 +8,7 @@ import Roadmap from "@/pages/Roadmap";
 import About from "@/pages/About";
 import AgentSkills from "@/pages/AgentSkills";
 import SkillDetail from "@/pages/SkillDetail";
+import SkillsWalkthrough from "@/pages/SkillsWalkthrough";
 import NotFound from "@/pages/not-found";
 
 function Router() {
@@ -20,6 +21,7 @@ function Router() {
         <Route path="/dsl" component={DslReference} />
         <Route path="/roadmap" component={Roadmap} />
         <Route path="/about" component={About} />
+        <Route path="/walkthrough" component={SkillsWalkthrough} />
         <Route path="/skills/:skillId" component={SkillDetail} />
         <Route path="/skills" component={AgentSkills} />
         <Route component={NotFound} />
