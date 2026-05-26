@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,700;0,9..144,800;1,9..144,700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Alfa+Slab+One&family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
 @import "tailwindcss";
 @import "tw-animate-css";
 @plugin "@tailwindcss/typography";
@@ -71,8 +71,8 @@
   --okh-forge-code-fg: #d4c9b5;   /* warm parchment — code text     */
 
   /* ---- Typography ----------------------------------------------- */
-  --app-font-sans:    'Inter', system-ui, sans-serif;
-  --app-font-display: 'Fraunces', Georgia, serif;
+  --app-font-sans:    'DM Sans', system-ui, sans-serif;
+  --app-font-display: 'Alfa Slab One', Georgia, serif;
   --app-font-mono:    'JetBrains Mono', 'Menlo', monospace;
 
   /* ---- Radius ---------------------------------------------------- */
@@ -220,6 +220,47 @@
     @apply border-t;
     background: var(--okh-header-bg);
     border-color: var(--okh-header-border);
+  }
+
+  /* ---- Header nav links ----------------------------------------- */
+
+  .forge-nav-link {
+    color: var(--okh-header-muted);
+    font-weight: 400;
+    transition: background-color 150ms, color 150ms;
+  }
+  .forge-nav-link:hover {
+    background: var(--okh-header-hover);
+    color: var(--okh-header-text);
+  }
+  .forge-nav-link--active {
+    color: var(--okh-header-text);
+    background: var(--okh-header-hover);
+    font-weight: 600;
+  }
+  .forge-nav-link--active:hover {
+    background: var(--okh-header-hover);
+  }
+
+  /* ---- Header icon buttons (GitHub, theme toggle, menu) --------- */
+
+  .forge-icon-btn {
+    color: var(--okh-header-muted);
+    transition: background-color 150ms, color 150ms;
+  }
+  .forge-icon-btn:hover {
+    background: var(--okh-header-hover);
+    color: var(--okh-header-text);
+  }
+
+  /* ---- Footer / mobile-menu links ------------------------------- */
+
+  .forge-footer-link {
+    color: var(--okh-header-muted);
+    transition: color 150ms;
+  }
+  .forge-footer-link:hover {
+    color: var(--okh-header-text);
   }
 
   /* ---- Blueprint grid texture ----------------------------------- */

@@ -32,7 +32,7 @@ const DISTINCTIONS = [
 
 const PRINCIPLES = [
   { icon: FileCode2, title: "Text-First", body: "Write BPMN as code. Version-control it, diff it, review it in pull requests. No proprietary file formats." },
-  { icon: GitBranch, title: "Mermaid-Native", body: "Follows Mermaid DSL conventions. Renders where Mermaid renders: GitHub, Notion, docs portals, AI outputs." },
+  { icon: GitBranch, title: "Mermaid-Native", body: "Follows Mermaid DSL conventions. Designed to render wherever Mermaid renders once registered as an external diagram plugin." },
   { icon: Layers, title: "Scoped Subset", body: "A documented BPMN 2.0 descriptive subset — not a full implementation. Clarity and usability over exhaustive compliance." },
   { icon: CheckCircle2, title: "Plugin-First Path", body: "Starts as an external plugin for fast iteration. Community discussion and upstream proposal come after validation." },
 ];

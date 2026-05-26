@@ -87,18 +87,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
                 <Link
                   key={link.href}
                   href={link.href}
-                  className="relative px-3 py-1.5 rounded text-sm transition-all"
-                  style={{
-                    color: isActive ? "var(--okh-header-text)" : "var(--okh-header-muted)",
-                    background: isActive ? "var(--okh-header-hover)" : "transparent",
-                    fontWeight: isActive ? 600 : 400,
-                  }}
-                  onMouseEnter={e => {
-                    if (!isActive) (e.currentTarget as HTMLElement).style.background = "var(--okh-header-hover)";
-                  }}
-                  onMouseLeave={e => {
-                    if (!isActive) (e.currentTarget as HTMLElement).style.background = "transparent";
-                  }}
+                  className={`relative px-3 py-1.5 rounded text-sm forge-nav-link${isActive ? " forge-nav-link--active" : ""}`}
                   data-testid={`nav-${link.label.toLowerCase().replace(/\s+/g, '-')}`}
                 >
                   {link.label}
@@ -120,10 +109,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
               href={GITHUB_REPO}
               target="_blank"
               rel="noopener noreferrer"
-              className="p-2 rounded transition-colors"
-              style={{ color: "var(--okh-header-muted)" }}
-              onMouseEnter={e => (e.currentTarget.style.background = "var(--okh-header-hover)")}
-              onMouseLeave={e => (e.currentTarget.style.background = "transparent")}
+              className="forge-icon-btn p-2 rounded"
               aria-label="GitHub repository"
               data-testid="link-github-header"
             >
@@ -133,10 +119,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
             {/* Theme toggle */}
             <button
               onClick={() => setDark(d => !d)}
-              className="p-2 rounded transition-colors"
-              style={{ color: "var(--okh-header-muted)" }}
-              onMouseEnter={e => (e.currentTarget.style.background = "var(--okh-header-hover)")}
-              onMouseLeave={e => (e.currentTarget.style.background = "transparent")}
+              className="forge-icon-btn p-2 rounded"
               aria-label="Toggle dark mode"
               data-testid="button-toggle-theme"
             >
@@ -145,10 +128,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
 
             {/* Mobile menu toggle */}
             <button
-              className="md:hidden p-2 rounded transition-colors"
-              style={{ color: "var(--okh-header-muted)" }}
-              onMouseEnter={e => (e.currentTarget.style.background = "var(--okh-header-hover)")}
-              onMouseLeave={e => (e.currentTarget.style.background = "transparent")}
+              className="md:hidden forge-icon-btn p-2 rounded"
               onClick={() => setMenuOpen(o => !o)}
               aria-label="Toggle menu"
               data-testid="button-toggle-menu"
@@ -192,8 +172,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
                 href={GITHUB_REPO}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center gap-1.5 px-3 py-1.5 rounded text-xs"
-                style={{ color: "var(--okh-header-muted)" }}
+                className="forge-footer-link flex items-center gap-1.5 px-3 py-1.5 rounded text-xs"
               >
                 <Github size={12} />
                 GitHub
@@ -219,15 +198,12 @@ export function Layout({ children }: { children: React.ReactNode }) {
           </span>
 
           {/* Right — links */}
-          <div className="flex flex-wrap items-center gap-x-4 gap-y-1.5" style={{ color: "var(--okh-header-muted)" }}>
+          <div className="flex flex-wrap items-center gap-x-4 gap-y-1.5">
             <a
               href={GITHUB_REPO}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center gap-1 transition-colors hover:text-white"
-              style={{ color: "var(--okh-header-muted)" }}
-              onMouseEnter={e => (e.currentTarget.style.color = "var(--okh-header-text)")}
-              onMouseLeave={e => (e.currentTarget.style.color = "var(--okh-header-muted)")}
+              className="forge-footer-link flex items-center gap-1"
               data-testid="link-github-footer"
             >
               <Github size={11} />
@@ -237,10 +213,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
               href={GITHUB_PAGES}
               target="_blank"
               rel="noopener noreferrer"
-              className="transition-colors"
-              style={{ color: "var(--okh-header-muted)" }}
-              onMouseEnter={e => (e.currentTarget.style.color = "var(--okh-header-text)")}
-              onMouseLeave={e => (e.currentTarget.style.color = "var(--okh-header-muted)")}
+              className="forge-footer-link"
               data-testid="link-github-pages"
             >
               GitHub Pages
@@ -249,10 +222,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
               href={DOCS_URL}
               target="_blank"
               rel="noopener noreferrer"
-              className="transition-colors"
-              style={{ color: "var(--okh-header-muted)" }}
-              onMouseEnter={e => (e.currentTarget.style.color = "var(--okh-header-text)")}
-              onMouseLeave={e => (e.currentTarget.style.color = "var(--okh-header-muted)")}
+              className="forge-footer-link"
               data-testid="link-spec-docs"
             >
               Spec docs
@@ -261,10 +231,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
               href="https://github.com/mermaid-js/mermaid/issues/7699"
               target="_blank"
               rel="noopener noreferrer"
-              className="transition-colors"
-              style={{ color: "var(--okh-header-muted)" }}
-              onMouseEnter={e => (e.currentTarget.style.color = "var(--okh-header-text)")}
-              onMouseLeave={e => (e.currentTarget.style.color = "var(--okh-header-muted)")}
+              className="forge-footer-link"
               data-testid="link-github-issue"
             >
               mermaid#7699
@@ -273,10 +240,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
               href={OKH_SITE}
               target="_blank"
               rel="noopener noreferrer"
-              className="transition-colors"
-              style={{ color: "var(--okh-header-muted)" }}
-              onMouseEnter={e => (e.currentTarget.style.color = "var(--okh-header-text)")}
-              onMouseLeave={e => (e.currentTarget.style.color = "var(--okh-header-muted)")}
+              className="forge-footer-link"
             >
               overkillhill.com
             </a>

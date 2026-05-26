@@ -92,6 +92,15 @@ Defined for light mode in `:root` and overridden for dark mode in `.dark`.
 | `.forge-grid` | Blueprint grid background texture |
 | `.diagram-grid` | Dot grid for diagram preview panels |
 
+### Navigation & header interactive elements
+
+| Class | Use |
+|-------|-----|
+| `.forge-nav-link` | Desktop nav link — muted at rest, header-text + hover-bg on hover |
+| `.forge-nav-link--active` | Active route state — header-text color, hover-bg, semibold |
+| `.forge-icon-btn` | Header icon button (GitHub, theme toggle, menu) — muted at rest, text + bg on hover |
+| `.forge-footer-link` | Footer and mobile-menu link — muted at rest, header-text on hover |
+
 ### Content
 
 | Class | Use |
@@ -149,8 +158,41 @@ When building a new OKH P³ companion app:
 3. Use `.forge-header` / `.forge-main` / `.forge-footer` for the shell.
 4. Use `.forge-btn-primary` and `.forge-btn-outline` for all CTAs.
 5. Use `.forge-code-panel` and `.forge-code-panel-tab` for any code/editor surfaces.
-6. Use the same three fonts: Inter (sans), Fraunces (display), JetBrains Mono (mono).
+6. Use the same three fonts: DM Sans (body/UI), Alfa Slab One (display headings), JetBrains Mono (code/DSL).
 7. Keep the header always-dark — do not make it theme-responsive.
 
 The goal is that a user who switches between OKH apps should recognize the same
 workbench aesthetic without the apps looking identical.
+
+---
+
+## Sibling design contract
+
+The following rules govern all apps that share the OKH Forge foundation.
+
+### Fixed — do not override
+
+| Item | Rule |
+|------|------|
+| Brand primitive tokens (`--okh-forge-*`) | Values are locked across all sibling apps. Do not override or replace them with app-specific hex values. |
+| Header/footer surface | Always dark, always uses `--okh-header-bg`. Never made theme-responsive. |
+| Primary typefaces | DM Sans (body/UI), Alfa Slab One (display headings), JetBrains Mono (code/DSL). No other primary typeface families. |
+| Shell class names | `.forge-shell`, `.forge-header`, `.forge-main`, `.forge-footer` — always present, always in this structure. |
+
+### Variable — may differ per app
+
+| Item | Rule |
+|------|------|
+| Semantic HSL tokens (`--background`, `--primary`, etc.) | May be tuned per app's domain emphasis within the Forge palette range. |
+| Content sections and page structure | Each app determines its own pages and information architecture. |
+| Domain-specific utility classes | Apps may add their own `forge-*` classes for domain surfaces (e.g. `.diagram-grid`). |
+| Accent emphasis | The amber/rust split may be weighted differently per app. |
+
+### Sibling relationships
+
+| App | Role |
+|-----|------|
+| **BPMN for Mermaid** (`mermaid-diagram-bpmn`) | Structural/specification sibling — process notation tooling, contributor prototype. |
+| **Mermaid Theme Builder** | Visual/configuration sibling — same forge foundation, theming domain register. |
+
+Both apps share the same brand primitives, shell classes, and typeface stack. They are designed to feel like products from the same workbench while serving distinct user goals.

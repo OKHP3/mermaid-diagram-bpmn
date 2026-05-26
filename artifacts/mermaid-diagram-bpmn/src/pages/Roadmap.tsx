@@ -61,7 +61,7 @@ const VERSION_LADDER: VersionStep[] = [
       "Interactive pipeline diagram — click any skill to navigate to its detail page",
       "PNS.md lifecycle advancement shown per skill in Walkthrough table",
       "Purchase-approval worked example tracing all 15 skills end-to-end",
-      "Notion skill cards linked from the About page",
+      "Skill dependency flow diagram surfaced on the Architecture page",
     ],
   },
   {

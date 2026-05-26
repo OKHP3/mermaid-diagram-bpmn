@@ -82,7 +82,7 @@ Make the suite genuinely usable and the UI interactive.
 - [ ] Interactive pipeline diagram — click any skill to navigate to its detail page
 - [ ] PNS.md lifecycle advancement shown in Walkthrough table (which skill advances which state)
 - [ ] Purchase-approval worked example tracing all 15 skills end-to-end
-- [ ] Notion skill cards linked from the About page
+- [ ] Skill dependency flow diagram surfaced on the Architecture page
 - [ ] `bp_skill_version: "0.4.0"` bumped across all 15 source files
 - [ ] All tests passing
 
