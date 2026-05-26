@@ -1,4 +1,156 @@
-import { CheckCheck, FlaskConical, Clock, Wrench, GitBranch, Database, Puzzle, Palette, Shield, AlignVerticalJustifyStart } from "lucide-react";
+import { CheckCheck, FlaskConical, Clock, Wrench, GitBranch, Database, Puzzle, Palette, Shield, AlignVerticalJustifyStart, CircleDot } from "lucide-react";
+
+// ─── Version Ladder ────────────────────────────────────────────────────────────
+
+type VersionStatus = "done" | "current" | "planned";
+
+interface VersionStep {
+  version: string;
+  title: string;
+  status: VersionStatus;
+  deliverables: string[];
+}
+
+const VERSION_LADDER: VersionStep[] = [
+  {
+    version: "V0.1",
+    title: "bpmn-beta prototype",
+    status: "done",
+    deliverables: [
+      "Hand-written parser with stack-based pool/lane block parsing",
+      "SVG renderer in React — all BPMN shape types, bpmn-* CSS classes",
+      "getStyles() — theme-aware CSS injected into SVG <defs>",
+      "layoutGraph() — flat + pool/lane-aware layout modes",
+      "Playground, DSL Reference, Architecture pages",
+      "5 canonical .mmd example fixtures",
+      "Detector, BpmnDb, Vitest unit + corpus tests",
+    ],
+  },
+  {
+    version: "V0.2",
+    title: "BP-SKILL pilot — 4 skills",
+    status: "done",
+    deliverables: [
+      "4 okhp3-* skills with full SKILL.md content (process-discovery, process-narrative, bpmn-for-mermaid, mermaid-theme-builder)",
+      "context/ variable layer — 9 context template files with YAML frontmatter",
+      "GitHub repository scaffolded (OKHP3/mermaid-diagram-bpmn)",
+    ],
+  },
+  {
+    version: "V0.3",
+    title: "BP-SKILL suite — 15-skill pipeline",
+    status: "current",
+    deliverables: [
+      "15-skill full lifecycle pipeline with complete SKILL.md content",
+      "Agent Skills browser (/skills) — standard, pipeline diagram, skill browser, variable layer, PNS schema",
+      "Walkthrough page (/walkthrough) — end-to-end 15-skill guide",
+      "SkillDetail page (/skills/:skillId) with single + suite ZIP downloads",
+      "PNS.md lifecycle tracker + 13-section schema viewer",
+      "Documentation rewrite: README, AGENTS, 6 docs/ files",
+      "GitHub Pages deployment workflow",
+      "bp_skill_version: \"0.3.0\" across all 15 source SKILL.md files",
+      "okhp3-* skills deprecated in frontmatter",
+      "Version checklist published at docs/version-checklist.md",
+    ],
+  },
+  {
+    version: "V0.4",
+    title: "Content and interactivity",
+    status: "planned",
+    deliverables: [
+      "Interactive pipeline diagram — click any skill to navigate to its detail page",
+      "PNS.md lifecycle advancement shown per skill in Walkthrough table",
+      "Purchase-approval worked example tracing all 15 skills end-to-end",
+      "Notion skill cards linked from the About page",
+    ],
+  },
+  {
+    version: "V0.5",
+    title: "Validation tooling",
+    status: "planned",
+    deliverables: [
+      "skill:validate CLI — conformance checks for SKILL.md frontmatter and required sections",
+      "validate-pns.mjs — schema-enforced PNS completeness checker",
+      "Eval suite with pass/fail fixtures for all 15 skills (pnpm eval:run)",
+      "Completeness scoring scripts for all 15 skill output types",
+    ],
+  },
+  {
+    version: "V0.6",
+    title: "Mermaid plugin packaging",
+    status: "planned",
+    deliverables: [
+      "registerExternalDiagrams() integration — detector, parser, DB, renderer all registered",
+      "Theme variable binding — getStyles() reads live Mermaid theme vars at render time",
+      "Plugin entry point exported from package, loadable via <script> against Mermaid CDN",
+    ],
+  },
+  {
+    version: "V0.7",
+    title: "Langium parser",
+    status: "planned",
+    deliverables: [
+      "Formal Langium grammar covering all bpmn-beta syntax",
+      "Error recovery — invalid lines produce a diagnostic, not a crash",
+      "Parser snapshot + visual regression test suite",
+      "LSP support: hover, completion, and diagnostics in VS Code",
+    ],
+  },
+  {
+    version: "V0.8",
+    title: "Quality gates",
+    status: "planned",
+    deliverables: [
+      "BPMN 2.0.2 Descriptive Conformance Sub-Class element matrix published",
+      "WCAG 2.1 AA accessibility audit on all rendered SVG output",
+      "Bundle size baseline documented; dependency audit — no critical CVEs",
+      "LLM benchmark prompts tested across ChatGPT, Claude, Gemini for bpmn-beta generation accuracy",
+      "CONTRIBUTING.md, SECURITY.md, CODE_OF_CONDUCT.md added",
+    ],
+  },
+  {
+    version: "V0.9",
+    title: "Community and upstream prep",
+    status: "planned",
+    deliverables: [
+      "3+ real-world process examples contributed (beyond purchase-approval)",
+      "Mermaid issues #7699, #2623, #660 engaged with prototype link",
+      "BP-SKILL suite listed in agentskills.io directory",
+      "Comparison matrix: bpmn-beta vs. PlantUML, bpmn.io, Visio, Mermaid flowchart",
+    ],
+  },
+  {
+    version: "V1.0",
+    title: "Upstream Mermaid PR",
+    status: "planned",
+    deliverables: [
+      "Formal PR open at mermaid-js/mermaid proposing bpmn-beta as a core diagram type",
+      "BP-SKILL v1.0 published as standalone npm package (@okhp3/bp-skill)",
+      "DSL spec v1.0 frozen — no breaking syntax changes without a new major",
+      "Full plugin documentation written for Mermaid maintainers",
+    ],
+  },
+];
+
+const VERSION_STATUS_CONFIG: Record<VersionStatus, { label: string; pill: string; dot: string }> = {
+  done: {
+    label: "Done",
+    pill: "text-emerald-700 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-900/20 border-emerald-200 dark:border-emerald-800",
+    dot: "bg-emerald-500",
+  },
+  current: {
+    label: "Current",
+    pill: "text-primary bg-primary/10 border-primary/30",
+    dot: "bg-primary ring-4 ring-primary/20",
+  },
+  planned: {
+    label: "Planned",
+    pill: "text-muted-foreground bg-muted/50 border-border",
+    dot: "bg-border",
+  },
+};
+
+// ─── MVP Scope / Deferred ──────────────────────────────────────────────────────
 
 const MVP_SCOPE = [
   "Start events",
@@ -180,6 +332,74 @@ export default function Roadmap() {
           the rendering model, and the Mermaid integration path. Deferred features are explicitly named
           to avoid scope creep and to set clear expectations with contributors and users.
         </p>
+      </div>
+
+      {/* ─── Version Ladder ───────────────────────────────────────── */}
+      <div className="mb-14">
+        <div className="mb-6">
+          <h2 className="text-base font-semibold text-foreground" data-testid="heading-version-ladder">
+            Version ladder — V0.1 to V1.0
+          </h2>
+          <p className="mt-1.5 text-xs text-muted-foreground max-w-2xl leading-relaxed">
+            Each version is a releasable milestone with explicit completion criteria. The full checklist
+            lives in{" "}
+            <code className="font-mono text-xs bg-muted px-1 rounded">docs/version-checklist.md</code>.
+          </p>
+        </div>
+
+        <div className="relative">
+          {/* Vertical spine */}
+          <div className="absolute left-[1.4rem] top-3 bottom-3 w-px bg-border hidden sm:block" />
+
+          <div className="flex flex-col gap-0">
+            {VERSION_LADDER.map((step, i) => {
+              const cfg = VERSION_STATUS_CONFIG[step.status];
+              const isLast = i === VERSION_LADDER.length - 1;
+              return (
+                <div
+                  key={step.version}
+                  className={`relative flex gap-4 sm:gap-5 items-start ${!isLast ? "pb-6" : ""}`}
+                >
+                  {/* Dot */}
+                  <div className="shrink-0 w-11 flex justify-center pt-0.5 z-10">
+                    <div
+                      className={`w-3 h-3 rounded-full border-2 border-background ${cfg.dot} mt-1`}
+                    />
+                  </div>
+
+                  {/* Content */}
+                  <div className="flex-1 min-w-0">
+                    <div className="flex flex-wrap items-center gap-2 mb-1.5">
+                      <span className="text-xs font-mono font-bold text-foreground">
+                        {step.version}
+                      </span>
+                      <span
+                        className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full border text-[10px] font-semibold ${cfg.pill}`}
+                      >
+                        {step.status === "current" && (
+                          <CircleDot size={9} className="shrink-0" />
+                        )}
+                        {cfg.label}
+                      </span>
+                      <span className="text-xs font-medium text-foreground">
+                        {step.title}
+                      </span>
+                    </div>
+
+                    <ul className="space-y-0.5">
+                      {step.deliverables.map((d, j) => (
+                        <li key={j} className="flex items-start gap-2 text-xs text-muted-foreground leading-relaxed">
+                          <span className="shrink-0 mt-1.5 w-1 h-1 rounded-full bg-muted-foreground/30" />
+                          {d}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
       </div>
 
       {/* Scope columns */}

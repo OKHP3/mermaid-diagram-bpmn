@@ -4,6 +4,8 @@ description: Conduct structured process discovery using BABOK v3 elicitation tec
 license: MIT
 metadata:
   bp_skill_version: "0.2.0"
+  deprecated: true
+  deprecated_reason: "Superseded by the full BP-SKILL v0.3 15-skill pipeline suite. Retained for reference."
   status: core
   version: 0.1.0
   author: OverKill Hill P³
@@ -28,6 +30,8 @@ metadata:
     - process discovery
     - elicit requirements
 ---
+> **Deprecated in BP-SKILL v0.3.** This skill is retained for reference only. It is superseded by the full 15-skill pipeline suite. See the [BP-SKILL suite](../README.md) for the current skill set.
+
 
 ## Purpose
 

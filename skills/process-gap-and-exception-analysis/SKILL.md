@@ -5,7 +5,7 @@ license: MIT
 homepage: https://github.com/overkillhill/mermaid-diagram-bpmn/tree/main/skills/process-gap-and-exception-analysis
 repository: https://github.com/overkillhill/mermaid-diagram-bpmn
 metadata:
-  bp_skill_version: "0.2.0"
+  bp_skill_version: "0.3.0"
   status: core
   version: "0.1.0"
   author: OverKill Hill P³

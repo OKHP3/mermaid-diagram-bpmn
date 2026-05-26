@@ -4,6 +4,8 @@ description: Generate, validate, normalize, and explain Mermaid-native bpmn-beta
 license: MIT
 metadata:
   bp_skill_version: "0.2.0"
+  deprecated: true
+  deprecated_reason: "Superseded by the full BP-SKILL v0.3 15-skill pipeline suite. Retained for reference."
   status: core
   version: 0.1.0
   author: OverKill Hill P³
@@ -31,6 +33,8 @@ metadata:
   depends_on: ["okhp3-process-narrative"]
   produces: "bpmn-beta.mmd"
 ---
+> **Deprecated in BP-SKILL v0.3.** This skill is retained for reference only. It is superseded by the full 15-skill pipeline suite. See the [BP-SKILL suite](../README.md) for the current skill set.
+
 
 ## Purpose
 

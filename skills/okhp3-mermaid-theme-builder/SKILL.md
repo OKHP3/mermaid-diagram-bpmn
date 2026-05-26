@@ -4,6 +4,8 @@ description: Apply reusable visual governance to Mermaid diagrams. Use this skil
 license: MIT
 metadata:
   bp_skill_version: "0.2.0"
+  deprecated: true
+  deprecated_reason: "Superseded by the full BP-SKILL v0.3 15-skill pipeline suite. Retained for reference."
   status: supporting
   author: OverKill Hill P3
   project: Mermaid Theme Builder
@@ -13,6 +15,8 @@ metadata:
   category: diagram-governance
   produces: "styled-mermaid.md"
 ---
+> **Deprecated in BP-SKILL v0.3.** This skill is retained for reference only. It is superseded by the full 15-skill pipeline suite. See the [BP-SKILL suite](../README.md) for the current skill set.
+
 
 ## Purpose
 
