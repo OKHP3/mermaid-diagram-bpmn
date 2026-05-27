@@ -1,4 +1,4 @@
-import { CheckCheck, FlaskConical, Clock, Wrench, GitBranch, Database, Puzzle, Palette, Shield, AlignVerticalJustifyStart, CircleDot } from "lucide-react";
+import { CheckCheck, FlaskConical, Clock, Wrench, GitBranch, Database, Puzzle, Palette, Shield, AlignVerticalJustifyStart, CircleDot, ExternalLink } from "lucide-react";
 
 // ─── Version Ladder ────────────────────────────────────────────────────────────
 
@@ -527,6 +527,31 @@ export default function Roadmap() {
           <code className="font-mono text-xs bg-muted px-1 rounded">docs/strategy.md</code>
           {" "}in this repository. If they disagree, that file wins.
         </p>
+      </div>
+
+      {/* Reference links */}
+      <div className="mt-6 rounded-lg border border-border bg-card overflow-hidden">
+        <div className="px-4 py-3 border-b border-border bg-muted/30">
+          <p className="text-xs font-semibold text-foreground uppercase tracking-wide">Reference links</p>
+        </div>
+        <ul className="divide-y divide-border">
+          <li className="flex items-center gap-3 px-4 py-3">
+            <ExternalLink size={12} className="text-muted-foreground shrink-0" />
+            <div className="flex-1 min-w-0">
+              <a
+                href="https://www.notion.so/36c812e0ced481ef816de1cd471fd1cd"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-xs font-medium text-primary hover:underline underline-offset-2"
+              >
+                BP-SKILL v0.2 Suite
+              </a>
+              <p className="text-[10px] text-muted-foreground mt-0.5">
+                Full suite documentation — all 15 skills, PNS schema, context files, and install instructions
+              </p>
+            </div>
+          </li>
+        </ul>
       </div>
     </div>
   );
