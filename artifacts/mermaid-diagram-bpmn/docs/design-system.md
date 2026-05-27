@@ -51,10 +51,10 @@ reference via CSS variable.
 The OKH header is always dark, regardless of light/dark page theme.
 
 ```css
---okh-header-bg:     #1c2118;
---okh-header-text:   #e6dfc9;
---okh-header-muted:  rgba(230, 223, 201, 0.52);
---okh-header-border: #2a3124;
+--okh-header-bg:     #1c3a34;                    /* = --okh-forge-teal */
+--okh-header-text:   #e5e7eb;                    /* neutral near-white */
+--okh-header-muted:  rgba(229, 231, 235, 0.52);
+--okh-header-border: rgba(255, 255, 255, 0.07);  /* glass border       */
 --okh-header-active: var(--okh-forge-rust);
 --okh-header-hover:  rgba(255, 255, 255, 0.07);
 ```

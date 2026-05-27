@@ -49,12 +49,12 @@ export const LIGHT_THEME: BpmnThemeOptions = {
 // Fallback theme with concrete values for Mermaid's SVG context where CSS
 // custom properties defined by Tailwind are not available.
 export const MERMAID_FALLBACK_THEME: BpmnThemeOptions = {
-  lineColor: '#333333',
-  mainBkg: '#ffffff',
-  nodeBorder: '#999999',
-  clusterBkg: '#efefef',
-  textColor: '#333333',
-  primaryColor: '#1890ff',
+  primaryColor: '#111827',   /* near-black node fill  */
+  lineColor:    '#c46a2c',   /* rust-orange           */
+  mainBkg:      '#1a2332',   /* dark navy background  */
+  nodeBorder:   '#c46a2c',   /* rust-orange border    */
+  clusterBkg:   '#0d1117',   /* deep workbench        */
+  textColor:    '#e5e7eb',   /* near-white text       */
 };
 
 /**

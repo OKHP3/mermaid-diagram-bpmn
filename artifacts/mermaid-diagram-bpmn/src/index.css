@@ -72,11 +72,11 @@
 
   /* ---- Typography ----------------------------------------------- */
   --app-font-sans:    'DM Sans', system-ui, sans-serif;
-  --app-font-display: 'Alfa Slab One', Georgia, serif;
+  --app-font-display: 'Alfa Slab One', system-ui, sans-serif;
   --app-font-mono:    'JetBrains Mono', 'Menlo', monospace;
 
   /* ---- Radius ---------------------------------------------------- */
-  --radius: 0.5rem;
+  --radius: 0.75rem;
 
   /* ---- Shadow scale --------------------------------------------- */
   --forge-shadow-sm: 0 1px 2px rgba(15, 23, 42, 0.06);
@@ -84,29 +84,29 @@
   --forge-shadow-lg: 0 4px 16px rgba(15, 23, 42, 0.14);
 
   /* ---- Header — always-dark, never theme-responsive ------------- */
-  --okh-header-bg:     #1c2118;
-  --okh-header-text:   #e6dfc9;
-  --okh-header-muted:  rgba(230, 223, 201, 0.52);
-  --okh-header-border: #2a3124;
+  --okh-header-bg:     #1c3a34;                    /* forge teal — was dark olive   */
+  --okh-header-text:   #e5e7eb;                    /* neutral near-white            */
+  --okh-header-muted:  rgba(229, 231, 235, 0.52);  /* match new text base color     */
+  --okh-header-border: rgba(255, 255, 255, 0.07);  /* was solid #2a3124             */
   --okh-header-active: var(--okh-forge-rust);
   --okh-header-hover:  rgba(255, 255, 255, 0.07);
 
   /* ---- Semantic tokens — light mode ----------------------------- */
-  --background:              40 24% 92%;   /* warm field  #f0ece4 */
-  --foreground:              28 45%  8%;   /* espresso    #1d1108 */
+  --background:              33 18% 94%;   /* warm field  #f0ebe5 */
+  --foreground:             222 47% 11%;   /* navy ink    #0f172a */
 
-  --card:                    42 50% 97%;   /* warm paper  #faf7f1 */
-  --card-foreground:         28 45%  8%;
+  --card:                    34 35% 95%;   /* warm paper  #f6f2ee */
+  --card-foreground:        222 47% 11%;
   --card-border:             38 28% 80%;
 
-  --popover:                 42 50% 97%;
-  --popover-foreground:      28 45%  8%;
+  --popover:                 34 35% 95%;
+  --popover-foreground:     222 47% 11%;
 
   --primary:                 25 62% 47%;   /* rust-orange #c46a2c */
   --primary-foreground:       0  0% 100%;
 
   --secondary:               38 22% 88%;
-  --secondary-foreground:    28 45%  8%;
+  --secondary-foreground:   222 47% 11%;
 
   --muted:                   38 20% 89%;
   --muted-foreground:        33 18% 44%;
@@ -124,36 +124,36 @@
 }
 
 .dark {
-  /* ---- Semantic tokens — dark mode ------------------------------ */
-  --background:              88 18%  9%;
-  --foreground:              38 28% 88%;
+  /* ---- Semantic tokens — dark mode (slate-blue hue 224/220) ----- */
+  --background:             224 30%  8%;   /* #0c1120 deep navy      */
+  --foreground:             220 14% 92%;   /* #e5e7eb near-white     */
 
-  --card:                    88 15% 13%;
-  --card-foreground:         38 28% 88%;
-  --card-border:             88 12% 20%;
+  --card:                   224 25% 11%;   /* #131b2e dark navy card  */
+  --card-foreground:        220 14% 92%;
+  --card-border:            224 20% 18%;   /* #222f4a border          */
 
-  --popover:                 88 15% 13%;
-  --popover-foreground:      38 28% 88%;
+  --popover:                224 25% 11%;
+  --popover-foreground:     220 14% 92%;
 
-  --primary:                 25 62% 60%;
+  --primary:                 25 63% 58%;   /* #d4803a rust lightened  */
   --primary-foreground:       0  0% 100%;
 
-  --secondary:               88 12% 18%;
-  --secondary-foreground:    38 28% 88%;
+  --secondary:              224 20% 15%;
+  --secondary-foreground:   220 14% 92%;
 
-  --muted:                   88 12% 18%;
-  --muted-foreground:        38 18% 56%;
+  --muted:                  224 20% 15%;
+  --muted-foreground:       220 10% 56%;
 
-  --accent:                  19 28% 22%;
-  --accent-foreground:       25 62% 70%;
-  --accent-border:           19 28% 32%;
+  --accent:                 224 20% 18%;
+  --accent-foreground:       25 63% 70%;
+  --accent-border:          224 20% 24%;
 
   --destructive:              0 62% 45%;
   --destructive-foreground:   0  0% 100%;
 
-  --border:                  88 12% 20%;
-  --input:                   88 12% 20%;
-  --ring:                    25 62% 60%;
+  --border:                 224 20% 18%;
+  --input:                  224 20% 18%;
+  --ring:                    25 63% 58%;
 }
 
 /* ================================================================== *

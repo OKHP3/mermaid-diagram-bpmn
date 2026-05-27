@@ -84,10 +84,10 @@
   --sidebar-border: 220 13% 91%;
   --sidebar-ring: 240 5.9% 10%;
 
-  --font-sans: 'Inter', sans-serif;
+  --font-sans: 'DM Sans', system-ui, sans-serif;
   --font-serif: Georgia, serif;
   --font-mono: Menlo, monospace;
-  --radius: .5rem;
+  --radius: 0.75rem;
   --spacing: 0.25rem;
 }
 
