@@ -1,40 +1,27 @@
 /* ═══════════════════════════════════════════════════════════════════════════
    OKH FORGE UI SYSTEM  ·  forge-tokens.css  ·  v0.1.0
-   CANONICAL DESIGN TOKENS  ·  SOURCE OF TRUTH
+   RAW PALETTE LAYER — local copy for BPMN for Mermaid
 
-   Shared token layer for all OverKill Hill P3 companion apps.
-   Mirrors overkillhill.com/assets/css/theme.css.
+   Source of truth: github.com/OKHP3/mermaid-theme-builder/src/styles/forge-tokens.css
+   Mirrors the upstream raw palette section only. Semantic token mapping
+   (--background, --foreground, etc.) and Tailwind @theme bridge remain in
+   src/index.css so this file stays portable.
 
-   Default mode is LIGHT. Dark mode activates only via the .dark class on the
-   document root. Do not auto-apply .dark on load and do not follow the system
-   color scheme by default.
+   Authority order:
+     1. OverKill-Hill assets/css/theme.css
+     2. Mermaid Theme Builder src/styles/forge-tokens.css  ← upstream
+     3. THIS FILE (local copy)
+     4. src/index.css (semantic mapping + component utilities)
 
-   GOVERNANCE
-   This file is the single definition. Do not edit downstream copies.
-   Edit here, then re-sync into each consuming app. Each app imports this file
-   first, then layers its own component utility classes on top.
-
-   These apps are separate Replit projects, not a monorepo. Re-sync via a
-   GitHub Action that pulls this upstream file and opens a PR on diff, or by
-   manual copy gated against the brand-conformance checklist. One upstream,
-   every downstream copy regenerated, never hand-edited.
-
-   EMBEDDED SURFACES
-   When a consuming app is embedded via an iframe (e.g. the Mermaid Theme
-   Builder on its overkillhill.com project page), CSS does not cross the iframe
-   boundary. The host page cannot style the embedded app and vice versa. The
-   embedded app must ship its own copy of this file. Visual harmony comes from
-   both sides importing the same tokens, not from inheritance.
-
-   Tailwind v4: this file feeds the @theme inline bridge at the bottom, so the
-   semantic tokens are available as Tailwind color/font/radius utilities.
+   EMBEDDED SURFACES: CSS does not cross iframe boundaries. The host page
+   cannot style this app; this file must be shipped with the app.
    ═══════════════════════════════════════════════════════════════════════════ */
 
 
 /* ─────────────────────────────────────────────────────────────────────────
-   SECTION A — RAW PALETTE TOKENS
-   Canonical brand hex values. Fixed across light and dark. Read, do not
-   override in component scope.
+   RAW FORGE PALETTE
+   Canonical brand hex values. Fixed across light and dark. Do not override
+   in component scope — map through semantic tokens in index.css instead.
    ───────────────────────────────────────────────────────────────────────── */
 
 :root {
@@ -48,284 +35,37 @@
   --okh-forge-code-bg: #0f1f1c;   /* code / workbench panel background */
   --okh-forge-code-fg: #d4c9b5;   /* code / workbench panel text     */
 
-  /* Header surface (always-dark, identical in light and dark mode) */
+  /* Header surface (always-dark — identical in light and dark mode) */
   --forge-header-bg:     var(--okh-forge-teal);    /* #1c3a34 */
   --forge-header-fg:     #e5e7eb;
   --forge-header-muted:  rgba(229, 231, 235, 0.55);
   --forge-header-border: rgba(255, 255, 255, 0.07);
 
-  /* Footer rail (always-dark, darker than header) */
+  /* Footer rail (always-dark) */
   --forge-footer-bg:     #0f1a17;
   --forge-footer-fg:     rgba(229, 231, 235, 0.45);
   --forge-footer-border: rgba(255, 255, 255, 0.08);
-
-  /* Mobile nav (always-dark, matches header tone) */
-  --forge-mobile-nav-bg:     rgba(28, 58, 52, 0.97);
-  --forge-mobile-nav-border: rgba(255, 255, 255, 0.10);
 
   /* Blueprint grid texture */
   --forge-grid-size:  28px;
   --forge-grid-light: rgba(0, 0, 0, 0.028);
   --forge-grid-dark:  rgba(255, 255, 255, 0.018);
 
-  /* Elevation overlays (used by hover/active utilities) */
-  --elevate-1: rgba(0, 0, 0, 0.03);
-  --elevate-2: rgba(0, 0, 0, 0.08);
-
-  /* Button / badge outline helpers */
-  --button-outline: rgba(0, 0, 0, 0.10);
-  --badge-outline:  rgba(0, 0, 0, 0.05);
-  --opaque-button-border-intensity: -8;
-
-  /* Canonical Mermaid render tokens (match theme.css and the OverKill Hill P3
-     palette emitted by the Mermaid Theme Builder). Used for diagram output. */
+  /* Canonical Mermaid render tokens */
   --mermaid-primary-color:        #111827;
-  --mermaid-primary-text-color:   #e5e7eb;
   --mermaid-primary-border-color: #c46a2c;
   --mermaid-line-color:           #c46a2c;
-  --mermaid-secondary-color:      #181f26;
-  --mermaid-tertiary-color:       #1c3a34;
   --mermaid-cluster-bg:           #0d1117;
-  --mermaid-edge-label-bg:        #181f26;
+  --mermaid-text-color:           #e5e7eb;
 
-  /* Header-specific text tones (warm cream family for always-dark header) */
-  --forge-header-title:  #e8dcc8;   /* warm cream app title — warmer than header-fg */
-  --forge-header-slug:   #b8aa96;   /* muted warm cream for slug/code badge */
+  /* Font families */
+  --app-font-display: 'Alfa Slab One', Georgia, serif;
+  --app-font-sans:    'DM Sans', system-ui, -apple-system, sans-serif;
+  --app-font-mono:    'JetBrains Mono', 'Fira Code', monospace;
 
-  /* Legacy shorthand aliases (backward compat; prefer --okh-forge-*) */
+  /* Legacy shorthand aliases */
   --okh-teal:   #1c3a34;
   --okh-orange: #c46a2c;
   --okh-amber:  #e6a03c;
   --okh-paper:  #f6f2ee;
-}
-
-.dark {
-  --elevate-1: rgba(255, 255, 255, 0.04);
-  --elevate-2: rgba(255, 255, 255, 0.09);
-  --button-outline: rgba(255, 255, 255, 0.10);
-  --badge-outline:  rgba(255, 255, 255, 0.05);
-  --opaque-button-border-intensity: 9;
-}
-
-
-/* ─────────────────────────────────────────────────────────────────────────
-   SECTION B — SEMANTIC DESIGN TOKENS  (LIGHT MODE, default)
-   All HSL channel values. Derived from the raw forge palette above.
-   ───────────────────────────────────────────────────────────────────────── */
-
-:root {
-  /* Page */
-  --background: 33 18% 94%;          /* #f0ebe5  warm paper page bg */
-  --foreground: 222 47% 11%;         /* #0f172a  deep navy ink */
-  --border:     30 20% 88%;          /* warm subtle border */
-
-  /* Card / Popover */
-  --card:                 34 35% 95%;   /* #f6f2ee warm paper */
-  --card-foreground:      222 47% 11%;
-  --card-border:          30 20% 88%;
-  --popover:              34 35% 97%;
-  --popover-foreground:   222 47% 11%;
-  --popover-border:       30 20% 88%;
-
-  /* Primary — rust-orange #c46a2c */
-  --primary:            25 63% 47%;
-  --primary-foreground: 0 0% 100%;
-
-  /* Secondary / Muted / Accent */
-  --secondary:            33 28% 92%;
-  --secondary-foreground: 222 30% 20%;
-  --muted:                33 25% 91%;
-  --muted-foreground:     220 9% 35%;   /* #4b5563 */
-  --accent:               25 40% 92%;   /* light rust tint */
-  --accent-foreground:    25 63% 35%;
-
-  /* Sidebar */
-  --sidebar:                    33 28% 93%;
-  --sidebar-foreground:         222 47% 11%;
-  --sidebar-border:             30 18% 86%;
-  --sidebar-primary:            25 63% 47%;
-  --sidebar-primary-foreground: 0 0% 100%;
-  --sidebar-accent:             25 40% 92%;
-  --sidebar-accent-foreground:  25 63% 35%;
-  --sidebar-ring:               25 63% 47%;
-
-  /* System */
-  --destructive:            0 72% 51%;
-  --destructive-foreground: 0 0% 100%;
-  --input: 30 20% 85%;
-  --ring:  25 63% 47%;          /* rust-orange focus ring */
-
-  /* Chart palette */
-  --chart-1: 25 63% 47%;
-  --chart-2: 196 90% 45%;
-  --chart-3: 38 92% 52%;
-  --chart-4: 142 72% 42%;
-  --chart-5: 330 80% 54%;
-
-  /* Typography */
-  --app-font-sans:    'DM Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-  --app-font-display: 'Alfa Slab One', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-  --app-font-serif:   Georgia, serif;
-  --app-font-mono:    'JetBrains Mono', 'Menlo', monospace;
-
-  /* Shape / spacing */
-  --radius:  0.75rem;
-  --spacing: 0.25rem;
-  --tracking-normal: 0em;
-
-  /* Shadow scale (light) */
-  --shadow-2xs: 0 1px 2px 0 rgba(0, 0, 0, 0.04);
-  --shadow-xs:  0 1px 3px 0 rgba(0, 0, 0, 0.06);
-  --shadow-sm:  0 2px 4px 0 rgba(0, 0, 0, 0.06), 0 1px 2px -1px rgba(0, 0, 0, 0.04);
-  --shadow:     0 4px 8px 0 rgba(0, 0, 0, 0.08), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
-  --shadow-md:  0 6px 16px 0 rgba(0, 0, 0, 0.10), 0 3px 6px -3px rgba(0, 0, 0, 0.06);
-  --shadow-lg:  0 10px 24px 0 rgba(0, 0, 0, 0.12), 0 4px 8px -4px rgba(0, 0, 0, 0.07);
-  --shadow-xl:  0 16px 40px 0 rgba(0, 0, 0, 0.14), 0 8px 16px -8px rgba(0, 0, 0, 0.08);
-  --shadow-2xl: 0 24px 60px 0 rgba(0, 0, 0, 0.18);
-
-  /* Opaque border helpers */
-  --sidebar-primary-border: hsl(from hsl(var(--sidebar-primary)) h s calc(l + var(--opaque-button-border-intensity)) / alpha);
-  --sidebar-accent-border:  hsl(from hsl(var(--sidebar-accent))  h s calc(l + var(--opaque-button-border-intensity)) / alpha);
-  --primary-border:         hsl(from hsl(var(--primary))         h s calc(l + var(--opaque-button-border-intensity)) / alpha);
-  --secondary-border:       hsl(from hsl(var(--secondary))       h s calc(l + var(--opaque-button-border-intensity)) / alpha);
-  --muted-border:           hsl(from hsl(var(--muted))           h s calc(l + var(--opaque-button-border-intensity)) / alpha);
-  --accent-border:          hsl(from hsl(var(--accent))          h s calc(l + var(--opaque-button-border-intensity)) / alpha);
-  --destructive-border:     hsl(from hsl(var(--destructive))     h s calc(l + var(--opaque-button-border-intensity)) / alpha);
-}
-
-
-/* ─────────────────────────────────────────────────────────────────────────
-   SECTION C — SEMANTIC DESIGN TOKENS  (DARK MODE)
-   Espresso / blueprint palette (slate-blue family, hue ~224).
-   Header and footer surfaces stay always-dark via Section A.
-   ───────────────────────────────────────────────────────────────────────── */
-
-.dark {
-  --background: 224 30% 8%;
-  --foreground: 220 14% 92%;
-  --border:     224 20% 18%;
-
-  --card:               224 25% 11%;
-  --card-foreground:    220 14% 92%;
-  --card-border:        224 20% 18%;
-  --popover:            224 25% 11%;
-  --popover-foreground: 220 14% 92%;
-  --popover-border:     224 20% 18%;
-
-  --primary:            25 63% 58%;   /* rust-orange, lifted for dark bg */
-  --primary-foreground: 0 0% 100%;
-
-  --secondary:            224 20% 16%;
-  --secondary-foreground: 220 14% 88%;
-  --muted:                224 20% 14%;
-  --muted-foreground:     220 12% 56%;
-  --accent:               25 25% 18%;
-  --accent-foreground:    25 50% 75%;
-
-  --sidebar:                    224 28% 10%;
-  --sidebar-foreground:         220 14% 90%;
-  --sidebar-border:             224 20% 16%;
-  --sidebar-primary:            25 63% 58%;
-  --sidebar-primary-foreground: 0 0% 100%;
-  --sidebar-accent:             25 25% 18%;
-  --sidebar-accent-foreground:  25 50% 75%;
-  --sidebar-ring:               25 63% 58%;
-
-  --destructive:            0 72% 58%;
-  --destructive-foreground: 0 0% 100%;
-  --input: 224 20% 18%;
-  --ring:  25 63% 58%;
-
-  --chart-1: 25 63% 58%;
-  --chart-2: 196 90% 52%;
-  --chart-3: 38 92% 58%;
-  --chart-4: 142 72% 48%;
-  --chart-5: 330 80% 60%;
-
-  /* Shadow scale (dark) */
-  --shadow-2xs: 0 1px 2px 0 rgba(0, 0, 0, 0.20);
-  --shadow-xs:  0 1px 3px 0 rgba(0, 0, 0, 0.25);
-  --shadow-sm:  0 2px 4px 0 rgba(0, 0, 0, 0.25), 0 1px 2px -1px rgba(0, 0, 0, 0.20);
-  --shadow:     0 4px 8px 0 rgba(0, 0, 0, 0.30), 0 2px 4px -2px rgba(0, 0, 0, 0.22);
-  --shadow-md:  0 6px 16px 0 rgba(0, 0, 0, 0.35), 0 3px 6px -3px rgba(0, 0, 0, 0.28);
-  --shadow-lg:  0 10px 24px 0 rgba(0, 0, 0, 0.40), 0 4px 8px -4px rgba(0, 0, 0, 0.32);
-  --shadow-xl:  0 16px 40px 0 rgba(0, 0, 0, 0.45), 0 8px 16px -8px rgba(0, 0, 0, 0.36);
-  --shadow-2xl: 0 24px 60px 0 rgba(0, 0, 0, 0.50);
-
-  --sidebar-primary-border: hsl(from hsl(var(--sidebar-primary)) h s calc(l + var(--opaque-button-border-intensity)) / alpha);
-  --sidebar-accent-border:  hsl(from hsl(var(--sidebar-accent))  h s calc(l + var(--opaque-button-border-intensity)) / alpha);
-  --primary-border:         hsl(from hsl(var(--primary))         h s calc(l + var(--opaque-button-border-intensity)) / alpha);
-  --secondary-border:       hsl(from hsl(var(--secondary))       h s calc(l + var(--opaque-button-border-intensity)) / alpha);
-  --muted-border:           hsl(from hsl(var(--muted))           h s calc(l + var(--opaque-button-border-intensity)) / alpha);
-  --accent-border:          hsl(from hsl(var(--accent))          h s calc(l + var(--opaque-button-border-intensity)) / alpha);
-  --destructive-border:     hsl(from hsl(var(--destructive))     h s calc(l + var(--opaque-button-border-intensity)) / alpha);
-}
-
-
-/* ─────────────────────────────────────────────────────────────────────────
-   SECTION D — TAILWIND @THEME BRIDGE
-   Maps the CSS variables above into Tailwind's color/font/radius utilities.
-   ───────────────────────────────────────────────────────────────────────── */
-
-@theme inline {
-  --color-background: hsl(var(--background));
-  --color-foreground: hsl(var(--foreground));
-  --color-border:     hsl(var(--border));
-  --color-input:      hsl(var(--input));
-  --color-ring:       hsl(var(--ring));
-
-  --color-card:            hsl(var(--card));
-  --color-card-foreground: hsl(var(--card-foreground));
-  --color-card-border:     hsl(var(--card-border));
-
-  --color-popover:            hsl(var(--popover));
-  --color-popover-foreground: hsl(var(--popover-foreground));
-  --color-popover-border:     hsl(var(--popover-border));
-
-  --color-primary:            hsl(var(--primary));
-  --color-primary-foreground: hsl(var(--primary-foreground));
-  --color-primary-border:     var(--primary-border);
-
-  --color-secondary:            hsl(var(--secondary));
-  --color-secondary-foreground: hsl(var(--secondary-foreground));
-  --color-secondary-border:     var(--secondary-border);
-
-  --color-muted:            hsl(var(--muted));
-  --color-muted-foreground: hsl(var(--muted-foreground));
-  --color-muted-border:     var(--muted-border);
-
-  --color-accent:            hsl(var(--accent));
-  --color-accent-foreground: hsl(var(--accent-foreground));
-  --color-accent-border:     var(--accent-border);
-
-  --color-destructive:            hsl(var(--destructive));
-  --color-destructive-foreground: hsl(var(--destructive-foreground));
-  --color-destructive-border:     var(--destructive-border);
-
-  --color-chart-1: hsl(var(--chart-1));
-  --color-chart-2: hsl(var(--chart-2));
-  --color-chart-3: hsl(var(--chart-3));
-  --color-chart-4: hsl(var(--chart-4));
-  --color-chart-5: hsl(var(--chart-5));
-
-  --color-sidebar:                    hsl(var(--sidebar));
-  --color-sidebar-foreground:         hsl(var(--sidebar-foreground));
-  --color-sidebar-border:             hsl(var(--sidebar-border));
-  --color-sidebar-primary:            hsl(var(--sidebar-primary));
-  --color-sidebar-primary-foreground: hsl(var(--sidebar-primary-foreground));
-  --color-sidebar-primary-border:     var(--sidebar-primary-border);
-  --color-sidebar-accent:             hsl(var(--sidebar-accent));
-  --color-sidebar-accent-foreground:  hsl(var(--sidebar-accent-foreground));
-  --color-sidebar-accent-border:      var(--sidebar-accent-border);
-  --color-sidebar-ring:               hsl(var(--sidebar-ring));
-
-  --font-sans:    var(--app-font-sans);
-  --font-display: var(--app-font-display);
-  --font-serif:   var(--app-font-serif);
-  --font-mono:    var(--app-font-mono);
-
-  --radius-sm: calc(var(--radius) - 4px);
-  --radius-md: calc(var(--radius) - 2px);
-  --radius-lg: var(--radius);
-  --radius-xl: calc(var(--radius) + 4px);
 }
