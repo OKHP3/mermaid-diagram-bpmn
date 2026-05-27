@@ -74,6 +74,7 @@ const SEVERITY_COLORS: Record<string, string> = {
 };
 
 const CONTRIBUTE_LINKS = [
+  { label: "BP-SKILL v0.2 Suite — Notion page", url: "https://www.notion.so/36c812e0ced481ef816de1cd471fd1cd" },
   { label: "GitHub issue #7699 — Native BPMN 2.0 support", url: "https://github.com/mermaid-js/mermaid/issues/7699" },
   { label: "GitHub issue #2623 — BPMN support discussion", url: "https://github.com/mermaid-js/mermaid/issues/2623" },
   { label: "GitHub issue #660 — Older BPMN diagram request", url: "https://github.com/mermaid-js/mermaid/issues/660" },
@@ -228,17 +229,37 @@ export default function About() {
         <h2 className="text-base font-semibold text-foreground mb-4" data-testid="heading-how-to-contribute">
           How to get involved
         </h2>
-        <div className="forge-card max-w-2xl mb-6 flex items-start justify-between gap-4">
-          <div>
-            <p className="text-sm font-semibold text-foreground mb-1">New to the project?</p>
-            <p className="text-xs text-muted-foreground leading-relaxed">
-              The BP-SKILL Suite Walkthrough shows how all 15 skills connect — from intake to publication —
-              in a single bpmn-beta pipeline diagram and step-by-step handoff table.
-            </p>
+        <div className="flex flex-col gap-3 max-w-2xl mb-6">
+          <div className="forge-card flex items-start justify-between gap-4" data-testid="card-bp-skill-suite">
+            <div>
+              <p className="text-sm font-semibold text-foreground mb-1">BP-SKILL v0.2 Suite</p>
+              <p className="text-xs text-muted-foreground leading-relaxed">
+                A companion suite of 15 agent skills covering the full bpmn-beta authoring lifecycle —
+                from process discovery through publication. Designed for LLM-assisted documentation
+                workflows that generate valid <code className="font-mono bg-muted px-1 py-0.5 rounded">bpmn-beta</code> diagrams.
+              </p>
+            </div>
+            <a
+              href="https://www.notion.so/36c812e0ced481ef816de1cd471fd1cd"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="forge-btn-primary shrink-0 inline-flex items-center gap-2 text-xs"
+            >
+              Notion page <ExternalLink size={12} />
+            </a>
           </div>
-          <Link href="/walkthrough" className="forge-btn-primary shrink-0 inline-flex items-center gap-2 text-xs">
-            Suite Walkthrough <ArrowRight size={12} />
-          </Link>
+          <div className="forge-card flex items-start justify-between gap-4">
+            <div>
+              <p className="text-sm font-semibold text-foreground mb-1">New to the project?</p>
+              <p className="text-xs text-muted-foreground leading-relaxed">
+                The BP-SKILL Suite Walkthrough shows how all 15 skills connect — from intake to publication —
+                in a single bpmn-beta pipeline diagram and step-by-step handoff table.
+              </p>
+            </div>
+            <Link href="/walkthrough" className="forge-btn-primary shrink-0 inline-flex items-center gap-2 text-xs">
+              Suite Walkthrough <ArrowRight size={12} />
+            </Link>
+          </div>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           {[
