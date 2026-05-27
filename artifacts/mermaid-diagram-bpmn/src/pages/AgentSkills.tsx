@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from "react";
+import type { CSSProperties } from "react";
 import { ExternalLink, ChevronDown, ChevronUp, Search, X } from "lucide-react";
 import {
   SKILLS, VARIABLE_FILES, PIPELINE_LAYERS,
@@ -102,11 +103,7 @@ export default function AgentSkills() {
               <button
                 key={tab.id}
                 onClick={() => scrollTo(tab.id)}
-                className="px-4 py-3 text-xs font-medium whitespace-nowrap transition-colors shrink-0"
-                style={{
-                  color: activeSection === tab.id ? "hsl(var(--primary))" : "hsl(var(--muted-foreground))",
-                  borderBottom: activeSection === tab.id ? "2px solid hsl(var(--primary))" : "2px solid transparent",
-                }}
+                className={`px-4 py-3 text-xs font-medium whitespace-nowrap shrink-0 forge-section-tab${activeSection === tab.id ? " forge-section-tab--active" : ""}`}
               >
                 {tab.label}
               </button>
@@ -255,12 +252,8 @@ export default function AgentSkills() {
                 <button
                   key={l.id}
                   onClick={() => setLayerFilter(layerFilter === l.id ? null : l.id)}
-                  className={layerFilter === l.id ? "forge-tab-active" : "forge-tab"}
-                  style={
-                    layerFilter === l.id
-                      ? { background: l.color, color: "#fff" }
-                      : {}
-                  }
+                  className={layerFilter === l.id ? "forge-layer-tab-active" : "forge-tab"}
+                  style={{ "--layer-color": l.color } as CSSProperties}
                 >
                   {l.label}
                 </button>

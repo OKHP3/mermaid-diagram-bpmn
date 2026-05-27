@@ -150,8 +150,7 @@ export default function Playground() {
       {/* Experimental notice */}
       {activeExampleDef?.experimental && (
         <div
-          className="px-4 sm:px-6 py-2 flex items-center gap-2 text-xs"
-          style={{ background: "rgba(230,160,60,0.08)", borderBottom: "1px solid rgba(230,160,60,0.2)" }}
+          className="px-4 sm:px-6 py-2 flex items-center gap-2 text-xs forge-experimental-notice"
         >
           <FlaskConical size={11} className="text-amber-600 shrink-0" />
           <span className="text-foreground/80">
@@ -166,15 +165,14 @@ export default function Playground() {
 
         {/* Source panel */}
         <div
-          className="flex flex-col md:w-1/2 border-b md:border-b-0 md:border-r min-h-[280px] md:min-h-0"
-          style={{ borderColor: "#2a3124" }}
+          className="flex flex-col md:w-1/2 border-b md:border-b-0 md:border-r min-h-[280px] md:min-h-0 border-[var(--okh-header-border)]"
         >
           <div className="forge-code-panel-tab flex items-center justify-between px-4 py-2 border-b">
-            <span className="text-xs font-mono" style={{ color: "rgba(230, 223, 201, 0.5)" }}>
+            <span className="text-xs font-mono">
               source.bpmn-beta
             </span>
             {parseError && (
-              <span className="flex items-center gap-1 text-xs" style={{ color: "#e87c5c" }} data-testid="text-parse-error">
+              <span className="flex items-center gap-1 text-xs forge-parse-error-text" data-testid="text-parse-error">
                 <AlertCircle size={11} />
                 Parse error
               </span>
@@ -190,8 +188,7 @@ export default function Playground() {
           />
           {parseError && (
             <div
-              className="px-4 py-2 border-t text-xs font-mono"
-              style={{ borderColor: "#4a2018", background: "rgba(196,106,44,0.12)", color: "#e87c5c" }}
+              className="px-4 py-2 border-t text-xs font-mono forge-parse-error-bar"
               data-testid="text-parse-error-detail"
             >
               {parseError}

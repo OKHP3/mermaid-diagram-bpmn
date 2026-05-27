@@ -1,4 +1,5 @@
 import { Link } from "wouter";
+import type { CSSProperties } from "react";
 import { ArrowRight, GitBranch, FileCode2, Layers, CheckCircle2, ExternalLink, CheckCheck, FlaskConical, Clock, XCircle, Users, Building2, Bot, BookOpen, GitPullRequest } from "lucide-react";
 import { StatusRibbon } from "@/components/StatusRibbon";
 
@@ -308,7 +309,7 @@ export default function Home() {
                   { n: "15", name: "Publication & Handoff Packaging",   layer: "#777777" },
                 ].map((row) => (
                   <div key={row.n} className="flex items-center gap-2.5">
-                    <div className="w-1 h-5 rounded-full shrink-0" style={{ background: row.layer }} />
+                    <div className="w-1 h-5 rounded-full shrink-0 forge-layer-dot" style={{ "--layer-color": row.layer } as CSSProperties} />
                     <span className="text-[9px] font-mono text-muted-foreground/50 shrink-0 w-4">{row.n}</span>
                     <span className="text-[10px] text-foreground font-medium leading-tight">{row.name}</span>
                   </div>

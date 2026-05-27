@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import type { CSSProperties } from "react";
 import { Link, useParams } from "wouter";
 import { ArrowLeft, ExternalLink } from "lucide-react";
 import {
@@ -64,12 +65,11 @@ export default function SkillDetail() {
   );
 
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col" style={{ "--layer-color": layerColor } as CSSProperties}>
 
       {/* ─── Header ──────────────────────────────────────────── */}
       <div
-        className="border-b border-border"
-        style={{ borderTopWidth: 4, borderTopColor: layerColor }}
+        className="border-b border-border forge-layer-border-top"
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-8">
 
@@ -84,28 +84,24 @@ export default function SkillDetail() {
           {/* Badges row */}
           <div className="flex flex-wrap items-center gap-2 mb-4">
             <span
-              className="text-[10px] font-mono font-bold px-2.5 py-1 rounded-full"
-              style={{ background: `${layerColor}20`, color: layerColor }}
+              className="text-[10px] font-mono font-bold px-2.5 py-1 rounded-full forge-layer-badge"
             >
               Skill {String(skill.pipelineOrder).padStart(2, "0")} of 15
             </span>
             <span
-              className="text-[10px] font-mono font-bold px-2.5 py-1 rounded-full"
-              style={{ background: `${layerColor}20`, color: layerColor }}
+              className="text-[10px] font-mono font-bold px-2.5 py-1 rounded-full forge-layer-badge"
             >
               {layer.label}
             </span>
             {isCore ? (
               <span
-                className="text-[10px] font-mono font-bold px-2.5 py-1 rounded-full text-white"
-                style={{ background: layerColor }}
+                className="text-[10px] font-mono font-bold px-2.5 py-1 rounded-full forge-layer-badge--filled"
               >
                 CORE
               </span>
             ) : (
               <span
-                className="text-[10px] font-mono font-bold px-2.5 py-1 rounded-full border border-dashed"
-                style={{ borderColor: layerColor, color: layerColor }}
+                className="text-[10px] font-mono font-bold px-2.5 py-1 rounded-full forge-layer-badge--outlined"
               >
                 EXTENSION
               </span>
@@ -181,8 +177,7 @@ export default function SkillDetail() {
                     </>
                   )}
                   <span
-                    className="text-[11px] font-mono font-bold px-2.5 py-1.5 rounded text-white"
-                    style={{ background: layerColor }}
+                    className="text-[11px] font-mono font-bold px-2.5 py-1.5 rounded forge-layer-badge--filled"
                   >
                     {skill.pipelineOrder}. {skill.displayName}
                   </span>
@@ -220,7 +215,7 @@ export default function SkillDetail() {
               <ul className="flex flex-col gap-1">
                 {skill.produces.map((p) => (
                   <li key={p} className="flex items-start gap-2 text-xs text-foreground/80">
-                    <span style={{ color: layerColor }} className="mt-px shrink-0 font-bold">←</span>
+                    <span className="mt-px shrink-0 font-bold forge-layer-text">←</span>
                     <code className="font-mono">{p}</code>
                   </li>
                 ))}

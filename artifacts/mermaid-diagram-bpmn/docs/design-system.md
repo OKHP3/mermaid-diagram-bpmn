@@ -138,7 +138,45 @@ Defined for light mode in `:root` and overridden for dark mode in `.dark`.
 |-------|-----|
 | `.forge-tabs` | Horizontal tab row container |
 | `.forge-tab` | Inactive tab pill |
-| `.forge-tab-active` | Active tab pill |
+| `.forge-tab-active` | Active tab pill (primary color) |
+| `.forge-layer-tab-active` | Active tab pill using `--layer-color` CSS var |
+
+### Section navigation
+
+| Class | Use |
+|-------|-----|
+| `.forge-section-tab` | Sticky in-page nav tab — muted at rest |
+| `.forge-section-tab--active` | Active state — primary color + 2px underline |
+
+### Playground code surfaces
+
+| Class | Use |
+|-------|-----|
+| `.forge-experimental-notice` | Amber tinted banner above experimental examples |
+| `.forge-parse-error-text` | Rust/coral error text (parse indicator) |
+| `.forge-parse-error-bar` | Dark error detail bar below the code panel |
+
+### Pipeline table
+
+| Class | Use |
+|-------|-----|
+| `.forge-pipeline-end` | Muted "Pipeline end" badge (terminal node indicator) |
+
+### Layer-color dynamic classes
+
+These classes read `--layer-color` from a CSS custom property. Set it inline on the
+element or a containing ancestor: `style={{ "--layer-color": layerColor } as CSSProperties}`.
+
+| Class | Use |
+|-------|-----|
+| `.forge-layer-dot` | Small circle indicator filled with layer color |
+| `.forge-layer-badge` | Tinted bg (13%) + layer color text — most common badge |
+| `.forge-layer-badge--soft` | Tinted bg (10%) + border (21%) + layer color text |
+| `.forge-layer-badge--filled` | Solid layer color bg + white text (CORE badge, pipeline highlight) |
+| `.forge-layer-badge--outlined` | Dashed border (35%) + layer color text (EXTENSION badge) |
+| `.forge-layer-border-top` | 4px top border in layer color (SkillDetail header accent) |
+| `.forge-layer-border-left` | 3px left border in layer color (mobile card accent) |
+| `.forge-layer-text` | Text colored with layer color |
 
 ---
 

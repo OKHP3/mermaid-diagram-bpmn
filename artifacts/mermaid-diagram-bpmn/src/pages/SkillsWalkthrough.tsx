@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import type { CSSProperties } from "react";
 import { Link } from "wouter";
 import { ArrowRight, ArrowDown } from "lucide-react";
 import { BpmnRenderer } from "@/lib/bpmn-renderer";
@@ -149,12 +150,12 @@ export default function SkillsWalkthrough() {
                       <tr
                         key={skill.id}
                         className={`border-b border-border last:border-0 ${i % 2 === 0 ? "bg-card" : "bg-muted/10"}`}
+                        style={{ "--layer-color": layerColor } as CSSProperties}
                       >
                         {/* # */}
                         <td className="px-4 py-3 align-top">
                           <span
-                            className="inline-flex items-center justify-center w-6 h-6 rounded text-[9px] font-mono font-bold"
-                            style={{ background: `${layerColor}22`, color: layerColor }}
+                            className="inline-flex items-center justify-center w-6 h-6 rounded text-[9px] font-mono font-bold forge-layer-badge"
                           >
                             {String(skill.pipelineOrder).padStart(2, "0")}
                           </span>
@@ -170,12 +171,7 @@ export default function SkillsWalkthrough() {
                               {skill.displayName}
                             </Link>
                             <span
-                              className="inline-block text-[8px] font-mono uppercase tracking-wider px-1.5 py-0.5 rounded-full self-start"
-                              style={{
-                                background: `${layerColor}18`,
-                                color: layerColor,
-                                border: `1px solid ${layerColor}35`,
-                              }}
+                              className="inline-block text-[8px] font-mono uppercase tracking-wider px-1.5 py-0.5 rounded-full self-start forge-layer-badge--soft"
                             >
                               {skill.layerLabel}
                               {skill.status === "recommended-extension" && " · ext"}
@@ -219,14 +215,7 @@ export default function SkillsWalkthrough() {
                         {/* Next downstream */}
                         <td className="px-4 py-3 align-top">
                           {downstream.length === 0 ? (
-                            <span
-                              className="inline-block text-[9px] font-mono px-2 py-0.5 rounded-full"
-                              style={{
-                                background: "#77777718",
-                                color: "#777",
-                                border: "1px solid #77777730",
-                              }}
-                            >
+                            <span className="inline-block text-[9px] font-mono px-2 py-0.5 rounded-full forge-pipeline-end">
                               Pipeline end
                             </span>
                           ) : (
@@ -238,8 +227,8 @@ export default function SkillsWalkthrough() {
                                     className="inline-flex items-center gap-1 text-primary hover:underline underline-offset-2"
                                   >
                                     <span
-                                      className="text-[8px] font-mono"
-                                      style={{ color: LAYER_COLOR[d.layer] }}
+                                      className="text-[8px] font-mono forge-layer-text"
+                                      style={{ "--layer-color": LAYER_COLOR[d.layer] } as CSSProperties}
                                     >
                                       {String(d.pipelineOrder).padStart(2, "0")}
                                     </span>
@@ -266,14 +255,13 @@ export default function SkillsWalkthrough() {
               return (
                 <div
                   key={skill.id}
-                  className="rounded-xl border border-border bg-card overflow-hidden"
-                  style={{ borderLeftWidth: 3, borderLeftColor: layerColor }}
+                  className="rounded-xl border border-border bg-card overflow-hidden forge-layer-border-left"
+                  style={{ "--layer-color": layerColor } as CSSProperties}
                 >
                   {/* Card header */}
                   <div className="px-4 py-3 border-b border-border flex items-center gap-3">
                     <span
-                      className="inline-flex items-center justify-center w-7 h-7 rounded text-[10px] font-mono font-bold shrink-0"
-                      style={{ background: `${layerColor}22`, color: layerColor }}
+                      className="inline-flex items-center justify-center w-7 h-7 rounded text-[10px] font-mono font-bold shrink-0 forge-layer-badge"
                     >
                       {String(skill.pipelineOrder).padStart(2, "0")}
                     </span>
@@ -285,8 +273,7 @@ export default function SkillsWalkthrough() {
                         {skill.displayName}
                       </Link>
                       <span
-                        className="text-[8px] font-mono uppercase tracking-wider"
-                        style={{ color: layerColor }}
+                        className="text-[8px] font-mono uppercase tracking-wider forge-layer-text"
                       >
                         {skill.layerLabel}{skill.status === "recommended-extension" ? " · extension" : " · core"}
                       </span>
@@ -332,8 +319,8 @@ export default function SkillsWalkthrough() {
                               className="inline-flex items-center gap-1 text-[10px] text-primary hover:underline underline-offset-2 font-medium"
                             >
                               <span
-                                className="text-[8px] font-mono"
-                                style={{ color: LAYER_COLOR[d.layer] }}
+                                className="text-[8px] font-mono forge-layer-text"
+                                style={{ "--layer-color": LAYER_COLOR[d.layer] } as CSSProperties}
                               >
                                 {String(d.pipelineOrder).padStart(2, "0")}
                               </span>

@@ -410,4 +410,101 @@
     box-shadow: var(--forge-shadow-sm);
   }
 
+  /* ---- Section navigation tabs (e.g. AgentSkills sticky nav) ---- */
+
+  .forge-section-tab {
+    color: hsl(var(--muted-foreground));
+    border-bottom: 2px solid transparent;
+    transition: color 150ms, border-color 150ms;
+  }
+
+  .forge-section-tab--active {
+    color: hsl(var(--primary));
+    border-bottom: 2px solid hsl(var(--primary));
+  }
+
+  /* ---- Playground code-panel surfaces --------------------------- */
+
+  .forge-experimental-notice {
+    background: rgba(230, 160, 60, 0.08);
+    border-bottom: 1px solid rgba(230, 160, 60, 0.2);
+  }
+
+  .forge-parse-error-text {
+    color: #e87c5c;
+  }
+
+  .forge-parse-error-bar {
+    border-color: #4a2018;
+    background: rgba(196, 106, 44, 0.12);
+    color: #e87c5c;
+  }
+
+  /* ---- Pipeline table cells ------------------------------------- */
+
+  .forge-pipeline-end {
+    background: rgba(119, 119, 119, 0.094);
+    color: #777;
+    border: 1px solid rgba(119, 119, 119, 0.188);
+  }
+
+  /* ---- Layer-color dynamic classes ------------------------------ *
+   * Set --layer-color on the element or a container ancestor.       *
+   * All forge-layer-* classes read var(--layer-color).              *
+   * ---------------------------------------------------------------- */
+
+  .forge-layer-dot {
+    background: var(--layer-color);
+  }
+
+  /* Tinted bg + color text — most common layer badge */
+  .forge-layer-badge {
+    background: color-mix(in srgb, var(--layer-color) 13%, transparent);
+    color: var(--layer-color);
+  }
+
+  /* Tinted bg + color text + border — walkthrough table layer label */
+  .forge-layer-badge--soft {
+    background: color-mix(in srgb, var(--layer-color) 10%, transparent);
+    color: var(--layer-color);
+    border: 1px solid color-mix(in srgb, var(--layer-color) 21%, transparent);
+  }
+
+  /* Solid bg + white text — CORE badge, pipeline position highlight */
+  .forge-layer-badge--filled {
+    background: var(--layer-color);
+    color: white;
+  }
+
+  /* Dashed border + color text — EXTENSION badge */
+  .forge-layer-badge--outlined {
+    border: 1px dashed color-mix(in srgb, var(--layer-color) 35%, transparent);
+    color: var(--layer-color);
+  }
+
+  /* 4px top border accent (SkillDetail header) */
+  .forge-layer-border-top {
+    border-top-width: 4px;
+    border-top-color: var(--layer-color);
+  }
+
+  /* 3px left border accent (SkillsWalkthrough mobile cards) */
+  .forge-layer-border-left {
+    border-left-width: 3px;
+    border-left-color: var(--layer-color);
+  }
+
+  /* Text colored with layer color */
+  .forge-layer-text {
+    color: var(--layer-color);
+  }
+
+  /* Active layer-filter tab — overrides forge-tab with layer color */
+  .forge-layer-tab-active {
+    @apply px-3 py-1 rounded-full text-xs font-medium;
+    background: var(--layer-color);
+    color: white;
+    box-shadow: var(--forge-shadow-sm);
+  }
+
 }
