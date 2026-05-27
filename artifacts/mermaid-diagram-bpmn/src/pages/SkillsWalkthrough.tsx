@@ -174,6 +174,9 @@ export default function SkillsWalkthrough() {
           <a href="#walkthrough-table" className="forge-btn-outline inline-flex items-center gap-2">
             Jump to Walkthrough Table <ArrowDown size={14} />
           </a>
+          <Link href="/walkthrough/purchase-approval" className="forge-btn-outline inline-flex items-center gap-2">
+            Worked Example <ArrowRight size={14} />
+          </Link>
         </div>
       </section>
 
