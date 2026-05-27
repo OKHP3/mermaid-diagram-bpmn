@@ -2,23 +2,33 @@ import { useState } from "react";
 import { useLocation } from "wouter";
 import { Copy, Check, ExternalLink } from "lucide-react";
 import { SKILLS, PIPELINE_LAYERS } from "@/data/skills-registry";
+import { SKILL_DEPS } from "@/data/skill-deps-auto";
 
+// Node positions [col, row] derived from SKILL_DEPS (extracted from
+// skills/{id}/SKILL.md frontmatter by scripts/extract-skill-deps.mjs).
+//
+// Layout  5 cols x 8 rows  NW=114 NH=40 CW=155 RH=54:
+//   Col 0: PIS (root)
+//   Col 1: SRM, EIF, AIS  (direct children of PIS)
+//   Col 2: PNA (depends on PIS+SRM), GEA (depends on AIS)
+//   Col 3: VPM DMA PVQ PMC SOP RACI SIP (from PNA), FSC (from GEA)
+//   Col 4: PUB (depends on PNA+VPM+SOP)
 const POSITIONS: Record<string, [number, number]> = {
-  "process-intake-and-scope":                [0, 1],
+  "process-intake-and-scope":                [0, 3],
   "stakeholder-and-role-mapping":            [1, 1],
-  "sipoc-generation":                        [1, 3],
-  "elicitation-and-interview-facilitation":  [2, 0],
-  "raci-and-governance-matrix-generation":   [2, 2],
-  "as-is-process-capture":                   [3, 1],
-  "process-narrative-authoring":             [4, 1],
-  "visual-process-modeling":                 [5, 0],
-  "process-gap-and-exception-analysis":      [5, 1],
-  "process-validation-and-quality-scoring":  [5, 2],
-  "decision-model-authoring":                [5, 3],
-  "future-state-and-change-strategy":        [6, 1],
-  "process-measures-and-controls-definition":[6, 2],
-  "sop-and-work-instruction-generation":     [6, 3],
-  "publication-and-handoff-packaging":       [6, 4],
+  "elicitation-and-interview-facilitation":  [1, 3],
+  "as-is-process-capture":                   [1, 6],
+  "process-narrative-authoring":             [2, 3],
+  "process-gap-and-exception-analysis":      [2, 6],
+  "visual-process-modeling":                 [3, 0],
+  "decision-model-authoring":                [3, 1],
+  "process-validation-and-quality-scoring":  [3, 2],
+  "process-measures-and-controls-definition":[3, 3],
+  "sop-and-work-instruction-generation":     [3, 4],
+  "raci-and-governance-matrix-generation":   [3, 5],
+  "sipoc-generation":                        [3, 6],
+  "future-state-and-change-strategy":        [3, 7],
+  "publication-and-handoff-packaging":       [4, 3],
 };
 
 const SHORT: Record<string, string> = {
@@ -40,16 +50,16 @@ const SHORT: Record<string, string> = {
 };
 
 const NW = 114;
-const NH = 44;
-const CW = 148;
-const RH = 68;
+const NH = 40;
+const CW = 155;
+const RH = 54;
 const PAD = 12;
 
 const nx = (col: number) => col * CW + PAD;
 const ny = (row: number) => row * RH + PAD;
 
-const SVG_W = nx(6) + NW + PAD;
-const SVG_H = ny(4) + NH + PAD;
+const SVG_W = nx(4) + NW + PAD;
+const SVG_H = ny(7) + NH + PAD;
 
 const LAYER_CLS: Record<number, string> = {
   1: "discovery",
@@ -60,6 +70,10 @@ const LAYER_CLS: Record<number, string> = {
   6: "publication",
 };
 
+/**
+ * Generates Mermaid flowchart code from SKILL_DEPS (extracted from SKILL.md).
+ * Edges are: dependency -> dependent (left-to-right data flow).
+ */
 function buildMermaid(): string {
   const lines: string[] = [
     "flowchart LR",
@@ -83,7 +97,7 @@ function buildMermaid(): string {
   }
   lines.push("");
   for (const s of diagramSkills) {
-    for (const dep of s.dependsOn) {
+    for (const dep of SKILL_DEPS[s.id] ?? []) {
       if (!POSITIONS[dep]) continue;
       lines.push(
         `  ${dep.replace(/-/g, "_")} --> ${s.id.replace(/-/g, "_")}`,
@@ -120,7 +134,7 @@ export function DependencyFlowDiagram() {
   for (const skill of SKILLS) {
     if (!POSITIONS[skill.id]) continue;
     const [tcol, trow] = POSITIONS[skill.id];
-    for (const dep of skill.dependsOn) {
+    for (const dep of SKILL_DEPS[skill.id] ?? []) {
       if (!POSITIONS[dep]) continue;
       const [scol, srow] = POSITIONS[dep];
       const x1 = nx(scol) + NW;
@@ -206,7 +220,7 @@ export function DependencyFlowDiagram() {
                 />
                 <text
                   x={x + 8}
-                  y={y + 15}
+                  y={y + 13}
                   fontSize={8}
                   fontFamily="ui-monospace, monospace"
                   fontWeight="bold"
@@ -216,7 +230,7 @@ export function DependencyFlowDiagram() {
                 </text>
                 <text
                   x={x + 8}
-                  y={y + 31}
+                  y={y + 28}
                   fontSize={10}
                   fontFamily="ui-sans-serif, system-ui, sans-serif"
                   style={{ fill: "hsl(var(--foreground))", fillOpacity: 0.85 }}
