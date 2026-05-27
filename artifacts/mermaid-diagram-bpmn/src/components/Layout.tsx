@@ -60,19 +60,10 @@ export function Layout({ children }: { children: React.ReactNode }) {
               alt="BPMN for Mermaid icon"
               className="w-7 h-7 rounded-md object-cover ring-1 ring-white/10"
             />
-            <span
-              className="font-semibold text-sm hidden sm:inline"
-              style={{ color: "var(--okh-header-text)" }}
-            >
+            <span className="font-semibold text-sm hidden sm:inline forge-brand-title">
               BPMN for Mermaid
             </span>
-            <code
-              className="hidden md:inline text-xs font-mono px-1.5 py-0.5 rounded"
-              style={{
-                color: "var(--okh-header-muted)",
-                background: "rgba(255,255,255,0.06)",
-              }}
-            >
+            <code className="hidden md:inline text-xs font-mono px-1.5 py-0.5 rounded forge-brand-badge">
               bpmn-beta
             </code>
           </Link>
@@ -184,8 +175,8 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-xs">
 
           {/* Left — identity */}
-          <span style={{ color: "var(--okh-header-muted)" }}>
-            <code className="font-mono" style={{ color: "var(--okh-header-text)" }}>mermaid-diagram-bpmn</code>
+          <span className="forge-footer-slug">
+            <code className="font-mono">mermaid-diagram-bpmn</code>
             {" — "}contributor prototype · OverKill Hill P³
           </span>
 

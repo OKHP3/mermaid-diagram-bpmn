@@ -276,6 +276,27 @@
     background: rgba(196, 106, 44, 0.12);
   }
 
+  /* ---- Header brand title & badge ------------------------------ */
+
+  .forge-brand-title {
+    color: var(--okh-header-text);
+  }
+
+  .forge-brand-badge {
+    color: var(--okh-header-muted);
+    background: rgba(255, 255, 255, 0.06);
+  }
+
+  /* ---- Footer identity slug ------------------------------------- */
+
+  .forge-footer-slug {
+    color: var(--okh-header-muted);
+  }
+
+  .forge-footer-slug code {
+    color: var(--okh-header-text);
+  }
+
   /* ---- Active-route underline indicator ------------------------- */
 
   .forge-nav-active-indicator {

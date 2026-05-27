@@ -96,6 +96,9 @@ Defined for light mode in `:root` and overridden for dark mode in `.dark`.
 
 | Class | Use |
 |-------|-----|
+| `.forge-brand-title` | Header logo title span ("BPMN for Mermaid") — header-text color |
+| `.forge-brand-badge` | Header `bpmn-beta` code badge — muted color, subtle white-tinted background |
+| `.forge-footer-slug` | Footer identity span wrapper — muted color; nested `code` inherits header-text color |
 | `.forge-nav-link` | Desktop nav link — muted at rest, header-text + hover-bg on hover |
 | `.forge-nav-link--active` | Desktop active route — header-text color, hover-bg, semibold |
 | `.forge-nav-active-indicator` | Active-route underline `<span>` — rust-orange bar below active link |
