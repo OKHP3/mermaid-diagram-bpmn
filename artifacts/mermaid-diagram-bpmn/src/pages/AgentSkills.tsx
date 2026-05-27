@@ -8,6 +8,7 @@ import {
 } from "@/data/skills-registry";
 import { SkillCard } from "@/components/skills/SkillCard";
 import { PipelineDiagram } from "@/components/skills/PipelineDiagram";
+import { DependencyFlowDiagram } from "@/components/skills/DependencyFlowDiagram";
 import { PnsLifecycleTracker } from "@/components/skills/PnsLifecycleTracker";
 import { VariableFileCard } from "@/components/skills/VariableFileCard";
 import { SkillFrontmatterPreview } from "@/components/skills/SkillFrontmatterPreview";
@@ -54,6 +55,7 @@ export default function AgentSkills() {
   const [search, setSearch] = useState("");
   const [pnsExpanded, setPnsExpanded] = useState(false);
   const [pnsSectionOpen, setPnsSectionOpen] = useState<number | null>(null);
+  const [pipelineView, setPipelineView] = useState<"layers" | "deps">("layers");
   const searchRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -210,12 +212,39 @@ export default function AgentSkills() {
           <h2 className="text-xl font-bold text-foreground mb-2">
             A coherent methodology, not a collection of prompts.
           </h2>
-          <p className="text-sm text-muted-foreground mb-8 max-w-2xl leading-relaxed">
+          <p className="text-sm text-muted-foreground mb-6 max-w-2xl leading-relaxed">
             All 15 skills connect through a single handoff artifact — PNS.md. Each skill either
             reads or advances its lifecycle status, from <code className="font-mono text-xs bg-muted px-1 rounded">draft-intake</code> to <code className="font-mono text-xs bg-muted px-1 rounded">published</code>.
             Click any skill to view its full specification.
           </p>
-          <PipelineDiagram />
+
+          <div className="forge-tabs mb-6">
+            <button
+              onClick={() => setPipelineView("layers")}
+              className={pipelineView === "layers" ? "forge-tab-active" : "forge-tab"}
+            >
+              Layer View
+            </button>
+            <button
+              onClick={() => setPipelineView("deps")}
+              className={pipelineView === "deps" ? "forge-tab-active" : "forge-tab"}
+            >
+              Dependency Flow
+            </button>
+          </div>
+
+          {pipelineView === "layers" ? (
+            <PipelineDiagram />
+          ) : (
+            <>
+              <p className="text-xs text-muted-foreground mb-4 max-w-2xl leading-relaxed">
+                Arrows show which skills must run before each downstream skill. Derived from the{" "}
+                <code className="font-mono text-[10px] bg-muted px-1 rounded">depends_on</code>{" "}
+                field in each SKILL.md. Click any node to open its specification.
+              </p>
+              <DependencyFlowDiagram />
+            </>
+          )}
         </div>
       </section>
 
