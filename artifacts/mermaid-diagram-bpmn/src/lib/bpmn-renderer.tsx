@@ -1,3 +1,5 @@
+import { useState, useRef } from 'react';
+import { useLocation } from 'wouter';
 import { parse } from './bpmn-parser';
 import { layoutGraph, BpmnLayout, BpmnLayoutNode, PoolLayout, LaneLayout } from './bpmn-layout';
 import { BpmnNode, BpmnFlow } from './bpmn-db';
@@ -54,8 +56,16 @@ function SendTaskIcon({ x, y }: { x: number; y: number }) {
   );
 }
 
-function renderNode(node: BpmnNode, lnode: BpmnLayoutNode) {
+interface NodeInteraction {
+  onClick?: () => void;
+  tooltip?: string;
+  onEnter?: (e: React.MouseEvent) => void;
+  onLeave?: () => void;
+}
+
+function renderNode(node: BpmnNode, lnode: BpmnLayoutNode, interaction?: NodeInteraction) {
   const { x, y, width, height } = lnode;
+  const hasClick = !!interaction?.onClick;
 
   if (node.kind === 'event' && node.position === 'start') {
     return (
@@ -87,7 +97,16 @@ function renderNode(node: BpmnNode, lnode: BpmnLayoutNode) {
     const iconX = x - hw + 14;
     const iconY = y - hh + 12;
     return (
-      <g key={node.id}>
+      <g
+        key={node.id}
+        role={hasClick ? 'button' : undefined}
+        tabIndex={hasClick ? 0 : undefined}
+        style={hasClick ? { cursor: 'pointer' } : undefined}
+        onClick={interaction?.onClick}
+        onKeyDown={hasClick ? (e) => { if (e.key === 'Enter' || e.key === ' ') interaction?.onClick?.(); } : undefined}
+        onMouseEnter={interaction?.onEnter}
+        onMouseLeave={interaction?.onLeave}
+      >
         <rect x={x - hw} y={y - hh} width={width} height={height} rx={6} className="bpmn-task" />
         {node.subtype === 'user' && <UserTaskIcon x={iconX} y={iconY} />}
         {node.subtype === 'service' && <ServiceTaskIcon x={iconX} y={iconY} />}
@@ -216,7 +235,20 @@ function renderPools(pools: PoolLayout[], lanes: LaneLayout[]) {
   );
 }
 
-export function BpmnRenderer({ source }: { source: string }) {
+export interface BpmnRendererProps {
+  source: string;
+  nodeLinks?: Record<string, string>;
+  nodeTooltips?: Record<string, string>;
+}
+
+export function BpmnRenderer({ source, nodeLinks, nodeTooltips }: BpmnRendererProps) {
+  const [, navigate] = useLocation();
+  const [hoveredNode, setHoveredNode] = useState<string | null>(null);
+  const [tooltipPos, setTooltipPos] = useState<{ x: number; y: number }>({ x: 0, y: 0 });
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  const hasInteractions = !!(nodeLinks || nodeTooltips);
+
   try {
     const db = parse(source);
     const nodes = db.getNodes();
@@ -236,40 +268,87 @@ export function BpmnRenderer({ source }: { source: string }) {
     const vbW = layout.width + pad;
     const vbH = layout.hasPools ? layout.height + pad : layout.height + pad * 2;
 
+    const tooltipText = hoveredNode ? nodeTooltips?.[hoveredNode] : undefined;
+
     return (
-      <svg
-        className="w-full h-full"
-        viewBox={`${vbX} ${vbY} ${vbW} ${vbH}`}
-        preserveAspectRatio="xMidYMid meet"
-        role="img"
-        aria-labelledby="bpmn-title bpmn-desc"
-      >
-        <title id="bpmn-title">{db.getAccTitle() ?? 'BPMN Diagram'}</title>
-        <desc id="bpmn-desc">{db.getAccDescription() ?? 'A bpmn-beta diagram'}</desc>
+      <div ref={containerRef} style={{ position: 'relative' }}>
+        <svg
+          className="w-full h-full"
+          viewBox={`${vbX} ${vbY} ${vbW} ${vbH}`}
+          preserveAspectRatio="xMidYMid meet"
+          role="img"
+          aria-labelledby="bpmn-title bpmn-desc"
+        >
+          <title id="bpmn-title">{db.getAccTitle() ?? 'BPMN Diagram'}</title>
+          <desc id="bpmn-desc">{db.getAccDescription() ?? 'A bpmn-beta diagram'}</desc>
 
-        <defs>
-          <style>{getStyles(LIGHT_THEME)}</style>
-          <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
-            <polygon points="0 0, 10 3.5, 0 7" className="bpmn-arrow" />
-          </marker>
-          <marker id="arrowhead-msg" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
-            <polygon points="0 0, 10 3.5, 0 7" className="bpmn-arrow-open" strokeWidth="1" />
-          </marker>
-          <marker id="slash-marker" markerWidth="8" markerHeight="10" refX="4" refY="5" orient="auto">
-            <line x1="6" y1="1" x2="2" y2="9" className="bpmn-slash" />
-          </marker>
-        </defs>
+          <defs>
+            <style>{getStyles(LIGHT_THEME)}</style>
+            <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+              <polygon points="0 0, 10 3.5, 0 7" className="bpmn-arrow" />
+            </marker>
+            <marker id="arrowhead-msg" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+              <polygon points="0 0, 10 3.5, 0 7" className="bpmn-arrow-open" strokeWidth="1" />
+            </marker>
+            <marker id="slash-marker" markerWidth="8" markerHeight="10" refX="4" refY="5" orient="auto">
+              <line x1="6" y1="1" x2="2" y2="9" className="bpmn-slash" />
+            </marker>
+          </defs>
 
-        {layout.hasPools && renderPools(layout.pools, layout.lanes)}
+          {layout.hasPools && renderPools(layout.pools, layout.lanes)}
 
-        {db.getFlows().map(flow => renderFlow(flow, layout))}
+          {db.getFlows().map(flow => renderFlow(flow, layout))}
 
-        {nodes.map(node => {
-          const lnode = layout.nodes.find(n => n.id === node.id);
-          if (!lnode) return null;
-          return renderNode(node, lnode);
-        })}
-      </svg>
+          {nodes.map(node => {
+            const lnode = layout.nodes.find(n => n.id === node.id);
+            if (!lnode) return null;
+            const link = nodeLinks?.[node.id];
+            const interaction: NodeInteraction | undefined = hasInteractions
+              ? {
+                  onClick: link ? () => navigate(link) : undefined,
+                  tooltip: nodeTooltips?.[node.id],
+                  onEnter: (e: React.MouseEvent) => {
+                    if (!nodeTooltips?.[node.id]) return;
+                    const container = containerRef.current;
+                    if (!container) return;
+                    const rect = container.getBoundingClientRect();
+                    setHoveredNode(node.id);
+                    setTooltipPos({
+                      x: e.clientX - rect.left,
+                      y: e.clientY - rect.top,
+                    });
+                  },
+                  onLeave: () => setHoveredNode(null),
+                }
+              : undefined;
+            return renderNode(node, lnode, interaction);
+          })}
+        </svg>
+
+        {tooltipText && hoveredNode && (
+          <div
+            style={{
+              position: 'absolute',
+              left: tooltipPos.x + 10,
+              top: tooltipPos.y + 10,
+              pointerEvents: 'none',
+              zIndex: 50,
+              width: 200,
+            }}
+            className="rounded-lg border border-border bg-card shadow-lg p-2.5"
+          >
+            <p className="text-[9px] font-mono uppercase tracking-wider text-muted-foreground/60 mb-1.5">
+              Triggers when
+            </p>
+            <p className="text-[10px] italic text-foreground/75 leading-snug">
+              "{tooltipText}"
+            </p>
+            <p className="text-[9px] text-primary/70 mt-1.5 font-mono">
+              Click to view skill →
+            </p>
+          </div>
+        )}
+      </div>
     );
   } catch (err) {
     return (

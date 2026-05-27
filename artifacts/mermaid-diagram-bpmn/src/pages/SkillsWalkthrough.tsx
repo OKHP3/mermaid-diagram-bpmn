@@ -8,6 +8,16 @@ import { SKILLS, PIPELINE_LAYERS } from "@/data/skills-registry";
 const LAYER_COLOR: Record<number, string> = {};
 PIPELINE_LAYERS.forEach((l) => { LAYER_COLOR[l.id] = l.color; });
 
+const PIPELINE_NODE_LINKS: Record<string, string> = {};
+const PIPELINE_NODE_TOOLTIPS: Record<string, string> = {};
+SKILLS.forEach((skill) => {
+  const nodeId = `sk${String(skill.pipelineOrder).padStart(2, "0")}`;
+  PIPELINE_NODE_LINKS[nodeId] = `/skills/${skill.id}`;
+  if (skill.triggerPhrases[0]) {
+    PIPELINE_NODE_TOOLTIPS[nodeId] = skill.triggerPhrases[0];
+  }
+});
+
 const PIPELINE_BPMN = `bpmn-beta
 accTitle: BP-SKILL v0.3 — 15-Skill Pipeline
 accDescr: Business process documentation lifecycle from intake to publication
@@ -106,7 +116,11 @@ export default function SkillsWalkthrough() {
             style={{ minHeight: 180 }}
           >
             <div style={{ minWidth: 2400, padding: "12px 16px" }}>
-              <BpmnRenderer source={PIPELINE_BPMN} />
+              <BpmnRenderer
+                source={PIPELINE_BPMN}
+                nodeLinks={PIPELINE_NODE_LINKS}
+                nodeTooltips={PIPELINE_NODE_TOOLTIPS}
+              />
             </div>
           </div>
 
