@@ -51,7 +51,7 @@ export const LIGHT_THEME: BpmnThemeOptions = {
 export const MERMAID_FALLBACK_THEME: BpmnThemeOptions = {
   primaryColor: '#111827',   /* near-black node fill  */
   lineColor:    '#c46a2c',   /* rust-orange           */
-  mainBkg:      '#1a2332',   /* dark navy background  */
+  mainBkg:      '#111827',   /* near-black — matches primaryColor, canonical sibling value */
   nodeBorder:   '#c46a2c',   /* rust-orange border    */
   clusterBkg:   '#0d1117',   /* deep workbench        */
   textColor:    '#e5e7eb',   /* near-white text       */

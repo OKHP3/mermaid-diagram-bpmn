@@ -141,7 +141,7 @@
   --secondary:              224 20% 15%;
   --secondary-foreground:   220 14% 92%;
 
-  --muted:                  224 20% 15%;
+  --muted:                  224 20% 14%;
   --muted-foreground:       220 10% 56%;
 
   --accent:                 224 20% 18%;
@@ -179,7 +179,7 @@
      .forge-grid          blueprint grid background texture
      .forge-card          standard content card
      .forge-card-title    section title inside a card
-     .forge-eyebrow       small-caps mono label above headings
+     .forge-eyebrow       sans uppercase eyebrow label above headings
      .forge-callout       rust left-border emphasis block
      .forge-status-pill   inline status badge
 
@@ -336,7 +336,7 @@
   }
 
   .forge-eyebrow {
-    @apply text-xs font-mono font-semibold tracking-[0.2em] uppercase text-muted-foreground;
+    @apply text-xs font-semibold tracking-[0.07em] uppercase text-muted-foreground;
   }
 
   .forge-callout {
