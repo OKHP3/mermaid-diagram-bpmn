@@ -12,7 +12,7 @@
 
 | File | Purpose |
 |---|---|
-| [`OMG-BPMN-2.0.2-formal-specification.pdf`](./OMG-BPMN-2.0.2-formal-specification.pdf) | Full OMG BPMN 2.0.2 formal specification — included in this repository as the authoritative notation reference |
+| [`omg-bpmn-2.0.2-formal-specification.pdf`](./omg-bpmn-2.0.2-formal-specification.pdf) | Full OMG BPMN 2.0.2 formal specification — included in this repository as the authoritative notation reference |
 
 ---
 
@@ -125,7 +125,7 @@ Any deviation from these rules in a PR must cite a specific rationale and a `doc
 
 ## Accessing the specification
 
-The PDF included at `artifacts/mermaid-diagram-bpmn/standards/OMG-BPMN-2.0.2-formal-specification.pdf` is the full formal specification. It is publicly available from OMG at no cost:
+The PDF included at `artifacts/mermaid-diagram-bpmn/standards/omg-bpmn-2.0.2-formal-specification.pdf` is the full formal specification. It is publicly available from OMG at no cost:
 
 - Direct PDF download: https://www.omg.org/spec/BPMN/2.0.2/PDF
 - Specification home: https://www.omg.org/spec/BPMN/

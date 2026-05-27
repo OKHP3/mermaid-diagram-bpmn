@@ -55,8 +55,8 @@ This project has two co-equal hard requirements. **Neither takes priority over t
 A diagram that renders correctly in Mermaid but uses wrong BPMN notation is as broken as one that follows the spec but fails to render. Do not trade one off against the other.
 
 **BPMN specification resources:**
-- Specification file: `standards/OMG-BPMN-2.0.2-formal-specification.pdf` (included in this repo)
-- Compliance map: `standards/BPMN-SPEC-REFERENCE.md`
+- Specification file: `standards/omg-bpmn-2.0.2-formal-specification.pdf` (included in this repo)
+- Compliance map: `standards/bpmn-spec-reference.md`
 - Standard home: https://www.bpmn.org/
 - OMG spec: https://www.omg.org/spec/BPMN/2.0.2/PDF
 
@@ -66,7 +66,7 @@ A diagram that renders correctly in Mermaid but uses wrong BPMN notation is as b
 - Governance constant: `MERMAID_VERSION_TARGET` in `bpmn-plugin.ts`
 
 When adding or modifying any rendered element, both checks are required:
-1. Look up the element in `standards/BPMN-SPEC-REFERENCE.md` — verify shape, marker, and line style against the spec
+1. Look up the element in `standards/bpmn-spec-reference.md` — verify shape, marker, and line style against the spec
 2. Verify the plugin draw function produces valid SVG that Mermaid can inject into the page
 3. If either standard requires a deviation from the other, open a `docs/decisions.md` entry — do not resolve the tension silently
 

@@ -99,7 +99,7 @@ No standalone validation module exists in v0.1. Validation is implicit in the pa
 | `artifacts/mermaid-diagram-bpmn/docs/roadmap.md` | Background for deferred features list |
 | `artifacts/mermaid-diagram-bpmn/docs/mermaid-compatibility.md` | Background for `references/compliance-matrix.md` |
 | `artifacts/mermaid-diagram-bpmn/docs/competitive-landscape.md` | Background for `references/scope-firewall.md` |
-| `standards/BPMN-SPEC-REFERENCE.md` (if exists) | Background for `references/bpmn-2-element-catalog.md` |
+| `standards/bpmn-spec-reference.md` (if exists) | Background for `references/bpmn-2-element-catalog.md` |
 
 ---
 

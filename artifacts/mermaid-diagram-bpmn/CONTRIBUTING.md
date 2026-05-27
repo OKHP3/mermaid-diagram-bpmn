@@ -38,7 +38,7 @@ Every rendered element must satisfy both standards equally — neither takes pri
 - **Mermaid rendering**: output must render correctly in all Mermaid-compatible hosts. Plugin v1 target: `registerExternalDiagrams()`. Current state: standalone React app with direct SVG renderer.
 - **BPMN 2.0.2 notation**: shapes, markers, and flows must match the OMG specification.
 
-See `standards/BPMN-SPEC-REFERENCE.md` for the element-by-element compliance map.
+See `standards/bpmn-spec-reference.md` for the element-by-element compliance map.
 
 ## What we accept
 
@@ -67,7 +67,7 @@ See `standards/BPMN-SPEC-REFERENCE.md` for the element-by-element compliance map
 6. Add an example to `examples/` and update `bpmn-examples.ts`
 7. Add unit tests to `src/lib/__tests__/`
 8. Update the support matrix on the Home page and in `docs/dsl-spec.md`
-9. Verify notation against `standards/BPMN-SPEC-REFERENCE.md`
+9. Verify notation against `standards/bpmn-spec-reference.md`
 
 ## DSL changes
 

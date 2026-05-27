@@ -23,8 +23,8 @@ When these two requirements create tension, open a `docs/decisions.md` entry and
 
 | Resource | Location |
 |---|---|
-| Specification PDF (local copy) | [`OMG-BPMN-2.0.2-formal-specification.pdf`](./OMG-BPMN-2.0.2-formal-specification.pdf) |
-| Section-by-section compliance map | [`BPMN-SPEC-REFERENCE.md`](./BPMN-SPEC-REFERENCE.md) |
+| Specification PDF (local copy) | [`omg-bpmn-2.0.2-formal-specification.pdf`](./omg-bpmn-2.0.2-formal-specification.pdf) |
+| Section-by-section compliance map | [`bpmn-spec-reference.md`](./bpmn-spec-reference.md) |
 | BPMN standard home | https://www.bpmn.org/ |
 | OMG specification page | https://www.omg.org/spec/BPMN/2.0.2/PDF |
 

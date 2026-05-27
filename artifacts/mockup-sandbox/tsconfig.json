@@ -1,6 +1,6 @@
 {
   "extends": "../../tsconfig.base.json",
-  "include": ["src/**/*", "mockupPreviewPlugin.ts", "vite.config.ts"],
+  "include": ["src/**/*", "mockup-preview-plugin.ts", "vite.config.ts"],
   "exclude": ["node_modules", "build", "dist", "**/*.test.ts"],
   "compilerOptions": {
     "noEmit": true,

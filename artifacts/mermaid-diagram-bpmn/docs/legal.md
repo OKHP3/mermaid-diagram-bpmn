@@ -23,11 +23,11 @@ BPMN 2.0.2 is a standard published by the Object Management Group (OMG) (documen
 - BPMN 2.0.2 PDF: https://www.omg.org/spec/BPMN/2.0.2/PDF
 - Original OMG document: http://www.omg.org/cgi-bin/doc?dtc/10-06-02
 
-A copy of the specification PDF is included in this repository at `standards/OMG-BPMN-2.0.2-formal-specification.pdf`. OMG publishes its specifications for free public use; including a copy here is consistent with their standard distribution policy and provides an offline reference for contributors and AI agents working in this codebase.
+A copy of the specification PDF is included in this repository at `standards/omg-bpmn-2.0.2-formal-specification.pdf`. OMG publishes its specifications for free public use; including a copy here is consistent with their standard distribution policy and provides an offline reference for contributors and AI agents working in this codebase.
 
 **BPMN for Mermaid targets the Descriptive Conformance Sub-Class** defined in BPMN 2.0.2 Section 2.1. This is the subset intended for human-readable process documentation. It does not implement BPMN execution semantics, choreography, or conversation diagrams.
 
-Rendered elements (shapes, markers, flow lines) are required to conform to the notation defined in the specification. See `standards/BPMN-SPEC-REFERENCE.md` for the section-by-section compliance map.
+Rendered elements (shapes, markers, flow lines) are required to conform to the notation defined in the specification. See `standards/bpmn-spec-reference.md` for the section-by-section compliance map.
 
 Use of BPMN element names and notation (start event, end event, gateway, task, lane, pool, sequence flow, message flow) does not require a license from OMG. These are standardized vocabulary terms describing a shared diagramming notation. Their use in a diagram rendering tool does not constitute publication of the standard itself.
 
