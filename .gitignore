@@ -47,3 +47,18 @@ Thumbs.db
 # Replit
 .cache/
 .local/
+
+# Repository Hygiene Standard (OverKill Hill P3) — Section 4
+# Replit working-buffer artifacts
+attached_assets/
+attached-assets/
+_unused/
+unused/
+
+# Test and build output
+test-results/
+playwright-report/
+coverage/
+build/
+.next/
+.vite/

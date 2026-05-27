@@ -44,7 +44,7 @@ Use this checklist before tagging and deploying any release.
 ## Pre-release: documentation
 
 - [ ] `CHANGELOG.md` updated with all changes since last release
-- [ ] `docs/ROADMAP.md` shows completed items as ✅ Shipped with date
+- [ ] `docs/roadmap.md` shows completed items as ✅ Shipped with date
 - [ ] `docs/decisions.md` — any new decisions recorded
 - [ ] `docs/technical-debt-register.md` — resolved items marked with ~~strikethrough~~ and date
 - [ ] `docs/dsl-spec.md` is current
