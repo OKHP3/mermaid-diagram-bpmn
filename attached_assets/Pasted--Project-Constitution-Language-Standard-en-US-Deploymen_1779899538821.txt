@@ -1,0 +1,167 @@
+# Project Constitution -- Language Standard: en-US
+
+> **Deployment:** Paste the Short Clause into `AGENTS.md` or your project-level constitution permanently.
+> Use the Full Work Order as an on-demand audit prompt. Both artifacts are maintained separately.
+
+---
+
+## Artifact 1: Short Clause (Permanent -- Paste into AGENTS.md / Project Constitution)
+
+```markdown
+### Language Standard: en-US
+
+This project is authored, owned, and maintained by a United States-based creator.
+All user-facing content must use United States English (`en-US`).
+
+Scope: UI copy, documentation, README content, release notes, comments intended for
+human readers, prompts, tooltips, button text, error messages, validation messages,
+QA/QC reports, and marketing language.
+
+Examples of required US-EN spellings:
+color, behavior, organization, optimize, customize, center, analyze, modeling,
+artifact, visualization, standardization, initialize, finalize, prioritize, summarize,
+license (noun), program, catalog, fulfill, gray, toward, among, while.
+
+Do NOT change the following where spelling is externally defined or technically significant:
+- Direct quotations from external sources
+- Proper nouns, brand names, product names
+- Dependency, package, or library names
+- URLs, file names, route names
+- API fields, schema keys, code identifiers
+- Generated lockfiles or external standards
+
+US English compliance is a required QA/QC gate. It is not a stylistic preference.
+Any output that fails this standard is a defect.
+```
+
+---
+
+## Artifact 2: Full Work Order (On-Demand -- Paste when running an audit pass)
+
+```markdown
+Apply a strict US English (`en-US`) normalization pass across this Repl.
+
+I am located in the United States. This project must use `en-US` as its mandatory
+language standard. Treat this as a Project Constitution requirement and a QA/QC gate --
+not a stylistic preference.
+
+### Scope
+
+Review and correct all of the following:
+- User-facing UI copy (labels, buttons, tooltips, error messages, validation messages)
+- Documentation and README files
+- Comments intended for human readers
+- Help text and onboarding copy
+- Release notes
+- QA/QC output and reports
+- Markdown files
+
+### Replacements Required
+
+Apply these substitutions. This list is representative, not exhaustive.
+
+| UK/Commonwealth (BAD) | US English (GOOD) |
+|---|---|
+| colour / colours | color / colors |
+| favourite / favourites | favorite / favorites |
+| behaviour / behaviours | behavior / behaviors |
+| organisation / organisations | organization / organizations |
+| organised / organising | organized / organizing |
+| optimisation / optimise | optimization / optimize |
+| customisation / customised | customization / customized |
+| centre | center |
+| metre | meter |
+| catalogue | catalog |
+| licence (noun) | license |
+| analyse / analysing | analyze / analyzing |
+| modelling | modeling |
+| traveller | traveler |
+| labelled | labeled |
+| fulfil | fulfill |
+| grey | gray |
+| towards | toward |
+| amongst | among |
+| whilst | while |
+| programme (non-software) | program |
+| artefact | artifact |
+| visualisation | visualization |
+| standardisation | standardization |
+| initialise | initialize |
+| finalise | finalize |
+| prioritise | prioritize |
+| summarise | summarize |
+
+### Protected Exceptions -- Do NOT Change
+
+Do not alter spelling in:
+- Direct quotations from external sources
+- Proper nouns, brand names, product names
+- Dependency, package, or library names
+- URLs, file names, route names
+- API fields, schema keys, code identifiers
+- Generated lockfiles
+- External standard names or third-party content
+
+If a protected item contains a UK-EN spelling, leave it unchanged and note it in the
+QA summary as an intentional exception.
+
+### QA Summary Required
+
+After completing changes, produce a structured QA report:
+
+1. Files scanned
+2. Files changed
+3. UK/Commonwealth spellings found (list each)
+4. US-EN replacements applied (list each)
+5. Protected exceptions intentionally left unchanged (list each with reason)
+6. Confirmation that all edited user-facing content now complies with `en-US`
+
+Do not introduce any new UK/Commonwealth spellings in the final output, comments,
+documentation, or QA report itself.
+```
+
+---
+
+## Reference: Good vs. Bad Spelling Table
+
+For human review and onboarding. Use this as a training reference for contributors.
+
+| Context | BAD (UK/Commonwealth) | GOOD (US-EN) |
+|---|---|---|
+| UI label | colour | color |
+| UI label | behaviour settings | behavior settings |
+| UI label | centre the dialog | center the dialog |
+| Error message | unauthorised access | unauthorized access |
+| Error message | organisation not found | organization not found |
+| Variable name | colour_code | color_code |
+| Variable name | organisation_id | organization_id |
+| Function name | serialise_payload() | serialize_payload() |
+| Function name | initialise_db() | initialize_db() |
+| Code comment | Initialise the database | Initialize the database |
+| Code comment | Synchronise data with catalogue | Synchronize data with catalog |
+| Log output | Analysing input... | Analyzing input... |
+| Doc string | Centre the dialogue box | Center the dialog box |
+| Config key | organisation_id | organization_id |
+| String literal | "Defence mechanisms" | "Defense mechanisms" |
+| String literal | "Synchronise complete" | "Synchronize complete" |
+| README | modelling approach | modeling approach |
+| README | labelled as | labeled as |
+| README | whilst running | while running |
+| README | amongst the options | among the options |
+| README | QA/QC artefact | QA/QC artifact |
+| Release note | finalised | finalized |
+| Release note | prioritised | prioritized |
+| Button text | Customise | Customize |
+| Button text | Visualise | Visualize |
+
+---
+
+## Notes
+
+- Use `en-US` (locale code) rather than `US-EN` when configuring tooling, validators,
+  spell-checkers, linters, or AI agents. Both are human-readable; only `en-US` is
+  machine-authoritative.
+- If a linter or spell-checker flags a correct US-EN spelling as an error, the tool
+  configuration is wrong. Fix the tool, not the word.
+- Third-party libraries that use UK-EN internally (e.g., a package named `colour`) are
+  protected exceptions. Do not let those spellings propagate into your own authored content.
