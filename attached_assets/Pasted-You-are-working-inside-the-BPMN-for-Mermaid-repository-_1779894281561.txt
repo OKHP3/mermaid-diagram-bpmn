@@ -1,0 +1,489 @@
+You are working inside the BPMN for Mermaid repository.
+
+Repository:
+https://github.com/OKHP3/mermaid-diagram-bpmn
+
+Replit project:
+https://replit.com/t/overkill-hill/repls/BPMN-for-Mermaid
+
+Live app:
+https://okhp3.github.io/mermaid-diagram-bpmn/
+
+Parent project page:
+https://overkillhill.com/projects/bpmn-for-mermaid/
+
+Canonical parent stylesheet:
+https://github.com/OKHP3/OverKill-Hill/blob/main/assets/css/theme.css
+Raw:
+https://raw.githubusercontent.com/OKHP3/OverKill-Hill/main/assets/css/theme.css
+
+Sibling reference app:
+https://github.com/OKHP3/mermaid-theme-builder
+
+Sibling token source:
+https://github.com/OKHP3/mermaid-theme-builder/blob/main/src/styles/forge-tokens.css
+Raw:
+https://raw.githubusercontent.com/OKHP3/mermaid-theme-builder/main/src/styles/forge-tokens.css
+
+Sibling live visual target:
+https://okhp3.github.io/mermaid-theme-builder
+
+TASK TYPE:
+Brand conformance realignment.
+
+MODE:
+Controlled token adoption. Not redesign.
+
+PRIMARY OBJECTIVE:
+Bring BPMN for Mermaid into visual alignment with Mermaid Theme Builder and the OverKill Hill P³ website by adopting the same OKH Forge design tokens, fonts, header surfaces, radius scale, Mermaid output colors, and default theme behavior.
+
+This project and Mermaid Theme Builder are sibling Mermaid projects. They should look like two tools from the same studio, not two unrelated Replit experiments.
+
+This is an alignment pass, not a feature sprint.
+
+The target is not “make it prettier.”
+The target is “make it obey the same design contract.”
+
+CURRENT STRATEGIC POSITIONING TO PRESERVE:
+BPMN for Mermaid is:
+- a text-first bpmn-beta DSL
+- a Mermaid diagram-type contribution proposal
+- a browser-rendered prototype
+- a standards-aware process-modeling tool
+- the visual output layer for BP-SKILL if that is currently present in the repo and public page
+- open source
+- free
+- client-side where applicable
+
+BPMN for Mermaid is not:
+- official Mermaid core
+- a full BPMN 2.0 execution engine
+- BPMN XML import/export
+- bpmn-js runtime
+- Visio replacement
+- Signavio replacement
+- Camunda Modeler replacement
+- commercial SaaS
+- employer work
+- BFS or Builders FirstSource work
+
+DO NOT CHANGE:
+- bpmn-beta DSL syntax
+- parser behavior
+- SVG renderer logic except the fallback theme token values requested below
+- routes
+- app structure
+- docs architecture
+- BP-SKILL content, unless a factual status label is wrong
+- package manager
+- deployment config
+- existing feature behavior
+- current playground capability
+
+DO CHANGE:
+- font loading
+- shared token source
+- CSS token values
+- local divergent brand tokens
+- header color tokens
+- dark palette tokens
+- radius tokens
+- Mermaid fallback theme colors
+- first-load theme behavior if it follows OS dark mode by default
+- documentation that describes the Forge token contract
+
+PREFERRED EXECUTION PATH:
+Path 1: adopt the sibling token file.
+
+Fetch the raw token file from:
+https://raw.githubusercontent.com/OKHP3/mermaid-theme-builder/main/src/styles/forge-tokens.css
+
+Place it at:
+artifacts/mermaid-diagram-bpmn/src/styles/forge-tokens.css
+
+Then update:
+artifacts/mermaid-diagram-bpmn/src/index.css
+
+so it imports:
+@import "./styles/forge-tokens.css";
+
+This token file should become the shared local copy for the BPMN app.
+
+Do not invent a BPMN-specific token layer when the sibling already defines the OKH Forge layer.
+
+FALLBACK EXECUTION PATH:
+Path 2: explicit edits.
+
+Use Path 2 only if the sibling token file cannot be fetched. In that case, manually edit the values in src/index.css to exactly match the required token values in this prompt.
+
+Do not approximate.
+
+FILE TARGETS:
+Primary app:
+- artifacts/mermaid-diagram-bpmn/index.html
+- artifacts/mermaid-diagram-bpmn/src/index.css
+- artifacts/mermaid-diagram-bpmn/src/styles/forge-tokens.css
+- artifacts/mermaid-diagram-bpmn/src/lib/bpmn-styles.ts
+- artifacts/mermaid-diagram-bpmn/src/components/Layout.tsx
+- artifacts/mermaid-diagram-bpmn/docs/okh-forge-ui-contract.md
+
+Secondary mockup sandbox if present:
+- artifacts/mockup-sandbox/index.html
+- artifacts/mockup-sandbox/src/index.css
+
+Apply font and token alignment to the mockup sandbox too if it exists. Do not create the mockup sandbox if absent.
+
+CANONICAL VALUES:
+Use these exact values.
+
+Fonts:
+- display: Alfa Slab One
+- body: DM Sans
+- mono: JetBrains Mono
+
+Google Fonts href must be:
+https://fonts.googleapis.com/css2?family=Alfa+Slab+One&family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap
+
+Remove:
+- Fraunces
+- Inter as primary UI font
+- local serif heading assumptions
+
+Raw forge palette:
+- --okh-forge-bg: #f0ebe5
+- --okh-forge-paper: #f6f2ee
+- --okh-forge-ink: #0f172a
+- --okh-forge-teal: #1c3a34
+- --okh-forge-rust: #c46a2c
+- --okh-forge-amber: #e6a03c
+- --okh-forge-code-bg: #0f1f1c
+- --okh-forge-code-fg: #d4c9b5
+
+Light semantic tokens:
+- --background: 33 18% 94%
+- --foreground: 222 47% 11%
+- --border: 30 20% 88%
+- --card: 34 35% 95%
+- --card-foreground: 222 47% 11%
+- --card-border: 30 20% 88%
+- --popover: 34 35% 97%
+- --primary: 25 63% 47%
+- --primary-foreground: 0 0% 100%
+- --secondary: 33 28% 92%
+- --muted: 33 25% 91%
+- --muted-foreground: 220 9% 35%
+- --accent: 25 40% 92%
+- --accent-foreground: 25 63% 35%
+- --input: 30 20% 85%
+- --ring: 25 63% 47%
+- --radius: 0.75rem
+
+Dark semantic tokens:
+- --background: 224 30% 8%
+- --foreground: 220 14% 92%
+- --border: 224 20% 18%
+- --card: 224 25% 11%
+- --card-foreground: 220 14% 92%
+- --card-border: 224 20% 18%
+- --popover: 224 25% 11%
+- --popover-foreground: 220 14% 92%
+- --primary: 25 63% 58%
+- --primary-foreground: 0 0% 100%
+- --secondary: 224 20% 16%
+- --muted: 224 20% 14%
+- --muted-foreground: 220 12% 56%
+- --accent: 25 25% 18%
+- --accent-foreground: 25 50% 75%
+- --input: 224 20% 18%
+- --ring: 25 63% 58%
+
+Header tokens:
+Replace local divergent values.
+
+Required:
+- header background: #1c3a34
+- header foreground: #e5e7eb
+- header muted: rgba(229, 231, 235, 0.55)
+- header border: rgba(255, 255, 255, 0.07)
+- active accent: #c46a2c
+
+Reject:
+- #1c2118 as header background
+- olive-black header surfaces
+- parchment header text if it causes divergence from Theme Builder
+- separate local header identity unless mapped to the shared token names
+
+Blueprint grid:
+- use the sibling token file grid size if adopted
+- expected size: 28px
+- do not retain a 32px local grid unless the shared token source now uses it
+
+Radius:
+- base radius must be 0.75rem
+- do not retain 0.5rem as the app base radius
+- pill buttons may stay rounded-full
+
+Eyebrow labels:
+Align to sibling:
+- sans, not mono, unless explicitly used as code
+- font-weight 600
+- uppercase
+- letter-spacing 0.07em
+- muted-foreground color
+
+Mermaid fallback output theme:
+Find:
+artifacts/mermaid-diagram-bpmn/src/lib/bpmn-styles.ts
+
+Find MERMAID_FALLBACK_THEME.
+
+Replace generic gray/blue values with the canonical OverKill Hill P³ Mermaid values:
+
+export const MERMAID_FALLBACK_THEME: BpmnThemeOptions = {
+  lineColor: '#c46a2c',
+  mainBkg: '#111827',
+  nodeBorder: '#c46a2c',
+  clusterBkg: '#0d1117',
+  textColor: '#e5e7eb',
+  primaryColor: '#111827',
+};
+
+If the sibling repo exposes OKH_P3_MERMAID_THEME, you may import or copy-map from that value only if doing so does not introduce cross-repo runtime coupling that breaks the build. A copied local constant is acceptable for this repo. A broken import is not acceptable.
+
+Do not change:
+- BpmnThemeOptions interface
+- getStyles behavior
+- parser logic
+- renderer logic
+- LIGHT_THEME behavior unless it uses off-brand values
+
+Default theme behavior:
+Find the theme mode logic, likely in:
+artifacts/mermaid-diagram-bpmn/src/components/Layout.tsx
+
+If first load with no stored preference follows prefers-color-scheme and goes dark automatically, change it.
+
+Required:
+- no stored preference equals light mode
+- stored dark preference still works
+- manual toggle still works
+- do not remove the theme toggle
+
+Layout.tsx refactor:
+Reduce inline visual styling where practical, but do not restructure the layout.
+
+Keep:
+- title: BPMN for Mermaid
+- bpmn-beta badge
+- GitHub link
+- theme toggle
+- mobile menu
+- current routes
+- current nav items
+- Agent Skills links if currently present
+- playground route
+
+Replace or map:
+- inline header colors to Forge classes or Forge tokens
+- local active nav colors to Forge tokens
+- local footer colors to Forge tokens
+- generic hover styles to Forge tokens
+
+Do not:
+- move nav links
+- remove pages
+- rewrite the app shell
+- change page IA
+- redesign cards
+- add a new design system
+
+DOCUMENTATION REQUIREMENT:
+Create or update:
+artifacts/mermaid-diagram-bpmn/docs/okh-forge-ui-contract.md
+
+The document must include:
+
+Title:
+OKH Forge UI Contract for BPMN for Mermaid
+
+Sections:
+1. Purpose
+   State that BPMN for Mermaid is the structural sibling to Mermaid Theme Builder and consumes the same OKH Forge design language.
+
+2. Authority order
+   List:
+   - OverKill-Hill assets/css/theme.css
+   - Mermaid Theme Builder src/styles/forge-tokens.css
+   - BPMN local copy at src/styles/forge-tokens.css
+   - local component styles
+
+3. Non-negotiable visual contract
+   Include exact fonts, palette values, radius, header, dark palette, and Mermaid output colors.
+
+4. What may differ
+   BPMN may differ in:
+   - icon
+   - bpmn-beta badge
+   - DSL examples
+   - process-modeling vocabulary
+   - spec/reference pages
+   - Agent Skills browser if present
+   - playground-first workflow
+
+5. What may not differ
+   BPMN may not differ in:
+   - base fonts
+   - base token palette
+   - header color
+   - radius scale
+   - dark-mode family
+   - primary accent
+   - grid motif
+   - code panel treatment
+   - card treatment
+   - footer treatment
+   - default first-load mode
+
+6. Iframe boundary
+   Explain that CSS does not cross iframe boundaries. The parent OverKill Hill page cannot style the app. The app must carry its own local token copy.
+
+7. Drift test
+   Include the command checklist:
+   grep for Fraunces
+   grep for Inter
+   grep for #1890ff
+   grep for #1c2118
+   grep for "88 18% 9%"
+   grep for "0.5rem"
+   check font load
+   check first-load theme behavior
+   compare side by side with Theme Builder
+
+8. Brand firewall
+   State no BFS, no Builders FirstSource, no employer content, no employer examples.
+
+SECONDARY MOCKUP SANDBOX:
+If artifacts/mockup-sandbox exists, apply font and token changes there too:
+- index.html font load
+- src/index.css token layer
+- no Fraunces
+- no Inter as primary UI font
+- no olive dark mode
+- no local header drift
+- no 0.5rem base radius
+
+Do not create a sandbox.
+Do not redesign sandbox components.
+
+ACCEPTANCE CRITERIA:
+Report PASS or FAIL for each.
+
+1. Shared token file:
+   artifacts/mermaid-diagram-bpmn/src/styles/forge-tokens.css exists and matches or intentionally mirrors Theme Builder's forge-tokens.css.
+
+2. Index import:
+   artifacts/mermaid-diagram-bpmn/src/index.css imports the shared token file and no longer defines a competing full local Forge token system.
+
+3. Fonts:
+   index.html loads Alfa Slab One, DM Sans, JetBrains Mono.
+   Fraunces removed.
+   Inter removed as app body font.
+
+4. Light mode tokens:
+   background, foreground, card, primary, and radius match canonical values.
+
+5. Dark mode tokens:
+   dark mode uses slate-blue espresso family, not olive hue 88.
+
+6. Header:
+   header resolves to #1c3a34 and #e5e7eb.
+
+7. Radius:
+   base radius is 0.75rem.
+
+8. Mermaid output:
+   MERMAID_FALLBACK_THEME uses rust-orange lines and borders, dark navy fills, and no generic blue #1890ff.
+
+9. First-load behavior:
+   cleared localStorage renders light mode first.
+
+10. Layout integrity:
+   routes, nav items, playground, skill pages, and docs pages still work.
+
+11. Product integrity:
+   bpmn-beta syntax, parser behavior, and renderer behavior are unchanged except for visual token output.
+
+12. Mockup sandbox:
+   if present, it uses the same font and token corrections.
+
+13. Brand firewall:
+   no BFS, Builders FirstSource, employer references, or employer color examples introduced.
+
+14. Forbidden remnants:
+   grep confirms zero remaining unwanted occurrences in styling surfaces:
+   - Fraunces
+   - Inter as primary UI font
+   - #1890ff
+   - #1c2118
+   - "88 18% 9%"
+   - "0.5rem" as base radius
+   - font-serif on OKH headings
+
+VALIDATION COMMANDS:
+Run:
+pnpm install
+pnpm typecheck
+pnpm test
+pnpm build
+
+Use the project’s actual command set if these names differ.
+Do not switch package managers unless the repo requires it.
+
+MANUAL VISUAL CHECK:
+Open the app locally and compare against:
+https://okhp3.github.io/mermaid-theme-builder
+
+The result should be:
+- same studio
+- same forge
+- same token language
+- different product purpose
+- no visual contradiction
+
+REQUIRED OUTPUT:
+Return exactly this structure:
+
+1. Path taken:
+   Path 1 adopt-shared-token-file
+   or
+   Path 2 explicit edits
+
+2. Files changed:
+   table with path, reason, type of change
+
+3. Acceptance table:
+   criterion, file and line, confirmed value, PASS or FAIL
+
+4. Validation table:
+   command, result, notes
+
+5. Grep report:
+   list each forbidden value and whether it remains
+
+6. Visual comparison statement:
+   one paragraph stating whether BPMN now reads as a sibling to Mermaid Theme Builder
+
+7. Blockers:
+   list exact blockers or say none
+
+STYLE RULES FOR YOUR REPORT:
+- no em dashes
+- no marketing filler
+- no vague design claims
+- no “seamlessly”
+- no “robust”
+- no “powerful”
+- no “effortlessly”
+- no “elevate”
+- no “unleash”
+- dry and factual
