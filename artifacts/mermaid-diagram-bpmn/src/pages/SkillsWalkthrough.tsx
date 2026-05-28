@@ -1,9 +1,10 @@
-import { useEffect } from "react";
+import { useEffect, useRef, useState } from "react";
 import type { CSSProperties } from "react";
 import { Link } from "wouter";
 import { ArrowRight, ArrowDown } from "lucide-react";
 import { BpmnRenderer } from "@/lib/bpmn-renderer";
 import { SKILLS, PIPELINE_LAYERS } from "@/data/skills-registry";
+import { PNS_TRANSITIONS } from "@/data/pns-transitions";
 import { PnsLifecycleTracker } from "@/components/skills/PnsLifecycleTracker";
 import { PnsBadge } from "@/components/skills/PnsBadge";
 
@@ -64,11 +65,77 @@ function nextSkillsFor(skillId: string): typeof SKILLS {
     .sort((a, b) => a.pipelineOrder - b.pipelineOrder);
 }
 
+/** Map from skill id → PNS "after" status for that skill (source: PNS_TRANSITIONS). */
+const SKILL_PNS_STATUS: Record<string, string> = {};
+Object.entries(PNS_TRANSITIONS).forEach(([skillId, tx]) => {
+  if (tx.after) SKILL_PNS_STATUS[skillId] = tx.after;
+});
+
 export default function SkillsWalkthrough() {
   useEffect(() => {
     document.title = "BP-SKILL Suite Walkthrough | BPMN for Mermaid";
     const desc = document.querySelector('meta[name="description"]');
     if (desc) desc.setAttribute("content", "End-to-end walkthrough of all 15 BP-SKILL skills — from intake to publication. Trigger conditions, inputs consumed, artifacts produced, and downstream handoffs.");
+  }, []);
+
+  const [activeStatus, setActiveStatus] = useState<string | undefined>(undefined);
+  const intersectingRef = useRef<Set<string>>(new Set());
+
+  useEffect(() => {
+    const intersecting = intersectingRef.current;
+
+    function updateActiveStatus() {
+      if (intersecting.size === 0) {
+        setActiveStatus(undefined);
+        return;
+      }
+      // Pick the visible skill with the lowest pipeline order
+      let bestSkill: (typeof SKILLS)[number] | undefined;
+      for (const skillId of intersecting) {
+        const skill = SKILLS.find((s) => s.id === skillId);
+        if (!skill) continue;
+        if (!bestSkill || skill.pipelineOrder < bestSkill.pipelineOrder) {
+          bestSkill = skill;
+        }
+      }
+      if (bestSkill) {
+        setActiveStatus(SKILL_PNS_STATUS[bestSkill.id]);
+      }
+    }
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          // Extract skill id from e.g. "row-process-intake-and-scope-lg" or "-sm"
+          const rawId = entry.target.id;
+          const skillId = rawId.replace(/^row-/, "").replace(/-(lg|sm)$/, "");
+          if (entry.isIntersecting) {
+            intersecting.add(skillId);
+          } else {
+            intersecting.delete(skillId);
+          }
+        }
+        updateActiveStatus();
+      },
+      {
+        // A band spanning from 10% to 55% from the top of the viewport
+        rootMargin: "-10% 0px -45% 0px",
+        threshold: 0,
+      }
+    );
+
+    // Observe all desktop and mobile row elements
+    for (const skill of SKILLS) {
+      const lg = document.getElementById(`row-${skill.id}-lg`);
+      const sm = document.getElementById(`row-${skill.id}-sm`);
+      if (lg) observer.observe(lg);
+      if (sm) observer.observe(sm);
+    }
+
+    return () => {
+      observer.disconnect();
+      intersecting.clear();
+    };
   }, []);
 
   return (
@@ -155,7 +222,7 @@ export default function SkillsWalkthrough() {
             <p className="text-[9px] font-mono uppercase tracking-wider text-muted-foreground/50 mb-3">
               PNS.md lifecycle — click a pill to jump to the skill that sets it
             </p>
-            <PnsLifecycleTracker withAnchors />
+            <PnsLifecycleTracker withAnchors activeStatus={activeStatus} />
           </div>
 
           {/* Desktop table */}

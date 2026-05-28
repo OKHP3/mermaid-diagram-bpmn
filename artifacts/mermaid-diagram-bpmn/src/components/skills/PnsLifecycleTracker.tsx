@@ -2,6 +2,7 @@ import { PNS_LIFECYCLE, SKILLS } from "@/data/skills-registry";
 
 interface PnsLifecycleTrackerProps {
   withAnchors?: boolean;
+  activeStatus?: string;
 }
 
 /**
@@ -22,7 +23,7 @@ function scrollToSkillRow(skillId: string) {
   target?.scrollIntoView({ behavior: "smooth", block: "start" });
 }
 
-export function PnsLifecycleTracker({ withAnchors = false }: PnsLifecycleTrackerProps) {
+export function PnsLifecycleTracker({ withAnchors = false, activeStatus }: PnsLifecycleTrackerProps) {
   return (
     <div className="w-full">
       {/* Desktop: horizontal */}
@@ -31,20 +32,30 @@ export function PnsLifecycleTracker({ withAnchors = false }: PnsLifecycleTracker
           const skill = SKILLS.find((s) => s.id === state.setBy);
           const isLast = i === PNS_LIFECYCLE.length - 1;
           const isLinked = withAnchors && !!skill;
+          const isActive = activeStatus === state.status;
 
           const pillContent = (
             <div
-              className="px-2 py-1 rounded-full border text-[10px] font-mono font-semibold text-center whitespace-nowrap"
+              className="px-2 py-1 rounded-full border text-[10px] font-mono font-semibold text-center whitespace-nowrap transition-all duration-300"
               style={{
-                background: skill
+                background: isActive
+                  ? `hsl(var(--primary) / 0.22)`
+                  : skill
                   ? `hsl(var(--primary) / 0.12)`
                   : "hsl(var(--muted))",
-                borderColor: skill
+                borderColor: isActive
+                  ? "hsl(var(--primary) / 0.8)"
+                  : skill
                   ? "hsl(var(--primary) / 0.4)"
                   : "hsl(var(--border))",
+                borderWidth: isActive ? "1.5px" : "1px",
                 color: skill
                   ? "hsl(var(--primary))"
                   : "hsl(var(--muted-foreground))",
+                opacity: activeStatus && !isActive ? 0.45 : 1,
+                boxShadow: isActive
+                  ? "0 0 0 2px hsl(var(--primary) / 0.15)"
+                  : "none",
               }}
             >
               {state.status}
@@ -60,6 +71,7 @@ export function PnsLifecycleTracker({ withAnchors = false }: PnsLifecycleTracker
                     type="button"
                     className="block w-full hover:opacity-80 transition-opacity focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/50 rounded-full"
                     aria-label={`Jump to ${skill.displayName} in the table`}
+                    aria-current={isActive ? "true" : undefined}
                     onClick={() => scrollToSkillRow(state.setBy)}
                   >
                     {pillContent}
@@ -68,7 +80,16 @@ export function PnsLifecycleTracker({ withAnchors = false }: PnsLifecycleTracker
                   pillContent
                 )}
                 {/* Skill name below */}
-                <p className="mt-1.5 text-[9px] text-muted-foreground text-center leading-tight px-0.5">
+                <p
+                  className="mt-1.5 text-[9px] text-center leading-tight px-0.5 transition-colors duration-300"
+                  style={{
+                    color: isActive
+                      ? "hsl(var(--primary))"
+                      : "hsl(var(--muted-foreground))",
+                    fontWeight: isActive ? 600 : undefined,
+                    opacity: activeStatus && !isActive ? 0.55 : 1,
+                  }}
+                >
                   {skill ? skill.displayName : state.setBy}
                 </p>
               </div>
@@ -89,16 +110,27 @@ export function PnsLifecycleTracker({ withAnchors = false }: PnsLifecycleTracker
           const skill = SKILLS.find((s) => s.id === state.setBy);
           const isLast = i === PNS_LIFECYCLE.length - 1;
           const isLinked = withAnchors && !!skill;
+          const isActive = activeStatus === state.status;
 
           return (
-            <div key={state.status} className="flex items-start gap-3">
+            <div
+              key={state.status}
+              className="flex items-start gap-3 transition-opacity duration-300"
+              style={{ opacity: activeStatus && !isActive ? 0.45 : 1 }}
+            >
               <div className="flex flex-col items-center">
                 <div
-                  className="w-2 h-2 rounded-full shrink-0 mt-1"
+                  className="w-2 h-2 rounded-full shrink-0 mt-1 transition-all duration-300"
                   style={{
-                    background: skill
+                    background: isActive
                       ? "hsl(var(--primary))"
+                      : skill
+                      ? "hsl(var(--primary) / 0.5)"
                       : "hsl(var(--border))",
+                    boxShadow: isActive
+                      ? "0 0 0 3px hsl(var(--primary) / 0.2)"
+                      : "none",
+                    transform: isActive ? "scale(1.3)" : "scale(1)",
                   }}
                 />
                 {!isLast && (
@@ -114,18 +146,23 @@ export function PnsLifecycleTracker({ withAnchors = false }: PnsLifecycleTracker
                     type="button"
                     className="hover:opacity-80 transition-opacity focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/50 rounded"
                     aria-label={`Jump to ${skill.displayName} in the table`}
+                    aria-current={isActive ? "true" : undefined}
                     onClick={() => scrollToSkillRow(state.setBy)}
                   >
                     <code
-                      className="text-[10px] font-mono font-semibold"
-                      style={{ color: "hsl(var(--primary))" }}
+                      className="text-[10px] font-mono font-semibold transition-colors duration-300"
+                      style={{
+                        color: isActive
+                          ? "hsl(var(--primary))"
+                          : "hsl(var(--primary) / 0.7)",
+                      }}
                     >
                       {state.status}
                     </code>
                   </button>
                 ) : (
                   <code
-                    className="text-[10px] font-mono font-semibold"
+                    className="text-[10px] font-mono font-semibold transition-colors duration-300"
                     style={{
                       color: skill
                         ? "hsl(var(--primary))"
@@ -135,7 +172,15 @@ export function PnsLifecycleTracker({ withAnchors = false }: PnsLifecycleTracker
                     {state.status}
                   </code>
                 )}
-                <p className="text-[9px] text-muted-foreground mt-0.5">
+                <p
+                  className="text-[9px] mt-0.5 transition-colors duration-300"
+                  style={{
+                    color: isActive
+                      ? "hsl(var(--primary))"
+                      : "hsl(var(--muted-foreground))",
+                    fontWeight: isActive ? 600 : undefined,
+                  }}
+                >
                   {skill ? skill.displayName : state.setBy}
                 </p>
               </div>
