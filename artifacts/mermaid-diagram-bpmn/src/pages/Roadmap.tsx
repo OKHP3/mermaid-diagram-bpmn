@@ -1,3 +1,4 @@
+import React from "react";
 import { CheckCheck, FlaskConical, Clock, Wrench, GitBranch, Database, Puzzle, Palette, Shield, AlignVerticalJustifyStart, CircleDot, ExternalLink } from "lucide-react";
 
 // ─── Version Ladder ────────────────────────────────────────────────────────────
@@ -201,11 +202,21 @@ const DEFERRED = [
   "Deeply nested lanes",
 ];
 
-const CONTRIBUTION_STEPS = [
+const GITHUB_ISSUE_BASE = "https://github.com/mermaid-js/mermaid/issues/";
+
+const CONTRIBUTION_STEPS: { n: string; title: string; body: React.ReactNode }[] = [
   {
     n: "01",
     title: "Engage on existing issues",
-    body: "Read and comment on Mermaid GitHub issues #7699, #2623, and #660. Signal intent without prematurely locking syntax.",
+    body: (
+      <>
+        Read and comment on Mermaid GitHub issues{" "}
+        <a href={`${GITHUB_ISSUE_BASE}7699`} target="_blank" rel="noopener noreferrer" className="text-primary hover:underline underline-offset-2 font-medium">#7699</a>,{" "}
+        <a href={`${GITHUB_ISSUE_BASE}2623`} target="_blank" rel="noopener noreferrer" className="text-primary hover:underline underline-offset-2 font-medium">#2623</a>, and{" "}
+        <a href={`${GITHUB_ISSUE_BASE}660`} target="_blank" rel="noopener noreferrer" className="text-primary hover:underline underline-offset-2 font-medium">#660</a>.{" "}
+        Signal intent without prematurely locking syntax.
+      </>
+    ),
   },
   {
     n: "02",
@@ -535,6 +546,54 @@ export default function Roadmap() {
           <p className="text-xs font-semibold text-foreground uppercase tracking-wide">Reference links</p>
         </div>
         <ul className="divide-y divide-border">
+          <li className="flex items-center gap-3 px-4 py-3">
+            <ExternalLink size={12} className="text-muted-foreground shrink-0" />
+            <div className="flex-1 min-w-0">
+              <a
+                href={`${GITHUB_ISSUE_BASE}7699`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-xs font-medium text-primary hover:underline underline-offset-2"
+              >
+                mermaid-js/mermaid #7699
+              </a>
+              <p className="text-[10px] text-muted-foreground mt-0.5">
+                BPMN diagram support proposal by Andreas Emrich (DFKI) — filed 2026-05-02
+              </p>
+            </div>
+          </li>
+          <li className="flex items-center gap-3 px-4 py-3">
+            <ExternalLink size={12} className="text-muted-foreground shrink-0" />
+            <div className="flex-1 min-w-0">
+              <a
+                href={`${GITHUB_ISSUE_BASE}2623`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-xs font-medium text-primary hover:underline underline-offset-2"
+              >
+                mermaid-js/mermaid #2623
+              </a>
+              <p className="text-[10px] text-muted-foreground mt-0.5">
+                Earlier BPMN / process diagram request in the Mermaid issue tracker
+              </p>
+            </div>
+          </li>
+          <li className="flex items-center gap-3 px-4 py-3">
+            <ExternalLink size={12} className="text-muted-foreground shrink-0" />
+            <div className="flex-1 min-w-0">
+              <a
+                href={`${GITHUB_ISSUE_BASE}660`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-xs font-medium text-primary hover:underline underline-offset-2"
+              >
+                mermaid-js/mermaid #660
+              </a>
+              <p className="text-[10px] text-muted-foreground mt-0.5">
+                Original BPMN diagram feature request in the Mermaid issue tracker
+              </p>
+            </div>
+          </li>
           <li className="flex items-center gap-3 px-4 py-3">
             <ExternalLink size={12} className="text-muted-foreground shrink-0" />
             <div className="flex-1 min-w-0">
