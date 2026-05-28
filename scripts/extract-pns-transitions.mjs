@@ -13,6 +13,7 @@
  */
 
 import fs from "fs";
+import os from "os";
 import path from "path";
 import { fileURLToPath } from "url";
 
@@ -22,10 +23,15 @@ const REGISTRY = path.join(
   ROOT,
   "artifacts/mermaid-diagram-bpmn/src/data/skills-registry.ts",
 );
-const OUT = path.join(
+const COMMITTED_OUT = path.join(
   ROOT,
   "artifacts/mermaid-diagram-bpmn/src/data/pns-transitions-auto.ts",
 );
+
+const CHECK_MODE = process.argv.includes("--check");
+const OUT = CHECK_MODE
+  ? path.join(os.tmpdir(), "pns-transitions-check.ts")
+  : COMMITTED_OUT;
 
 const BP_SKILL_IDS = [
   "process-intake-and-scope",
@@ -217,9 +223,22 @@ const lines = [
 ];
 
 fs.writeFileSync(OUT, lines.join("\n"), "utf8");
-console.log(`[extract-pns-transitions] Generated ${path.relative(ROOT, OUT)}`);
-for (const [id, t] of Object.entries(transitions)) {
-  const b = t.before ?? "(none)";
-  const a = t.after ?? "(none)";
-  console.log(`  ${id}: ${b} → ${a}`);
+
+if (CHECK_MODE) {
+  const generated = fs.readFileSync(OUT, "utf8");
+  const committed = fs.readFileSync(COMMITTED_OUT, "utf8");
+  if (generated !== committed) {
+    console.error(
+      "[extract-pns-transitions] FAIL: pns-transitions-auto.ts is stale — run pnpm skill:pns",
+    );
+    process.exit(1);
+  }
+  console.log("[extract-pns-transitions] OK: pns-transitions-auto.ts is up to date.");
+} else {
+  console.log(`[extract-pns-transitions] Generated ${path.relative(ROOT, OUT)}`);
+  for (const [id, t] of Object.entries(transitions)) {
+    const b = t.before ?? "(none)";
+    const a = t.after ?? "(none)";
+    console.log(`  ${id}: ${b} → ${a}`);
+  }
 }
