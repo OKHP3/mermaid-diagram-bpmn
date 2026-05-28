@@ -9,7 +9,7 @@ interface VersionStep {
   version: string;
   title: string;
   status: VersionStatus;
-  deliverables: string[];
+  deliverables: React.ReactNode[];
 }
 
 const VERSION_LADDER: VersionStep[] = [
@@ -115,7 +115,15 @@ const VERSION_LADDER: VersionStep[] = [
     status: "planned",
     deliverables: [
       "3+ real-world process examples contributed (beyond purchase-approval)",
-      "Mermaid issues #7699, #2623, #660 engaged with prototype link",
+      <>
+        Mermaid issues{" "}
+        <a href="https://github.com/mermaid-js/mermaid/issues/7699" target="_blank" rel="noopener noreferrer" className="underline hover:text-foreground transition-colors">#7699</a>
+        {", "}
+        <a href="https://github.com/mermaid-js/mermaid/issues/2623" target="_blank" rel="noopener noreferrer" className="underline hover:text-foreground transition-colors">#2623</a>
+        {", "}
+        <a href="https://github.com/mermaid-js/mermaid/issues/660" target="_blank" rel="noopener noreferrer" className="underline hover:text-foreground transition-colors">#660</a>
+        {" engaged with prototype link"}
+      </>,
       "BP-SKILL suite listed in agentskills.io directory",
       "Comparison matrix: bpmn-beta vs. PlantUML, bpmn.io, Visio, Mermaid flowchart",
     ],
