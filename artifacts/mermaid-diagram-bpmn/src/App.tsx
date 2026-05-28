@@ -10,6 +10,7 @@ import AgentSkills from "@/pages/AgentSkills";
 import SkillDetail from "@/pages/SkillDetail";
 import SkillsWalkthrough from "@/pages/SkillsWalkthrough";
 import PurchaseApprovalExample from "@/pages/PurchaseApprovalExample";
+import EmployeeOffboardingExample from "@/pages/EmployeeOffboardingExample";
 import NotFound from "@/pages/not-found";
 
 function Router() {
@@ -23,6 +24,7 @@ function Router() {
         <Route path="/roadmap" component={Roadmap} />
         <Route path="/about" component={About} />
         <Route path="/walkthrough/purchase-approval" component={PurchaseApprovalExample} />
+        <Route path="/walkthrough/employee-offboarding" component={EmployeeOffboardingExample} />
         <Route path="/walkthrough" component={SkillsWalkthrough} />
         <Route path="/skills/:skillId" component={SkillDetail} />
         <Route path="/skills" component={AgentSkills} />
