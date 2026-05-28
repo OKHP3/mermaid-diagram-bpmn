@@ -5,6 +5,8 @@ import { ArrowLeft, ExternalLink } from "lucide-react";
 import {
   SKILLS, PIPELINE_LAYERS, VARIABLE_FILES,
 } from "@/data/skills-registry";
+import { PnsBadge } from "@/components/skills/PnsBadge";
+import { PNS_TRANSITIONS } from "@/data/pns-transitions";
 import { SkillMiniCard } from "@/components/skills/SkillMiniCard";
 import { SkillFrontmatterPreview } from "@/components/skills/SkillFrontmatterPreview";
 import { InstallTabs } from "@/components/skills/InstallTabs";
@@ -221,6 +223,16 @@ export default function SkillDetail() {
                 ))}
               </ul>
             </div>
+
+            {/* PNS.md lifecycle status */}
+            {!!PNS_TRANSITIONS[skill.id] && (
+              <div>
+                <p className="forge-eyebrow mb-2">PNS.md Status</p>
+                <div className="forge-card p-3">
+                  <PnsBadge skillId={skill.id} verbose />
+                </div>
+              </div>
+            )}
           </div>
         </div>
       </div>

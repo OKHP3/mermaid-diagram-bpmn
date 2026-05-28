@@ -3,91 +3,12 @@ import type { CSSProperties } from "react";
 import { Link } from "wouter";
 import { ArrowRight, ArrowDown } from "lucide-react";
 import { BpmnRenderer } from "@/lib/bpmn-renderer";
-import { SKILLS, PIPELINE_LAYERS, PNS_LIFECYCLE } from "@/data/skills-registry";
+import { SKILLS, PIPELINE_LAYERS } from "@/data/skills-registry";
 import { PnsLifecycleTracker } from "@/components/skills/PnsLifecycleTracker";
+import { PnsBadge } from "@/components/skills/PnsBadge";
 
 const LAYER_COLOR: Record<number, string> = {};
 PIPELINE_LAYERS.forEach((l) => { LAYER_COLOR[l.id] = l.color; });
-
-// PNS.md lifecycle transition per skill.
-// before: status the skill consumes (from skill's consumes field, PNS.md [xxx])
-// after:  status the skill sets (from PNS_LIFECYCLE.setBy; null = reads only)
-const PNS_TRANSITIONS: Record<string, { before: string | null; after: string | null }> = {
-  "process-intake-and-scope":                { before: null,               after: "draft-intake"    },
-  "stakeholder-and-role-mapping":            { before: "draft-intake",     after: "scoped"          },
-  "elicitation-and-interview-facilitation":  { before: "scoped",           after: "elicited"        },
-  "as-is-process-capture":                   { before: "elicited",         after: "documented-as-is"},
-  "process-narrative-authoring":             { before: "documented-as-is", after: "modeled"         },
-  "visual-process-modeling":                 { before: "modeled",          after: null              },
-  "process-gap-and-exception-analysis":      { before: "modeled",          after: "analyzed"        },
-  "future-state-and-change-strategy":        { before: "analyzed",         after: null              },
-  "decision-model-authoring":                { before: "modeled",          after: null              },
-  "process-validation-and-quality-scoring":  { before: "modeled",          after: "validated"       },
-  "process-measures-and-controls-definition":{ before: "validated",        after: null              },
-  "sop-and-work-instruction-generation":     { before: "validated",        after: null              },
-  "raci-and-governance-matrix-generation":   { before: "modeled",          after: null              },
-  "sipoc-generation":                        { before: "modeled",          after: null              },
-  "publication-and-handoff-packaging":       { before: "validated",        after: "published"       },
-};
-
-// Verify PNS_LIFECYCLE `after` values match the registry (keep in sync)
-PNS_LIFECYCLE.forEach((state) => {
-  const entry = PNS_TRANSITIONS[state.setBy];
-  if (entry && !entry.after) entry.after = state.status;
-});
-
-function PnsBadge({ skillId }: { skillId: string }) {
-  const tx = PNS_TRANSITIONS[skillId];
-  if (!tx) return null;
-  const { before, after } = tx;
-
-  const setStyle = {
-    background: "hsl(var(--primary) / 0.12)",
-    borderColor: "hsl(var(--primary) / 0.4)",
-    color: "hsl(var(--primary))",
-  };
-  const readStyle = {
-    background: "hsl(var(--muted))",
-    borderColor: "hsl(var(--border))",
-    color: "hsl(var(--muted-foreground))",
-  };
-
-  return (
-    <div className="flex flex-col gap-0.5 items-start">
-      {before !== null ? (
-        <span
-          className="inline-block px-1.5 py-0.5 rounded-full border text-[9px] font-mono font-semibold whitespace-nowrap"
-          style={readStyle}
-          title="PNS.md status consumed by this skill"
-        >
-          {before}
-        </span>
-      ) : (
-        after && (
-          <span
-            className="inline-block px-1.5 py-0.5 rounded-full border text-[9px] font-mono whitespace-nowrap italic"
-            style={readStyle}
-            title="PNS.md does not yet exist at this stage"
-          >
-            (none yet)
-          </span>
-        )
-      )}
-      {after && (
-        <>
-          <span className="text-[8px] text-muted-foreground/40 font-mono pl-1.5 leading-none">↓ sets</span>
-          <span
-            className="inline-block px-1.5 py-0.5 rounded-full border text-[9px] font-mono font-semibold whitespace-nowrap"
-            style={setStyle}
-            title="PNS.md status set by this skill"
-          >
-            {after}
-          </span>
-        </>
-      )}
-    </div>
-  );
-}
 
 const PIPELINE_NODE_LINKS: Record<string, string> = {};
 const PIPELINE_NODE_TOOLTIPS: Record<string, string> = {};
