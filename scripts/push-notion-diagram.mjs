@@ -76,6 +76,18 @@ async function deleteBlock(blockId) {
   return notionFetch(`/blocks/${blockId}`, "DELETE");
 }
 
+/**
+ * Notion's rich_text items have a 2000-char limit per element.
+ * Split a string into chunks and return an array of rich_text objects.
+ */
+function richTextChunks(content, maxLen = 2000) {
+  const chunks = [];
+  for (let i = 0; i < content.length; i += maxLen) {
+    chunks.push({ type: "text", text: { content: content.slice(i, i + maxLen) } });
+  }
+  return chunks;
+}
+
 async function appendCodeBlock(pageId, language, content) {
   return notionFetch(`/blocks/${pageId}/children`, "PATCH", {
     children: [
@@ -83,7 +95,7 @@ async function appendCodeBlock(pageId, language, content) {
         type: "code",
         code: {
           language,
-          rich_text: [{ type: "text", text: { content } }],
+          rich_text: richTextChunks(content),
         },
       },
     ],
@@ -130,8 +142,11 @@ const blocks = await listPageBlocks(PAGE_ID);
 const existing = blocks.find((b) => {
   if (b.type !== "code") return false;
   const texts = b.code?.rich_text ?? [];
-  const full = texts.map((t) => t.plain_text ?? t.text?.content ?? "").join("");
-  return full.includes("flowchart LR") && full.includes("BP-SKILL");
+  // Notion returns plain_text on read; fall back to text.content for safety
+  const full = texts
+    .map((t) => t.plain_text ?? t.text?.content ?? "")
+    .join("");
+  return full.includes("flowchart LR");
 });
 
 if (existing) {
