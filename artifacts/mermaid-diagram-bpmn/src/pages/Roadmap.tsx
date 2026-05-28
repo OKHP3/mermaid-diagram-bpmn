@@ -602,22 +602,6 @@ export default function Roadmap() {
               </p>
             </div>
           </li>
-          <li className="flex items-center gap-3 px-4 py-3">
-            <ExternalLink size={12} className="text-muted-foreground shrink-0" />
-            <div className="flex-1 min-w-0">
-              <a
-                href="https://www.notion.so/36c812e0ced481ef816de1cd471fd1cd"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-xs font-medium text-primary hover:underline underline-offset-2"
-              >
-                BP-SKILL v0.2 Suite
-              </a>
-              <p className="text-[10px] text-muted-foreground mt-0.5">
-                Full suite documentation — all 15 skills, PNS schema, context files, and install instructions
-              </p>
-            </div>
-          </li>
         </ul>
       </div>
     </div>
