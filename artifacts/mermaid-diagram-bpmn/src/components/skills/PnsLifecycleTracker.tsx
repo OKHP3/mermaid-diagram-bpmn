@@ -4,6 +4,24 @@ interface PnsLifecycleTrackerProps {
   withAnchors?: boolean;
 }
 
+/**
+ * Scroll to the skill row that is currently visible in the DOM.
+ * Desktop rows carry id="row-{skillId}-lg"; mobile cards carry id="row-{skillId}-sm".
+ * We check which one has a non-null offsetParent (i.e. is visible) and
+ * scroll to it. Falls back to the first found element if neither is visible.
+ */
+function scrollToSkillRow(skillId: string) {
+  const lg = document.getElementById(`row-${skillId}-lg`);
+  const sm = document.getElementById(`row-${skillId}-sm`);
+  const target =
+    lg && lg.offsetParent !== null
+      ? lg
+      : sm && sm.offsetParent !== null
+      ? sm
+      : lg ?? sm;
+  target?.scrollIntoView({ behavior: "smooth", block: "start" });
+}
+
 export function PnsLifecycleTracker({ withAnchors = false }: PnsLifecycleTrackerProps) {
   return (
     <div className="w-full">
@@ -14,9 +32,9 @@ export function PnsLifecycleTracker({ withAnchors = false }: PnsLifecycleTracker
           const isLast = i === PNS_LIFECYCLE.length - 1;
           const isLinked = withAnchors && !!skill;
 
-          const pill = (
+          const pillContent = (
             <div
-              className={`px-2 py-1 rounded-full border text-[10px] font-mono font-semibold text-center whitespace-nowrap${isLinked ? " hover:opacity-80 transition-opacity" : ""}`}
+              className="px-2 py-1 rounded-full border text-[10px] font-mono font-semibold text-center whitespace-nowrap"
               style={{
                 background: skill
                   ? `hsl(var(--primary) / 0.12)`
@@ -36,17 +54,18 @@ export function PnsLifecycleTracker({ withAnchors = false }: PnsLifecycleTracker
           return (
             <div key={state.status} className="flex items-start flex-1 min-w-0">
               <div className="flex flex-col items-center flex-1 min-w-0">
-                {/* Pill — wrapped in anchor when withAnchors and skill exists */}
+                {/* Pill — button-driven scroll when withAnchors and skill exists */}
                 {isLinked ? (
-                  <a
-                    href={`#row-${state.setBy}`}
-                    className="block w-full"
-                    aria-label={`Jump to ${skill.displayName} row`}
+                  <button
+                    type="button"
+                    className="block w-full hover:opacity-80 transition-opacity focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/50 rounded-full"
+                    aria-label={`Jump to ${skill.displayName} in the table`}
+                    onClick={() => scrollToSkillRow(state.setBy)}
                   >
-                    {pill}
-                  </a>
+                    {pillContent}
+                  </button>
                 ) : (
-                  pill
+                  pillContent
                 )}
                 {/* Skill name below */}
                 <p className="mt-1.5 text-[9px] text-muted-foreground text-center leading-tight px-0.5">
@@ -91,21 +110,27 @@ export function PnsLifecycleTracker({ withAnchors = false }: PnsLifecycleTracker
               </div>
               <div className="pb-4">
                 {isLinked ? (
-                  <a
-                    href={`#row-${state.setBy}`}
-                    aria-label={`Jump to ${skill.displayName} row`}
+                  <button
+                    type="button"
+                    className="hover:opacity-80 transition-opacity focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/50 rounded"
+                    aria-label={`Jump to ${skill.displayName} in the table`}
+                    onClick={() => scrollToSkillRow(state.setBy)}
                   >
                     <code
-                      className="text-[10px] font-mono font-semibold hover:opacity-80 transition-opacity"
+                      className="text-[10px] font-mono font-semibold"
                       style={{ color: "hsl(var(--primary))" }}
                     >
                       {state.status}
                     </code>
-                  </a>
+                  </button>
                 ) : (
                   <code
                     className="text-[10px] font-mono font-semibold"
-                    style={{ color: skill ? "hsl(var(--primary))" : "hsl(var(--muted-foreground))" }}
+                    style={{
+                      color: skill
+                        ? "hsl(var(--primary))"
+                        : "hsl(var(--muted-foreground))",
+                    }}
                   >
                     {state.status}
                   </code>

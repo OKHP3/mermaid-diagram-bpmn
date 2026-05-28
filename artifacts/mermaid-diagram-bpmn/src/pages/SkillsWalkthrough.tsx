@@ -259,7 +259,7 @@ export default function SkillsWalkthrough() {
                     return (
                       <tr
                         key={skill.id}
-                        id={`row-${skill.id}`}
+                        id={`row-${skill.id}-lg`}
                         className={`border-b border-border last:border-0 ${i % 2 === 0 ? "bg-card" : "bg-muted/10"}`}
                         style={{ "--layer-color": layerColor } as CSSProperties}
                       >
@@ -371,7 +371,7 @@ export default function SkillsWalkthrough() {
               return (
                 <div
                   key={skill.id}
-                  id={`row-${skill.id}`}
+                  id={`row-${skill.id}-sm`}
                   className="rounded-xl border border-border bg-card overflow-hidden forge-layer-border-left"
                   style={{ "--layer-color": layerColor } as CSSProperties}
                 >
