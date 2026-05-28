@@ -93,6 +93,25 @@ export default function About() {
           Key decisions made during the design of <code className="font-mono text-xs bg-muted px-1 py-0.5 rounded">bpmn-beta</code>,
           the risks this project is managing, and how to get involved.
         </p>
+        <div className="flex items-center gap-3 mt-4 flex-wrap" data-testid="about-badges">
+          <a
+            href="https://github.com/OKHP3/mermaid-diagram-bpmn/actions/workflows/deploy-gh-pages.yml"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Deploy to GitHub Pages workflow status"
+          >
+            <img
+              src="https://github.com/OKHP3/mermaid-diagram-bpmn/actions/workflows/deploy-gh-pages.yml/badge.svg"
+              alt="Deploy to GitHub Pages"
+              height="20"
+            />
+          </a>
+          <img
+            src="https://img.shields.io/badge/BP--SKILL-15%20skills-5b6ee1?style=flat&logo=data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxNiAxNiI+PHBhdGggZmlsbD0id2hpdGUiIGQ9Ik04IDFhNyA3IDAgMSAwIDAgMTRBNyA3IDAgMCAwIDggMXptMCAyYTUgNSAwIDEgMSAwIDEwQTUgNSAwIDAgMSA4IDN6bS0uNSAydjQuNWwzLjUgMi0uNS44LTQtMi4zVjV6Ii8+PC9zdmc+"
+            alt="BP-SKILL: 15 skills"
+            height="20"
+          />
+        </div>
       </div>
 
       {/* Decisions */}
