@@ -288,6 +288,14 @@
     background: rgba(255, 255, 255, 0.06);
   }
 
+  /* ---- Skill count badge in nav --------------------------------- */
+
+  .forge-skill-badge {
+    color: var(--okh-primary);
+    background: color-mix(in srgb, var(--okh-primary) 14%, transparent);
+    font-variant-numeric: tabular-nums;
+  }
+
   /* ---- Footer identity slug ------------------------------------- */
 
   .forge-footer-slug {
