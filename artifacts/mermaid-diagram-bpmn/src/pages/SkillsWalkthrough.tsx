@@ -4,6 +4,7 @@ import { Link } from "wouter";
 import { ArrowRight, ArrowDown } from "lucide-react";
 import { BpmnRenderer } from "@/lib/bpmn-renderer";
 import { SKILLS, PIPELINE_LAYERS, PNS_LIFECYCLE } from "@/data/skills-registry";
+import { PnsLifecycleTracker } from "@/components/skills/PnsLifecycleTracker";
 
 const LAYER_COLOR: Record<number, string> = {};
 PIPELINE_LAYERS.forEach((l) => { LAYER_COLOR[l.id] = l.color; });
@@ -220,10 +221,18 @@ export default function SkillsWalkthrough() {
           <h2 className="text-xl font-bold text-foreground mb-2">
             Skill-by-Skill Handoff Reference
           </h2>
-          <p className="text-sm text-muted-foreground mb-8 max-w-2xl leading-relaxed">
+          <p className="text-sm text-muted-foreground mb-5 max-w-2xl leading-relaxed">
             For each skill: the phrase that triggers it, the artifacts it reads, what it produces,
             and which skills immediately follow. Click a skill name to view its full specification.
           </p>
+
+          {/* PNS lifecycle chain — pills link to matching skill rows */}
+          <div className="mb-8 p-4 rounded-xl border border-border bg-card/40">
+            <p className="text-[9px] font-mono uppercase tracking-wider text-muted-foreground/50 mb-3">
+              PNS.md lifecycle — click a pill to jump to the skill that sets it
+            </p>
+            <PnsLifecycleTracker withAnchors />
+          </div>
 
           {/* Desktop table */}
           <div className="hidden lg:block rounded-xl border border-border overflow-hidden">
@@ -250,6 +259,7 @@ export default function SkillsWalkthrough() {
                     return (
                       <tr
                         key={skill.id}
+                        id={`row-${skill.id}`}
                         className={`border-b border-border last:border-0 ${i % 2 === 0 ? "bg-card" : "bg-muted/10"}`}
                         style={{ "--layer-color": layerColor } as CSSProperties}
                       >
@@ -361,6 +371,7 @@ export default function SkillsWalkthrough() {
               return (
                 <div
                   key={skill.id}
+                  id={`row-${skill.id}`}
                   className="rounded-xl border border-border bg-card overflow-hidden forge-layer-border-left"
                   style={{ "--layer-color": layerColor } as CSSProperties}
                 >
