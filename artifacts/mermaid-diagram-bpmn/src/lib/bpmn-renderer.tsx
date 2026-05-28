@@ -61,6 +61,7 @@ interface NodeInteraction {
   tooltip?: string;
   onEnter?: (e: React.MouseEvent) => void;
   onLeave?: () => void;
+  isHovered?: boolean;
 }
 
 function renderNode(node: BpmnNode, lnode: BpmnLayoutNode, interaction?: NodeInteraction) {
@@ -108,6 +109,9 @@ function renderNode(node: BpmnNode, lnode: BpmnLayoutNode, interaction?: NodeInt
         onMouseLeave={interaction?.onLeave}
       >
         <rect x={x - hw} y={y - hh} width={width} height={height} rx={6} className="bpmn-task" />
+        {interaction?.isHovered && (
+          <rect x={x - hw} y={y - hh} width={width} height={height} rx={6} className="bpmn-task-hover" />
+        )}
         {node.subtype === 'user' && <UserTaskIcon x={iconX} y={iconY} />}
         {node.subtype === 'service' && <ServiceTaskIcon x={iconX} y={iconY} />}
         {node.subtype === 'script' && <ScriptTaskIcon x={iconX} y={iconY} />}
@@ -308,17 +312,19 @@ export function BpmnRenderer({ source, nodeLinks, nodeTooltips }: BpmnRendererPr
                   onClick: link ? () => navigate(link) : undefined,
                   tooltip: nodeTooltips?.[node.id],
                   onEnter: (e: React.MouseEvent) => {
-                    if (!nodeTooltips?.[node.id]) return;
                     const container = containerRef.current;
                     if (!container) return;
-                    const rect = container.getBoundingClientRect();
                     setHoveredNode(node.id);
-                    setTooltipPos({
-                      x: e.clientX - rect.left,
-                      y: e.clientY - rect.top,
-                    });
+                    if (nodeTooltips?.[node.id]) {
+                      const rect = container.getBoundingClientRect();
+                      setTooltipPos({
+                        x: e.clientX - rect.left,
+                        y: e.clientY - rect.top,
+                      });
+                    }
                   },
                   onLeave: () => setHoveredNode(null),
+                  isHovered: hoveredNode === node.id,
                 }
               : undefined;
             return renderNode(node, lnode, interaction);
