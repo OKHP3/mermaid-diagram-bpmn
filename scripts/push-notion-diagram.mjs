@@ -4,31 +4,32 @@
  *
  * Reads the Mermaid dependency-flow diagram from
  * artifacts/mermaid-diagram-bpmn/public/skill-dependency-flow.md
- * and ensures it appears as the FIRST block on the BP-SKILL Notion page.
+ * and pushes it as a code block to the BP-SKILL Notion page.
  *
- * Strategy for top-placement:
- *   The Notion Blocks API only supports appending children (no prepend).
- *   To place the diagram first, the script:
- *     1. Snapshots all current top-level page blocks
- *     2. Deletes them all
- *     3. Appends the diagram code block first
- *     4. Re-appends all original non-diagram blocks in their original order
- *   This is safe on pages with only simple blocks (paragraph, heading,
- *   code, callout, bulleted_list_item, numbered_list_item, quote, divider).
- *   Nested/complex blocks (tables, synced_blocks, columns) are skipped with
- *   a warning — they survive deletion only if none exist on the page.
+ * Default (safe) behaviour:
+ *   - Detects any existing diagram block by a unique marker comment
+ *     (%% BPSKILL-DEPENDENCY-FLOW) embedded in the code block body.
+ *   - Deletes ONLY that one block — no other page content is touched.
+ *   - Appends the fresh diagram block (Notion only supports appending;
+ *     the public API has no prepend operation).
+ *   - Result: diagram appears at the bottom (or in the same position
+ *     if it was already the last block).
  *
- * Idempotency:
- *   A unique marker comment is embedded as the first line of the pushed
- *   code block: %% BPSKILL-DEPENDENCY-FLOW
- *   Re-runs detect and skip carrying the old diagram forward, replacing it
- *   with the freshly generated one at the top.
+ * --force-rebuild (destructive):
+ *   Places the diagram at the TOP of the page by rebuilding page content.
+ *   Safety checks before any deletion:
+ *     1. All top-level blocks must be in RESTORABLE_TYPES.
+ *     2. None of those blocks may have nested children (has_children: true),
+ *        because the restore path only handles top-level content.
+ *   If either check fails the script aborts with a clear error and no
+ *   changes are made. Add --force-rebuild only when you have confirmed
+ *   the page contains only simple, flat blocks.
  *
  * Required env var: NOTION_TOKEN
  * Target page:      36c812e0-ced4-81ef-816d-e1cd471fd1cd
  *
  * Usage:
- *   node scripts/push-notion-diagram.mjs [--dry-run]
+ *   node scripts/push-notion-diagram.mjs [--dry-run] [--force-rebuild]
  */
 
 import { readFileSync } from "fs";
@@ -37,6 +38,11 @@ import { dirname, join } from "path";
 
 const PAGE_ID = "36c812e0-ced4-81ef-816d-e1cd471fd1cd";
 const NOTION_VERSION = "2022-06-28";
+
+/**
+ * Unique marker embedded as the first line of every pushed code block.
+ * Detection matches only this exact marker, not generic Mermaid content.
+ */
 const MARKER_COMMENT = "%% BPSKILL-DEPENDENCY-FLOW";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -44,19 +50,9 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 // ── CLI flags ──────────────────────────────────────────────────────────────
 
 const DRY_RUN = process.argv.includes("--dry-run");
+const FORCE_REBUILD = process.argv.includes("--force-rebuild");
 
-// ── Token ─────────────────────────────────────────────────────────────────
-
-const NOTION_TOKEN = process.env.NOTION_TOKEN;
-if (!NOTION_TOKEN) {
-  console.error(
-    "ERROR: NOTION_TOKEN environment variable is not set.\n" +
-      "Set it in the Replit Secrets panel and re-run."
-  );
-  process.exit(1);
-}
-
-// ── Supported leaf block types that can be round-tripped safely ──────────
+// ── Block types that can be safely round-tripped without nested children ──
 
 const RESTORABLE_TYPES = new Set([
   "paragraph",
@@ -71,6 +67,17 @@ const RESTORABLE_TYPES = new Set([
   "divider",
   "to_do",
 ]);
+
+// ── Token ─────────────────────────────────────────────────────────────────
+
+const NOTION_TOKEN = process.env.NOTION_TOKEN;
+if (!NOTION_TOKEN) {
+  console.error(
+    "ERROR: NOTION_TOKEN environment variable is not set.\n" +
+      "Set it in the Replit Secrets panel and re-run."
+  );
+  process.exit(1);
+}
 
 // ── Notion helpers ────────────────────────────────────────────────────────
 
@@ -108,7 +115,7 @@ async function deleteBlock(blockId) {
 }
 
 /**
- * Notion's rich_text items have a 2000-char limit per element.
+ * Notion rich_text items have a 2000-char per-element limit.
  * Split content into chunks and return an array of rich_text objects.
  */
 function richTextChunks(content, maxLen = 2000) {
@@ -123,9 +130,9 @@ function richTextChunks(content, maxLen = 2000) {
 }
 
 /**
- * Build the Notion block object for the diagram, ready to append.
+ * Build the Notion block payload for the diagram code block.
  */
-function buildDiagramBlock(mermaidCode) {
+function buildDiagramBlockPayload(mermaidCode) {
   return {
     type: "code",
     code: {
@@ -136,8 +143,8 @@ function buildDiagramBlock(mermaidCode) {
 }
 
 /**
- * Deep-strip null values from an object so Notion's append API doesn't
- * reject fields that are null in fetched block payloads (e.g. icon: null).
+ * Deep-strip null values from an object.
+ * Notion rejects null fields (e.g. icon: null) when appending blocks.
  */
 function stripNulls(obj) {
   if (Array.isArray(obj)) return obj.map(stripNulls);
@@ -152,9 +159,8 @@ function stripNulls(obj) {
 }
 
 /**
- * Reconstruct a plain Notion block payload from a fetched block object.
- * Only handles types listed in RESTORABLE_TYPES.
- * Returns null if the block type cannot be safely round-tripped.
+ * Convert a fetched Notion block into an appendable payload.
+ * Returns null for unrestorable types.
  */
 function toAppendPayload(block) {
   const { type } = block;
@@ -165,8 +171,7 @@ function toAppendPayload(block) {
 }
 
 /**
- * Append a batch of block payloads as children of pageId.
- * Notion allows up to 100 children per request.
+ * Append up to 100 block payloads per request (Notion limit).
  */
 async function appendBlocks(pageId, children) {
   if (children.length === 0) return;
@@ -209,13 +214,13 @@ if (DRY_RUN) {
   process.exit(0);
 }
 
-// ── Snapshot current page blocks ──────────────────────────────────────────
+// ── Fetch current page blocks ─────────────────────────────────────────────
 
 console.log(`Fetching blocks from Notion page ${PAGE_ID} …`);
 const currentBlocks = await listPageBlocks(PAGE_ID);
 console.log(`Found ${currentBlocks.length} existing block(s).`);
 
-// Separate diagram block(s) from the rest
+/** Returns true if a block is our pushed diagram (identified by marker). */
 const isDiagramBlock = (b) => {
   if (b.type !== "code") return false;
   const texts = b.code?.rich_text ?? [];
@@ -223,47 +228,75 @@ const isDiagramBlock = (b) => {
   return full.includes(MARKER_COMMENT);
 };
 
-const diagramBlocks = currentBlocks.filter(isDiagramBlock);
+const existingDiagram = currentBlocks.find(isDiagramBlock);
 const otherBlocks = currentBlocks.filter((b) => !isDiagramBlock(b));
 
-// Check that all other blocks are restorable
-const unrestorable = otherBlocks.filter((b) => !RESTORABLE_TYPES.has(b.type));
-if (unrestorable.length > 0) {
-  console.error(
-    `ERROR: Page contains ${unrestorable.length} block type(s) that cannot be safely moved:\n` +
-      unrestorable.map((b) => `  ${b.type} (${b.id})`).join("\n") +
-      "\nAbort — no changes made. Remove or simplify those blocks and re-run."
+// ── FORCE REBUILD: top-placement with full safety preflight ───────────────
+
+if (FORCE_REBUILD) {
+  console.log("\n[--force-rebuild] Running preflight checks …");
+
+  const unrestorable = otherBlocks.filter((b) => !RESTORABLE_TYPES.has(b.type));
+  if (unrestorable.length > 0) {
+    console.error(
+      `ERROR: Page contains ${unrestorable.length} block type(s) that cannot be safely restored:\n` +
+        unrestorable.map((b) => `  ${b.type} (${b.id})`).join("\n") +
+        "\nAbort — no changes made."
+    );
+    process.exit(1);
+  }
+
+  const withChildren = otherBlocks.filter((b) => b.has_children);
+  if (withChildren.length > 0) {
+    console.error(
+      `ERROR: ${withChildren.length} block(s) have nested children that cannot be safely restored:\n` +
+        withChildren.map((b) => `  ${b.type} (${b.id})`).join("\n") +
+        "\nAbort — no changes made. Flatten nested content before using --force-rebuild."
+    );
+    process.exit(1);
+  }
+
+  console.log("Preflight passed — all blocks are flat and restorable.");
+  console.log(
+    `Rebuilding page: diagram first, then ${otherBlocks.length} original block(s) …`
   );
-  process.exit(1);
+
+  const restorePayloads = otherBlocks.map(toAppendPayload).filter(Boolean);
+
+  for (const b of currentBlocks) {
+    await deleteBlock(b.id);
+  }
+  console.log(`Deleted ${currentBlocks.length} block(s).`);
+
+  await appendBlocks(PAGE_ID, [buildDiagramBlockPayload(mermaidCode)]);
+  if (restorePayloads.length > 0) {
+    await appendBlocks(PAGE_ID, restorePayloads);
+    console.log(`Restored ${restorePayloads.length} original block(s).`);
+  }
+
+  console.log(
+    `\nDone (${existingDiagram ? "updated" : "created"} — placed at top). ` +
+      `Open https://www.notion.so/${PAGE_ID.replace(/-/g, "")} to verify.`
+  );
+  process.exit(0);
 }
 
-const restorePayloads = otherBlocks.map(toAppendPayload).filter(Boolean);
+// ── DEFAULT (safe): delete only the diagram block, append fresh ───────────
 
-// ── Delete all current blocks ─────────────────────────────────────────────
+if (existingDiagram) {
+  console.log(`Found existing diagram block ${existingDiagram.id} — deleting …`);
+  await deleteBlock(existingDiagram.id);
+  console.log("Deleted.");
+} else {
+  console.log("No existing diagram block found — will append fresh.");
+}
 
-const wasUpdate = diagramBlocks.length > 0;
+await appendBlocks(PAGE_ID, [buildDiagramBlockPayload(mermaidCode)]);
+
 console.log(
-  wasUpdate
-    ? `Removing ${diagramBlocks.length} old diagram block(s) and reordering page …`
-    : "No existing diagram block — rebuilding page with diagram at top …"
-);
-
-for (const b of currentBlocks) {
-  await deleteBlock(b.id);
-}
-console.log(`Deleted ${currentBlocks.length} block(s).`);
-
-// ── Re-append: diagram first, then original blocks ────────────────────────
-
-console.log("Appending diagram at top …");
-await appendBlocks(PAGE_ID, [buildDiagramBlock(mermaidCode)]);
-
-if (restorePayloads.length > 0) {
-  console.log(`Re-appending ${restorePayloads.length} original block(s) …`);
-  await appendBlocks(PAGE_ID, restorePayloads);
-}
-
-console.log(
-  `\nDone (${wasUpdate ? "updated" : "created"}). ` +
-    `Open https://www.notion.so/${PAGE_ID.replace(/-/g, "")} to verify.`
+  `\nDone (${existingDiagram ? "updated" : "created"}). ` +
+    `Open https://www.notion.so/${PAGE_ID.replace(/-/g, "")} to verify.\n` +
+    `Note: diagram is placed at the bottom (Notion API limitation).\n` +
+    `To place it at the top, run with --force-rebuild after confirming the page\n` +
+    `contains only simple flat blocks (no toggles, tables, columns, etc.).`
 );
