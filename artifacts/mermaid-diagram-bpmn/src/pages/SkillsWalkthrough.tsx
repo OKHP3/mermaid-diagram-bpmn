@@ -100,7 +100,7 @@ SKILLS.forEach((skill) => {
 
 const PIPELINE_BPMN = `bpmn-beta
 accTitle: BP-SKILL v0.3 — 15-Skill Pipeline
-accDescr: Business process documentation lifecycle from intake to publication
+accDescr: Business process documentation lifecycle from intake to publication. Click any skill node to open its detail page.
 
 start s0 "Process Request"
 task:user sk01 "01 · Intake & Scope"
@@ -191,7 +191,7 @@ export default function SkillsWalkthrough() {
             Rendered as a <code className="font-mono text-xs bg-muted px-1 rounded">bpmn-beta</code> diagram.
             Each box is a BP-SKILL skill. The flow follows the primary handoff sequence —
             see the table below for branch paths and optional tracks.
-            Scroll right to view the full pipeline.
+            Click any skill to open its detail page. Scroll right to view the full pipeline.
           </p>
 
           <div
