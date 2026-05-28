@@ -7,7 +7,8 @@
     "hello": "tsx ./src/hello.ts",
     "typecheck": "tsc -p tsconfig.json --noEmit",
     "notion:push-diagram": "node ../scripts/push-notion-diagram.mjs",
-    "notion:push-diagram:dry": "node ../scripts/push-notion-diagram.mjs --dry-run"
+    "notion:push-diagram:dry": "node ../scripts/push-notion-diagram.mjs --dry-run",
+    "skill:pns": "node ../scripts/extract-pns-transitions.mjs"
   },
   "devDependencies": {
     "@types/node": "catalog:",
