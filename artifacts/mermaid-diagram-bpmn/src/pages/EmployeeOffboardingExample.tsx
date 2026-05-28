@@ -198,7 +198,7 @@ GAP-04 [MEDIUM] IP ownership of code built on personal repos is unaddressed
   {
     skillId: "future-state-and-change-strategy",
     pnsConsumed: "analyzed",
-    pnsSet: null,
+    pnsSet: "future-designed",
     triggerUsed: "Model future-state improvements for employee-offboarding based on the gap report.",
     inputLabel: "PNS.md [analyzed] + gap report + organization-profile",
     inputSnippet:
@@ -217,15 +217,15 @@ Delta: +2 act-NNN entries; 1 new event trigger (HRIS signal); 1 decision gateway
   },
   {
     skillId: "decision-model-authoring",
-    pnsConsumed: "modeled",
-    pnsSet: null,
+    pnsConsumed: "analyzed",
+    pnsSet: "decision-enriched",
     triggerUsed: "Build DMN decision tables for the offboarding access-revocation tier and equipment-escalation rules in employee-offboarding.",
-    inputLabel: "PNS.md [modeled] + business-glossary + IT security policy + Legal input",
+    inputLabel: "PNS.md [analyzed] + gap report + IT security policy + Legal input",
     inputSnippet:
-`Two decision points requiring DMN formalisation:
-  (1) Access revocation tier — determines which systems to revoke and in which order.
-  (2) Equipment recovery path — determines whether remote wipe is authorised.
-IT security policy defines 3 access tiers (critical, standard, low).`,
+`Gap report confirmed two decision points requiring DMN formalisation:
+  GAP-01: access revocation tier (critical/standard/low) — no SLA yet, needs formal rules.
+  GAP-02: equipment recovery path — remote-wipe authority unresolved.
+DMN authoring uses the analyzed PNS so decision tables reflect confirmed gap findings.`,
     outputLabel: "DMN decision tables (access-tier + equipment escalation)",
     outputSnippet:
 `TABLE 1: access-revocation-tier.dmn
@@ -243,14 +243,15 @@ R3   | > 7                 | any         | Legal authorises remote wipe`,
   },
   {
     skillId: "process-validation-and-quality-scoring",
-    pnsConsumed: "modeled",
+    pnsConsumed: "decision-enriched",
     pnsSet: "validated",
-    triggerUsed: "Validate and score the employee-offboarding PNS.",
-    inputLabel: "PNS.md [modeled] + compliance-controls-registry + IT security policy",
+    triggerUsed: "Validate and score the employee-offboarding PNS now that the DMN tables are in place.",
+    inputLabel: "PNS.md [decision-enriched] + compliance-controls-registry + DMN tables",
     inputSnippet:
-`PNS version: 0.1.0-draft. Sections §1–§7 present; §6 partial (IP policy TBC).
-Known open items: GAP-04 (IP ownership) pending Legal; FS-03 sequencing fix not yet integrated.
-GDPR data-retention requirement: leavers' personal data deletion schedule must be documented.`,
+`PNS version: 0.1.0-draft. §6 Business Rules now supplemented by two DMN tables.
+DMN tables include access-revocation-tier.dmn and equipment-escalation.dmn.
+Validation checks that all GAP findings are addressed: GAP-01/02 via DMN; GAP-03 via FS-03; GAP-04 pending Legal.
+GDPR data-retention requirement still absent from §7 — noted as V6 defect.`,
     outputLabel: "Quality scorecard (excerpt)",
     outputSnippet:
 `Overall score: 81 / 100  |  Recommendation: resolve V6 (data retention) before publication
@@ -306,14 +307,15 @@ Step 2  [Manager]  Within 24 hours of step 1, confirm last working day with the 
   },
   {
     skillId: "raci-and-governance-matrix-generation",
-    pnsConsumed: "modeled",
+    pnsConsumed: "decision-enriched",
     pnsSet: null,
-    triggerUsed: "Generate the RACI matrix for employee-offboarding.",
-    inputLabel: "PNS.md [modeled] + role-dictionary",
+    triggerUsed: "Generate the RACI matrix for employee-offboarding including the DMN-governed decision activities.",
+    inputLabel: "PNS.md [decision-enriched] + role-dictionary",
     inputSnippet:
 `5 roles confirmed: emp, mgr, hr, it, fin.
-9 activities (act-001 to act-009) plus future-state additions.
-RACI-V01 rule: exactly one Accountable per activity.`,
+9 activities (act-001 to act-009) plus 2 future-state additions (act-010, act-011).
+RACI-V01 rule: exactly one Accountable per activity.
+Decision activities (access-tier, equipment-escalation) now included as accountable IT rows.`,
     outputLabel: "RACI matrix (excerpt)",
     outputSnippet:
 `Activity                    | Employee | Manager | HR   | IT   | Finance
@@ -328,14 +330,15 @@ Process final pay           |    I     |    —    |  C   |  —   |  A/R`,
   },
   {
     skillId: "sipoc-generation",
-    pnsConsumed: "modeled",
+    pnsConsumed: "decision-enriched",
     pnsSet: null,
     triggerUsed: "Generate the SIPOC for employee-offboarding.",
-    inputLabel: "PNS.md [modeled] + process-taxonomy",
+    inputLabel: "PNS.md [decision-enriched] + process-taxonomy",
     inputSnippet:
 `Process: PROC-2025-108 Employee Offboarding — Voluntary Resignation.
 Scope confirmed: resignation receipt to full offboarding completion.
-Stakeholder register and system touchpoints available.`,
+Stakeholder register, system touchpoints, and DMN decision tables all available.
+SIPOC captures the DMN-governed access and equipment decisions as process steps.`,
     outputLabel: "SIPOC table",
     outputSnippet:
 `Suppliers   | Employee (resignation), Line Manager (sign-off), IT (systems list), Legal (IP policy)
@@ -347,7 +350,7 @@ Customers   | HR (compliance record), IT (clean access state), Finance (audit tr
   {
     skillId: "publication-and-handoff-packaging",
     pnsConsumed: "validated",
-    pnsSet: "published",
+    pnsSet: "packaged",
     triggerUsed: "Package employee-offboarding for publication.",
     inputLabel: "PNS.md [validated] + all derived artifacts + approval metadata",
     inputSnippet:
@@ -356,7 +359,7 @@ Approver: HR Director (Tom B.) + IT Head (Marcus P.), 2025-01-20.
 Target repository: Confluence HR Process Library + IT Runbook.`,
     outputLabel: "Publication manifest (excerpt)",
     outputSnippet:
-`BUNDLE: PROC-2025-108-v1.0  |  status: published  |  approved: 2025-01-20
+`BUNDLE: PROC-2025-108-v1.0  |  status: packaged  |  approved: 2025-01-20
 Artifacts (11):
   PNS.md                     stakeholder-register.md    gap-report.md
   bpmn-diagram.svg           access-tier.dmn            equipment-escalation.dmn
@@ -693,11 +696,11 @@ export default function EmployeeOffboardingExample() {
               </div>
               <div className="flex items-center">
                 <p className="text-sm font-semibold" style={{ color: "hsl(var(--primary))" }}>
-                  PROC-2025-108 published
+                  PROC-2025-108 packaged
                 </p>
                 <span className="ml-2 text-xs text-muted-foreground">
                   All 15 skills complete. PNS.md status:{" "}
-                  <code className="font-mono text-[10px] bg-muted px-1 rounded">published</code>
+                  <code className="font-mono text-[10px] bg-muted px-1 rounded">packaged</code>
                 </span>
               </div>
             </div>
