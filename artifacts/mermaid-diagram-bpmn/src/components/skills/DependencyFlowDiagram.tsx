@@ -204,7 +204,7 @@ export function DependencyFlowDiagram() {
                 onMouseLeave={() => setHovered(null)}
                 onClick={() => navigate(`/skills/${skill.id}`)}
                 role="link"
-                aria-label={skill.displayName}
+                aria-label={`${skill.displayName} — ${skill.status === "core" ? "Core" : "Extension"}, ${skill.layerLabel}`}
               >
                 <rect
                   x={x}
@@ -217,6 +217,7 @@ export function DependencyFlowDiagram() {
                   stroke={color}
                   strokeWidth={isHov ? 2 : 1}
                   strokeOpacity={isHov ? 0.9 : 0.4}
+                  strokeDasharray={skill.status === "recommended-extension" ? "5 3" : undefined}
                 />
                 <text
                   x={x + 8}
@@ -240,12 +241,52 @@ export function DependencyFlowDiagram() {
               </g>
             );
           })}
+
+          {/* ── Hover tooltip ─────────────────────────────────────────── */}
+          {hovered && (() => {
+            const skill = SKILLS.find((s) => s.id === hovered);
+            if (!skill || !POSITIONS[skill.id]) return null;
+            const [col, row] = POSITIONS[skill.id];
+            const cx = nx(col) + NW / 2;
+            const ty = ny(row);
+            const statusLabel = skill.status === "core" ? "Core" : "Extension";
+            const tipText = `${statusLabel} · ${skill.layerLabel}`;
+            const tw = tipText.length * 5.6 + 18;
+            const th = 18;
+            const tx = Math.min(Math.max(cx - tw / 2, PAD), SVG_W - tw - PAD);
+            const tooltipY = ty - th - 5;
+            return (
+              <g style={{ pointerEvents: "none" }}>
+                <rect
+                  x={tx}
+                  y={tooltipY}
+                  width={tw}
+                  height={th}
+                  rx={4}
+                  fill="hsl(var(--popover, 0 0% 100%))"
+                  stroke="hsl(var(--border, 0 0% 80%))"
+                  strokeWidth={1}
+                  opacity={0.97}
+                />
+                <text
+                  x={tx + tw / 2}
+                  y={tooltipY + 12}
+                  fontSize={9}
+                  textAnchor="middle"
+                  fontFamily="ui-sans-serif, system-ui, sans-serif"
+                  style={{ fill: "hsl(var(--foreground, 0 0% 10%))", fillOpacity: 0.9 }}
+                >
+                  {tipText}
+                </text>
+              </g>
+            );
+          })()}
         </svg>
       </div>
 
-      <div className="flex flex-wrap gap-3 items-center">
+      <div className="flex flex-wrap gap-x-4 gap-y-2 items-center">
         <span className="text-[9px] font-mono uppercase tracking-wider text-muted-foreground/50">
-          Legend:
+          Layer:
         </span>
         {PIPELINE_LAYERS.map((l) => (
           <div key={l.id} className="flex items-center gap-1.5">
@@ -258,6 +299,22 @@ export function DependencyFlowDiagram() {
             </span>
           </div>
         ))}
+        <span className="text-muted-foreground/20 text-[9px] font-mono">|</span>
+        <span className="text-[9px] font-mono uppercase tracking-wider text-muted-foreground/50">
+          Border:
+        </span>
+        <div className="flex items-center gap-1.5">
+          <svg width="14" height="14" className="flex-shrink-0">
+            <rect x="1" y="1" width="12" height="12" rx="2" fill="none" stroke="currentColor" strokeWidth="1.5" className="text-muted-foreground/60" />
+          </svg>
+          <span className="text-[9px] text-muted-foreground font-mono">Core</span>
+        </div>
+        <div className="flex items-center gap-1.5">
+          <svg width="14" height="14" className="flex-shrink-0">
+            <rect x="1" y="1" width="12" height="12" rx="2" fill="none" stroke="currentColor" strokeWidth="1.5" strokeDasharray="3 2" className="text-muted-foreground/60" />
+          </svg>
+          <span className="text-[9px] text-muted-foreground font-mono">Extension</span>
+        </div>
       </div>
 
       <div className="rounded-xl border border-border overflow-hidden">
