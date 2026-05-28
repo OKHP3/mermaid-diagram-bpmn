@@ -173,16 +173,6 @@ export default function Home() {
               but to create a dedicated{" "}
               <code className="font-mono text-xs bg-muted px-1.5 py-0.5 rounded">bpmn-beta</code> plugin
               implementing a documented descriptive subset — and later propose upstream inclusion once the syntax stabilizes.
-              Community demand for this is tracked in{" "}
-              <a
-                href="https://github.com/mermaid-js/mermaid/issues/7699"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-primary hover:underline underline-offset-2 font-medium"
-              >
-                issue #7699
-              </a>
-              {" "}and related Mermaid GitHub discussions.
             </p>
           </div>
 
