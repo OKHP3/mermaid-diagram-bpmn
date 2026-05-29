@@ -19,7 +19,7 @@ run = "pnpm --filter @workspace/mermaid-diagram-bpmn run dev"
 
 [services.production]
 build = [ "pnpm", "--filter", "@workspace/mermaid-diagram-bpmn", "run", "build" ]
-publicDir = "artifacts/mermaid-diagram-bpmn/dist/public"
+publicDir = "app/dist/public"
 serve = "static"
 
 [[services.production.rewrites]]

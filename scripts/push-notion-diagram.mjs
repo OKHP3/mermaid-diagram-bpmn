@@ -3,7 +3,7 @@
  * push-notion-diagram.mjs
  *
  * Reads the Mermaid dependency-flow diagram from
- * artifacts/mermaid-diagram-bpmn/public/skill-dependency-flow.md
+ * app/public/skill-dependency-flow.md
  * and pushes it as a code block to the BP-SKILL Notion page.
  *
  * Default (safe) behaviour:
@@ -185,7 +185,7 @@ async function appendBlocks(pageId, children) {
 
 const mdPath = join(
   __dirname,
-  "../artifacts/mermaid-diagram-bpmn/public/skill-dependency-flow.md"
+  "../app/public/skill-dependency-flow.md"
 );
 
 let mdSource;

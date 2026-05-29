@@ -171,7 +171,7 @@ importers:
         specifier: ~5.9.2
         version: 5.9.3
 
-  artifacts/mermaid-diagram-bpmn:
+  app:
     devDependencies:
       '@hookform/resolvers':
         specifier: ^3.10.0

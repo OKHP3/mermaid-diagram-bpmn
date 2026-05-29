@@ -11,7 +11,7 @@ A contributor-facing prototype and documentation workspace for a Mermaid-native 
 - `pnpm run typecheck` — full typecheck across all packages
 - `pnpm run build` — typecheck + build all packages
 - `pnpm --filter @workspace/mermaid-diagram-bpmn run test` — run vitest unit + corpus tests
-- Frontend workflow: `artifacts/mermaid-diagram-bpmn: web` (preview at `/`)
+- Frontend workflow: `app: web` (preview at `/`)
 
 ## Stack
 
@@ -26,7 +26,7 @@ A contributor-facing prototype and documentation workspace for a Mermaid-native 
 
 ## Where things live
 
-- `artifacts/mermaid-diagram-bpmn/src/lib/` — all library modules
+- `app/src/lib/` — all library modules
   - `bpmn-detector.ts` — `detect(text): boolean`, `DETECTOR_KEY = 'BPMNDiagram'`
   - `bpmn-db.ts` — `BpmnDb` class with typed nodes, flows, pools, lanes
   - `bpmn-parser.ts` — `parse(source): BpmnDb`; stack-based block parser for pools/lanes
@@ -35,9 +35,9 @@ A contributor-facing prototype and documentation workspace for a Mermaid-native 
   - `bpmn-styles.ts` — `getStyles(BpmnThemeOptions): string`; injected into SVG `<defs>`
   - `bpmn-examples.ts` — `BPMN_EXAMPLES[]` with `?raw` imports from `examples/`
   - `__tests__/` — unit tests (detector, db, parser) + corpus tests
-- `artifacts/mermaid-diagram-bpmn/examples/` — 5 canonical `.mmd` fixture files
-- `artifacts/mermaid-diagram-bpmn/src/pages/` — Home, Playground, Architecture, DslReference, Roadmap, About
-- `_unused/README.md` — documents unused template scaffolding (api-spec, api-client-react, api-zod, db removed; api-server and mockup-sandbox retained as Replit workflow artifacts)
+- `app/examples/` — canonical `.mmd` fixture files
+- `app/src/pages/` — Home, Playground, Architecture, DslReference, Roadmap, About
+- `app/` is the web application package (`@workspace/mermaid-diagram-bpmn`); was previously `artifacts/mermaid-diagram-bpmn/`
 
 ## Architecture decisions
 

@@ -8,7 +8,7 @@
  *   node scripts/extract-skill-deps.mjs
  *
  * Output:
- *   artifacts/mermaid-diagram-bpmn/src/data/skill-deps-auto.ts
+ *   app/src/data/skill-deps-auto.ts
  */
 
 import fs from "fs";
@@ -20,7 +20,7 @@ const ROOT = path.resolve(__dirname, "..");
 const SKILLS_DIR = path.join(ROOT, "skills");
 const OUT = path.join(
   ROOT,
-  "artifacts/mermaid-diagram-bpmn/src/data/skill-deps-auto.ts",
+  "app/src/data/skill-deps-auto.ts",
 );
 
 const BP_SKILL_IDS = [

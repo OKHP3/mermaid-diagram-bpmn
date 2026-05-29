@@ -16,8 +16,8 @@ import { resolve, join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
-const artifactRoot = resolve(__dirname, '..');         // artifacts/mermaid-diagram-bpmn/
-const repoRoot     = resolve(artifactRoot, '../..');   // workspace root
+const artifactRoot = resolve(__dirname, '..');         // app/
+const repoRoot     = resolve(artifactRoot, '..');      // workspace root
 const skillsDir    = join(repoRoot, 'skills');         // workspace/skills/
 const contextDir   = join(repoRoot, 'context');        // workspace/context/
 const publicDir    = join(artifactRoot, 'public');
