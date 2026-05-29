@@ -142,7 +142,7 @@ export async function checkPnsStatusTransitionFromFile(pnsFilePath, proposedStat
     pns = JSON.parse(raw);
   } else {
     const { parseYaml } = await import(
-      resolve(here, '../skills/okhp3-process-narrative/scripts/parse-yaml-minimal.mjs')
+      resolve(here, 'src/parse-yaml-minimal.mjs')
     );
     pns = parseYaml(raw);
   }

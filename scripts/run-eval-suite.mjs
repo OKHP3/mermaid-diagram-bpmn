@@ -34,8 +34,8 @@ function warn(msg) { return `${YELLOW}!${RESET} ${msg}`; }
 // ─── YAML parser (minimal, compatible with all fixture files) ─────────────────
 
 const PARSE_YAML_PATH = join(
-  REPO_ROOT,
-  'skills/okhp3-process-narrative/scripts/parse-yaml-minimal.mjs'
+  HERE,
+  'src/parse-yaml-minimal.mjs'
 );
 const { parseYaml } = await import(PARSE_YAML_PATH);
 

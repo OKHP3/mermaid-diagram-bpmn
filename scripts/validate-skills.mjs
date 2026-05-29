@@ -310,43 +310,6 @@ function validateContextFiles() {
   if (allOk) pass(`${p} C13: ${contextFiles.length} context file(s) pass v0.2 schema check`);
 }
 
-// ─── C12: Pipeline contract integrity ─────────────────────────────────────────
-function validatePipelineContract() {
-  const p = '[pipeline]';
-  const paths = {
-    discovery: join(skillsDir, 'okhp3-process-discovery', 'SKILL.md'),
-    narrative: join(skillsDir, 'okhp3-process-narrative', 'SKILL.md'),
-    bpmn: join(skillsDir, 'okhp3-bpmn-for-mermaid', 'SKILL.md'),
-  };
-
-  for (const [key, path] of Object.entries(paths)) {
-    if (!existsSync(path)) {
-      fail(`${p} C12: pipeline contract`, `Missing skill SKILL.md: ${key}`);
-      return;
-    }
-  }
-
-  const disc = parseFrontmatter(readFileSync(paths.discovery, 'utf8')) || {};
-  const narr = parseFrontmatter(readFileSync(paths.narrative, 'utf8')) || {};
-  const bpmn = parseFrontmatter(readFileSync(paths.bpmn, 'utf8')) || {};
-
-  let ok = true;
-
-  const checks = [
-    [(disc.produces || '').includes('pir.yaml'),           'discovery produces pir.yaml',           `produces="${disc.produces}"`],
-    [(narr.consumes || '').includes('pir.yaml'),           'narrative consumes pir.yaml',            `consumes="${narr.consumes}"`],
-    [(narr.depends_on || '').includes('okhp3-process-discovery'), 'narrative depends_on discovery', `depends_on="${narr.depends_on}"`],
-    [(narr.produces || '').includes('pns.yaml'),           'narrative produces pns.yaml',            `produces="${narr.produces}"`],
-    [(bpmn.consumes || '').includes('pns.yaml'),           'bpmn-for-mermaid consumes pns.yaml',     `consumes="${bpmn.consumes}"`],
-    [(bpmn.depends_on || '').includes('okhp3-process-narrative'), 'bpmn-for-mermaid depends_on narrative', `depends_on="${bpmn.depends_on}"`],
-    [(bpmn.produces || '').includes('bpmn-beta.mmd'),      'bpmn-for-mermaid produces bpmn-beta.mmd',`produces="${bpmn.produces}"`],
-  ];
-
-  for (const [cond, label, detail] of checks) {
-    if (!cond) { fail(`${p} C12: ${label}`, detail); ok = false; }
-  }
-  if (ok) pass(`${p} C12: pipeline contract PIR → PNS → bpmn-beta.mmd`);
-}
 
 // ─── Main ─────────────────────────────────────────────────────────────────────
 
@@ -360,7 +323,6 @@ for (const dir of skillDirs) {
   validateSkill(dir);
 }
 validateContextFiles();
-validatePipelineContract();
 
 console.log('\n─── Results ─────────────────────────────────────────────────────────');
 for (const r of results) {

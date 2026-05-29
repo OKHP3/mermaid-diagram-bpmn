@@ -29,8 +29,8 @@ pool q2o "Quote to Order" {
   s1 --> t1
   t1 --> t2
   t2 --> g1
-  g1 --> t3: "yes — above threshold"
-  g1 --> t4: "no — within limit"
+  g1 --> t3: "yes -- above threshold"
+  g1 --> t4: "no -- within limit"
   t3 --> t4
   t4 --> g2
   g2 --> t5: "approved"

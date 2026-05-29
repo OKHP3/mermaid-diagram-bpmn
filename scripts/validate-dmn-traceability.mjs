@@ -157,7 +157,7 @@ if (process.argv[1] && new URL(import.meta.url).pathname === process.argv[1]) {
   const { fileURLToPath } = await import('node:url');
   const here = dirname(fileURLToPath(import.meta.url));
   const { parseYaml } = await import(
-    resolve(here, '../skills/okhp3-process-narrative/scripts/parse-yaml-minimal.mjs')
+    resolve(here, 'src/parse-yaml-minimal.mjs')
   );
   const dmn = parseYaml(readFileSync(resolve(dmnFile), 'utf8'));
   const pns = parseYaml(readFileSync(resolve(pnsFile), 'utf8'));

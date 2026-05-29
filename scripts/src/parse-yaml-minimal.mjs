@@ -1,10 +1,10 @@
 /**
  * parse-yaml-minimal.mjs
- * Recursive-descent YAML parser — no external dependencies.
+ * Recursive-descent YAML parser -- no external dependencies.
  * Handles: flat scalars, nested objects, arrays of maps, arrays of scalars,
  * empty arrays ([] notation), quoted strings, and unquoted multi-word values.
  *
- * Not a full YAML implementation — designed specifically for PNS fixture files.
+ * Not a full YAML implementation -- designed specifically for PNS fixture files.
  */
 
 /**
