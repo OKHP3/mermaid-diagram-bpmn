@@ -62,9 +62,10 @@ export default function Playground() {
 
   function handleMouseMove(e: React.MouseEvent) {
     if (!dragRef.current) return;
-    const dx = e.clientX - dragRef.current.mx;
-    const dy = e.clientY - dragRef.current.my;
-    setViewState(vs => ({ ...vs, tx: dragRef.current!.tx + dx, ty: dragRef.current!.ty + dy }));
+    const { mx, my, tx: originTx, ty: originTy } = dragRef.current;
+    const dx = e.clientX - mx;
+    const dy = e.clientY - my;
+    setViewState(vs => ({ ...vs, tx: originTx + dx, ty: originTy + dy }));
   }
 
   function handlePanEnd() {
