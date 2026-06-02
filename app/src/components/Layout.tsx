@@ -10,7 +10,7 @@ const NAV_LINKS = [
   { href: "/architecture", label: "Architecture" },
   { href: "/roadmap", label: "Roadmap" },
   { href: "/about", label: "About" },
-  { href: "/skills", label: "Agent Skills", badge: SKILLS.length },
+  { href: "/skills", label: "Agent Skills" },
   { href: "/walkthrough", label: "Walkthrough" },
 ] as const;
 
