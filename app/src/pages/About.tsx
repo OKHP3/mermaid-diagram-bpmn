@@ -167,6 +167,65 @@ export default function About() {
         </div>
       </section>
 
+      {/* Project heritage */}
+      <section className="mb-14">
+        <h2 className="text-base font-semibold text-foreground mb-4" data-testid="heading-heritage">
+          Project heritage and stack positioning
+        </h2>
+        <div className="rounded-lg border border-border bg-card p-5 mb-5">
+          <p className="text-xs text-muted-foreground leading-relaxed mb-4">
+            BPMN for Mermaid is the <strong className="text-foreground">process-structure and notation layer</strong> of
+            the OKHP³ Visual Language Stack — a set of complementary tools that take a raw process idea all
+            the way to a styled, documented, published artifact.
+          </p>
+          <div className="font-mono text-xs leading-relaxed text-muted-foreground bg-muted/40 rounded px-4 py-3 border border-border">
+            <div>ReFolDec <span className="text-foreground/40">— recursive fold/unfold transformation theory</span></div>
+            <div className="pl-4">└─ <span className="text-primary font-semibold">BPMN for Mermaid</span> <span className="text-foreground/40">— process-structure and notation layer</span></div>
+            <div className="pl-10">└─ Mermaid Theme Builder <span className="text-foreground/40">— visual governance and renderer profiles</span></div>
+            <div className="mt-1">skillz / BP-SKILL <span className="text-foreground/40">— executable agent workflows for the process lifecycle</span></div>
+            <div>OverKill Hill <span className="text-foreground/40">— public narrative and routing surface</span></div>
+          </div>
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-5">
+          <div className="p-4 rounded-lg border border-border bg-card">
+            <p className="text-xs font-semibold text-foreground mb-2">Process lifecycle (steps 1–8)</p>
+            <ol className="text-xs text-muted-foreground leading-relaxed space-y-1 list-none">
+              {[
+                "Raw process idea",
+                "Guided capture — skillz elicitation",
+                "Process narrative — PNS.md",
+                "Structured model — BpmnDb",
+                "bpmn-beta syntax",
+                "Mermaid diagram — SVG output",
+                "Visual governance — Mermaid Theme Builder",
+                "Publication — skillz packaging",
+              ].map((step, i) => (
+                <li key={i} className="flex gap-2">
+                  <span className={`font-mono font-bold shrink-0 ${i >= 3 && i <= 5 ? "text-primary" : "text-muted-foreground/50"}`}>{i + 1}.</span>
+                  <span className={i >= 3 && i <= 5 ? "text-foreground" : ""}>{step}</span>
+                </li>
+              ))}
+            </ol>
+            <p className="text-xs text-muted-foreground/60 mt-3 border-t border-border pt-2">
+              This project owns steps 4–6. Steps 1–3 are BP-SKILL. Steps 7–8 are Mermaid Theme Builder and BP-SKILL respectively.
+            </p>
+          </div>
+          <div className="p-4 rounded-lg border border-border bg-card">
+            <p className="text-xs font-semibold text-foreground mb-3">Lineage</p>
+            <p className="text-xs text-muted-foreground leading-relaxed mb-3">
+              Earlier experiments under the names <strong className="text-foreground">PathScrib-R</strong>,
+              Path Scribbler, and <strong className="text-foreground">Flowpilot Scribbler</strong> explored
+              conversational process discovery and Mermaid diagram generation as declarative-agent-like
+              instruction sets.
+            </p>
+            <p className="text-xs text-muted-foreground leading-relaxed">
+              BPMN for Mermaid formalizes that lineage into a structured process-notation layer. The ancestor
+              projects' public story lives on OverKill Hill — not in this codebase.
+            </p>
+          </div>
+        </div>
+      </section>
+
       {/* Competitive landscape */}
       <section className="mb-14">
         <h2 className="text-base font-semibold text-foreground mb-4" data-testid="heading-competitive">

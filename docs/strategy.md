@@ -27,6 +27,68 @@ Mermaid has no BPMN diagram type. Business analysts, developers, and architects 
 
 ---
 
+## OKHP³ Visual Language Stack
+
+BPMN for Mermaid is one component of the OKHP³ Visual Language Stack — a set of complementary tools that together take a raw process idea all the way to a styled, documented, published artifact.
+
+```text
+ReFolDec                   — recursive fold/unfold transformation theory
+  └─ BPMN for Mermaid      — process-structure and notation layer  ◄ this project
+       └─ Mermaid Theme Builder  — visual governance, renderer profiles, palette contracts
+skillz / BP-SKILL          — executable agent workflows for the full process lifecycle
+OverKill Hill              — public narrative and routing surface
+```
+
+### Role of BPMN for Mermaid in the stack
+
+BPMN for Mermaid is the **process-structure and notation layer**. It formalizes process intent — captured through conversation, analysis, or AI elicitation — into a text-first, Git-native, Mermaid-compatible model. It does not own:
+
+- Style decisions, color palettes, or renderer visual profiles (Mermaid Theme Builder)
+- Executable agent instruction sets or reusable workflow prompts (skillz / BP-SKILL)
+- The public narrative, routing, or cross-project story (OverKill Hill)
+
+### Relationship to ReFolDec
+
+ReFolDec is the recursive folding/unfolding transformation grammar that underpins the OKHP³ stack. BPMN for Mermaid is a concrete instance of this theory: process ideas are *folded* into structured `bpmn-beta` notation and *unfolded* into diagrams, documentation, and downstream artifacts. The DSL keyword, the `BpmnDb` data model, and the layout/renderer pipeline are all expressions of a fold-then-unfold transformation.
+
+### Relationship to Mermaid Theme Builder
+
+Mermaid Theme Builder handles the visual-governance contract that BPMN for Mermaid produces diagrams for. Responsibilities are strictly separated:
+
+| This project | Mermaid Theme Builder |
+|---|---|
+| Process semantics — what the diagram means | Visual governance — how the diagram looks |
+| BPMN notation correctness | Renderer profile, palette, and style tokens |
+| `bpmn-beta` DSL and `BpmnDb` data model | Semantic color contracts and theme variables |
+| Diagram structure output | Style-preserving update, syntax repair, export |
+
+### Relationship to skillz / BP-SKILL
+
+BP-SKILL is the skillz layer for this stack: 15 portable SKILL.md agent workflows covering the full business process documentation lifecycle. The skills do the human-in-the-loop work — elicitation, narrative authoring, gap analysis, governance, publication — and produce `PNS.md` (Process Narrative Specification) as the central handoff. `visual-process-modeling` (skill 06) is the bridge that converts a completed PNS into `bpmn-beta` syntax.
+
+### PathScrib-R / Flowpilot Scribbler lineage
+
+Earlier experiments under the names PathScrib-R, Path Scribbler, and Flowpilot Scribbler explored conversational process discovery and Mermaid diagram generation. These custom declarative-agent-like instruction sets informed the process-to-Mermaid workflow that BPMN for Mermaid formalizes. Their public story lives on OverKill Hill; this repository contains only the formalized result.
+
+### Process lifecycle
+
+The end-to-end flow the stack is designed to support:
+
+```text
+1. Raw process idea
+2. Guided capture (skillz elicitation)
+3. Process narrative (PNS.md)
+4. Structured model (BpmnDb)
+5. bpmn-beta syntax
+6. Mermaid diagram (SVG output)
+7. Visual governance (Mermaid Theme Builder styling)
+8. Publication and documentation (skillz packaging)
+```
+
+Each step is owned by a distinct layer. BPMN for Mermaid owns steps 4–6.
+
+---
+
 ## Related Mermaid upstream issues
 
 | Issue | Title | Relevance |

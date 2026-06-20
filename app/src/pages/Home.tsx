@@ -161,6 +161,10 @@ export default function Home() {
           <p className="mt-5 text-base text-muted-foreground leading-relaxed max-w-2xl">
             A Mermaid-native diagram type for business process modeling. Text-first, version-controllable,
             Markdown-compatible. Write BPMN the way you write flowcharts — then commit it.
+            The process-structure and notation layer of the{" "}
+            <a href="/about" className="text-primary underline underline-offset-2 hover:text-primary/80">
+              OKHP³ Visual Language Stack
+            </a>.
           </p>
 
           {/* Project thesis card */}

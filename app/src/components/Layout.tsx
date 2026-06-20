@@ -79,17 +79,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
                   className={`relative px-3 py-1.5 rounded text-sm forge-nav-link${isActive ? " forge-nav-link--active" : ""}`}
                   data-testid={`nav-${link.label.toLowerCase().replace(/\s+/g, '-')}`}
                 >
-                  <span className="flex items-center gap-1.5">
-                    {link.label}
-                    {"badge" in link && (
-                      <span
-                        className="font-mono text-[10px] leading-none px-1.5 py-0.5 rounded-full forge-skill-badge"
-                        data-testid="nav-skills-badge"
-                      >
-                        {link.badge}
-                      </span>
-                    )}
-                  </span>
+                  {link.label}
                   {isActive && (
                     <span className="forge-nav-active-indicator absolute bottom-0 left-3 right-3 h-0.5 rounded-full" />
                   )}
@@ -151,14 +141,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
                   onClick={() => setMenuOpen(false)}
                   className={`px-3 py-2.5 rounded text-sm forge-mobile-nav-link${isActive ? " forge-mobile-nav-link--active" : ""}`}
                 >
-                  <span className="flex items-center gap-1.5">
-                    {link.label}
-                    {"badge" in link && (
-                      <span className="font-mono text-[10px] leading-none px-1.5 py-0.5 rounded-full forge-skill-badge">
-                        {link.badge}
-                      </span>
-                    )}
-                  </span>
+                  {link.label}
                 </Link>
               );
             })}

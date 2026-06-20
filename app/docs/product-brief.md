@@ -102,6 +102,12 @@ bpmn-beta text → detect → parse → layout → render → SVG in Markdown
 
 ---
 
+## Stack context
+
+BPMN for Mermaid is the process-structure and notation layer of the OKHP³ Visual Language Stack. It sits between the agent workflow layer (skillz / BP-SKILL, which elicits and narrativizes process intent) and the visual governance layer (Mermaid Theme Builder, which applies renderer profiles and palette contracts to diagram output). The recursive transformation theory that frames this layered fold/unfold approach is ReFolDec. For the full stack positioning and scope separations, see [docs/strategy.md](../../docs/strategy.md).
+
+---
+
 ## Disclaimer
 
 BPMN for Mermaid is a personal OverKill Hill P³ project by Jamie Hill. It is not affiliated with the mermaid-js maintainers, Mermaid Chart, Mermaid.ai, or any standards body. It implements a documented descriptive subset of BPMN 2.0 — it does not claim full BPMN 2.0 compliance.

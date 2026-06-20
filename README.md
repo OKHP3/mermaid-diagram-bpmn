@@ -68,6 +68,19 @@ Paste this into the [live playground](https://okhp3.github.io/mermaid-diagram-bp
 
 ---
 
+## OKHP³ Visual Language Stack
+
+BPMN for Mermaid is the **process-structure and notation layer** of the OKHP³ Visual Language Stack. Related components:
+
+- **ReFolDec** — recursive fold/unfold transformation theory; `bpmn-beta` is a concrete instance
+- **Mermaid Theme Builder** — visual governance, renderer profiles, and palette contracts for diagram output
+- **skillz / BP-SKILL** — executable agent workflows covering the full process lifecycle (this repo)
+- **OverKill Hill** — public narrative and routing surface for the stack
+
+See [docs/strategy.md](./docs/strategy.md#okhp³-visual-language-stack) for the full stack positioning, process lifecycle, and scope separations.
+
+---
+
 ## Project surfaces
 
 | Surface | Purpose |
@@ -92,10 +105,10 @@ Paste this into the [live playground](https://okhp3.github.io/mermaid-diagram-bp
 |---|---|
 | BPMN standard home | https://www.bpmn.org/ |
 | OMG BPMN 2.0.2 specification | https://www.omg.org/spec/BPMN/2.0.2/PDF |
-| Specification PDF in this repo | [artifacts/mermaid-diagram-bpmn/standards/OMG-BPMN-2.0.2-formal-specification.pdf](./artifacts/mermaid-diagram-bpmn/standards/OMG-BPMN-2.0.2-formal-specification.pdf) |
-| BPMN compliance reference | [artifacts/mermaid-diagram-bpmn/standards/BPMN-SPEC-REFERENCE.md](./artifacts/mermaid-diagram-bpmn/standards/BPMN-SPEC-REFERENCE.md) |
-| Mermaid compatibility notes | [artifacts/mermaid-diagram-bpmn/docs/mermaid-compatibility.md](./artifacts/mermaid-diagram-bpmn/docs/mermaid-compatibility.md) |
-| DSL specification | [artifacts/mermaid-diagram-bpmn/docs/dsl-spec.md](./artifacts/mermaid-diagram-bpmn/docs/dsl-spec.md) |
+| Specification PDF in this repo | [app/standards/OMG-BPMN-2.0.2-formal-specification.pdf](./app/standards/OMG-BPMN-2.0.2-formal-specification.pdf) |
+| BPMN compliance reference | [app/standards/BPMN-SPEC-REFERENCE.md](./app/standards/BPMN-SPEC-REFERENCE.md) |
+| Mermaid compatibility notes | [app/docs/mermaid-compatibility.md](./app/docs/mermaid-compatibility.md) |
+| DSL specification | [app/docs/dsl-spec.md](./app/docs/dsl-spec.md) |
 
 ---
 
@@ -103,8 +116,8 @@ Paste this into the [live playground](https://okhp3.github.io/mermaid-diagram-bp
 
 ```text
 mermaid-diagram-bpmn/
-  artifacts/mermaid-diagram-bpmn/
-    src/                       React/Vite application source
+  app/                         React/Vite application package
+    src/                       Application source
       data/skills-registry.ts  Canonical skill data
       pages/AgentSkills.tsx    Skills browser page
       pages/SkillDetail.tsx    Individual skill detail page
