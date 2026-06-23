@@ -1,0 +1,100 @@
+as_is_version: "0.1"
+process_id: proc-purchase-approval
+baseline_status: reviewed
+captured_date: "2026-05-01"
+capture_method: interview
+process_version: "1.0-baseline"
+captured_by_role: Business Analyst
+
+steps:
+  - id: act-001
+    description: Submit purchase request form with vendor quote attached
+    actor_role_id: role-requester
+    entry_criteria: Requester has identified a purchase need and obtained a vendor quote
+    exit_criteria: Request submitted in ERP Portal with confirmation number
+    capture_quality: high
+    systems:
+      - ERP Portal
+    notes: ""
+
+  - id: act-002
+    description: Review purchase request for completeness and policy compliance
+    actor_role_id: role-finance-manager
+    entry_criteria: New request notification received in ERP Portal
+    exit_criteria: Request marked as reviewed; compliance status recorded
+    capture_quality: high
+    systems:
+      - ERP Portal
+    notes: ""
+
+  - id: gw-001
+    description: Is the purchase amount within Finance Manager approval limit?
+    actor_role_id: role-finance-manager
+    entry_criteria: Request reviewed and compliant
+    exit_criteria: Routing decision recorded
+    capture_quality: high
+    systems:
+      - ERP Portal
+    notes: "Threshold: $10,000"
+
+  - id: act-003
+    description: Approve purchase request and generate purchase order
+    actor_role_id: role-finance-manager
+    entry_criteria: Request within approval limit and policy compliant
+    exit_criteria: PO generated and status set to Approved
+    capture_quality: high
+    systems:
+      - ERP Portal
+    notes: ""
+
+  - id: act-004
+    description: Escalate purchase request to Director for approval
+    actor_role_id: role-finance-manager
+    entry_criteria: Purchase exceeds $10,000 threshold
+    exit_criteria: Request transferred to Director queue in ERP Portal
+    capture_quality: medium
+    systems:
+      - ERP Portal
+    notes: "Exact escalation SLA unclear — varies in practice"
+
+  - id: act-005
+    description: Issue approved purchase order to vendor
+    actor_role_id: role-procurement
+    entry_criteria: PO in Approved status
+    exit_criteria: PO emailed to vendor; confirmation received
+    capture_quality: high
+    systems:
+      - ERP Portal
+      - Email
+    notes: ""
+
+  - id: act-006
+    description: Notify requester of approval or rejection outcome
+    actor_role_id: role-finance-manager
+    entry_criteria: Approval or rejection decision recorded
+    exit_criteria: Requester notification sent
+    capture_quality: medium
+    systems:
+      - Email
+    notes: "Notification is manual email; no automated trigger"
+
+identified_gaps:
+  - gap_id: gap-001
+    gap_type: execution
+    affected_step: act-004
+    description: Escalation SLA to Director is not defined — varies by individual
+    severity: major
+    capture_quality_flag: medium
+
+  - gap-002:
+    gap_id: gap-002
+    gap_type: execution
+    affected_step: act-006
+    description: Requester notification is a manual email with no SLA or template
+    severity: minor
+    capture_quality_flag: medium
+
+open_questions:
+  - id: oq-001
+    question: What is the defined SLA for Director approval of purchases over $10,000?
+    owner: role-director

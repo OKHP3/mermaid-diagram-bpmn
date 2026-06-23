@@ -1,0 +1,127 @@
+pir_version: "0.1"
+process_id: proc-purchase-approval
+process_name: Purchase Order Approval
+process_owner: Finance Manager
+department: Finance
+elicitation_method: interview
+elicitation_date: "2026-05-01"
+elicited_by: Business Analyst
+status: complete
+
+trigger:
+  description: A staff member submits a purchase request requiring approval before payment.
+  event_type: message
+
+actors:
+  - role_id: role-requester
+    role_name: Requester
+    department: Any
+    type: initiator
+    interest: timely approval of purchase
+    influence: low
+  - role_id: role-finance-manager
+    role_name: Finance Manager
+    department: Finance
+    type: approver
+    interest: budget compliance and policy adherence
+    influence: high
+  - role_id: role-procurement
+    role_name: Procurement Officer
+    department: Finance
+    type: performer
+    interest: vendor compliance and contract terms
+    influence: medium
+  - role_id: role-director
+    role_name: Director
+    department: Executive
+    type: approver
+    interest: strategic spend oversight
+    influence: high
+
+inputs:
+  - id: inp-001
+    name: Purchase Request Form
+    source: Requester
+    format: digital form
+  - id: inp-002
+    name: Vendor Quote
+    source: Vendor
+    format: PDF
+
+outputs:
+  - id: out-001
+    name: Approved Purchase Order
+    consumer: Vendor
+    format: signed PDF
+  - id: out-002
+    name: Rejection Notice
+    consumer: Requester
+    format: email
+
+steps:
+  - id: step-001
+    description: Submit purchase request with vendor quote attached
+    actor_role_id: role-requester
+    system: ERP Portal
+  - id: step-002
+    description: Review purchase request for policy compliance
+    actor_role_id: role-finance-manager
+    system: ERP Portal
+  - id: step-003
+    description: Approve or reject the purchase request
+    actor_role_id: role-finance-manager
+    system: ERP Portal
+  - id: step-004
+    description: Issue approved purchase order to vendor
+    actor_role_id: role-procurement
+    system: ERP Portal
+  - id: step-005
+    description: Notify requester of approval or rejection outcome
+    actor_role_id: role-finance-manager
+    system: Email
+
+exceptions:
+  - id: exc-001
+    description: Vendor quote is missing or expired
+    trigger: Purchase request submitted without a current vendor quote
+    handling: Return request to requester with instruction to obtain current quote
+
+  - id: exc-002
+    description: Purchase exceeds Finance Manager approval limit
+    trigger: Purchase amount exceeds $10,000
+    handling: Escalate to Director for approval
+
+business_rules:
+  - id: rule-001
+    description: Purchases under $1,000 may be auto-approved by the Finance Manager without Director sign-off
+    source: policy
+  - id: rule-002
+    description: Purchases over $10,000 require Director approval
+    source: policy
+  - id: rule-003
+    description: All vendor quotes must be dated within 30 days of submission
+    source: contract
+
+systems:
+  - name: ERP Portal
+    role: processor
+    integration_type: ui
+  - name: Email
+    role: notification
+    integration_type: manual
+
+controls:
+  - id: ctrl-001
+    type: approval
+    description: Finance Manager approval required for all purchases
+    enforced_by: ERP Portal workflow
+  - id: ctrl-002
+    type: segregation
+    description: Requester cannot approve their own purchase request
+    enforced_by: ERP Portal role configuration
+
+open_questions: []
+
+validation:
+  completeness_score: 95
+  ready_for_narrative: true

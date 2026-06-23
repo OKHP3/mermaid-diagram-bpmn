@@ -1,0 +1,128 @@
+{
+  "primaryColor": {
+    "semanticRole": "Primary node fill color",
+    "appliesTo": ["flowchart", "sequenceDiagram", "classDiagram", "stateDiagram", "erDiagram", "requirementDiagram", "c4Diagram", "block", "mindmap", "quadrantChart"],
+    "format": "hex",
+    "required": true
+  },
+  "primaryTextColor": {
+    "semanticRole": "Text color on primary-colored nodes",
+    "appliesTo": ["flowchart", "sequenceDiagram", "classDiagram", "stateDiagram", "erDiagram", "requirementDiagram", "c4Diagram", "block"],
+    "format": "hex",
+    "required": true
+  },
+  "primaryBorderColor": {
+    "semanticRole": "Border color for primary nodes",
+    "appliesTo": ["flowchart", "sequenceDiagram", "classDiagram", "stateDiagram", "erDiagram", "requirementDiagram", "c4Diagram", "block"],
+    "format": "hex",
+    "required": true
+  },
+  "lineColor": {
+    "semanticRole": "Color for edges, arrows, and connector lines",
+    "appliesTo": ["flowchart", "sequenceDiagram", "classDiagram", "stateDiagram", "erDiagram", "requirementDiagram", "c4Diagram", "gitGraph", "mindmap", "block"],
+    "format": "hex",
+    "required": true
+  },
+  "secondaryColor": {
+    "semanticRole": "Fill color for secondary nodes and alternate row backgrounds",
+    "appliesTo": ["flowchart", "sequenceDiagram", "classDiagram", "stateDiagram", "block"],
+    "format": "hex",
+    "required": true
+  },
+  "secondaryTextColor": {
+    "semanticRole": "Text color on secondary-colored nodes",
+    "appliesTo": ["flowchart", "sequenceDiagram", "classDiagram", "stateDiagram"],
+    "format": "hex",
+    "required": false
+  },
+  "secondaryBorderColor": {
+    "semanticRole": "Border color for secondary nodes",
+    "appliesTo": ["flowchart", "classDiagram", "stateDiagram"],
+    "format": "hex",
+    "required": false
+  },
+  "tertiaryColor": {
+    "semanticRole": "Fill color for tertiary or background-context nodes",
+    "appliesTo": ["flowchart", "sequenceDiagram", "classDiagram", "stateDiagram", "block"],
+    "format": "hex",
+    "required": true
+  },
+  "tertiaryTextColor": {
+    "semanticRole": "Text color on tertiary-colored nodes",
+    "appliesTo": ["flowchart", "classDiagram", "stateDiagram"],
+    "format": "hex",
+    "required": false
+  },
+  "tertiaryBorderColor": {
+    "semanticRole": "Border color for tertiary nodes",
+    "appliesTo": ["flowchart", "classDiagram", "stateDiagram"],
+    "format": "hex",
+    "required": false
+  },
+  "textColor": {
+    "semanticRole": "Global text color fallback for diagram labels and axis text",
+    "appliesTo": ["flowchart", "sequenceDiagram", "classDiagram", "stateDiagram", "gantt", "pie", "timeline", "quadrantChart", "mindmap"],
+    "format": "hex",
+    "required": false
+  },
+  "background": {
+    "semanticRole": "Diagram canvas background color",
+    "appliesTo": ["flowchart", "sequenceDiagram", "classDiagram", "stateDiagram", "erDiagram", "gantt", "pie", "gitGraph", "mindmap", "timeline", "journey", "quadrantChart", "requirementDiagram", "c4Diagram", "block", "sankey", "xychart"],
+    "format": "hex",
+    "required": true
+  },
+  "mainBkg": {
+    "semanticRole": "Default node background / main fill when primaryColor is not set",
+    "appliesTo": ["flowchart", "sequenceDiagram", "classDiagram", "stateDiagram", "erDiagram", "block"],
+    "format": "hex",
+    "required": true
+  },
+  "nodeBorder": {
+    "semanticRole": "Default border color for all node types",
+    "appliesTo": ["flowchart", "sequenceDiagram", "classDiagram", "stateDiagram", "erDiagram", "requirementDiagram", "c4Diagram", "block"],
+    "format": "hex",
+    "required": true
+  },
+  "clusterBkg": {
+    "semanticRole": "Fill color for subgraph cluster / group backgrounds",
+    "appliesTo": ["flowchart", "stateDiagram", "c4Diagram"],
+    "format": "hex",
+    "required": true
+  },
+  "titleColor": {
+    "semanticRole": "Color for diagram and section titles",
+    "appliesTo": ["flowchart", "sequenceDiagram", "classDiagram", "stateDiagram", "erDiagram", "gantt", "pie", "mindmap", "timeline", "quadrantChart", "requirementDiagram"],
+    "format": "hex",
+    "required": true
+  },
+  "edgeLabelBackground": {
+    "semanticRole": "Background color for edge label boxes",
+    "appliesTo": ["flowchart"],
+    "format": "hex",
+    "required": false
+  },
+  "fontFamily": {
+    "semanticRole": "CSS font stack for all diagram text",
+    "appliesTo": ["flowchart", "sequenceDiagram", "classDiagram", "stateDiagram", "erDiagram", "gantt", "pie", "gitGraph", "mindmap", "timeline", "journey", "quadrantChart", "requirementDiagram", "c4Diagram", "block", "sankey", "xychart"],
+    "format": "font-string",
+    "required": false
+  },
+  "fontSize": {
+    "semanticRole": "Global base font size for node labels",
+    "appliesTo": ["flowchart", "sequenceDiagram", "classDiagram", "stateDiagram", "erDiagram", "gantt", "block"],
+    "format": "px",
+    "required": false
+  },
+  "actorBkg": {
+    "semanticRole": "Background fill for sequence diagram actor boxes",
+    "appliesTo": ["sequenceDiagram"],
+    "format": "hex",
+    "required": false
+  },
+  "noteBkgColor": {
+    "semanticRole": "Background fill for sequence diagram note boxes",
+    "appliesTo": ["sequenceDiagram"],
+    "format": "hex",
+    "required": false
+  }
+}

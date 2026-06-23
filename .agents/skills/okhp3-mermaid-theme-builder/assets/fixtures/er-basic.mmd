@@ -1,0 +1,19 @@
+erDiagram
+    CUSTOMER {
+        int id PK
+        string name
+        string email
+    }
+    ORDER {
+        int id PK
+        date placed_at
+        string status
+    }
+    PRODUCT {
+        int id PK
+        string name
+        float price
+    }
+
+    CUSTOMER ||--o{ ORDER : places
+    ORDER }o--|{ PRODUCT : contains

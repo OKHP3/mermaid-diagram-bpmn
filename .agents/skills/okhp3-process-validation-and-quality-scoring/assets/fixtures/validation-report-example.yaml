@@ -1,0 +1,75 @@
+validation_report_version: "0.1"
+process_id: proc-purchase-approval
+validation_date: "2026-05-10"
+validated_by_role: Business Analyst
+
+rules_run:
+  - rule_id: V1
+    severity: error
+    status: pass
+    findings: []
+
+  - rule_id: V2
+    severity: error
+    status: pass
+    findings: []
+
+  - rule_id: V3
+    severity: error
+    status: pass
+    findings: []
+
+  - rule_id: V4
+    severity: warning
+    status: pass
+    findings: []
+
+  - rule_id: V5
+    severity: error
+    status: pass
+    findings: []
+
+  - rule_id: V6
+    severity: error
+    status: pass
+    findings: []
+
+  - rule_id: V7
+    severity: warning
+    status: pass
+    findings: []
+
+  - rule_id: V8
+    severity: error
+    status: pass
+    findings: []
+
+  - rule_id: V9
+    severity: warning
+    status: pass
+    findings: []
+
+artifact_scores:
+  pir:
+    completeness_score: 95
+    v8_status: pass
+  pns:
+    quality_score: 95
+    v1_status: pass
+    v2_status: pass
+    v3_status: pass
+    v4_status: pass
+    v5_status: pass
+    v6_status: pass
+    v7_status: pass
+  bpmn:
+    validated: true
+    v9_status: pass
+
+composite_score: 95
+band: A
+ready_for_publication: true
+
+blocking_errors: []
+recommendations:
+  - "Consider adding work instructions for each role before finalising the publication bundle"

@@ -1,0 +1,38 @@
+sipoc_version: "0.1"
+process_id: proc-purchase-approval
+generated_from: pns.yaml
+generated_date: "2026-05-10"
+
+suppliers:
+  - Requester
+  - Vendor
+
+inputs:
+  - Purchase Request Form
+  - Vendor Quote
+
+process_steps:
+  - id: act-001
+    description: Submit purchase request form with vendor quote attached
+  - id: act-002
+    description: Review purchase request for completeness and policy compliance
+  - id: act-003
+    description: Approve or reject the purchase request
+  - id: act-004
+    description: Issue approved purchase order to vendor
+  - id: act-005
+    description: Notify requester of approval or rejection outcome
+
+outputs:
+  - Approved Purchase Order
+  - Rejection Notice
+
+customers:
+  - Vendor
+  - Requester
+
+quality_checks:
+  inputs_have_source: true
+  outputs_have_consumer: true
+  process_steps_count: 5
+  meets_minimum_steps: true

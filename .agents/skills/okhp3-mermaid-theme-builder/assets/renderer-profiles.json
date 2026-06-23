@@ -1,0 +1,93 @@
+[
+  {
+    "id": "mermaid-live",
+    "name": "Mermaid Live Editor",
+    "supportsInitDirective": "full",
+    "supportsThemeVariables": "full",
+    "supportsClassDef": "full",
+    "supportsCSSInjection": "full",
+    "supportsCustomFonts": "full",
+    "lookSupport": ["classic", "neo", "handDrawn"],
+    "riskLevel": "low",
+    "recommendedMode": "formatA",
+    "notes": "Reference renderer. Always runs the latest published Mermaid. All looks, themeVariables, and CSS injection are fully supported. Use this to validate before committing to other renderers."
+  },
+  {
+    "id": "github",
+    "name": "GitHub",
+    "supportsInitDirective": "full",
+    "supportsThemeVariables": "full",
+    "supportsClassDef": "full",
+    "supportsCSSInjection": "none",
+    "supportsCustomFonts": "none",
+    "lookSupport": ["classic", "neo-partial"],
+    "riskLevel": "low",
+    "recommendedMode": "formatA",
+    "notes": "Renders Mermaid in issues, PRs, markdown files, and wikis. The %%{init}%% directive is respected and themeVariables apply. Mermaid version is pinned to a stable release. Custom web fonts are blocked by CSP. Hand-Drawn look requires Rough.js which GitHub does not bundle."
+  },
+  {
+    "id": "gitlab",
+    "name": "GitLab",
+    "supportsInitDirective": "full",
+    "supportsThemeVariables": "full",
+    "supportsClassDef": "full",
+    "supportsCSSInjection": "none",
+    "supportsCustomFonts": "none",
+    "lookSupport": ["classic", "neo-partial"],
+    "riskLevel": "low",
+    "recommendedMode": "formatA",
+    "notes": "Similar to GitHub. Mermaid is rendered in markdown files, wikis, and descriptions. themeVariables from %%{init}%% are respected. Self-hosted GitLab instances may use older Mermaid versions. Custom web fonts are blocked by CSP. Hand-Drawn look not available."
+  },
+  {
+    "id": "notion",
+    "name": "Notion",
+    "supportsInitDirective": "partial",
+    "supportsThemeVariables": "partial",
+    "supportsClassDef": "full",
+    "supportsCSSInjection": "none",
+    "supportsCustomFonts": "none",
+    "lookSupport": ["classic"],
+    "riskLevel": "medium",
+    "recommendedMode": "formatA",
+    "notes": "Notion embeds Mermaid diagrams in pages. The %%{init}%% directive is parsed but only a subset of themeVariables are applied. Mermaid version is pinned to an older stable release (10.x). Neo and Hand-Drawn looks are not available. Some diagram families may not render."
+  },
+  {
+    "id": "obsidian",
+    "name": "Obsidian",
+    "supportsInitDirective": "full",
+    "supportsThemeVariables": "full",
+    "supportsClassDef": "full",
+    "supportsCSSInjection": "partial",
+    "supportsCustomFonts": "partial",
+    "lookSupport": ["classic", "neo-partial", "handDrawn-partial"],
+    "riskLevel": "low",
+    "recommendedMode": "formatA",
+    "notes": "Obsidian supports Mermaid via a built-in renderer and community plugins. themeVariables are respected. CSS injection may work via Obsidian CSS snippets. System fonts work; web fonts require custom snippet. Neo and Hand-Drawn look availability depends on the bundled Mermaid version."
+  },
+  {
+    "id": "confluence",
+    "name": "Confluence + Plugin",
+    "supportsInitDirective": "partial",
+    "supportsThemeVariables": "partial",
+    "supportsClassDef": "partial",
+    "supportsCSSInjection": "none",
+    "supportsCustomFonts": "none",
+    "lookSupport": ["classic"],
+    "riskLevel": "high",
+    "recommendedMode": "formatA",
+    "notes": "Mermaid in Confluence requires a third-party macro plugin. Plugin quality and Mermaid version vary widely. Most plugins support basic themeVariables; CSS injection is generally not available. Neo and Hand-Drawn looks are not supported."
+  },
+  {
+    "id": "cli",
+    "name": "Mermaid CLI (mmdc)",
+    "supportsInitDirective": "full",
+    "supportsThemeVariables": "full",
+    "supportsClassDef": "full",
+    "supportsCSSInjection": "full",
+    "supportsCustomFonts": "full",
+    "lookSupport": ["classic", "neo", "handDrawn"],
+    "riskLevel": "low",
+    "recommendedMode": "formatA",
+    "notes": "Command-line renderer using Puppeteer + Mermaid. Produces SVG/PNG/PDF. Full feature support including all looks. CSS injection is possible via the --cssFile flag. Best for CI/CD pipelines and batch rendering."
+  }
+]

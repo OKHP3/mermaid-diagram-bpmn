@@ -1,0 +1,217 @@
+pns_version: "0.1"
+process_id: proc-purchase-approval
+process_name: Purchase Order Approval
+process_owner: Finance Manager
+department: Finance
+status: approved
+created_date: "2026-05-02"
+last_modified_date: "2026-05-10"
+pir_ref: proc-purchase-approval
+apqc_pcf_mapping: "4.1.1"
+
+process_box:
+  trigger: Staff member submits a purchase request requiring approval before payment
+  inputs:
+    - name: Purchase Request Form
+      source: Requester
+    - name: Vendor Quote
+      source: Vendor
+  outputs:
+    - name: Approved Purchase Order
+      consumer: Vendor
+    - name: Rejection Notice
+      consumer: Requester
+  criteria: Purchase Order issued to vendor or rejection notice sent to requester
+  resources: ERP Portal, Finance Policy FP-003
+  responsibilities: Finance Manager accountable for all approval decisions
+  risks: Budget overrun if approval controls are bypassed; vendor delay if SLA is breached
+
+activity_sequence:
+  activities:
+    - id: act-001
+      description: Submit purchase request form with vendor quote attached
+      actor_role_id: role-requester
+      inputs: [Purchase Request Form, Vendor Quote]
+      outputs: [Submitted Request]
+      systems: [ERP Portal]
+      preconditions: Vendor quote dated within 30 days
+      postconditions: Request confirmation number issued
+
+    - id: act-002
+      description: Review purchase request for completeness and policy compliance
+      actor_role_id: role-finance-manager
+      inputs: [Submitted Request]
+      outputs: [Reviewed Request]
+      systems: [ERP Portal]
+      preconditions: Request received in ERP Portal queue
+      postconditions: Compliance status recorded
+
+    - id: act-003
+      description: Approve or reject the purchase request
+      actor_role_id: role-finance-manager
+      inputs: [Reviewed Request]
+      outputs: [Approval Decision]
+      systems: [ERP Portal]
+      preconditions: Review complete
+      postconditions: Decision recorded; PO generated if approved
+
+    - id: act-004
+      description: Issue approved purchase order to vendor
+      actor_role_id: role-procurement
+      inputs: [Approved Purchase Order]
+      outputs: [Issued PO]
+      systems: [ERP Portal, Email]
+      preconditions: PO in Approved status
+      postconditions: Vendor confirmation received
+
+    - id: act-005
+      description: Notify requester of approval or rejection outcome
+      actor_role_id: role-finance-manager
+      inputs: [Approval Decision]
+      outputs: [Requester Notification]
+      systems: [Email]
+      preconditions: Decision recorded
+      postconditions: Requester notified within 1 business day
+
+roles_and_raci:
+  roles:
+    - role_id: role-requester
+      role_name: Requester
+    - role_id: role-finance-manager
+      role_name: Finance Manager
+    - role_id: role-procurement
+      role_name: Procurement Officer
+    - role_id: role-director
+      role_name: Director
+
+  raci_matrix:
+    - activity_id: act-001
+      responsible: [role-requester]
+      accountable: role-requester
+      consulted: []
+      informed: [role-finance-manager]
+
+    - activity_id: act-002
+      responsible: [role-finance-manager]
+      accountable: role-finance-manager
+      consulted: [role-procurement]
+      informed: []
+
+    - activity_id: act-003
+      responsible: [role-finance-manager]
+      accountable: role-finance-manager
+      consulted: [role-director]
+      informed: [role-requester]
+
+    - activity_id: act-004
+      responsible: [role-procurement]
+      accountable: role-finance-manager
+      consulted: []
+      informed: [role-requester]
+
+    - activity_id: act-005
+      responsible: [role-finance-manager]
+      accountable: role-finance-manager
+      consulted: []
+      informed: [role-requester]
+
+business_rules:
+  - id: rule-001
+    description: Purchases under $1,000 may be approved by Finance Manager without Director sign-off
+    source: policy
+    applies_to: act-003
+    rationale: Finance Policy FP-003 §3.2 — delegated approval authority
+
+  - id: rule-002
+    description: Purchases over $10,000 require Director approval
+    source: policy
+    applies_to: act-003
+    rationale: Finance Policy FP-003 §3.3 — escalated approval threshold
+
+decision_points:
+  - id: gw-001
+    description: Is the purchase amount within Finance Manager approval limit?
+    activity_id: act-003
+    criteria: Purchase amount compared against $10,000 threshold
+    outcomes:
+      - label: Within limit
+        next_activity: act-004
+      - label: Exceeds limit
+        next_activity: act-003-escalate
+
+exception_paths:
+  - id: exc-001
+    description: Vendor quote is missing or expired
+    trigger: Purchase request submitted without a current vendor quote
+    handling: Return request to requester with instruction to obtain a vendor quote dated within 30 days
+    owner_role_id: role-finance-manager
+    escalation_path: None — requester must resubmit
+
+  - id: exc-002
+    description: Purchase exceeds Finance Manager approval limit
+    trigger: Purchase amount exceeds $10,000
+    handling: Escalate request to Director queue in ERP Portal; Director approves or rejects within 2 business days
+    owner_role_id: role-director
+    escalation_path: Board approval for purchases over $100,000
+
+kpis:
+  - id: kpi-001
+    name: PO Approval Cycle Time
+    formula: Average elapsed time from PO submission timestamp to approval timestamp across all POs in the period
+    data_source: ERP Portal — submission and approval timestamp fields on PO records
+    target: "2 business days"
+    frequency: monthly
+
+  - id: kpi-002
+    name: PO Rejection Rate
+    formula: Count of POs rejected / total POs submitted × 100
+    data_source: ERP Portal — status field on PO records
+    target: "< 5%"
+    frequency: monthly
+
+systems_and_integrations:
+  - system_name: ERP Portal
+    role: processor
+    integration_type: ui
+    activities_supported: [act-001, act-002, act-003, act-004]
+
+  - system_name: Email
+    role: notification
+    integration_type: manual
+    activities_supported: [act-004, act-005]
+
+controls_and_compliance:
+  - id: ctrl-001
+    type: approval
+    description: Finance Manager approval required for all purchase requests before PO is issued
+    standard_ref: Finance Policy FP-003 §3.1
+    activities_covered: [act-003]
+    waiver: none
+
+  - id: ctrl-002
+    type: segregation
+    description: Requester cannot approve their own purchase request
+    standard_ref: Finance Policy FP-003 §3.4
+    activities_covered: [act-002, act-003]
+    waiver: none
+
+open_questions: []
+
+babok_core_concepts:
+  change: Uncontrolled purchases become tracked, approved expenditures with audit trails
+  need: The organisation needs to prevent unauthorised spending while enabling timely procurement
+  solution: A structured approval workflow with tiered authority levels and system-enforced controls
+  stakeholders: Requesters, Finance Manager, Procurement Officer, Director, and Vendors
+  value: Reduced unauthorised spend, faster vendor payment cycles, and improved audit readiness
+  context: Finance department operating under Finance Policy FP-003 with ERP Portal as the system of record
+
+revision_history:
+  - version: "1.0"
+    date: "2026-05-10"
+    author_role: Business Analyst
+    summary: Initial approved version following elicitation and SME review
+
+validation:
+  pns_quality_score: 95
+  ready_for_publication: true
+  ready_for_bpmn_modeling: true
