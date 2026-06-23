@@ -62,3 +62,11 @@ coverage/
 build/
 .next/
 .vite/
+
+# Generated at build time by app/scripts/generate-skill-files.mjs
+# Canonical sources: skills/ (SKILL.md files) and context/ (variable templates)
+# Do not commit these — run `pnpm --filter @workspace/mermaid-diagram-bpmn run skill:generate` to regenerate
+app/public/skills/
+app/public/context/
+app/public/pns-template.yaml
+app/public/bp-skill-readme.md
