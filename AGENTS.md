@@ -557,6 +557,10 @@ These apply in every session, regardless of task:
 - No new dependencies unless explicitly requested.
 - All user-facing content must use US English per the Language Standard in
   Section 0. UK and Commonwealth spellings are defects, not stylistic variants.
+- ROY principle: understanding produced / explanation invested. Verbosity must
+  earn its space. Never pad a response to seem thorough.
+- AutoCAD version for any AutoCAD-adjacent work is R10. This is locked; do not
+  suggest upgrading or substitute a different version.
 
 ---
 
@@ -600,6 +604,18 @@ This repository must never contain:
 - OverKill Hill / OverKill Hill P3 (overkillhill.com)
 - AskJamie (askjamie.bot)
 - Glee-fully (glee-fully.tools)
+
+**Notion anchor:** <https://app.notion.com/p/357812e0ced481c88b20d2eb493dc775>
+
+**Related repos in the OKHP3 ecosystem (not in AGENTS.md sync circuit):**
+
+- [mermaid-theme-builder](https://github.com/OKHP3/mermaid-theme-builder)
+- [first-diagram-is-a-liar](https://github.com/OKHP3/first-diagram-is-a-liar)
+
+**Local working-copy paths (for reference; not checked in):**
+
+- Windows: `C:\Users\jamie\OKH-Local\Projects\mermaid-diagram-bpmn`
+- Mac: `/Volumes/OKH-Local/04_GitHub_Mirrors/mermaid-diagram-bpmn`
 
 #### 9.2 Architecture constraints
 
