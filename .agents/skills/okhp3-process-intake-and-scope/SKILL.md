@@ -1,5 +1,5 @@
 ---
-name: process-intake-and-scope
+name: okhp3-process-intake-and-scope
 description: Conduct structured process intake and scope definition using BABOK v3 elicitation techniques. Use this skill when the user wants to document a business process from scratch; when they describe a workflow, procedure, or set of steps and need it structured; when they ask to scope a process, define process boundaries, or capture business rules; when they say "help me document this process", "let's scope out this workflow", or "what are the inputs and outputs"; when you need a Process Intake Record (PIR) as input for downstream narrative, modeling, or SOP skills.
 license: MIT
 homepage: https://github.com/overkillhill/mermaid-diagram-bpmn/tree/main/skills/process-intake-and-scope

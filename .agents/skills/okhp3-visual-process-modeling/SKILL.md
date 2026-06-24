@@ -1,5 +1,5 @@
 ---
-name: visual-process-modeling
+name: okhp3-visual-process-modeling
 description: Generate, validate, normalise, and explain Mermaid-native bpmn-beta diagrams from a Process Narrative Specification. Use this skill when the user wants to convert a PNS or process notes into a visual diagram; when they ask for BPMN, a process flow, a swimlane diagram, or a workflow diagram; when they want to validate or repair existing bpmn-beta code; when they mention pools, lanes, gateways, tasks, events, or BPMN 2.0; when they want a Mermaid-native process model they can commit to a repo; when the PNS has three or more gateway decision points and a DMN decision table is warranted.
 license: MIT
 homepage: https://github.com/overkillhill/mermaid-diagram-bpmn/tree/main/skills/visual-process-modeling

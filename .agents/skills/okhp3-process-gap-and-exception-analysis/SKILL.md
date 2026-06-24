@@ -1,5 +1,5 @@
 ---
-name: process-gap-and-exception-analysis
+name: okhp3-process-gap-and-exception-analysis
 description: Identify deviations, gaps, and exception paths between an as-is process capture and its intended design. Use this skill when the user wants to find where a process breaks down, where steps are missing or inconsistent, where exception handling is undefined, or where current execution differs from documented procedure. Use when they say "what's wrong with the current process", "find the gaps", "where does this break", or "analyze exceptions". Produces a gap analysis report and exception catalog.
 license: MIT
 homepage: https://github.com/overkillhill/mermaid-diagram-bpmn/tree/main/skills/process-gap-and-exception-analysis

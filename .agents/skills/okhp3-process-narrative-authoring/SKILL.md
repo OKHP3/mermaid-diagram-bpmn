@@ -1,5 +1,5 @@
 ---
-name: process-narrative-authoring
+name: okhp3-process-narrative-authoring
 description: Author and validate a Process Narrative Specification (PNS) from a PIR and stakeholder register. Use this skill when you have a completed Process Intake Record from process-intake-and-scope and need to produce a structured narrative document that anchors ISO 9001 §4.4.1 process-box semantics, BABOK Core Concept Model, RACI matrix, SIPOC table, business rules, decision points, KPIs, and controls. The PNS is the authoritative handoff input for visual-process-modeling, sop-and-work-instruction-generation, raci-and-governance-matrix-generation, and sipoc-generation.
 license: MIT
 homepage: https://github.com/overkillhill/mermaid-diagram-bpmn/tree/main/skills/process-narrative-authoring

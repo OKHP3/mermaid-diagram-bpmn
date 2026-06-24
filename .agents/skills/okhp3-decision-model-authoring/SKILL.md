@@ -1,5 +1,5 @@
 ---
-name: decision-model-authoring
+name: okhp3-decision-model-authoring
 description: Author and validate decision models from PNS decision points using DMN-aligned rule tables. Use this skill when the PNS contains three or more gateway decision points that warrant a structured decision table; when the user asks to document business rules as decision logic, build a DMN table, or make decision criteria explicit. This is a recommended extension skill triggered automatically when visual-process-modeling identifies three or more gateways. Produces a decision-model YAML and a human-readable DMN rule table.
 license: MIT
 homepage: https://github.com/overkillhill/mermaid-diagram-bpmn/tree/main/skills/decision-model-authoring

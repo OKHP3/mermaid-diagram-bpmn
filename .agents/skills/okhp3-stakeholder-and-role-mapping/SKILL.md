@@ -1,5 +1,5 @@
 ---
-name: stakeholder-and-role-mapping
+name: okhp3-stakeholder-and-role-mapping
 description: Derive and validate a structured stakeholder register from a completed Process Intake Record. Use this skill when you have a PIR from process-intake-and-scope and need to identify all affected parties, classify their roles, assess influence and interest, and define engagement strategies. Use when the user asks who is involved in a process, needs a RACI-ready role list, wants to understand stakeholder impact, or needs an engagement plan before narrative authoring begins.
 license: MIT
 homepage: https://github.com/overkillhill/mermaid-diagram-bpmn/tree/main/skills/stakeholder-and-role-mapping

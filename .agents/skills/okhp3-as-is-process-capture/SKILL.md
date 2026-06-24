@@ -1,5 +1,5 @@
 ---
-name: as-is-process-capture
+name: okhp3-as-is-process-capture
 description: Capture and normalise a current-state process description into a structured as-is process YAML with stable step identifiers. Use this skill when the user has a process that is already running and needs to document its current state before gap analysis or redesign; when they provide step lists, SOPs, or process notes that need to be structured; when they say "document what we do today", "capture the current process", or "baseline the process before we change it". Produces a structured as-is process artifact with normalised step IDs.
 license: MIT
 homepage: https://github.com/overkillhill/mermaid-diagram-bpmn/tree/main/skills/as-is-process-capture
