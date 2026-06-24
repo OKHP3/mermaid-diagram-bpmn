@@ -1,0 +1,69 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "catalog-meta",
+  "description": "Machine-readable metadata written by okhp3-skill-cataloger alongside the output file on every successful run. Written to .agents/skills/.catalog-meta.json in catalog mode, or .catalog-meta.json at repo root in full index mode.",
+  "type": "object",
+  "required": ["last_indexed", "skill_count", "mode", "surface", "indexed_by"],
+  "properties": {
+    "last_indexed": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO 8601 UTC timestamp of the last successful run. Example: 2026-06-23T18:10:00Z"
+    },
+    "skill_count": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Total number of skills found and indexed in this run."
+    },
+    "mode": {
+      "type": "string",
+      "enum": ["project", "library"],
+      "description": "Scan mode used: project (flat layout in .agents/skills/) or library (categorized layout)."
+    },
+    "surface": {
+      "type": "string",
+      "enum": ["project-skills", "distribution"],
+      "description": "Which surface was indexed. project-skills = .agents/skills/ (catalog mode). distribution = root family folders (--full mode)."
+    },
+    "indexed_by": {
+      "type": "string",
+      "description": "Name and version of the cataloger script. Example: okhp3-skill-cataloger v1.2.0"
+    },
+    "repo": {
+      "type": "string",
+      "description": "Repository name. Defaults to the current working directory name. Override with --repo-name."
+    },
+    "homepage": {
+      "type": "string",
+      "format": "uri",
+      "description": "Author homepage URL."
+    },
+    "github": {
+      "type": "string",
+      "format": "uri",
+      "description": "Author GitHub profile URL."
+    }
+  },
+  "examples": [
+    {
+      "last_indexed": "2026-06-23T18:10:00Z",
+      "skill_count": 5,
+      "mode": "project",
+      "surface": "project-skills",
+      "indexed_by": "okhp3-skill-cataloger v1.2.0",
+      "repo": "kierans-lifetrkr",
+      "homepage": "https://overkillhill.com",
+      "github": "https://github.com/OKHP3"
+    },
+    {
+      "last_indexed": "2026-06-23T19:30:00Z",
+      "skill_count": 14,
+      "mode": "library",
+      "surface": "distribution",
+      "indexed_by": "okhp3-skill-cataloger v1.2.0",
+      "repo": "skillz",
+      "homepage": "https://overkillhill.com",
+      "github": "https://github.com/OKHP3"
+    }
+  ]
+}

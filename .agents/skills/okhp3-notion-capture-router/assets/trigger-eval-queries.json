@@ -1,0 +1,50 @@
+[
+  {
+    "query": "Move this ChatGPT thread into Notion, check if it is duplicate or new, and create extracts for the useful bits.",
+    "should_trigger": true
+  },
+  {
+    "query": "I exported a Claude conversation as PDF. Help me ingest it into my Notion brain and reconcile it against GitHub.",
+    "should_trigger": true
+  },
+  {
+    "query": "Use the ideation router to decide where this Perplexity research thread belongs in Notion.",
+    "should_trigger": true
+  },
+  {
+    "query": "Audit my ChatGPT project threads and identify which ones are already captured in Notion.",
+    "should_trigger": true
+  },
+  {
+    "query": "Turn this messy AI conversation into Chat Threads plus Extracts rows.",
+    "should_trigger": true
+  },
+  {
+    "query": "Is this thread duplicate, complementary, or net new compared with my Notion archive?",
+    "should_trigger": true
+  },
+  {
+    "query": "Summarize this article in five bullets.",
+    "should_trigger": false
+  },
+  {
+    "query": "Create a Mermaid flowchart for this business process.",
+    "should_trigger": false
+  },
+  {
+    "query": "Write a LinkedIn post from this project update.",
+    "should_trigger": false
+  },
+  {
+    "query": "Help me design a Notion dashboard for tracking household chores.",
+    "should_trigger": false
+  },
+  {
+    "query": "What are the best practices for exporting PDFs from Gemini?",
+    "should_trigger": false
+  },
+  {
+    "query": "Make a new Agent Skill skeleton from this repeated workflow.",
+    "should_trigger": false
+  }
+]
