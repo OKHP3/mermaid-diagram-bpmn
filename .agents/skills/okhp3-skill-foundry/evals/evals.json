@@ -1,0 +1,76 @@
+{
+  "skill_name": "okhp3-skill-foundry",
+  "skill_version": "1.0.0",
+  "note": "Self-evals -- tests the Foundry skill on concrete authoring tasks",
+  "evals": [
+    {
+      "id": 1,
+      "name": "brand-attribution-on-existing-skill",
+      "prompt": "I have an existing skill called 'weather-fetch' that only has name and description in its YAML frontmatter. Walk me through exactly what I need to add to give it full OKHP3 brand attribution. Include the exact text for the header line, the About footer, and the complete YAML metadata block.",
+      "expectations": [
+        {
+          "id": 1,
+          "text": "Response provides the complete YAML metadata block with all required fields: author, version, category, origin, homepage, author-github"
+        },
+        {
+          "id": 2,
+          "text": "Response provides the exact header line format: '**OverKill Hill P³** · [overkillhill.com](...) · [github.com/OKHP3](...)'"
+        },
+        {
+          "id": 3,
+          "text": "Response provides the exact About footer with all three lines: 'Built by...', 'Published at...', 'Part of the OKHP3/skillz...'"
+        },
+        {
+          "id": 4,
+          "text": "Response specifies the version bump rule: bumping from 1.0.0 to 1.1.0 (minor) for brand attribution as a structural change"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "name": "eval-design-for-new-skill",
+      "prompt": "I'm creating a skill called 'weather-fetch' that teaches agents to fetch current weather from the Open-Meteo API (free, no API key). The skill documents the endpoint GET https://api.open-meteo.com/v1/forecast?latitude=LAT&longitude=LON&current=temperature_2m,wind_speed_10m and a function called fetchWeather(lat, lon) that returns { temperature: number, windSpeed: number, unit: 'celsius' }. Design 3 eval test cases following the Foundry methodology. Show me the prompts and the 4 evidence-anchored expectations for each.",
+      "expectations": [
+        {
+          "id": 1,
+          "text": "Response designs exactly 3 test cases, each with a distinct concrete capability (not variations of the same thing)"
+        },
+        {
+          "id": 2,
+          "text": "Response writes exactly 4 expectations per test case"
+        },
+        {
+          "id": 3,
+          "text": "At least one expectation per test case anchors to a specific identifier from the skill: fetchWeather, temperature_2m, wind_speed_10m, or the exact return shape { temperature, windSpeed, unit: 'celsius' }"
+        },
+        {
+          "id": 4,
+          "text": "Response explains the evidence-anchoring requirement: that without-skill should fail most expectations, and that expectations must reference skill-specific content not derivable from general LLM knowledge"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "name": "grade-a-mock-executor-response",
+      "prompt": "Here is a grading task. The expectation is: 'Response provides the exact endpoint GET https://api.open-meteo.com/v1/forecast?latitude=LAT&longitude=LON&current=temperature_2m,wind_speed_10m'. The executor response says: 'You can use the Open-Meteo API. Call fetch(\"https://api.open-meteo.com/v1/forecast?lat=\"+lat+\"&lon=\"+lon+\"&hourly=temperature_2m\") and extract the result.' Write the grading.json entry for this expectation and explain your pass/fail decision with verbatim evidence.",
+      "expectations": [
+        {
+          "id": 1,
+          "text": "Response grades the expectation as FAILED (not passed) -- the executor used 'lat'/'lon' not 'latitude'/'longitude', used hourly not current, and used temperature_2m in hourly context not current context"
+        },
+        {
+          "id": 2,
+          "text": "Response writes a grading.json entry with the exact fields: text, passed, evidence"
+        },
+        {
+          "id": 3,
+          "text": "Response quotes verbatim from the mock executor response as the evidence string (not a paraphrase)"
+        },
+        {
+          "id": 4,
+          "text": "Response identifies at least two specific deviations: the parameter name difference (lat vs latitude) AND the hourly vs current context difference"
+        }
+      ]
+    }
+  ]
+}

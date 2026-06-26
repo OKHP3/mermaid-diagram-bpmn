@@ -1,0 +1,35 @@
+{
+  "expectations": [
+    {
+      "text": "Response grades the expectation as FAILED (not passed) -- the executor used 'lat'/'lon' not 'latitude'/'longitude', used hourly not current, and used temperature_2m in hourly context not current context",
+      "passed": true,
+      "evidence": "Response states 'Result: Fail' and explains: 'The task required the response to provide an exact endpoint. The executor's response deviates from the requirement.' Correct grade."
+    },
+    {
+      "text": "Response writes a grading.json entry with the exact fields: text, passed, evidence",
+      "passed": false,
+      "evidence": "grading.json entry uses 'expectation' instead of 'text', and 'explanation' instead of 'evidence'. Actual fields: {\"expectation\": \"...\", \"passed\": false, \"explanation\": \"...\"}. The Foundry-specified field names 'text' and 'evidence' are not used. A developer copying this structure would produce grading.json files incompatible with the Foundry benchmark aggregation schema."
+    },
+    {
+      "text": "Response quotes verbatim from the mock executor response as the evidence string (not a paraphrase)",
+      "passed": true,
+      "evidence": "Response quotes: 'Verbatim evidence: - Actual: https://api.open-meteo.com/v1/forecast?lat=\"+lat+\"&lon=\"+lon+\"&hourly=temperature_2m'. Text from the mock response is quoted directly."
+    },
+    {
+      "text": "Response identifies at least two specific deviations: the parameter name difference (lat vs latitude) AND the hourly vs current context difference",
+      "passed": true,
+      "evidence": "Response identifies: '1. Parameter Names: The expectation required latitude and longitude. The executor used the shorthand lat and lon.' and '2. Data Parameters: The expectation required the current parameter with two specific variables: temperature_2m and wind_speed_10m. The executor used the hourly parameter.' Both deviations correctly named."
+    }
+  ],
+  "summary": { "passed": 3, "failed": 1, "total": 4, "pass_rate": 0.75 },
+  "execution_metrics": {},
+  "timing": {},
+  "claims": [],
+  "user_notes_summary": {
+    "uncertainties": [],
+    "needs_review": [
+      "without-skill uses wrong grading.json field names ('expectation' and 'explanation' instead of 'text' and 'evidence'). A developer following this pattern would produce grading files incompatible with Foundry schema -- silent incompatibility."
+    ],
+    "workarounds": []
+  }
+}

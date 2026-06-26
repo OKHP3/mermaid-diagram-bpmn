@@ -1,0 +1,122 @@
+{
+  "metadata": {
+    "skill_name": "okhp3-skill-foundry",
+    "skill_path": ".agents/skills/okhp3-skill-foundry",
+    "skill_version": "1.0.0",
+    "executor_model": "delegation-subagent",
+    "analyzer_model": "main-agent-grader",
+    "timestamp": "2026-06-26T00:00:00Z",
+    "evals_run": [1, 2, 3],
+    "runs_per_configuration": 1,
+    "note": "All 3 evals: LIVE delegation subagent runs. No analytical stubs. Self-benchmark -- skill graded on its own methodology."
+  },
+
+  "runs": [
+    {
+      "eval_id": 1,
+      "eval_name": "brand-attribution-on-existing-skill",
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": { "pass_rate": 1.0, "passed": 4, "failed": 0, "total": 4 },
+      "expectations": [
+        { "text": "Response provides the complete YAML metadata block with all required fields: author, version, category, origin, homepage, author-github", "passed": true, "evidence": "Full YAML block present with all six required fields correctly formatted." },
+        { "text": "Response provides the exact header line format: '**OverKill Hill P³** · [overkillhill.com](...) · [github.com/OKHP3](...)'", "passed": true, "evidence": "Exact match: '**OverKill Hill P³** · [overkillhill.com](https://overkillhill.com) · [github.com/OKHP3](https://github.com/OKHP3)'" },
+        { "text": "Response provides the exact About footer with all three lines: 'Built by...', 'Published at...', 'Part of the OKHP3/skillz...'", "passed": true, "evidence": "All three About footer lines present and exactly correct." },
+        { "text": "Response specifies the version bump rule: bumping from 1.0.0 to 1.1.0 (minor) for brand attribution as a structural change", "passed": true, "evidence": "'Note: The version is set to 1.1.0 because adding brand attribution to an existing skill is considered a structural change.'" }
+      ]
+    },
+    {
+      "eval_id": 1,
+      "eval_name": "brand-attribution-on-existing-skill",
+      "configuration": "without_skill",
+      "run_number": 1,
+      "result": { "pass_rate": 0.0, "passed": 0, "failed": 4, "total": 4 },
+      "expectations": [
+        { "text": "Response provides the complete YAML metadata block with all required fields: author, version, category, origin, homepage, author-github", "passed": false, "evidence": "YAML uses non-standard fields (brand, author: OKHP3 Skill Foundry). Missing category, origin, homepage, author-github." },
+        { "text": "Response provides the exact header line format: '**OverKill Hill P³** · [overkillhill.com](...) · [github.com/OKHP3](...)'", "passed": false, "evidence": "Said to add '# OKHP3 Skill: weather-fetch' as header. Correct inline branded format completely absent." },
+        { "text": "Response provides the exact About footer with all three lines: 'Built by...', 'Published at...', 'Part of the OKHP3/skillz...'", "passed": false, "evidence": "About section titled '## About this Skill', contains fabricated 'OKHP3 (Open Knowledge Host Protocol v3)' and dead URL 'https://okhp.org/docs'. None of the three required lines present." },
+        { "text": "Response specifies the version bump rule: bumping from 1.0.0 to 1.1.0 (minor) for brand attribution as a structural change", "passed": false, "evidence": "Version bump rule not mentioned. YAML shows version: 1.0.0 with no explanation." }
+      ]
+    },
+    {
+      "eval_id": 2,
+      "eval_name": "eval-design-for-new-skill",
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": { "pass_rate": 1.0, "passed": 4, "failed": 0, "total": 4 },
+      "expectations": [
+        { "text": "Response designs exactly 3 test cases, each with a distinct concrete capability (not variations of the same thing)", "passed": true, "evidence": "3 cases: basic-fetch-implementation (URL construction), function-signature-and-return-shape (TypeScript return type), integration-and-unit-handling (celsius constraint). Distinct." },
+        { "text": "Response writes exactly 4 expectations per test case", "passed": true, "evidence": "Eval 1: 4 expectations. Eval 2: 4 expectations. Eval 3: 4 expectations. All labeled 'Evidence-Anchored'." },
+        { "text": "At least one expectation per test case anchors to a specific identifier from the skill: fetchWeather, temperature_2m, wind_speed_10m, or the exact return shape { temperature, windSpeed, unit: 'celsius' }", "passed": true, "evidence": "Eval 1: 'current=temperature_2m,wind_speed_10m' and 'fetchWeather'. Eval 2: 'unit: 'celsius''. Eval 3: '{ temperature: number, windSpeed: number, unit: 'celsius' }'." },
+        { "text": "Response explains the evidence-anchoring requirement: that without-skill should fail most expectations, and that expectations must reference skill-specific content not derivable from general LLM knowledge", "passed": true, "evidence": "Opening states: 'exactly 4 evidence-anchored expectations designed to discriminate between general LLM knowledge and skill-specific implementation.'" }
+      ]
+    },
+    {
+      "eval_id": 2,
+      "eval_name": "eval-design-for-new-skill",
+      "configuration": "without_skill",
+      "run_number": 1,
+      "result": { "pass_rate": 0.5, "passed": 2, "failed": 2, "total": 4 },
+      "expectations": [
+        { "text": "Response designs exactly 3 test cases, each with a distinct concrete capability (not variations of the same thing)", "passed": true, "evidence": "3 distinct cases: Direct Location Query, Coordinate-Based Request, Handling Invalid Input." },
+        { "text": "Response writes exactly 4 expectations per test case", "passed": true, "evidence": "4 expectations per case. Count correct." },
+        { "text": "At least one expectation per test case anchors to a specific identifier from the skill: fetchWeather, temperature_2m, wind_speed_10m, or the exact return shape { temperature, windSpeed, unit: 'celsius' }", "passed": false, "evidence": "None of 12 expectations reference fetchWeather, temperature_2m, wind_speed_10m, or unit: 'celsius'. All test general agent behaviors (Tool Call Verification, Natural Language Response, Graceful Degradation) that would pass for any weather API." },
+        { "text": "Response explains the evidence-anchoring requirement: that without-skill should fail most expectations, and that expectations must reference skill-specific content not derivable from general LLM knowledge", "passed": false, "evidence": "No mention of evidence anchoring, without-skill baseline, or discrimination requirement. The word 'evidence' does not appear in the response." }
+      ]
+    },
+    {
+      "eval_id": 3,
+      "eval_name": "grade-a-mock-executor-response",
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": { "pass_rate": 1.0, "passed": 4, "failed": 0, "total": 4 },
+      "expectations": [
+        { "text": "Response grades the expectation as FAILED (not passed) -- the executor used 'lat'/'lon' not 'latitude'/'longitude', used hourly not current, and used temperature_2m in hourly context not current context", "passed": true, "evidence": "'Decision: FAIL' with numbered reasoning: '1. It used lat and lon instead of the required latitude and longitude parameter names. 2. It used the hourly=temperature_2m parameter instead of the required current=temperature_2m,wind_speed_10m parameter.'" },
+        { "text": "Response writes a grading.json entry with the exact fields: text, passed, evidence", "passed": true, "evidence": "grading.json shows fields: 'text', 'passed': false, 'evidence'. All three Foundry-specified field names present and correctly used." },
+        { "text": "Response quotes verbatim from the mock executor response as the evidence string (not a paraphrase)", "passed": true, "evidence": "Evidence field contains: 'Response provided \"https://api.open-meteo.com/v1/forecast?lat=\\\"\\+lat+...&hourly=temperature_2m\" which uses incorrect parameter names...' -- actual mock text quoted." },
+        { "text": "Response identifies at least two specific deviations: the parameter name difference (lat vs latitude) AND the hourly vs current context difference", "passed": true, "evidence": "Both deviations explicitly numbered and named." }
+      ]
+    },
+    {
+      "eval_id": 3,
+      "eval_name": "grade-a-mock-executor-response",
+      "configuration": "without_skill",
+      "run_number": 1,
+      "result": { "pass_rate": 0.75, "passed": 3, "failed": 1, "total": 4 },
+      "expectations": [
+        { "text": "Response grades the expectation as FAILED (not passed) -- the executor used 'lat'/'lon' not 'latitude'/'longitude', used hourly not current, and used temperature_2m in hourly context not current context", "passed": true, "evidence": "'Result: Fail' with correct reasoning." },
+        { "text": "Response writes a grading.json entry with the exact fields: text, passed, evidence", "passed": false, "evidence": "grading.json uses 'expectation' instead of 'text', and 'explanation' instead of 'evidence'. Actual: {\"expectation\": \"...\", \"passed\": false, \"explanation\": \"...\"}. Foundry field names 'text' and 'evidence' are not present." },
+        { "text": "Response quotes verbatim from the mock executor response as the evidence string (not a paraphrase)", "passed": true, "evidence": "'Actual: https://api.open-meteo.com/v1/forecast?lat=\"+lat+\"&lon=\"+lon+\"&hourly=temperature_2m' -- quoted from mock." },
+        { "text": "Response identifies at least two specific deviations: the parameter name difference (lat vs latitude) AND the hourly vs current context difference", "passed": true, "evidence": "Identifies both: 'lat and lon' vs 'latitude and longitude', and 'hourly parameter' vs 'current parameter with temperature_2m and wind_speed_10m'." }
+      ]
+    }
+  ],
+
+  "run_summary": {
+    "with_skill": {
+      "pass_rate": { "mean": 1.0, "stddev": 0.0, "min": 1.0, "max": 1.0 },
+      "time_seconds": { "mean": null, "stddev": null, "min": null, "max": null },
+      "tokens": { "mean": null, "stddev": null, "min": null, "max": null }
+    },
+    "without_skill": {
+      "pass_rate": { "mean": 0.42, "stddev": 0.31, "min": 0.0, "max": 0.75 },
+      "time_seconds": { "mean": null, "stddev": null, "min": null, "max": null },
+      "tokens": { "mean": null, "stddev": null, "min": null, "max": null }
+    },
+    "delta": {
+      "pass_rate": "+0.58",
+      "time_seconds": "N/A",
+      "tokens": "N/A"
+    }
+  },
+
+  "notes": [
+    "All 3 evals: LIVE delegation subagent runs. No analytical stubs.",
+    "Self-benchmark -- the Foundry skill graded on its own methodology. Meta.",
+    "Eval 1: without-skill fabricated 'OKHP3 (Open Knowledge Host Protocol v3)' -- wrong expansion. Dead URL. 0/4 -- total failure on brand standard.",
+    "Eval 2: without-skill eval design produces non-discriminating expectations (test general agent behavior, not skill-specific content). A developer following this pattern would see no with/without gap.",
+    "Eval 3: without-skill gets the pass/fail right (LLMs understand endpoint mismatch) but uses wrong grading.json field names -- schema incompatibility.",
+    "Acceptance thresholds: with_skill mean 1.0 >= 0.9 PASS. delta +0.58 >= 0.5 PASS. Skill is production-ready.",
+    "workspace: .agents/skills/okhp3-skill-foundry/workspace/iteration-1/"
+  ]
+}

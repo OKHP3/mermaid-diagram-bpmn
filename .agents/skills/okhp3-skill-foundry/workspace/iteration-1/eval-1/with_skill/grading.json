@@ -1,0 +1,29 @@
+{
+  "expectations": [
+    {
+      "text": "Response provides the complete YAML metadata block with all required fields: author, version, category, origin, homepage, author-github",
+      "passed": true,
+      "evidence": "Response shows full YAML block including: 'author: Jamie Hill (OverKill Hill P³)', 'version: \"1.1.0\"', 'category: universal', 'origin: okhp3/skillz', 'homepage: https://overkillhill.com', 'author-github: https://github.com/OKHP3' -- all six required fields present and correctly formatted."
+    },
+    {
+      "text": "Response provides the exact header line format: '**OverKill Hill P³** · [overkillhill.com](...) · [github.com/OKHP3](...)'",
+      "passed": true,
+      "evidence": "Response provides exactly: '**OverKill Hill P³** · [overkillhill.com](https://overkillhill.com) · [github.com/OKHP3](https://github.com/OKHP3)' -- exact match including middle-dot separators."
+    },
+    {
+      "text": "Response provides the exact About footer with all three lines: 'Built by...', 'Published at...', 'Part of the OKHP3/skillz...'",
+      "passed": true,
+      "evidence": "Response provides all three lines: 'Built by [Jamie Hill](https://overkillhill.com) · [OverKill Hill P³](https://overkillhill.com)', 'Published at [github.com/OKHP3](https://github.com/OKHP3)', 'Part of the [OKHP3/skillz](https://github.com/OKHP3/skillz) Agent Skill library.' -- exact match."
+    },
+    {
+      "text": "Response specifies the version bump rule: bumping from 1.0.0 to 1.1.0 (minor) for brand attribution as a structural change",
+      "passed": true,
+      "evidence": "Response states: 'Note: The version is set to 1.1.0 because adding brand attribution to an existing skill is considered a structural change.' -- correct rule, correct version target."
+    }
+  ],
+  "summary": { "passed": 4, "failed": 0, "total": 4, "pass_rate": 1.0 },
+  "execution_metrics": {},
+  "timing": {},
+  "claims": [],
+  "user_notes_summary": { "uncertainties": [], "needs_review": [], "workarounds": [] }
+}

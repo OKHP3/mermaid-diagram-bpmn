@@ -1,0 +1,29 @@
+{
+  "expectations": [
+    {
+      "text": "Response designs exactly 3 test cases, each with a distinct concrete capability (not variations of the same thing)",
+      "passed": true,
+      "evidence": "Response produces exactly 3 cases: 'basic-fetch-implementation' (URL endpoint construction), 'function-signature-and-return-shape' (TypeScript return type and function usage), 'integration-and-unit-handling' (celsius constraint and conversion awareness). Three distinct capabilities, not variations."
+    },
+    {
+      "text": "Response writes exactly 4 expectations per test case",
+      "passed": true,
+      "evidence": "Eval 1: 4 expectations numbered 1-4. Eval 2: 4 expectations numbered 1-4. Eval 3: 4 expectations numbered 1-4. All labeled 'Evidence-Anchored'."
+    },
+    {
+      "text": "At least one expectation per test case anchors to a specific identifier from the skill: fetchWeather, temperature_2m, wind_speed_10m, or the exact return shape { temperature, windSpeed, unit: 'celsius' }",
+      "passed": true,
+      "evidence": "Eval 1 expectation 2: 'current=temperature_2m,wind_speed_10m'. Eval 1 expectation 4: 'fetchWeather function'. Eval 2 expectation 3: 'unit: 'celsius''. Eval 3 expectation 1: 'unit: 'celsius''. Eval 3 expectation 4: '{ temperature: number, windSpeed: number, unit: 'celsius' }'. All three cases anchor to skill-specific identifiers."
+    },
+    {
+      "text": "Response explains the evidence-anchoring requirement: that without-skill should fail most expectations, and that expectations must reference skill-specific content not derivable from general LLM knowledge",
+      "passed": true,
+      "evidence": "Opening paragraph states: 'exactly 4 evidence-anchored expectations designed to discriminate between general LLM knowledge and skill-specific implementation.' Each expectation is labeled 'Evidence-Anchored:'. The discrimination principle is explicitly stated in the framing."
+    }
+  ],
+  "summary": { "passed": 4, "failed": 0, "total": 4, "pass_rate": 1.0 },
+  "execution_metrics": {},
+  "timing": {},
+  "claims": [],
+  "user_notes_summary": { "uncertainties": [], "needs_review": [], "workarounds": [] }
+}

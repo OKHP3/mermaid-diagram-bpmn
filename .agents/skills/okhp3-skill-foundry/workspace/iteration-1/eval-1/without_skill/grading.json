@@ -1,0 +1,36 @@
+{
+  "expectations": [
+    {
+      "text": "Response provides the complete YAML metadata block with all required fields: author, version, category, origin, homepage, author-github",
+      "passed": false,
+      "evidence": "Response YAML uses non-standard fields: 'brand: OKHP3', 'author: OKHP3 Skill Foundry' (wrong string -- should be 'Jamie Hill (OverKill Hill P³)'). Missing: category, origin, homepage, author-github. Version is unquoted '1.0.0' not '\"1.0.0\"'. Name lacks okhp3- prefix in the actual block. None of the six required fields are correctly present."
+    },
+    {
+      "text": "Response provides the exact header line format: '**OverKill Hill P³** · [overkillhill.com](...) · [github.com/OKHP3](...)'",
+      "passed": false,
+      "evidence": "Response says to add '# OKHP3 Skill: weather-fetch' as the header. This is a Markdown H1 heading, not the branded inline line. The correct format (**OverKill Hill P³** · ...) is completely absent."
+    },
+    {
+      "text": "Response provides the exact About footer with all three lines: 'Built by...', 'Published at...', 'Part of the OKHP3/skillz...'",
+      "passed": false,
+      "evidence": "Response About section says '## About this Skill' (wrong heading) and contains 'OKHP3 (Open Knowledge Host Protocol v3)' -- fabricated expansion of the abbreviation. URL given is 'https://okhp.org/docs' -- does not exist. None of the three required lines ('Built by Jamie Hill...', 'Published at...', 'Part of OKHP3/skillz...') are present."
+    },
+    {
+      "text": "Response specifies the version bump rule: bumping from 1.0.0 to 1.1.0 (minor) for brand attribution as a structural change",
+      "passed": false,
+      "evidence": "No version bump rule mentioned. YAML shows 'version: 1.0.0' with no explanation. The response does not discuss version management at all."
+    }
+  ],
+  "summary": { "passed": 0, "failed": 4, "total": 4, "pass_rate": 0.0 },
+  "execution_metrics": {},
+  "timing": {},
+  "claims": [],
+  "user_notes_summary": {
+    "uncertainties": [],
+    "needs_review": [
+      "CRITICAL: without-skill fabricated 'OKHP3 (Open Knowledge Host Protocol v3)' -- the abbreviation does not stand for this. A developer following this response would add a factually wrong expansion to their skill.",
+      "CRITICAL: without-skill URL 'https://okhp.org/docs' does not exist. Would lead developer to a dead link."
+    ],
+    "workarounds": []
+  }
+}
