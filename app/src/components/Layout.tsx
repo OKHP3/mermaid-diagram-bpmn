@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Link, useLocation } from "wouter";
 import { Moon, Sun, Menu, X, Github } from "lucide-react";
 import { SKILLS } from "../data/skills-registry";
+import { usePageTracking } from "../hooks/usePageTracking";
 
 const NAV_LINKS = [
   { href: "/", label: "Home" },
@@ -43,6 +44,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
   const [dark, setDark] = useDarkMode();
   const [menuOpen, setMenuOpen] = useState(false);
   const [location] = useLocation();
+  usePageTracking();
 
   return (
     <div className="forge-shell">
