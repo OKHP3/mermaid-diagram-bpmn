@@ -614,7 +614,7 @@ This repository must never contain:
 
 **Local working-copy paths (for reference; not checked in):**
 
-- Windows: `C:\Users\jamie\OKH-Local\Projects\mermaid-diagram-bpmn`
+- Windows: `C:\Users\jamie\OKH-Local\04_GitHub_Mirrors\mermaid-diagram-bpmn`
 - Mac: `/Volumes/OKH-Local/04_GitHub_Mirrors/mermaid-diagram-bpmn`
 
 #### 9.2 Architecture constraints
