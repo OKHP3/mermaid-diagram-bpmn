@@ -1,0 +1,41 @@
+name: Technology version audit
+
+on:
+  pull_request:
+    paths:
+      - ".github/workflows/**"
+      - ".replit"
+      - "package.json"
+      - "app/package.json"
+      - "scripts/package.json"
+      - "pnpm-workspace.yaml"
+      - "pnpm-lock.yaml"
+      - "scripts/check-technology-versions.mjs"
+  schedule:
+    - cron: "30 8 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v6
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: "24"
+          cache: "pnpm"
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Audit technology versions
+        run: pnpm run technology:check -- --ci

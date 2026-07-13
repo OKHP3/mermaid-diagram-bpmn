@@ -43,7 +43,7 @@
     "@replit/vite-plugin-cartographer": "catalog:",
     "@replit/vite-plugin-dev-banner": "catalog:",
     "@replit/vite-plugin-runtime-error-modal": "catalog:",
-    "@tailwindcss/typography": "^0.5.15",
+    "@tailwindcss/typography": "^0.5.20",
     "@tailwindcss/vite": "catalog:",
     "@tanstack/react-query": "catalog:",
     "@testing-library/dom": "^10.4.1",
@@ -76,8 +76,8 @@
     "tw-animate-css": "^1.4.0",
     "vaul": "^1.1.2",
     "vite": "catalog:",
-    "vitest": "^3.2.6",
-    "wouter": "^3.3.5",
+    "vitest": "^4.1.10",
+    "wouter": "^3.10.0",
     "zod": "catalog:"
   }
 }

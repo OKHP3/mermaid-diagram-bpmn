@@ -4,31 +4,34 @@ packages:
   - lib/integrations/*
   - scripts
 
+allowBuilds:
+  esbuild: true
+
 autoInstallPeers: false
 
 catalog:
   '@replit/vite-plugin-cartographer': ^0.5.5
   '@replit/vite-plugin-dev-banner': ^0.1.1
   '@replit/vite-plugin-runtime-error-modal': ^0.0.6
-  '@tailwindcss/vite': ^4.3.0
+  '@tailwindcss/vite': ^4.3.2
   '@tanstack/react-query': ^5.90.21
-  '@types/node': ^25.3.3
-  '@types/react': ^19.2.0
-  '@types/react-dom': ^19.2.0
-  '@vitejs/plugin-react': ^5.2.0
+  '@types/node': ^26.1.1
+  '@types/react': ^19.2.17
+  '@types/react-dom': ^19.2.3
+  '@vitejs/plugin-react': ^6.0.3
   class-variance-authority: ^0.7.1
   clsx: ^2.1.1
   drizzle-orm: ^0.45.2
   fflate: ^0.8.3
   framer-motion: ^12.40.0
   lucide-react: ^0.545.0
-  react: 19.1.0
-  react-dom: 19.1.0
-  tailwind-merge: ^3.3.1
-  tailwindcss: ^4.1.14
-  tsx: ^4.21.0
-  vite: ^7.3.5
-  wouter: ^3.3.5
+  react: 19.2.7
+  react-dom: 19.2.7
+  tailwind-merge: ^3.6.0
+  tailwindcss: ^4.3.2
+  tsx: ^4.23.0
+  vite: ^8.1.4
+  wouter: ^3.10.0
   zod: ^4.4.3
 
 minimumReleaseAge: 1440
@@ -64,7 +67,6 @@ overrides:
   '@tailwindcss/oxide>@tailwindcss/oxide-linux-arm64-musl': '-'
   '@tailwindcss/oxide>@tailwindcss/oxide-linux-x64-musl': '-'
   '@tailwindcss/oxide>@tailwindcss/oxide-win32-arm64-msvc': '-'
-  '@tailwindcss/oxide>@tailwindcss/oxide-win32-x64-msvc': '-'
   esbuild: ^0.28.1
   esbuild>@esbuild/aix-ppc64: '-'
   esbuild>@esbuild/android-arm: '-'
@@ -100,7 +102,6 @@ overrides:
   lightningcss>lightningcss-linux-arm64-musl: '-'
   lightningcss>lightningcss-linux-x64-musl: '-'
   lightningcss>lightningcss-win32-arm64-msvc: '-'
-  lightningcss>lightningcss-win32-x64-msvc: '-'
   '@babel/core': '>=7.29.6'
   undici: '>=7.28.0'
   lodash@<=4.17.23: '>=4.18.0'
