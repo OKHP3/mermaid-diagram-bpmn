@@ -3,7 +3,7 @@
 #
 # Update policy:
 # - Dependabot opens PRs for npm and GitHub Actions dependency updates.
-# - CI runs typecheck and test on each PR (see .github/workflows/ci.yml).
+# - The deployment workflow validates the production build on pushes to main.
 # - All PRs require human review and merge.
 # - Mermaid major version upgrades require manual review of the plugin contract
 #   in src/lib/bpmn-plugin.ts and docs/mermaid-compatibility.md before merging.
@@ -22,8 +22,11 @@ updates:
     commit-message:
       prefix: "chore(deps)"
     ignore:
-      # Mermaid major version upgrades require plugin contract review — handle manually.
+      # Mermaid major version upgrades require plugin contract review: handle manually.
       - dependency-name: "mermaid"
+        update-types: ["version-update:semver-major"]
+      # plugin-react 6.x imports Vite internals that Vite 7 does not export.
+      - dependency-name: "@vitejs/plugin-react"
         update-types: ["version-update:semver-major"]
 
   - package-ecosystem: "github-actions"
