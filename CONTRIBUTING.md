@@ -16,22 +16,26 @@ pnpm --filter @workspace/mermaid-diagram-bpmn run test
 pnpm --filter @workspace/mermaid-diagram-bpmn run typecheck
 ```
 
-Both must pass before submitting a PR. CI enforces this on every push.
+Both should pass before submitting a PR. The current Pages workflow does not
+run these checks as a deployment gate, so run them locally before review.
 
 ## Where things live
 
 ```text
-artifacts/mermaid-diagram-bpmn/
-├── src/lib/          ← parser, layout, renderer, plugin adapter
-├── src/pages/        ← playground and documentation pages
-├── examples/         ← canonical .mmd fixture files
-├── docs/             ← project documentation
-└── standards/        ← BPMN reference material and compliance notes
+app/
+├── src/lib/          parser, layout, renderer, plugin adapter
+├── src/pages/        playground and documentation pages
+├── examples/         canonical .mmd fixture files
+├── docs/             application documentation
+└── standards/        BPMN reference material and compliance notes
 ```
 
 ## Brand and identity rules
 
-See `AGENTS.md`. Do not claim full BPMN 2.0 compliance. Do not use `bpmn` without `-beta` as the DSL keyword anywhere. The public title is "BPMN for Mermaid" — not "bpmn-beta tool" or any name with "beta" in the product title.
+See `AGENTS.md`. Do not claim full BPMN 2.0 compliance. Do not use `bpmn`
+without `-beta` as the DSL keyword anywhere. The public title is
+"BPMN for Mermaid", not "bpmn-beta tool" or any name with "beta" in the
+product title.
 
 ## Current implementation status
 
@@ -45,12 +49,12 @@ See `AGENTS.md`. Do not claim full BPMN 2.0 compliance. Do not use `bpmn` withou
 
 ## Dual-compliance requirement
 
-Every rendered element must satisfy both standards equally — neither takes priority:
+Every rendered element must satisfy both standards equally. Neither takes priority:
 
 - **Mermaid rendering**: output must render correctly in Mermaid-compatible packaging. Plugin v1 target: `registerExternalDiagrams()` and `mermaid.render()` validation. Current state: standalone React app, direct SVG renderer, and source-level External Diagram adapter.
 - **BPMN 2.0.2 notation**: shapes, markers, and flows must match the OMG specification or cite an explicit project decision.
 
-See [`artifacts/mermaid-diagram-bpmn/standards/BPMN-SPEC-REFERENCE.md`](./artifacts/mermaid-diagram-bpmn/standards/BPMN-SPEC-REFERENCE.md) for the element-by-element compliance map.
+See [`app/standards/bpmn-spec-reference.md`](./app/standards/bpmn-spec-reference.md) for the element-by-element compliance map.
 
 ## What we accept
 
@@ -64,28 +68,29 @@ See [`artifacts/mermaid-diagram-bpmn/standards/BPMN-SPEC-REFERENCE.md`](./artifa
 
 ## What we don't accept
 
-- `bpmn-js` runtime dependency — the renderer is intentionally hand-written
+- `bpmn-js` runtime dependency. The renderer is intentionally hand-written.
 - BPMN XML import or export as v1 scope
 - Backend server, user accounts, or cloud storage
-- New element types outside the Descriptive Conformance subset without a `docs/decisions.md` entry
+- New element types outside the Descriptive Conformance subset without an `app/docs/decisions.md` entry
 - Breaking DSL changes without a minor version bump and decision log entry
 
 ## Adding a new element type
 
-1. Add or update the typed model in `bpmn-db.ts`.
-2. Add parsing logic to `bpmn-parser.ts`.
-3. Add layout dimensions or routing behavior to `bpmn-layout.ts`.
-4. Add React playground rendering to `bpmn-renderer.tsx`.
-5. Add or mirror imperative SVG output in `bpmn-plugin.ts` if the element must work in Mermaid adapter mode.
+1. Add or update the typed model in `app/src/lib/bpmn-db.ts`.
+2. Add parsing logic to `app/src/lib/bpmn-parser.ts`.
+3. Add layout dimensions or routing behavior to `app/src/lib/bpmn-layout.ts`.
+4. Add React playground rendering to `app/src/lib/bpmn-renderer.tsx`.
+5. Add or mirror imperative SVG output in `app/src/lib/bpmn-plugin.ts` if the element must work in Mermaid adapter mode.
 6. Add CSS/style support in the applicable style module.
-7. Add an example to `examples/` and update `bpmn-examples.ts`.
-8. Add unit tests to `src/lib/__tests__/`.
-9. Update the support matrix on the Home page and in `docs/dsl-spec.md`.
-10. Verify notation against `artifacts/mermaid-diagram-bpmn/standards/BPMN-SPEC-REFERENCE.md`.
+7. Add an example to `app/examples/` and update `app/src/lib/bpmn-examples.ts`.
+8. Add unit tests to `app/src/lib/__tests__/`.
+9. Update the support matrix on the Home page and in `app/docs/dsl-spec.md`.
+10. Verify notation against `app/standards/bpmn-spec-reference.md`.
 
 ## DSL changes
 
-Any change to the DSL syntax requires a `docs/decisions.md` entry, updated `docs/dsl-spec.md`, updated examples, and parser tests.
+Any change to the DSL syntax requires an `app/docs/decisions.md` entry, updated
+`app/docs/dsl-spec.md`, updated examples, and parser tests.
 
 ## Project surfaces
 
