@@ -21,41 +21,41 @@ const SKILLS = join(__dir, '..');
 
 // ─── Script imports (all 15 core skills) ─────────────────────────────────────
 
-import { generatePir }             from '../process-intake-and-scope/scripts/generate-pir.mjs';
-import { scoreIntakeCompleteness } from '../process-intake-and-scope/scripts/score-intake-completeness.mjs';
-import { validatePir }             from '../process-intake-and-scope/scripts/validate-pir.mjs';
+import { generatePir }             from '../okhp3-process-intake-and-scope/scripts/generate-pir.mjs';
+import { scoreIntakeCompleteness } from '../okhp3-process-intake-and-scope/scripts/score-intake-completeness.mjs';
+import { validatePir }             from '../okhp3-process-intake-and-scope/scripts/validate-pir.mjs';
 
-import { generateQuestionPlan }    from '../elicitation-and-interview-facilitation/scripts/generate-question-plan.mjs';
-import { assignStepIds }           from '../as-is-process-capture/scripts/assign-step-ids.mjs';
-import { analyzeGaps }             from '../process-gap-and-exception-analysis/scripts/analyze-gaps.mjs';
-import { generateFutureState }     from '../future-state-and-change-strategy/scripts/generate-future-state.mjs';
+import { generateQuestionPlan }    from '../okhp3-elicitation-and-interview-facilitation/scripts/generate-question-plan.mjs';
+import { assignStepIds }           from '../okhp3-as-is-process-capture/scripts/assign-step-ids.mjs';
+import { analyzeGaps }             from '../okhp3-process-gap-and-exception-analysis/scripts/analyze-gaps.mjs';
+import { generateFutureState }     from '../okhp3-future-state-and-change-strategy/scripts/generate-future-state.mjs';
 
-import { generateStakeholderRegister } from '../stakeholder-and-role-mapping/scripts/generate-stakeholder-register.mjs';
-import { generateRaci }            from '../raci-and-governance-matrix-generation/scripts/generate-raci.mjs';
-import { generateSipoc }           from '../sipoc-generation/scripts/generate-sipoc.mjs';
-import { generateMeasuresRegister } from '../process-measures-and-controls-definition/scripts/generate-measures-register.mjs';
+import { generateStakeholderRegister } from '../okhp3-stakeholder-and-role-mapping/scripts/generate-stakeholder-register.mjs';
+import { generateRaci }            from '../okhp3-raci-and-governance-matrix-generation/scripts/generate-raci.mjs';
+import { generateSipoc }           from '../okhp3-sipoc-generation/scripts/generate-sipoc.mjs';
+import { generateMeasuresRegister } from '../okhp3-process-measures-and-controls-definition/scripts/generate-measures-register.mjs';
 
-import { scorePnsQuality }         from '../process-narrative-authoring/scripts/score-pns-quality.mjs';
-import { validatePns }             from '../process-narrative-authoring/scripts/validate-pns.mjs';
+import { scorePnsQuality }         from '../okhp3-process-narrative-authoring/scripts/score-pns-quality.mjs';
+import { validatePns }             from '../okhp3-process-narrative-authoring/scripts/validate-pns.mjs';
 
-import { validateDecisionModel }   from '../decision-model-authoring/scripts/validate-decision-model.mjs';
+import { validateDecisionModel }   from '../okhp3-decision-model-authoring/scripts/validate-decision-model.mjs';
 
-import { validateBpmnBeta }        from '../visual-process-modeling/scripts/validate-bpmn-beta.mjs';
-import { lintProcessModel }        from '../visual-process-modeling/scripts/lint-process-model.mjs';
-import { normalizeBpmnBeta }       from '../visual-process-modeling/scripts/normalize-bpmn-beta.mjs';
-import { repairBpmnBeta }          from '../visual-process-modeling/scripts/repair-bpmn-beta.mjs';
+import { validateBpmnBeta }        from '../okhp3-visual-process-modeling/scripts/validate-bpmn-beta.mjs';
+import { lintProcessModel }        from '../okhp3-visual-process-modeling/scripts/lint-process-model.mjs';
+import { normalizeBpmnBeta }       from '../okhp3-visual-process-modeling/scripts/normalize-bpmn-beta.mjs';
+import { repairBpmnBeta }          from '../okhp3-visual-process-modeling/scripts/repair-bpmn-beta.mjs';
 
-import { runValidationSuite }      from '../process-validation-and-quality-scoring/scripts/run-validation-suite.mjs';
-import { generateSop }             from '../sop-and-work-instruction-generation/scripts/generate-sop.mjs';
-import { buildPublicationBundle }  from '../publication-and-handoff-packaging/scripts/build-publication-bundle.mjs';
+import { runValidationSuite }      from '../okhp3-process-validation-and-quality-scoring/scripts/run-validation-suite.mjs';
+import { generateSop }             from '../okhp3-sop-and-work-instruction-generation/scripts/generate-sop.mjs';
+import { buildPublicationBundle }  from '../okhp3-publication-and-handoff-packaging/scripts/build-publication-bundle.mjs';
 
 // ─── Shared fixture data (matches pns-example.yaml) ──────────────────────────
-// Hard-coded from skills/process-narrative-authoring/assets/fixtures/pns-example.yaml
+// Hard-coded from skills/okhp3-process-narrative-authoring/assets/fixtures/pns-example.yaml
 // to avoid a runtime YAML-parse dependency in the test runner.
 
 const FIXTURE_PATH = join(
   SKILLS,
-  'process-narrative-authoring/assets/fixtures/pns-example.yaml'
+  'okhp3-process-narrative-authoring/assets/fixtures/pns-example.yaml'
 );
 
 const PNS = {
@@ -146,7 +146,7 @@ const PNS = {
   },
 };
 
-// Wrapped PNS for scripts that navigate via pns.sections (process-narrative-authoring,
+// Wrapped PNS for scripts that navigate via pns.sections (okhp3-process-narrative-authoring,
 // raci-and-governance-matrix-generation, sipoc-generation).
 const PNS_WRAPPED = { sections: PNS };
 
@@ -402,7 +402,7 @@ test('Stage 11 — generateMeasuresRegister extracts KPIs and controls from PNS'
   assert.ok(result.controlsRegister.controls.length >= 2, 'at least 2 controls must be derived from fixture');
 });
 
-// ─── Stage 12: process-narrative-authoring / score-pns-quality ─────────────────
+// ─── Stage 12: okhp3-process-narrative-authoring / score-pns-quality ─────────────────
 test('Stage 12 — scorePnsQuality scores the fixture PNS ≥ 75 (publication threshold)', () => {
   const result = scorePnsQuality(PNS_WRAPPED);
 
@@ -415,7 +415,7 @@ test('Stage 12 — scorePnsQuality scores the fixture PNS ≥ 75 (publication th
   assert.equal(result.ready_for_publication, true, 'fixture PNS must be ready_for_publication');
 });
 
-// ─── Stage 13: process-narrative-authoring / validate-pns ─────────────────────
+// ─── Stage 13: okhp3-process-narrative-authoring / validate-pns ─────────────────────
 test('Stage 13 — validatePns runs V1–V7 rules and returns standard shape', () => {
   const result = validatePns(PNS_FOR_VALIDATE);
 

@@ -1,34 +1,22 @@
 ---
 name: process-narrative-authoring
-description: Author and validate a Process Narrative Specification (PNS) from a PIR and stakeholder register. Use this skill when you have a completed Process Intake Record from process-intake-and-scope and need to produce a structured narrative document that anchors ISO 9001 §4.4.1 process-box semantics, BABOK Core Concept Model, RACI matrix, SIPOC table, business rules, decision points, KPIs, and controls. The PNS is the authoritative handoff input for visual-process-modeling, sop-and-work-instruction-generation, raci-and-governance-matrix-generation, and sipoc-generation.
-license: MIT
-homepage: https://github.com/overkillhill/mermaid-diagram-bpmn/tree/main/skills/process-narrative-authoring
-repository: https://github.com/overkillhill/mermaid-diagram-bpmn
+description: "Author and validate a Process Narrative Specification (PNS) from a PIR and stakeholder register. Use this skill when you have a completed Process Intake Record from process-intake-and-scope and need to produce a structured narrative document that anchors ISO 9001 §4.4.1 process-box semantics, BABOK Core Concept Model, RACI matrix, SIPOC table, business rules, decision points, KPIs, and controls. The PNS is the authoritative handoff input for visual-process-modeling, sop-and-work-instruction-generation, raci-and-governance-matrix-generation, and sipoc-generation."
+license: "MIT"
 metadata:
   bp_skill_version: "0.3.0"
-  status: core
+  status: "core"
   version: "0.1.0"
-  author: OverKill Hill P³
+  author: "OverKill Hill P³"
   project: "BP-SKILL: Business Process Agent Skill Suite"
-  category: process-documentation
-  standards_refs:
-    - "ISO 9001:2015 §4.4.1 (Quality Management System and its processes)"
-    - "BABOK v3 §7 (Solution Evaluation)"
-    - "BABOK v3 Core Concept Model"
-    - "BPM CBOK v4 §5 (Process Analysis)"
+  category: "process-documentation"
+  standards_refs: "ISO 9001:2015 §4.4.1 (Quality Management System and its processes); BABOK v3 §7 (Solution Evaluation); BABOK v3 Core Concept Model; BPM CBOK v4 §5 (Process Analysis)"
   produces: "pns.yaml, pns.md"
   consumes: "pir.yaml, stakeholder-register.yaml"
-  depends_on: ["process-intake-and-scope", "stakeholder-and-role-mapping"]
-  tags: process-narrative, pns, iso9001, babok, raci, sipoc, business-rules, kpis, process-documentation
-  triggers:
-    - write the process narrative
-    - author the PNS
-    - process narrative specification
-    - document the process formally
-    - ISO 9001 process document
-    - narrative from PIR
-    - RACI matrix
-    - SIPOC table
+  depends_on: "process-intake-and-scope; stakeholder-and-role-mapping"
+  tags: "process-narrative, pns, iso9001, babok, raci, sipoc, business-rules, kpis, process-documentation"
+  triggers: "write the process narrative; author the PNS; process narrative specification; document the process formally; ISO 9001 process document; narrative from PIR; RACI matrix; SIPOC table"
+  homepage: "https://github.com/overkillhill/mermaid-diagram-bpmn/tree/main/skills/process-narrative-authoring"
+  repository: "https://github.com/overkillhill/mermaid-diagram-bpmn"
 ---
 
 ## Purpose
@@ -178,6 +166,16 @@ When validation passes and score ≥ 75, pass `pns.yaml` to:
 - `sipoc-generation` — for SIPOC table
 
 ---
+
+## Execution contract
+
+Apply this contract on every run so the artifact is trustworthy and reusable:
+
+1. State the input evidence, assumptions, and unresolved questions before drafting. Never invent missing process facts, owners, controls, dates, or approvals.
+2. Preserve stable identifiers and source traceability. When transforming an upstream artifact, retain its IDs and cite the source field or section for each derived decision.
+3. Produce the declared artifact exactly, including required fields and valid values. Keep unsupported, uncertain, or not-applicable items explicit instead of silently omitting them.
+4. Validate the result with the bundled script or fixture when available. Report validation status, warnings, and any manual review still required.
+5. Stop and request the missing input when a boundary, approval authority, or safety-critical rule cannot be inferred. A partial artifact with clearly marked open questions is safer than a confident fabrication.
 
 ## References
 

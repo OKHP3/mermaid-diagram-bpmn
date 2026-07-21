@@ -1,6 +1,6 @@
 ---
 name: okhp3-mermaid-architecture
-description: System and solution architecture diagrams in Mermaid for technical audiences — C4 model (Context/Container/Component/Code), architecture-beta cloud/infrastructure diagrams, block diagrams, packet/protocol diagrams, service topology, and integration flows. Use when the user wants to diagram software architecture, infrastructure, deployments, service relationships, or "how systems connect." Always load okhp3-mermaid-core first for audience/type/theming.
+description: "System and solution architecture diagrams in Mermaid for technical audiences — C4 model (Context/Container/Component/Code), architecture-beta cloud/infrastructure diagrams, block diagrams, packet/protocol diagrams, service topology, and integration flows. Use when the user wants to diagram software architecture, infrastructure, deployments, service relationships, or \\\"how systems connect.\\\" Always load okhp3-mermaid-core first for audience/type/theming."
 ---
 
 # OKHP3 Mermaid Architecture
@@ -26,3 +26,9 @@ For high-level system overviews (`block-beta`) and protocol/network-level detail
 ## Cross-diagram zoom coherence
 
 When the same system appears at multiple C4 layers, each diagram should be independently valid (passes all 3 gates on its own) AND collectively coherent (container names match between Context and Container layers, etc.). This is a Gate 2 (semantic) check that spans multiple files — flag inconsistencies even though each individual diagram might pass its own Gate 2.
+
+## Delivery contract
+
+State the audience, abstraction level, system boundary, and whether the diagram describes a current state, target state, or proposed option. Keep one source of truth for names and interfaces across related diagrams, and label inferred or future-state elements.
+
+Before delivery, run the core syntax, semantic, and audience-fit gates. Check that every edge has a declared meaning, external systems are visibly distinguished, and the diagram does not imply runtime behavior or deployment guarantees that the source evidence does not support. Return paste-ready Mermaid plus any renderer caveats.

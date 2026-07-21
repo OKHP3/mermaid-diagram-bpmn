@@ -1,34 +1,22 @@
 ---
 name: okhp3-process-measures-and-controls-definition
-description: Define process performance measures, KPIs, and compliance controls for a validated PNS. Use this skill when the user needs to add measurability and governance to a documented process; when they ask to define KPIs, set performance targets, add compliance controls, or map the process to a control framework. This is a recommended extension skill — use after process-narrative-authoring when governance and measurement rigour is required. Produces a measures register and a controls register.
-license: MIT
-homepage: https://github.com/overkillhill/mermaid-diagram-bpmn/tree/main/skills/process-measures-and-controls-definition
-repository: https://github.com/overkillhill/mermaid-diagram-bpmn
+description: "Define process performance measures, KPIs, and compliance controls for a validated PNS. Use this skill when the user needs to add measurability and governance to a documented process; when they ask to define KPIs, set performance targets, add compliance controls, or map the process to a control framework. This is a recommended extension skill — use after process-narrative-authoring when governance and measurement rigour is required. Produces a measures register and a controls register."
+license: "MIT"
 metadata:
+  homepage: "https://github.com/overkillhill/mermaid-diagram-bpmn/tree/main/skills/process-measures-and-controls-definition"
+  repository: "https://github.com/overkillhill/mermaid-diagram-bpmn"
   bp_skill_version: "0.3.0"
-  status: recommended-extension
+  status: "recommended-extension"
   version: "0.1.0"
-  author: OverKill Hill P³
+  author: "OverKill Hill P³"
   project: "BP-SKILL: Business Process Agent Skill Suite"
-  category: process-governance
-  standards_refs:
-    - "ISO 9001:2015 §9.1 (Monitoring, measurement, analysis and evaluation)"
-    - "COSO Internal Control Integrated Framework 2013"
-    - "BABOK v3 §7.4 (Assess Solution Limitations)"
-    - "BPM CBOK v4 §8 (Process Performance Management)"
+  category: "process-governance"
+  standards_refs: "ISO 9001:2015 §9.1 (Monitoring, measurement, analysis and evaluation); COSO Internal Control Integrated Framework 2013; BABOK v3 §7.4 (Assess Solution Limitations); BPM CBOK v4 §8 (Process Performance Management)"
   produces: "measures-register.yaml, controls-register.yaml"
   consumes: "pns.yaml"
-  depends_on: ["process-narrative-authoring"]
-  tags: KPIs, measures, controls, governance, ISO9001, COSO, performance-management, compliance, process-controls
-  triggers:
-    - define KPIs
-    - add performance measures
-    - compliance controls
-    - governance framework
-    - measures register
-    - controls register
-    - performance targets
-    - ISO 9001 controls
+  depends_on: "process-narrative-authoring"
+  tags: "KPIs, measures, controls, governance, ISO9001, COSO, performance-management, compliance, process-controls"
+  triggers: "define KPIs; add performance measures; compliance controls; governance framework; measures register; controls register; performance targets; ISO 9001 controls"
 ---
 
 ## Purpose
@@ -110,6 +98,16 @@ Each control in `controls-register.yaml`:
 Merge `measures-register.yaml` KPI entries back into `pns.yaml` `kpis[]` section. Merge `controls-register.yaml` entries into `pns.yaml` `controls_and_compliance[]`. Re-run `process-validation-and-quality-scoring` to verify score improves.
 
 ---
+
+## Execution contract
+
+Apply this contract on every run so the artifact is trustworthy and reusable:
+
+1. State the input evidence, assumptions, and unresolved questions before drafting. Never invent missing process facts, owners, controls, dates, or approvals.
+2. Preserve stable identifiers and source traceability. When transforming an upstream artifact, retain its IDs and cite the source field or section for each derived decision.
+3. Produce the declared artifact exactly, including required fields and valid values. Keep unsupported, uncertain, or not-applicable items explicit instead of silently omitting them.
+4. Validate the result with the bundled script or fixture when available. Report validation status, warnings, and any manual review still required.
+5. Stop and request the missing input when a boundary, approval authority, or safety-critical rule cannot be inferred. A partial artifact with clearly marked open questions is safer than a confident fabrication.
 
 ## References
 

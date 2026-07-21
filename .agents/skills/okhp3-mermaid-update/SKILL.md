@@ -1,6 +1,6 @@
 ---
 name: okhp3-mermaid-update
-description: Style-preserving update of an existing Mermaid diagram. Use when the user provides an existing .mmd file (or fenced Mermaid block) and a change request — new nodes, revised labels, added edges, restructured flow, or changed content — and the goal is to apply the minimum diff required without touching the diagram's style configuration, classDef declarations, or init block. Load okhp3-mermaid-core first for audience/type context. Do NOT use this skill for syntax repair (broken parse) — use okhp3-mermaid-repair for that.
+description: "Style-preserving update of an existing Mermaid diagram. Use when the user provides an existing .mmd file (or fenced Mermaid block) and a change request — new nodes, revised labels, added edges, restructured flow, or changed content — and the goal is to apply the minimum diff required without touching the diagram's style configuration, classDef declarations, or init block. Load okhp3-mermaid-core first for audience/type context. Do NOT use this skill for syntax repair (broken parse) — use okhp3-mermaid-repair for that."
 ---
 
 # OKHP3 Mermaid Update
@@ -33,7 +33,7 @@ If the change intent is ambiguous, ask one clarifying question. Proceeding with 
 
 Make only the changes required to satisfy the stated intent.
 
-- Add new nodes using the same ID convention as existing nodes (check `references/naming-conventions.md` in `okhp3-mermaid-core`)
+- Add new nodes using the same ID convention as existing nodes (load the `naming-conventions` reference from `okhp3-mermaid-core`)
 - Assign `classDef` classes to new nodes consistent with the existing class assignment pattern
 - Do not rename, restructure, or reorder unchanged nodes
 - Do not reformat or reindent unchanged sections

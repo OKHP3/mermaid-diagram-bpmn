@@ -1,32 +1,22 @@
 ---
 name: okhp3-publication-and-handoff-packaging
-description: Assemble all validated BP-SKILL process artifacts into a publication-ready bundle with a manifest, approvals record, and completeness check. Use this skill when the user is ready to publish or hand off a complete process documentation set; when they ask to package the process docs, create a handoff bundle, publish the process artifacts, or generate a release package. Requires a passing validation report (Band A or B) before bundling. Produces a MANIFEST.yaml, APPROVALS.yaml, and a ZIP-ready directory structure.
-license: MIT
-homepage: https://github.com/overkillhill/mermaid-diagram-bpmn/tree/main/skills/publication-and-handoff-packaging
-repository: https://github.com/overkillhill/mermaid-diagram-bpmn
+description: "Assemble all validated BP-SKILL process artifacts into a publication-ready bundle with a manifest, approvals record, and completeness check. Use this skill when the user is ready to publish or hand off a complete process documentation set; when they ask to package the process docs, create a handoff bundle, publish the process artifacts, or generate a release package. Requires a passing validation report (Band A or B) before bundling. Produces a MANIFEST.yaml, APPROVALS.yaml, and a ZIP-ready directory structure."
+license: "MIT"
 metadata:
+  homepage: "https://github.com/overkillhill/mermaid-diagram-bpmn/tree/main/skills/publication-and-handoff-packaging"
+  repository: "https://github.com/overkillhill/mermaid-diagram-bpmn"
   bp_skill_version: "0.3.0"
-  status: core
+  status: "core"
   version: "0.1.0"
-  author: OverKill Hill P³
+  author: "OverKill Hill P³"
   project: "BP-SKILL: Business Process Agent Skill Suite"
-  category: process-publication
-  standards_refs:
-    - "ISO 9001:2015 §7.5 (Documented information)"
-    - "ISO 9001:2015 §7.5.3 (Control of documented information)"
-    - "BPM CBOK v4 §9 (Process Documentation)"
+  category: "process-publication"
+  standards_refs: "ISO 9001:2015 §7.5 (Documented information); ISO 9001:2015 §7.5.3 (Control of documented information); BPM CBOK v4 §9 (Process Documentation)"
   produces: "MANIFEST.yaml, APPROVALS.yaml, handoff-manifest.yaml"
   consumes: "pns.yaml, bpmn-beta.mmd, sop.md"
-  depends_on: ["process-narrative-authoring", "visual-process-modeling", "sop-and-work-instruction-generation"]
-  tags: publication, handoff, bundle, manifest, approvals, release, ISO9001, documented-information
-  triggers:
-    - package the process docs
-    - publish the process
-    - handoff bundle
-    - release package
-    - create the publication bundle
-    - finalize process documentation
-    - ready to publish
+  depends_on: "process-narrative-authoring; visual-process-modeling; sop-and-work-instruction-generation"
+  tags: "publication, handoff, bundle, manifest, approvals, release, ISO9001, documented-information"
+  triggers: "package the process docs; publish the process; handoff bundle; release package; create the publication bundle; finalize process documentation; ready to publish"
 ---
 
 ## Purpose
@@ -147,6 +137,16 @@ Release is blocked if:
 Once the bundle is assembled and all approvals collected, archive the `process-artifacts/<process-id>/` directory and distribute per `APPROVALS.yaml` `distribution[]`. Tag the version in your document management system.
 
 ---
+
+## Execution contract
+
+Apply this contract on every run so the artifact is trustworthy and reusable:
+
+1. State the input evidence, assumptions, and unresolved questions before drafting. Never invent missing process facts, owners, controls, dates, or approvals.
+2. Preserve stable identifiers and source traceability. When transforming an upstream artifact, retain its IDs and cite the source field or section for each derived decision.
+3. Produce the declared artifact exactly, including required fields and valid values. Keep unsupported, uncertain, or not-applicable items explicit instead of silently omitting them.
+4. Validate the result with the bundled script or fixture when available. Report validation status, warnings, and any manual review still required.
+5. Stop and request the missing input when a boundary, approval authority, or safety-critical rule cannot be inferred. A partial artifact with clearly marked open questions is safer than a confident fabrication.
 
 ## References
 

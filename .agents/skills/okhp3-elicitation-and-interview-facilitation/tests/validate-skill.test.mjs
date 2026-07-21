@@ -4,8 +4,8 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync, existsSync } from 'node:fs';
-import { join, dirname } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { join, dirname, basename } from 'node:path';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 
 const __dir = dirname(fileURLToPath(import.meta.url));
 const SKILL_ROOT = join(__dir, '..');
@@ -29,7 +29,7 @@ function parseFrontmatter(content) {
 
 test('SKILL.md exists', () => assert.ok(exists('SKILL.md')));
 test('name matches directory', () => {
-  assert.equal(parseFrontmatter(read('SKILL.md')).name, 'elicitation-and-interview-facilitation');
+  assert.equal(parseFrontmatter(read('SKILL.md')).name, basename(SKILL_ROOT));
 });
 test('bp_skill_version present', () => assert.ok(parseFrontmatter(read('SKILL.md')).bp_skill_version));
 test('standards_refs non-empty', () => assert.ok(read('SKILL.md').includes('BABOK')));
@@ -46,12 +46,12 @@ const FILES = [
 for (const f of FILES) test(`exists: ${f}`, () => assert.ok(exists(f)));
 
 test('generateQuestionPlan exports named function', async () => {
-  const mod = await import(join(SKILL_ROOT, 'scripts/generate-question-plan.mjs'));
+  const mod = await import(pathToFileURL(join(SKILL_ROOT, 'scripts/generate-question-plan.mjs')).href);
   assert.equal(typeof mod.generateQuestionPlan, 'function');
 });
 
 test('generateQuestionPlan returns { valid, errors, warnings, plan }', async () => {
-  const { generateQuestionPlan } = await import(join(SKILL_ROOT, 'scripts/generate-question-plan.mjs'));
+  const { generateQuestionPlan } = await import(pathToFileURL(join(SKILL_ROOT, 'scripts/generate-question-plan.mjs')).href);
   const result = generateQuestionPlan({ process_id: 'test', actors: [], steps: [], exceptions: [], business_rules: [] });
   assert.equal(typeof result.valid, 'boolean');
   assert.ok(Array.isArray(result.errors));

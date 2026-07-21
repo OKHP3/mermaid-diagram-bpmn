@@ -1,0 +1,62 @@
+question_plan_version: "0.1"
+process_id: proc-purchase-approval
+generated_from: pir.yaml
+session_type: interview
+target_role: Finance Manager
+planned_date: "2026-05-05"
+facilitator_role: Business Analyst
+
+gaps_targeted:
+  - section: exceptions
+    completeness: low
+    question_count: 3
+  - section: business_rules
+    completeness: medium
+    question_count: 2
+
+questions:
+  - id: q-001
+    section: trigger
+    type: context
+    question: "What makes you aware that a new purchase request needs your attention today?"
+    probe: "Is it a system notification, an email, or someone walking over?"
+    expected_output: trigger.description refinement
+
+  - id: q-002
+    section: exceptions
+    type: edge-case
+    question: "Tell me about the last time a purchase request came in that you couldn't approve immediately. What happened?"
+    probe: "What was missing? What did you have to do to resolve it?"
+    expected_output: new exception entry or existing exception handling refinement
+
+  - id: q-003
+    section: exceptions
+    type: edge-case
+    question: "What happens when a vendor quote arrives after the 30-day validity window?"
+    probe: "Is the request automatically returned or does it require manual review?"
+    expected_output: exc-001 handling detail
+
+  - id: q-004
+    section: exceptions
+    type: edge-case
+    question: "Has a purchase ever been approved but the vendor couldn't fulfill it? How was that handled?"
+    probe: "Who was notified and who had to act?"
+    expected_output: new exception entry if not already captured
+
+  - id: q-005
+    section: business_rules
+    type: constraint
+    question: "Is there a written policy that defines the approval thresholds — the $1,000 and $10,000 limits? Where is it documented?"
+    probe: "Is it in the Finance Policy manual? Is it referenced in the ERP system?"
+    expected_output: rule-001 and rule-002 source citation
+
+  - id: q-006
+    section: business_rules
+    type: constraint
+    question: "Are there any categories of purchase that are treated differently — IT equipment, services, or international vendors?"
+    probe: "Does anything bypass the normal approval workflow?"
+    expected_output: new business rule or exception entries
+
+facilitation_notes:
+  - "Confirm with Finance Manager before starting: is there a written Finance Policy document I can review after the interview?"
+  - "If Director approval process is unclear, schedule a separate 15-minute conversation with Director"

@@ -4,8 +4,8 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync, existsSync } from 'node:fs';
-import { join, dirname } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { join, dirname, basename } from 'node:path';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 
 const __dir = dirname(fileURLToPath(import.meta.url));
 const SKILL_ROOT = join(__dir, '..');
@@ -29,7 +29,7 @@ function parseFrontmatter(content) {
 
 test('SKILL.md exists', () => assert.ok(exists('SKILL.md')));
 test('name matches directory', () => {
-  assert.equal(parseFrontmatter(read('SKILL.md')).name, 'process-validation-and-quality-scoring');
+  assert.equal(parseFrontmatter(read('SKILL.md')).name, basename(SKILL_ROOT));
 });
 test('bp_skill_version present', () => assert.ok(parseFrontmatter(read('SKILL.md')).bp_skill_version));
 test('standards_refs non-empty', () => assert.ok(read('SKILL.md').includes('ISO 9001')));
@@ -46,12 +46,12 @@ const FILES = [
 for (const f of FILES) test(`exists: ${f}`, () => assert.ok(exists(f)));
 
 test('runValidationSuite exports named function', async () => {
-  const mod = await import(join(SKILL_ROOT, 'scripts/run-validation-suite.mjs'));
+  const mod = await import(pathToFileURL(join(SKILL_ROOT, 'scripts/run-validation-suite.mjs')).href);
   assert.equal(typeof mod.runValidationSuite, 'function');
 });
 
 test('runValidationSuite returns { valid, errors, warnings, report }', async () => {
-  const { runValidationSuite } = await import(join(SKILL_ROOT, 'scripts/run-validation-suite.mjs'));
+  const { runValidationSuite } = await import(pathToFileURL(join(SKILL_ROOT, 'scripts/run-validation-suite.mjs')).href);
   const result = runValidationSuite({});
   assert.equal(typeof result.valid, 'boolean');
   assert.ok(Array.isArray(result.errors));
@@ -81,7 +81,7 @@ test('package.json test script correct', () => {
 // ─── Behavioural tests for V4, publication gate, and V9 ──────────────────────
 
 test('V4 is included in rules_run when pns is provided', async () => {
-  const { runValidationSuite } = await import(join(SKILL_ROOT, 'scripts/run-validation-suite.mjs'));
+  const { runValidationSuite } = await import(pathToFileURL(join(SKILL_ROOT, 'scripts/run-validation-suite.mjs')).href);
   const minimalPns = {
     pns_version: '1', process_id: 'p1', process_name: 'P', process_owner: 'O',
     department: 'D', status: 'draft',
@@ -96,7 +96,7 @@ test('V4 is included in rules_run when pns is provided', async () => {
 });
 
 test('V4 warns on compound activity description (semicolon)', async () => {
-  const { runValidationSuite } = await import(join(SKILL_ROOT, 'scripts/run-validation-suite.mjs'));
+  const { runValidationSuite } = await import(pathToFileURL(join(SKILL_ROOT, 'scripts/run-validation-suite.mjs')).href);
   const pns = {
     pns_version: '1', process_id: 'p1', process_name: 'P', process_owner: 'O',
     department: 'D', status: 'draft',
@@ -114,7 +114,7 @@ test('V4 warns on compound activity description (semicolon)', async () => {
 });
 
 test('V4 warns on subordinate-conjunction opener', async () => {
-  const { runValidationSuite } = await import(join(SKILL_ROOT, 'scripts/run-validation-suite.mjs'));
+  const { runValidationSuite } = await import(pathToFileURL(join(SKILL_ROOT, 'scripts/run-validation-suite.mjs')).href);
   const pns = {
     pns_version: '1', process_id: 'p1', process_name: 'P', process_owner: 'O',
     department: 'D', status: 'draft',
@@ -132,7 +132,7 @@ test('V4 warns on subordinate-conjunction opener', async () => {
 });
 
 test('blocking errors force ready_for_publication to false even if band is A/B', async () => {
-  const { runValidationSuite } = await import(join(SKILL_ROOT, 'scripts/run-validation-suite.mjs'));
+  const { runValidationSuite } = await import(pathToFileURL(join(SKILL_ROOT, 'scripts/run-validation-suite.mjs')).href);
   // PNS with a V2 error (missing actor_role_id) but a high stored pns_quality_score
   const pns = {
     pns_version: '1', process_id: 'p1', process_name: 'P', process_owner: 'O',
@@ -156,7 +156,7 @@ test('blocking errors force ready_for_publication to false even if band is A/B',
 });
 
 test('ready_for_publication is true when all blocking rules pass and band is A or B', async () => {
-  const { runValidationSuite } = await import(join(SKILL_ROOT, 'scripts/run-validation-suite.mjs'));
+  const { runValidationSuite } = await import(pathToFileURL(join(SKILL_ROOT, 'scripts/run-validation-suite.mjs')).href);
   const pns = {
     pns_version: '1', process_id: 'p1', process_name: 'P', process_owner: 'O',
     department: 'D', status: 'draft',
@@ -182,7 +182,7 @@ test('ready_for_publication is true when all blocking rules pass and band is A o
 });
 
 test('V9 warns when bpmn-beta header keyword is missing', async () => {
-  const { runValidationSuite } = await import(join(SKILL_ROOT, 'scripts/run-validation-suite.mjs'));
+  const { runValidationSuite } = await import(pathToFileURL(join(SKILL_ROOT, 'scripts/run-validation-suite.mjs')).href);
   const bpmn = 'start(S) --> task(T) --> end(E)'; // valid-ish structure but no bpmn-beta header
   const result = runValidationSuite({ bpmn });
   const v9 = result.report.rules_run.find(r => r.rule_id === 'V9');
@@ -192,7 +192,7 @@ test('V9 warns when bpmn-beta header keyword is missing', async () => {
 });
 
 test('V9 passes for a structurally sound bpmn-beta diagram with pool/lane', async () => {
-  const { runValidationSuite } = await import(join(SKILL_ROOT, 'scripts/run-validation-suite.mjs'));
+  const { runValidationSuite } = await import(pathToFileURL(join(SKILL_ROOT, 'scripts/run-validation-suite.mjs')).href);
   const bpmn = [
     'bpmn-beta',
     'pool Purchasing {',

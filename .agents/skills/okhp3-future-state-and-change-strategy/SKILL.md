@@ -1,34 +1,22 @@
 ---
 name: okhp3-future-state-and-change-strategy
-description: Design a target-state process and a structured change strategy from a gap analysis. Use this skill when the user wants to redesign a process after gaps have been identified; when they ask "what should the process look like", "how do we fix this", "design the to-be process", or "build a change plan". Produces a future-state process artifact and a change strategy document. This is a recommended extension skill — use after process-gap-and-exception-analysis has produced a gap analysis. Scope firewall applies: never include employer-proprietary constraints without explicit user authorisation.
-license: MIT
-homepage: https://github.com/overkillhill/mermaid-diagram-bpmn/tree/main/skills/future-state-and-change-strategy
-repository: https://github.com/overkillhill/mermaid-diagram-bpmn
+description: "Design a target-state process and a structured change strategy from a gap analysis. Use this skill when the user wants to redesign a process after gaps have been identified; when they ask \\\"what should the process look like\\\", \\\"how do we fix this\\\", \\\"design the to-be process\\\", or \\\"build a change plan\\\". Produces a future-state process artifact and a change strategy document. This is a recommended extension skill — use after process-gap-and-exception-analysis has produced a gap analysis. Scope firewall applies: never include employer-proprietary constraints without explicit user authorisation."
+license: "MIT"
 metadata:
+  homepage: "https://github.com/overkillhill/mermaid-diagram-bpmn/tree/main/skills/future-state-and-change-strategy"
+  repository: "https://github.com/overkillhill/mermaid-diagram-bpmn"
   bp_skill_version: "0.3.0"
-  status: recommended-extension
+  status: "recommended-extension"
   version: "0.1.0"
-  author: OverKill Hill P³
+  author: "OverKill Hill P³"
   project: "BP-SKILL: Business Process Agent Skill Suite"
-  category: process-improvement
-  standards_refs:
-    - "BPM CBOK v4 §7 (Process Transformation)"
-    - "BABOK v3 §7.5 (Recommend Actions to Increase Solution Value)"
-    - "Kotter 8-Step Change Model"
-    - "ADKAR Change Management Model"
+  category: "process-improvement"
+  standards_refs: "BPM CBOK v4 §7 (Process Transformation); BABOK v3 §7.5 (Recommend Actions to Increase Solution Value); Kotter 8-Step Change Model; ADKAR Change Management Model"
   produces: "future-state.yaml, change-strategy.md"
   consumes: "gap-analysis.yaml"
-  depends_on: ["process-gap-and-exception-analysis"]
-  tags: future-state, to-be-process, change-strategy, process-redesign, transformation, ADKAR, Kotter, BPM-CBOK
-  triggers:
-    - design the future state
-    - to-be process
-    - change plan
-    - redesign the process
-    - improvement strategy
-    - fix the gaps
-    - target state
-    - change management
+  depends_on: "process-gap-and-exception-analysis"
+  tags: "future-state, to-be-process, change-strategy, process-redesign, transformation, ADKAR, Kotter, BPM-CBOK"
+  triggers: "design the future state; to-be process; change plan; redesign the process; improvement strategy; fix the gaps; target state; change management"
 ---
 
 ## Purpose
@@ -124,6 +112,16 @@ Structure the change strategy document with:
 Pass `future-state.yaml` to `process-intake-and-scope` or `process-narrative-authoring` to create the target-state PNS. The future-state steps map directly to `activity_sequence.activities[]` in the new PNS.
 
 ---
+
+## Execution contract
+
+Apply this contract on every run so the artifact is trustworthy and reusable:
+
+1. State the input evidence, assumptions, and unresolved questions before drafting. Never invent missing process facts, owners, controls, dates, or approvals.
+2. Preserve stable identifiers and source traceability. When transforming an upstream artifact, retain its IDs and cite the source field or section for each derived decision.
+3. Produce the declared artifact exactly, including required fields and valid values. Keep unsupported, uncertain, or not-applicable items explicit instead of silently omitting them.
+4. Validate the result with the bundled script or fixture when available. Report validation status, warnings, and any manual review still required.
+5. Stop and request the missing input when a boundary, approval authority, or safety-critical rule cannot be inferred. A partial artifact with clearly marked open questions is safer than a confident fabrication.
 
 ## References
 

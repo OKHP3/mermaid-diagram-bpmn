@@ -1,6 +1,6 @@
 ---
 name: okhp3-mermaid-repair
-description: Syntax repair for broken Mermaid diagrams. Use when a .mmd file or fenced Mermaid block fails to parse — mmdc reports errors, Mermaid Live shows red, or the rendered output is visually malformed. Diagnoses the parse failure, applies the minimum fix, and re-runs Gate 1 (syntax validation). Does not restructure, restyle, relabel, or redesign. Does not change content. Load okhp3-mermaid-core first. For intentional content changes to a working diagram, use okhp3-mermaid-update instead.
+description: "Syntax repair for broken Mermaid diagrams. Use when a .mmd file or fenced Mermaid block fails to parse — mmdc reports errors, Mermaid Live shows red, or the rendered output is visually malformed. Diagnoses the parse failure, applies the minimum fix, and re-runs Gate 1 (syntax validation). Does not restructure, restyle, relabel, or redesign. Does not change content. Load okhp3-mermaid-core first. For intentional content changes to a working diagram, use okhp3-mermaid-update instead."
 ---
 
 # OKHP3 Mermaid Repair

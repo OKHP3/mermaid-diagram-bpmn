@@ -1,36 +1,22 @@
 ---
 name: okhp3-process-intake-and-scope
-description: Conduct structured process intake and scope definition using BABOK v3 elicitation techniques. Use this skill when the user wants to document a business process from scratch; when they describe a workflow, procedure, or set of steps and need it structured; when they ask to scope a process, define process boundaries, or capture business rules; when they say "help me document this process", "let's scope out this workflow", or "what are the inputs and outputs"; when you need a Process Intake Record (PIR) as input for downstream narrative, modeling, or SOP skills.
-license: MIT
-homepage: https://github.com/overkillhill/mermaid-diagram-bpmn/tree/main/skills/process-intake-and-scope
-repository: https://github.com/overkillhill/mermaid-diagram-bpmn
+description: "Conduct structured process intake and scope definition using BABOK v3 elicitation techniques. Use this skill when the user wants to document a business process from scratch; when they describe a workflow, procedure, or set of steps and need it structured; when they ask to scope a process, define process boundaries, or capture business rules; when they say \\\"help me document this process\\\", \\\"let's scope out this workflow\\\", or \\\"what are the inputs and outputs\\\"; when you need a Process Intake Record (PIR) as input for downstream narrative, modeling, or SOP skills."
+license: "MIT"
 metadata:
+  homepage: "https://github.com/overkillhill/mermaid-diagram-bpmn/tree/main/skills/process-intake-and-scope"
+  repository: "https://github.com/overkillhill/mermaid-diagram-bpmn"
   bp_skill_version: "0.3.0"
-  status: core
+  status: "core"
   version: "0.1.0"
-  author: OverKill Hill P³
+  author: "OverKill Hill P³"
   project: "BP-SKILL: Business Process Agent Skill Suite"
-  category: process-analysis
-  standards_refs:
-    - "BABOK v3 §4 (Elicitation and Collaboration)"
-    - "BABOK v3 §10.14 (Document Analysis)"
-    - "BABOK v3 §10.25 (Interviews)"
-    - "BPM CBOK v4 §4 (Process Modelling)"
-    - "ISO 9001:2015 §4.4 (Quality Management System and its processes)"
+  category: "process-analysis"
+  standards_refs: "BABOK v3 §4 (Elicitation and Collaboration); BABOK v3 §10.14 (Document Analysis); BABOK v3 §10.25 (Interviews); BPM CBOK v4 §4 (Process Modelling); ISO 9001:2015 §4.4 (Quality Management System and its processes)"
   consumes: "request-brief.md, organization-profile.md, process-taxonomy.md (optional)"
   produces: "pir.yaml, scope-statement.md"
-  depends_on: []
-  tags: process-intake, scope-definition, elicitation, BABOK, PIR, business-analysis, intake, process-boundary
-  triggers:
-    - document this process
-    - help me scope this workflow
-    - capture the process steps
-    - process intake
-    - define process boundaries
-    - what are the inputs and outputs
-    - map this business process
-    - process discovery
-    - elicit requirements
+  depends_on: ""
+  tags: "process-intake, scope-definition, elicitation, BABOK, PIR, business-analysis, intake, process-boundary"
+  triggers: "document this process; help me scope this workflow; capture the process steps; process intake; define process boundaries; what are the inputs and outputs; map this business process; process discovery; elicit requirements"
 ---
 
 ## Purpose
@@ -165,6 +151,16 @@ When `ready_for_narrative: true`:
 When `ready_for_narrative: false`, report missing sections and ask targeted follow-up questions.
 
 ---
+
+## Execution contract
+
+Apply this contract on every run so the artifact is trustworthy and reusable:
+
+1. State the input evidence, assumptions, and unresolved questions before drafting. Never invent missing process facts, owners, controls, dates, or approvals.
+2. Preserve stable identifiers and source traceability. When transforming an upstream artifact, retain its IDs and cite the source field or section for each derived decision.
+3. Produce the declared artifact exactly, including required fields and valid values. Keep unsupported, uncertain, or not-applicable items explicit instead of silently omitting them.
+4. Validate the result with the bundled script or fixture when available. Report validation status, warnings, and any manual review still required.
+5. Stop and request the missing input when a boundary, approval authority, or safety-critical rule cannot be inferred. A partial artifact with clearly marked open questions is safer than a confident fabrication.
 
 ## References
 

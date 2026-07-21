@@ -1,6 +1,6 @@
 ---
 name: okhp3-process-capture
-description: Capture a recurring task as either a backlog entry or a new skill skeleton. Use when the user says "I keep doing X", "this is the third time", "make this a skill", "let's capture this", or at the natural end of a work session when a repeatable pattern just occurred. Extracts the pattern from conversation context (tools used, sequence of steps, input/output formats, corrections made) and produces either a BACKLOG.md line or a SKILL.md skeleton following this repo's conventions — not full skill authoring (that's skill-creator's job once a skeleton exists).
+description: "Capture a recurring task as either a backlog entry or a new skill skeleton. Use when the user says \\\"I keep doing X\\\", \\\"this is the third time\\\", \\\"make this a skill\\\", \\\"let's capture this\\\", or at the natural end of a work session when a repeatable pattern just occurred. Extracts the pattern from conversation context (tools used, sequence of steps, input/output formats, corrections made) and produces either a BACKLOG.md line or a SKILL.md skeleton following this repo's conventions — not full skill authoring (that's skill-creator's job once a skeleton exists)."
 ---
 
 # OKHP3 Process Capture
@@ -24,3 +24,10 @@ The intake mechanism. Turns "I just did this for the third time" into a structur
 ## Handoff
 
 A skeleton from this skill is a starting point for `skill-creator` (the Anthropic example skill, if available) for full authoring, testing, and description-optimization — this skill does intake and structure, not iteration and evals.
+
+## Guardrails
+
+- Capture only patterns supported by the current conversation or user-provided evidence. Mark inferred details as open questions.
+- Do not create a new family, write private material into a public repository, or overwrite an existing skill without explicit authorization.
+- A skeleton must include a precise trigger boundary, intended output, out-of-scope cases, validation plan, and references/assets still needed.
+- Report whether the result is a backlog entry or an unvalidated skeleton. Never present a skeleton as a production-ready skill.

@@ -1,33 +1,22 @@
 ---
 name: okhp3-stakeholder-and-role-mapping
-description: Derive and validate a structured stakeholder register from a completed Process Intake Record. Use this skill when you have a PIR from process-intake-and-scope and need to identify all affected parties, classify their roles, assess influence and interest, and define engagement strategies. Use when the user asks who is involved in a process, needs a RACI-ready role list, wants to understand stakeholder impact, or needs an engagement plan before narrative authoring begins.
-license: MIT
-homepage: https://github.com/overkillhill/mermaid-diagram-bpmn/tree/main/skills/stakeholder-and-role-mapping
-repository: https://github.com/overkillhill/mermaid-diagram-bpmn
+description: "Derive and validate a structured stakeholder register from a completed Process Intake Record. Use this skill when you have a PIR from process-intake-and-scope and need to identify all affected parties, classify their roles, assess influence and interest, and define engagement strategies. Use when the user asks who is involved in a process, needs a RACI-ready role list, wants to understand stakeholder impact, or needs an engagement plan before narrative authoring begins."
+license: "MIT"
 metadata:
+  homepage: "https://github.com/overkillhill/mermaid-diagram-bpmn/tree/main/skills/stakeholder-and-role-mapping"
+  repository: "https://github.com/overkillhill/mermaid-diagram-bpmn"
   bp_skill_version: "0.3.0"
-  status: core
+  status: "core"
   version: "0.1.0"
-  author: OverKill Hill P³
+  author: "OverKill Hill P³"
   project: "BP-SKILL: Business Process Agent Skill Suite"
-  category: process-analysis
-  standards_refs:
-    - "BABOK v3 §3.2 (Stakeholder Analysis)"
-    - "BABOK v3 §10.41 (Stakeholder List, Map, or Personas)"
-    - "PMI PMBOK v7 §2.2 (Stakeholder Performance Domain)"
-    - "BPM CBOK v4 §4 (Process Modelling)"
+  category: "process-analysis"
+  standards_refs: "BABOK v3 §3.2 (Stakeholder Analysis); BABOK v3 §10.41 (Stakeholder List, Map, or Personas); PMI PMBOK v7 §2.2 (Stakeholder Performance Domain); BPM CBOK v4 §4 (Process Modelling)"
   produces: "stakeholder-register.yaml"
   consumes: "pir.yaml"
-  depends_on: ["process-intake-and-scope"]
-  tags: stakeholder-analysis, role-mapping, stakeholder-register, BABOK, engagement-strategy, RACI, business-analysis
-  triggers:
-    - who is involved in this process
-    - stakeholder register
-    - map the roles
-    - identify stakeholders
-    - engagement strategy
-    - who needs to be consulted
-    - RACI roles
+  depends_on: "process-intake-and-scope"
+  tags: "stakeholder-analysis, role-mapping, stakeholder-register, BABOK, engagement-strategy, RACI, business-analysis"
+  triggers: "who is involved in this process; stakeholder register; map the roles; identify stakeholders; engagement strategy; who needs to be consulted; RACI roles"
 ---
 
 ## Purpose
@@ -102,6 +91,16 @@ Every register must pass:
 Pass `pir.yaml` and the generated `stakeholder-register.yaml` together to `process-narrative-authoring`. The narrative skill maps `stakeholder_id` values to RACI role assignments.
 
 ---
+
+## Execution contract
+
+Apply this contract on every run so the artifact is trustworthy and reusable:
+
+1. State the input evidence, assumptions, and unresolved questions before drafting. Never invent missing process facts, owners, controls, dates, or approvals.
+2. Preserve stable identifiers and source traceability. When transforming an upstream artifact, retain its IDs and cite the source field or section for each derived decision.
+3. Produce the declared artifact exactly, including required fields and valid values. Keep unsupported, uncertain, or not-applicable items explicit instead of silently omitting them.
+4. Validate the result with the bundled script or fixture when available. Report validation status, warnings, and any manual review still required.
+5. Stop and request the missing input when a boundary, approval authority, or safety-critical rule cannot be inferred. A partial artifact with clearly marked open questions is safer than a confident fabrication.
 
 ## References
 

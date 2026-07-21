@@ -1,0 +1,68 @@
+raci_version: "0.1"
+process_id: proc-purchase-approval
+generated_from: pns.yaml
+generated_date: "2026-05-10"
+
+roles:
+  - role_id: role-requester
+    role_name: Requester
+  - role_id: role-finance-manager
+    role_name: Finance Manager
+  - role_id: role-procurement
+    role_name: Procurement Officer
+  - role_id: role-director
+    role_name: Director
+
+matrix:
+  - activity_id: act-001
+    description: Submit purchase request form with vendor quote attached
+    responsible: [role-requester]
+    accountable: role-requester
+    consulted: []
+    informed: [role-finance-manager]
+
+  - activity_id: act-002
+    description: Review purchase request for completeness and policy compliance
+    responsible: [role-finance-manager]
+    accountable: role-finance-manager
+    consulted: [role-procurement]
+    informed: []
+
+  - activity_id: act-003
+    description: Approve or reject the purchase request
+    responsible: [role-finance-manager]
+    accountable: role-finance-manager
+    consulted: [role-director]
+    informed: [role-requester]
+
+  - activity_id: act-004
+    description: Issue approved purchase order to vendor
+    responsible: [role-procurement]
+    accountable: role-finance-manager
+    consulted: []
+    informed: [role-requester]
+
+  - activity_id: act-005
+    description: Notify requester of approval or rejection outcome
+    responsible: [role-finance-manager]
+    accountable: role-finance-manager
+    consulted: []
+    informed: [role-requester]
+
+governance_extensions:
+  - role_id: role-finance-manager
+    escalation_path: role-director
+    delegation_rule: Finance Manager may delegate to Procurement Officer for purchases under $1,000 during planned absence
+    absence_cover: role-director
+    authority_limit: "$10,000 per transaction"
+
+  - role_id: role-director
+    escalation_path: Board of Directors
+    delegation_rule: Director may not delegate approval authority for purchases over $10,000
+    absence_cover: Deputy Director (if designated)
+    authority_limit: "$100,000 per transaction"
+
+validation:
+  all_activities_have_accountable: true
+  all_activities_have_responsible: true
+  no_duplicate_accountable: true

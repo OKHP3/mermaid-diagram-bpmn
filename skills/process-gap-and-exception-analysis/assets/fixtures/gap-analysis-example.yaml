@@ -1,0 +1,57 @@
+gap_analysis_version: "0.1"
+process_id: proc-purchase-approval
+analysis_date: "2026-05-02"
+analyst_role: Business Analyst
+source_artifact: as-is-process.yaml
+
+gaps:
+  - gap_id: gap-001
+    gap_type: execution
+    severity: major
+    affected_steps: [act-004]
+    description: Escalation SLA to Director is not defined
+    root_cause: No formal SLA was ever set; approval timeline depends on Director availability
+    impact: POs requiring Director approval can be delayed indefinitely, blocking procurement
+    recommended_action: Define a 2-business-day SLA for Director approval and enforce via ERP Portal
+
+  - gap_id: gap-002
+    gap_type: execution
+    severity: minor
+    affected_steps: [act-006]
+    description: Requester notification is a manual email with no SLA or template
+    root_cause: Notification step was added informally without a standard template
+    impact: Inconsistent requester communication; requesters may chase status unnecessarily
+    recommended_action: Create an email template and set a 1-business-day notification SLA
+
+  - gap_id: gap-003
+    gap_type: structural
+    severity: minor
+    affected_steps: [act-001]
+    description: Input has no `source` field — vendor quote source is implied but not explicit
+    root_cause: Capture quality was high but field was left blank during PIR authoring
+    impact: Traceability gap in the as-is record
+    recommended_action: Add source field to inp-002 in the PIR
+
+exception_catalog:
+  - exception_id: exc-001
+    description: Vendor quote is missing or expired
+    trigger_condition: Purchase request submitted without a vendor quote dated within 30 days
+    affected_steps: [act-001, act-002]
+    current_handling: Finance Manager manually returns request with an informal email
+    severity: major
+    recommended_action: Formalise return procedure with a standard rejection notice template
+
+  - exception_id: exc-002
+    description: Purchase exceeds Finance Manager approval limit
+    trigger_condition: Purchase amount exceeds $10,000
+    affected_steps: [act-003]
+    current_handling: Finance Manager manually escalates to Director via ERP Portal
+    severity: major
+    recommended_action: Add automated escalation trigger in ERP Portal when amount threshold is breached
+
+summary:
+  critical_count: 0
+  major_count: 3
+  minor_count: 1
+  observation_count: 0
+  ready_for_future_state: true

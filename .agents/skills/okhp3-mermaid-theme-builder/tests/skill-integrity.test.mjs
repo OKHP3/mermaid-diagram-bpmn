@@ -53,43 +53,40 @@ test("frontmatter name is correct", () => {
   assert.equal(name, "okhp3-mermaid-theme-builder");
 });
 
-test("frontmatter contains top-level version field", () => {
-  assert.ok(frontmatter.match(/^version:/m), "Missing top-level 'version:' in frontmatter — must be flat, not nested under metadata:");
+test("frontmatter contains metadata version field", () => {
+  assert.ok(frontmatter.match(/^\s+version:/m), "Missing metadata.version in frontmatter");
 });
 
-test("frontmatter contains top-level author field", () => {
-  assert.ok(frontmatter.match(/^author:/m), "Missing top-level 'author:' in frontmatter");
+test("frontmatter contains metadata author field", () => {
+  assert.ok(frontmatter.match(/^\s+author:/m), "Missing metadata.author in frontmatter");
 });
 
 test("frontmatter contains license field", () => {
   assert.ok(frontmatter.match(/^license:/m), "Missing 'license' in frontmatter");
 });
 
-test("frontmatter contains top-level homepage field", () => {
-  assert.ok(frontmatter.match(/^homepage:/m), "Missing top-level 'homepage:' in frontmatter");
+test("frontmatter contains metadata homepage field", () => {
+  assert.ok(frontmatter.match(/^\s+homepage:/m), "Missing metadata.homepage in frontmatter");
 });
 
-test("frontmatter contains top-level repository field", () => {
-  assert.ok(frontmatter.match(/^repository:/m), "Missing top-level 'repository:' in frontmatter");
+test("frontmatter contains metadata repository field", () => {
+  assert.ok(frontmatter.match(/^\s+repository:/m), "Missing metadata.repository in frontmatter");
 });
 
-test("frontmatter contains top-level category field", () => {
-  assert.ok(frontmatter.match(/^category:/m), "Missing top-level 'category:' in frontmatter");
+test("frontmatter contains metadata category field", () => {
+  assert.ok(frontmatter.match(/^\s+category:/m), "Missing metadata.category in frontmatter");
 });
 
-test("frontmatter contains top-level tags field", () => {
-  assert.ok(frontmatter.match(/^tags:/m), "Missing top-level 'tags:' in frontmatter");
+test("frontmatter contains metadata tags field", () => {
+  assert.ok(frontmatter.match(/^\s+tags:/m), "Missing metadata.tags in frontmatter");
 });
 
-test("frontmatter contains top-level tools field", () => {
-  assert.ok(frontmatter.match(/^tools:/m), "Missing top-level 'tools:' in frontmatter — required by Agent Skills standard");
+test("frontmatter contains metadata tools field", () => {
+  assert.ok(frontmatter.match(/^\s+tools:/m), "Missing metadata.tools in frontmatter");
 });
 
-test("frontmatter does NOT use deprecated nested metadata block", () => {
-  assert.ok(
-    !frontmatter.includes("metadata:"),
-    "Frontmatter must not contain a nested 'metadata:' block — all fields must be top-level (Agent Skills standard)"
-  );
+test("frontmatter uses the portable metadata map", () => {
+  assert.ok(frontmatter.match(/^metadata:/m), "Expected metadata map for repository-specific fields");
 });
 
 // ── Version alignment ──────────────────────────────────────────────────────

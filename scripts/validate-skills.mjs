@@ -12,6 +12,7 @@ import { readFileSync, existsSync, readdirSync } from 'node:fs';
 import { resolve, join, dirname, basename } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { spawnSync } from 'node:child_process';
+import { parseSkillFrontmatter, getSkillField } from './skill-frontmatter.mjs';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const repoRoot = resolve(__dirname, '..');
@@ -58,21 +59,6 @@ function fail(check, message) {
   results.push({ status: 'FAIL', check, message });
 }
 
-// ─── Parse YAML frontmatter (flat key:value including indented lines) ─────────
-function parseFrontmatter(content) {
-  const m = content.match(/^---\n([\s\S]*?)\n---/);
-  if (!m) return null;
-  const fm = {};
-  for (const line of m[1].split('\n')) {
-    const colon = line.indexOf(':');
-    if (colon === -1) continue;
-    const key = line.slice(0, colon).trim();
-    const val = line.slice(colon + 1).trim().replace(/^["']|["']$/g, '');
-    if (key && !key.startsWith('#') && !key.startsWith('-')) fm[key] = val;
-  }
-  return fm;
-}
-
 // ─── Extract file references from SKILL.md body ───────────────────────────────
 function extractFileRefs(content) {
   const refs = new Set();
@@ -112,13 +98,13 @@ function validateSkill(skillDir) {
   const content = readFileSync(skillMdPath, 'utf8');
 
   // C2: Valid YAML frontmatter
-  const fmMatch = content.match(/^---\n([\s\S]*?)\n---/);
-  if (!fmMatch) {
+  const frontmatter = parseSkillFrontmatter(content);
+  if (!frontmatter) {
     fail(`${p} C2: valid YAML frontmatter`, 'No --- delimited frontmatter block found');
     return;
   }
   pass(`${p} C2: valid YAML frontmatter`);
-  const fm = parseFrontmatter(content) || {};
+  const fm = { ...frontmatter.fields, ...frontmatter.metadata };
 
   // C3: name matches directory
   if ((fm.name || '') !== skillName) {
@@ -128,7 +114,7 @@ function validateSkill(skillDir) {
   }
 
   // C4: description length 50–1024 chars
-  const desc = fm.description || '';
+  const desc = getSkillField(frontmatter, 'description');
   if (desc.length < 50) {
     fail(`${p} C4: description ≥50 chars`, `description is ${desc.length} chars`);
   } else if (desc.length > 1024) {
@@ -152,9 +138,9 @@ function validateSkill(skillDir) {
   }
 
   // C6: consumes present if depends_on is set (treat [], "", and absent as "not set")
-  const dependsOn = (fm.depends_on || '').replace(/^\[|\]$/g, '').trim();
-  if (dependsOn && !(fm.consumes || '')) {
-    fail(`${p} C6: consumes field present`, `has depends_on="${fm.depends_on}" but no consumes`);
+  const dependsOn = getSkillField(frontmatter, 'depends_on').trim();
+  if (dependsOn && dependsOn !== '[]' && !(getSkillField(frontmatter, 'consumes') || '')) {
+    fail(`${p} C6: consumes field present`, `has depends_on="${dependsOn}" but no consumes`);
   } else {
     pass(`${p} C6: consumes/depends_on consistent`);
   }
@@ -163,7 +149,15 @@ function validateSkill(skillDir) {
   const refs = extractFileRefs(content);
   let allExist = true;
   for (const ref of refs) {
-    if (!existsSync(join(skillDir, ref))) {
+    if (ref.includes('*')) {
+      const parent = join(skillDir, ref.slice(0, ref.lastIndexOf('/')));
+      const suffix = ref.slice(ref.lastIndexOf('/') + 1).replace('*', '');
+      const matches = existsSync(parent) && readdirSync(parent).some((file) => file.endsWith(suffix));
+      if (matches) continue;
+    } else if (existsSync(join(skillDir, ref))) {
+      continue;
+    }
+    {
       fail(`${p} C7: referenced file exists`, `Missing: ${ref}`);
       allExist = false;
     }
@@ -275,7 +269,7 @@ function validateContextFiles() {
   for (const file of contextFiles) {
     const filePath = join(contextDir, file);
     const content = readFileSync(filePath, 'utf8');
-    const fm = parseFrontmatter(content);
+    const fm = parseSkillFrontmatter(content);
     if (!fm) {
       fail(`${p} C13: ${file} has frontmatter`, 'No --- delimited frontmatter block found');
       allOk = false;
@@ -283,21 +277,22 @@ function validateContextFiles() {
     }
 
     for (const field of V2_NON_EMPTY) {
-      if (!fm[field]) {
+      if (!getSkillField(fm, field)) {
         fail(`${p} C13: ${file} v0.2 schema`, `Missing or empty required field: ${field}`);
         allOk = false;
       }
     }
 
     for (const field of V2_PRESENT) {
-      if (fm[field] === undefined) {
+      if (fm.fields[field] === undefined && fm.metadata[field] === undefined) {
         fail(`${p} C13: ${file} v0.2 schema`, `Missing required field (may be empty): ${field}`);
         allOk = false;
       }
     }
 
-    if (fm.schema_version && fm.schema_version !== '0.2.0') {
-      fail(`${p} C13: ${file} schema_version`, `Expected "0.2.0", got "${fm.schema_version}"`);
+    const schemaVersion = getSkillField(fm, 'schema_version');
+    if (schemaVersion && schemaVersion !== '0.2.0') {
+      fail(`${p} C13: ${file} schema_version`, `Expected "0.2.0", got "${schemaVersion}"`);
       allOk = false;
     }
 
@@ -314,7 +309,7 @@ function validateContextFiles() {
 // ─── Main ─────────────────────────────────────────────────────────────────────
 
 const skillDirs = readdirSync(skillsDir, { withFileTypes: true })
-  .filter(e => e.isDirectory())
+  .filter(e => e.isDirectory() && !e.name.startsWith('__'))
   .map(e => join(skillsDir, e.name));
 
 console.log(`Validating ${skillDirs.length} skill(s) in skills/ ...\n`);

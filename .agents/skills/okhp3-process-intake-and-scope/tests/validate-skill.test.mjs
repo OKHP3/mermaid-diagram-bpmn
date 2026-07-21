@@ -5,8 +5,8 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync, existsSync } from 'node:fs';
-import { join, dirname } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { join, dirname, basename } from 'node:path';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 
 const __dir = dirname(fileURLToPath(import.meta.url));
 const SKILL_ROOT = join(__dir, '..');
@@ -37,7 +37,7 @@ test('SKILL.md has valid frontmatter', () => {
 
 test('name matches directory', () => {
   const fm = parseFrontmatter(read('SKILL.md'));
-  assert.equal(fm.name, 'process-intake-and-scope');
+  assert.equal(fm.name, basename(SKILL_ROOT));
 });
 
 test('bp_skill_version is present', () => {
@@ -79,12 +79,12 @@ test('scripts have no React/DOM imports', () => {
 });
 
 test('generatePir exports named function', async () => {
-  const mod = await import(join(SKILL_ROOT, 'scripts/generate-pir.mjs'));
+  const mod = await import(pathToFileURL(join(SKILL_ROOT, 'scripts/generate-pir.mjs')).href);
   assert.equal(typeof mod.generatePir, 'function');
 });
 
 test('generatePir returns { valid, errors, warnings, pir }', async () => {
-  const { generatePir } = await import(join(SKILL_ROOT, 'scripts/generate-pir.mjs'));
+  const { generatePir } = await import(pathToFileURL(join(SKILL_ROOT, 'scripts/generate-pir.mjs')).href);
   const result = generatePir({ processName: 'Test Process' });
   assert.equal(typeof result.valid, 'boolean');
   assert.ok(Array.isArray(result.errors));

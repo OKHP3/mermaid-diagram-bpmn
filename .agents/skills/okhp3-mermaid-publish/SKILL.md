@@ -1,6 +1,6 @@
 ---
 name: okhp3-mermaid-publish
-description: Rendering, exporting, and publishing finished Mermaid diagrams. Use after a diagram has passed okhp3-mermaid-core's three validation gates and needs to become a viewable artifact — local PNG/SVG render, embedding in a .md file, or publishing via the Mermaid Chart MCP for a shareable link. NEVER deletes rendered output; the render IS the deliverable.
+description: "Rendering, exporting, and publishing finished Mermaid diagrams. Use after a diagram has passed okhp3-mermaid-core's three validation gates and needs to become a viewable artifact — local PNG/SVG render, embedding in a .md file, or publishing via the Mermaid Chart MCP for a shareable link. NEVER deletes rendered output; the render IS the deliverable."
 ---
 
 # OKHP3 Mermaid Publish
@@ -30,3 +30,9 @@ Three output shapes — `.mmd` file, fenced ` ```mermaid ` block in a `.md` file
 ## Privacy
 
 Never route diagram source through third-party rendering APIs (e.g., Kroki) without explicit user consent. This is a known issue in at least one reviewed community skill — diagram content may be proprietary, and a silent cloud fallback is a data governance failure, not a convenience.
+
+## Delivery contract
+
+Confirm the requested output format, target renderer, destination path, and whether the source may leave the local environment before rendering. Preserve the source file, report the exact output path and renderer used, and distinguish a successful render from a successful publish.
+
+If rendering or publishing fails, return the actionable error and the next safe route. Never silently download, upload, overwrite, or delete artifacts, and never claim a share link exists without verifying the returned link.

@@ -1,7 +1,8 @@
 ---
 name: find-skills
-description: Helps agents discover, evaluate, and recommend installable agent skills when a task may be better handled by a specialized skill. Use when users ask how to do a specialized task, whether a skill exists, or how to extend agent capabilities.
-enabled: true
+description: "Helps agents discover, evaluate, and recommend installable agent skills when a task may be better handled by a specialized skill. Use when users ask how to do a specialized task, whether a skill exists, or how to extend agent capabilities."
+metadata:
+  enabled: "true"
 ---
 
 # Find Skills

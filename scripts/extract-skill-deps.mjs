@@ -14,6 +14,7 @@
 import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
+import { parseSkillFrontmatter, getSkillField } from "./skill-frontmatter.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, "..");
@@ -44,19 +45,13 @@ const BP_SKILL_IDS = [
 function extractDeps(skillId) {
   const file = path.join(SKILLS_DIR, skillId, "SKILL.md");
   const content = fs.readFileSync(file, "utf8");
-  const fm = content.match(/^---\n([\s\S]*?)\n---/)?.[1] ?? "";
-
-  const inline = fm.match(/^\s*depends_on:\s*(\[.*?\])/m);
-  if (inline) return JSON.parse(inline[1]);
-
-  const blockStart = fm.search(/^\s*depends_on:\s*$/m);
-  if (blockStart !== -1) {
-    const rest = fm.slice(blockStart);
-    const items = [...rest.matchAll(/^\s+-\s+[\"']?([a-z][a-z0-9-]*)[\"']?/gm)];
-    return items.map((m) => m[1]);
-  }
-
-  return [];
+  const frontmatter = parseSkillFrontmatter(content);
+  const raw = getSkillField(frontmatter, "depends_on");
+  if (!raw || raw === "[]") return [];
+  return raw
+    .split(/[;,]/)
+    .map((item) => item.trim().replace(/^[\"']|[\"']$/g, ""))
+    .filter((item) => /^[a-z][a-z0-9-]*$/.test(item));
 }
 
 const deps = {};

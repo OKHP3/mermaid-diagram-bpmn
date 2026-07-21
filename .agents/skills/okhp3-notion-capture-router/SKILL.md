@@ -1,13 +1,13 @@
 ---
 name: okhp3-notion-capture-router
-description: Use this skill when converting ChatGPT, Claude, Perplexity, Copilot, Gemini, PDF exports, or pasted AI conversations into Jamie's Notion knowledge hub. Routes a thread through Notion anchors, classifies Origin, dedupes against Chat Threads and Extracts, splits reusable nuggets into rows, reconciles against OKHP3 GitHub repos, and reports whether the material is duplicate, complementary, or net new. Use for thread inventory, capture-and-route, ideation router, Notion ingestion, second-brain migration, archive readiness, cross-platform memory consolidation, and chat-to-Notion workflows.
-license: MIT
-compatibility: Requires access to Jamie's Notion workspace connector. GitHub reconciliation requires access to OKHP3 repositories. Do not commit private Notion URLs.
+description: "Use this skill when converting ChatGPT, Claude, Perplexity, Copilot, Gemini, PDF exports, or pasted AI conversations into Jamie's Notion knowledge hub. Routes a thread through Notion anchors, classifies Origin, dedupes against Chat Threads and Extracts, splits reusable nuggets into rows, reconciles against OKHP3 GitHub repos, and reports whether the material is duplicate, complementary, or net new. Use for thread inventory, capture-and-route, ideation router, Notion ingestion, second-brain migration, archive readiness, cross-platform memory consolidation, and chat-to-Notion workflows."
+license: "MIT"
+compatibility: "Requires access to Jamie's Notion workspace connector. GitHub reconciliation requires access to OKHP3 repositories. Do not commit private Notion URLs."
 metadata:
-  author: OKHP3
+  author: "OKHP3"
   version: "0.1.0"
-  maturity: draftable
-  family: notion
+  maturity: "draftable"
+  family: "notion"
 ---
 
 # OKHP3 Notion Capture Router

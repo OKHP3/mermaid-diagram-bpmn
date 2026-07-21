@@ -4,8 +4,8 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync, existsSync } from 'node:fs';
-import { join, dirname } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { join, dirname, basename } from 'node:path';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 
 const __dir = dirname(fileURLToPath(import.meta.url));
 const SKILL_ROOT = join(__dir, '..');
@@ -29,7 +29,7 @@ function parseFrontmatter(content) {
 
 test('SKILL.md exists', () => assert.ok(exists('SKILL.md')));
 test('name matches directory', () => {
-  assert.equal(parseFrontmatter(read('SKILL.md')).name, 'sop-and-work-instruction-generation');
+  assert.equal(parseFrontmatter(read('SKILL.md')).name, basename(SKILL_ROOT));
 });
 test('bp_skill_version present', () => assert.ok(parseFrontmatter(read('SKILL.md')).bp_skill_version));
 test('standards_refs non-empty', () => assert.ok(read('SKILL.md').includes('ISO 9001')));
@@ -46,12 +46,12 @@ const FILES = [
 for (const f of FILES) test(`exists: ${f}`, () => assert.ok(exists(f)));
 
 test('generateSop exports named function', async () => {
-  const mod = await import(join(SKILL_ROOT, 'scripts/generate-sop.mjs'));
+  const mod = await import(pathToFileURL(join(SKILL_ROOT, 'scripts/generate-sop.mjs')).href);
   assert.equal(typeof mod.generateSop, 'function');
 });
 
 test('generateSop returns { valid, errors, warnings, sop } where sop is a string', async () => {
-  const { generateSop } = await import(join(SKILL_ROOT, 'scripts/generate-sop.mjs'));
+  const { generateSop } = await import(pathToFileURL(join(SKILL_ROOT, 'scripts/generate-sop.mjs')).href);
   const result = generateSop({ process_id: 'test', process_name: 'Test', status: 'approved' });
   assert.equal(typeof result.valid, 'boolean');
   assert.ok(Array.isArray(result.errors));
@@ -60,7 +60,7 @@ test('generateSop returns { valid, errors, warnings, sop } where sop is a string
 });
 
 test('generateSop includes H1 heading with process name', async () => {
-  const { generateSop } = await import(join(SKILL_ROOT, 'scripts/generate-sop.mjs'));
+  const { generateSop } = await import(pathToFileURL(join(SKILL_ROOT, 'scripts/generate-sop.mjs')).href);
   const result = generateSop({ process_id: 'test', process_name: 'My Test Process', status: 'approved' });
   assert.ok(result.sop.includes('My Test Process'), 'SOP must include process name in H1');
 });

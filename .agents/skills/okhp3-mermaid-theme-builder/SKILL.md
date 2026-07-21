@@ -1,25 +1,15 @@
 ---
 name: okhp3-mermaid-theme-builder
-version: 0.5.0
-description: Apply reusable color palettes and visual governance to Mermaid diagram code. Use this skill when the user wants to style, theme, color, or brand a Mermaid diagram; when they want a themeVariables block or %%{init}%% configuration; when they ask for a prompt scaffold that enforces consistent diagram styling for future AI-generated Mermaid; when they want renderer-safe output for GitHub, GitLab, Obsidian, Notion, Confluence, or the Mermaid CLI; when they want to make Mermaid output renderer-safe or renderer-compatible; when they mention Mermaid colors, palettes, CSS variables, diagram cleanup, or on-brand diagrams; or when they want to extract and re-theme existing styled Mermaid code.
-author: OverKill Hill P³
-license: MIT
-homepage: https://okhp3.github.io/mermaid-theme-builder
-repository: https://github.com/OKHP3/mermaid-theme-builder
-category: diagram-governance
-tags:
-  - mermaid
-  - diagram
-  - theme
-  - palette
-  - themeVariables
-  - prompt-scaffold
-  - renderer-profiles
-  - look-api
-tools:
-  - read_file
-  - write_file
-  - run_command
+description: "Apply reusable color palettes and visual governance to Mermaid diagram code. Use this skill when the user wants to style, theme, color, or brand a Mermaid diagram; when they want a themeVariables block or %%{init}%% configuration; when they ask for a prompt scaffold that enforces consistent diagram styling for future AI-generated Mermaid; when they want renderer-safe output for GitHub, GitLab, Obsidian, Notion, Confluence, or the Mermaid CLI; when they want to make Mermaid output renderer-safe or renderer-compatible; when they mention Mermaid colors, palettes, CSS variables, diagram cleanup, or on-brand diagrams; or when they want to extract and re-theme existing styled Mermaid code."
+license: "MIT"
+metadata:
+  version: "0.5.0"
+  author: "OverKill Hill P³"
+  homepage: "https://okhp3.github.io/mermaid-theme-builder"
+  repository: "https://github.com/OKHP3/mermaid-theme-builder"
+  category: "diagram-governance"
+  tags: "mermaid, theming, themeVariables, renderer-compatibility, palette, accessibility"
+  tools: "node scripts/detect-diagram.mjs; node scripts/apply-theme.mjs; node scripts/validate-theme.mjs; node scripts/generate-prompt-scaffold.mjs"
 ---
 
 # okhp3-mermaid-theme-builder

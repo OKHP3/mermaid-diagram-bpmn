@@ -1,6 +1,6 @@
 ---
 name: okhp3-mermaid-bpmn
-description: BPMN-informed business process modeling in Mermaid. Use whenever the user wants to diagram a business process, workflow, approval chain, decision/gateway logic, swim lanes, cross-department handoffs, onboarding flows, procurement flows, or anything describable as "who does what, in what order, with what decision points." This is the differentiator no community Mermaid skill covers — BPMN vocabulary (gateways, events, tasks, swim lanes, subprocesses) does not exist in mgranberry, WH-2099, softaworks, or Agents365's skills. Always load okhp3-mermaid-core first for audience/type/theming, then this skill for BPMN vocabulary and patterns.
+description: "BPMN-informed business process modeling in Mermaid. Use whenever the user wants to diagram a business process, workflow, approval chain, decision/gateway logic, swim lanes, cross-department handoffs, onboarding flows, procurement flows, or anything describable as \\\"who does what, in what order, with what decision points.\\\" This is the differentiator no community Mermaid skill covers — BPMN vocabulary (gateways, events, tasks, swim lanes, subprocesses) does not exist in mgranberry, WH-2099, softaworks, or Agents365's skills. Always load okhp3-mermaid-core first for audience/type/theming, then this skill for BPMN vocabulary and patterns."
 ---
 
 # OKHP3 Mermaid BPMN
@@ -45,3 +45,9 @@ Be explicit about which is being diagrammed. A process *definition* shows all po
 ## Worked examples
 
 `references/process-examples/` contains validated `.mmd` examples (approval-flow, onboarding, procurement) once authored. Currently empty — Phase 1 deliverable.
+
+## Delivery contract
+
+Declare whether the model is a process definition or one process instance, identify every pool/lane owner, and label sequence-flow conditions. Do not imply executable BPMN semantics, XML interchange, or full BPMN 2.0 conformance from Mermaid syntax alone.
+
+Validate the Mermaid syntax and then review semantic completeness: start/end events, gateway convergence, exception paths, cross-lane handoffs, and message-versus-sequence flow meaning. If a requested BPMN construct is outside the supported Mermaid pattern, preserve the meaning with a documented approximation or route to `visual-process-modeling`.

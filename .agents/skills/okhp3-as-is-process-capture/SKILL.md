@@ -1,32 +1,22 @@
 ---
 name: okhp3-as-is-process-capture
-description: Capture and normalise a current-state process description into a structured as-is process YAML with stable step identifiers. Use this skill when the user has a process that is already running and needs to document its current state before gap analysis or redesign; when they provide step lists, SOPs, or process notes that need to be structured; when they say "document what we do today", "capture the current process", or "baseline the process before we change it". Produces a structured as-is process artifact with normalised step IDs.
-license: MIT
-homepage: https://github.com/overkillhill/mermaid-diagram-bpmn/tree/main/skills/as-is-process-capture
-repository: https://github.com/overkillhill/mermaid-diagram-bpmn
+description: "Capture and normalise a current-state process description into a structured as-is process YAML with stable step identifiers. Use this skill when the user has a process that is already running and needs to document its current state before gap analysis or redesign; when they provide step lists, SOPs, or process notes that need to be structured; when they say \\\"document what we do today\\\", \\\"capture the current process\\\", or \\\"baseline the process before we change it\\\". Produces a structured as-is process artifact with normalised step IDs."
+license: "MIT"
 metadata:
+  homepage: "https://github.com/overkillhill/mermaid-diagram-bpmn/tree/main/skills/as-is-process-capture"
+  repository: "https://github.com/overkillhill/mermaid-diagram-bpmn"
   bp_skill_version: "0.3.0"
-  status: core
+  status: "core"
   version: "0.1.0"
-  author: OverKill Hill P³
+  author: "OverKill Hill P³"
   project: "BP-SKILL: Business Process Agent Skill Suite"
-  category: process-analysis
-  standards_refs:
-    - "BPM CBOK v4 §4.2 (As-Is Process Modelling)"
-    - "BABOK v3 §10.14 (Document Analysis)"
-    - "ISO 9001:2015 §4.4 (Quality Management System and its processes)"
+  category: "process-analysis"
+  standards_refs: "BPM CBOK v4 §4.2 (As-Is Process Modelling); BABOK v3 §10.14 (Document Analysis); ISO 9001:2015 §4.4 (Quality Management System and its processes)"
   produces: "as-is-process.yaml"
   consumes: "pir.yaml"
-  depends_on: ["process-intake-and-scope"]
-  tags: as-is-capture, current-state, baseline, process-documentation, step-normalisation, BPM-CBOK
-  triggers:
-    - document the current process
-    - baseline the process
-    - capture what we do today
-    - as-is process
-    - current state
-    - document existing steps
-    - process baseline
+  depends_on: "process-intake-and-scope"
+  tags: "as-is-capture, current-state, baseline, process-documentation, step-normalisation, BPM-CBOK"
+  triggers: "document the current process; baseline the process; capture what we do today; as-is process; current state; document existing steps; process baseline"
 ---
 
 ## Purpose
@@ -110,6 +100,16 @@ Pass `as-is-process.yaml` to `process-gap-and-exception-analysis` to identify de
 Also pass `pir.yaml` to `process-narrative-authoring` when the as-is record is reviewed and approved.
 
 ---
+
+## Execution contract
+
+Apply this contract on every run so the artifact is trustworthy and reusable:
+
+1. State the input evidence, assumptions, and unresolved questions before drafting. Never invent missing process facts, owners, controls, dates, or approvals.
+2. Preserve stable identifiers and source traceability. When transforming an upstream artifact, retain its IDs and cite the source field or section for each derived decision.
+3. Produce the declared artifact exactly, including required fields and valid values. Keep unsupported, uncertain, or not-applicable items explicit instead of silently omitting them.
+4. Validate the result with the bundled script or fixture when available. Report validation status, warnings, and any manual review still required.
+5. Stop and request the missing input when a boundary, approval authority, or safety-critical rule cannot be inferred. A partial artifact with clearly marked open questions is safer than a confident fabrication.
 
 ## References
 

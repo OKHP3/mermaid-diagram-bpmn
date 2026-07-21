@@ -4,8 +4,8 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync, existsSync } from 'node:fs';
-import { join, dirname } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { join, dirname, basename } from 'node:path';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 
 const __dir = dirname(fileURLToPath(import.meta.url));
 const SKILL_ROOT = join(__dir, '..');
@@ -29,7 +29,7 @@ function parseFrontmatter(content) {
 
 test('SKILL.md exists', () => assert.ok(exists('SKILL.md')));
 test('name matches directory', () => {
-  assert.equal(parseFrontmatter(read('SKILL.md')).name, 'decision-model-authoring');
+  assert.equal(parseFrontmatter(read('SKILL.md')).name, basename(SKILL_ROOT));
 });
 test('bp_skill_version present', () => assert.ok(parseFrontmatter(read('SKILL.md')).bp_skill_version));
 test('standards_refs non-empty', () => assert.ok(read('SKILL.md').includes('DMN') || read('SKILL.md').includes('OMG')));
@@ -46,12 +46,12 @@ const FILES = [
 for (const f of FILES) test(`exists: ${f}`, () => assert.ok(exists(f)));
 
 test('validateDecisionModel exports named function', async () => {
-  const mod = await import(join(SKILL_ROOT, 'scripts/validate-decision-model.mjs'));
+  const mod = await import(pathToFileURL(join(SKILL_ROOT, 'scripts/validate-decision-model.mjs')).href);
   assert.equal(typeof mod.validateDecisionModel, 'function');
 });
 
 test('validateDecisionModel returns { valid, errors, warnings, rules_fired }', async () => {
-  const { validateDecisionModel } = await import(join(SKILL_ROOT, 'scripts/validate-decision-model.mjs'));
+  const { validateDecisionModel } = await import(pathToFileURL(join(SKILL_ROOT, 'scripts/validate-decision-model.mjs')).href);
   const result = validateDecisionModel({});
   assert.equal(typeof result.valid, 'boolean');
   assert.ok(Array.isArray(result.errors));
@@ -60,7 +60,7 @@ test('validateDecisionModel returns { valid, errors, warnings, rules_fired }', a
 });
 
 test('validateDecisionModel returns invalid for empty decisions', async () => {
-  const { validateDecisionModel } = await import(join(SKILL_ROOT, 'scripts/validate-decision-model.mjs'));
+  const { validateDecisionModel } = await import(pathToFileURL(join(SKILL_ROOT, 'scripts/validate-decision-model.mjs')).href);
   const result = validateDecisionModel({ decisions: [] });
   assert.equal(result.valid, false);
   assert.ok(result.errors.some(e => e.includes('DM-1')));

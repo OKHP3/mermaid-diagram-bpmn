@@ -1,6 +1,6 @@
 ---
 name: okhp3-mermaid-core
-description: Foundation skill for ALL Mermaid diagram work. Load this first for any task involving Mermaid syntax, diagrams, flowcharts, process maps, architecture sketches, or visualizing relationships/workflows/structures. Handles audience declaration, diagram type selection across all 27 current Mermaid types (stable and beta), the OKHP3 design system, file naming and the diagram registry, and the three-gate validation framework. Routes to okhp3-mermaid-bpmn, okhp3-mermaid-architecture, or okhp3-mermaid-data for domain-specific vocabulary, and to okhp3-mermaid-publish for rendering/output.
+description: "Foundation skill for ALL Mermaid diagram work. Load this first for any task involving Mermaid syntax, diagrams, flowcharts, process maps, architecture sketches, or visualizing relationships/workflows/structures. Handles audience declaration, diagram type selection across all 27 current Mermaid types (stable and beta), the OKHP3 design system, file naming and the diagram registry, and the three-gate validation framework. Routes to okhp3-mermaid-bpmn, okhp3-mermaid-architecture, or okhp3-mermaid-data for domain-specific vocabulary, and to okhp3-mermaid-publish for rendering/output."
 ---
 
 # OKHP3 Mermaid Core

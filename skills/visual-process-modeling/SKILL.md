@@ -1,34 +1,22 @@
 ---
 name: visual-process-modeling
-description: Generate, validate, normalise, and explain Mermaid-native bpmn-beta diagrams from a Process Narrative Specification. Use this skill when the user wants to convert a PNS or process notes into a visual diagram; when they ask for BPMN, a process flow, a swimlane diagram, or a workflow diagram; when they want to validate or repair existing bpmn-beta code; when they mention pools, lanes, gateways, tasks, events, or BPMN 2.0; when they want a Mermaid-native process model they can commit to a repo; when the PNS has three or more gateway decision points and a DMN decision table is warranted.
-license: MIT
-homepage: https://github.com/overkillhill/mermaid-diagram-bpmn/tree/main/skills/visual-process-modeling
-repository: https://github.com/overkillhill/mermaid-diagram-bpmn
+description: "Generate, validate, normalise, and explain Mermaid-native bpmn-beta diagrams from a Process Narrative Specification. Use this skill when the user wants to convert a PNS or process notes into a visual diagram; when they ask for BPMN, a process flow, a swimlane diagram, or a workflow diagram; when they want to validate or repair existing bpmn-beta code; when they mention pools, lanes, gateways, tasks, events, or BPMN 2.0; when they want a Mermaid-native process model they can commit to a repo; when the PNS has three or more gateway decision points and a DMN decision table is warranted."
+license: "MIT"
 metadata:
   bp_skill_version: "0.3.0"
-  status: core
+  status: "core"
   version: "0.1.0"
-  author: OverKill Hill P³
+  author: "OverKill Hill P³"
   project: "BP-SKILL: Business Process Agent Skill Suite"
-  category: process-diagramming
-  standards_refs:
-    - "BPMN 2.0.2 Descriptive Conformance Sub-Class (OMG formal/2013-12-09)"
-    - "Mermaid 11.x External Diagram API"
-    - "BPM CBOK v4 §6 (Process Modeling)"
+  category: "process-diagramming"
+  standards_refs: "BPMN 2.0.2 Descriptive Conformance Sub-Class (OMG formal/2013-12-09); Mermaid 11.x External Diagram API; BPM CBOK v4 §6 (Process Modeling)"
   produces: "bpmn-beta.mmd, process-model.svg"
   consumes: "pns.yaml"
-  depends_on: ["process-narrative-authoring"]
-  tags: bpmn, mermaid, bpmn-beta, visual-modeling, process-flow, swimlane, gateways, pools, lanes, workflow
-  triggers:
-    - create a BPMN diagram
-    - draw a business process
-    - convert process to mermaid
-    - bpmn-beta
-    - swimlane diagram
-    - process flow with gateways
-    - validate BPMN
-    - pools and lanes
-    - model this workflow
+  depends_on: "process-narrative-authoring"
+  tags: "bpmn, mermaid, bpmn-beta, visual-modeling, process-flow, swimlane, gateways, pools, lanes, workflow"
+  triggers: "create a BPMN diagram; draw a business process; convert process to mermaid; bpmn-beta; swimlane diagram; process flow with gateways; validate BPMN; pools and lanes; model this workflow"
+  homepage: "https://github.com/overkillhill/mermaid-diagram-bpmn/tree/main/skills/visual-process-modeling"
+  repository: "https://github.com/overkillhill/mermaid-diagram-bpmn"
 ---
 
 ## Purpose
@@ -126,6 +114,16 @@ Rules:
 Pass `bpmn-beta.mmd` to `publication-and-handoff-packaging` for bundle assembly. If ≥3 gateways, also pass `pns.yaml` to `decision-model-authoring`.
 
 ---
+
+## Execution contract
+
+Apply this contract on every run so the artifact is trustworthy and reusable:
+
+1. State the input evidence, assumptions, and unresolved questions before drafting. Never invent missing process facts, owners, controls, dates, or approvals.
+2. Preserve stable identifiers and source traceability. When transforming an upstream artifact, retain its IDs and cite the source field or section for each derived decision.
+3. Produce the declared artifact exactly, including required fields and valid values. Keep unsupported, uncertain, or not-applicable items explicit instead of silently omitting them.
+4. Validate the result with the bundled script or fixture when available. Report validation status, warnings, and any manual review still required.
+5. Stop and request the missing input when a boundary, approval authority, or safety-critical rule cannot be inferred. A partial artifact with clearly marked open questions is safer than a confident fabrication.
 
 ## References
 

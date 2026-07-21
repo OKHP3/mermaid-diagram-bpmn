@@ -1,7 +1,8 @@
 ---
 name: okhp3-foundry-repo-creator
-description: Create governed FoundRy child repositories from Custom GPTs, Gemini Gems, Copilot agents, prompt bundles, Notion concepts, research notes, or prototype ideas. Use whenever the user wants to migrate an AI capability into GitHub, standardize a repo, create a child repo scaffold, or convert platform-specific AI work into a reusable capability package.
-enabled: true
+description: "Create governed FoundRy child repositories from Custom GPTs, Gemini Gems, Copilot agents, prompt bundles, Notion concepts, research notes, or prototype ideas. Use whenever the user wants to migrate an AI capability into GitHub, standardize a repo, create a child repo scaffold, or convert platform-specific AI work into a reusable capability package."
+metadata:
+  enabled: "true"
 ---
 
 # FoundRy Repo Creator

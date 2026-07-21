@@ -1,6 +1,6 @@
 ---
 name: okhp3-mermaid-data
-description: Data model and relationship diagrams in Mermaid — entity-relationship (ER) diagrams, class diagrams, schema documentation. Use when the user wants to diagram a database schema, data model, object structure, class hierarchy, or entity relationships with cardinality. Always load okhp3-mermaid-core first for audience/type/theming.
+description: "Data model and relationship diagrams in Mermaid — entity-relationship (ER) diagrams, class diagrams, schema documentation. Use when the user wants to diagram a database schema, data model, object structure, class hierarchy, or entity relationships with cardinality. Always load okhp3-mermaid-core first for audience/type/theming."
 ---
 
 # OKHP3 Mermaid Data
@@ -22,3 +22,9 @@ When a diagram is documenting an existing schema (vs. designing a new one), see 
 ## Cardinality Conventions
 
 Consistent notation across all OKHP3 ER diagrams — defined once in `references/erd-syntax.md`, referenced rather than re-decided per diagram.
+
+## Delivery contract
+
+First classify the artifact as documentation of an existing schema or a proposed design. Preserve source names and types when documenting; mark inferred keys, optionality, normalization, and ownership instead of presenting guesses as facts.
+
+Validate syntax, cardinality consistency, relationship direction, and audience fit. Keep sensitive fields out unless they are needed for the user's purpose, and explain any omitted detail or Mermaid renderer limitation.

@@ -1,33 +1,22 @@
 ---
 name: process-validation-and-quality-scoring
-description: Orchestrate the full V1–V9 validation suite across all BP-SKILL process artifacts and produce a 0-100 quality score with band classification. Use this skill when the user wants to validate a complete process documentation set before publication; when they ask "is this ready to publish", "validate the process docs", "run the quality check", or "what is the quality score". Produces a validation report with per-artifact scores, rule-level findings, band classification (A–D), and a publication gate verdict.
-license: MIT
-homepage: https://github.com/overkillhill/mermaid-diagram-bpmn/tree/main/skills/process-validation-and-quality-scoring
-repository: https://github.com/overkillhill/mermaid-diagram-bpmn
+description: "Orchestrate the full V1–V9 validation suite across all BP-SKILL process artifacts and produce a 0-100 quality score with band classification. Use this skill when the user wants to validate a complete process documentation set before publication; when they ask \\\"is this ready to publish\\\", \\\"validate the process docs\\\", \\\"run the quality check\\\", or \\\"what is the quality score\\\". Produces a validation report with per-artifact scores, rule-level findings, band classification (A–D), and a publication gate verdict."
+license: "MIT"
 metadata:
   bp_skill_version: "0.3.0"
-  status: core
+  status: "core"
   version: "0.1.0"
-  author: OverKill Hill P³
+  author: "OverKill Hill P³"
   project: "BP-SKILL: Business Process Agent Skill Suite"
-  category: process-quality
-  standards_refs:
-    - "ISO 9001:2015 §9.1 (Monitoring, measurement, analysis and evaluation)"
-    - "BABOK v3 §7.6 (Analyse Potential Value and Recommend Solution)"
-    - "BPM CBOK v4 §8 (Process Performance Management)"
+  category: "process-quality"
+  standards_refs: "ISO 9001:2015 §9.1 (Monitoring, measurement, analysis and evaluation); BABOK v3 §7.6 (Analyse Potential Value and Recommend Solution); BPM CBOK v4 §8 (Process Performance Management)"
   produces: "validation-report.yaml"
   consumes: "pns.yaml, pir.yaml"
-  depends_on: ["process-narrative-authoring"]
-  tags: validation, quality-scoring, V1-V9, publication-gate, process-quality, ISO9001, BPM-CBOK
-  triggers:
-    - validate the process
-    - quality check
-    - is this ready to publish
-    - run the validation suite
-    - quality score
-    - publication gate
-    - check the process docs
-    - V1 through V9
+  depends_on: "process-narrative-authoring"
+  tags: "validation, quality-scoring, V1-V9, publication-gate, process-quality, ISO9001, BPM-CBOK"
+  triggers: "validate the process; quality check; is this ready to publish; run the validation suite; quality score; publication gate; check the process docs; V1 through V9"
+  homepage: "https://github.com/overkillhill/mermaid-diagram-bpmn/tree/main/skills/process-validation-and-quality-scoring"
+  repository: "https://github.com/overkillhill/mermaid-diagram-bpmn"
 ---
 
 ## Purpose
@@ -116,6 +105,16 @@ When `ready_for_publication: true`, pass all artifacts to `publication-and-hando
 When `ready_for_publication: false`, present `blocking_errors[]` to the user and return to the appropriate skill to resolve each error.
 
 ---
+
+## Execution contract
+
+Apply this contract on every run so the artifact is trustworthy and reusable:
+
+1. State the input evidence, assumptions, and unresolved questions before drafting. Never invent missing process facts, owners, controls, dates, or approvals.
+2. Preserve stable identifiers and source traceability. When transforming an upstream artifact, retain its IDs and cite the source field or section for each derived decision.
+3. Produce the declared artifact exactly, including required fields and valid values. Keep unsupported, uncertain, or not-applicable items explicit instead of silently omitting them.
+4. Validate the result with the bundled script or fixture when available. Report validation status, warnings, and any manual review still required.
+5. Stop and request the missing input when a boundary, approval authority, or safety-critical rule cannot be inferred. A partial artifact with clearly marked open questions is safer than a confident fabrication.
 
 ## References
 

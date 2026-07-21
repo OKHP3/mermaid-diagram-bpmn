@@ -4,8 +4,8 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync, existsSync } from 'node:fs';
-import { join, dirname } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { join, dirname, basename } from 'node:path';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 
 const __dir = dirname(fileURLToPath(import.meta.url));
 const SKILL_ROOT = join(__dir, '..');
@@ -29,7 +29,7 @@ function parseFrontmatter(content) {
 
 test('SKILL.md exists', () => assert.ok(exists('SKILL.md')));
 test('name matches directory', () => {
-  assert.equal(parseFrontmatter(read('SKILL.md')).name, 'stakeholder-and-role-mapping');
+  assert.equal(parseFrontmatter(read('SKILL.md')).name, basename(SKILL_ROOT));
 });
 test('bp_skill_version present', () => {
   assert.ok(parseFrontmatter(read('SKILL.md')).bp_skill_version);
@@ -50,7 +50,7 @@ const FILES = [
 for (const f of FILES) test(`exists: ${f}`, () => assert.ok(exists(f)));
 
 test('generateStakeholderRegister exports named function', async () => {
-  const mod = await import(join(SKILL_ROOT, 'scripts/generate-stakeholder-register.mjs'));
+  const mod = await import(pathToFileURL(join(SKILL_ROOT, 'scripts/generate-stakeholder-register.mjs')).href);
   assert.equal(typeof mod.generateStakeholderRegister, 'function');
 });
 

@@ -1,0 +1,63 @@
+measures_register_version: "0.1"
+process_id: proc-purchase-approval
+generated_from: pns.yaml
+generated_date: "2026-05-10"
+
+kpis:
+  - kpi_id: kpi-001
+    name: PO Approval Cycle Time
+    category: cycle_time
+    formula: Average elapsed time from PO submission timestamp to approval timestamp across all POs in the period
+    data_source: ERP Portal — submission and approval timestamp fields on PO records
+    target: "2 business days"
+    frequency: monthly
+    owner_role_id: role-finance-manager
+    activities_measured: [act-002, act-003]
+
+  - kpi_id: kpi-002
+    name: PO Rejection Rate
+    category: quality
+    formula: Count of POs rejected / total POs submitted × 100
+    data_source: ERP Portal — status field on PO records
+    target: "< 5%"
+    frequency: monthly
+    owner_role_id: role-finance-manager
+    activities_measured: [act-003]
+
+  - kpi_id: kpi-003
+    name: Director Escalation Rate
+    category: volume
+    formula: Count of POs escalated to Director / total POs submitted × 100
+    data_source: ERP Portal — escalation status field on PO records
+    target: "< 10%"
+    frequency: monthly
+    owner_role_id: role-director
+    activities_measured: [act-003]
+
+controls:
+  - control_id: ctrl-001
+    type: preventive
+    description: Finance Manager approval required for all purchase requests before PO is issued
+    standard_ref: Finance Policy FP-003 §3.1
+    activities_covered: [act-003]
+    frequency: per-transaction
+    evidence_required: Approval record in ERP Portal with timestamp and approver role
+    owner_role_id: role-finance-manager
+
+  - control_id: ctrl-002
+    type: preventive
+    description: Requester cannot approve their own purchase request — system enforced
+    standard_ref: Finance Policy FP-003 §3.4
+    activities_covered: [act-002, act-003]
+    frequency: per-transaction
+    evidence_required: ERP Portal role configuration audit log
+    owner_role_id: role-finance-manager
+
+  - control_id: ctrl-003
+    type: detective
+    description: Monthly reconciliation of approved POs against budget allocations
+    standard_ref: Finance Policy FP-003 §6.1
+    activities_covered: [act-003, act-004]
+    frequency: monthly
+    evidence_required: Monthly reconciliation report signed by Finance Manager
+    owner_role_id: role-finance-manager

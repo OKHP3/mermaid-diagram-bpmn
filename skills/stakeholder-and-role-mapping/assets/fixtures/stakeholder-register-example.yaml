@@ -1,0 +1,41 @@
+register_version: "0.1"
+process_id: proc-purchase-approval
+generated_from: pir.yaml
+generated_date: "2026-05-01"
+
+stakeholders:
+  - stakeholder_id: role-requester
+    name: Requester
+    department: Any
+    primary_role: initiator
+    interest: timely approval of purchase
+    influence: low
+    engagement_strategy: Collaborate
+    grid_position: Keep Informed
+
+  - stakeholder_id: role-finance-manager
+    name: Finance Manager
+    department: Finance
+    primary_role: approver
+    interest: budget compliance and policy adherence
+    influence: high
+    engagement_strategy: Consult
+    grid_position: Manage Closely
+
+  - stakeholder_id: role-procurement
+    name: Procurement Officer
+    department: Finance
+    primary_role: performer
+    interest: vendor compliance and contract terms
+    influence: medium
+    engagement_strategy: Collaborate
+    grid_position: Keep Informed
+
+  - stakeholder_id: role-director
+    name: Director
+    department: Executive
+    primary_role: approver
+    interest: strategic spend oversight
+    influence: high
+    engagement_strategy: Consult
+    grid_position: Manage Closely

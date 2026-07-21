@@ -1,32 +1,22 @@
 ---
 name: okhp3-raci-and-governance-matrix-generation
-description: Generate and validate a RACI matrix and governance responsibility document from a validated PNS. Use this skill when the user needs a standalone RACI chart, a governance matrix, or a responsibility assignment document for a process; when they ask to produce a RACI table, document who is responsible for what, or generate a governance framework for a process. Derives directly from PNS roles_and_raci and activity_sequence sections. Produces raci.md and governance-matrix.md.
-license: MIT
-homepage: https://github.com/overkillhill/mermaid-diagram-bpmn/tree/main/skills/raci-and-governance-matrix-generation
-repository: https://github.com/overkillhill/mermaid-diagram-bpmn
+description: "Generate and validate a RACI matrix and governance responsibility document from a validated PNS. Use this skill when the user needs a standalone RACI chart, a governance matrix, or a responsibility assignment document for a process; when they ask to produce a RACI table, document who is responsible for what, or generate a governance framework for a process. Derives directly from PNS roles_and_raci and activity_sequence sections. Produces raci.md and governance-matrix.md."
+license: "MIT"
 metadata:
+  homepage: "https://github.com/overkillhill/mermaid-diagram-bpmn/tree/main/skills/raci-and-governance-matrix-generation"
+  repository: "https://github.com/overkillhill/mermaid-diagram-bpmn"
   bp_skill_version: "0.3.0"
-  status: core
+  status: "core"
   version: "0.1.0"
-  author: OverKill Hill P³
+  author: "OverKill Hill P³"
   project: "BP-SKILL: Business Process Agent Skill Suite"
-  category: process-governance
-  standards_refs:
-    - "PMI PMBOK v7 §2.2 (Stakeholder Performance Domain)"
-    - "BABOK v3 §3.2 (Stakeholder Analysis)"
-    - "ISO 9001:2015 §5.3 (Organizational roles, responsibilities and authorities)"
+  category: "process-governance"
+  standards_refs: "PMI PMBOK v7 §2.2 (Stakeholder Performance Domain); BABOK v3 §3.2 (Stakeholder Analysis); ISO 9001:2015 §5.3 (Organizational roles, responsibilities and authorities)"
   produces: "raci.md, governance-matrix.md"
   consumes: "pns.yaml"
-  depends_on: ["process-narrative-authoring"]
-  tags: RACI, governance-matrix, responsibility-assignment, roles, accountability, PMI, ISO9001
-  triggers:
-    - generate RACI matrix
-    - RACI table
-    - responsibility matrix
-    - governance matrix
-    - who is responsible
-    - accountability matrix
-    - roles and responsibilities
+  depends_on: "process-narrative-authoring"
+  tags: "RACI, governance-matrix, responsibility-assignment, roles, accountability, PMI, ISO9001"
+  triggers: "generate RACI matrix; RACI table; responsibility matrix; governance matrix; who is responsible; accountability matrix; roles and responsibilities"
 ---
 
 ## Purpose
@@ -99,6 +89,16 @@ Every RACI matrix must satisfy:
 Pass `raci.md` and `governance-matrix.md` to `publication-and-handoff-packaging` for bundle assembly.
 
 ---
+
+## Execution contract
+
+Apply this contract on every run so the artifact is trustworthy and reusable:
+
+1. State the input evidence, assumptions, and unresolved questions before drafting. Never invent missing process facts, owners, controls, dates, or approvals.
+2. Preserve stable identifiers and source traceability. When transforming an upstream artifact, retain its IDs and cite the source field or section for each derived decision.
+3. Produce the declared artifact exactly, including required fields and valid values. Keep unsupported, uncertain, or not-applicable items explicit instead of silently omitting them.
+4. Validate the result with the bundled script or fixture when available. Report validation status, warnings, and any manual review still required.
+5. Stop and request the missing input when a boundary, approval authority, or safety-critical rule cannot be inferred. A partial artifact with clearly marked open questions is safer than a confident fabrication.
 
 ## References
 

@@ -1,32 +1,22 @@
 ---
 name: sipoc-generation
-description: Generate a SIPOC table from a validated PNS. Use this skill when the user needs a high-level process summary showing Suppliers, Inputs, Process steps, Outputs, and Customers; when they ask to produce a SIPOC, create a process summary table, or generate a one-page process overview. Derives directly from PNS process_box and activity_sequence. Produces a sipoc.md Markdown table suitable for presentations, kickoff documents, and governance packs.
-license: MIT
-homepage: https://github.com/overkillhill/mermaid-diagram-bpmn/tree/main/skills/sipoc-generation
-repository: https://github.com/overkillhill/mermaid-diagram-bpmn
+description: "Generate a SIPOC table from a validated PNS. Use this skill when the user needs a high-level process summary showing Suppliers, Inputs, Process steps, Outputs, and Customers; when they ask to produce a SIPOC, create a process summary table, or generate a one-page process overview. Derives directly from PNS process_box and activity_sequence. Produces a sipoc.md Markdown table suitable for presentations, kickoff documents, and governance packs."
+license: "MIT"
 metadata:
   bp_skill_version: "0.3.0"
-  status: core
+  status: "core"
   version: "0.1.0"
-  author: OverKill Hill P³
+  author: "OverKill Hill P³"
   project: "BP-SKILL: Business Process Agent Skill Suite"
-  category: process-documentation
-  standards_refs:
-    - "Six Sigma DMAIC — Define phase"
-    - "BPM CBOK v4 §4.1 (Process Context)"
-    - "BABOK v3 §10.46 (Value Stream Mapping)"
+  category: "process-documentation"
+  standards_refs: "Six Sigma DMAIC — Define phase; BPM CBOK v4 §4.1 (Process Context); BABOK v3 §10.46 (Value Stream Mapping)"
   produces: "sipoc.md"
   consumes: "pns.yaml"
-  depends_on: ["process-narrative-authoring"]
-  tags: SIPOC, process-summary, suppliers, inputs, outputs, customers, Six-Sigma, BPM-CBOK
-  triggers:
-    - generate SIPOC
-    - SIPOC table
-    - process summary table
-    - suppliers and customers
-    - one-page process overview
-    - process context
-    - define phase
+  depends_on: "process-narrative-authoring"
+  tags: "SIPOC, process-summary, suppliers, inputs, outputs, customers, Six-Sigma, BPM-CBOK"
+  triggers: "generate SIPOC; SIPOC table; process summary table; suppliers and customers; one-page process overview; process context; define phase"
+  homepage: "https://github.com/overkillhill/mermaid-diagram-bpmn/tree/main/skills/sipoc-generation"
+  repository: "https://github.com/overkillhill/mermaid-diagram-bpmn"
 ---
 
 ## Purpose
@@ -101,6 +91,16 @@ Pass `sipoc.md` to `publication-and-handoff-packaging` for bundle assembly.
 The SIPOC is also a useful attachment for `elicitation-and-interview-facilitation` — share it with stakeholders as a conversation starter before the workshop.
 
 ---
+
+## Execution contract
+
+Apply this contract on every run so the artifact is trustworthy and reusable:
+
+1. State the input evidence, assumptions, and unresolved questions before drafting. Never invent missing process facts, owners, controls, dates, or approvals.
+2. Preserve stable identifiers and source traceability. When transforming an upstream artifact, retain its IDs and cite the source field or section for each derived decision.
+3. Produce the declared artifact exactly, including required fields and valid values. Keep unsupported, uncertain, or not-applicable items explicit instead of silently omitting them.
+4. Validate the result with the bundled script or fixture when available. Report validation status, warnings, and any manual review still required.
+5. Stop and request the missing input when a boundary, approval authority, or safety-critical rule cannot be inferred. A partial artifact with clearly marked open questions is safer than a confident fabrication.
 
 ## References
 

@@ -1,34 +1,22 @@
 ---
 name: okhp3-sop-and-work-instruction-generation
-description: Generate Standard Operating Procedures (SOPs) and work instructions from a validated PNS. Use this skill when the user needs to produce a human-readable procedure document from a process narrative; when they ask to write an SOP, create work instructions, generate a procedure, or produce an ISO 9001-compliant process document. The generated SOP follows ISO 9001 §4.4.2 documented information requirements. Produces sop.md and optional work-instructions.md for each role.
-license: MIT
-homepage: https://github.com/overkillhill/mermaid-diagram-bpmn/tree/main/skills/sop-and-work-instruction-generation
-repository: https://github.com/overkillhill/mermaid-diagram-bpmn
+description: "Generate Standard Operating Procedures (SOPs) and work instructions from a validated PNS. Use this skill when the user needs to produce a human-readable procedure document from a process narrative; when they ask to write an SOP, create work instructions, generate a procedure, or produce an ISO 9001-compliant process document. The generated SOP follows ISO 9001 §4.4.2 documented information requirements. Produces sop.md and optional work-instructions.md for each role."
+license: "MIT"
 metadata:
+  homepage: "https://github.com/overkillhill/mermaid-diagram-bpmn/tree/main/skills/sop-and-work-instruction-generation"
+  repository: "https://github.com/overkillhill/mermaid-diagram-bpmn"
   bp_skill_version: "0.3.0"
-  status: core
+  status: "core"
   version: "0.1.0"
-  author: OverKill Hill P³
+  author: "OverKill Hill P³"
   project: "BP-SKILL: Business Process Agent Skill Suite"
-  category: process-documentation
-  standards_refs:
-    - "ISO 9001:2015 §4.4.2 (Documented information)"
-    - "ISO 9001:2015 §7.5 (Documented information)"
-    - "BABOK v3 §10.45 (Use Cases and Scenarios)"
-    - "BPM CBOK v4 §9 (Process Documentation)"
+  category: "process-documentation"
+  standards_refs: "ISO 9001:2015 §4.4.2 (Documented information); ISO 9001:2015 §7.5 (Documented information); BABOK v3 §10.45 (Use Cases and Scenarios); BPM CBOK v4 §9 (Process Documentation)"
   produces: "sop.md, work-instructions.md"
   consumes: "pns.yaml"
-  depends_on: ["process-narrative-authoring"]
-  tags: SOP, work-instructions, documented-information, ISO9001, procedure, process-document, work-instruction
-  triggers:
-    - write an SOP
-    - create work instructions
-    - generate a procedure
-    - SOP document
-    - standard operating procedure
-    - documented procedure
-    - work instruction
-    - ISO 9001 document
+  depends_on: "process-narrative-authoring"
+  tags: "SOP, work-instructions, documented-information, ISO9001, procedure, process-document, work-instruction"
+  triggers: "write an SOP; create work instructions; generate a procedure; SOP document; standard operating procedure; documented procedure; work instruction; ISO 9001 document"
 ---
 
 ## Purpose
@@ -135,6 +123,16 @@ When `work-instructions.md` is requested, generate one section per role:
 Pass `sop.md` and `work-instructions.md` to `publication-and-handoff-packaging` for bundle assembly.
 
 ---
+
+## Execution contract
+
+Apply this contract on every run so the artifact is trustworthy and reusable:
+
+1. State the input evidence, assumptions, and unresolved questions before drafting. Never invent missing process facts, owners, controls, dates, or approvals.
+2. Preserve stable identifiers and source traceability. When transforming an upstream artifact, retain its IDs and cite the source field or section for each derived decision.
+3. Produce the declared artifact exactly, including required fields and valid values. Keep unsupported, uncertain, or not-applicable items explicit instead of silently omitting them.
+4. Validate the result with the bundled script or fixture when available. Report validation status, warnings, and any manual review still required.
+5. Stop and request the missing input when a boundary, approval authority, or safety-critical rule cannot be inferred. A partial artifact with clearly marked open questions is safer than a confident fabrication.
 
 ## References
 

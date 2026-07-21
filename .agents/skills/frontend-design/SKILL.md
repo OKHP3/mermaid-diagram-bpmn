@@ -1,7 +1,7 @@
 ---
 name: frontend-design
-description: Create distinctive, production-grade frontend interfaces with high design quality. Use this skill when the user asks to build web components, pages, artifacts, posters, or applications (examples include websites, landing pages, dashboards, React components, HTML/CSS layouts, or when styling/beautifying any web UI). Generates creative, polished code and UI design that avoids generic AI aesthetics.
-license: Complete terms in LICENSE.txt
+description: "Create distinctive, production-grade frontend interfaces with high design quality. Use this skill when the user asks to build web components, pages, artifacts, posters, or applications (examples include websites, landing pages, dashboards, React components, HTML/CSS layouts, or when styling/beautifying any web UI). Generates creative, polished code and UI design that avoids generic AI aesthetics."
+license: "Complete terms in LICENSE.txt"
 ---
 
 This skill guides creation of distinctive, production-grade frontend interfaces that avoid generic "AI slop" aesthetics. Implement real working code with exceptional attention to aesthetic details and creative choices.
@@ -40,3 +40,11 @@ Interpret creatively and make unexpected choices that feel genuinely designed fo
 **IMPORTANT**: Match implementation complexity to the aesthetic vision. Maximalist designs need elaborate code with extensive animations and effects. Minimalist or refined designs need restraint, precision, and careful attention to spacing, typography, and subtle details. Elegance comes from executing the vision well.
 
 Remember: Claude is capable of extraordinary creative work. Don't hold back, show what can truly be created when thinking outside the box and committing fully to a distinctive vision.
+
+## Delivery contract
+
+Before implementation, state the chosen visual direction, audience, content hierarchy, and technical constraints. Preserve the host application's existing design tokens, routing, and component conventions unless the user explicitly asks for a redesign of those foundations.
+
+Deliver working, accessible code rather than a static mockup: support keyboard navigation, visible focus, readable contrast, semantic structure, responsive behavior, and reduced-motion preferences. Keep interaction and animation purposeful; do not trade usability or performance for spectacle.
+
+Verify the result with the project's available typecheck, build, lint, and visual checks. If a dependency, font, asset, or browser capability is unavailable, use a local fallback and say so. Do not claim a design is production-ready until the implementation path and verification status are explicit.

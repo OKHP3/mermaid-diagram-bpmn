@@ -1,35 +1,22 @@
 ---
 name: elicitation-and-interview-facilitation
-description: Plan and facilitate structured elicitation sessions using BABOK v3 interview and workshop techniques. Use this skill when you need to gather process knowledge from subject matter experts; when the user wants a question plan before an interview or workshop; when elicitation is incomplete and gaps need targeted follow-up; when they say "help me interview the process owner", "prepare questions for the workshop", or "what should I ask to fill in the missing steps". Produces a question plan and elicitation notes template.
-license: MIT
-homepage: https://github.com/overkillhill/mermaid-diagram-bpmn/tree/main/skills/elicitation-and-interview-facilitation
-repository: https://github.com/overkillhill/mermaid-diagram-bpmn
+description: "Plan and facilitate structured elicitation sessions using BABOK v3 interview and workshop techniques. Use this skill when you need to gather process knowledge from subject matter experts; when the user wants a question plan before an interview or workshop; when elicitation is incomplete and gaps need targeted follow-up; when they say \\\"help me interview the process owner\\\", \\\"prepare questions for the workshop\\\", or \\\"what should I ask to fill in the missing steps\\\". Produces a question plan and elicitation notes template."
+license: "MIT"
 metadata:
   bp_skill_version: "0.3.0"
-  status: core
+  status: "core"
   version: "0.1.0"
-  author: OverKill Hill P³
+  author: "OverKill Hill P³"
   project: "BP-SKILL: Business Process Agent Skill Suite"
-  category: process-analysis
-  standards_refs:
-    - "BABOK v3 §4 (Elicitation and Collaboration)"
-    - "BABOK v3 §10.25 (Interviews)"
-    - "BABOK v3 §10.50 (Workshops)"
-    - "BABOK v3 §10.14 (Document Analysis)"
-    - "BPM CBOK v4 §4.3 (Process Discovery Techniques)"
+  category: "process-analysis"
+  standards_refs: "BABOK v3 §4 (Elicitation and Collaboration); BABOK v3 §10.25 (Interviews); BABOK v3 §10.50 (Workshops); BABOK v3 §10.14 (Document Analysis); BPM CBOK v4 §4.3 (Process Discovery Techniques)"
   produces: "question-plan.yaml, elicitation-notes.md"
   consumes: "pir.yaml, scope-statement.md"
-  depends_on: ["process-intake-and-scope"]
-  tags: elicitation, interview-facilitation, question-plan, BABOK, workshop, subject-matter-expert, process-discovery
-  triggers:
-    - prepare interview questions
-    - help me run the workshop
-    - question plan
-    - what should I ask
-    - elicitation session
-    - interview the process owner
-    - SME interview
-    - workshop facilitation
+  depends_on: "process-intake-and-scope"
+  tags: "elicitation, interview-facilitation, question-plan, BABOK, workshop, subject-matter-expert, process-discovery"
+  triggers: "prepare interview questions; help me run the workshop; question plan; what should I ask; elicitation session; interview the process owner; SME interview; workshop facilitation"
+  homepage: "https://github.com/overkillhill/mermaid-diagram-bpmn/tree/main/skills/elicitation-and-interview-facilitation"
+  repository: "https://github.com/overkillhill/mermaid-diagram-bpmn"
 ---
 
 ## Purpose
@@ -108,6 +95,16 @@ The `elicitation-notes.md` output contains:
 After elicitation, update `pir.yaml` and re-run `process-intake-and-scope` scoring. When score ≥ 70, pass `pir.yaml` to `stakeholder-and-role-mapping` and then `process-narrative-authoring`.
 
 ---
+
+## Execution contract
+
+Apply this contract on every run so the artifact is trustworthy and reusable:
+
+1. State the input evidence, assumptions, and unresolved questions before drafting. Never invent missing process facts, owners, controls, dates, or approvals.
+2. Preserve stable identifiers and source traceability. When transforming an upstream artifact, retain its IDs and cite the source field or section for each derived decision.
+3. Produce the declared artifact exactly, including required fields and valid values. Keep unsupported, uncertain, or not-applicable items explicit instead of silently omitting them.
+4. Validate the result with the bundled script or fixture when available. Report validation status, warnings, and any manual review still required.
+5. Stop and request the missing input when a boundary, approval authority, or safety-critical rule cannot be inferred. A partial artifact with clearly marked open questions is safer than a confident fabrication.
 
 ## References
 

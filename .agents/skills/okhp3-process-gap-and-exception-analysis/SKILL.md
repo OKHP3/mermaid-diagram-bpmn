@@ -1,34 +1,22 @@
 ---
 name: okhp3-process-gap-and-exception-analysis
-description: Identify deviations, gaps, and exception paths between an as-is process capture and its intended design. Use this skill when the user wants to find where a process breaks down, where steps are missing or inconsistent, where exception handling is undefined, or where current execution differs from documented procedure. Use when they say "what's wrong with the current process", "find the gaps", "where does this break", or "analyze exceptions". Produces a gap analysis report and exception catalog.
-license: MIT
-homepage: https://github.com/overkillhill/mermaid-diagram-bpmn/tree/main/skills/process-gap-and-exception-analysis
-repository: https://github.com/overkillhill/mermaid-diagram-bpmn
+description: "Identify deviations, gaps, and exception paths between an as-is process capture and its intended design. Use this skill when the user wants to find where a process breaks down, where steps are missing or inconsistent, where exception handling is undefined, or where current execution differs from documented procedure. Use when they say \\\"what's wrong with the current process\\\", \\\"find the gaps\\\", \\\"where does this break\\\", or \\\"analyze exceptions\\\". Produces a gap analysis report and exception catalog."
+license: "MIT"
 metadata:
+  homepage: "https://github.com/overkillhill/mermaid-diagram-bpmn/tree/main/skills/process-gap-and-exception-analysis"
+  repository: "https://github.com/overkillhill/mermaid-diagram-bpmn"
   bp_skill_version: "0.3.0"
-  status: core
+  status: "core"
   version: "0.1.0"
-  author: OverKill Hill P³
+  author: "OverKill Hill P³"
   project: "BP-SKILL: Business Process Agent Skill Suite"
-  category: process-analysis
-  standards_refs:
-    - "BPM CBOK v4 §5.2 (Process Analysis Techniques)"
-    - "BABOK v3 §10.11 (Business Rules Analysis)"
-    - "ISO 9001:2015 §10.2 (Nonconformity and corrective action)"
-    - "Six Sigma DMAIC — Analyse phase"
+  category: "process-analysis"
+  standards_refs: "BPM CBOK v4 §5.2 (Process Analysis Techniques); BABOK v3 §10.11 (Business Rules Analysis); ISO 9001:2015 §10.2 (Nonconformity and corrective action); Six Sigma DMAIC — Analyse phase"
   produces: "gap-analysis.yaml, exception-catalog.yaml"
   consumes: "as-is-process.yaml"
-  depends_on: ["as-is-process-capture"]
-  tags: gap-analysis, exception-analysis, process-improvement, root-cause, nonconformity, BPM-CBOK, six-sigma
-  triggers:
-    - find the gaps in this process
-    - what's wrong with the current process
-    - exception analysis
-    - where does this break
-    - process gaps
-    - analyze exceptions
-    - root cause analysis
-    - process improvement
+  depends_on: "as-is-process-capture"
+  tags: "gap-analysis, exception-analysis, process-improvement, root-cause, nonconformity, BPM-CBOK, six-sigma"
+  triggers: "find the gaps in this process; what's wrong with the current process; exception analysis; where does this break; process gaps; analyze exceptions; root cause analysis; process improvement"
 ---
 
 ## Purpose
@@ -128,6 +116,16 @@ Pass `gap-analysis.yaml` and `exception-catalog.yaml` to `future-state-and-chang
 Also use `exception-catalog.yaml` to enrich `exception_paths[]` in `process-narrative-authoring`.
 
 ---
+
+## Execution contract
+
+Apply this contract on every run so the artifact is trustworthy and reusable:
+
+1. State the input evidence, assumptions, and unresolved questions before drafting. Never invent missing process facts, owners, controls, dates, or approvals.
+2. Preserve stable identifiers and source traceability. When transforming an upstream artifact, retain its IDs and cite the source field or section for each derived decision.
+3. Produce the declared artifact exactly, including required fields and valid values. Keep unsupported, uncertain, or not-applicable items explicit instead of silently omitting them.
+4. Validate the result with the bundled script or fixture when available. Report validation status, warnings, and any manual review still required.
+5. Stop and request the missing input when a boundary, approval authority, or safety-critical rule cannot be inferred. A partial artifact with clearly marked open questions is safer than a confident fabrication.
 
 ## References
 
