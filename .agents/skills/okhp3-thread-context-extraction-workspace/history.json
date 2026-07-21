@@ -1,0 +1,30 @@
+{
+  "started_at": "2026-07-21T12:43:11-05:00",
+  "skill_name": "okhp3-thread-context-extraction",
+  "baseline": "pre-2.0.0 snapshot",
+  "candidate": "2.0.0",
+  "current_best": "v2.0.0-density-fix",
+  "iterations": [
+    {
+      "version": "pre-2.0.0",
+      "parent": null,
+      "expectation_pass_rate": 0.6667,
+      "grading_result": "baseline",
+      "is_current_best": false
+    },
+    {
+      "version": "v2.0.0",
+      "parent": "pre-2.0.0",
+      "expectation_pass_rate": 0.9167,
+      "grading_result": "won-with-one-rapid-mode-failure",
+      "is_current_best": false
+    },
+    {
+      "version": "v2.0.0-density-fix",
+      "parent": "v2.0.0",
+      "expectation_pass_rate": 1.0,
+      "grading_result": "targeted-fix-passed",
+      "is_current_best": true
+    }
+  ]
+}

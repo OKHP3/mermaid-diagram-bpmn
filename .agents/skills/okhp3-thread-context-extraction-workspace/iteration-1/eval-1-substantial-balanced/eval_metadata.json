@@ -1,0 +1,12 @@
+{
+  "eval_id": 1,
+  "name": "substantial-normalizes-balanced",
+  "prompt": "Use substantial depth on this mixed AI thread containing You and Assistant labels, Copy and Sources controls, an image placeholder, a referenced PDF, and a canvas link. Evacuate its useful context into standalone repository Markdown.",
+  "fixture": ".agents/skills/okhp3-thread-context-extraction/evals/fixtures/mixed-balanced-thread.md",
+  "expectations": [
+    "Response normalizes the substantial coverage trigger and records extraction_depth: balanced.",
+    "Response includes coverage accounting that shows all supplied turns and rich elements were assessed and given explicit dispositions.",
+    "Response records Copy and Sources as exclude-chrome and catalogs the image, PDF, and canvas with destination references or precise missing states.",
+    "Response includes an actionable handoff and a recorded rehydration test that permit continuation without the original platform or thread."
+  ]
+}

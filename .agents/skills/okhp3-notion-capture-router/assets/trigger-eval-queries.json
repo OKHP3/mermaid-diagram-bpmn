@@ -4,7 +4,7 @@
     "should_trigger": true
   },
   {
-    "query": "I exported a Claude conversation as PDF. Help me ingest it into my Notion brain and reconcile it against GitHub.",
+    "query": "I exported a Claude conversation as PDF. Help me ingest it into a Notion workspace and reconcile it against GitHub.",
     "should_trigger": true
   },
   {
@@ -12,15 +12,15 @@
     "should_trigger": true
   },
   {
-    "query": "Audit my ChatGPT project threads and identify which ones are already captured in Notion.",
+    "query": "Audit these ChatGPT project threads and identify which ones are already captured in Notion.",
     "should_trigger": true
   },
   {
-    "query": "Turn this messy AI conversation into Chat Threads plus Extracts rows.",
+    "query": "Turn this messy AI conversation into a thread page plus reusable extract rows in Notion.",
     "should_trigger": true
   },
   {
-    "query": "Is this thread duplicate, complementary, or net new compared with my Notion archive?",
+    "query": "Is this thread duplicate, complementary, or net new compared with the existing Notion archive?",
     "should_trigger": true
   },
   {

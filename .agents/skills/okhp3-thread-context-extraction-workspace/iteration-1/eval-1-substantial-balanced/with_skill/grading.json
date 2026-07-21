@@ -1,0 +1,79 @@
+{
+  "expectations": [
+    {
+      "text": "Response normalizes the substantial coverage trigger and records extraction_depth: balanced.",
+      "passed": true,
+      "evidence": "The generated artifact records `requested_extraction_depth: \"substantial\"` and `extraction_depth: \"balanced\"` in frontmatter. Its Extraction profile also states: `The user explicitly requested substantial depth; the skill normalizes substantial to balanced.` This is substantive normalization, not merely use of the word balanced."
+    },
+    {
+      "text": "Response includes coverage accounting that shows all supplied turns and rich elements were assessed and given explicit dispositions.",
+      "passed": true,
+      "evidence": "The Coverage accounting table reconciles 4 turn groups as assessed and retained, and 5 rich elements as assessed, with 2 omitted as chrome and 3 missing or unavailable. The Turn ledger then enumerates T001-T004, while the Content element ledger enumerates E001-E005 with `flag-missing` or `exclude-chrome` actions. These totals match the four labeled turns and the image, PDF, Canvas, and two grouped UI-control records in the fixture."
+    },
+    {
+      "text": "Response records Copy and Sources as exclude-chrome and catalogs the image, PDF, and canvas with destination references or precise missing states.",
+      "passed": true,
+      "evidence": "E004 groups `Copy, Good response, Sources` and assigns `exclude-chrome`. E001 catalogs `extraction-flow.png` as `description-only` and `flag-missing`, E002 catalogs `retention-rules.pdf` as `referenced-not-supplied` and `flag-missing`, and E003 catalogs Canvas `Depth Mapping` as `metadata-only` and `flag-missing`. Each asset row also gives a destination reference explaining where the surviving information or gap is carried forward."
+    },
+    {
+      "text": "Response includes an actionable handoff and a recorded rehydration test that permit continuation without the original platform or thread.",
+      "passed": true,
+      "evidence": "The Actionable handoff gives a current state, resume point, required context, and four actions with owner, status, dependencies, and acceptance conditions. The Rehydration test records five criteria, results, and evidence or gaps, including that no source account, thread, project, Canvas, or connector is a runtime dependency. It records an overall `pass` while precisely limiting final retention validation and recovery of the original Canvas comparison."
+    }
+  ],
+  "summary": {
+    "passed": 4,
+    "failed": 0,
+    "total": 4,
+    "pass_rate": 1.0
+  },
+  "claims": [
+    {
+      "claim": "The requested substantial depth was normalized to balanced.",
+      "type": "factual",
+      "verified": true,
+      "evidence": "The prompt requests substantial depth; the final frontmatter records requested depth `substantial` and selected `balanced`, and the transcript explicitly describes the normalization."
+    },
+    {
+      "claim": "The supplied capture contains four labeled turns and five rich-element records after adjacent controls are grouped by owning boundary.",
+      "type": "factual",
+      "verified": true,
+      "evidence": "The fixture has two `You` blocks and two `Assistant` blocks. The artifact accounts for the image, PDF, Canvas, the Copy/Good response/Sources control group, and Retry as E001-E005."
+    },
+    {
+      "claim": "The image payload, PDF contents, and Canvas contents were unavailable and were not inferred.",
+      "type": "quality",
+      "verified": true,
+      "evidence": "The fixture supplies only image alt text, a PDF filename plus an explicit statement that its content cannot be pasted, and a Canvas title plus reported purpose. The artifact consistently marks these as description-only, referenced-not-supplied, or metadata-only and confines claims to the surviving evidence."
+    },
+    {
+      "claim": "The extract passes source independence while retaining explicit blocked capabilities.",
+      "type": "quality",
+      "verified": true,
+      "evidence": "The artifact contains a standalone workflow, current state, resume point, executable next actions, and a five-row rehydration test. It identifies PDF-based retention validation and original Canvas-comparison recovery as blocked without making either a runtime dependency for using the workflow."
+    },
+    {
+      "claim": "The bundled writer ultimately validated and wrote the final artifact successfully after launcher recovery.",
+      "type": "process",
+      "verified": true,
+      "evidence": "The transcript records a failed initial `python` invocation, successful recovery with `py -3`, a validated dry run, successful final write, and verification of required headings and metadata. The expected output file exists and contains those stated structures."
+    }
+  ],
+  "user_notes_summary": {
+    "uncertainties": [],
+    "needs_review": [],
+    "workarounds": []
+  },
+  "eval_feedback": {
+    "suggestions": [
+      {
+        "assertion": "Response includes coverage accounting that shows all supplied turns and rich elements were assessed and given explicit dispositions.",
+        "reason": "If the intent is to reward auditable accounting rather than any complete ledger, require reconciled class totals for assessed, retained, compressed, omitted, and missing material. The baseline can substantively satisfy the present wording through a prose coverage rule plus complete ledgers."
+      },
+      {
+        "reason": "Add a bounded-usability or non-redundancy assertion. The with-skill artifact is 17,146 characters versus 14,213 for the baseline, 20.6% longer. The extra length materially improves actionability through an owner/status/dependency/acceptance handoff and a criteria-based rehydration table, but it also repeats the same missing-sidecar limits across several sections, which the current assertions cannot penalize."
+      }
+    ],
+    "overall": "All four assertions are substantively met. Compared with the baseline, this artifact is more actionable and auditable, especially at the resume point and acceptance-condition level, but also more verbose. Most of the extra length earns its place through the handoff and recorded rehydration evidence; repeated explanations of the PDF, Canvas, and image gaps are the clearest opportunity to tighten it."
+  }
+}

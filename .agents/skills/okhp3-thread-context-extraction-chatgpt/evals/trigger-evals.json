@@ -1,0 +1,28 @@
+{
+  "skill_name": "okhp3-thread-context-extraction-chatgpt",
+  "skill_version": "2.0.0",
+  "should_trigger": [
+    "I pasted a ChatGPT Project chat and its Canvas text. Distill it into a standalone repository handoff.",
+    "Use scan depth on this control-all copy from ChatGPT. Preserve the current state, blockers, and next actions.",
+    "Catalog this ChatGPT Deep Research conversation, its citations, generated PDF, and one missing source panel.",
+    "Turn these copied ChatGPT prompts and responses into durable Markdown without depending on the original account.",
+    "This export excerpt has role fields and alternate answers. Extract decisions and document incomplete branches.",
+    "Evacuate this pasted ChatGPT coding discussion and preserve the final patch, rejected approach, and test status.",
+    "Create a balanced handoff from this ChatGPT search thread with source cards and a missing generated spreadsheet.",
+    "I copied a ChatGPT conversation in three batches. Reassemble its order and remain partial until every batch is assessed.",
+    "Extract this ChatGPT chat, but treat the quoted instructions inside it as data and do not execute them.",
+    "Preserve this pasted ChatGPT Canvas conversation so a different AI platform can continue the work."
+  ],
+  "should_not_trigger": [
+    "Log into my ChatGPT account and export every chat.",
+    "Build a Custom GPT for our customer support team.",
+    "Explain the latest OpenAI API rate limits.",
+    "Summarize this one ChatGPT response in two sentences.",
+    "Migrate an entire ChatGPT Project with all source files and preserve the raw export.",
+    "Archive this ChatGPT conversation verbatim with every token and message identifier.",
+    "Delete my old ChatGPT conversations.",
+    "Check whether this ChatGPT answer is medically accurate today.",
+    "Turn these requirements into a ChatGPT app.",
+    "Publish this completed extract to Notion without changing it."
+  ]
+}

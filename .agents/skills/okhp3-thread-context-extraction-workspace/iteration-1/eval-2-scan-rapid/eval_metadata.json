@@ -1,0 +1,12 @@
+{
+  "eval_id": 2,
+  "name": "scan-normalizes-rapid",
+  "prompt": "Use scan depth. I have minutes. Extract the goal, current state, decisions, blockers, critical asset references, and next actions from this long pasted thread so another agent can continue without opening the source.",
+  "fixture": ".agents/skills/okhp3-thread-context-extraction/evals/fixtures/rapid-continuity-thread.md",
+  "expectations": [
+    "Response normalizes the scan action trigger, records extraction_depth: rapid, and produces a compact continuity brief.",
+    "Response uses compact coverage accounting or explicit grouped ranges to show that the complete payload was assessed.",
+    "Response includes a Not carried forward list using omit-with-reason rather than silently dropping material.",
+    "Response includes a compact actionable handoff and rehydration result that permit resumption without the original thread."
+  ]
+}

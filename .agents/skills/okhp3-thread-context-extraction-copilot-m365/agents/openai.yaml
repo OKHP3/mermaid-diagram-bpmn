@@ -1,0 +1,6 @@
+interface:
+  display_name: "Copilot M365 Thread Extraction"
+  short_description: "Evacuate Copilot chats into portable Markdown"
+  default_prompt: "Extract the supplied Microsoft Copilot thread into a standalone Markdown artifact at balanced depth."
+policy:
+  allow_implicit_invocation: true

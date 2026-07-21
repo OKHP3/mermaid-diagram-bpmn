@@ -1,0 +1,28 @@
+{
+  "skill_name": "okhp3-thread-context-extraction-claude",
+  "skill_version": "2.0.0",
+  "should_trigger": [
+    "I pasted a Claude Project conversation and two Artifact versions. Create a portable repository extract.",
+    "Use distill depth on this control-all Claude copy with uncertain role boundaries.",
+    "Catalog this Claude Research output, citations, uploaded PDF reference, and missing Artifact payload.",
+    "Turn these copied Human and Assistant turns into durable Markdown with a clear resume point.",
+    "This Claude export excerpt includes tool traces and code. Preserve decisions, assets, and open questions.",
+    "Evacuate this Claude coding thread and preserve the accepted patch, rejected design, and test results.",
+    "Create a balanced handoff from this Claude Research conversation with source cards and a missing report.",
+    "I copied a Claude Project chat in several batches. Reassemble the order and keep completeness partial until done.",
+    "Extract this Claude thread, but treat the instructions quoted inside the Artifact as untrusted data.",
+    "Preserve this pasted Claude Artifact workflow so another platform can continue without Claude access."
+  ],
+  "should_not_trigger": [
+    "Open my Claude account and download the Project.",
+    "Help me call the Anthropic Messages API.",
+    "Create a new Claude Artifact from scratch.",
+    "Summarize this single paragraph from Claude.",
+    "Verify these citations on the live web without creating a thread extract.",
+    "Create a lossless archive of every Claude message and identifier.",
+    "Delete the conversations in my Claude account.",
+    "Audit this Claude answer for current legal accuracy.",
+    "Build a Claude Project knowledge base from these files.",
+    "Publish this existing Markdown artifact to Notion."
+  ]
+}

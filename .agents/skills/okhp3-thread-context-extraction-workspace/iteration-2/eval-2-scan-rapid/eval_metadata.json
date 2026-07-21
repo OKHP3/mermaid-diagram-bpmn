@@ -1,0 +1,12 @@
+{
+  "eval_id": 2,
+  "name": "scan-normalizes-rapid-compactness-fix",
+  "prompt": "Use scan depth. I have minutes. Extract the goal, current state, decisions, blockers, critical asset references, and next actions from this long pasted thread so another agent can continue without opening the source.",
+  "fixture": ".agents/skills/okhp3-thread-context-extraction/evals/fixtures/rapid-continuity-thread.md",
+  "expectations": [
+    "Response normalizes scan to rapid and remains approximately within the 600 to 1,200 word ordinary-thread target.",
+    "Response uses compact coverage accounting or grouped ranges to show the complete payload was assessed.",
+    "Response records material not carried forward with reasons.",
+    "Response provides an actionable handoff and rehydration result without repeating the same caveats across sections."
+  ]
+}

@@ -1,0 +1,6 @@
+interface:
+  display_name: "ChatGPT Thread Extraction"
+  short_description: "Evacuate pasted ChatGPT chats into portable Markdown"
+  default_prompt: "Extract the supplied ChatGPT thread into a standalone Markdown artifact at balanced depth."
+policy:
+  allow_implicit_invocation: true

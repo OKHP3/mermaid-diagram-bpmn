@@ -1,31 +1,13 @@
-# Platform Variants
+# Source Platform Variants
 
-Use this reference to tune the same capture workflow for different AI platforms.
+Normalize the source into the same capture model regardless of where it originated.
 
-## ChatGPT
+| Source | Handling |
+|---|---|
+| ChatGPT, Claude, Copilot, or Gemini | Preserve the conversation title, platform, date, source link when available, user request, assistant outputs, decisions, and open loops. |
+| Perplexity or other research tool | Preserve citations and distinguish sourced findings from synthesis. |
+| PDF export | Recover title, platform, date, file name, export date, and source link when available; mark unknown metadata explicitly. |
+| Markdown, text, or pasted transcript | Treat the supplied text as the source artifact and record its file name or conversation context. |
+| Existing Notion page | Fetch it first, preserve the source page relation, and classify the operation as copy, move, update, or reconcile. |
 
-Use a project-level skill file as the controlling artifact. Keep unrelated files out of scope during ingestion unless they are source material.
-
-## Claude
-
-Use a project or skill package. Preserve the same two-layer output model: Chat Threads plus Extracts.
-
-## Perplexity
-
-Use for research-heavy intake. Preserve source citations in the source artifact and store distilled nuggets in Notion.
-
-## Copilot
-
-Use exported or copied content as the source artifact, then ingest through the router.
-
-## Gemini
-
-Use exported summaries, notes, markdown, or PDF artifacts as the source material.
-
-## PDF exports
-
-Recover platform, title, date, source link, file name, and export date when available. Mark absent metadata as unknown or pending.
-
-## Platform-neutral rule
-
-The source platform is not the system of record. Notion is the knowledge hub. GitHub is the artifact layer. The AI platform is the quarry.
+The source platform is not automatically the system of record. The user may choose Notion as the durable destination, a page as the full export, a database as the index, or both.

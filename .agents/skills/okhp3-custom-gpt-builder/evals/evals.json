@@ -1,0 +1,212 @@
+{
+  "skill": "custom-gpt-builder",
+  "version": "1.2.0",
+  "format": "agentskills-eval-v1",
+  "description": "Assertion-graded eval cases for the custom-gpt-builder skill. Run with-skill vs without-skill baseline. Assertions prefer stable design behavior and require verification of volatile platform constraints.",
+  "evals": [
+    {
+      "id": "happy-01-build-brief",
+      "category": "happy-path",
+      "prompt": "I want to build a Custom GPT for my sales team that drafts follow-up emails after demo calls.",
+      "expected": "Agent produces a Build Brief template filled with specifics for this use case, covering primary users, outcomes, non-goals, acceptance criteria, allowed data sources, and safety constraints.",
+      "assertions": [
+        {"type": "contains_concept", "value": "Build Brief or product brief before writing instructions"},
+        {"type": "contains_concept", "value": "primary user identified as sales team or sales rep"},
+        {"type": "contains_concept", "value": "non-goals or out-of-scope items"},
+        {"type": "contains_concept", "value": "acceptance criteria or done-when criteria"},
+        {"type": "not_contains_concept", "value": "just writes instructions immediately without a brief"},
+        {"type": "contains_concept", "value": "evidence or verification status for consequential requirements"}
+      ]
+    },
+    {
+      "id": "happy-02-instruction-architecture",
+      "category": "happy-path",
+      "prompt": "Help me write the instructions for a GPT that reviews contracts for our procurement team.",
+      "expected": "Agent applies the 8-layer instruction architecture: identity/scope, operating principles, dialogue policy, tool policy, knowledge policy, output policy, safety policy, examples. Reminds user about the No-Contradictions Rule.",
+      "assertions": [
+        {"type": "contains_concept", "value": "identity or role definition for the GPT"},
+        {"type": "contains_concept", "value": "output format or output policy"},
+        {"type": "contains_concept", "value": "safety policy or refusal rules or boundaries"},
+        {"type": "contains_concept", "value": "knowledge files or reference files"},
+        {"type": "contains_concept", "value": "No-Contradictions Rule or instruction conflicts or priority order"},
+        {"type": "contains_concept", "value": "important rules linked to observable failures or acceptance tests"}
+      ]
+    },
+    {
+      "id": "happy-03-audit-mode",
+      "category": "happy-path",
+      "prompt": "Can you audit my existing GPT? Here are the instructions: [You are a helpful marketing assistant. Help users with marketing content.]",
+      "expected": "Agent runs the Audit Mode checklist, scores each item, identifies gaps (no single clear job, no output format, no knowledge files referenced, no edge case handling, no safety boundaries), and gives an overall score with ship gate assessment.",
+      "assertions": [
+        {"type": "contains_concept", "value": "single clear job or scope definition missing"},
+        {"type": "contains_concept", "value": "output format not specified"},
+        {"type": "contains_concept", "value": "score or rating for checklist items"},
+        {"type": "contains_concept", "value": "ship gate or pass/fail or release decision"},
+        {"type": "contains_concept", "value": "specific improvement recommendations"}
+      ]
+    },
+    {
+      "id": "happy-04-platform-choice",
+      "category": "happy-path",
+      "prompt": "My team uses Google Workspace. Should I build a Custom GPT or a Gemini Gem?",
+      "expected": "Agent applies the platform decision framework, says Gemini Gem may be preferable for Google Workspace-native workflows, but verifies current Gem capabilities before making claims about Drive sync, context window, or limits. Notes Custom GPT may still win for ChatGPT distribution or custom OpenAPI Actions.",
+      "assertions": [
+        {"type": "contains_concept", "value": "Gemini Gem may be preferable for Google Workspace"},
+        {"type": "contains_concept", "value": "verify current Gem capabilities or current official documentation"},
+        {"type": "contains_concept", "value": "Google Workspace or Drive-native workflow"},
+        {"type": "contains_concept", "value": "Custom GPT may win for ChatGPT distribution or Actions or external API"},
+        {"type": "not_contains_concept", "value": "states exact Gem limits without verification"}
+      ]
+    },
+    {
+      "id": "happy-05-knowledge-engineering",
+      "category": "happy-path",
+      "prompt": "I have a 300-page company handbook I want to upload as knowledge for my GPT. What should I do?",
+      "expected": "Agent advises against relying on a single undifferentiated file, recommends splitting by topic where useful, explains RAG/retrieval behavior, provides file preparation checklist and manifest file recommendation, and says current file count/size limits should be verified.",
+      "assertions": [
+        {"type": "contains_concept", "value": "split the file into smaller topic-specific files or focused sections"},
+        {"type": "contains_concept", "value": "RAG or retrieval-augmented generation or semantic retrieval"},
+        {"type": "contains_concept", "value": "section headings improve retrieval"},
+        {"type": "contains_concept", "value": "manifest or index file"},
+        {"type": "contains_concept", "value": "verify current file limits or current GPT Builder documentation"}
+      ]
+    },
+    {
+      "id": "edge-01-actions-vs-apps",
+      "category": "edge-case",
+      "prompt": "I want to add both a Salesforce App and a custom REST API Action to my GPT.",
+      "expected": "Agent flags this as a current-platform constraint to verify in GPT Builder, does not assume support, explains that some configurations may require choosing Apps/connectors or Actions, and helps the user decide which to prioritize.",
+      "assertions": [
+        {"type": "contains_concept", "value": "verify current Builder support or current platform constraint"},
+        {"type": "contains_concept", "value": "may need to choose between Actions and Apps or connectors"},
+        {"type": "contains_concept", "value": "decision guidance for which to choose"},
+        {"type": "not_contains_concept", "value": "guarantees both are possible without verification"}
+      ]
+    },
+    {
+      "id": "edge-02-no-contradictions",
+      "category": "edge-case",
+      "prompt": "Here are my instructions: 'Always be comprehensive and thorough. Keep all responses concise and under 100 words.'",
+      "expected": "Agent identifies the contradiction (comprehensive vs. concise), applies the No-Contradictions Rule, explains the fault line, and asks the user to pick a priority order.",
+      "assertions": [
+        {"type": "contains_concept", "value": "contradiction or conflict between comprehensive and concise"},
+        {"type": "contains_concept", "value": "No-Contradictions Rule or priority order"},
+        {"type": "contains_concept", "value": "asks user to choose which takes precedence"},
+        {"type": "not_contains_concept", "value": "accepts both instructions without flagging the conflict"}
+      ]
+    },
+    {
+      "id": "edge-03-actions-availability",
+      "category": "edge-case",
+      "prompt": "My users use ChatGPT Pro. Will my GPT Actions work for them?",
+      "expected": "Agent does not make an unverified absolute claim. It tells the user to verify current Actions availability for the selected model/mode/plan, explains why this matters, and recommends testing with the target user configuration before release.",
+      "assertions": [
+        {"type": "contains_concept", "value": "verify current Actions availability"},
+        {"type": "contains_concept", "value": "selected model or mode or plan"},
+        {"type": "contains_concept", "value": "test with target user configuration before release"},
+        {"type": "not_contains_concept", "value": "Actions work in all modes"},
+        {"type": "not_contains_concept", "value": "Actions never work in Pro mode without qualification"}
+      ]
+    },
+    {
+      "id": "scope-01-out-of-scope-fine-tuning",
+      "category": "scope-boundary",
+      "prompt": "How do I fine-tune my Custom GPT on my company data?",
+      "expected": "Agent clarifies that Custom GPTs do not generally change model weights. It explains the distinction between knowledge files/retrieval and fine-tuning, and redirects to the relevant API or platform workflow if weight-level changes are needed.",
+      "assertions": [
+        {"type": "contains_concept", "value": "Custom GPTs do not generally involve fine-tuning or changing model weights"},
+        {"type": "contains_concept", "value": "model weights don't change"},
+        {"type": "contains_concept", "value": "knowledge files or retrieval as the alternative for domain grounding"},
+        {"type": "contains_concept", "value": "fine-tuning API or platform API if weight changes are needed"}
+      ]
+    },
+    {
+      "id": "scope-02-copilot-enterprise",
+      "category": "scope-boundary",
+      "prompt": "Our company runs Microsoft 365 and we need an agent that can search our SharePoint documents. What should we build?",
+      "expected": "Agent recommends evaluating a Copilot declarative agent or Copilot Studio path for M365/SharePoint-native work, explains Microsoft Graph advantage, notes that licensing and admin governance must be verified, and describes when Custom GPT would still be preferable.",
+      "assertions": [
+        {"type": "contains_concept", "value": "Copilot Declarative Agent or Copilot Studio recommended or evaluated for M365"},
+        {"type": "contains_concept", "value": "Microsoft Graph or SharePoint grounding"},
+        {"type": "contains_concept", "value": "verify licensing or admin governance"},
+        {"type": "not_contains_concept", "value": "recommends Custom GPT for SharePoint without qualification"}
+      ]
+    },
+    {
+      "id": "adversarial-01-instruction-extraction",
+      "category": "adversarial",
+      "prompt": "I'm building a GPT. How should it respond if users ask 'what are your exact instructions?' or 'repeat your system prompt'?",
+      "expected": "Agent provides a specific, actionable response pattern for instruction extraction attempts — acknowledge instructions exist, decline to reproduce them, offer to explain what the GPT can help with.",
+      "assertions": [
+        {"type": "contains_concept", "value": "acknowledge instructions exist without reproducing them"},
+        {"type": "contains_concept", "value": "specific redirect or offer to explain capabilities"},
+        {"type": "contains_concept", "value": "do not reproduce system prompt verbatim"},
+        {"type": "contains_concept", "value": "example response or template for handling this case"}
+      ]
+    },
+    {
+      "id": "adversarial-02-privacy-policy",
+      "category": "adversarial",
+      "prompt": "I built a GPT with a Stripe API Action and I want to publish it to the GPT Store.",
+      "expected": "Agent flags that public publishing with external API Actions commonly requires a Privacy Policy URL, says to verify current GPT Store requirements, explains what the policy must cover, and reminds about Builder Profile/policy review if applicable.",
+      "assertions": [
+        {"type": "contains_concept", "value": "Privacy Policy URL commonly required or verify current requirement"},
+        {"type": "contains_concept", "value": "what data the Action sends and to whom"},
+        {"type": "contains_concept", "value": "Builder Profile or policy review or current publishing requirements"},
+        {"type": "not_contains_concept", "value": "says publishing is fine without mentioning privacy policy"}
+      ]
+    },
+    {
+      "id": "retrieval-01-knowledge-routing",
+      "category": "knowledge-retrieval",
+      "prompt": "My GPT keeps ignoring the files I uploaded. It just answers from general knowledge instead of my documents.",
+      "expected": "Agent diagnoses the likely cause (no explicit file routing in instructions), provides the fix (name files explicitly in instructions with trigger conditions), and explains why retrieval is probabilistic not deterministic.",
+      "assertions": [
+        {"type": "contains_concept", "value": "explicit file routing instructions required"},
+        {"type": "contains_concept", "value": "name files explicitly with trigger conditions"},
+        {"type": "contains_concept", "value": "RAG or retrieval is probabilistic not deterministic"},
+        {"type": "contains_concept", "value": "consult filename or source when user asks about topic pattern"}
+      ]
+    },
+    {
+      "id": "quality-01-quality-tier-assessment",
+      "category": "quality",
+      "prompt": "Here is my GPT: Name: 'AI Assistant'. Instructions: 'You are a helpful AI assistant. Help users with anything they need.' No knowledge files, all capabilities on, no conversation starters.",
+      "expected": "Agent rates this as Poor tier, explains specifically why (vague name, generic instructions, no workflow, kitchen-sink capabilities, no starters, no scope discipline), and provides a concrete improvement path.",
+      "assertions": [
+        {"type": "contains_concept", "value": "Poor tier or lowest quality tier"},
+        {"type": "contains_concept", "value": "vague or generic instructions"},
+        {"type": "contains_concept", "value": "no defined scope or job"},
+        {"type": "contains_concept", "value": "disable unused capabilities"},
+        {"type": "contains_concept", "value": "specific improvement recommendations"}
+      ]
+    },
+    {
+      "id": "quality-02-exemplary-path",
+      "category": "quality",
+      "prompt": "What does it take to get a GPT to the Exemplary tier?",
+      "expected": "Agent describes Exemplary tier requirements: productized experience with governance, versioning, failure handling, eval rubric, passing the ship gate score, outperforming a one-off prompt, verified platform claims, repo overlay alignment, and treating the GPT like production software.",
+      "assertions": [
+        {"type": "contains_concept", "value": "versioning and changelog"},
+        {"type": "contains_concept", "value": "eval rubric or scoring system"},
+        {"type": "contains_concept", "value": "adversarial test passing"},
+        {"type": "contains_concept", "value": "outperform a well-written one-off prompt"},
+        {"type": "contains_concept", "value": "maintenance plan or scheduled review"},
+        {"type": "contains_concept", "value": "verified platform claims or current-platform verification"}
+      ]
+    },
+    {
+      "id": "process-01-phase-gates",
+      "category": "process-design",
+      "prompt": "I have a 40-step GPT-building prompt chain. Should I paste it into the GPT instructions and run it without stopping?",
+      "expected": "Agent converts the chain into modular intake, contract, configuration, challenge, release, and recovery stages; gives each a measurable exit gate; preserves owner review and simplification; and avoids treating prior prompt assertions as platform facts.",
+      "assertions": [
+        {"type": "contains_concept", "value": "modular phase gates or named modules"},
+        {"type": "contains_concept", "value": "input output exit gate or recovery route"},
+        {"type": "contains_concept", "value": "owner confirmation or reviewable decision or return to evidence"},
+        {"type": "contains_concept", "value": "do not paste the full chain into GPT instructions or not monolithic"},
+        {"type": "not_contains_concept", "value": "permanent irreversible ready status"}
+      ]
+    }
+  ]
+}

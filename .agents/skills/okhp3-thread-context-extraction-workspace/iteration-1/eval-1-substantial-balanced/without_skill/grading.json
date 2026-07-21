@@ -1,0 +1,79 @@
+{
+  "expectations": [
+    {
+      "text": "Response normalizes the substantial coverage trigger and records extraction_depth: balanced.",
+      "passed": true,
+      "evidence": "The generated artifact records `extraction_depth: \"balanced\"` in frontmatter and states under Extraction profile: `Requested depth: substantial`, `Selected depth: balanced`, and `The explicit substantial trigger normalizes to the balanced profile.` The normalization is therefore explicit even though requested depth is not duplicated in frontmatter."
+    },
+    {
+      "text": "Response includes coverage accounting that shows all supplied turns and rich elements were assessed and given explicit dispositions.",
+      "passed": true,
+      "evidence": "Although there is no dedicated numeric Coverage accounting table, the Extraction profile explicitly says all four labeled turns are retained individually, the image/PDF/Canvas are cataloged individually, and repeated controls are grouped and excluded. The Turn ledger enumerates T001-T004, and the Content element ledger enumerates E001-E005 with retain, exclude-chrome, or flag-missing actions. Together these form substantive coverage accounting for every supplied turn and rich element."
+    },
+    {
+      "text": "Response records Copy and Sources as exclude-chrome and catalogs the image, PDF, and canvas with destination references or precise missing states.",
+      "passed": true,
+      "evidence": "E002 groups `Copy`, `Good response`, and `Sources` and assigns `exclude-chrome`. E001 records the image as description-only with no payload, E003 records `retention-rules.pdf` as referenced-not-supplied and `flag-missing`, and E004 records Canvas `Depth Mapping` as metadata-only with the table and version state missing. The Normalization exceptions and Open questions further state the precise unavailable content without reconstructing it."
+    },
+    {
+      "text": "Response includes an actionable handoff and a recorded rehydration test that permit continuation without the original platform or thread.",
+      "passed": false,
+      "evidence": "The output includes three proposed next-action bullets and claims `Source-independence test: Pass`, so it offers useful continuation guidance. However, it has no consolidated actionable handoff with ownership, status, dependencies, or acceptance evidence, and it does not record an executed rehydration test with criteria, per-criterion results, and supporting evidence. The checklist merely instructs a future reader to perform an independence check. Under the required burden of proof, a pass claim and proposed actions do not establish that the rehydration test was actually performed and recorded."
+    }
+  ],
+  "summary": {
+    "passed": 3,
+    "failed": 1,
+    "total": 4,
+    "pass_rate": 0.75
+  },
+  "claims": [
+    {
+      "claim": "The explicit substantial trigger was normalized to balanced.",
+      "type": "factual",
+      "verified": true,
+      "evidence": "The prompt requests substantial depth, and the output's frontmatter and Extraction profile record balanced as selected while explicitly describing the normalization."
+    },
+    {
+      "claim": "All four labeled turns and five grouped rich elements were covered.",
+      "type": "factual",
+      "verified": true,
+      "evidence": "The fixture contains four labeled turns. The output enumerates T001-T004 and E001-E005, with the five elements corresponding to the image, grouped Copy/Good response/Sources controls, PDF, Canvas, and Retry control."
+    },
+    {
+      "claim": "No unavailable PDF, Canvas, image, or source-card content was represented as captured.",
+      "type": "quality",
+      "verified": true,
+      "evidence": "The artifact limits the image to supplied alt-text meaning, marks the PDF and Canvas payloads missing, and treats Sources as UI chrome without citations. These limitations match the fixture."
+    },
+    {
+      "claim": "The source-independence test passed.",
+      "type": "quality",
+      "verified": false,
+      "evidence": "The artifact is readable without the source platform and supplies useful next steps, but it records only a summary assertion of pass. It provides no executed test criteria, per-criterion outcomes, or evidence demonstrating that rehydration was performed."
+    },
+    {
+      "claim": "The baseline writer produced and then deliberately replaced the final artifact after ledger corrections.",
+      "type": "process",
+      "verified": true,
+      "evidence": "The transcript states that the writer ran successfully, the result was reread, speaker labels and element numbering were corrected, and the artifact was replaced with `--allow-existing`. The expected final output exists with the stated four-turn and five-element ledgers."
+    }
+  ],
+  "user_notes_summary": {
+    "uncertainties": [],
+    "needs_review": [],
+    "workarounds": []
+  },
+  "eval_feedback": {
+    "suggestions": [
+      {
+        "assertion": "Response includes an actionable handoff and a recorded rehydration test that permit continuation without the original platform or thread.",
+        "reason": "Keep this as a discriminating assertion, but define the minimum evidence: a current state and resume point; actions with owner or actor, dependency, and acceptance condition; and rehydration criteria with recorded result and evidence. This would prevent a bare `Pass` statement or a future-tense checklist from satisfying the outcome."
+      },
+      {
+        "reason": "Add a bounded-usability or non-redundancy check. This baseline is shorter than the with-skill artifact, 14,213 versus 17,146 characters, but its three proposed next actions are buried in Open questions and have no owner, status, dependency, or acceptance condition. The comparison shows that brevity alone is not usability; the eval should reward concise actionability rather than raw completeness or raw length."
+      }
+    ],
+    "overall": "Three assertions pass. The baseline is 2,933 characters shorter and still accurate, complete in its ledgers, and source-aware. Its brevity comes with a meaningful actionability cost: it lacks a consolidated handoff and records only a source-independence pass claim, not a criteria-and-evidence rehydration result. The tightened fourth assertion correctly exposes that gap."
+  }
+}

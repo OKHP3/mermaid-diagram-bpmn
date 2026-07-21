@@ -1,0 +1,85 @@
+{
+  "expectations": [
+    {
+      "text": "Response normalizes the scan action trigger, records extraction_depth: rapid, and produces a compact continuity brief.",
+      "passed": false,
+      "evidence": "The normalization itself is correct: frontmatter records `requested_extraction_depth: \"scan\"` and `extraction_depth: \"rapid\"`, and the profile says `scan` normalizes to `rapid`. The compound expectation nevertheless fails on compactness. The final artifact is 15,277 characters and about 2,070 words for a 1,550-character, 213-word, nine-turn fixture. It expands the source by roughly 9.9 times in characters and repeats the same goal, decisions, blockers, assets, and limits across the introduction, synopsis, ledgers, value inventory, rationale, handoff, reusable-assets section, open questions, rehydration table, and provenance. That is not a compact rapid brief for a user who has minutes."
+    },
+    {
+      "text": "Response uses compact coverage accounting or explicit grouped ranges to show that the complete payload was assessed.",
+      "passed": true,
+      "evidence": "The Coverage accounting table explicitly reconciles 9 assessed turns as 8 retained and 1 compressed, then identifies T008 as the compressed repeated reminder. The Turn ledger enumerates T001-T009, and the Content element ledger accounts for five unique referenced repository resources as E001-E005. These records cover every supplied turn and all source-stated resource references. The accounting is compact even though the artifact around it is not."
+    },
+    {
+      "text": "Response includes a Not carried forward list using omit-with-reason rather than silently dropping material.",
+      "passed": true,
+      "evidence": "The Extraction profile contains an explicit `Not carried forward` entry: `Conversational phrasing, repeated visibility language, and nonessential wording were omitted because they do not change the handoff.` It also states that no decision, blocker, asset reference, or next action was omitted. T008 is separately identified as compressed rather than silently dropped."
+    },
+    {
+      "text": "Response includes a compact actionable handoff and rehydration result that permit resumption without the original thread.",
+      "passed": true,
+      "evidence": "The Actionable handoff gives current state, resume point, and required context, followed by three actions with owner, status, dependencies, and acceptance conditions. The Rehydration test records five criteria, each with a result and evidence or gap, and concludes `Overall source-independence result: pass`. It also identifies the remaining limitation: the agent must locate or define the three realistic evals and expected outcomes. Those two sections are concise and sufficient for resumption even though the overall artifact is excessively long."
+    }
+  ],
+  "summary": {
+    "passed": 3,
+    "failed": 1,
+    "total": 4,
+    "pass_rate": 0.75
+  },
+  "claims": [
+    {
+      "claim": "The requested scan depth was normalized to rapid.",
+      "type": "factual",
+      "verified": true,
+      "evidence": "The eval prompt requests scan depth, while the final frontmatter records requested depth `scan` and selected depth `rapid`; the profile and transcript both state the alias mapping."
+    },
+    {
+      "claim": "All nine supplied turns and five unique referenced repository resources were assessed.",
+      "type": "factual",
+      "verified": true,
+      "evidence": "The fixture contains nine labeled turns. The artifact enumerates T001-T009 and resolves the source's template, depth profiles, extraction contract, writer utility, and platform-pattern reference to five unique E001-E005 resources."
+    },
+    {
+      "claim": "The five repository-relative asset locations recorded in the extract are available.",
+      "type": "factual",
+      "verified": true,
+      "evidence": "Direct file checks confirm that all five recorded paths exist under `.agents/skills/okhp3-thread-context-extraction/`: the platform-pattern reference, template, writer, depth-profile reference, and extraction contract."
+    },
+    {
+      "claim": "This is a compact rapid continuity brief.",
+      "type": "quality",
+      "verified": false,
+      "evidence": "The output is about 2,070 words versus 213 words in the supplied capture. Multiple sections restate substantially the same decisions, blockers, asset names, and source limits. The result is thorough and usable, but not compact."
+    },
+    {
+      "claim": "The extract passes source independence and supports continuation without the original thread.",
+      "type": "quality",
+      "verified": true,
+      "evidence": "The objective, reported current state, settled rules, blockers, local asset paths, resume point, ordered actions, dependencies, acceptance conditions, and unresolved eval-definition gap are all present. The recorded five-criterion rehydration table supplies evidence for the pass rather than merely asserting it."
+    },
+    {
+      "claim": "The bundled writer normalized the depth and produced the final artifact successfully.",
+      "type": "process",
+      "verified": true,
+      "evidence": "The transcript records a dry run, normalization from scan to rapid, the derived filename, the final write under `outputs/`, and a reread of the generated artifact. The expected file exists with the stated filename and metadata."
+    }
+  ],
+  "user_notes_summary": {
+    "uncertainties": [],
+    "needs_review": [],
+    "workarounds": []
+  },
+  "eval_feedback": {
+    "suggestions": [
+      {
+        "assertion": "Response normalizes the scan action trigger, records extraction_depth: rapid, and produces a compact continuity brief.",
+        "reason": "Keep compactness in the assertion, but make it independently measurable and avoid coupling it to the depth-normalization check. For a rapid extraction, specify a word ceiling, a maximum expansion ratio, or a required small set of nonduplicative sections. This run correctly normalizes depth yet is almost ten times the source length, so the compound assertion otherwise hides which requirement failed."
+      },
+      {
+        "reason": "Add a non-redundancy assertion for rapid mode. The output repeats the same decisions, blockers, assets, and caveats across many sections even though its actual handoff and rehydration tables are useful. A discriminating check should reward complete coverage once, not repeated coverage in every template section."
+      }
+    ],
+    "overall": "Three of four assertions pass. The output is exceptionally complete, auditable, source-independent, and actionable, but it misses the defining rapid-mode quality: compactness. Its 2,070 words turn a 213-word source into a document that is slower to scan than the source itself."
+  }
+}

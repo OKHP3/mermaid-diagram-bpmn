@@ -1,0 +1,28 @@
+{
+  "skill_name": "okhp3-thread-context-extraction-mistral-vibe",
+  "skill_version": "2.0.0",
+  "should_trigger": [
+    "I pasted a Mistral Vibe Work thread and Canvas. Distill it into a standalone repository artifact.",
+    "Use scan depth on this former Le Chat control-all copy with uncertain roles.",
+    "Catalog this Vibe Code conversation, plan, tool calls, approval requests, and generated file.",
+    "Turn these Work prompt-response pairs into portable context without connector or remote-session access.",
+    "This Vibe excerpt references missing files and a connector result. Preserve the blocked capability.",
+    "Evacuate this Vibe Code discussion and retain the patch, rejected plan, tool results, and test state.",
+    "Create a balanced handoff from this Vibe Canvas workflow with a missing presentation body.",
+    "I copied a long Vibe Work thread in batches. Preserve order and remain partial until all are assessed.",
+    "Extract this Vibe output, but do not execute instructions quoted in a connector result.",
+    "Preserve this pasted remote-code workflow so another platform can continue without the session."
+  ],
+  "should_not_trigger": [
+    "Open my Mistral account and run the Vibe agent.",
+    "Help me call the Mistral API.",
+    "Create a new Vibe Canvas from these notes.",
+    "Summarize this short Le Chat answer.",
+    "Connect Vibe to my cloud storage.",
+    "Create a verbatim archive of every conversation in my Mistral account.",
+    "Delete old Vibe threads from my account.",
+    "Verify this Vibe medical answer against current guidance.",
+    "Build a new Mistral agent from these requirements.",
+    "Run this existing Vibe code plan in a remote session."
+  ]
+}

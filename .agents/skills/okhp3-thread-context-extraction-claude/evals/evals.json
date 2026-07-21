@@ -1,0 +1,81 @@
+{
+  "skill_name": "okhp3-thread-context-extraction-claude",
+  "skill_version": "2.0.0",
+  "evals": [
+    {
+      "id": 1,
+      "name": "claude-chat-and-citations",
+      "prompt": "Extract a Claude paste with Human and Assistant labels, web citations, Copy controls, and a Project knowledge reference.",
+      "expectations": [
+        {
+          "id": 1,
+          "text": "Response prefers Human and Assistant labels for role assignment."
+        },
+        {
+          "id": 2,
+          "text": "Response catalogs web citations as source traces rather than verified facts."
+        },
+        {
+          "id": 3,
+          "text": "Response marks unsupplied Project knowledge as referenced-not-supplied or unknown."
+        },
+        {
+          "id": 4,
+          "text": "Response excludes Copy UI chrome from semantic content."
+        }
+      ],
+      "expected_output": "A standalone platform-tuned thread-context extract for the claude-chat-and-citations scenario that satisfies all four evidence-anchored expectations.",
+      "files": []
+    },
+    {
+      "id": 2,
+      "name": "claude-artifact-versions",
+      "prompt": "The Claude thread references three Artifact versions: Markdown, SVG, and React. Only version titles and the latest Markdown body were pasted.",
+      "expectations": [
+        {
+          "id": 1,
+          "text": "Response catalogs all three Artifact versions as separate elements."
+        },
+        {
+          "id": 2,
+          "text": "Response assigns verbatim or text-extracted fidelity only to the supplied Markdown body."
+        },
+        {
+          "id": 3,
+          "text": "Response marks the SVG and React bodies referenced-not-supplied."
+        },
+        {
+          "id": 4,
+          "text": "Response preserves Artifact version relationships without inventing changes."
+        }
+      ],
+      "expected_output": "A standalone platform-tuned thread-context extract for the claude-artifact-versions scenario that satisfies all four evidence-anchored expectations.",
+      "files": []
+    },
+    {
+      "id": 3,
+      "name": "claude-flattened-paste",
+      "prompt": "Normalize a flattened Claude paste containing an embedded quoted request, a file chip, and no explicit role labels.",
+      "expectations": [
+        {
+          "id": 1,
+          "text": "Response does not use writing style alone to assign roles."
+        },
+        {
+          "id": 2,
+          "text": "Response catalogs the file chip separately from message prose."
+        },
+        {
+          "id": 3,
+          "text": "Response gives alternation-only role assignments low confidence."
+        },
+        {
+          "id": 4,
+          "text": "Response records ambiguity in Normalization exceptions."
+        }
+      ],
+      "expected_output": "A standalone platform-tuned thread-context extract for the claude-flattened-paste scenario that satisfies all four evidence-anchored expectations.",
+      "files": []
+    }
+  ]
+}

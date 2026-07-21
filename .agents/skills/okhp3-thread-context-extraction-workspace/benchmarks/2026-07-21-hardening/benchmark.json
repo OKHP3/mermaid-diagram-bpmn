@@ -1,0 +1,89 @@
+{
+  "metadata": {
+    "skill_name": "okhp3-thread-context-extraction",
+    "candidate_version": "2.0.0",
+    "baseline": "pre-2.0.0 snapshot",
+    "timestamp": "2026-07-21T19:30:00Z",
+    "evals_run": [1, 2, 3],
+    "runs_per_configuration": 1,
+    "targeted_reruns": ["eval-2 with_skill after compactness fix"]
+  },
+  "runs": [
+    {
+      "eval_id": 1,
+      "eval_name": "substantial-normalizes-balanced",
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": {"pass_rate": 1.0, "passed": 4, "failed": 0, "total": 4, "time_seconds": null, "tokens": null, "tool_calls": null, "errors": 0},
+      "output_chars": 17146,
+      "output_words": 2209
+    },
+    {
+      "eval_id": 1,
+      "eval_name": "substantial-normalizes-balanced",
+      "configuration": "without_skill",
+      "run_number": 1,
+      "result": {"pass_rate": 0.75, "passed": 3, "failed": 1, "total": 4, "time_seconds": null, "tokens": null, "tool_calls": null, "errors": 0},
+      "output_chars": 14213,
+      "output_words": 1803
+    },
+    {
+      "eval_id": 2,
+      "eval_name": "scan-normalizes-rapid",
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": {"pass_rate": 0.75, "passed": 3, "failed": 1, "total": 4, "time_seconds": null, "tokens": null, "tool_calls": null, "errors": 0},
+      "output_chars": 15277,
+      "output_words": 1806
+    },
+    {
+      "eval_id": 2,
+      "eval_name": "scan-normalizes-rapid-compactness-fix",
+      "configuration": "with_skill",
+      "run_number": 2,
+      "result": {"pass_rate": 1.0, "passed": 4, "failed": 0, "total": 4, "time_seconds": null, "tokens": null, "tool_calls": null, "errors": 0},
+      "output_chars": 7917,
+      "output_words": 898
+    },
+    {
+      "eval_id": 2,
+      "eval_name": "scan-normalizes-rapid",
+      "configuration": "without_skill",
+      "run_number": 1,
+      "result": {"pass_rate": 0.5, "passed": 2, "failed": 2, "total": 4, "time_seconds": null, "tokens": null, "tool_calls": null, "errors": 0},
+      "output_chars": 10874,
+      "output_words": 1274
+    },
+    {
+      "eval_id": 3,
+      "eval_name": "catalog-normalizes-comprehensive",
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": {"pass_rate": 1.0, "passed": 4, "failed": 0, "total": 4, "time_seconds": null, "tokens": null, "tool_calls": null, "errors": 0},
+      "output_chars": 16348,
+      "output_words": 2108
+    },
+    {
+      "eval_id": 3,
+      "eval_name": "catalog-normalizes-comprehensive",
+      "configuration": "without_skill",
+      "run_number": 1,
+      "result": {"pass_rate": 0.75, "passed": 3, "failed": 1, "total": 4, "time_seconds": null, "tokens": null, "tool_calls": null, "errors": 0},
+      "output_chars": 12159,
+      "output_words": 1539
+    }
+  ],
+  "run_summary": {
+    "final_with_skill": {"pass_rate": {"mean": 1.0}, "output_chars": {"mean": 13803.67}, "output_words": {"mean": 1738.33}},
+    "without_skill": {"pass_rate": {"mean": 0.6667}, "output_chars": {"mean": 12415.33}, "output_words": {"mean": 1538.67}},
+    "delta": {"pass_rate": "+0.3333", "output_chars": "+1388.34", "output_words": "+199.66"},
+    "initial_candidate_pass_rate": 0.9167
+  },
+  "notes": [
+    "The pre-update snapshot was already a strong baseline with depth aliases, ledgers, rich-element cataloging, provenance, and source-independence guidance.",
+    "Version 2.0.0 initially passed 11 of 12 assertions; rapid-mode compactness was the only failure.",
+    "The targeted rapid fix reduced the eval-2 artifact from 15,277 to 7,917 characters and from 1,806 to 898 measured words while raising it from 3/4 to 4/4.",
+    "Final selected candidate outputs passed 12 of 12 assertions. The +0.3333 delta is below the FoundRy aspirational +0.50 because the baseline already passed 8 of 12 assertions.",
+    "Timing and token usage were not exposed by the local subagent runner and are recorded as null rather than estimated."
+  ]
+}

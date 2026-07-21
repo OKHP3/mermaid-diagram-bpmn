@@ -1,0 +1,6 @@
+interface:
+  display_name: "Mistral Vibe Thread Extraction"
+  short_description: "Evacuate Vibe chats into portable Markdown"
+  default_prompt: "Extract the supplied Mistral Vibe thread into a standalone Markdown artifact at balanced depth."
+policy:
+  allow_implicit_invocation: true

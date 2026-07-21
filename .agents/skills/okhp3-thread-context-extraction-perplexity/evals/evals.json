@@ -1,0 +1,81 @@
+{
+  "skill_name": "okhp3-thread-context-extraction-perplexity",
+  "skill_version": "2.0.0",
+  "evals": [
+    {
+      "id": 1,
+      "name": "perplexity-question-answer-sources",
+      "prompt": "Extract a Perplexity session with an initial question, two follow-ups, answers, numbered citations, source cards, and Export and Rewrite controls.",
+      "expectations": [
+        {
+          "id": 1,
+          "text": "Response maps initial and follow-up questions separately from answers."
+        },
+        {
+          "id": 2,
+          "text": "Response preserves supplied citation numbering and URLs."
+        },
+        {
+          "id": 3,
+          "text": "Response catalogs source cards as content elements."
+        },
+        {
+          "id": 4,
+          "text": "Response excludes Export and Rewrite UI chrome from semantic content."
+        }
+      ],
+      "expected_output": "A standalone platform-tuned thread-context extract for the perplexity-question-answer-sources scenario that satisfies all four evidence-anchored expectations.",
+      "files": []
+    },
+    {
+      "id": 2,
+      "name": "perplexity-file-and-image",
+      "prompt": "A Perplexity answer analyzes an uploaded PDF and image and offers a generated DOCX, but the paste includes only their names and the prose answer.",
+      "expectations": [
+        {
+          "id": 1,
+          "text": "Response catalogs the PDF, image, and DOCX separately."
+        },
+        {
+          "id": 2,
+          "text": "Response marks absent file bodies metadata-only or referenced-not-supplied."
+        },
+        {
+          "id": 3,
+          "text": "Response does not claim to have opened the sources or files."
+        },
+        {
+          "id": 4,
+          "text": "Response records missing file content as an extraction limit."
+        }
+      ],
+      "expected_output": "A standalone platform-tuned thread-context extract for the perplexity-file-and-image scenario that satisfies all four evidence-anchored expectations.",
+      "files": []
+    },
+    {
+      "id": 3,
+      "name": "perplexity-space-context",
+      "prompt": "Normalize a copied Perplexity Space thread where the Space name is shown but custom instructions, connectors, and internal files are absent.",
+      "expectations": [
+        {
+          "id": 1,
+          "text": "Response records the Space name only as supplied."
+        },
+        {
+          "id": 2,
+          "text": "Response marks custom instructions, connectors, and internal files not supplied or unknown."
+        },
+        {
+          "id": 3,
+          "text": "Response keeps copied citations distinct from independently verified facts."
+        },
+        {
+          "id": 4,
+          "text": "Response records uncertainty in Normalization exceptions."
+        }
+      ],
+      "expected_output": "A standalone platform-tuned thread-context extract for the perplexity-space-context scenario that satisfies all four evidence-anchored expectations.",
+      "files": []
+    }
+  ]
+}

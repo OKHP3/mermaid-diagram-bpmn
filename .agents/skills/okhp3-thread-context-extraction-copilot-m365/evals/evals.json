@@ -1,0 +1,81 @@
+{
+  "skill_name": "okhp3-thread-context-extraction-copilot-m365",
+  "skill_version": "2.0.0",
+  "evals": [
+    {
+      "id": 1,
+      "name": "copilot-chat-grounding",
+      "prompt": "Extract an M365 Copilot Chat paste with Message Copilot boundaries, work and web grounding labels, source cards, and response controls.",
+      "expectations": [
+        {
+          "id": 1,
+          "text": "Response uses Message Copilot and response controls as role-boundary evidence."
+        },
+        {
+          "id": 2,
+          "text": "Response records work and web grounding only where supplied."
+        },
+        {
+          "id": 3,
+          "text": "Response catalogs source cards separately from answer prose."
+        },
+        {
+          "id": 4,
+          "text": "Response treats tenant-grounded references as sensitive source traces."
+        }
+      ],
+      "expected_output": "A standalone platform-tuned thread-context extract for the copilot-chat-grounding scenario that satisfies all four evidence-anchored expectations.",
+      "files": []
+    },
+    {
+      "id": 2,
+      "name": "copilot-pages-and-m365-items",
+      "prompt": "The chat references a Copilot Page, SharePoint file, Teams meeting, and Outlook email. Only titles are in the paste.",
+      "expectations": [
+        {
+          "id": 1,
+          "text": "Response treats Copilot Pages as a separate editable canvas."
+        },
+        {
+          "id": 2,
+          "text": "Response catalogs the Page, file, meeting, and email separately."
+        },
+        {
+          "id": 3,
+          "text": "Response marks absent bodies metadata-only or referenced-not-supplied."
+        },
+        {
+          "id": 4,
+          "text": "Response applies needs-review or private-only handling to employer content."
+        }
+      ],
+      "expected_output": "A standalone platform-tuned thread-context extract for the copilot-pages-and-m365-items scenario that satisfies all four evidence-anchored expectations.",
+      "files": []
+    },
+    {
+      "id": 3,
+      "name": "consumer-versus-m365",
+      "prompt": "Normalize a Copilot paste that does not show whether it came from consumer Copilot or Microsoft 365 Copilot.",
+      "expectations": [
+        {
+          "id": 1,
+          "text": "Response records the product surface as unknown rather than inferring it."
+        },
+        {
+          "id": 2,
+          "text": "Response does not infer a tenant identity."
+        },
+        {
+          "id": 3,
+          "text": "Response records uncertain grounding in Normalization exceptions."
+        },
+        {
+          "id": 4,
+          "text": "Response does not use writing style to assign platform or role."
+        }
+      ],
+      "expected_output": "A standalone platform-tuned thread-context extract for the consumer-versus-m365 scenario that satisfies all four evidence-anchored expectations.",
+      "files": []
+    }
+  ]
+}

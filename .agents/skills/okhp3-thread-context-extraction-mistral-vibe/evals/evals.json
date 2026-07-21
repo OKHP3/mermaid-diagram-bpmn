@@ -1,0 +1,81 @@
+{
+  "skill_name": "okhp3-thread-context-extraction-mistral-vibe",
+  "skill_version": "2.0.0",
+  "evals": [
+    {
+      "id": 1,
+      "name": "vibe-work-progress-tools",
+      "prompt": "Extract a Vibe Work paste containing a plan, progress updates, tool calls, connector results, and final assistant output.",
+      "expectations": [
+        {
+          "id": 1,
+          "text": "Response distinguishes plan, progress, tool calls, and final answer blocks."
+        },
+        {
+          "id": 2,
+          "text": "Response catalogs tool calls and connector results as tool_event elements."
+        },
+        {
+          "id": 3,
+          "text": "Response records Vibe Work only because the surface was supplied."
+        },
+        {
+          "id": 4,
+          "text": "Response does not treat tool output as automatically verified."
+        }
+      ],
+      "expected_output": "A standalone platform-tuned thread-context extract for the vibe-work-progress-tools scenario that satisfies all four evidence-anchored expectations.",
+      "files": []
+    },
+    {
+      "id": 2,
+      "name": "vibe-canvas-and-code",
+      "prompt": "The Vibe thread references Canvas tabs for a document, chart, code, and presentation plus code diffs and test output. Only titles and summaries were pasted.",
+      "expectations": [
+        {
+          "id": 1,
+          "text": "Response catalogs Canvas tabs, code diffs, and test output separately."
+        },
+        {
+          "id": 2,
+          "text": "Response preserves supplied tab or version relationships."
+        },
+        {
+          "id": 3,
+          "text": "Response marks absent bodies metadata-only or referenced-not-supplied."
+        },
+        {
+          "id": 4,
+          "text": "Response keeps claimed code state separate from actual repository state."
+        }
+      ],
+      "expected_output": "A standalone platform-tuned thread-context extract for the vibe-canvas-and-code scenario that satisfies all four evidence-anchored expectations.",
+      "files": []
+    },
+    {
+      "id": 3,
+      "name": "vibe-le-chat-unknown-mode",
+      "prompt": "Normalize a historical Le Chat paste whose current Vibe mode, connector context, and source files are not visible.",
+      "expectations": [
+        {
+          "id": 1,
+          "text": "Response accepts Le Chat as a historical source alias."
+        },
+        {
+          "id": 2,
+          "text": "Response records the current Vibe mode as unknown."
+        },
+        {
+          "id": 3,
+          "text": "Response marks connector context and source files not supplied or unknown."
+        },
+        {
+          "id": 4,
+          "text": "Response records the missing context in Normalization exceptions."
+        }
+      ],
+      "expected_output": "A standalone platform-tuned thread-context extract for the vibe-le-chat-unknown-mode scenario that satisfies all four evidence-anchored expectations.",
+      "files": []
+    }
+  ]
+}

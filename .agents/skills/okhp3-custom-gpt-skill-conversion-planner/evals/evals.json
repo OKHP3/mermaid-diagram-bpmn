@@ -1,0 +1,36 @@
+{
+  "skill_name": "okhp3-custom-gpt-skill-conversion-planner",
+  "skill_version": "1.2.0",
+  "evals": [
+    {
+      "id": "portable-method",
+      "prompt": "This GPT reviews ADRs using a rubric in its instructions, a public glossary PDF, three conversation starters, and a six-stage prompt chain. Plan its conversion to an Agent Skill.",
+      "expectations": [
+        "Maps the rubric and any useful chain stages to portable procedures with inputs, exit criteria, and recovery rather than copying UI language.",
+        "Maps the public glossary to a reference asset and preserves source traceability.",
+        "Defines a trigger, scope boundary, output contract, and safety rule for the new skill.",
+        "Creates a Foundry handoff with exactly three eval cases and four expectations per case, including a semantic-preservation check."
+      ]
+    },
+    {
+      "id": "semantic-loss",
+      "prompt": "The GPT uses a private connector, hidden Builder instructions, conversation memory, and an OAuth Action. What transfers to a public skill and what does not?",
+      "expectations": [
+        "Separates portable method content from connector permissions, hidden UI behavior, memory, and OAuth credentials.",
+        "Records semantic loss with impact and mitigation rather than claiming feature parity.",
+        "Proposes adapters or explicit exclusions for platform-bound capabilities.",
+        "Marks unknown platform behavior as unverified and adds an acceptance test or verification task."
+      ]
+    },
+    {
+      "id": "incomplete-source",
+      "prompt": "I only have a GPT name and a screenshot. Should we convert it into a skill now?",
+      "expectations": [
+        "Selects needs_source_artifacts or a comparable blocked disposition.",
+        "Does not invent instructions, tools, knowledge, or behavior from the screenshot.",
+        "Requests the smallest high-value source artifacts needed to continue.",
+        "Still provides a provisional architecture and a concrete migration next step."
+      ]
+    }
+  ]
+}

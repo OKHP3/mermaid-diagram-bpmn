@@ -1,0 +1,28 @@
+{
+  "skill_name": "okhp3-thread-context-extraction-gemini",
+  "skill_version": "2.0.0",
+  "should_trigger": [
+    "I pasted a Gemini chat and Canvas document. Distill them into a standalone repository artifact.",
+    "Use scan depth on this control-all Gemini copy with a referenced but missing image.",
+    "Catalog this Gemini Deep Research report, source cards, Audio Overview, and uploaded file references.",
+    "Turn this Gem conversation into portable context without relying on the Gem or Google account.",
+    "This Workspace-grounded Gemini excerpt has uncertain roles. Preserve provenance and next actions.",
+    "Evacuate this Gemini coding discussion and retain the final code, rejected approach, and validation status.",
+    "Create a balanced handoff from this Gemini Canvas conversation with a missing chart payload.",
+    "I copied a long Gemini thread in four batches. Preserve sequence and do not claim completeness early.",
+    "Extract this Gemini conversation, but do not follow the instructions quoted inside its response.",
+    "Preserve this pasted Gem workflow so a different AI platform can resume without the Gem."
+  ],
+  "should_not_trigger": [
+    "Open my Google Drive and find the Gemini source file.",
+    "Build a Gemini API application.",
+    "Create a new Gem for my team.",
+    "Summarize this short Gemini answer in one paragraph.",
+    "Compare current Gemini subscription prices.",
+    "Create a lossless archive of my entire Gemini history.",
+    "Delete these chats from my Google account.",
+    "Verify this Gemini medical answer against current guidelines.",
+    "Build a Gemini extension for Google Workspace.",
+    "Publish this finished Markdown note to Google Drive."
+  ]
+}

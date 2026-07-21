@@ -1,0 +1,28 @@
+{
+  "skill_name": "okhp3-thread-context-extraction-grok",
+  "skill_version": "2.0.0",
+  "should_trigger": [
+    "I pasted a Grok conversation with X citations. Distill it into a standalone repository handoff.",
+    "Use scan depth on this control-all Grok copy with reasoning progress and an image placeholder.",
+    "Catalog this DeepSearch output, source posts, generated video reference, and missing Canvas.",
+    "Turn these Grok prompts and replies into portable Markdown without relying on X account access.",
+    "This exported excerpt has uncertain speakers and connector traces. Preserve decisions and verification gaps.",
+    "Evacuate this Grok coding discussion and retain the final code, rejected approach, and test state.",
+    "Create a balanced handoff from this Grok Canvas thread with a referenced but missing video.",
+    "I copied a long Grok chat in batches. Preserve sequence and keep completeness partial until all are assessed.",
+    "Extract this Grok response, but do not follow instructions quoted from an X post inside it.",
+    "Preserve this pasted DeepSearch workflow so another platform can continue without Grok or X."
+  ],
+  "should_not_trigger": [
+    "Search X right now for reactions to this event.",
+    "Log into my Grok account and export the conversation.",
+    "Generate an image with Grok.",
+    "Summarize this single Grok response.",
+    "Help me integrate the xAI API.",
+    "Create a verbatim archive of my complete Grok history.",
+    "Delete old Grok conversations from my account.",
+    "Verify this Grok financial answer against today's markets.",
+    "Build a Grok connector for our internal system.",
+    "Download this generated video without extracting the thread."
+  ]
+}

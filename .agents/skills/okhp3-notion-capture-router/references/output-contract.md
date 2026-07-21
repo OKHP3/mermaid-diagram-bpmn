@@ -5,85 +5,61 @@ Use this contract whenever `okhp3-notion-capture-router` reports or writes a cap
 ## Capture report
 
 ```md
-# Capture Report: [Thread Title]
+# Notion Capture Report: [Source Title]
 
-## Boundary Gate
-- Platform:
-- Origin:
+## Request
+- Source platform/type:
+- Destination type: page / database / data source / both
+- Requested mode: preview / report-only / create / update / upsert
+- Destination resolved from:
+
+## Safety
 - Safe to write: Yes / No / Partial
-- Reason:
+- Privacy or redaction notes:
+- Confirmation needed:
 
-## Thread Classification
-- Dedupe status: duplicate / complementary / net-new / conflicted / unsafe-to-capture
-- Primary Domain:
-- Secondary Domain candidates:
-- Project relation:
-- GitHub repo candidate:
+## Classification
+- Source-level status: duplicate / complementary / net-new / conflicted / unsafe-to-capture
+- Extract count:
+- Existing match or relation:
 
-## Thread Summary
-[One paragraph. Purpose, topics, decisions, deliverables, open loops.]
+## Summary
+[Purpose, topics, decisions, deliverables, and open loops.]
 
-## Extract Plan
-| Extract | Type | Confidence | Dedupe status | Destination | Next action |
+## Extract plan
+| Extract | Type | Confidence | Status | Destination | Action |
 |---|---|---|---|---|---|
 | ... | ... | ... | ... | ... | ... |
 
-## GitHub Reconciliation
-| Nugget | In Notion? | In GitHub? | Action |
-|---|---:|---:|---|
-| ... | Y/N | Y/N | ... |
-
-## Write Log
+## Write log
 - Created:
 - Updated:
 - Skipped:
+- Redacted:
+- Failed:
 - Pending:
 
-## Archive Gate
-- Topic / Domain retrievable: Yes / No
-- Date retrievable: Yes / No
-- Origin retrievable: Yes / No
-- Canonical link present: Yes / No
-- Recommended status:
+## Verification
+- Destination fetched after write: Yes / No
+- Content or properties verified: Yes / No
+- Relations/source traceability verified: Yes / No
+- Duplicate check completed: Yes / No
 ```
 
-## Chat Threads row
+## Page export
 
-| Field | Value rule |
-|---|---|
-| Title | Specific, searchable title. Avoid generic "ChatGPT thread". |
-| Platform | Source platform. Use Other for unknown. |
-| Origin | JMH, OKH, WORK, or MIX. Run boundary gate first. |
-| Date | Source date if known, otherwise capture date. |
-| Domain | Primary domain relation. |
-| Project | Project relation if clear. Leave blank if not clear. |
-| Summary | One-line retrieval summary. |
-| Link | Source URL if available. Otherwise `pending`. |
-| Status | `Extracted` unless archive gate passes. |
+Use a readable Markdown page with metadata, summary, extracts, open loops, and source content. Preserve the source when the user asks for a full export; label summaries and derived extracts so they are not mistaken for verbatim source material.
 
-## Extract row
+## Database row
 
-| Field | Value rule |
-|---|---|
-| Title | One reusable idea, not a bundle. |
-| Type | Use closest fit. Default to Research Finding. |
-| Confidence | High when reusable and clear. Medium when likely useful. Low when uncertain but worth preserving. |
-| Status | Captured by default. Canonical only if already validated or promoted. |
-| Next action | Specific action: route, validate, convert, publish, compare, or leave parked. |
-| Source thread | Relate to the thread row. |
-| Domains | Relate to primary domain. |
-| Projects | Relate when applicable. |
+Report the exact property map used, including the title property, status values, relations, and any long content placed in the page body. Do not report guessed fields as if they were written.
 
 ## Classification rules
 
 | Class | Use when | Write behavior |
 |---|---|---|
-| duplicate | Existing record covers same substance | Update existing if useful, do not create duplicate |
-| complementary | Existing record exists but this adds material | Append or create linked extract |
-| net-new | No adequate representation exists | Create new rows |
-| conflicted | Similar material disagrees or supersedes older material | Preserve both and flag review |
-| unsafe-to-capture | Privacy, employer, or personal-data issue | Report only |
-
-## Archive status rule
-
-Use `Archived` only when the archive gate passes. Otherwise use `Extracted` and list the missing retrieval axis.
+| duplicate | Existing item covers the same substance | Link or update only when useful; do not create another copy |
+| complementary | Existing item exists but the new material adds value | Append, update, or create a linked extract |
+| net-new | No adequate representation exists | Create the planned page or row |
+| conflicted | Similar material disagrees or supersedes older content | Preserve both and flag review |
+| unsafe-to-capture | Privacy, authority, or destination risk is unresolved | Report only |

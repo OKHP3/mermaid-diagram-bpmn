@@ -1,0 +1,92 @@
+{
+  "expectations": [
+    {
+      "text": "Response normalizes the scan action trigger, records extraction_depth: rapid, and produces a compact continuity brief.",
+      "passed": false,
+      "evidence": "The normalization is correct: frontmatter records `extraction_depth: \"rapid\"`, and the profile explicitly states `Requested depth: scan`, `Selected depth: rapid`, and that scan normalizes to rapid. The compound expectation fails on compactness. The artifact is 10,874 characters and about 1,495 words for a 1,550-character, 213-word, nine-turn fixture. It expands the source by roughly 7.0 times in characters and repeats the same material across a synopsis, two ledgers, normalization exceptions, value inventory, decisions, checklist, asset register, limits, and provenance. This is shorter than the with-skill result but still not a compact rapid brief."
+    },
+    {
+      "text": "Response uses compact coverage accounting or explicit grouped ranges to show that the complete payload was assessed.",
+      "passed": true,
+      "evidence": "The profile states that all nine turns were inspected and that T008's repeated reminder was compressed. The Turn ledger then enumerates T001-T009. The Content element ledger and Normalization exceptions account for the three named files and explicitly classify the image and canvas mentions as unavailable risk-category material rather than supplied payloads. This is enough to show complete assessment, although treating those abstract mentions as E004 and E005 content elements is less precise than the with-skill accounting."
+    },
+    {
+      "text": "Response includes a Not carried forward list using omit-with-reason rather than silently dropping material.",
+      "passed": true,
+      "evidence": "The Extraction profile explicitly states: `Not carried forward: Routine conversational phrasing, duplicate reminder wording, and verbatim transcript text were omitted because they add no continuation value.` The coverage rule also identifies the repeated source-independence reminder as compressed into one operating constraint."
+    },
+    {
+      "text": "Response includes a compact actionable handoff and rehydration result that permit resumption without the original thread.",
+      "passed": false,
+      "evidence": "The seven-step Immediate continuation checklist is useful and the profile asserts `Source-independence test: Pass for rapid continuity.` However, there is no recorded rehydration test with explicit criteria, per-criterion outcomes, and evidence or gaps. The checklist also lacks owners, statuses, dependencies, and acceptance conditions, so it does not provide the same executable handoff evidence as the with-skill result. Under the burden of proof, a bare pass claim plus future actions does not establish a completed rehydration result."
+    }
+  ],
+  "summary": {
+    "passed": 2,
+    "failed": 2,
+    "total": 4,
+    "pass_rate": 0.5
+  },
+  "claims": [
+    {
+      "claim": "The requested scan depth was normalized to rapid.",
+      "type": "factual",
+      "verified": true,
+      "evidence": "The eval prompt requests scan depth; the output records rapid in frontmatter and explicitly describes the scan-to-rapid normalization in the Extraction profile."
+    },
+    {
+      "claim": "All nine supplied turns were inspected.",
+      "type": "factual",
+      "verified": true,
+      "evidence": "The fixture contains nine labeled turns, and the output enumerates all of them as T001-T009 with accurate short summaries."
+    },
+    {
+      "claim": "The image and canvas are supplied rich-content elements represented by E004 and E005.",
+      "type": "quality",
+      "verified": false,
+      "evidence": "The fixture only discusses images and canvases as general capture-risk categories. It supplies no particular image, canvas, title, chip, filename, or sidecar. The artifact eventually clarifies this in Normalization exceptions, but assigning E004 type `image` and E005 type `canvas` overstates the source material."
+    },
+    {
+      "claim": "This is a compact rapid continuity brief.",
+      "type": "quality",
+      "verified": false,
+      "evidence": "The output is about 1,495 words versus 213 words in the source and repeats the same information across numerous sections. It is accurate and shorter than the with-skill artifact, but it is not compact for a time-critical scan request."
+    },
+    {
+      "claim": "The source-independence test passed.",
+      "type": "quality",
+      "verified": false,
+      "evidence": "The output likely contains enough context to continue and offers a useful checklist, but it records only a summary pass assertion. It does not define rehydration criteria, record outcomes against them, or attach evidence and gaps, so the claimed test result is not demonstrated."
+    },
+    {
+      "claim": "The baseline writer ultimately created the final artifact after recovering from an unavailable Python alias.",
+      "type": "process",
+      "verified": true,
+      "evidence": "The transcript records one failed attempt through the unavailable `python` alias, a successful retry through the installed Python launcher, and a reread of the generated file. The expected output exists with the described metadata and title."
+    }
+  ],
+  "user_notes_summary": {
+    "uncertainties": [],
+    "needs_review": [],
+    "workarounds": [
+      "The first writer attempt used an unavailable `python` alias; the executor retried successfully with the installed Python launcher."
+    ]
+  },
+  "eval_feedback": {
+    "suggestions": [
+      {
+        "assertion": "Response normalizes the scan action trigger, records extraction_depth: rapid, and produces a compact continuity brief.",
+        "reason": "Split normalization from compactness and define a measurable rapid-mode size or non-redundancy constraint. This output correctly normalizes the trigger but is still about seven times the source length, so one compound verdict obscures the distinct success and failure."
+      },
+      {
+        "assertion": "Response uses compact coverage accounting or explicit grouped ranges to show that the complete payload was assessed.",
+        "reason": "Require the accounting to distinguish actual supplied rich elements from abstract discussion of rich-element risks. The baseline passes complete-turn coverage, but its ledger promotes generic mentions of images and canvases into E004 and E005 even though no specific rich payload was supplied."
+      },
+      {
+        "assertion": "Response includes a compact actionable handoff and rehydration result that permit resumption without the original thread.",
+        "reason": "Define minimum recorded evidence for rehydration: criteria, a result for each criterion, and evidence or a stated gap. Also require handoff actions to include an actor, dependency, and acceptance condition. This prevents a bare pass assertion and general checklist from satisfying the outcome."
+      }
+    ],
+    "overall": "Two of four assertions pass. The baseline accurately normalizes scan to rapid, covers all turns, and records omissions, but it is still far too long for rapid mode and does not substantiate its source-independence pass with a recorded rehydration test. Its rich-element ledger also over-models abstract image and canvas risk mentions as concrete elements."
+  }
+}

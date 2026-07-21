@@ -1,0 +1,61 @@
+{
+  "expectations": [
+    {
+      "text": "Response normalizes scan to rapid and remains approximately within the 600 to 1,200 word ordinary-thread target.",
+      "passed": true,
+      "evidence": "Frontmatter records requested_extraction_depth scan and extraction_depth rapid. Repository-side counting found 898 words, within the documented target."
+    },
+    {
+      "text": "Response uses compact coverage accounting or grouped ranges to show the complete payload was assessed.",
+      "passed": true,
+      "evidence": "Coverage accounting reconciles nine turns, five file references, seven decisions, and five reusable assets. Grouped ledgers account for T001-T009 and E001-E005."
+    },
+    {
+      "text": "Response records material not carried forward with reasons.",
+      "passed": true,
+      "evidence": "Extraction profile states that conversational phrasing and a repeated visibility reminder were compressed because they add no operating detail, while no focused item was omitted."
+    },
+    {
+      "text": "Response provides an actionable handoff and rehydration result without repeating the same caveats across sections.",
+      "passed": true,
+      "evidence": "The handoff records current state, resume point, dependencies, owners, statuses, and acceptance conditions. The rehydration table records five evidence-backed results and uses D1-D7 and E001-E005 cross-references instead of repeating full explanations."
+    }
+  ],
+  "summary": {
+    "passed": 4,
+    "failed": 0,
+    "total": 4,
+    "pass_rate": 1.0
+  },
+  "execution_metrics": {
+    "tool_calls": {},
+    "total_tool_calls": 0,
+    "total_steps": 0,
+    "errors_encountered": 0,
+    "output_chars": 7917,
+    "transcript_chars": 1409
+  },
+  "claims": [
+    {
+      "claim": "The rapid artifact contains 898 words.",
+      "type": "factual",
+      "verified": true,
+      "evidence": "Counted from the generated Markdown artifact using a Unicode word-token pattern."
+    },
+    {
+      "claim": "The artifact permits continuation without the source thread.",
+      "type": "quality",
+      "verified": true,
+      "evidence": "Objective, decisions, current state, local asset paths, blockers, resume point, actions, dependencies, and unresolved gaps are retained."
+    }
+  ],
+  "user_notes_summary": {
+    "uncertainties": [],
+    "needs_review": [],
+    "workarounds": []
+  },
+  "eval_feedback": {
+    "suggestions": [],
+    "overall": "The focused fix resolved the compactness failure. The artifact fell from 15,277 to 7,917 characters while retaining auditable coverage, actionability, and rehydration evidence."
+  }
+}

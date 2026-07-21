@@ -1,0 +1,6 @@
+interface:
+  display_name: "Grok Thread Extraction"
+  short_description: "Evacuate pasted Grok chats into portable Markdown"
+  default_prompt: "Extract the supplied Grok thread into a standalone Markdown artifact at balanced depth."
+policy:
+  allow_implicit_invocation: true

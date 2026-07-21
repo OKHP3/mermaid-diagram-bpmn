@@ -1,0 +1,81 @@
+{
+  "skill_name": "okhp3-thread-context-extraction-gemini",
+  "skill_version": "2.0.0",
+  "evals": [
+    {
+      "id": 1,
+      "name": "gemini-chat-controls",
+      "prompt": "Extract a Gemini paste with user prompts, answer action controls, source links, and a Drive file chip.",
+      "expectations": [
+        {
+          "id": 1,
+          "text": "Response uses Gemini answer controls and composer boundaries as role evidence."
+        },
+        {
+          "id": 2,
+          "text": "Response catalogs the Drive file chip separately from message text."
+        },
+        {
+          "id": 3,
+          "text": "Response labels source links as source traces."
+        },
+        {
+          "id": 4,
+          "text": "Response creates both required ledgers."
+        }
+      ],
+      "expected_output": "A standalone platform-tuned thread-context extract for the gemini-chat-controls scenario that satisfies all four evidence-anchored expectations.",
+      "files": []
+    },
+    {
+      "id": 2,
+      "name": "gemini-canvas-research",
+      "prompt": "The Gemini conversation references a Canvas app and a Deep Research report with charts and a diagram, but the paste contains only summaries and titles.",
+      "expectations": [
+        {
+          "id": 1,
+          "text": "Response treats Canvas and Deep Research as separate surfaces."
+        },
+        {
+          "id": 2,
+          "text": "Response catalogs the app, report, charts, and diagram as content elements."
+        },
+        {
+          "id": 3,
+          "text": "Response assigns referenced-not-supplied fidelity to absent bodies."
+        },
+        {
+          "id": 4,
+          "text": "Response does not reconstruct unavailable visual contents."
+        }
+      ],
+      "expected_output": "A standalone platform-tuned thread-context extract for the gemini-canvas-research scenario that satisfies all four evidence-anchored expectations.",
+      "files": []
+    },
+    {
+      "id": 3,
+      "name": "gemini-gem-context",
+      "prompt": "Normalize a Gemini Gem thread where the Gem name is visible but its instructions and Workspace grounding are absent.",
+      "expectations": [
+        {
+          "id": 1,
+          "text": "Response records the Gem name only as supplied."
+        },
+        {
+          "id": 2,
+          "text": "Response marks Gem instructions not supplied or unknown."
+        },
+        {
+          "id": 3,
+          "text": "Response marks Workspace grounding not supplied or unknown."
+        },
+        {
+          "id": 4,
+          "text": "Response does not infer product context from response style."
+        }
+      ],
+      "expected_output": "A standalone platform-tuned thread-context extract for the gemini-gem-context scenario that satisfies all four evidence-anchored expectations.",
+      "files": []
+    }
+  ]
+}

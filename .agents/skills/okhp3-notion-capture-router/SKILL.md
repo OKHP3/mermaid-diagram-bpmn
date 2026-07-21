@@ -1,222 +1,227 @@
 ---
 name: okhp3-notion-capture-router
-description: "Use this skill when converting ChatGPT, Claude, Perplexity, Copilot, Gemini, PDF exports, or pasted AI conversations into Jamie's Notion knowledge hub. Routes a thread through Notion anchors, classifies Origin, dedupes against Chat Threads and Extracts, splits reusable nuggets into rows, reconciles against OKHP3 GitHub repos, and reports whether the material is duplicate, complementary, or net new. Use for thread inventory, capture-and-route, ideation router, Notion ingestion, second-brain migration, archive readiness, cross-platform memory consolidation, and chat-to-Notion workflows."
-license: "MIT"
-compatibility: "Requires access to Jamie's Notion workspace connector. GitHub reconciliation requires access to OKHP3 repositories. Do not commit private Notion URLs."
+description: Use this skill whenever an agent needs to export, capture, ingest, summarize, route, deduplicate, or reconcile a conversation or content artifact into Notion. It guides connector-enabled agents through choosing a Notion page versus database destination, resolving a workspace-specific URL or ID, inspecting page content or data-source schema before writing, mapping thread metadata and reusable extracts, creating or updating records safely, and verifying the result. Trigger for ChatGPT, Claude, Perplexity, Copilot, Gemini, PDF, Markdown, transcript, knowledge-base, Notion API, Notion connector, page, database, data source, or thread-export requests, even when the user does not name this skill.
+license: MIT
+compatibility: Requires a Notion connector or API-capable integration for writes. Read-only report mode works without write access. Do not commit account-specific Notion URLs, IDs, tokens, or workspace structure.
 metadata:
-  author: "OKHP3"
-  version: "0.1.0"
-  maturity: "draftable"
-  family: "notion"
+  author: Jamie Hill (OverKill Hill P³)
+  version: "0.3.0"
+  category: notion
+  origin: okhp3/skillz
+  homepage: https://overkillhill.com
+  author-github: https://github.com/OKHP3
+  maturity: draftable
 ---
 
-# OKHP3 Notion Capture Router
+# okhp3-notion-capture-router
 
-Turn a long AI conversation into durable Notion knowledge without dumping transcript sludge into the brain.
+**OverKill Hill P³** · [overkillhill.com](https://overkillhill.com) · [github.com/OKHP3](https://github.com/OKHP3)
 
-This skill is the ingestion layer for ChatGPT, Claude, Perplexity, Copilot, Gemini, PDF exports, and pasted thread summaries. It decides whether a thread is duplicate, complementary, or net new, then routes it into the Notion knowledge hub as two layers:
+Turn conversations and other content artifacts into useful Notion pages or database records. The skill teaches an agent-enabled platform how to use Notion as a destination without assuming a particular user's account, workspace taxonomy, page hierarchy, or database schema.
 
-1. A **Chat Threads** record for the whole conversation.
-2. One or more **Extracts** records for reusable nuggets.
+The source may be a live conversation, an exported transcript, a PDF, Markdown, research notes, or another structured artifact. The destination may be:
+
+1. A **page export** containing the complete source or a clearly labeled summary and extract set.
+2. A **database export** containing one thread/content record, one record per reusable extract, or another schema requested by the user.
+
+Use the user's requested destination and schema as the authority. Names such as “Chat Threads” or “Extracts” are examples, not required Notion structures.
 
 ## Use this skill when
 
-Use this skill when the user asks to:
+Use it when the user asks to:
 
-- capture, route, archive, centralize, ingest, inventory, migrate, audit, or dedupe AI conversations
-- move a ChatGPT, Claude, Perplexity, Copilot, Gemini, PDF export, or pasted transcript into Notion
-- determine whether a thread is already captured, complementary, or net new
-- compare a thread against existing Notion pages, Chat Threads, Extracts, Domains, Projects, or OKHP3 GitHub repos
-- create a reusable capture prompt, ingestion router, ideation router, or archive workflow
-- reduce a large conversation into thread-level and nugget-level knowledge
+- export a conversation, transcript, research result, or file into Notion
+- create or update a Notion page, database row, or data-source record
+- design a reusable Notion capture or ingestion workflow
+- turn a thread into a summary, outline, decision record, checklist, or reusable extracts
+- deduplicate or reconcile new material against existing Notion content
+- map an agent platform's output into a Notion API or connector schema
+- move content between pages and databases while preserving traceability
 
-Do not use this skill for generic note-taking, general Notion advice, or writing a single summary unless the user asks for routing, dedupe, extraction, archival, or cross-platform knowledge reuse.
+Do not use it for generic Notion advice that does not involve capture, export, routing, schema mapping, or a Notion write.
 
-## Private anchor rule
+## Scope
 
-This public skill must not hard-code private Notion URLs, database IDs, collection IDs, workspace links, or connector-only resource IDs.
+| In scope | Out of scope |
+|---|---|
+| Source normalization, destination resolution, schema inspection, deduplication, safe page or row writes, verification, and capture reporting | Guessing workspace structure, bypassing connector permissions, exporting private material publicly, or creating a new schema without explicit authorization |
 
-The runtime agent should obtain the private anchors from the user's project files, current prompt, connector context, or a non-committed file named:
+## Operating principles
 
-```text
-routing-anchors.private.md
+- **Destination-neutral:** Never assume the connected workspace belongs to a named person or has a particular page tree. Resolve the destination from the user's prompt, connector context, a project configuration file, or an explicit search result.
+- **Schema-first:** Fetch a target database or data source before creating rows. Use the returned property names and types exactly; do not guess fields.
+- **Page-safe:** Fetch a target page before replacing or appending content. Preserve child pages and databases unless the user explicitly authorizes their removal.
+- **Idempotent:** Search or query before creating a record. Prefer updating a matching page or row over creating duplicates.
+- **Traceable:** Preserve source title, platform, date, source link when available, export time, and the relationship between a full thread and its extracts.
+- **Consent-aware:** Confirm the intended destination and visibility when they are ambiguous. Do not copy confidential, personal, or employer-restricted material into a broader destination without explicit authorization.
+- **Connector-native:** Use the available Notion connector/API operations rather than inventing URLs, IDs, relation values, or unsupported Markdown.
+
+## Workflow
+
+### 1. Define the capture request
+
+Identify:
+
+- source content and source platform
+- requested output: full export, summary, extracts, or a combination
+- destination type: page, database/data source, or both
+- requested destination URL, ID, name, or search criteria
+- desired behavior: preview, report-only, create, update, or upsert
+- privacy, audience, and retention constraints
+
+If the user did not specify a destination, produce a capture plan and ask for a destination before writing. If the connector supports safe search, search for candidate destinations and present the candidates rather than choosing an unrelated page.
+
+### 2. Resolve and inspect the destination
+
+Use `references/destination-contract.md` for destination roles and the expected resolution process.
+
+For a page destination:
+
+1. Fetch the page by the supplied URL or ID.
+2. Confirm its title, location, and intended purpose.
+3. Inspect existing content and child pages before choosing append, targeted update, or replacement.
+
+For a database or data-source destination:
+
+1. Fetch the database/data source first.
+2. Identify the actual data source and title property.
+3. Read the schema, templates, and available select/status/relation options.
+4. Map only fields supported by that schema.
+
+If resolution or access fails, switch to report-only mode. Do not fabricate a fallback destination.
+
+### Connector operation map
+
+Map the platform's available tools to these logical operations. Different runtimes may use different names, but the sequence matters:
+
+| Logical operation | Typical connector/API capability | Purpose |
+|---|---|---|
+| Search | `search` | Find candidate pages, databases, or data sources from a user-supplied name or topic |
+| Fetch | `fetch` / retrieve page or schema | Read a page, database, data source, child structure, or current row before writing |
+| Query | `query` / database search | Find matching rows using the actual schema and stable properties |
+| Create | create page or data-source item | Create a page or database row with a valid title and supported properties |
+| Update | update page properties/content | Apply the smallest targeted change to an existing page or row |
+| Verify | fetch after write | Confirm the write, relations, content, and destination |
+
+When a connector exposes operations such as `notion_search`, `notion_fetch`, `notion_create_pages`, or `notion_update_page`, treat them as implementations of these logical operations. Do not skip the fetch/schema step because a tool name suggests that it can write directly.
+
+### 3. Normalize the source
+
+Build a thread-level record with, when available:
+
+- title
+- source platform and source type
+- source date and export date
+- source URL or file name
+- purpose and user intent
+- concise summary
+- decisions, frameworks, prompts, drafts, findings, and open loops
+- privacy classification and any redaction applied
+
+When the user asks for a full export, preserve the source in a readable Markdown structure and put the summary and extracts near the top. Do not silently replace a requested full export with a summary.
+
+### 4. Extract reusable material
+
+Split the source into separate extracts when they can be retrieved or reused independently. Suitable types include Decision, Framework, Prompt, Checklist, Definition, Outline, Draft, and Research Finding.
+
+Each extract should include:
+
+- a specific title
+- the reusable content
+- confidence or review status when useful
+- a link or relation to the source thread/page
+- the destination requested by the user
+
+Keep uncertain but potentially useful material labeled as low confidence rather than presenting it as settled fact.
+
+### 5. Check duplicates and relationships
+
+Search or query the target before writing at two levels:
+
+1. **Source level:** Is this thread, document, or page already represented?
+2. **Extract level:** Is the proposed reusable idea already present, complementary, or contradictory?
+
+Classify each item as `duplicate`, `complementary`, `net-new`, `conflicted`, or `unsafe-to-capture`. Update or link duplicates, append complementary material when appropriate, and flag conflicts for review instead of overwriting silently.
+
+### 6. Build the write plan
+
+For a page export, plan a structure such as:
+
+```md
+# [Source title]
+
+## Capture metadata
+- Platform:
+- Source date:
+- Exported at:
+- Source link:
+
+## Summary
+
+## Decisions and findings
+
+## Reusable extracts
+
+## Open loops
+
+## Source content
 ```
 
-Use `references/routing-anchors.md` for the public role contract and expected anchor types.
+For a database export, prepare one property map per row using the fetched schema. Use relations only when the target schema exposes them and the related page IDs are known. Put long source text in page content when the database is intended for index metadata rather than transcript storage.
 
-## Core workflow
+Keep API payloads small and explicit: send only the properties and content required for the requested operation, preserve unchanged content, and handle any asynchronous task or polling response returned by the connector before reporting success.
 
-### 1. Load the anchor map
+### 7. Execute the smallest safe write
 
-Load the private anchor map before writing anything.
+Use the connector's equivalent of:
 
-Minimum anchor roles:
+- create page or row for net-new content
+- update page properties for metadata changes
+- append or targeted content update for additions
+- query/search plus update for an existing match
 
-- Brain hub
-- Intake page
-- Chat Threads database
-- Extracts database
-- Domains database
-- Projects database
-- Notion to GitHub routing hub
-- Master Page Index
-- Relationship Mindmap
+Do not replace an entire page when an append or targeted update is sufficient. Do not create a new database merely because a requested database was not found unless the user explicitly asked for database creation and supplied the intended schema.
 
-If anchors are missing, continue with best effort in report-only mode. Do not fabricate page URLs, database IDs, or relations.
+If the request is report-only, write nothing and provide the exact Markdown and property mappings needed for manual execution.
 
-### 2. Run the boundary gate
+### 8. Verify and report
 
-Classify Origin before writing:
+After a successful write, fetch the created or updated page/row again when possible. Verify:
 
-| Origin | Meaning | Default action |
-|---|---|---|
-| `JMH` | Jamie personal, family, identity, life, personal learning | May write to personal brain |
-| `OKH` | OverKill Hill, Glee-fully, AskJamie, public portfolio, side-project IP | May write to personal or OKHP3 brain |
-| `WORK` | Day job or employer-confidential material | Do not write to personal brain unless explicitly public-safe and sanitized |
-| `MIX` | Blended or ambiguous material | Extract only public-safe and reusable thinking, then flag the boundary |
+- title and key metadata
+- content or property values
+- relations and source traceability
+- no duplicate was created
+- requested visibility and destination were respected
 
-Stop or switch to report-only if the thread contains sensitive private material that should not be preserved outside the source platform.
+Use `references/output-contract.md` for the capture report. Report what was created, updated, skipped, redacted, failed, and left pending.
 
-### 3. Produce the thread summary
+## Privacy and public-repository boundary
 
-Create a thread-level summary that includes:
+This skill is generic and may be used with many Notion workspaces. Do not place a user's private page URLs, page IDs, database IDs, workspace links, access tokens, or copied private content into this public repository. Runtime configuration belongs in the user's environment, prompt, connector context, or an ignored local configuration file.
 
-- platform
-- date, if known
-- working title
-- purpose and user intent
-- main topics
-- decisions
-- frameworks or prompts
-- open loops
-- deliverables created
-- why the thread matters
+Privacy is about the destination and the user's authorization, not about making the skill exclusive to one account. The skill should explain how to use a connector effectively while leaving workspace-specific structure to runtime resolution.
 
-The summary is not the archive. It is the index card.
-
-### 4. Extract nuggets
-
-Split the thread into one Extract per reusable idea. Do not merge unrelated insights.
-
-Valid extract types:
-
-- Decision
-- Framework
-- Prompt
-- Checklist
-- Definition
-- Outline
-- Draft
-- Research Finding
-
-Capture rejected options and rationale when they explain why the final decision matters.
-
-When uncertain, keep the nugget with `Confidence = Low` rather than dropping it.
-
-### 5. Route through Domains
-
-Use the Domains anchor as the routing authority. Match against:
-
-- Domain name
-- Description
-- Rules / boundaries
-- Routing Notes
-- Hub Page URL
-- Parent domain
-
-If one domain clearly fits, assign it.
-
-If two domains plausibly fit, report both and choose the higher-confidence primary route. Do not invent a new Domain unless the current taxonomy has no defensible home.
-
-### 6. Dedupe at two layers
-
-Run dedupe separately:
-
-1. **Thread-level dedupe** against Chat Threads.
-2. **Nugget-level dedupe** against Extracts.
-
-Classify each item:
-
-| Classification | Meaning | Action |
-|---|---|---|
-| `duplicate` | Already captured with same substance | Link or update existing record, do not create another |
-| `complementary` | Extends an existing page or extract | Update or append to the existing canonical item |
-| `net-new` | Not represented elsewhere | Create a new thread row or extract row |
-| `conflicted` | Similar material exists but disagrees | Flag for human review, preserve both until resolved |
-| `unsafe-to-capture` | Private or unsuitable for Notion | Report only, do not write |
-
-### 7. Write the Notion records
-
-If writing is available and safe:
-
-- Create or update one Chat Threads row.
-- Create or update one Extracts row per reusable nugget.
-- Relate Extracts back to the Source thread.
-- Relate both layers to Domain and Project when available.
-- Set Status deliberately:
-  - Chat Threads: Inbox, Triaged, Active, Extracting, Extracted, Archived
-  - Extracts: Captured, Needs review, In use, Canonical, Archived
-
-Do not mark a thread `Archived` unless the archive gate passes.
-
-### 8. Reconcile GitHub
-
-Use the Notion to GitHub routing hub to identify whether a matching OKHP3 repository exists.
-
-For each high-value nugget, check whether it already exists in the matching repo as code, markdown, README content, docs, skill files, or backlog items.
-
-Output a gap table:
-
-| Nugget | In Notion? | In GitHub? | Action |
-|---|---:|---:|---|
-| [title] | Y/N | Y/N | create, update, link, or ignore |
-
-Do not create or update GitHub files unless the user asked for execution.
-
-### 9. Apply the archive gate
-
-A thread is archive-eligible only when all of these are true:
-
-- Thread row has Title, Origin, Platform, Date if known, Domain, Summary, and Status.
-- Extracts exist for all reusable nuggets worth keeping.
-- Duplicate and complementary items were handled.
-- At least one real backlink exists: source thread URL, domain hub, or repo anchor.
-- Retrieval works on four axes:
-  - Topic / Domain
-  - Date
-  - Origin
-  - Canonical destination link
-
-If any gate fails, set or recommend `Extracted`, not `Archived`.
-
-## Output format
-
-Use `assets/report-template.md` as the default report structure.
-
-If the user asked for the actual Notion write, end with:
-
-- what was created
-- what was updated
-- what was skipped
-- what remains unresolved
-
-If write access is unavailable, produce the exact rows that should be created and label the answer `report-only`.
-
-## Gotchas
-
-- The source thread URL is usually not available through the connector. Ask the user to paste it or mark Link as pending. Never fabricate it.
-- ChatGPT Projects can contain unrelated files. During ingestion, the routing skill file should be the controlling artifact. Extra files may distract the model unless they are direct source material.
-- PDF exports flatten metadata. Recover platform, title, date, and source URL manually when possible.
-- Notion is the knowledge hub. GitHub is the installable artifact layer. Do not confuse them.
-- A whole transcript is not knowledge. The extract layer is the durable value layer.
-- Do not promote employer-specific material into public OKHP3 repos. Generalize it or leave it private.
+If a user asks to export private Notion content into a public artifact, pause and identify the conflict. Offer a redacted/public-safe export or a private local artifact, and do not publish the private source by assumption.
 
 ## Reference loading
 
-Load these only when needed:
+Load only what the request needs:
 
-- `references/routing-anchors.md`: anchor role contract and private URL handling.
-- `references/output-contract.md`: exact field mapping and capture report rules.
-- `references/platform-variants.md`: ChatGPT, Claude, Perplexity, Copilot, Gemini, and PDF handling.
-- `references/final-check.md`: final self-check before writing or reporting.
+- `references/destination-contract.md`: resolve generic page, database, and data-source destinations.
+- `references/output-contract.md`: capture report and row-level output shape.
+- `references/platform-variants.md`: normalize source material from common AI platforms and files.
+- `references/final-check.md`: verification checklist before reporting completion.
+- `assets/report-template.md`: reusable report scaffold.
 - `assets/trigger-eval-queries.json`: trigger and non-trigger examples for description testing.
+
+## Output contract
+
+Always report the mode (`write`, `append`, `update`, or `report_only`), resolved destination type, source coverage, created/updated/skipped/redacted items, verification result, and pending failures. If the connector cannot resolve or re-fetch the destination, do not claim completion.
+
+## About
+
+Built by [Jamie Hill](https://overkillhill.com) · [OverKill Hill P³](https://github.com/OKHP3)
+Published at [github.com/OKHP3](https://github.com/OKHP3)
+Part of the [OKHP3/skillz](https://github.com/OKHP3/skillz) Agent Skill library.
+MIT License -- free to use, fork, and adapt. A nod to the source is appreciated.

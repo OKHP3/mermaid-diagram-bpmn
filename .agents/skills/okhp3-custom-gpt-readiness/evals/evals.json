@@ -1,0 +1,36 @@
+{
+  "skill_name": "okhp3-custom-gpt-readiness",
+  "skill_version": "1.2.0",
+  "evals": [
+    {
+      "id": "concept-with-gaps",
+      "prompt": "I want a GPT that turns messy meeting notes into useful plans. I have only that sentence and no files yet. Tell me whether it is ready and what to ask next.",
+      "expectations": [
+        "Classifies the primary job or audience as missing or vague rather than inventing them.",
+        "Identifies acceptance tests and safety/data boundaries as build blockers.",
+        "Asks a minimal targeted question set instead of a generic questionnaire.",
+        "Uses a readiness disposition and classifies supplied claims as evidence, inference, theory, preference, or unknown."
+      ]
+    },
+    {
+      "id": "partial-evidence",
+      "prompt": "Here is a draft and a 12-step build chain: audience is internal project leads; output is a one-page plan; it may use an uploaded playbook; no tools; must not make commitments for people. Assess the evidence and prepare the builder handoff.",
+      "expectations": [
+        "Records supplied facts as evidence and does not ask again for audience, output, or tool policy.",
+        "Scores the eight readiness domains or clearly marks unsupported domains as missing.",
+        "Carries the no-commitments boundary into safety constraints and acceptance tests.",
+        "Produces a handoff that names okhp3-custom-gpt-builder as the next workflow and includes a phase map with observable gates and a testable maturity hypothesis."
+      ]
+    },
+    {
+      "id": "wrong-construct",
+      "prompt": "I need a background service with OAuth, a database, scheduled jobs, and a REST API. Can you assess this as a Custom GPT concept?",
+      "expectations": [
+        "Flags that the request is not primarily a Custom GPT and selects not_a_custom_gpt or an equivalent disposition.",
+        "Does not promise to implement OAuth, a database, or scheduled jobs.",
+        "Explains the construct mismatch and offers a safe routing recommendation.",
+        "Still records the decision and evidence rather than simply refusing."
+      ]
+    }
+  ]
+}

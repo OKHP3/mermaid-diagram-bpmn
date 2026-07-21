@@ -1,0 +1,81 @@
+{
+  "skill_name": "okhp3-thread-context-extraction-chatgpt",
+  "skill_version": "2.0.0",
+  "evals": [
+    {
+      "id": 1,
+      "name": "chatgpt-controls-and-citations",
+      "prompt": "Extract this ChatGPT paste containing You and ChatGPT turns, Copy and Good response controls, inline citations, and a Sources drawer.",
+      "expectations": [
+        {
+          "id": 1,
+          "text": "Response uses ChatGPT response controls as assistant-boundary evidence."
+        },
+        {
+          "id": 2,
+          "text": "Response catalogs inline citations and the Sources drawer as source traces."
+        },
+        {
+          "id": 3,
+          "text": "Response excludes Copy and Good response UI chrome from the semantic summary."
+        },
+        {
+          "id": 4,
+          "text": "Response creates Turn ledger and Content element ledger sections."
+        }
+      ],
+      "expected_output": "A standalone platform-tuned thread-context extract for the chatgpt-controls-and-citations scenario that satisfies all four evidence-anchored expectations.",
+      "files": []
+    },
+    {
+      "id": 2,
+      "name": "chatgpt-canvas-and-files",
+      "prompt": "The ChatGPT thread references an uploaded spreadsheet, a generated PNG, and a Canvas document exported as Markdown, but only the chat text and file names were pasted.",
+      "expectations": [
+        {
+          "id": 1,
+          "text": "Response catalogs the spreadsheet, PNG, and Canvas document separately."
+        },
+        {
+          "id": 2,
+          "text": "Response treats Canvas as a separate surface from the chat."
+        },
+        {
+          "id": 3,
+          "text": "Response assigns metadata-only or referenced-not-supplied fidelity where content is absent."
+        },
+        {
+          "id": 4,
+          "text": "Response does not claim to have inspected missing files."
+        }
+      ],
+      "expected_output": "A standalone platform-tuned thread-context extract for the chatgpt-canvas-and-files scenario that satisfies all four evidence-anchored expectations.",
+      "files": []
+    },
+    {
+      "id": 3,
+      "name": "chatgpt-ambiguous-full-paste",
+      "prompt": "Normalize a control-all ChatGPT paste with flattened formatting, a quoted user prompt inside an answer, and no visible role names.",
+      "expectations": [
+        {
+          "id": 1,
+          "text": "Response does not classify roles from prose style alone."
+        },
+        {
+          "id": 2,
+          "text": "Response uses low confidence when relying on alternation."
+        },
+        {
+          "id": 3,
+          "text": "Response does not automatically split a quoted prompt into a human turn."
+        },
+        {
+          "id": 4,
+          "text": "Response records unresolved boundaries in Normalization exceptions."
+        }
+      ],
+      "expected_output": "A standalone platform-tuned thread-context extract for the chatgpt-ambiguous-full-paste scenario that satisfies all four evidence-anchored expectations.",
+      "files": []
+    }
+  ]
+}
