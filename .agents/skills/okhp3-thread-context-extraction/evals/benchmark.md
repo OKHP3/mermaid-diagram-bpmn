@@ -25,4 +25,4 @@ references, action ownership, acceptance conditions, evidenced rehydration,
 prompt-injection boundaries, and safer deterministic tooling.
 
 Detailed outputs and grading evidence live in the sibling
-`okhp3-thread-context-extraction-workspace/` evaluation workspace.
+`ctx-thread-extract-workspace/` evaluation workspace.

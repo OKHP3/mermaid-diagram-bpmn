@@ -23,7 +23,7 @@ Title-chain derivation:
 1. **Source synopsis:** The two paragraphs above describe the thread's purpose, method, decisions, evidence boundary, missing assets, and usable outcome.
 2. **Introduction:** The opening paragraph compresses that synopsis into a repository-independent extraction method and its consequential missing dependencies.
 3. **Primary topic:** Repository-independent AI thread extraction with missing asset controls.
-4. **Artifact title and filename:** `Repository-Independent AI Thread Extraction with Missing Asset Controls`; `repository-independent-ai-thread-extraction-missing-asset-controls.md`.
+4. **Artifact title and filename:** `Repository-Independent AI Thread Extraction with Missing Asset Controls`; `ai-thread-missing-asset-controls.md`.
 
 ## Turn ledger
 

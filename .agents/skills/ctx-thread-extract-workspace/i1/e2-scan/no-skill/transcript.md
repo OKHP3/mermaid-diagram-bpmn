@@ -19,4 +19,4 @@
 
 ## Output
 
-`.agents/skills/okhp3-thread-context-extraction-workspace/iteration-1/eval-2-scan-rapid/without_skill/outputs/standalone-cross-platform-thread-extraction-skill-continuity.md`
+`.agents/skills/ctx-thread-extract-workspace/i1/e2-scan/no-skill/outputs/standalone-cross-platform-thread-extraction-skill-continuity.md`

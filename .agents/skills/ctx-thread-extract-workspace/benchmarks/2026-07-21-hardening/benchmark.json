@@ -21,7 +21,7 @@
     {
       "eval_id": 1,
       "eval_name": "substantial-normalizes-balanced",
-      "configuration": "without_skill",
+      "configuration": "no-skill",
       "run_number": 1,
       "result": {"pass_rate": 0.75, "passed": 3, "failed": 1, "total": 4, "time_seconds": null, "tokens": null, "tool_calls": null, "errors": 0},
       "output_chars": 14213,
@@ -48,7 +48,7 @@
     {
       "eval_id": 2,
       "eval_name": "scan-normalizes-rapid",
-      "configuration": "without_skill",
+      "configuration": "no-skill",
       "run_number": 1,
       "result": {"pass_rate": 0.5, "passed": 2, "failed": 2, "total": 4, "time_seconds": null, "tokens": null, "tool_calls": null, "errors": 0},
       "output_chars": 10874,
@@ -66,7 +66,7 @@
     {
       "eval_id": 3,
       "eval_name": "catalog-normalizes-comprehensive",
-      "configuration": "without_skill",
+      "configuration": "no-skill",
       "run_number": 1,
       "result": {"pass_rate": 0.75, "passed": 3, "failed": 1, "total": 4, "time_seconds": null, "tokens": null, "tool_calls": null, "errors": 0},
       "output_chars": 12159,
@@ -75,7 +75,7 @@
   ],
   "run_summary": {
     "final_with_skill": {"pass_rate": {"mean": 1.0}, "output_chars": {"mean": 13803.67}, "output_words": {"mean": 1738.33}},
-    "without_skill": {"pass_rate": {"mean": 0.6667}, "output_chars": {"mean": 12415.33}, "output_words": {"mean": 1538.67}},
+    "no-skill": {"pass_rate": {"mean": 0.6667}, "output_chars": {"mean": 12415.33}, "output_words": {"mean": 1538.67}},
     "delta": {"pass_rate": "+0.3333", "output_chars": "+1388.34", "output_words": "+199.66"},
     "initial_candidate_pass_rate": 0.9167
   },
