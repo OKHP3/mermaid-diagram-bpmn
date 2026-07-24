@@ -46,15 +46,18 @@ plugin or BPMN execution platform.
 The following issues were observed during this context pass and are not fixed
 by this guidance-only change:
 
-- `node scripts/validate-skills.mjs` reports missing YAML frontmatter in all 15
-  source skills and in all nine context templates.
-- `pnpm run skill:test` references missing per-skill test paths and the missing
-  path `skills/__tests__/pipeline.integration.test.mjs`.
+- `node scripts/validate-skills.mjs` passes for all 15 source skills and all
+  nine context templates. The separate `.agents/skills` validator still
+  reports four portability or metadata failures: one package uses lowercase
+  `skill.md`, and three packages have descriptions shorter than the required
+  minimum.
+- `node scripts/extract-pns-transitions.mjs --check` reports that
+  `app/src/data/pns-transitions-auto.ts` is stale and needs regeneration.
 - The Pages workflow installs, generates, builds, and deploys, but does not run
   the application test suite or typecheck as a deployment gate.
-- The current checkout has no installed dependency tree, and the local pnpm
-  shim attempted to reach the npm registry. pnpm-based checks therefore could
-  not be completed in this environment.
+- Dependency installation is available in the current checkout. The root
+  skill tests pass, but application typecheck, build, and application test
+  status should still be verified before release.
 
 Treat these as evidence-backed risks. Do not silently describe them as fixed.
 
@@ -144,7 +147,7 @@ introduce flowchart metadata syntax as bpmn-beta syntax.
 The declared and checked-in stack is:
 
 - Node.js 24 compatibility line in Replit and GitHub Actions
-- pnpm 11, declared as `pnpm@11.12.0` in the root manifest
+- pnpm 11, declared as `pnpm@11.16.0` in the root manifest
 - TypeScript 7.0.2
 - React 19.2.7 and Vite 8.1.4
 - Tailwind CSS 4 through the Vite plugin
