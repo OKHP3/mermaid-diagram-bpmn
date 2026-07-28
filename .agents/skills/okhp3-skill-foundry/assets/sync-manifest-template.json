@@ -23,6 +23,7 @@
         "benchmarks/benchmark.json",
         "benchmarks/evolution-review-YYYY-MM-DD.md",
         "benchmarks/learning-ledger-YYYY-MM-DD.json",
+        "benchmarks/sync-verification-YYYY-MM-DD.json",
         "scripts/validate-skill-suite.cjs"
       ],
       "approved_adapter_differences": [
@@ -32,9 +33,12 @@
         "workspace/**"
       ],
       "verification": {
+        "verification_kind": "current-state-reconciliation|recorded-sync-event",
+        "verification_date": "<YYYY-MM-DD>",
         "core_file_hashes": "<recorded-after-sync>",
         "adapter_semantic_review": "<recorded-after-sync>",
-        "validator_command": "<command-and-result>"
+        "validator_command": "<command-and-result>",
+        "historical_limit": "<do not claim unrecorded approval, pre-sync status, or recovery information>"
       }
     }
   ]

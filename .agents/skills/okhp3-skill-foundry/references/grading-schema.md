@@ -17,6 +17,11 @@ Every record declares one status:
 Never use a `historical`, `analytical`, or `not-run` record to declare the
 current version production-ready.
 
+An analytical structural-integrity release may claim only that its declared
+evidence relationships and verification records passed the documented checks.
+It cannot inherit, imply, or replace live task-quality, uplift, discovery, or
+production-readiness evidence.
+
 ## `grading.json`
 
 Store one file per run:

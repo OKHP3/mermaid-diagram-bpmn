@@ -1,0 +1,85 @@
+{
+  "schema_version": "1.0",
+  "review_protocol": "equilibrium-v1",
+  "decision_question": "Does the frozen v3.0.0 Foundry candidate merit a v3.1.0 change before external live evaluation?",
+  "candidate": {
+    "skill_version": "3.0.0",
+    "package_manifest_sha256": "C6E81F3E9B7932BD501A5784044F9ABCC2553AF8D81B0DC1B7CA47DCEF6AB4DD",
+    "hash_scope": "All package files excluding workspace/ at the frozen v3.0.0 review point."
+  },
+  "independence": {
+    "reviewer_contexts_separated": true,
+    "shared_model_or_source_limits": [
+      "All reviewers had access to the same repository and task framing.",
+      "No isolated executor, unseen holdout owner, or different model family was available.",
+      "The review is analytical evidence, not independent live evaluation."
+    ]
+  },
+  "initial_reviews": [
+    {
+      "role": "evidence-reviewer",
+      "decision": "approve-current-and-defer-performance-claim",
+      "claims": [
+        {
+          "claim": "Current authoritative sources support v3.0.0 portability and optional-adapter rules; no current performance claim is supported.",
+          "evidence_ids": ["SRC-01", "SRC-02", "benchmark-historical-status"],
+          "confidence": "high",
+          "consequence": "A new version without new structural evidence would create another unevaluated candidate.",
+          "assumptions": ["Host behavior still requires live verification."]
+        }
+      ]
+    },
+    {
+      "role": "outcome-reviewer",
+      "decision": "defer-performance-release",
+      "claims": [
+        {
+          "claim": "The public development cases and historical 1.0.0 benchmark cannot demonstrate v3.0.0 outcome lift, discovery quality, or a protected release holdout.",
+          "evidence_ids": ["evals-public-development", "benchmark-historical-status"],
+          "confidence": "high",
+          "consequence": "No performance, uplift, or production-readiness statement is justified.",
+          "assumptions": ["A separate executor and holdout owner are required."]
+        }
+      ]
+    },
+    {
+      "role": "portability-security-reviewer",
+      "decision": "recommend-structural-v3.1",
+      "claims": [
+        {
+          "claim": "The validator permits incoherent holdout and benchmark metadata, and synchronization proof is only templated.",
+          "evidence_ids": ["validator-holdout-check", "validator-benchmark-check", "sync-template-placeholders"],
+          "confidence": "high",
+          "consequence": "A structural pass could be mistaken for protected or current live evidence.",
+          "assumptions": ["Deterministic checks can prevent the declared incoherence even though they cannot prove evaluator independence."]
+        }
+      ]
+    }
+  ],
+  "concordance": "material-disagreement",
+  "disruptor": {
+    "triggered": false,
+    "falsification_hypotheses": [],
+    "test_results": [],
+    "reason": "The initial reviewers materially disagreed about whether static integrity evidence justified a release, so the protocol routed to negotiation."
+  },
+  "negotiator": {
+    "triggered": true,
+    "decision": "approve-narrow-analytical-v3.1",
+    "decisive_evidence_or_test": "The current validator accepts a package without enforcing holdout-state coherence, current-version live-benchmark coherence, or a completed current-state synchronization record.",
+    "unresolved_items": [
+      "External live evaluation and an unseen holdout remain required for any outcome claim."
+    ]
+  },
+  "release_decision": "approved-with-limits",
+  "limitations": [
+    "The release may claim analytical structural-integrity hardening only.",
+    "It may not claim performance, uplift, production readiness, independent approval, or a completed live benchmark.",
+    "A current-state reconciliation cannot reconstruct historical authorization, pre-sync status, or prior recovery information."
+  ],
+  "follow_up_conditions": [
+    "Run matched, version-specific live tasks with a separate executor and blinded grader.",
+    "Use an external owner for an unseen release holdout and record its custody and results.",
+    "Run discovery evaluation in target clients with a labeled external query set."
+  ]
+}

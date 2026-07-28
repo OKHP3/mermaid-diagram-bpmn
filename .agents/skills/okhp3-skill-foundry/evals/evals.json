@@ -1,8 +1,10 @@
 {
   "skill_name": "okhp3-skill-foundry",
-  "skill_version": "3.0.0",
+  "skill_version": "3.1.0",
   "status": "design-ready",
-  "note": "Self-evaluation design for the recursive Foundry renewal. These cases require fresh, version-matched runs before any 3.0.0 performance claim.",
+  "release_status": "analytical-structural-integrity",
+  "performance_evidence_status": "not-run",
+  "note": "Self-evaluation design for the recursive Foundry renewal. Version 3.1.0 adds structural-integrity controls only; these cases still require fresh, version-matched runs before any performance, uplift, or production-readiness claim.",
   "release_holdout": {
     "status": "external-required",
     "holdout_seen": true,

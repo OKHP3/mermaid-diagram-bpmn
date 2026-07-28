@@ -12,11 +12,11 @@ description: >
 license: MIT
 compatibility: >
   Any Agent Skills-compatible client with filesystem access. An isolated runner
-  is optional for live with/without-skill benchmarks. Node.js 18+ is needed only
+  is optional for live with/without-skill benchmarks. Node.js is needed only
   when using this package's bundled validator.
 metadata:
   author: Jamie Hill (OverKill Hill P³)
-  version: "3.0.0"
+  version: "3.1.0"
   category: meta-tooling
   origin: okhp3/skillz
   homepage: https://overkillhill.com
@@ -162,7 +162,10 @@ For each case:
 5. Partition cases into a development set for the fix loop and a protected
    holdout set for release. A holdout is protected only when the optimizing
    author has not read it. Record `holdout_seen`; retire and replace any
-   holdout exposed to the optimizer.
+   holdout exposed to the optimizer. Declare `protected` only for an unseen
+   holdout with at least one packaged holdout case. Declare
+   `external-required` when the public package contains no usable holdout; its
+   `holdout_seen` value must be `true` and no performance claim may rely on it.
 6. Freeze a versioned evaluation protocol before a release run: package and
    resource hashes, prompts, fixtures, expectations, rubric, host, runner,
    model settings, tool availability, activation mode, session identity, and
@@ -295,6 +298,11 @@ Use this phase when improving any skill, especially the Foundry itself.
    adapter differences. Never merge divergent copies by overwriting uninspected
    work.
 
+A current-state reconciliation can prove only present file equality and recorded
+post-change verification. It cannot reconstruct an unrecorded past approval,
+pre-sync Git status, canonical-selection decision, or recovery path. Label that
+limit plainly rather than backfilling it from memory.
+
 Renew when evidence changes the decision: an official specification or host
 changes, the model or runner changes, a real failure appears, a new capability
 is added, or release evidence becomes stale. Do not mutate on a calendar just
@@ -317,6 +325,8 @@ Before handoff:
    unintended generated output entered the package.
 3. Confirm evaluation provenance, evaluated version, configuration, limitations,
    and release criteria. Do not call a newer version benchmarked by association.
+   An analytical structural-integrity release must say that no fresh live
+   benchmark or unseen release holdout has been completed.
 4. Verify canonical and synchronized copies at both file and semantic levels.
 5. Report changed files, validation results, historical evidence, unresolved
    limits, and any action that still needs user authorization.
