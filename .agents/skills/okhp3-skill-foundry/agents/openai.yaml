@@ -1,0 +1,6 @@
+interface:
+  display_name: "OKHP3 Skill Foundry"
+  short_description: "Create, test, and improve portable Agent Skills"
+  default_prompt: "Use the Foundry workflow to improve this skill with explicit scope, evidence, regression coverage, and release validation."
+policy:
+  allow_implicit_invocation: true

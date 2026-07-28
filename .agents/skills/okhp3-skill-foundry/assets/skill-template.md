@@ -1,58 +1,53 @@
 ---
-name: okhp3-SLUG
+name: okhp3-<slug>
 description: >
-  OverKill Hill P³ NOUN_PHRASE. Use when PRIMARY_TRIGGER.
-  Also activate when SECONDARY_TRIGGER. This is the authoritative
-  NOUN_PHRASE for this repo -- use it even when the user does not
-  mention it by name.
+  <Primary job and concrete trigger terms>. Use when <specific request>.
+  Also activate when <secondary request or boundary>.
 license: MIT
+compatibility: <Only real environment requirements, if any>
 metadata:
   author: Jamie Hill (OverKill Hill P³)
   version: "1.0.0"
-  category: CATEGORY
+  category: <category>
   origin: okhp3/skillz
   homepage: https://overkillhill.com
   author-github: https://github.com/OKHP3
-  in_scope:
-    - EXPLICIT_CAPABILITY
-    - EXPLICIT_CAPABILITY
-  out_of_scope:
-    - EXPLICIT_EXCLUSION
-    - EXPLICIT_EXCLUSION
+  in_scope: "<concise boundary>"
+  out_of_scope: "<concise exclusion>"
 ---
 
-# okhp3-SLUG
+# okhp3-<slug>
 
 **OverKill Hill P³** · [overkillhill.com](https://overkillhill.com) · [github.com/OKHP3](https://github.com/OKHP3)
 
-ELEVATOR_PITCH_2_TO_3_SENTENCES
+<Two concise sentences: what reliable outcome this skill enables and the local
+knowledge or method that makes it useful.>
 
 ---
 
 ## Scope
 
 | In scope | Out of scope |
-|----------|-------------|
-| ITEM | ITEM |
-| ITEM | ITEM |
+|---|---|
+| <capability> | <explicit exclusion> |
 
----
+## Operating contract
 
-## MAIN_SECTION_1
+1. Inspect <inputs and constraints>.
+2. Decide <key decision> using <local rule or resource>.
+3. Produce <observable output>.
+4. If <missing prerequisite or unsafe case>, return <safe fallback or blocked result>.
 
-CONTENT
+## Resource routing
 
----
+- Read `references/<focused-reference>.md` when <specific condition>.
+- Run `scripts/<deterministic-helper>` only when <specific condition>.
 
-## MAIN_SECTION_2
+## Evaluation and release
 
-CONTENT
-
----
-
-## References
-
-- `references/FILE.md` -- ONE_LINE_DESCRIPTION
+- Keep at least one normal-path, one edge-case, and one safety or failure case.
+- Record the evaluated version and whether evidence is live, analytical,
+  historical, or not-run.
 
 ---
 

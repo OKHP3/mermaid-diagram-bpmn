@@ -1,0 +1,119 @@
+{
+  "schema_version": "1.0",
+  "record_id": "foundry-renewal-3.0.0-2026-07-27",
+  "created_on": "2026-07-27",
+  "scope": "Renew the OKHP3 Skill Foundry portable package, record the evidence and limitations, then synchronize authorized mirrors.",
+  "candidate": {
+    "pre_change_version": "2.2.0",
+    "release_candidate_version": "3.0.0",
+    "pre_change_hash": "not-recorded-before-review",
+    "final_hash": "record after final validation"
+  },
+  "evidence_sources": [
+    {
+      "id": "SRC-01",
+      "title": "Agent Skills Specification",
+      "url": "https://agentskills.io/specification",
+      "authority": "normative-portable-specification",
+      "retrieved_on": "2026-07-27",
+      "claim_used": "Portable metadata, naming, progressive-disclosure, and resource-layout constraints.",
+      "decision": "accepted"
+    },
+    {
+      "id": "SRC-02",
+      "title": "OpenAI Learn: Build Skills",
+      "url": "https://learn.chatgpt.com/docs/build-skills",
+      "authority": "host-guidance",
+      "retrieved_on": "2026-07-27",
+      "claim_used": "Front-loaded descriptions and optional host adapter guidance.",
+      "decision": "accepted-with-portability-boundary"
+    },
+    {
+      "id": "SRC-03",
+      "title": "Anthropic: Equipping agents for the real world with Agent Skills",
+      "url": "https://www.anthropic.com/engineering/equipping-agents-for-the-real-world-with-agent-skills",
+      "authority": "host-guidance",
+      "retrieved_on": "2026-07-27",
+      "claim_used": "Progressive disclosure as a design pattern.",
+      "decision": "accepted"
+    },
+    {
+      "id": "SRC-04",
+      "title": "GitHub Copilot: About agent skills",
+      "url": "https://docs.github.com/en/copilot/concepts/agents/about-agent-skills",
+      "authority": "host-guidance",
+      "retrieved_on": "2026-07-27",
+      "claim_used": "Cross-client locations and package portability considerations.",
+      "decision": "accepted-with-host-scope"
+    },
+    {
+      "id": "SRC-05",
+      "title": "Prompt Equilibrium framework attachments supplied by the package owner",
+      "authority": "internal-conceptual-analysis",
+      "retrieved_on": "2026-07-27",
+      "claim_used": "Conditional dissent, explicit roles, provenance ledgers, semantic-interference awareness, and evidence-based reconciliation.",
+      "decision": "accepted-as-process-design-not-external-performance-proof",
+      "limitations": [
+        "Attachment claims and citations were not adopted as current normative platform facts without separate verification.",
+        "The equilibrium metaphor is not asserted to be a formal game-theoretic solution."
+      ]
+    }
+  ],
+  "review_passes": [
+    {
+      "id": "REV-01",
+      "role": "ecosystem reviewer",
+      "finding": "Make portable constraints explicit, preserve optional adapters, use frozen evaluation protocols, and renew on evidence-changing events.",
+      "decision": "accepted"
+    },
+    {
+      "id": "REV-02",
+      "role": "adversarial reviewer",
+      "finding": "Fail zero-package validation, retire exposed holdouts, preserve legacy benchmark status, and use non-compensatory critical-risk gates.",
+      "decision": "accepted"
+    },
+    {
+      "id": "REV-03",
+      "role": "comparative reviewer",
+      "finding": "Synchronize a reviewed package inventory rather than SKILL.md alone and retain local workspace evidence without blind overwrite.",
+      "decision": "accepted"
+    },
+    {
+      "id": "REV-04",
+      "role": "equilibrium reviewer",
+      "finding": "Agreement should trigger falsification; material disagreement should trigger evidence negotiation rather than a vote or ritualized dissent.",
+      "decision": "accepted"
+    }
+  ],
+  "changes": [
+    {
+      "id": "CHG-01",
+      "hypothesis": "A compact portable core with explicit evidence and trust boundaries is more reliable than a long, self-certifying instruction set.",
+      "expected_benefit": "More precise activation, safer execution, and version-specific claims.",
+      "regression_risk": "Added structure could burden low-risk work.",
+      "mitigation": "Use the equilibrium protocol only for material decisions and preserve a lightweight default path.",
+      "result": "Analytical review accepted; live 3.0.0 benchmark not run.",
+      "applicability_limit": "No performance claim without fresh, comparable executions."
+    },
+    {
+      "id": "CHG-02",
+      "hypothesis": "Conditional dissent reduces the risk of consensus becoming self-certification.",
+      "expected_benefit": "An evidence-backed path for adversarial counterexamples and disagreement resolution.",
+      "regression_risk": "Correlated reviewers or performative contrarianism could waste effort.",
+      "mitigation": "Record reviewer dependence and require falsifiable counterexamples; allow defer-for-evidence.",
+      "result": "Design and development evaluation case added; no live release evidence claimed.",
+      "applicability_limit": "Independent contexts and, where possible, models are needed for stronger evidence."
+    }
+  ],
+  "rejected_alternatives": [
+    {
+      "alternative": "Treat any repeated agreement as proof the Foundry is perfect.",
+      "reason": "Agreement can arise from shared context, model behavior, source gaps, or an untested assumption."
+    },
+    {
+      "alternative": "Run a contrarian on every minor formatting change.",
+      "reason": "Cost must be proportional to risk; low-risk work needs ordinary review."
+    }
+  ],
+  "current_status": "analytical-design-complete-live-evaluation-pending"
+}

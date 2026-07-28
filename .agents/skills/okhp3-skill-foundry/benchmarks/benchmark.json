@@ -1,14 +1,18 @@
 {
+  "schema_version": "1.0-historical",
   "metadata": {
     "skill_name": "okhp3-skill-foundry",
-    "skill_path": ".agents/skills/okhp3-skill-foundry",
-    "skill_version": "1.0.0",
+    "skill_path": "okhp3-skill-foundry",
+    "evaluated_skill_version": "1.0.0",
+    "evaluation_status": "historical",
+    "status_reason": "The package is now version 3.0.0. These completed runs remain useful provenance but do not validate the current release candidate.",
     "executor_model": "delegation-subagent",
     "analyzer_model": "main-agent-grader",
     "timestamp": "2026-06-26T00:00:00Z",
     "evals_run": [1, 2, 3],
     "runs_per_configuration": 1,
-    "note": "All 3 evals: LIVE delegation subagent runs. No analytical stubs. Self-benchmark -- skill graded on its own methodology."
+    "note": "All 3 evals were LIVE delegation-subagent runs for version 1.0.0. No analytical stubs. Self-benchmark graded the Foundry on its then-current methodology.",
+    "legacy_schema_note": "This complete legacy evidence record is intentionally preserved under its original 1.0-era shape. It is historical provenance, not a version 2.0 record and not current-release validation."
   },
 
   "runs": [
@@ -111,12 +115,13 @@
   },
 
   "notes": [
+    "HISTORICAL: This evidence applies only to evaluated version 1.0.0 and must not be used as a performance claim for version 3.0.0.",
     "All 3 evals: LIVE delegation subagent runs. No analytical stubs.",
-    "Self-benchmark -- the Foundry skill graded on its own methodology. Meta.",
+    "Self-benchmark: the Foundry skill graded on its then-current methodology.",
     "Eval 1: without-skill fabricated 'OKHP3 (Open Knowledge Host Protocol v3)' -- wrong expansion. Dead URL. 0/4 -- total failure on brand standard.",
     "Eval 2: without-skill eval design produces non-discriminating expectations (test general agent behavior, not skill-specific content). A developer following this pattern would see no with/without gap.",
     "Eval 3: without-skill gets the pass/fail right (LLMs understand endpoint mismatch) but uses wrong grading.json field names -- schema incompatibility.",
-    "Acceptance thresholds: with_skill mean 1.0 >= 0.9 PASS. delta +0.58 >= 0.5 PASS. Skill is production-ready.",
+    "For version 1.0.0, the historical starting thresholds passed: with-skill mean 1.0 >= 0.9 and delta +0.58 >= 0.5. Fresh version-matched evidence is required for any current release claim.",
     "workspace: .agents/skills/okhp3-skill-foundry/workspace/iteration-1/"
   ]
 }
