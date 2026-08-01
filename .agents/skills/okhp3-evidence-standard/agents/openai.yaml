@@ -1,6 +1,0 @@
-interface:
-  display_name: "OKHP3 Evidence Standard"
-  short_description: "Separate facts from judgments"
-  default_prompt: "Use $okhp3-evidence-standard to classify the claims and unresolved evidence in this work."
-policy:
-  allow_implicit_invocation: true

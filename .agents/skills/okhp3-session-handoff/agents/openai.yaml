@@ -1,6 +1,0 @@
-interface:
-  display_name: "OKHP3 Session Handoff"
-  short_description: "Preserve cross-boundary context"
-  default_prompt: "Use $okhp3-session-handoff to leave a durable continuation record for this work."
-policy:
-  allow_implicit_invocation: true

@@ -1,6 +1,0 @@
-interface:
-  display_name: "OKHP3 Artifact Validation"
-  short_description: "Check work before completion"
-  default_prompt: "Use $okhp3-artifact-validation to validate this work and separate passes, failures, warnings, blockers, and checks not run."
-policy:
-  allow_implicit_invocation: true

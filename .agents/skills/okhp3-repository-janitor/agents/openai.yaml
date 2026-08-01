@@ -1,4 +1,0 @@
-interface:
-  display_name: "Repository Janitor"
-  short_description: "Reconcile and safely prune Git repositories"
-  default_prompt: "Use $okhp3-repository-janitor to audit my local Git mirrors against GitHub and prepare safe merge and prune actions."

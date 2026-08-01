@@ -1,4 +1,0 @@
-interface:
-  display_name: "Repository Organizer"
-  short_description: "Profile and safely reorganize cross-platform content-first Git repositories."
-  default_prompt: "Scan this repository, check cross-platform names, determine what it is for, and prepare a safe migration plan."
