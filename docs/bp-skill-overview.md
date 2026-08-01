@@ -24,7 +24,7 @@ BP-SKILL packages the full business process documentation lifecycle as 15 SKILL.
 
 ## Why bpmn-beta is the visual output layer, not the whole product
 
-Practitioners who encounter this repository through the [live playground](https://okhp3.github.io/mermaid-diagram-bpmn/playground) often assume bpmn-beta is the product. It is one output of one skill. Skill 06 (`visual-process-modeling`) reads a completed PNS.md and produces a bpmn-beta diagram — a text-first BPMN representation in a Mermaid-compatible code fence. The diagram is the deliverable that gets embedded in Confluence, pasted into a GitHub PR, or dropped into a README. Everything upstream of that diagram — discovery, stakeholder mapping, narrative authoring, gap analysis, gap remediation, validation — is handled by the other 14 skills.
+Practitioners who encounter this repository through the [live playground](https://okhp3.github.io/mermaid-diagram-bpmn/playground) often assume bpmn-beta is the product. It is one output of one skill. Skill 06 (`okhp3-visual-process-modeling`) reads a completed PNS.md and produces a bpmn-beta diagram — a text-first BPMN representation in a Mermaid-compatible code fence. The diagram is the deliverable that gets embedded in Confluence, pasted into a GitHub PR, or dropped into a README. Everything upstream of that diagram — discovery, stakeholder mapping, narrative authoring, gap analysis, gap remediation, validation — is handled by the other 14 skills.
 
 ---
 
@@ -32,45 +32,45 @@ Practitioners who encounter this repository through the [live playground](https:
 
 ### Layer 1 — Discovery
 
-**01 process-intake-and-scope** [core] — Structured process intake: scope boundary, business objectives, regulatory context, initial stakeholder set. Produces a Process Intake Record (PIR).
+**01 okhp3-process-intake-and-scope** [core] — Structured process intake: scope boundary, business objectives, regulatory context, initial stakeholder set. Produces a Process Intake Record (PIR).
 
-**02 stakeholder-and-role-mapping** [core] — Stakeholder identification and RACI pre-assignment. Maps roles to APQC PCF activities. Produces a Stakeholder Register.
+**02 okhp3-stakeholder-and-role-mapping** [core] — Stakeholder identification and RACI pre-assignment. Maps roles to APQC PCF activities. Produces a Stakeholder Register.
 
-**03 elicitation-and-interview-facilitation** [core] — Interview guide generation and facilitation support. Produces structured elicitation notes conforming to BABOK v3 elicitation technique requirements.
+**03 okhp3-elicitation-interviews** [core] — Interview guide generation and facilitation support. Produces structured elicitation notes conforming to BABOK v3 elicitation technique requirements.
 
 ### Layer 2 — Narrative
 
-**04 as-is-process-capture** [core] — Converts elicitation notes into a structured as-is process description with numbered activity sequence, decision points, and exception paths.
+**04 okhp3-as-is-process-capture** [core] — Converts elicitation notes into a structured as-is process description with numbered activity sequence, decision points, and exception paths.
 
-**05 process-narrative-authoring** [core] — Authors or refines the full PNS.md, populating all 13 required sections from elicitation inputs.
+**05 okhp3-process-narrative-authoring** [core] — Authors or refines the full PNS.md, populating all 13 required sections from elicitation inputs.
 
-**07 process-gap-and-exception-analysis** [core] — Identifies gaps between as-is and target-state, exception paths not documented in the narrative, and missing handoff points.
+**07 okhp3-process-gap-exception-analysis** [core] — Identifies gaps between as-is and target-state, exception paths not documented in the narrative, and missing handoff points.
 
-**08 future-state-and-change-strategy** [extension] — Documents the target state process and the change approach required to reach it.
+**08 okhp3-future-state-change-strategy** [extension] — Documents the target state process and the change approach required to reach it.
 
-**10 process-validation-and-quality-scoring** [core] — Runs the 9 traceability checks (V1-V9) against PNS.md and produces a quality score (0-100) with a defect list.
+**10 okhp3-process-validation-scoring** [core] — Runs the 9 traceability checks (V1-V9) against PNS.md and produces a quality score (0-100) with a defect list.
 
 ### Layer 3 — Visual and Decision Modeling
 
-**06 visual-process-modeling** [core] — Converts PNS.md activity sequence into a bpmn-beta diagram. The visual output layer.
+**06 okhp3-visual-process-modeling** [core] — Converts PNS.md activity sequence into a bpmn-beta diagram. The visual output layer.
 
-**09 decision-model-authoring** [extension] — Documents decision points as DMN 1.4 decision tables with input/output columns and rule rows.
+**09 okhp3-decision-model-authoring** [extension] — Documents decision points as DMN 1.4 decision tables with input/output columns and rule rows.
 
 ### Layer 4 — Operational
 
-**11 process-measures-and-controls-definition** [extension] — Defines KPIs, SLAs, and internal controls for each process activity.
+**11 okhp3-process-measures-controls** [extension] — Defines KPIs, SLAs, and internal controls for each process activity.
 
-**12 sop-and-work-instruction-generation** [core] — Generates SOPs and role-level work instructions from the validated PNS.md.
+**12 okhp3-sop-work-instructions** [core] — Generates SOPs and role-level work instructions from the validated PNS.md.
 
 ### Layer 5 — Governance
 
-**13 raci-and-governance-matrix-generation** [core] — Produces a full RACI matrix from the activity sequence and stakeholder register.
+**13 okhp3-raci-governance-matrix** [core] — Produces a full RACI matrix from the activity sequence and stakeholder register.
 
-**14 sipoc-generation** [core] — Generates a SIPOC table (Supplier, Input, Process, Output, Customer) aligned to APQC PCF classification.
+**14 okhp3-sipoc-generation** [core] — Generates a SIPOC table (Supplier, Input, Process, Output, Customer) aligned to APQC PCF classification.
 
 ### Layer 6 — Publication
 
-**15 publication-and-handoff-packaging** [core] — Packages all outputs for stakeholder review: PNS.md, BPMN diagram, SIPOC, RACI, SOPs, and a publication checklist.
+**15 okhp3-publication-handoff-packaging** [core] — Packages all outputs for stakeholder review: PNS.md, BPMN diagram, SIPOC, RACI, SOPs, and a publication checklist.
 
 ---
 

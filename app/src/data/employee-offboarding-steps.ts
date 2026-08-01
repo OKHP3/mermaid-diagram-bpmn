@@ -3,7 +3,7 @@ export type { ExampleStep };
 
 export const EMPLOYEE_OFFBOARDING_STEPS: ExampleStep[] = [
   {
-    skillId: "process-intake-and-scope",
+    skillId: "okhp3-process-intake-and-scope",
     pnsConsumed: null,
     pnsSet: "draft-intake",
     triggerUsed: "Map this process — employee offboarding for voluntary resignations. Notice period is 4 weeks standard, IT access must be revoked within 24 hours of the last working day.",
@@ -24,7 +24,7 @@ classification: internal
 status: draft-intake`,
   },
   {
-    skillId: "stakeholder-and-role-mapping",
+    skillId: "okhp3-stakeholder-and-role-mapping",
     pnsConsumed: "draft-intake",
     pnsSet: "scoped",
     triggerUsed: "Map stakeholders for the employee-offboarding process.",
@@ -43,7 +43,7 @@ it      | IT Operations         | R       | Account and equipment management
 fin     | Payroll / Finance     | C / I   | Issues final pay, closes benefits`,
   },
   {
-    skillId: "elicitation-and-interview-facilitation",
+    skillId: "okhp3-elicitation-interviews",
     pnsConsumed: "scoped",
     pnsSet: "elicited",
     triggerUsed: "Run the elicitation interview guide for employee-offboarding.",
@@ -62,7 +62,7 @@ Focus: exception paths, IP/code ownership, equipment recovery failures`,
 Open question: Who authorises remote-wipe if equipment is not returned within 14 days?`,
   },
   {
-    skillId: "as-is-process-capture",
+    skillId: "okhp3-as-is-process-capture",
     pnsConsumed: "elicited",
     pnsSet: "documented-as-is",
     triggerUsed: "Capture the as-is activity sequence for employee-offboarding.",
@@ -84,7 +84,7 @@ act-008 | HR             | Conduct exit interview; record feedback
 act-009 | Payroll        | Process final pay run including holiday accrual`,
   },
   {
-    skillId: "process-narrative-authoring",
+    skillId: "okhp3-process-narrative-authoring",
     pnsConsumed: "documented-as-is",
     pnsSet: "modeled",
     triggerUsed: "Author the full PNS.md for employee-offboarding.",
@@ -105,7 +105,7 @@ IP policy ambiguity flagged for gap analysis — not resolved in narrative.`,
 §7  System Touchpoints             complete  (Active Directory, BambooHR, payroll system)`,
   },
   {
-    skillId: "visual-process-modeling",
+    skillId: "okhp3-visual-process-modeling",
     pnsConsumed: "modeled",
     pnsSet: null,
     triggerUsed: "Generate the bpmn-beta diagram for employee-offboarding using pool-lane notation.",
@@ -119,7 +119,7 @@ Render target: bpmn-beta DSL for Mermaid.`,
     hasDiagram: true,
   },
   {
-    skillId: "process-gap-and-exception-analysis",
+    skillId: "okhp3-process-gap-exception-analysis",
     pnsConsumed: "modeled",
     pnsSet: "analyzed",
     triggerUsed: "Analyse gaps and exceptions in the employee-offboarding process.",
@@ -141,7 +141,7 @@ GAP-04 [MEDIUM] IP ownership of code built on personal repos is unaddressed
   Legal risk if company IP exists in repositories outside corporate ownership.`,
   },
   {
-    skillId: "future-state-and-change-strategy",
+    skillId: "okhp3-future-state-change-strategy",
     pnsConsumed: "analyzed",
     pnsSet: "future-designed",
     triggerUsed: "Model future-state improvements for employee-offboarding based on the gap report.",
@@ -161,7 +161,7 @@ FS-04: IP acknowledgement step — employee signs IP declaration at act-001 (new
 Delta: +2 act-NNN entries; 1 new event trigger (HRIS signal); 1 decision gateway added (equipment status).`,
   },
   {
-    skillId: "decision-model-authoring",
+    skillId: "okhp3-decision-model-authoring",
     pnsConsumed: "analyzed",
     pnsSet: "decision-enriched",
     triggerUsed: "Build DMN decision tables for the offboarding access-revocation tier and equipment-escalation rules in employee-offboarding.",
@@ -187,7 +187,7 @@ R2   | 4–7                 | >= £500     | HR escalates; IT prepares wipe req
 R3   | > 7                 | any         | Legal authorises remote wipe`,
   },
   {
-    skillId: "process-validation-and-quality-scoring",
+    skillId: "okhp3-process-validation-scoring",
     pnsConsumed: "decision-enriched",
     pnsSet: "validated",
     triggerUsed: "Validate and score the employee-offboarding PNS now that the DMN tables are in place.",
@@ -209,7 +209,7 @@ V7  Exception Handling          8/10  remote-wipe authorisation path now documen
 V9  Handoff Conditions          9/10  HRIS signal trigger clearly specified`,
   },
   {
-    skillId: "process-measures-and-controls-definition",
+    skillId: "okhp3-process-measures-controls",
     pnsConsumed: "validated",
     pnsSet: null,
     triggerUsed: "Define KPIs and controls for employee-offboarding.",
@@ -229,7 +229,7 @@ CTL-02  IP declaration signature      mandatory at act-001 (intake)       blocks
 CTL-03  Payroll final-pay run audit   evidence retained 7 years           HMRC / GDPR obligation`,
   },
   {
-    skillId: "sop-and-work-instruction-generation",
+    skillId: "okhp3-sop-work-instructions",
     pnsConsumed: "validated",
     pnsSet: null,
     triggerUsed: "Generate the SOP for employee-offboarding.",
@@ -251,7 +251,7 @@ Step 2  [Manager]  Within 24 hours of step 1, confirm last working day with the 
   SLA: manager sign-off on handover tasks must be completed before the final working day.`,
   },
   {
-    skillId: "raci-and-governance-matrix-generation",
+    skillId: "okhp3-raci-governance-matrix",
     pnsConsumed: "decision-enriched",
     pnsSet: null,
     triggerUsed: "Generate the RACI matrix for employee-offboarding including the DMN-governed decision activities.",
@@ -274,7 +274,7 @@ Conduct exit interview      |    R     |    —    | A/R  |  —   |   —
 Process final pay           |    I     |    —    |  C   |  —   |  A/R`,
   },
   {
-    skillId: "sipoc-generation",
+    skillId: "okhp3-sipoc-generation",
     pnsConsumed: "decision-enriched",
     pnsSet: null,
     triggerUsed: "Generate the SIPOC for employee-offboarding.",
@@ -293,7 +293,7 @@ Outputs     | Closed HRIS record, revoked accounts, recovered equipment, signed 
 Customers   | HR (compliance record), IT (clean access state), Finance (audit trail), Legal (IP declaration)`,
   },
   {
-    skillId: "publication-and-handoff-packaging",
+    skillId: "okhp3-publication-handoff-packaging",
     pnsConsumed: "validated",
     pnsSet: "packaged",
     triggerUsed: "Package employee-offboarding for publication.",

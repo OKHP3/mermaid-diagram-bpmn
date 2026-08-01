@@ -1,0 +1,162 @@
+---
+name: process-gap-and-exception-analysis
+description: "Identify deviations, gaps, and exception paths between an as-is process capture and its intended design. Use this skill when the user wants to find where a process breaks down, where steps are missing or inconsistent, where exception handling is undefined, or where current execution differs from documented procedure. Use when they say \\\"what's wrong with the current process\\\", \\\"find the gaps\\\", \\\"where does this break\\\", or \\\"analyze exceptions\\\". Records gaps only — it does not propose solutions or redesign; for that, hand off to future-state-and-change-strategy. Produces a gap analysis report and exception catalog."
+license: "MIT"
+compatibility: "Reading the as-is capture and classifying gaps needs no special runtime. scripts/analyze-gaps.mjs needs a JavaScript runtime that executes ES modules (Node.js); no minimum version is pinned in this repository. If it cannot run, classify gaps by hand against the four gap-type patterns in references/gap-analysis-framework.md and say so in your output rather than presenting the result as machine-detected."
+metadata:
+  bp_skill_version: "0.3.0"
+  status: "core"
+  version: "0.2.0"
+  author: "OverKill Hill P³"
+  project: "BP-SKILL: Business Process Agent Skill Suite"
+  category: "process-analysis"
+  standards_refs: "BPM CBOK v4 §5.2 (Process Analysis Techniques); BABOK v3 §10.11 (Business Rules Analysis); ISO 9001:2015 §10.2 (Nonconformity and corrective action); Six Sigma DMAIC — Analyse phase"
+  produces: "gap-analysis.yaml, exception-catalog.yaml"
+  consumes: "as-is-process.yaml"
+  depends_on: "as-is-process-capture"
+  tags: "gap-analysis, exception-analysis, process-improvement, root-cause, nonconformity, BPM-CBOK, six-sigma"
+  triggers: "find the gaps in this process; what's wrong with the current process; exception analysis; where does this break; process gaps; analyze exceptions; root cause analysis; process improvement"
+  homepage: "https://github.com/overkillhill/mermaid-diagram-bpmn/tree/main/skills/process-gap-and-exception-analysis"
+  repository: "https://github.com/overkillhill/mermaid-diagram-bpmn"
+---
+
+# process-gap-and-exception-analysis
+
+**BP-SKILL: Business Process Agent Skill Suite** · part of [mermaid-diagram-bpmn](https://github.com/overkillhill/mermaid-diagram-bpmn) · OverKill Hill P³
+
+---
+
+## Purpose
+
+Systematically identify gaps, deviations, and exception paths in a captured as-is process. The analysis distinguishes:
+
+1. **Structural gaps**: missing steps, undefined roles, absent inputs or outputs
+2. **Execution gaps**: steps performed inconsistently or only by specific individuals
+3. **Exception gaps**: failure paths with no documented handling
+4. **Compliance gaps**: steps missing required controls or policy references
+
+---
+
+## When to use this skill
+
+- You have an `as-is-process.yaml` and want to identify improvement opportunities
+- User asks where the current process fails, slows down, or creates risk
+- Preparing the input for `future-state-and-change-strategy`
+- User needs a root cause analysis of a known process failure
+
+## When NOT to use this skill
+
+- No as-is capture exists: run `as-is-process-capture` first
+- User wants to design the future state immediately: note the gap analysis is needed first, then run `future-state-and-change-strategy`
+- Do not propose solutions here: record gaps only; solutions belong in the future-state skill
+
+---
+
+## Gap Analysis Framework
+
+`scripts/analyze-gaps.mjs` analyses the as-is process for the following gap types:
+
+### Type 1: Structural gaps
+
+| Pattern | Gap description |
+|---|---|
+| Step with no `actor_role_id` | Unowned activity |
+| No start event or end event | Missing process boundary |
+| Input with no `source` | Untraced input |
+| Output with no `consumer` | Undelivered output |
+| `business_rules` empty | Undocumented constraints |
+
+### Type 2: Execution gaps
+
+| Pattern | Gap description |
+|---|---|
+| `capture_quality: low` on step | Poorly understood activity |
+| Step with `notes` containing "usually" or "sometimes" | Inconsistent execution |
+| Single person as sole performer across >50% of steps | Key-person dependency |
+
+### Type 3: Exception gaps
+
+| Pattern | Gap description |
+|---|---|
+| Decision point with no exception path | Unhandled failure branch |
+| Exception in PIR with no `handling` | Undefined recovery procedure |
+| Exception path with `owner_role_id` empty | Unowned error handling |
+
+### Type 4: Compliance gaps
+
+| Pattern | Gap description |
+|---|---|
+| `controls` empty on process | No governance controls |
+| Approval step with no `approver` role | Missing segregation of duties |
+| High-risk exception with no escalation path | Escalation path undefined |
+
+---
+
+## Severity Classification
+
+| Severity | Description |
+|---|---|
+| `critical` | Process cannot complete without this being resolved |
+| `major` | Significant risk of nonconformity or failure |
+| `minor` | Inconsistency or improvement opportunity |
+| `observation` | Informational: no immediate action required |
+
+---
+
+## Exception Catalog
+
+For each exception found, record:
+- `exception_id`: stable identifier
+- `description`: what goes wrong
+- `trigger_condition`: what causes this exception
+- `affected_steps[]`: which `act-NNN` IDs are affected
+- `current_handling`: what the process does today (if anything)
+- `severity`: critical | major | minor | observation
+- `recommended_action`: brief description (not a full solution)
+
+---
+
+## Handoff Instruction
+
+Pass `gap-analysis.yaml` and `exception-catalog.yaml` to `future-state-and-change-strategy` to prioritise gaps and design the target state.
+
+Also use `exception-catalog.yaml` to enrich `exception_paths[]` in `process-narrative-authoring`.
+
+---
+
+## Execution contract
+
+Apply this contract on every run so the artifact is trustworthy and reusable:
+
+1. State the input evidence, assumptions, and unresolved questions before drafting. Never invent missing process facts, owners, controls, dates, or approvals.
+2. Preserve stable identifiers and source traceability. When transforming an upstream artifact, retain its IDs and cite the source field or section for each derived decision.
+3. Produce the declared artifact exactly, including required fields and valid values. Keep unsupported, uncertain, or not-applicable items explicit instead of silently omitting them.
+4. Validate the result with the bundled script or fixture when available. Report validation status, warnings, and any manual review still required.
+5. Stop and request the missing input when a boundary, approval authority, or safety-critical rule cannot be inferred. A partial artifact with clearly marked open questions is safer than a confident fabrication.
+
+If `scripts/analyze-gaps.mjs` cannot run, classify gaps by hand using the four pattern tables in `references/gap-analysis-framework.md`, and state in the output that automated detection was not run.
+
+## References
+
+Load on demand:
+- `references/gap-analysis-framework.md`: gap type taxonomy, severity classification, and root cause analysis templates
+
+## Scripts
+
+- `scripts/analyze-gaps.mjs`: detects structural, execution, exception, and compliance gaps from as-is-process.yaml
+
+## Assets
+
+- `assets/fixtures/gap-analysis-example.yaml`: canonical gap analysis for purchase-approval as-is process
+
+## Evaluation and release status
+
+No `evals/evals.json` exists for this skill yet, and none of the five root-level `evals/` categories cover gap-analysis output directly. The only current check is the maintainer-facing `tests/validate-skill.test.mjs` against `assets/fixtures/gap-analysis-example.yaml`. Evidence status: `not-run` for task quality and skill uplift.
+
+Version 0.2.0 (this pass) added the `compatibility` declaration and the script fallback instruction; the description already stated the solutions-vs-gaps boundary, so this pass moved that sentence earlier for discovery-time visibility rather than adding a new one. Classified minor per the versioning table, not patch. No regression suite exists to run before this bump; that limitation is disclosed, not implied away.
+
+---
+
+## About
+
+Part of the **BP-SKILL: Business Process Agent Skill Suite**, published in [overkillhill/mermaid-diagram-bpmn](https://github.com/overkillhill/mermaid-diagram-bpmn). MIT License.

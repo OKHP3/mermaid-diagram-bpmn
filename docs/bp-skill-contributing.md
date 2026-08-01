@@ -8,7 +8,7 @@ Contribution guide for the BP-SKILL agent skill array. Read this before submitti
 
 Every SKILL.md must conform to the [Agent Skills open standard](https://agentskills.io). The base spec requires:
 
-**File naming:** The file must be named exactly `SKILL.md`. The skill directory name becomes the skill's identifier (e.g., `skills/process-narrative-authoring/SKILL.md` has ID `process-narrative-authoring`). Use lowercase kebab-case.
+**File naming:** The file must be named exactly `SKILL.md`. The skill directory name becomes the skill's identifier (e.g., `skills/okhp3-process-narrative-authoring/SKILL.md` has ID `okhp3-process-narrative-authoring`). Use lowercase kebab-case.
 
 **Required frontmatter fields:**
 
@@ -98,7 +98,7 @@ Every new skill and every substantive change to an existing skill requires eval 
 ```yaml
 ---
 fixture_id: "pna-pass-001"
-skill_id: "process-narrative-authoring"
+skill_id: "okhp3-process-narrative-authoring"
 input_description: "Complete elicitation notes for a 5-step approval process"
 expected_quality_score_min: 85
 expected_sections_present:

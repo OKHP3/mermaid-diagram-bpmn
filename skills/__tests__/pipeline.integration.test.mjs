@@ -21,41 +21,41 @@ const SKILLS = join(__dir, '..');
 
 // ─── Script imports (all 15 core skills) ─────────────────────────────────────
 
-import { generatePir }             from '../process-intake-and-scope/scripts/generate-pir.mjs';
-import { scoreIntakeCompleteness } from '../process-intake-and-scope/scripts/score-intake-completeness.mjs';
-import { validatePir }             from '../process-intake-and-scope/scripts/validate-pir.mjs';
+import { generatePir }             from '../okhp3-process-intake-and-scope/scripts/generate-pir.mjs';
+import { scoreIntakeCompleteness } from '../okhp3-process-intake-and-scope/scripts/score-intake-completeness.mjs';
+import { validatePir }             from '../okhp3-process-intake-and-scope/scripts/validate-pir.mjs';
 
-import { generateQuestionPlan }    from '../elicitation-and-interview-facilitation/scripts/generate-question-plan.mjs';
-import { assignStepIds }           from '../as-is-process-capture/scripts/assign-step-ids.mjs';
-import { analyzeGaps }             from '../process-gap-and-exception-analysis/scripts/analyze-gaps.mjs';
-import { generateFutureState }     from '../future-state-and-change-strategy/scripts/generate-future-state.mjs';
+import { generateQuestionPlan }    from '../okhp3-elicitation-interviews/scripts/generate-question-plan.mjs';
+import { assignStepIds }           from '../okhp3-as-is-process-capture/scripts/assign-step-ids.mjs';
+import { analyzeGaps }             from '../okhp3-process-gap-exception-analysis/scripts/analyze-gaps.mjs';
+import { generateFutureState }     from '../okhp3-future-state-change-strategy/scripts/generate-future-state.mjs';
 
-import { generateStakeholderRegister } from '../stakeholder-and-role-mapping/scripts/generate-stakeholder-register.mjs';
-import { generateRaci }            from '../raci-and-governance-matrix-generation/scripts/generate-raci.mjs';
-import { generateSipoc }           from '../sipoc-generation/scripts/generate-sipoc.mjs';
-import { generateMeasuresRegister } from '../process-measures-and-controls-definition/scripts/generate-measures-register.mjs';
+import { generateStakeholderRegister } from '../okhp3-stakeholder-and-role-mapping/scripts/generate-stakeholder-register.mjs';
+import { generateRaci }            from '../okhp3-raci-governance-matrix/scripts/generate-raci.mjs';
+import { generateSipoc }           from '../okhp3-sipoc-generation/scripts/generate-sipoc.mjs';
+import { generateMeasuresRegister } from '../okhp3-process-measures-controls/scripts/generate-measures-register.mjs';
 
-import { scorePnsQuality }         from '../process-narrative-authoring/scripts/score-pns-quality.mjs';
-import { validatePns }             from '../process-narrative-authoring/scripts/validate-pns.mjs';
+import { scorePnsQuality }         from '../okhp3-process-narrative-authoring/scripts/score-pns-quality.mjs';
+import { validatePns }             from '../okhp3-process-narrative-authoring/scripts/validate-pns.mjs';
 
-import { validateDecisionModel }   from '../decision-model-authoring/scripts/validate-decision-model.mjs';
+import { validateDecisionModel }   from '../okhp3-decision-model-authoring/scripts/validate-decision-model.mjs';
 
-import { validateBpmnBeta }        from '../visual-process-modeling/scripts/validate-bpmn-beta.mjs';
-import { lintProcessModel }        from '../visual-process-modeling/scripts/lint-process-model.mjs';
-import { normalizeBpmnBeta }       from '../visual-process-modeling/scripts/normalize-bpmn-beta.mjs';
-import { repairBpmnBeta }          from '../visual-process-modeling/scripts/repair-bpmn-beta.mjs';
+import { validateBpmnBeta }        from '../okhp3-visual-process-modeling/scripts/validate-bpmn-beta.mjs';
+import { lintProcessModel }        from '../okhp3-visual-process-modeling/scripts/lint-process-model.mjs';
+import { normalizeBpmnBeta }       from '../okhp3-visual-process-modeling/scripts/normalize-bpmn-beta.mjs';
+import { repairBpmnBeta }          from '../okhp3-visual-process-modeling/scripts/repair-bpmn-beta.mjs';
 
-import { runValidationSuite }      from '../process-validation-and-quality-scoring/scripts/run-validation-suite.mjs';
-import { generateSop }             from '../sop-and-work-instruction-generation/scripts/generate-sop.mjs';
-import { buildPublicationBundle }  from '../publication-and-handoff-packaging/scripts/build-publication-bundle.mjs';
+import { runValidationSuite }      from '../okhp3-process-validation-scoring/scripts/run-validation-suite.mjs';
+import { generateSop }             from '../okhp3-sop-work-instructions/scripts/generate-sop.mjs';
+import { buildPublicationBundle }  from '../okhp3-publication-handoff-packaging/scripts/build-publication-bundle.mjs';
 
 // ─── Shared fixture data (matches pns-example.yaml) ──────────────────────────
-// Hard-coded from skills/process-narrative-authoring/assets/fixtures/pns-example.yaml
+// Hard-coded from skills/okhp3-process-narrative-authoring/assets/fixtures/pns-example.yaml
 // to avoid a runtime YAML-parse dependency in the test runner.
 
 const FIXTURE_PATH = join(
   SKILLS,
-  'process-narrative-authoring/assets/fixtures/pns-example.yaml'
+  'okhp3-process-narrative-authoring/assets/fixtures/pns-example.yaml'
 );
 
 const PNS = {
@@ -146,8 +146,8 @@ const PNS = {
   },
 };
 
-// Wrapped PNS for scripts that navigate via pns.sections (process-narrative-authoring,
-// raci-and-governance-matrix-generation, sipoc-generation).
+// Wrapped PNS for scripts that navigate via pns.sections (okhp3-process-narrative-authoring,
+// okhp3-raci-governance-matrix, okhp3-sipoc-generation).
 const PNS_WRAPPED = { sections: PNS };
 
 // PNS with fields expected by validatePns (process_owner_role_id, version, valid status)
@@ -158,7 +158,7 @@ const PNS_FOR_VALIDATE = {
   status: 'validated',
 };
 
-// Minimal bpmn-beta diagram string used for visual-process-modeling stages
+// Minimal bpmn-beta diagram string used for okhp3-visual-process-modeling stages
 const BPMN_BETA = `bpmn-beta
 
 accTitle: Purchase Order Approval
@@ -198,7 +198,7 @@ let normalisedSteps = null;
 let gapAnalysis = null;
 let sopText = null;
 
-// ─── Stage 1: process-intake-and-scope / generate-pir ─────────────────────────
+// ─── Stage 1: okhp3-process-intake-and-scope / generate-pir ─────────────────────────
 test('Stage 1 — generatePir scaffolds a PIR from process name', () => {
   const result = generatePir({
     processName: 'Purchase Order Approval',
@@ -252,7 +252,7 @@ test('Stage 1 — generatePir scaffolds a PIR from process name', () => {
   };
 });
 
-// ─── Stage 2: process-intake-and-scope / score-intake-completeness ─────────────
+// ─── Stage 2: okhp3-process-intake-and-scope / score-intake-completeness ─────────────
 test('Stage 2 — scoreIntakeCompleteness returns score ≥ 70 for the enriched PIR', () => {
   assert.ok(enrichedPir, 'enrichedPir must be set by Stage 1');
   const result = scoreIntakeCompleteness(enrichedPir);
@@ -275,7 +275,7 @@ test('Stage 2 — scoreIntakeCompleteness returns score ≥ 70 for the enriched 
   };
 });
 
-// ─── Stage 3: process-intake-and-scope / validate-pir ─────────────────────────
+// ─── Stage 3: okhp3-process-intake-and-scope / validate-pir ─────────────────────────
 test('Stage 3 — validatePir returns the standard result shape', () => {
   assert.ok(enrichedPir, 'enrichedPir must be set by Stage 1');
   const result = validatePir(enrichedPir);
@@ -285,7 +285,7 @@ test('Stage 3 — validatePir returns the standard result shape', () => {
   assert.ok(Array.isArray(result.warnings));
 });
 
-// ─── Stage 4: elicitation-and-interview-facilitation / generate-question-plan ──
+// ─── Stage 4: okhp3-elicitation-interviews / generate-question-plan ──
 test('Stage 4 — generateQuestionPlan returns a plan from the PIR', () => {
   assert.ok(enrichedPir, 'enrichedPir must be set by Stage 1');
   const result = generateQuestionPlan(enrichedPir);
@@ -299,7 +299,7 @@ test('Stage 4 — generateQuestionPlan returns a plan from the PIR', () => {
   assert.equal(result.valid, true, 'generateQuestionPlan must be valid');
 });
 
-// ─── Stage 5: as-is-process-capture / assign-step-ids ─────────────────────────
+// ─── Stage 5: okhp3-as-is-process-capture / assign-step-ids ─────────────────────────
 test('Stage 5 — assignStepIds normalises activity IDs from enriched PIR steps', () => {
   assert.ok(enrichedPir, 'enrichedPir must be set by Stage 1');
   const result = assignStepIds(enrichedPir.steps);
@@ -317,7 +317,7 @@ test('Stage 5 — assignStepIds normalises activity IDs from enriched PIR steps'
   normalisedSteps = result.steps;
 });
 
-// ─── Stage 6: process-gap-and-exception-analysis / analyze-gaps ───────────────
+// ─── Stage 6: okhp3-process-gap-exception-analysis / analyze-gaps ───────────────
 test('Stage 6 — analyzeGaps reports zero critical gaps on the complete fixture', () => {
   assert.ok(normalisedSteps, 'normalisedSteps must be set by Stage 5');
   const asIs = {
@@ -341,7 +341,7 @@ test('Stage 6 — analyzeGaps reports zero critical gaps on the complete fixture
   gapAnalysis = { process_id: enrichedPir.process_id, gaps: result.gaps };
 });
 
-// ─── Stage 7: future-state-and-change-strategy / generate-future-state ─────────
+// ─── Stage 7: okhp3-future-state-change-strategy / generate-future-state ─────────
 test('Stage 7 — generateFutureState scaffolds change items from gap output', () => {
   assert.ok(gapAnalysis, 'gapAnalysis must be set by Stage 6');
   const result = generateFutureState(gapAnalysis);
@@ -354,7 +354,7 @@ test('Stage 7 — generateFutureState scaffolds change items from gap output', (
   assert.ok(Array.isArray(result.futureState.change_items), 'change_items must be an array');
 });
 
-// ─── Stage 8: stakeholder-and-role-mapping / generate-stakeholder-register ─────
+// ─── Stage 8: okhp3-stakeholder-and-role-mapping / generate-stakeholder-register ─────
 test('Stage 8 — generateStakeholderRegister derives register from PIR actors', () => {
   assert.ok(enrichedPir, 'enrichedPir must be set by Stage 1');
   const result = generateStakeholderRegister(enrichedPir);
@@ -366,7 +366,7 @@ test('Stage 8 — generateStakeholderRegister derives register from PIR actors',
   assert.ok(result.register && typeof result.register === 'object', 'register must be an object');
 });
 
-// ─── Stage 9: raci-and-governance-matrix-generation / generate-raci ────────────
+// ─── Stage 9: okhp3-raci-governance-matrix / generate-raci ────────────
 test('Stage 9 — generateRaci builds RACI matrix from PNS roles_and_raci', () => {
   const result = generateRaci(PNS_WRAPPED);
 
@@ -377,7 +377,7 @@ test('Stage 9 — generateRaci builds RACI matrix from PNS roles_and_raci', () =
   assert.ok(result.raci && typeof result.raci === 'object', 'raci must be an object');
 });
 
-// ─── Stage 10: sipoc-generation / generate-sipoc ──────────────────────────────
+// ─── Stage 10: okhp3-sipoc-generation / generate-sipoc ──────────────────────────────
 test('Stage 10 — generateSipoc derives SIPOC from PNS process_box', () => {
   const result = generateSipoc(PNS_WRAPPED);
 
@@ -388,7 +388,7 @@ test('Stage 10 — generateSipoc derives SIPOC from PNS process_box', () => {
   assert.ok(result.sipoc && typeof result.sipoc === 'object', 'sipoc must be an object');
 });
 
-// ─── Stage 11: process-measures-and-controls-definition / generate-measures-register
+// ─── Stage 11: okhp3-process-measures-controls / generate-measures-register
 test('Stage 11 — generateMeasuresRegister extracts KPIs and controls from PNS', () => {
   const result = generateMeasuresRegister(PNS);
 
@@ -402,7 +402,7 @@ test('Stage 11 — generateMeasuresRegister extracts KPIs and controls from PNS'
   assert.ok(result.controlsRegister.controls.length >= 2, 'at least 2 controls must be derived from fixture');
 });
 
-// ─── Stage 12: process-narrative-authoring / score-pns-quality ─────────────────
+// ─── Stage 12: okhp3-process-narrative-authoring / score-pns-quality ─────────────────
 test('Stage 12 — scorePnsQuality scores the fixture PNS ≥ 75 (publication threshold)', () => {
   const result = scorePnsQuality(PNS_WRAPPED);
 
@@ -415,7 +415,7 @@ test('Stage 12 — scorePnsQuality scores the fixture PNS ≥ 75 (publication th
   assert.equal(result.ready_for_publication, true, 'fixture PNS must be ready_for_publication');
 });
 
-// ─── Stage 13: process-narrative-authoring / validate-pns ─────────────────────
+// ─── Stage 13: okhp3-process-narrative-authoring / validate-pns ─────────────────────
 test('Stage 13 — validatePns runs V1–V7 rules and returns standard shape', () => {
   const result = validatePns(PNS_FOR_VALIDATE);
 
@@ -426,7 +426,7 @@ test('Stage 13 — validatePns runs V1–V7 rules and returns standard shape', (
   assert.ok(result.rules_fired.length > 0, 'at least one validation rule must be fired');
 });
 
-// ─── Stage 14: decision-model-authoring / validate-decision-model ──────────────
+// ─── Stage 14: okhp3-decision-model-authoring / validate-decision-model ──────────────
 test('Stage 14 — validateDecisionModel validates a purchase-threshold decision model', () => {
   const dm = {
     decision_model_version: '0.1',
@@ -460,7 +460,7 @@ test('Stage 14 — validateDecisionModel validates a purchase-threshold decision
   assert.ok(Array.isArray(result.rules_fired), 'rules_fired must be an array');
 });
 
-// ─── Stage 15: visual-process-modeling / validate-bpmn-beta ───────────────────
+// ─── Stage 15: okhp3-visual-process-modeling / validate-bpmn-beta ───────────────────
 test('Stage 15 — validateBpmnBeta validates the fixture BPMN diagram', () => {
   const result = validateBpmnBeta(BPMN_BETA);
 
@@ -471,7 +471,7 @@ test('Stage 15 — validateBpmnBeta validates the fixture BPMN diagram', () => {
   assert.equal(result.valid, true, `fixture BPMN must be valid (errors: ${result.errors.join(', ')})`);
 });
 
-// ─── Stage 16: visual-process-modeling / lint-process-model ───────────────────
+// ─── Stage 16: okhp3-visual-process-modeling / lint-process-model ───────────────────
 test('Stage 16 — lintProcessModel returns linting results for the fixture diagram', () => {
   const result = lintProcessModel(BPMN_BETA);
 
@@ -480,7 +480,7 @@ test('Stage 16 — lintProcessModel returns linting results for the fixture diag
     'result must contain an issues/errors/warnings array');
 });
 
-// ─── Stage 17: visual-process-modeling / normalize-bpmn-beta ─────────────────
+// ─── Stage 17: okhp3-visual-process-modeling / normalize-bpmn-beta ─────────────────
 test('Stage 17 — normalizeBpmnBeta returns the normalised diagram string', () => {
   const result = normalizeBpmnBeta(BPMN_BETA);
 
@@ -490,7 +490,7 @@ test('Stage 17 — normalizeBpmnBeta returns the normalised diagram string', () 
   assert.ok(Array.isArray(result.changes), 'result.changes must be an array');
 });
 
-// ─── Stage 18: visual-process-modeling / repair-bpmn-beta ─────────────────────
+// ─── Stage 18: okhp3-visual-process-modeling / repair-bpmn-beta ─────────────────────
 test('Stage 18 — repairBpmnBeta returns the repaired diagram and validation status', () => {
   const result = repairBpmnBeta(BPMN_BETA);
 
@@ -500,7 +500,7 @@ test('Stage 18 — repairBpmnBeta returns the repaired diagram and validation st
   assert.ok(Array.isArray(result.errors), 'result.errors must be an array');
 });
 
-// ─── Stage 19: process-validation-and-quality-scoring / run-validation-suite ───
+// ─── Stage 19: okhp3-process-validation-scoring / run-validation-suite ───
 test('Stage 19 — runValidationSuite runs V1–V9 checks on PIR + PNS; fixture is publication-ready', () => {
   assert.ok(enrichedPir, 'enrichedPir must be set by Stage 2');
   const result = runValidationSuite({ pir: enrichedPir, pns: PNS });
@@ -515,7 +515,7 @@ test('Stage 19 — runValidationSuite runs V1–V9 checks on PIR + PNS; fixture 
   assert.equal(result.report.ready_for_publication, true, 'fixture must pass the publication gate');
 });
 
-// ─── Stage 20: sop-and-work-instruction-generation / generate-sop ──────────────
+// ─── Stage 20: okhp3-sop-work-instructions / generate-sop ──────────────
 test('Stage 20 — generateSop produces a non-empty ISO 9001 SOP from the fixture PNS', () => {
   const result = generateSop(PNS);
 
@@ -531,7 +531,7 @@ test('Stage 20 — generateSop produces a non-empty ISO 9001 SOP from the fixtur
   sopText = result.sop;
 });
 
-// ─── Stage 21: publication-and-handoff-packaging / build-publication-bundle ────
+// ─── Stage 21: okhp3-publication-handoff-packaging / build-publication-bundle ────
 test('Stage 21 — buildPublicationBundle assembles all artifacts — missing_required: []', async () => {
   assert.ok(sopText, 'sopText must be set by Stage 20');
   assert.ok(existsSync(FIXTURE_PATH), `fixture file must exist at ${FIXTURE_PATH}`);

@@ -175,7 +175,7 @@ rejection_path: ""
 
 <!-- N/A allowed: for processes where no improvement or redesign is in scope. -->
 <!-- Document: target-state assumptions, change strategy summary, transition path, implementation dependencies. -->
-<!-- Populated by: future-state-and-change-strategy skill -->
+<!-- Populated by: okhp3-future-state-change-strategy skill -->
 
 future_state: null
 change_strategy: null

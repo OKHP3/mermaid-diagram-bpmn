@@ -64,7 +64,7 @@ Mermaid Theme Builder handles the visual-governance contract that BPMN for Merma
 
 ### Relationship to skillz / BP-SKILL
 
-BP-SKILL is the skillz layer for this stack: 15 portable SKILL.md agent workflows covering the full business process documentation lifecycle. The skills do the human-in-the-loop work — elicitation, narrative authoring, gap analysis, governance, publication — and produce `PNS.md` (Process Narrative Specification) as the central handoff. `visual-process-modeling` (skill 06) is the bridge that converts a completed PNS into `bpmn-beta` syntax.
+BP-SKILL is the skillz layer for this stack: 15 portable SKILL.md agent workflows covering the full business process documentation lifecycle. The skills do the human-in-the-loop work — elicitation, narrative authoring, gap analysis, governance, publication — and produce `PNS.md` (Process Narrative Specification) as the central handoff. `okhp3-visual-process-modeling` (skill 06) is the bridge that converts a completed PNS into `bpmn-beta` syntax.
 
 ### PathScrib-R / Flowpilot Scribbler lineage
 

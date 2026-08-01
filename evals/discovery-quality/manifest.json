@@ -2,7 +2,7 @@
   "category": "discovery-quality",
   "description": "PIR structural completeness and trigger/scope quality",
   "v_rule": "V8",
-  "validator_module": "skills/okhp3-process-discovery/scripts/validate-pir.mjs",
+  "validator_module": "skills/okhp3-process-intake-and-scope/scripts/validate-pir.mjs",
   "validator_fn": "validatePir",
   "fixture_type": "yaml",
   "weight": 20,

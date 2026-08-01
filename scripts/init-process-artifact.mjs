@@ -173,4 +173,4 @@ for (const d of subdirs) {
   console.log(`    ${d}/`);
 }
 console.log(`    PNS.md  (status: draft-intake, schema_version: 0.2.0)`);
-console.log(`\nNext: fill in PNS.md, then run process-intake-and-scope skill.`);
+console.log(`\nNext: fill in PNS.md, then run okhp3-process-intake-and-scope skill.`);

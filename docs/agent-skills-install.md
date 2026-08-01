@@ -24,12 +24,12 @@ Visit [okhp3.github.io/mermaid-diagram-bpmn/skills](https://okhp3.github.io/merm
 
 ```bash
 # Create the target directory and download a single skill
-mkdir -p skills/process-narrative-authoring
-curl -o skills/process-narrative-authoring/SKILL.md \
-  https://okhp3.github.io/mermaid-diagram-bpmn/skills/process-narrative-authoring/SKILL.md
+mkdir -p skills/okhp3-process-narrative-authoring
+curl -o skills/okhp3-process-narrative-authoring/SKILL.md \
+  https://okhp3.github.io/mermaid-diagram-bpmn/skills/okhp3-process-narrative-authoring/SKILL.md
 ```
 
-Replace `process-narrative-authoring` with any of the 15 skill IDs listed on the [skills browser](https://okhp3.github.io/mermaid-diagram-bpmn/skills).
+Replace `okhp3-process-narrative-authoring` with any of the 15 skill IDs listed on the [skills browser](https://okhp3.github.io/mermaid-diagram-bpmn/skills).
 
 ---
 
@@ -43,9 +43,9 @@ Claude Code reads skills from the `skills/` directory of your current project, o
 
 ```bash
 # From the root of your project
-mkdir -p skills/process-narrative-authoring
-curl -o skills/process-narrative-authoring/SKILL.md \
-  https://okhp3.github.io/mermaid-diagram-bpmn/skills/process-narrative-authoring/SKILL.md
+mkdir -p skills/okhp3-process-narrative-authoring
+curl -o skills/okhp3-process-narrative-authoring/SKILL.md \
+  https://okhp3.github.io/mermaid-diagram-bpmn/skills/okhp3-process-narrative-authoring/SKILL.md
 ```
 
 **Global install (all 15 skills):**
@@ -56,7 +56,7 @@ Download the ZIP from the [skills browser](https://okhp3.github.io/mermaid-diagr
 unzip bp-skill-suite-v0.3.zip -d ~/.claude/skills/
 ```
 
-**Verify:** Start a Claude Code session and type "I need to document a business process". Claude should respond by activating `process-intake-and-scope` and beginning the PIR intake form.
+**Verify:** Start a Claude Code session and type "I need to document a business process". Claude should respond by activating `okhp3-process-intake-and-scope` and beginning the PIR intake form.
 
 ---
 
@@ -67,9 +67,9 @@ Codex CLI reads skills from the `skills/` directory of your current project or f
 **Project-level install:**
 
 ```bash
-mkdir -p skills/process-narrative-authoring
-curl -o skills/process-narrative-authoring/SKILL.md \
-  https://okhp3.github.io/mermaid-diagram-bpmn/skills/process-narrative-authoring/SKILL.md
+mkdir -p skills/okhp3-process-narrative-authoring
+curl -o skills/okhp3-process-narrative-authoring/SKILL.md \
+  https://okhp3.github.io/mermaid-diagram-bpmn/skills/okhp3-process-narrative-authoring/SKILL.md
 ```
 
 **Global install:**
@@ -79,7 +79,7 @@ mkdir -p ~/.codex/skills
 # Download each skill or extract the ZIP into ~/.codex/skills/
 ```
 
-**Verify:** Run `codex` in your project directory and ask it to "capture the as-is process for purchase order approval". It should activate `as-is-process-capture` and ask structured elicitation questions.
+**Verify:** Run `codex` in your project directory and ask it to "capture the as-is process for purchase order approval". It should activate `okhp3-as-is-process-capture` and ask structured elicitation questions.
 
 ---
 
@@ -90,9 +90,9 @@ Copilot reads skills from `.github/skills/` in your repository or from the VS Co
 **Repository install:**
 
 ```bash
-mkdir -p .github/skills/process-narrative-authoring
-curl -o .github/skills/process-narrative-authoring/SKILL.md \
-  https://okhp3.github.io/mermaid-diagram-bpmn/skills/process-narrative-authoring/SKILL.md
+mkdir -p .github/skills/okhp3-process-narrative-authoring
+curl -o .github/skills/okhp3-process-narrative-authoring/SKILL.md \
+  https://okhp3.github.io/mermaid-diagram-bpmn/skills/okhp3-process-narrative-authoring/SKILL.md
 ```
 
 **Verify:** Open Copilot Chat and type "Help me document this process". Copilot should reference the skill name in its response and follow the structured intake procedure.
@@ -104,12 +104,12 @@ curl -o .github/skills/process-narrative-authoring/SKILL.md \
 Gemini CLI reads skills from the `skills/` directory of the current project.
 
 ```bash
-mkdir -p skills/visual-process-modeling
-curl -o skills/visual-process-modeling/SKILL.md \
-  https://okhp3.github.io/mermaid-diagram-bpmn/skills/visual-process-modeling/SKILL.md
+mkdir -p skills/okhp3-visual-process-modeling
+curl -o skills/okhp3-visual-process-modeling/SKILL.md \
+  https://okhp3.github.io/mermaid-diagram-bpmn/skills/okhp3-visual-process-modeling/SKILL.md
 ```
 
-**Verify:** Run `gemini` in your project and ask it to "generate a bpmn-beta diagram from this process narrative". It should activate `visual-process-modeling` and follow the visual modeling procedure.
+**Verify:** Run `gemini` in your project and ask it to "generate a bpmn-beta diagram from this process narrative". It should activate `okhp3-visual-process-modeling` and follow the visual modeling procedure.
 
 ---
 
@@ -119,9 +119,9 @@ Cursor reads skills from `.cursorrules` or from a `skills/` directory depending 
 
 ```bash
 # Most common path
-mkdir -p skills/stakeholder-and-role-mapping
-curl -o skills/stakeholder-and-role-mapping/SKILL.md \
-  https://okhp3.github.io/mermaid-diagram-bpmn/skills/stakeholder-and-role-mapping/SKILL.md
+mkdir -p skills/okhp3-stakeholder-and-role-mapping
+curl -o skills/okhp3-stakeholder-and-role-mapping/SKILL.md \
+  https://okhp3.github.io/mermaid-diagram-bpmn/skills/okhp3-stakeholder-and-role-mapping/SKILL.md
 ```
 
 ---
@@ -185,7 +185,7 @@ Download all 9 templates from the [skills browser](https://okhp3.github.io/merma
 
 **Skill not triggering**
 
-The trigger conditions are semantic, not keyword-matching. If the conversation does not match the trigger conditions declared in the SKILL.md `triggers` field, the skill will not activate. Try rephrasing your request to match the trigger descriptions listed on the [skill detail page](https://okhp3.github.io/mermaid-diagram-bpmn/skills). Alternatively, name the skill explicitly: "Use the process-narrative-authoring skill to...".
+The trigger conditions are semantic, not keyword-matching. If the conversation does not match the trigger conditions declared in the SKILL.md `triggers` field, the skill will not activate. Try rephrasing your request to match the trigger descriptions listed on the [skill detail page](https://okhp3.github.io/mermaid-diagram-bpmn/skills). Alternatively, name the skill explicitly: "Use the okhp3-process-narrative-authoring skill to...".
 
 **SKILL.md parse error**
 

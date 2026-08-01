@@ -2,7 +2,7 @@
   "category": "narrative-completeness",
   "description": "PNS schema completeness and exception/decision consistency",
   "v_rule": "V1,V6",
-  "validator_module": "skills/okhp3-process-narrative/scripts/validate-pns.mjs",
+  "validator_module": "skills/okhp3-process-narrative-authoring/scripts/validate-pns.mjs",
   "validator_fn": "validatePns",
   "fixture_type": "yaml",
   "weight": 20,

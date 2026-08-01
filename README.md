@@ -148,31 +148,31 @@ BP-SKILL packages the business process documentation lifecycle as 15 SKILL.md fi
 
 ```text
 LAYER 1 — DISCOVERY
-  01 process-intake-and-scope
-  02 stakeholder-and-role-mapping
-  03 elicitation-and-interview-facilitation
+  01 okhp3-process-intake-and-scope
+  02 okhp3-stakeholder-and-role-mapping
+  03 okhp3-elicitation-interviews
 
 LAYER 2 — NARRATIVE
-  04 as-is-process-capture
-  05 process-narrative-authoring
-  07 process-gap-and-exception-analysis
-  08 future-state-and-change-strategy
-  10 process-validation-and-quality-scoring
+  04 okhp3-as-is-process-capture
+  05 okhp3-process-narrative-authoring
+  07 okhp3-process-gap-exception-analysis
+  08 okhp3-future-state-change-strategy
+  10 okhp3-process-validation-scoring
 
 LAYER 3 — VISUAL AND DECISION MODELING
-  06 visual-process-modeling
-  09 decision-model-authoring
+  06 okhp3-visual-process-modeling
+  09 okhp3-decision-model-authoring
 
 LAYER 4 — OPERATIONAL
-  11 process-measures-and-controls-definition
-  12 sop-and-work-instruction-generation
+  11 okhp3-process-measures-controls
+  12 okhp3-sop-work-instructions
 
 LAYER 5 — GOVERNANCE
-  13 raci-and-governance-matrix-generation
-  14 sipoc-generation
+  13 okhp3-raci-governance-matrix
+  14 okhp3-sipoc-generation
 
 LAYER 6 — PUBLICATION
-  15 publication-and-handoff-packaging
+  15 okhp3-publication-handoff-packaging
 ```
 
 See [docs/agent-skills-install.md](./docs/agent-skills-install.md) for platform-specific install instructions and full suite download.

@@ -18,15 +18,15 @@
 /**
  * The canonical 9-state PNS lifecycle in order (BP-SKILL v0.2 spec — normative).
  * State names match the skill that sets each state:
- *   draft-intake      ← process-intake-and-scope
- *   scoped            ← stakeholder-and-role-mapping
- *   elicited          ← elicitation-and-interview-facilitation
- *   documented-as-is  ← as-is-process-capture
- *   modeled           ← process-narrative-authoring
- *   analyzed          ← process-gap-and-exception-analysis
- *   validated         ← process-validation-and-quality-scoring
- *   packaged          ← publication-and-handoff-packaging
- *   published         ← publication-and-handoff-packaging (after approval gate)
+ *   draft-intake      ← okhp3-process-intake-and-scope
+ *   scoped            ← okhp3-stakeholder-and-role-mapping
+ *   elicited          ← okhp3-elicitation-interviews
+ *   documented-as-is  ← okhp3-as-is-process-capture
+ *   modeled           ← okhp3-process-narrative-authoring
+ *   analyzed          ← okhp3-process-gap-exception-analysis
+ *   validated         ← okhp3-process-validation-scoring
+ *   packaged          ← okhp3-publication-handoff-packaging
+ *   published         ← okhp3-publication-handoff-packaging (after approval gate)
  *
  * A valid transition moves exactly one step forward.
  * Re-entering the same state (noop) is allowed with a warning.

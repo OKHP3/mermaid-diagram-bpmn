@@ -12,7 +12,7 @@ export interface ExampleStep {
 
 export const PURCHASE_APPROVAL_STEPS: ExampleStep[] = [
   {
-    skillId: "process-intake-and-scope",
+    skillId: "okhp3-process-intake-and-scope",
     pnsConsumed: null,
     pnsSet: "draft-intake",
     triggerUsed: "Map this process — purchase request approval. Requesters submit for any spend over £200, a manager reviews and decides within 48 hours.",
@@ -32,7 +32,7 @@ classification: internal
 status: draft-intake`,
   },
   {
-    skillId: "stakeholder-and-role-mapping",
+    skillId: "okhp3-stakeholder-and-role-mapping",
     pnsConsumed: "draft-intake",
     pnsSet: "scoped",
     triggerUsed: "Map stakeholders for the purchase-approval process.",
@@ -50,7 +50,7 @@ fin     | Finance Controller    | C     | Consulted on amounts > £5,000
 it      | IT / PO System        | I     | Processes PO issuance`,
   },
   {
-    skillId: "elicitation-and-interview-facilitation",
+    skillId: "okhp3-elicitation-interviews",
     pnsConsumed: "scoped",
     pnsSet: "elicited",
     triggerUsed: "Run the elicitation interview guide for purchase-approval.",
@@ -68,7 +68,7 @@ Facilitator note: cover exception paths and SLA enforcement`,
 Open question: Who is the backup approver when the manager is absent?`,
   },
   {
-    skillId: "as-is-process-capture",
+    skillId: "okhp3-as-is-process-capture",
     pnsConsumed: "elicited",
     pnsSet: "documented-as-is",
     triggerUsed: "Capture the as-is activity sequence for purchase-approval.",
@@ -88,7 +88,7 @@ act-006 | PO System        | Issue Purchase Order, notify Requester
 act-007 | PO System        | Send formal rejection notice to Requester`,
   },
   {
-    skillId: "process-narrative-authoring",
+    skillId: "okhp3-process-narrative-authoring",
     pnsConsumed: "documented-as-is",
     pnsSet: "modeled",
     triggerUsed: "Author the full PNS.md for purchase-approval.",
@@ -109,7 +109,7 @@ Glossary terms needed: PO, cost centre, countersignature.`,
 §7  System Touchpoints             partial   (PO portal ID unconfirmed)`,
   },
   {
-    skillId: "visual-process-modeling",
+    skillId: "okhp3-visual-process-modeling",
     pnsConsumed: "modeled",
     pnsSet: null,
     triggerUsed: "Generate the bpmn-beta diagram for purchase-approval.",
@@ -123,7 +123,7 @@ Render target: bpmn-beta DSL for Mermaid.`,
     hasDiagram: true,
   },
   {
-    skillId: "process-gap-and-exception-analysis",
+    skillId: "okhp3-process-gap-exception-analysis",
     pnsConsumed: "modeled",
     pnsSet: "analyzed",
     triggerUsed: "Analyse gaps and exceptions in the purchase-approval process.",
@@ -142,7 +142,7 @@ GAP-03 [MEDIUM] Verbal approvals accepted for urgent requests under £500
   Direct contradiction with Finance handbook §4.2 (no verbal approvals).`,
   },
   {
-    skillId: "future-state-and-change-strategy",
+    skillId: "okhp3-future-state-change-strategy",
     pnsConsumed: "analyzed",
     pnsSet: null,
     triggerUsed: "Model future-state improvements for purchase-approval based on the gap report.",
@@ -158,7 +158,7 @@ FS-03: All approval actions (including verbal confirmations) captured in PO syst
 Delta: 2 new act-NNN entries; gateway g1 gains a third branch "escalate-to-backup".`,
   },
   {
-    skillId: "decision-model-authoring",
+    skillId: "okhp3-decision-model-authoring",
     pnsConsumed: "modeled",
     pnsSet: null,
     triggerUsed: "Build the DMN decision table for the approval gateway in purchase-approval.",
@@ -177,7 +177,7 @@ R4   | > £5,000       | any             | finance-escalate
 R5   | any            | manager-absent  | delegate-to-backup`,
   },
   {
-    skillId: "process-validation-and-quality-scoring",
+    skillId: "okhp3-process-validation-scoring",
     pnsConsumed: "modeled",
     pnsSet: "validated",
     triggerUsed: "Validate and score the purchase-approval PNS.",
@@ -197,7 +197,7 @@ V7  Exception Handling          6/10  GAP-03 verbal approval not resolved in §6
 V9  Handoff Conditions          9/10  countersign threshold unambiguous`,
   },
   {
-    skillId: "process-measures-and-controls-definition",
+    skillId: "okhp3-process-measures-controls",
     pnsConsumed: "validated",
     pnsSet: null,
     triggerUsed: "Define KPIs and controls for purchase-approval.",
@@ -215,7 +215,7 @@ CTL-01  Finance countersign >£5k mandatory gate      blocks PO issuance
 CTL-02  PO system audit log      evidence retained   7 years (ISO 9001 §7.5.3)`,
   },
   {
-    skillId: "sop-and-work-instruction-generation",
+    skillId: "okhp3-sop-work-instructions",
     pnsConsumed: "validated",
     pnsSet: null,
     triggerUsed: "Generate the SOP for purchase-approval.",
@@ -236,7 +236,7 @@ Step 2  [PO System]  Route the submitted request to the Dept. Manager inbox auto
   SLA clock starts at submission timestamp. Manager has 48 hours to act.`,
   },
   {
-    skillId: "raci-and-governance-matrix-generation",
+    skillId: "okhp3-raci-governance-matrix",
     pnsConsumed: "modeled",
     pnsSet: null,
     triggerUsed: "Generate the RACI matrix for purchase-approval.",
@@ -254,7 +254,7 @@ Issue Purchase Order     |     I     |    A    |    —    |    R
 Send rejection notice    |     I     |    A    |    —    |    R`,
   },
   {
-    skillId: "sipoc-generation",
+    skillId: "okhp3-sipoc-generation",
     pnsConsumed: "modeled",
     pnsSet: null,
     triggerUsed: "Generate the SIPOC for purchase-approval.",
@@ -272,7 +272,7 @@ Outputs     | Purchase Order, rejection notice, PO audit log entry
 Customers   | Requester (outcome), Finance (audit), Supplier (PO), IT (log)`,
   },
   {
-    skillId: "publication-and-handoff-packaging",
+    skillId: "okhp3-publication-handoff-packaging",
     pnsConsumed: "validated",
     pnsSet: "published",
     triggerUsed: "Package purchase-approval for publication.",

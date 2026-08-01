@@ -8,7 +8,7 @@ The canonical reference for anyone writing, enriching, or validating a PNS.md ar
 
 PNS.md is the central handoff artifact in the BP-SKILL pipeline. It is a structured Markdown document — with a YAML frontmatter block and 13 required body sections — that accumulates the outputs of each upstream skill and provides validated inputs to each downstream skill.
 
-Without a typed handoff artifact, a 15-skill pipeline is just 15 independent prompts. PNS.md is what connects them. Skill 04 (as-is-process-capture) adds the activity sequence. Skill 05 (process-narrative-authoring) populates all required sections. Skill 07 (process-gap-and-exception-analysis) adds the gap register. Skill 10 (process-validation-and-quality-scoring) runs V1-V9 traceability checks and writes the quality score into the frontmatter. Skills 12-15 read the validated PNS.md to generate SOPs, RACI matrices, SIPOC tables, and the publication package.
+Without a typed handoff artifact, a 15-skill pipeline is just 15 independent prompts. PNS.md is what connects them. Skill 04 (okhp3-as-is-process-capture) adds the activity sequence. Skill 05 (okhp3-process-narrative-authoring) populates all required sections. Skill 07 (okhp3-process-gap-exception-analysis) adds the gap register. Skill 10 (okhp3-process-validation-scoring) runs V1-V9 traceability checks and writes the quality score into the frontmatter. Skills 12-15 read the validated PNS.md to generate SOPs, RACI matrices, SIPOC tables, and the publication package.
 
 A PNS.md that scores below 75 does not proceed to the publication layer (skills 12-15). This is by design: a defective narrative produces defective SOPs and governance artifacts.
 
@@ -18,14 +18,14 @@ A PNS.md that scores below 75 does not proceed to the publication layer (skills 
 
 | State | Set by | What it means |
 |---|---|---|
-| `draft` | Skill 05 (process-narrative-authoring) | PNS.md has been created; sections are being populated |
-| `elicitation-in-progress` | Skill 03 (elicitation-and-interview-facilitation) | Active discovery is underway; sections will change |
-| `as-is-captured` | Skill 04 (as-is-process-capture) | Current state is documented; Sections 1-5 are stable |
+| `draft` | Skill 05 (okhp3-process-narrative-authoring) | PNS.md has been created; sections are being populated |
+| `elicitation-in-progress` | Skill 03 (okhp3-elicitation-interviews) | Active discovery is underway; sections will change |
+| `as-is-captured` | Skill 04 (okhp3-as-is-process-capture) | Current state is documented; Sections 1-5 are stable |
 | `narrative-authored` | Skill 05 | All 13 required sections are populated; ready for gap analysis |
-| `gap-analyzed` | Skill 07 (process-gap-and-exception-analysis) | Gaps and exceptions are documented in Section 12 |
-| `future-state-defined` | Skill 08 (future-state-and-change-strategy) | Target state and change approach are added |
-| `validated` | Skill 10 (process-validation-and-quality-scoring) | V1-V9 checks passed; quality score >= 75 |
-| `published` | Skill 15 (publication-and-handoff-packaging) | Publication package delivered to stakeholders |
+| `gap-analyzed` | Skill 07 (okhp3-process-gap-exception-analysis) | Gaps and exceptions are documented in Section 12 |
+| `future-state-defined` | Skill 08 (okhp3-future-state-change-strategy) | Target state and change approach are added |
+| `validated` | Skill 10 (okhp3-process-validation-scoring) | V1-V9 checks passed; quality score >= 75 |
+| `published` | Skill 15 (okhp3-publication-handoff-packaging) | Publication package delivered to stakeholders |
 | `superseded` | Manual | A newer version of this PNS.md replaces this one |
 | `archived` | Manual | The process has been decommissioned or retired |
 
@@ -221,7 +221,7 @@ Each section heading is H2. Do not rename them — the headings are matched by t
 
 ### 12. Known Gaps and Assumptions
 
-**What to document:** Gaps identified during elicitation (information not obtained, stakeholders not interviewed, steps not validated), assumptions made in lieu of evidence, and deferred items. This section is populated by skill 07 (process-gap-and-exception-analysis). Format: Gap ID, Description, Impact, Owner, Resolution status.
+**What to document:** Gaps identified during elicitation (information not obtained, stakeholders not interviewed, steps not validated), assumptions made in lieu of evidence, and deferred items. This section is populated by skill 07 (okhp3-process-gap-exception-analysis). Format: Gap ID, Description, Impact, Owner, Resolution status.
 
 **Standard satisfied:** BABOK v3 §8.1 (solution evaluation); BPM CBOK v4.0 §5.1 (process improvement)
 
@@ -257,7 +257,7 @@ These sections can be added after Section 13 when applicable:
 
 ## 9 traceability rules (V1-V9)
 
-Skill 10 (process-validation-and-quality-scoring) runs these checks and reports pass/fail for each.
+Skill 10 (okhp3-process-validation-scoring) runs these checks and reports pass/fail for each.
 
 | Rule | Checks | Failure means |
 |---|---|---|

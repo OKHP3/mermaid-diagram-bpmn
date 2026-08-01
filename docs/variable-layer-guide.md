@@ -25,7 +25,7 @@ Complete the variable files in this order. Each file you complete unlocks more c
 5. `regional-context.md` — required for jurisdiction-specific compliance and language variants
 6. `compliance-controls-registry.md` — required for Section 11 of PNS.md and skill 11
 7. `integration-registry.md` — required for Section 7 of PNS.md (system touchpoints)
-8. `notation-preferences.md` — required for skill 06 (visual-process-modeling) output format
+8. `notation-preferences.md` — required for skill 06 (okhp3-visual-process-modeling) output format
 9. `business-glossary-and-rulebook.md` — the last file to complete; needs roles, systems, and processes defined first
 
 **Minimum viable configuration:** Files 1 and 2. The remaining 7 files are optional until the skills that specifically consume them are triggered. Skills degrade gracefully when variable files are absent — they use generic defaults and flag the gap in their output rather than failing.
@@ -86,7 +86,7 @@ Complete the variable files in this order. Each file you complete unlocks more c
 
 **Which skills read it:** Skills 02, 04, 05, 06, 12, 13, 14, 15.
 
-**Validation rules:** V3 in process-validation-and-quality-scoring checks that every role referenced in PNS.md Section 5 exists in this file. Missing role IDs fail V3. Duplicate `role_id` values are rejected by the validator — each role must have a unique ID.
+**Validation rules:** V3 in okhp3-process-validation-scoring checks that every role referenced in PNS.md Section 5 exists in this file. Missing role IDs fail V3. Duplicate `role_id` values are rejected by the validator — each role must have a unique ID.
 
 ---
 
@@ -225,7 +225,7 @@ Complete the variable files in this order. Each file you complete unlocks more c
 
 **Which skills read it:** Skills 04, 05, 06, 10, 15.
 
-**Validation rules:** V5 in skill 10 checks that every `system_id` referenced in PNS.md Section 7 exists in this file. Missing system IDs fail V5. Skill 06 (visual-process-modeling) uses system IDs as annotation labels in bpmn-beta diagrams — unresolved IDs produce placeholder text in the diagram.
+**Validation rules:** V5 in skill 10 checks that every `system_id` referenced in PNS.md Section 7 exists in this file. Missing system IDs fail V5. Skill 06 (okhp3-visual-process-modeling) uses system IDs as annotation labels in bpmn-beta diagrams — unresolved IDs produce placeholder text in the diagram.
 
 ---
 
@@ -250,7 +250,7 @@ Complete the variable files in this order. Each file you complete unlocks more c
 | `max_lane_width` | integer | Max lane width in diagram units | `200` |
 | `secondary_notation` | string | Fallback if primary not available | `"mermaid-flowchart"` |
 
-**Which skills read it:** Skill 06 (visual-process-modeling).
+**Which skills read it:** Skill 06 (okhp3-visual-process-modeling).
 
 **Validation rules:** If `primary_notation` is not `"bpmn-beta"`, skill 06 will warn that bpmn-beta is the only notation currently supported by the renderer. The field is present for future extensibility.
 

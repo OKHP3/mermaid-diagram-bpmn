@@ -1,0 +1,31 @@
+{
+  "schema_version": "2.0",
+  "metadata": {
+    "skill_name": "okhp3-equilibrium-review",
+    "evaluated_skill_version": "1.0.0",
+    "evaluation_status": "not-run",
+    "timestamp": "2026-07-28T00:00:00Z",
+    "runner": null,
+    "model": null,
+    "runs_per_configuration": 0,
+    "fixtures": "evals-1.0.0",
+    "known_limitations": [
+      "No external agent provider or fresh unseen holdout was available during package creation.",
+      "The Python orchestrator was structurally and locally tested only."
+    ]
+  },
+  "runs": [],
+  "run_summary": {
+    "with_skill": {"pass_rate": null},
+    "without_skill": {"pass_rate": null},
+    "delta": null
+  },
+  "acceptance_criteria": {
+    "task_quality": "not-set",
+    "skill_uplift": "not-set",
+    "rationale": "Set criteria before a comparable live run."
+  },
+  "notes": [
+    "This is an analytical design-ready record, not evidence of production readiness."
+  ]
+}

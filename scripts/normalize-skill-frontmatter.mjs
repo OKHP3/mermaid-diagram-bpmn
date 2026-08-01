@@ -20,21 +20,21 @@ const targets = [
 ];
 const write = process.argv.includes('--write');
 const processSkillNames = new Set([
-  'as-is-process-capture',
-  'decision-model-authoring',
-  'elicitation-and-interview-facilitation',
-  'future-state-and-change-strategy',
-  'process-gap-and-exception-analysis',
-  'process-intake-and-scope',
-  'process-measures-and-controls-definition',
-  'process-narrative-authoring',
-  'process-validation-and-quality-scoring',
-  'publication-and-handoff-packaging',
-  'raci-and-governance-matrix-generation',
-  'sipoc-generation',
-  'sop-and-work-instruction-generation',
-  'stakeholder-and-role-mapping',
-  'visual-process-modeling',
+  'okhp3-as-is-process-capture',
+  'okhp3-decision-model-authoring',
+  'okhp3-elicitation-interviews',
+  'okhp3-future-state-change-strategy',
+  'okhp3-process-gap-exception-analysis',
+  'okhp3-process-intake-and-scope',
+  'okhp3-process-measures-controls',
+  'okhp3-process-narrative-authoring',
+  'okhp3-process-validation-scoring',
+  'okhp3-publication-handoff-packaging',
+  'okhp3-raci-governance-matrix',
+  'okhp3-sipoc-generation',
+  'okhp3-sop-work-instructions',
+  'okhp3-stakeholder-and-role-mapping',
+  'okhp3-visual-process-modeling',
 ]);
 
 function skillFiles(dir) {

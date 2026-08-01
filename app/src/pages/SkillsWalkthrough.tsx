@@ -106,7 +106,7 @@ export default function SkillsWalkthrough() {
     const observer = new IntersectionObserver(
       (entries) => {
         for (const entry of entries) {
-          // Extract skill id from e.g. "row-process-intake-and-scope-lg" or "-sm"
+          // Extract skill id from e.g. "row-okhp3-process-intake-and-scope-lg" or "-sm"
           const rawId = entry.target.id;
           const skillId = rawId.replace(/^row-/, "").replace(/-(lg|sm)$/, "");
           if (entry.isIntersecting) {

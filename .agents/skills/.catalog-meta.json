@@ -1,10 +1,10 @@
 {
-  "last_indexed": "2026-06-24T17:13:09Z",
-  "skill_count": 30,
+  "last_indexed": "2026-08-01T02:53:53Z",
+  "skill_count": 48,
   "mode": "project",
   "surface": "project-skills",
-  "indexed_by": "okhp3-skill-cataloger v1.4.0",
-  "repo": "workspace",
+  "indexed_by": "okhp3-skill-cataloger v1.6.1",
+  "repo": "mermaid-diagram-bpmn",
   "homepage": "https://overkillhill.com",
   "github": "https://github.com/OKHP3"
 }

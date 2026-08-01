@@ -34,21 +34,21 @@ const OUT = CHECK_MODE
   : COMMITTED_OUT;
 
 const BP_SKILL_IDS = [
-  "process-intake-and-scope",
-  "stakeholder-and-role-mapping",
-  "elicitation-and-interview-facilitation",
-  "as-is-process-capture",
-  "process-narrative-authoring",
-  "visual-process-modeling",
-  "process-gap-and-exception-analysis",
-  "future-state-and-change-strategy",
-  "decision-model-authoring",
-  "process-validation-and-quality-scoring",
-  "process-measures-and-controls-definition",
-  "sop-and-work-instruction-generation",
-  "raci-and-governance-matrix-generation",
-  "sipoc-generation",
-  "publication-and-handoff-packaging",
+  "okhp3-process-intake-and-scope",
+  "okhp3-stakeholder-and-role-mapping",
+  "okhp3-elicitation-interviews",
+  "okhp3-as-is-process-capture",
+  "okhp3-process-narrative-authoring",
+  "okhp3-visual-process-modeling",
+  "okhp3-process-gap-exception-analysis",
+  "okhp3-future-state-change-strategy",
+  "okhp3-decision-model-authoring",
+  "okhp3-process-validation-scoring",
+  "okhp3-process-measures-controls",
+  "okhp3-sop-work-instructions",
+  "okhp3-raci-governance-matrix",
+  "okhp3-sipoc-generation",
+  "okhp3-publication-handoff-packaging",
 ];
 
 // ── helpers ──────────────────────────────────────────────────────────────────
