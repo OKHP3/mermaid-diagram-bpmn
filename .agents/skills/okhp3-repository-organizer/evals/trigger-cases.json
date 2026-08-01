@@ -1,0 +1,19 @@
+{
+  "skill_name": "okhp3-repository-organizer",
+  "skill_version": "1.1.1",
+  "purpose": "Manual trigger-quality review set. expected_trigger is the intended routing result, not an automated score.",
+  "cases": [
+    { "id": "positive-01", "query": "Profile this local Git repo of notes and PDFs before we reorganize it.", "expected_trigger": true },
+    { "id": "positive-02", "query": "This folder became a repo organically. Help me identify its purpose and propose a safer structure.", "expected_trigger": true },
+    { "id": "positive-03", "query": "Organize the prompts, Word files, and research notes without imposing an app layout.", "expected_trigger": true },
+    { "id": "positive-04", "query": "Check these repository names for Windows, macOS, Linux, GitHub URL, and shell portability.", "expected_trigger": true },
+    { "id": "positive-05", "query": "Which README, AGENTS, lifecycle, and migration files are justified by this content repository?", "expected_trigger": true },
+    { "id": "positive-06", "query": "Prepare an approval-gated git mv plan for a messy mixed-content repository.", "expected_trigger": true },
+    { "id": "near-miss-01", "query": "Create a brand-new application repository with a TypeScript source tree.", "expected_trigger": false },
+    { "id": "near-miss-02", "query": "Catalog the installable SKILL.md packages in this Skillz repository.", "expected_trigger": false },
+    { "id": "near-miss-03", "query": "Fix one malformed Mermaid diagram while preserving its existing style.", "expected_trigger": false },
+    { "id": "near-miss-04", "query": "Push the current branch to GitHub and open a pull request.", "expected_trigger": false },
+    { "id": "near-miss-05", "query": "Delete all duplicate files from this repository automatically.", "expected_trigger": false },
+    { "id": "near-miss-06", "query": "Design a production deployment architecture for a web service.", "expected_trigger": false }
+  ]
+}
