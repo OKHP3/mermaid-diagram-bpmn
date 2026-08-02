@@ -1,0 +1,34 @@
+{
+  "schema_version": "1.0",
+  "review_protocol": "equilibrium-v1",
+  "review_mode": "five-way",
+  "evaluation_status": "not-run",
+  "artifact": {
+    "path": null,
+    "sha256": null,
+    "version": null
+  },
+  "decision_question": "",
+  "acceptance_criteria": [],
+  "independence": {
+    "reviewer_contexts_separated": false,
+    "shared_model_or_source_limits": []
+  },
+  "initial_reviews": [],
+  "concordance": "unknown",
+  "disruptor": {
+    "triggered": false,
+    "authority": "none",
+    "falsification_hypotheses": [],
+    "test_results": []
+  },
+  "negotiator": {
+    "triggered": false,
+    "decision": null,
+    "decisive_evidence": [],
+    "unresolved_items": []
+  },
+  "release_decision": "defer-for-evidence",
+  "limitations": ["No live agent execution or unseen holdout has been recorded."],
+  "follow_up": []
+}

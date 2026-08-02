@@ -1,0 +1,38 @@
+{
+  "skill_name": "okhp3-skill-cataloger",
+  "skill_version": "1.6.1",
+  "status": "designed_not_run",
+  "notes": "Three discriminating evals are defined; no live benchmark results are claimed.",
+  "evals": [
+    {
+      "id": "cataloger-1",
+      "prompt": "This is an application repo with direct child folders under .agents/skills, and I only want to inspect the catalog without changing files. Which mode and command should I use, and what does it validate?",
+      "expectations": [
+        "Selects project catalog mode for direct child skill folders.",
+        "Provides the --check command against .agents/skills.",
+        "States that --check is non-writing and validates fatal metadata errors and README markers.",
+        "Distinguishes a catalog check from proving that live skills or marketplace listings are safe or current."
+      ]
+    },
+    {
+      "id": "cataloger-2",
+      "prompt": "I need to refresh the repository skill inventory after adding one skill. Give me the safe preview and write commands, and tell me which files should change.",
+      "expectations": [
+        "Provides the --dry-run command before the write command.",
+        "Provides the normal catalog command using --skills-dir .agents/skills.",
+        "Identifies .agents/skills/README.md between catalog markers as the generated catalog output.",
+        "Identifies .agents/skills/.catalog-meta.json as generated machine-readable metadata and instructs the agent to inspect the diff."
+      ]
+    },
+    {
+      "id": "cataloger-3",
+      "prompt": "Someone proposes running the cataloger's --full mode in this LifeTrkr application repo. Explain whether that is appropriate, what --full scans, and what safer alternative applies here.",
+      "expectations": [
+        "Recommends normal project catalog mode for this application repo instead of casually using --full.",
+        "Explains that --full scans root-level family/skill folders and excludes .agents/.",
+        "States that --full can write root README.md, FAMILY.md files, and root catalog metadata.",
+        "Calls out --no-absorb-readme or --dry-run when a distribution index is intentionally required."
+      ]
+    }
+  ]
+}

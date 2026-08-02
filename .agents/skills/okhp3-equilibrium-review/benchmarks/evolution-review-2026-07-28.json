@@ -1,0 +1,59 @@
+{
+  "schema_version": "1.0",
+  "review_protocol": "equilibrium-v1",
+  "skill_name": "okhp3-equilibrium-review",
+  "evaluated_skill_version": "1.0.0",
+  "evaluation_status": "analytical",
+  "decision": "approve-with-limits",
+  "review_question": "Does the package implement a safe, reusable five-role equilibrium review without treating missing evidence as agreement?",
+  "foundry_checks": {
+    "portable_validator_universal": "pass",
+    "portable_validator_active": "pass",
+    "full_catalog_check": "pass",
+    "project_catalog_check": "pass",
+    "python_syntax_check": "pass",
+    "dry_run": "pass",
+    "mock_five_role_subprocess_run": "pass",
+    "mirror_sha256_reconciliation": "pass"
+  },
+  "initial_reviews": [
+    {
+      "role": "evidence reviewer",
+      "status": "analytical",
+      "finding": "The package distinguishes facts, hypotheses, missing evidence, and release limits, and records not-run status conservatively."
+    },
+    {
+      "role": "outcome reviewer",
+      "status": "analytical",
+      "finding": "The package has a reusable output contract for documents, data evaluations, reports, hypotheses, and skills."
+    },
+    {
+      "role": "safety and portability reviewer",
+      "status": "analytical",
+      "finding": "The script uses explicit argument vectors, shell=false, safe dry-run defaults, and no provider or credential discovery."
+    }
+  ],
+  "concordance": "analytical-agreement",
+  "disruptor": {
+    "triggered": true,
+    "status": "analytical",
+    "finding": "A five-way dry run with no initial evidence originally labeled an exploratory disruptor as release-review input.",
+    "test_result": "Failed self-review expectation; patched authority labeling to exploratory-only whenever initial material agreement is absent."
+  },
+  "negotiator": {
+    "triggered": true,
+    "status": "analytical",
+    "decision": "approve-with-limits",
+    "rationale": "Structural, fixture, and orchestration checks pass. No live external agent-quality benchmark or unseen holdout exists."
+  },
+  "limitations": [
+    "The mock adapter validates subprocess orchestration and record parsing, not reviewer correctness.",
+    "No independent provider contexts or domain-specialist judgments were available during package creation.",
+    "No production-readiness, uplift, or general task-quality claim is authorized."
+  ],
+  "next_evidence": [
+    "Run matched live reviews with separated contexts or model families.",
+    "Add a protected or external holdout spanning at least three artifact domains.",
+    "Grade reviewer findings against human or domain-specialist adjudication."
+  ]
+}

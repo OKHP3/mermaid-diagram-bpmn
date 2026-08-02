@@ -1,0 +1,4 @@
+interface:
+  display_name: "Agent Skill Cataloger"
+  short_description: "Inventory and safely refresh Agent Skills"
+  default_prompt: "Use $okhp3-skill-cataloger to validate and safely preview or refresh this repository’s Agent Skills catalog."

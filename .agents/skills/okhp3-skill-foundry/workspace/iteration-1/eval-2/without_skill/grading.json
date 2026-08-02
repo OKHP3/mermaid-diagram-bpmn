@@ -1,0 +1,35 @@
+{
+  "expectations": [
+    {
+      "text": "Response designs exactly 3 test cases, each with a distinct concrete capability (not variations of the same thing)",
+      "passed": true,
+      "evidence": "3 cases: 'Direct Location Query' (city name to weather), 'Coordinate-Based Request' (lat/lon input), 'Handling Invalid Input' (out-of-range coordinates). Three distinct capabilities."
+    },
+    {
+      "text": "Response writes exactly 4 expectations per test case",
+      "passed": true,
+      "evidence": "Eval 1: 4 expectations. Eval 2: 4 expectations. Eval 3: 4 expectations. Count correct for all three."
+    },
+    {
+      "text": "At least one expectation per test case anchors to a specific identifier from the skill: fetchWeather, temperature_2m, wind_speed_10m, or the exact return shape { temperature, windSpeed, unit: 'celsius' }",
+      "passed": false,
+      "evidence": "None of the 12 expectations reference fetchWeather, temperature_2m, wind_speed_10m, or unit: 'celsius'. Expectations test general agent behaviors: 'Tool Call Verification', 'Data Extraction', 'Natural Language Response', 'Error Recognition', 'Graceful Degradation'. These would pass for any weather API tool, not specifically the Open-Meteo skill as documented."
+    },
+    {
+      "text": "Response explains the evidence-anchoring requirement: that without-skill should fail most expectations, and that expectations must reference skill-specific content not derivable from general LLM knowledge",
+      "passed": false,
+      "evidence": "No mention of evidence anchoring, without-skill baseline, or the discrimination requirement. The word 'evidence' does not appear in the response. Expectations are framed as 'Tool Call Verification', 'Data Extraction' -- behavioral checks, not evidence-anchored checks."
+    }
+  ],
+  "summary": { "passed": 2, "failed": 2, "total": 4, "pass_rate": 0.5 },
+  "execution_metrics": {},
+  "timing": {},
+  "claims": [],
+  "user_notes_summary": {
+    "uncertainties": [],
+    "needs_review": [
+      "without-skill eval design would be useless as a benchmark: expectations test general LLM agent behavior, not skill-specific content. A developer following this pattern would produce evals that show no with/without gap -- the primary quality signal would be invisible."
+    ],
+    "workarounds": []
+  }
+}

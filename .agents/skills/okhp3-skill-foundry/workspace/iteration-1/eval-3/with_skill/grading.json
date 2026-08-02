@@ -1,0 +1,29 @@
+{
+  "expectations": [
+    {
+      "text": "Response grades the expectation as FAILED (not passed) -- the executor used 'lat'/'lon' not 'latitude'/'longitude', used hourly not current, and used temperature_2m in hourly context not current context",
+      "passed": true,
+      "evidence": "Response says 'Decision: FAIL' and lists: '1. It used lat and lon instead of the required latitude and longitude parameter names. 2. It used the hourly=temperature_2m parameter instead of the required current=temperature_2m,wind_speed_10m parameter.' Correct grade with correct reasoning."
+    },
+    {
+      "text": "Response writes a grading.json entry with the exact fields: text, passed, evidence",
+      "passed": true,
+      "evidence": "grading.json entry shows: '\"text\": \"Response provides the exact endpoint GET...\"', '\"passed\": false', '\"evidence\": \"Response provided...\"'. All three required field names present and correctly used."
+    },
+    {
+      "text": "Response quotes verbatim from the mock executor response as the evidence string (not a paraphrase)",
+      "passed": true,
+      "evidence": "Evidence field contains verbatim quote: 'Response provided \"https://api.open-meteo.com/v1/forecast?lat=\\\"\\+lat+\\\"&lon=\\\"\\+lon+\\\"&hourly=temperature_2m\" which uses incorrect parameter names...' -- actual text from the mock response is quoted."
+    },
+    {
+      "text": "Response identifies at least two specific deviations: the parameter name difference (lat vs latitude) AND the hourly vs current context difference",
+      "passed": true,
+      "evidence": "Response explicitly numbers both: '1. It used lat and lon instead of the required latitude and longitude parameter names.' and '2. It used the hourly=temperature_2m parameter instead of the required current=temperature_2m,wind_speed_10m parameter.' Both deviations named."
+    }
+  ],
+  "summary": { "passed": 4, "failed": 0, "total": 4, "pass_rate": 1.0 },
+  "execution_metrics": {},
+  "timing": {},
+  "claims": [],
+  "user_notes_summary": { "uncertainties": [], "needs_review": [], "workarounds": [] }
+}
