@@ -1,0 +1,10 @@
+schema_version: "1.0"
+library:
+  name: OKHP3 style library
+  profiles:
+    - id: okhp3-forge
+      display_name: OKH Forge UI System
+      path: profiles/okhp3-forge.yaml
+      status: active
+      version: "1.0.0"
+      tags: [industrial, warm, technical, forge, okhp3]

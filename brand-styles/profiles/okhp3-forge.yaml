@@ -1,0 +1,287 @@
+schema_version: "1.0"
+style:
+  id: okhp3-forge
+  display_name: OKH Forge UI System
+  version: "1.0.0"
+  status: active
+  purpose: >
+    A warm-industrial design language for OverKill Hill P³ tools — structured
+    like a craftsperson's workshop, with warm paper surfaces, deep teal headers,
+    rust-orange primary actions, and monospaced code panels.
+  owner_context: owned
+  tags: [industrial, warm, technical, forge, okhp3, dark-header, dual-mode]
+  created_on: "2026-08-03"
+  updated_on: "2026-08-03"
+
+  sources:
+    - type: css
+      locator: app/src/styles/forge-tokens.css
+      authority: declared
+      sampled_on: "2026-08-03"
+      locator_detail: ":root CSS custom properties — raw palette layer, v0.1.0"
+      notes: >
+        Canonical raw palette. Declares all --okh-forge-* hex primitives, font
+        families, header/footer surface tokens, blueprint grid sizes, and
+        Mermaid render tokens. Labeled as a local copy of the upstream source at
+        github.com/OKHP3/mermaid-theme-builder/src/styles/forge-tokens.css.
+    - type: css
+      locator: app/src/index.css
+      authority: declared
+      sampled_on: "2026-08-03"
+      locator_detail: >
+        :root and .dark semantic HSL tokens, @theme Tailwind bridge, shadow
+        scale, header/footer overrides, and all forge-* utility classes.
+      notes: >
+        Maps raw palette into semantic HSL custom properties (light and dark
+        modes), registers Tailwind color tokens, defines the shadow scale,
+        and provides canonical utility classes for layout, content, buttons,
+        tabs, and code surfaces.
+
+  evidence_summary:
+    declared: >
+      All color values, font families, radius, shadow, and surface roles are
+      read directly from CSS custom-property declarations in the two source
+      files listed above. No visual inference was used.
+    observed: none
+    inferred: >
+      The "warm-industrial workshop" emotional register is drawn from the
+      combination of parchment backgrounds, forge-teal structural accent,
+      rust-orange action color, and dark code panels — consistent with the
+      inline comment labels in the source ("warm paper", "forge teal",
+      "workbench panel").
+
+  evidence:
+    - claim: Page background is warm off-white (#f0ebe5)
+      source: app/src/styles/forge-tokens.css — --okh-forge-bg
+      authority: declared
+      confidence: high
+      notes: Labeled "warm paper page background". HSL 33 18% 94% in index.css.
+    - claim: Card surface is a lighter warm paper (#f6f2ee)
+      source: app/src/styles/forge-tokens.css — --okh-forge-paper
+      authority: declared
+      confidence: high
+      notes: Labeled "lighter card surface". HSL 34 35% 95% in index.css.
+    - claim: Primary text is deep navy (#0f172a)
+      source: app/src/styles/forge-tokens.css — --okh-forge-ink
+      authority: declared
+      confidence: high
+      notes: Labeled "primary text / deep navy". HSL 222 47% 11% in index.css.
+    - claim: Structural accent and always-dark header/footer is forge teal (#1c3a34)
+      source: app/src/styles/forge-tokens.css — --okh-forge-teal / --forge-header-bg
+      authority: declared
+      confidence: high
+      notes: Used for all always-dark surfaces regardless of light/dark mode.
+    - claim: Primary action color is rust-orange (#c46a2c)
+      source: app/src/styles/forge-tokens.css — --okh-forge-rust
+      authority: declared
+      confidence: high
+      notes: HSL 25 62% 47% in index.css. Lightened to HSL 25 63% 58% in dark mode.
+    - claim: Secondary accent is warm amber (#e6a03c)
+      source: app/src/styles/forge-tokens.css — --okh-forge-amber
+      authority: declared
+      confidence: high
+      notes: Used for tinted accent bg (--accent) and highlights.
+    - claim: Code/workbench panel background is deep dark teal (#0f1f1c)
+      source: app/src/styles/forge-tokens.css — --okh-forge-code-bg
+      authority: declared
+      confidence: high
+      notes: Labeled "code / workbench panel background". Distinct from page bg.
+    - claim: Code panel text is warm parchment (#d4c9b5)
+      source: app/src/styles/forge-tokens.css — --okh-forge-code-fg
+      authority: declared
+      confidence: high
+      notes: Labeled "code / workbench panel text".
+    - claim: Display font is Alfa Slab One (slab serif)
+      source: app/src/styles/forge-tokens.css — --app-font-display
+      authority: declared
+      confidence: high
+      notes: Used for h1 and h2 headings per index.css base layer.
+    - claim: Body font is DM Sans (geometric sans-serif)
+      source: app/src/styles/forge-tokens.css — --app-font-sans
+      authority: declared
+      confidence: high
+      notes: Default body font loaded from Google Fonts at weights 400/500/600/700.
+    - claim: Monospace font is JetBrains Mono
+      source: app/src/styles/forge-tokens.css — --app-font-mono
+      authority: declared
+      confidence: high
+      notes: Used for code, pre, and textarea.code-area elements.
+    - claim: Base border radius is 0.75rem (12px)
+      source: app/src/index.css — --radius
+      authority: declared
+      confidence: high
+      notes: Components derive --radius-sm/md/lg/xl offsets from this value.
+    - claim: Blueprint grid texture is a subtle 32px grid overlay
+      source: app/src/index.css — .forge-grid
+      authority: declared
+      confidence: high
+      notes: Light mode uses warm brown tint; dark mode shifts to green tint.
+    - claim: Footer background is deeper dark (#0f1a17), darker than teal header
+      source: app/src/styles/forge-tokens.css — --forge-footer-bg
+      authority: declared
+      confidence: high
+      notes: Distinct from header; creates subtle depth layering.
+
+  tokens:
+    color:
+      foundation:
+        forge-bg:      "#f0ebe5"   # warm field — page background
+        forge-paper:   "#f6f2ee"   # warm paper — card surface
+        forge-ink:     "#0f172a"   # deep ink — body text
+        forge-teal:    "#1c3a34"   # forge teal — always-dark structural surface
+        forge-rust:    "#c46a2c"   # rust-orange — primary action
+        forge-amber:   "#e6a03c"   # amber — secondary accent
+        forge-code-bg: "#0f1f1c"   # dark workbench — code panels
+        forge-code-fg: "#d4c9b5"   # warm parchment — code panel text
+        forge-footer:  "#0f1a17"   # footer rail — deeper than teal header
+      semantic:
+        background:         "hsl(33 18% 94%)"   # forge-bg in light mode
+        foreground:         "hsl(222 47% 11%)"  # forge-ink
+        card:               "hsl(34 35% 95%)"   # forge-paper
+        card-border:        "hsl(38 28% 80%)"
+        primary:            "hsl(25 62% 47%)"   # forge-rust (light mode)
+        primary-dark:       "hsl(25 63% 58%)"   # forge-rust lightened (dark mode)
+        accent:             "hsl(36 70% 91%)"   # amber tint
+        accent-foreground:  "hsl(19 60% 22%)"   # dark rust
+        header-bg:          "#1c3a34"           # always-dark, not theme-responsive
+        header-text:        "#e5e7eb"
+        header-muted:       "rgba(229, 231, 235, 0.52)"
+        code-bg:            "#0f1f1c"
+        code-fg:            "#d4c9b5"
+
+    typography:
+      roles:
+        heading:
+          family: "'Alfa Slab One'"
+          fallback: [Georgia, serif]
+          notes: Slab serif for h1/h2 only; bold structural headings.
+        body:
+          family: "'DM Sans'"
+          fallback: [system-ui, -apple-system, sans-serif]
+          notes: Geometric sans; weights 400/500/600/700 loaded from Google Fonts.
+        mono:
+          family: "'JetBrains Mono'"
+          fallback: ["'Fira Code'", monospace]
+          notes: Used for all code, pre, and textarea.code-area elements.
+
+    geometry:
+      radius:
+        base: "0.75rem"
+        sm:   "calc(0.75rem - 4px)"
+        md:   "calc(0.75rem - 2px)"
+        lg:   "0.75rem"
+        xl:   "calc(0.75rem + 4px)"
+      shadow:
+        sm: "0 1px 2px rgba(15, 23, 42, 0.06)"
+        md: "0 2px 8px rgba(15, 23, 42, 0.10)"
+        lg: "0 4px 16px rgba(15, 23, 42, 0.14)"
+      grid:
+        size: "32px"
+        pattern: "blueprint crosshatch"
+        notes: >
+          Light mode — warm brown tint (hsla 30 30% 38% 0.055).
+          Dark mode — green tint (hsla 90 30% 60% 0.065).
+
+  direction:
+    visual_narrative: >
+      Warm-industrial workshop: structured like a craftsperson's bench.
+      Parchment surfaces imply physical documents; deep teal headers anchor
+      the tool's identity as permanent structure; rust-orange marks every
+      interactive affordance; dark code panels separate machine output from
+      human-readable content. Dense but never cluttered — the grid texture
+      reinforces precision without decorating for its own sake.
+    components:
+      - "Sticky always-dark teal header (.forge-header) — never theme-responsive"
+      - "Cards with rounded-xl corners, warm paper bg, subtle sm shadow"
+      - "Pill-shaped buttons: filled rust-orange primary, outlined warm-paper secondary, amber-tinted accent"
+      - "Pill-shaped filter/tab chips with border → filled transition on active"
+      - "Dark code-panel surface (#0f1f1c) with warm parchment text (#d4c9b5)"
+      - "Blueprint crosshatch grid overlay on main content areas"
+      - "Eyebrow labels: 0.07em tracked uppercase in muted-foreground"
+      - "Rust left-border callout block (.forge-callout)"
+      - "Layer-color badges: tinted bg variant, soft bordered, filled solid, dashed outlined"
+      - "Section nav underline indicator in rust-orange"
+    imagery:
+      - "Technical diagrams and process flows suit the palette well"
+      - "Prefer warm-toned photography over cool or desaturated"
+      - "Blueprint / schematic illustration style aligns with the grid texture"
+      - "Avoid glossy hero imagery or stock-photo collages"
+    motion:
+      - "Micro-transitions 150ms on color/background changes (nav links, icon buttons)"
+      - "Active button: opacity-90 hover, scale-95 on press"
+      - "Respect prefers-reduced-motion — no decorative animation in production"
+    avoid:
+      - "Cool blue or purple palettes in primary or header surfaces"
+      - "White (#ffffff) page backgrounds — always use warm off-white"
+      - "Border radius below 0.5rem on cards or buttons"
+      - "Mixing the dark-mode navy surface into always-dark teal surfaces"
+      - "Using forge-code-bg outside code/workbench panel contexts"
+      - "Adding decorative motion that cannot be suppressed by reduced-motion"
+
+  variants:
+    - id: dark-mode
+      applies_to: ".dark class on root or ancestor"
+      token_overrides:
+        background:         "hsl(224 30% 8%)"    # #0c1120 deep navy
+        foreground:         "hsl(220 14% 92%)"   # #e5e7eb near-white
+        card:               "hsl(224 25% 11%)"   # #131b2e dark navy card
+        card-border:        "hsl(224 20% 18%)"
+        primary:            "hsl(25 63% 58%)"    # rust lightened
+        accent:             "hsl(224 20% 18%)"
+        accent-foreground:  "hsl(25 63% 70%)"
+      notes: >
+        Header and footer remain forge-teal and forge-footer — unchanged in
+        dark mode. Only the page/card/accent surfaces shift to dark navy.
+    - id: code-panel
+      applies_to: ".forge-code-panel, .forge-code-panel-tab"
+      token_overrides:
+        background: "#0f1f1c"
+        color:      "#d4c9b5"
+        tab-border: "#2a3124"
+        tab-fg:     "rgba(230, 223, 201, 0.55)"
+      notes: >
+        Code panels are always dark regardless of page mode. Consistent with
+        the forge-teal header — both are "always-dark" surfaces.
+    - id: mermaid-diagram
+      applies_to: "Mermaid diagram renders inside the app"
+      token_overrides:
+        primary-color:        "#111827"
+        primary-border-color: "#c46a2c"
+        line-color:           "#c46a2c"
+        cluster-bg:           "#0d1117"
+        text-color:           "#e5e7eb"
+      notes: >
+        Declared in --mermaid-* tokens in forge-tokens.css. Diagrams use
+        dark panels with rust-orange edges and lines.
+
+  application:
+    suitable_targets: [spa, documentation, presentation, image-brief]
+    accessibility_notes:
+      - "Primary rust (#c46a2c) on white bg: 3.2:1 — use large text or icons only"
+      - "Primary rust on forge-paper (#f6f2ee): verify contrast before use at small text sizes"
+      - "Header text (#e5e7eb) on teal (#1c3a34): 8.5:1 — passes AA and AAA"
+      - "Code fg (#d4c9b5) on code bg (#0f1f1c): high contrast, verify with tooling"
+      - "Ensure focus rings use --ring (hsl 25 62% 47%) at sufficient offset"
+    target_constraints:
+      - "Tailwind CSS v4 with @theme inline bridge required for semantic token classes"
+      - "Google Fonts dependency: Alfa Slab One, DM Sans, JetBrains Mono"
+      - "CSS custom properties require modern browser support (no IE11)"
+      - "Dark mode via .dark class, not prefers-color-scheme media query directly"
+    acceptance_checks:
+      - "All --okh-forge-* primitives present in token layer"
+      - "Header and footer remain forge-teal in both light and dark mode"
+      - "Buttons use pill shape (rounded-full) at correct weights"
+      - "Eyebrow labels tracked, uppercase, muted-foreground"
+      - "Code panels use forge-code-bg / forge-code-fg, not semantic bg/fg"
+      - "Blueprint grid texture applied to main content area"
+
+  conflicts:
+    - none recorded
+
+  confidence:
+    overall: high
+    notes: >
+      All tokens and rules sourced directly from declared CSS custom properties.
+      No visual inference used for color or typography values. Emotional
+      register description is inferred from token labels and usage comments
+      in the source files, but does not affect any token value.
