@@ -1,0 +1,253 @@
+// @vitest-environment happy-dom
+import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { render, fireEvent, within } from '@testing-library/react';
+import AgentSkills from '@/pages/AgentSkills';
+import { SKILLS, PIPELINE_LAYERS } from '@/data/skills-registry';
+
+// ── Wouter ────────────────────────────────────────────────────────────────────
+vi.mock('wouter', () => ({
+  Link: ({ href, children, ...rest }: React.AnchorHTMLAttributes<HTMLAnchorElement> & { href: string }) => (
+    <a href={href} {...rest}>{children}</a>
+  ),
+  useLocation: () => ['/', vi.fn()],
+  useParams:   () => ({}),
+}));
+
+// ── Heavy sub-components ──────────────────────────────────────────────────────
+vi.mock('@/components/skills/PipelineDiagram',       () => ({ PipelineDiagram:       () => <div data-testid="pipeline-diagram" /> }));
+vi.mock('@/components/skills/DependencyFlowDiagram', () => ({ DependencyFlowDiagram: () => <div data-testid="dep-flow-diagram" /> }));
+vi.mock('@/components/skills/PnsLifecycleTracker',   () => ({ PnsLifecycleTracker:   () => <div data-testid="pns-lifecycle" /> }));
+vi.mock('@/components/skills/ZipDownloadButton',     () => ({ ZipDownloadButton:     ({ label }: { label: string }) => <button>{label}</button> }));
+vi.mock('@/components/skills/DownloadButton',        () => ({ DownloadButton:        ({ label }: { label: string }) => <button>{label}</button> }));
+vi.mock('@/components/skills/VariableFileCard',      () => ({ VariableFileCard:      () => <div data-testid="variable-file-card" /> }));
+vi.mock('@/components/skills/SkillFrontmatterPreview', () => ({ SkillFrontmatterPreview: () => <div data-testid="frontmatter-preview" /> }));
+
+// ── Helpers ───────────────────────────────────────────────────────────────────
+
+/** Navigate to the Skills browser section so the grid is visible. */
+function renderAndOpenBrowser() {
+  const result = render(<AgentSkills />);
+  // Click the "Skills" section tab to scroll to the browser section
+  fireEvent.click(result.getByRole('button', { name: /^Skills$/ }));
+  return result;
+}
+
+// ── Tests ─────────────────────────────────────────────────────────────────────
+
+describe('AgentSkills page — Skill Browser', () => {
+
+  it('renders all 15 skill cards in the browser section', () => {
+    const { getAllByText } = renderAndOpenBrowser();
+    // Each SkillCard renders its pipeline-order badge as "XX/15"
+    const orderBadges = getAllByText(/^\d{2}\/15$/);
+    expect(orderBadges).toHaveLength(15);
+  });
+
+  it('shows the search input and accepts text', () => {
+    const { getByPlaceholderText } = renderAndOpenBrowser();
+    const input = getByPlaceholderText(/search skills/i);
+    expect(input).not.toBeNull();
+    fireEvent.change(input, { target: { value: 'intake' } });
+    expect((input as HTMLInputElement).value).toBe('intake');
+  });
+
+  it('search "intake" narrows grid to the Process Intake & Scope card only', () => {
+    const { getByPlaceholderText, getAllByText, queryAllByText } = renderAndOpenBrowser();
+    const input = getByPlaceholderText(/search skills/i);
+    fireEvent.change(input, { target: { value: 'intake' } });
+
+    // Only one pipeline-order badge should be visible
+    const remaining = getAllByText(/^\d{2}\/15$/);
+    expect(remaining).toHaveLength(1);
+
+    // It's the correct card
+    expect(queryAllByText(/Process Intake & Scope/)).not.toHaveLength(0);
+  });
+
+  it('search with no matches shows "No skills match" message', () => {
+    const { getByPlaceholderText, getByText } = renderAndOpenBrowser();
+    const input = getByPlaceholderText(/search skills/i);
+    fireEvent.change(input, { target: { value: 'zzz_no_match_zzz' } });
+    expect(getByText(/No skills match your filters/i)).not.toBeNull();
+  });
+
+  it('clearing search restores all 15 cards', () => {
+    const { getByPlaceholderText, getAllByText } = renderAndOpenBrowser();
+    const input = getByPlaceholderText(/search skills/i);
+
+    fireEvent.change(input, { target: { value: 'intake' } });
+    expect(getAllByText(/^\d{2}\/15$/).length).toBeLessThan(15);
+
+    fireEvent.change(input, { target: { value: '' } });
+    expect(getAllByText(/^\d{2}\/15$/)).toHaveLength(15);
+  });
+
+  it('"Core Only" filter shows only core skills', () => {
+    const { getByRole, getAllByText } = renderAndOpenBrowser();
+    const coreCount = SKILLS.filter((s) => s.status === 'core').length;
+
+    fireEvent.click(getByRole('button', { name: /Core Only/i }));
+
+    const badges = getAllByText(/^\d{2}\/15$/);
+    expect(badges).toHaveLength(coreCount);
+  });
+
+  it('"Extensions Only" filter shows only extension skills', () => {
+    const { getByRole, getAllByText } = renderAndOpenBrowser();
+    const extCount = SKILLS.filter((s) => s.status === 'recommended-extension').length;
+
+    fireEvent.click(getByRole('button', { name: /Extensions Only/i }));
+
+    const badges = getAllByText(/^\d{2}\/15$/);
+    expect(badges).toHaveLength(extCount);
+  });
+
+  it('"All Skills" filter restores full set after a status filter', () => {
+    const { getByRole, getAllByText } = renderAndOpenBrowser();
+
+    fireEvent.click(getByRole('button', { name: /Core Only/i }));
+    fireEvent.click(getByRole('button', { name: /All Skills/i }));
+
+    expect(getAllByText(/^\d{2}\/15$/)).toHaveLength(15);
+  });
+
+  it('Discovery layer filter shows only Discovery skills', () => {
+    const { getByRole, getAllByText } = renderAndOpenBrowser();
+    const discoveryCount = SKILLS.filter((s) => s.layer === 1).length;
+
+    fireEvent.click(getByRole('button', { name: /^Discovery$/ }));
+
+    const badges = getAllByText(/^\d{2}\/15$/);
+    expect(badges).toHaveLength(discoveryCount);
+  });
+
+  it('clicking the same layer button twice clears the layer filter', () => {
+    const { getByRole, getAllByText } = renderAndOpenBrowser();
+
+    fireEvent.click(getByRole('button', { name: /^Discovery$/ }));
+    fireEvent.click(getByRole('button', { name: /^Discovery$/ }));
+
+    expect(getAllByText(/^\d{2}\/15$/)).toHaveLength(15);
+  });
+
+  it('"All Layers" button clears a layer filter', () => {
+    const { getByRole, getAllByText } = renderAndOpenBrowser();
+
+    fireEvent.click(getByRole('button', { name: /^Discovery$/ }));
+    fireEvent.click(getByRole('button', { name: /All Layers/i }));
+
+    expect(getAllByText(/^\d{2}\/15$/)).toHaveLength(15);
+  });
+
+  it('status + layer filters combine correctly', () => {
+    const { getByRole, getAllByText, queryAllByText } = renderAndOpenBrowser();
+
+    const layer = PIPELINE_LAYERS[0]; // Discovery
+    const combined = SKILLS.filter(
+      (s) => s.status === 'core' && s.layer === layer.id
+    );
+
+    fireEvent.click(getByRole('button', { name: /Core Only/i }));
+    fireEvent.click(getByRole('button', { name: new RegExp(`^${layer.label}$`) }));
+
+    if (combined.length === 0) {
+      expect(queryAllByText(/^\d{2}\/15$/)).toHaveLength(0);
+    } else {
+      expect(getAllByText(/^\d{2}\/15$/)).toHaveLength(combined.length);
+    }
+  });
+
+  it('results count line appears when a filter is active', () => {
+    const { getByRole, getByText } = renderAndOpenBrowser();
+    fireEvent.click(getByRole('button', { name: /Core Only/i }));
+    expect(getByText(/Showing \d+ of 15 skills/)).not.toBeNull();
+  });
+
+  it('"Clear filters" button inside empty state resets everything', () => {
+    const { getByPlaceholderText, getAllByText, getByRole } = renderAndOpenBrowser();
+    const input = getByPlaceholderText(/search skills/i);
+
+    fireEvent.change(input, { target: { value: 'zzz_no_match_zzz' } });
+
+    const clearBtn = getByRole('button', { name: /Clear filters/i });
+    fireEvent.click(clearBtn);
+
+    expect(getAllByText(/^\d{2}\/15$/)).toHaveLength(15);
+  });
+});
+
+describe('AgentSkills page — PNS Schema accordion', () => {
+
+  it('PNS section is collapsed by default — "Expand PNS schema viewer" hint is visible', () => {
+    const { getByText } = render(<AgentSkills />);
+    expect(getByText(/Expand PNS schema viewer/i)).not.toBeNull();
+  });
+
+  it('clicking the PNS toggle expands the section', () => {
+    const { getByRole, queryByText } = render(<AgentSkills />);
+
+    // The content should not be visible before expanding
+    expect(
+      queryByText(/Every skill in BP-SKILL either reads or writes/i)
+    ).toBeNull();
+
+    // Find the toggle via the h2 heading inside it
+    const h2 = getByRole('heading', { level: 2, name: /The Process Narrative Specification — The Handoff Artifact/i });
+    const toggle = h2.closest('button')!;
+    expect(toggle).not.toBeNull();
+    fireEvent.click(toggle);
+
+    expect(
+      queryByText(/Every skill in BP-SKILL either reads or writes/i)
+    ).not.toBeNull();
+  });
+
+  it('"Expand PNS schema viewer" hint disappears after expanding', () => {
+    const { getByRole, queryByText } = render(<AgentSkills />);
+
+    const h2 = getByRole('heading', { level: 2, name: /The Process Narrative Specification — The Handoff Artifact/i });
+    fireEvent.click(h2.closest('button')!);
+
+    expect(queryByText(/Expand PNS schema viewer/i)).toBeNull();
+  });
+
+  it('"Expand PNS schema viewer ↓" button also expands the section', () => {
+    const { getByText, queryByText } = render(<AgentSkills />);
+
+    fireEvent.click(getByText(/Expand PNS schema viewer/i));
+
+    expect(
+      queryByText(/Every skill in BP-SKILL either reads or writes/i)
+    ).not.toBeNull();
+  });
+
+  it('clicking the PNS toggle again collapses the section', () => {
+    const { getByRole, queryByText } = render(<AgentSkills />);
+
+    const h2 = getByRole('heading', { level: 2, name: /The Process Narrative Specification — The Handoff Artifact/i });
+    const toggle = h2.closest('button')!;
+    fireEvent.click(toggle); // expand
+    fireEvent.click(toggle); // collapse
+
+    expect(
+      queryByText(/Every skill in BP-SKILL either reads or writes/i)
+    ).toBeNull();
+  });
+});
+
+describe('AgentSkills page — section tab navigation', () => {
+
+  it('renders all five section tab buttons', () => {
+    const { getAllByRole } = render(<AgentSkills />);
+    // Tab labels that are unique in the nav strip; use getAllByRole since some
+    // labels ("PNS Schema", "Skills") also appear on other page elements.
+    const hasButton = (name: RegExp) =>
+      getAllByRole('button', { name }).length >= 1;
+
+    expect(hasButton(/The Standard/i)).toBe(true);
+    expect(hasButton(/^Pipeline$/i)).toBe(true);
+    expect(hasButton(/^Skills$/i)).toBe(true);
+    expect(hasButton(/Variable Layer/i)).toBe(true);
+    expect(hasButton(/PNS Schema/i)).toBe(true);
+  });
+});
