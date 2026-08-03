@@ -1,0 +1,6 @@
+interface:
+  display_name: "AskJamie Brand"
+  short_description: "Apply the calm AskJamie helpdesk system"
+  default_prompt: "Use $okhp3-askjamie-brand to align this target to the AskJamie profile."
+policy:
+  allow_implicit_invocation: true

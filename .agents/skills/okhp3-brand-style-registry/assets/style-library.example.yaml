@@ -1,0 +1,22 @@
+schema_version: "1.0"
+library:
+  name: Example style library
+  profiles:
+    - id: overkill-hill
+      display_name: OverKill Hill P³
+      path: profiles/overkill-hill.yaml
+      status: seed
+      version: "1.0.0"
+      tags: [industrial, technical, dark]
+    - id: glee-fully
+      display_name: Glee-fully Personalizable Tools
+      path: profiles/glee-fully.yaml
+      status: seed
+      version: "1.0.0"
+      tags: [retro-bright, playful, warm]
+    - id: askjamie
+      display_name: AskJamie
+      path: profiles/askjamie.yaml
+      status: seed
+      version: "1.0.0"
+      tags: [calm, mid-century, helpdesk]

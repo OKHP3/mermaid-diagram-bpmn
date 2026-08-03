@@ -1,0 +1,7 @@
+interface:
+  display_name: "Vite GitHub Pages"
+  short_description: "Deploy this Vite app through GitHub Pages"
+  default_prompt: "Use $okhp3-vite-github-pages to diagnose or safely update this app’s Vite Pages deployment."
+
+policy:
+  allow_implicit_invocation: true

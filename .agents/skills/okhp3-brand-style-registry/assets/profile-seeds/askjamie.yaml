@@ -1,0 +1,67 @@
+schema_version: "1.0"
+style:
+  id: askjamie
+  display_name: AskJamie
+  version: "1.1.0"
+  status: seed
+  purpose: A calm, articulate mid-century helpdesk that makes complex decisions navigable.
+  owner_context: owned
+  tags: [calm, mid-century, helpdesk, explanatory]
+  created_on: 2026-07-25
+  updated_on: 2026-07-25
+  sources:
+    - type: css
+      locator: https://github.com/OKHP3/AskJamie/blob/main/assets/css/theme.css
+      authority: declared
+      sampled_on: 2026-07-25
+      notes: Declares dark brown surfaces, quiet blue-teal accents, and inherited type roles.
+    - type: website
+      locator: https://askjamie.bot
+      authority: observed
+      sampled_on: 2026-07-25
+      notes: Establishes a vintage-tech helpdesk, paper grain, and a steady reading pace.
+  evidence_summary:
+    declared: Dark brown backgrounds, light text, muted secondary text, and blue-teal accent values.
+    observed: Mid-century helpdesk objects, calm information hierarchy, and reassurance under pressure.
+    inferred: An intelligent companion who reduces cognitive load without minimizing complexity.
+  evidence:
+    - claim: "Dark brown surfaces, light text, muted secondary text, and blue-teal accents are declared theme roles."
+      source: https://github.com/OKHP3/AskJamie/blob/main/assets/css/theme.css
+      authority: declared
+      confidence: high
+      notes: "Read from the declared theme source."
+    - claim: "The rendered experience uses a vintage-tech helpdesk metaphor and steady reading pace."
+      source: https://askjamie.bot
+      authority: observed
+      confidence: medium
+      notes: "Rendered-site interpretation, not a token declaration."
+  tokens:
+    color:
+      foundation:
+        background: "#1e1a17"
+        surface: "#2a2420"
+        soft_surface: "#231f1c"
+        foreground: "#e8e4df"
+        muted: "#9e918a"
+        teal: "#4ba8bd"
+      semantic:
+        accent: "#4ba8bd"
+        border_subtle: "rgba(255, 255, 255, 0.12)"
+    typography:
+      roles:
+        heading: { family: Baloo 2, fallback: [system-ui, sans-serif], notes: Shared theme declaration; use with the quieter AskJamie hierarchy. }
+        body: { family: Open Sans, fallback: [system-ui, sans-serif], notes: Shared theme declaration for readable helpdesk guidance. }
+        accent: { family: Kalam, fallback: [system-ui, sans-serif], notes: Shared theme declaration; reserve for a small, personal note rather than instructional copy. }
+  direction:
+    visual_narrative: Vintage technical helpdesk clarity with calm, human pacing.
+    components: [quiet dark panels, considered dividers, stepped walkthroughs, modest teal cues]
+    imagery: [mid-century office technology, diagrams, desktop objects, paper texture]
+    motion: [restrained, explanatory, and never urgent]
+    avoid: [alarmist alerts, visual noise, overly glossy AI imagery, pressure-heavy calls to action]
+  application:
+    suitable_targets: [spa, documentation, presentation, image-brief]
+    accessibility_notes: [Check light-text contrast on brown surfaces and do not use muted text for essential instruction.]
+    target_constraints: [Preserve existing SPA behavior and framework conventions; verify font availability and licensing before shipping.]
+    acceptance_checks: [Token layer reviewed, representative viewports inspected, keyboard focus checked, contrast checked for each meaningful state.]
+  conflicts: [none recorded]
+  confidence: { overall: high, notes: Seed derived from declared theme tokens and current site language. }

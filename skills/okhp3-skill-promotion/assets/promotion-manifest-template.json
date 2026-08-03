@@ -1,0 +1,57 @@
+{
+  "schema_version": "1.0",
+  "skill": {
+    "name": "<portable-skill-name>",
+    "version": "<semver>",
+    "maturity": "candidate",
+    "evidence_status": "not-run"
+  },
+  "source": {
+    "repository": "<origin-repository>",
+    "package_path": ".agents/skills/<name>",
+    "selected_as_canonical_incubator": false,
+    "selection_reason": "<evidence-backed reason>"
+  },
+  "mirrors": [
+    {
+      "path": "skills/<name>",
+      "role": "publication-mirror",
+      "authorized": false,
+      "aggregate_sha256": null
+    }
+  ],
+  "canonical_target": {
+    "repository": "OKHP3/skillz",
+    "family": "<family>",
+    "package_path": "<family>/<name>",
+    "accepted_commit_or_hash": null
+  },
+  "inventory": [],
+  "decision": {
+    "status": "candidate",
+    "alternatives_considered": [],
+    "unresolved_items": []
+  },
+  "safety": {
+    "license": "MIT",
+    "public_safety": "not-reviewed",
+    "private_material_found": false,
+    "external_writes": "none-declared",
+    "adapter_differences": []
+  },
+  "authorization": {
+    "requested_actions": [],
+    "approved_actions": [],
+    "withheld_actions": ["commit", "push", "pull-request", "external-publication"]
+  },
+  "verification": {
+    "checks": [],
+    "review_record": null,
+    "verified_at": null,
+    "limitations": []
+  },
+  "recovery": {
+    "path": "Inspect the diff and restore only reviewed files; do not delete destination-only files automatically.",
+    "pre_sync_git_status_recorded": false
+  }
+}

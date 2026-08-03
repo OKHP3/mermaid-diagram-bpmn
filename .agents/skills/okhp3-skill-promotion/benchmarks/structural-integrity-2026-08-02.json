@@ -1,0 +1,45 @@
+{
+  "schema_version": "1.0",
+  "skill_name": "okhp3-skill-promotion",
+  "skill_version": "0.1.0",
+  "evaluation_kind": "structural-and-deterministic-helper",
+  "evidence_status": "analytical",
+  "verification_date": "2026-08-02",
+  "checks": [
+    {
+      "id": "quick-validate-canonical",
+      "result": "pass",
+      "command": "py -3.14 community/skill-creator/scripts/quick_validate.py universal/okhp3-skill-promotion"
+    },
+    {
+      "id": "foundry-structure-active",
+      "result": "pass",
+      "detail": "Validated 16 active project-local packages recursively; this package had no structural error."
+    },
+    {
+      "id": "foundry-structure-distribution",
+      "result": "pass",
+      "detail": "Validated 17 universal distribution packages recursively; this package had no structural error."
+    },
+    {
+      "id": "mirror-helper-tests",
+      "result": "pass",
+      "detail": "Five unittest cases passed, covering exact sync, changed-file refusal, destination-only preservation, package-name mismatch, and nonportable-name rejection."
+    },
+    {
+      "id": "catalog-project-check",
+      "result": "pass",
+      "detail": "Project catalog check found 16 active skills; only pre-existing missing-version warnings remained."
+    },
+    {
+      "id": "catalog-full-check",
+      "result": "pass",
+      "detail": "Full distribution check found 113 canonical skills and excluded root skills/ publication mirrors."
+    }
+  ],
+  "limitations": [
+    "No live with/without-agent benchmark was run.",
+    "No protected or external release holdout was run.",
+    "Structural and deterministic tests do not prove task-quality uplift or production readiness."
+  ]
+}

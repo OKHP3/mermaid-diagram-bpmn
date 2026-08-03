@@ -1,0 +1,6 @@
+interface:
+  display_name: "Glee-fully Brand"
+  short_description: "Apply the warm retro-bright Glee-fully system"
+  default_prompt: "Use $okhp3-glee-fully-brand to align this target to the Glee-fully profile."
+policy:
+  allow_implicit_invocation: true

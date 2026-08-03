@@ -1,0 +1,52 @@
+{
+  "schema_version": "1.0",
+  "review_protocol": "equilibrium-v1",
+  "review_mode": "five-way",
+  "evaluation_status": "not-run",
+  "artifact": {
+    "path": "universal/okhp3-skill-promotion/SKILL.md",
+    "sha256": "dae6a325280f0ec19886779384f812a8934892c503e67527084c3e07d0deaa52",
+    "version": "0.1.0"
+  },
+  "decision_question": "Is okhp3-skill-promotion safe, portable, and sufficiently evidenced to serve as a draftable bridge from project-local skills to canonical OKHP3/skillz distribution?",
+  "acceptance_criteria": [
+    "The package distinguishes runtime source, publication mirror, and canonical distribution authority.",
+    "The package refuses blind overwrite, deletion of destination-only files, unauthorized publication, and unreviewed private material.",
+    "The package has a deterministic mirror helper with reproducible regression tests.",
+    "The package separates structural or analytical evidence from live task-quality and holdout evidence."
+  ],
+  "independence": {
+    "reviewer_contexts_separated": false,
+    "shared_model_or_source_limits": [
+      "No provider adapter was configured; role prompts were generated but no independent reviewer executed."
+    ]
+  },
+  "initial_reviews": [
+    {"role": "evidence", "status": "not-run", "decision": "defer-for-evidence"},
+    {"role": "outcome", "status": "not-run", "decision": "defer-for-evidence"},
+    {"role": "safety_portability", "status": "not-run", "decision": "defer-for-evidence"}
+  ],
+  "concordance": "unknown",
+  "disruptor": {
+    "triggered": true,
+    "authority": "exploratory-only",
+    "falsification_hypotheses": [],
+    "test_results": []
+  },
+  "negotiator": {
+    "triggered": true,
+    "decision": "defer-for-evidence",
+    "decisive_evidence": [],
+    "unresolved_items": [
+      "Run evidence, outcome, and safety-portability roles with separated contexts or record the review as analytical rather than independent."
+    ]
+  },
+  "release_decision": "defer-for-evidence",
+  "limitations": [
+    "The bundled orchestrator was run in safe dry-run mode because no agent command was supplied.",
+    "A protected or external holdout remains required before any outcome or uplift claim."
+  ],
+  "follow_up": [
+    "Run a provider-backed or human-separated equilibrium review before claiming independent release evidence."
+  ]
+}

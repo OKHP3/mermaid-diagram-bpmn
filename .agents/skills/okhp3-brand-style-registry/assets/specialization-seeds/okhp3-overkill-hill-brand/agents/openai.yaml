@@ -1,0 +1,6 @@
+interface:
+  display_name: "OverKill Hill Brand"
+  short_description: "Apply the forge-like OverKill Hill visual system"
+  default_prompt: "Use $okhp3-overkill-hill-brand to align this target to the OverKill Hill profile."
+policy:
+  allow_implicit_invocation: true

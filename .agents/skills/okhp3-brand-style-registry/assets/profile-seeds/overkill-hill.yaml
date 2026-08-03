@@ -1,0 +1,76 @@
+schema_version: "1.0"
+style:
+  id: overkill-hill
+  display_name: OverKill Hill P³
+  version: "1.1.0"
+  status: seed
+  purpose: Forge-like technical confidence for protocol-driven tools and durable systems.
+  owner_context: owned
+  tags: [industrial, technical, dark, forge]
+  created_on: 2026-07-25
+  updated_on: 2026-07-25
+  sources:
+    - type: css
+      locator: https://github.com/OKHP3/OverKill-Hill/blob/main/assets/css/theme.css
+      authority: declared
+      sampled_on: 2026-07-25
+      notes: Declares core colors, typography, spacing, radii, shadows, and transitions.
+    - type: website
+      locator: https://overkillhill.com
+      authority: observed
+      sampled_on: 2026-07-25
+      notes: Establishes the digital forge narrative and industrial editorial hierarchy.
+  evidence_summary:
+    declared: Espresso, teal, rust, orange, paper, and amber values; Alfa Slab One, DM Sans, and JetBrains Mono roles.
+    observed: Dense but deliberate technical editorial rhythm with forged and schematic metaphors.
+    inferred: Precise, capable, and heat-tempered rather than sterile.
+  evidence:
+    - claim: "The core palette includes teal, espresso, rust, orange, amber, and paper values."
+      source: https://github.com/OKHP3/OverKill-Hill/blob/main/assets/css/theme.css
+      authority: declared
+      confidence: high
+      notes: "Read from the declared theme source."
+    - claim: "The visual narrative is a technical forge with schematic and durable-material cues."
+      source: https://overkillhill.com
+      authority: observed
+      confidence: medium
+      notes: "Rendered-site interpretation, not a token declaration."
+  tokens:
+    color:
+      foundation:
+        teal: "#1c3a34"
+        olive: "#676a2c"
+        ochre: "#a06e28"
+        rust: "#5b3a27"
+        espresso: "#2a2320"
+        orange: "#c46a2c"
+        amber: "#e6a03c"
+        paper: "#f6f2ee"
+      semantic:
+        accent: "#c46a2c"
+        dark_surface: "#111827"
+        dark_surface_soft: "#181f26"
+        dark_foreground: "#e5e7eb"
+    typography:
+      roles:
+        heading: { family: Alfa Slab One, fallback: [sans-serif], notes: Use for decisive, display-level moments. }
+        body: { family: DM Sans, fallback: [sans-serif], notes: Use for clear working prose and UI. }
+        mono: { family: JetBrains Mono, fallback: [monospace], notes: Use for technical labels and structured details. }
+    geometry:
+      spacing: { xs: 0.25rem, sm: 0.5rem, md: 1rem, lg: 2rem, xl: 4rem, xxl: 8rem }
+      radius: { md: 0.75rem, lg: 1.25rem }
+      shadow: { soft: "0 18px 40px rgba(0, 0, 0, 0.5)" }
+      content_width: 1120px
+  direction:
+    visual_narrative: Precision, protocol, and promptcraft on an active workshop floor.
+    components: [dark technical surfaces, orange process accents, deliberate status labels, schematic detail]
+    imagery: [mechanical, workshop, blueprint, durable material metaphor]
+    motion: [fast 150ms feedback, measured 300ms transitions]
+    avoid: [generic neon cyberpunk, sterile enterprise gradients, whimsical decorative overload]
+  application:
+    suitable_targets: [spa, documentation, presentation, image-brief]
+    accessibility_notes: [Verify contrast for orange-on-dark controls, preserve visible keyboard focus, retain text alternatives for metaphorical imagery.]
+    target_constraints: [Preserve existing SPA behavior and framework conventions; verify font availability and licensing before shipping.]
+    acceptance_checks: [Token layer reviewed, representative viewports inspected, keyboard focus checked, contrast checked for each meaningful state.]
+  conflicts: [none recorded]
+  confidence: { overall: high, notes: Seed derived primarily from declared theme tokens. }

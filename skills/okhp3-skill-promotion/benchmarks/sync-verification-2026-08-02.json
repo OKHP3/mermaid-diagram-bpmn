@@ -1,0 +1,37 @@
+{
+  "schema_version": "1.0",
+  "verification_kind": "current-state-reconciliation",
+  "verification_date": "2026-08-02",
+  "canonical": {
+    "package": "universal/okhp3-skill-promotion",
+    "commit_or_hash": "dae6a325280f0ec19886779384f812a8934892c503e67527084c3e07d0deaa52"
+  },
+  "authorization_for_this_verification": "User authorized creation of the promotion skill and synchronization of its active and publication mirrors in this working tree.",
+  "historical_limit": "This record verifies present post-sync equality only. It does not reconstruct prior approval, canonical selection, pre-sync Git status, or recovery information.",
+  "core_file_hashes": {
+    "SKILL.md": "DAE6A325280F0EC19886779384F812A8934892C503E67527084C3E07D0DEAA52",
+    "assets/promotion-manifest-template.json": "680722911F0E7693003E1A3C297BC4B50F84F345A67961D802AD7BE8EBC0C6C3",
+    "evals/evals.json": "5092B11DAC45D142BCC0AD4447D8C0607ADEDA4C0CF5A9C885C7C7E2B7E45675",
+    "references/promotion-manifest.md": "2F95B1C493AEBD758C0697B80454AC8ED33882376C8830969C7AA22D48D6D0E6",
+    "scripts/sync_skill_mirror.py": "7A3C9263EA9A80AFD124C9FCF9603787F57D890629C43AECC38D683C87CA897E",
+    "tests/test_sync_skill_mirror.py": "A95A86D20216F81AC84AA12A66926DBEE82768840E2F78212F0D49E5674C01C7"
+  },
+  "mirrors": [
+    {
+      "repository": "OKHP3/skillz working tree",
+      "package": ".agents/skills/okhp3-skill-promotion",
+      "core_files_match": true,
+      "observed_core_file_count": 6,
+      "adapter_semantic_review": "No host adapter differences; bundled mirror helper reported exact equality.",
+      "validator_result": "quick_validate passed for the active copy."
+    },
+    {
+      "repository": "OKHP3/skillz working tree",
+      "package": "skills/okhp3-skill-promotion",
+      "core_files_match": true,
+      "observed_core_file_count": 6,
+      "adapter_semantic_review": "No host adapter differences; bundled mirror helper reported exact equality.",
+      "validator_result": "quick_validate passed for the publication mirror."
+    }
+  ]
+}

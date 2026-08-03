@@ -1,0 +1,35 @@
+{
+  "skill_name": "okhp3-brand-style-registry",
+  "evals": [
+    {
+      "id": "capture-named-profile",
+      "prompt": "I own a CSS file and a product landing page. Extract a reusable style profile called 'field-notes' and save it without assuming the rendering reveals every declared value.",
+      "expectations": [
+        "The response asks for or records both a human-readable style name and a stable kebab-case style ID.",
+        "The saved profile includes source records with locator, authority, sampled_on, and notes fields.",
+        "The profile keeps declared, observed, and inferred evidence in separate fields rather than blending them.",
+        "The profile records confidence and unresolved uncertainty instead of inventing values not present in the source."
+      ]
+    },
+    {
+      "id": "apply-single-profile-spa",
+      "prompt": "Restyle this React SPA using the 'field-notes' style profile. Preserve the existing application behavior and tell me what you changed.",
+      "expectations": [
+        "The application starts by mapping the selected profile to the SPA token layer or theme variables.",
+        "The sequence updates shared primitives before one-off components and preserves behavior.",
+        "The response names representative viewport, contrast, keyboard-focus, and font-fallback checks.",
+        "The handoff identifies applied cues, intentionally omitted cues, changed surfaces, and remaining review decisions."
+      ]
+    },
+    {
+      "id": "apply-multiple-profiles",
+      "prompt": "Use 'field-notes' and 'studio-warmth' on a product brief. I like the typography from the first and imagery from the second.",
+      "expectations": [
+        "The response designates field-notes as primary or asks the user to choose a primary profile.",
+        "The response assigns studio-warmth an explicit allowed role limited to imagery or another named supporting role.",
+        "The response prevents the supporting profile from silently replacing the primary palette, typography, or layout.",
+        "The response recommends a new named hybrid profile if the user wants system-level blending."
+      ]
+    }
+  ]
+}

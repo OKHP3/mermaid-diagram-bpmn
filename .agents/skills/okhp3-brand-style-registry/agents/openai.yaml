@@ -1,0 +1,6 @@
+interface:
+  display_name: "Brand Style Registry"
+  short_description: "Capture and apply evidence-backed visual styles"
+  default_prompt: "Use $okhp3-brand-style-registry to capture or apply a named visual style profile."
+policy:
+  allow_implicit_invocation: true

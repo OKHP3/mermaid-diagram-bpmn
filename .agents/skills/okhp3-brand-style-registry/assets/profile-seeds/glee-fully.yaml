@@ -1,0 +1,68 @@
+schema_version: "1.0"
+style:
+  id: glee-fully
+  display_name: Glee-fully Personalizable Tools
+  version: "1.1.0"
+  status: seed
+  purpose: Retro-bright, emotionally intelligent tools that make organization feel warm and playful.
+  owner_context: owned
+  tags: [retro-bright, playful, warm, personal-tools]
+  created_on: 2026-07-25
+  updated_on: 2026-07-25
+  sources:
+    - type: css
+      locator: https://github.com/OKHP3/Glee-fullyTools/blob/main/assets/css/theme.css
+      authority: declared
+      sampled_on: 2026-07-25
+      notes: Declares warm surfaces, pink and teal accents, and type roles.
+    - type: website
+      locator: https://glee-fully.tools
+      authority: observed
+      sampled_on: 2026-07-25
+      notes: Establishes a retro-bright toolbox, clean vector lines, and friendly warmth.
+  evidence_summary:
+    declared: Paper-led surfaces, warm dark text, pink and teal accents; Fredoka, Open Sans, and Kalam roles.
+    observed: Bright buttons, playful information framing, and mid-century-adjacent charm.
+    inferred: Encouraging, personal, and organized without feeling childish.
+  evidence:
+    - claim: "Paper-led surfaces use warm dark text with pink and teal accents."
+      source: https://github.com/OKHP3/Glee-fullyTools/blob/main/assets/css/theme.css
+      authority: declared
+      confidence: high
+      notes: "Read from the declared theme source."
+    - claim: "The rendered experience is retro-bright, friendly, and organized."
+      source: https://glee-fully.tools
+      authority: observed
+      confidence: medium
+      notes: "Rendered-site interpretation, not a token declaration."
+  tokens:
+    color:
+      foundation:
+        paper: "#f6f2ee"
+        surface: "#fffdfa"
+        soft_surface: "#fff7f1"
+        ink: "#2e2b29"
+        muted: "#6b5e57"
+        pink: "#d94f63"
+        teal: "#2d6f7e"
+      semantic:
+        accent_primary: "#d94f63"
+        accent_secondary: "#2d6f7e"
+    typography:
+      roles:
+        heading: { family: Fredoka, fallback: [Poppins, sans-serif], notes: Rounded display warmth. }
+        body: { family: Open Sans, fallback: [system-ui, sans-serif], notes: Clear, friendly utility text. }
+        accent: { family: Kalam, fallback: [system-ui, sans-serif], notes: Use sparingly for hand-drawn personality. }
+  direction:
+    visual_narrative: A retro-bright toolbox where delight and useful organization coexist.
+    components: [clean vector-like controls, warm cards, color-coded guidance, friendly labels]
+    imagery: [playful domestic or personal-tool metaphors, bright bounded compositions]
+    motion: [small celebratory feedback, never distracting]
+    avoid: [cold SaaS dashboards, excessive novelty typography, cluttered rainbow palettes]
+  application:
+    suitable_targets: [spa, documentation, presentation, image-brief]
+    accessibility_notes: [Do not rely on pink or teal alone for status; maintain readable body text on paper surfaces.]
+    target_constraints: [Preserve existing SPA behavior and framework conventions; verify font availability and licensing before shipping.]
+    acceptance_checks: [Token layer reviewed, representative viewports inspected, keyboard focus checked, contrast checked for each meaningful state.]
+  conflicts: [none recorded]
+  confidence: { overall: high, notes: Seed derived from declared theme tokens and current site language. }
