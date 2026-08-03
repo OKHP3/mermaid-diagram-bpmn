@@ -517,3 +517,21 @@
   }
 
 }
+
+/* ================================================================== *
+   Reduced-motion — honour prefers-reduced-motion: reduce
+   Collapses all CSS transitions and animations to near-instant so
+   users with vestibular or motion-sensitivity needs are unaffected.
+   scroll-behavior is also forced to auto (overrides JS smooth-scroll
+   where possible; the scrollToSkillRow helper reads matchMedia too).
+ * ================================================================== */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

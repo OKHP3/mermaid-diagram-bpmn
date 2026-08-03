@@ -20,7 +20,13 @@ function scrollToSkillRow(skillId: string) {
       : sm && sm.offsetParent !== null
       ? sm
       : lg ?? sm;
-  target?.scrollIntoView({ behavior: "smooth", block: "start" });
+  const prefersReducedMotion = window.matchMedia(
+    "(prefers-reduced-motion: reduce)"
+  ).matches;
+  target?.scrollIntoView({
+    behavior: prefersReducedMotion ? "instant" : "smooth",
+    block: "start",
+  });
 }
 
 export function PnsLifecycleTracker({ withAnchors = false, activeStatus }: PnsLifecycleTrackerProps) {
