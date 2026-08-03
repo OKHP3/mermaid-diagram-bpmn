@@ -302,7 +302,7 @@ export default function AgentSkills() {
                 placeholder="Search skills…"
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
-                className="w-full pl-8 pr-8 py-1.5 rounded-full border border-border bg-card text-xs text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-primary/40"
+                className="w-full pl-8 pr-8 py-1.5 rounded-full border border-border bg-card text-xs text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary/40"
               />
               {search && (
                 <button

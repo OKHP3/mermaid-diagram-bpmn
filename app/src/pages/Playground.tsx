@@ -180,7 +180,7 @@ export default function Playground() {
             )}
           </div>
           <textarea
-            className="flex-1 p-4 text-sm resize-none focus:outline-none leading-relaxed code-area forge-code-panel"
+            className="flex-1 p-4 text-sm resize-none focus-visible:outline-none leading-relaxed code-area forge-code-panel"
             value={source}
             onChange={e => handleSourceChange(e.target.value)}
             spellCheck={false}
