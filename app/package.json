@@ -4,7 +4,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "vite --config vite.config.ts --host 0.0.0.0",
+    "dev": "node scripts/generate-skill-files.mjs && vite --config vite.config.ts --host 0.0.0.0",
     "skill:generate": "node scripts/generate-skill-files.mjs",
     "build": "node scripts/generate-skill-files.mjs && vite build --config vite.config.ts",
     "serve": "vite preview --config vite.config.ts --host 0.0.0.0",
