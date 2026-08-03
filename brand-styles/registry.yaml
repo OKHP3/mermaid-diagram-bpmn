@@ -8,3 +8,10 @@ library:
       status: active
       version: "1.0.0"
       tags: [industrial, warm, technical, forge, okhp3]
+    - id: okhp3-forge-diagram
+      display_name: OKH Forge Diagram Surface
+      path: profiles/okhp3-forge-diagram.yaml
+      status: active
+      version: "1.0.0"
+      parent: okhp3-forge
+      tags: [dark, diagram, mermaid, bpmn, code-panel, forge, okhp3, always-dark]

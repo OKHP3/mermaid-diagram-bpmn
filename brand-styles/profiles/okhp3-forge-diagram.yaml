@@ -1,0 +1,269 @@
+schema_version: "1.0"
+style:
+  id: okhp3-forge-diagram
+  display_name: OKH Forge Diagram Surface
+  version: "1.0.0"
+  status: active
+  purpose: >
+    The always-dark diagram and code-panel sub-system of the OKH Forge UI.
+    Deep navy (#0f1f1c) base, warm parchment text, rust-orange borders and
+    lines. Used exclusively inside Mermaid diagram renders and code-editor
+    panels. Suitable for diagram-embedding contexts, iframe embeds, standalone
+    render targets, and any surface that hosts bpmn-beta or Mermaid output.
+  owner_context: owned
+  tags: [dark, diagram, mermaid, bpmn, code-panel, forge, okhp3, always-dark]
+  created_on: "2026-08-03"
+  updated_on: "2026-08-03"
+
+  parent_profile: okhp3-forge
+  parent_notes: >
+    This profile is a standalone extraction of the mermaid-diagram and
+    code-panel variant documented in okhp3-forge.yaml. It carries only
+    the tokens relevant to the diagram/code-panel surface so it can be
+    applied independently without importing the full page-level Forge system.
+
+  sources:
+    - type: css
+      locator: app/src/styles/forge-tokens.css
+      authority: declared
+      sampled_on: "2026-08-03"
+      locator_detail: >
+        :root — --mermaid-* canonical render tokens and --okh-forge-code-*
+        panel primitives. Lines 55–70.
+      notes: >
+        All diagram and code-panel hex values are declared here. The
+        --mermaid-* tokens are described as "Canonical Mermaid render tokens"
+        in the source comment and are loaded globally so the Mermaid runtime
+        can read them via CSS custom property resolution.
+    - type: css
+      locator: app/src/index.css
+      authority: declared
+      sampled_on: "2026-08-03"
+      locator_detail: >
+        .forge-code-panel, .forge-code-panel-tab, .diagram-grid utility
+        classes and Playground-specific error surface tokens. Lines 361–450.
+      notes: >
+        Semantic utility classes that apply the raw palette tokens to the
+        actual DOM elements. Covers placeholder opacity, tab border color,
+        dot-grid pattern, and error-state colors not present in forge-tokens.css.
+
+  evidence_summary:
+    declared: >
+      All color values are read directly from CSS custom-property declarations
+      and utility-class rules in the two source files. No visual inference or
+      screenshot sampling was used.
+    observed: none
+    inferred: >
+      The "deep-navy workshop" register is drawn from the combination of the
+      near-black base (#0f1f1c), parchment text (#d4c9b5), and rust-orange
+      structural lines — consistent with the "code / workbench panel" label
+      in forge-tokens.css. Rust-orange doubles as both the brand accent
+      (page-level) and the diagram edge/border color (diagram surface),
+      creating visual continuity between surfaces.
+
+  evidence:
+    - claim: Diagram and code-panel base background is deep dark teal (#0f1f1c)
+      source: app/src/styles/forge-tokens.css — --okh-forge-code-bg
+      authority: declared
+      confidence: high
+      notes: >
+        Labeled "code / workbench panel background". Applied via
+        .forge-code-panel in index.css. Distinct from the page-level dark-mode
+        navy (#0c1120) — this surface is always-dark regardless of theme mode.
+    - claim: Panel text is warm parchment (#d4c9b5)
+      source: app/src/styles/forge-tokens.css — --okh-forge-code-fg
+      authority: declared
+      confidence: high
+      notes: >
+        Labeled "code / workbench panel text". Applied via .forge-code-panel
+        in index.css. Placeholder text is a 30% opacity tint of the same value:
+        rgba(212, 201, 181, 0.30).
+    - claim: Mermaid node fill is near-black (#111827)
+      source: app/src/styles/forge-tokens.css — --mermaid-primary-color
+      authority: declared
+      confidence: high
+      notes: >
+        Canonical Mermaid render token. Consumed by the Mermaid JS runtime as
+        its `primaryColor` theme variable. Creates a dark node interior against
+        the diagram background.
+    - claim: Mermaid node borders and lines are rust-orange (#c46a2c)
+      source: >
+        app/src/styles/forge-tokens.css — --mermaid-primary-border-color,
+        --mermaid-line-color
+      authority: declared
+      confidence: high
+      notes: >
+        Both border and connecting-line color use the same rust-orange as the
+        page-level primary action color. This ties the diagram visual language
+        directly to the Forge brand accent.
+    - claim: Mermaid cluster/pool background is deeper black (#0d1117)
+      source: app/src/styles/forge-tokens.css — --mermaid-cluster-bg
+      authority: declared
+      confidence: high
+      notes: >
+        Slightly darker than the panel base (#0f1f1c), creating a subtle depth
+        distinction between swim-lane clusters and the diagram canvas.
+    - claim: Mermaid node text is near-white (#e5e7eb)
+      source: app/src/styles/forge-tokens.css — --mermaid-text-color
+      authority: declared
+      confidence: high
+      notes: Same value as forge-header-fg — the header's text color.
+    - claim: Tab bar border is #2a3124 (dark olive-green tint)
+      source: app/src/index.css — .forge-code-panel-tab border-color
+      authority: declared
+      confidence: high
+      notes: >
+        The tab bar sits atop the code panel and uses a slightly warmer/greener
+        border to separate it from the flat panel background without using a
+        pure-white or high-contrast rule.
+    - claim: Tab bar label text is 55% opacity warm-white (rgba(230, 223, 201, 0.55))
+      source: app/src/index.css — .forge-code-panel-tab color
+      authority: declared
+      confidence: high
+      notes: Muted to signal inactive state; active tab text would use full panel fg.
+    - claim: Dot-grid pattern on diagram preview panel uses 24px radial gradient dots
+      source: app/src/index.css — .diagram-grid
+      authority: declared
+      confidence: high
+      notes: >
+        Dot color resolves to hsl(var(--border)) — a theme-responsive value.
+        In practice the diagram panel is always-dark so the dot color resolves
+        to the dark-mode border token (hsl 224 20% 18% ≈ #1e2a40).
+    - claim: Parse-error text color is salmon (#e87c5c)
+      source: app/src/index.css — .forge-parse-error-text
+      authority: declared
+      confidence: high
+      notes: >
+        Used in the Playground error ribbon. Distinct from the page-level
+        destructive token — a warmer salmon rather than a pure red, keeping
+        errors within the warm palette register.
+    - claim: Parse-error bar background is a 12% rust-orange tint
+      source: app/src/index.css — .forge-parse-error-bar
+      authority: declared
+      confidence: high
+      notes: >
+        rgba(196, 106, 44, 0.12) over the dark panel, with a dark rust border
+        (#4a2018). Creates a low-saturation warning band without breaking the
+        dark-panel aesthetic.
+
+  tokens:
+    color:
+      foundation:
+        diagram-bg:         "#0f1f1c"   # always-dark panel base
+        diagram-cluster-bg: "#0d1117"   # swim-lane cluster fill (deeper)
+        diagram-text:       "#e5e7eb"   # node text / near-white
+        diagram-fg:         "#d4c9b5"   # panel prose text / warm parchment
+        diagram-border:     "#c46a2c"   # node borders — rust-orange
+        diagram-line:       "#c46a2c"   # connecting lines — rust-orange
+        diagram-node-fill:  "#111827"   # node background — near-black
+        tab-border:         "#2a3124"   # tab bar separator — dark olive
+        tab-fg-muted:       "rgba(230, 223, 201, 0.55)"   # inactive tab label
+        placeholder:        "rgba(212, 201, 181, 0.30)"   # code panel placeholder
+        error-text:         "#e87c5c"   # parse error salmon
+        error-bg-tint:      "rgba(196, 106, 44, 0.12)"    # error bar rust tint
+        error-border:       "#4a2018"   # error bar border — dark rust
+      semantic:
+        background:         "#0f1f1c"   # diagram-bg (always-dark, not theme-responsive)
+        foreground:         "#d4c9b5"   # warm parchment panel text
+        muted-foreground:   "rgba(212, 201, 181, 0.55)"
+        border:             "#2a3124"   # tab and panel separator
+        primary:            "#c46a2c"   # rust-orange (node borders + lines)
+        node-fill:          "#111827"   # node interior
+        cluster:            "#0d1117"   # pool / cluster fill
+        error:              "#e87c5c"   # salmon error text
+
+    mermaid_theme_vars:
+      primaryColor:            "#111827"
+      primaryBorderColor:      "#c46a2c"
+      lineColor:               "#c46a2c"
+      clusterBkg:              "#0d1117"
+      textColor:               "#e5e7eb"
+      notes: >
+        Map directly to Mermaid JS theme variables. Pass as `themeVariables`
+        in the Mermaid init config or resolve via CSS custom properties
+        (--mermaid-* tokens) if the runtime supports CSS variable resolution.
+
+    typography:
+      roles:
+        code:
+          family: "'JetBrains Mono'"
+          fallback: ["'Fira Code'", monospace]
+          notes: >
+            Applied to .forge-code-panel via --app-font-mono. Used for the
+            DSL source editor alongside the diagram output.
+        node-label:
+          family: >
+            Mermaid default — inherits from Mermaid's fontFamily theme var.
+            Recommend overriding to 'DM Sans' for Forge visual consistency.
+          notes: >
+            Mermaid renders node labels using its own font stack unless
+            fontFamily is set in themeVariables. The Forge app does not
+            currently override this, so node labels render in Mermaid's
+            default sans-serif.
+
+    geometry:
+      dot-grid:
+        size:    "24px"
+        pattern: "radial-gradient dots"
+        color:   "hsl(var(--border))"
+        notes:   "24px grid; dots resolve to dark-mode border token on diagram panels."
+
+  direction:
+    visual_narrative: >
+      A deep-navy workshop bench where diagrams live. The near-black base
+      (#0f1f1c) creates maximum separation from page content, signaling a
+      distinct render context. Rust-orange borders and lines carry the Forge
+      brand into every diagram edge, so the diagram feels authored — not
+      generated. Warm parchment text softens the otherwise stark dark surface,
+      maintaining the Forge warmth even in an all-dark context.
+    components:
+      - "Always-dark panel base (#0f1f1c) — never theme-responsive"
+      - "Rust-orange (#c46a2c) for all diagram borders, lines, and edges"
+      - "Near-black node fill (#111827) with warm parchment node text (#d4c9b5 / #e5e7eb)"
+      - "Deeper cluster fill (#0d1117) for swim-lane pools — subtle depth without border"
+      - "Dark-olive tab separator (#2a3124) for code-panel tab bar"
+      - "24px dot grid on diagram canvas — uses border token at ~18% opacity"
+      - "Salmon error ribbon (#e87c5c / rgba 196 106 44 0.12) for parse failures"
+    motion:
+      - "No decorative animation inside diagram renders"
+      - "Respect prefers-reduced-motion for any panel transitions"
+    avoid:
+      - "White or light-mode backgrounds inside the diagram panel"
+      - "Cool blue or purple border/line colors — keep rust-orange as the single accent"
+      - "High-opacity error colors that overpower the diagram content"
+      - "Switching to page-level semantic tokens (--background, --foreground) inside diagram panels"
+      - "Adding Alfa Slab One to node labels — reserve the display font for page headings"
+
+  application:
+    suitable_targets: [diagram-embed, iframe, code-editor, bpmn-renderer, mermaid-renderer]
+    accessibility_notes:
+      - "Node text (#e5e7eb) on node fill (#111827): ~17:1 — passes AAA"
+      - "Panel text (#d4c9b5) on panel bg (#0f1f1c): verify exact ratio — parchment on near-black"
+      - "Rust-orange (#c46a2c) on near-black (#111827): 3.5:1 approx — use for borders/lines only, not small text"
+      - "Error salmon (#e87c5c) on panel bg: verify contrast for small text use"
+    target_constraints:
+      - "CSS custom properties required — no IE11"
+      - "Mermaid JS runtime must be configured to read --mermaid-* tokens or receive themeVariables directly"
+      - "This profile is always-dark — do not apply .dark class toggling to the diagram panel"
+    acceptance_checks:
+      - "--okh-forge-code-bg (#0f1f1c) applied to panel background"
+      - "--mermaid-line-color and --mermaid-primary-border-color both resolve to #c46a2c"
+      - "Cluster background (#0d1117) is visually distinct from panel base (#0f1f1c)"
+      - "No page-level warm-paper tokens bleed into the diagram surface"
+      - "Error state uses salmon (#e87c5c), not page-level destructive token"
+
+  conflicts:
+    - with: okhp3-forge/dark-mode variant
+      resolution: >
+        The dark-mode variant of okhp3-forge shifts page surfaces to dark navy
+        (#0c1120). The diagram surface (#0f1f1c) is a separate always-dark token
+        that does not participate in the dark-mode switch. Do not use
+        okhp3-forge dark-mode tokens inside diagram panels.
+
+  confidence:
+    overall: high
+    notes: >
+      All color values sourced directly from declared CSS custom-property
+      declarations in forge-tokens.css and utility-class rules in index.css.
+      No visual inference used for color values. The mermaid_theme_vars mapping
+      is confirmed against the --mermaid-* token names in the source.
