@@ -181,6 +181,12 @@ style:
         notes: >
           Light mode — warm brown tint (hsla 30 30% 38% 0.055).
           Dark mode — green tint (hsla 90 30% 60% 0.065).
+          The rendered grid size (32px) comes from the hardcoded background-size
+          in the .forge-grid class in index.css. A separate CSS variable
+          --forge-grid-size is declared as 28px in forge-tokens.css but is not
+          yet consumed by .forge-grid; this profile tracks the rendered size.
+          If --forge-grid-size is wired into the class, update this field and
+          bump version + updated_on.
 
   direction:
     visual_narrative: >
@@ -274,6 +280,16 @@ style:
       - "Eyebrow labels tracked, uppercase, muted-foreground"
       - "Code panels use forge-code-bg / forge-code-fg, not semantic bg/fg"
       - "Blueprint grid texture applied to main content area"
+
+  maintenance:
+    drift_check: "pnpm brand:check (scripts/check-forge-profile.mjs)"
+    policy: >
+      Any change to app/src/styles/forge-tokens.css or app/src/index.css that
+      alters a token value declared in this profile requires: (1) updating the
+      matching field under tokens.color.foundation, tokens.typography, or
+      tokens.geometry; (2) bumping style.version; (3) updating style.updated_on
+      to the change date. Run `pnpm brand:check` to verify no values have
+      drifted before committing. See CONTRIBUTING.md § "Forge brand profile".
 
   conflicts:
     - none recorded

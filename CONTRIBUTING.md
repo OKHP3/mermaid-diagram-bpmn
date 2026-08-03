@@ -37,6 +37,40 @@ without `-beta` as the DSL keyword anywhere. The public title is
 "BPMN for Mermaid", not "bpmn-beta tool" or any name with "beta" in the
 product title.
 
+## Forge brand profile
+
+`brand-styles/profiles/okhp3-forge.yaml` is the canonical record of the Forge
+design token values. It was extracted from two source files and must stay in
+sync with them:
+
+| Source file | What it declares |
+|---|---|
+| `app/src/styles/forge-tokens.css` | Raw palette hex values, header/footer surfaces, font families, Mermaid render tokens |
+| `app/src/index.css` | Base radius (`--radius`), rendered grid size (`.forge-grid` `background-size`) |
+
+**When you change either source file, you must also:**
+
+1. Update the matching token value(s) in `brand-styles/profiles/okhp3-forge.yaml`
+   under `tokens.color.foundation`, `tokens.typography`, or `tokens.geometry`.
+2. Bump `style.version` (patch → minor if a token role changes meaning; minor →
+   major if a token is removed).
+3. Update `style.updated_on` to today's date (`YYYY-MM-DD`).
+4. Run the drift check to confirm nothing was missed:
+
+```bash
+pnpm brand:check
+```
+
+The check compares live CSS values against the profile's declared values and
+exits non-zero if any have drifted, listing each mismatch with the exact
+profile field to fix.
+
+> **Grid size note:** `--forge-grid-size` (currently `28px`) is a declared CSS
+> variable that is not yet consumed by the `.forge-grid` class. The class
+> hardcodes `background-size: 32px 32px` directly. The profile tracks the
+> rendered size (`32px`). If you wire up the variable, update the profile's
+> `tokens.geometry.grid.size` to match and bump the version.
+
 ## Current implementation status
 
 | Category | Elements |
