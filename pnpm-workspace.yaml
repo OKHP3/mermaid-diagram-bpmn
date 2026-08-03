@@ -13,7 +13,7 @@ catalog:
   '@replit/vite-plugin-cartographer': ^0.5.5
   '@replit/vite-plugin-dev-banner': ^0.1.1
   '@replit/vite-plugin-runtime-error-modal': ^0.0.6
-  '@tailwindcss/vite': ^4.3.2
+  '@tailwindcss/vite': ^4.3.3
   '@tanstack/react-query': ^5.90.21
   '@types/node': ^26.1.1
   '@types/react': ^19.2.17
