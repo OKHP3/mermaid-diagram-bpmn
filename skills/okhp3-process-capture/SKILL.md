@@ -11,6 +11,8 @@ metadata:
   author-github: https://github.com/OKHP3
   in_scope: "Recurring-task recognition, bounded backlog capture, and skill-skeleton handoff."
   out_of_scope: "Full skill authoring, unapproved repository edits, and treating one-off work as a durable workflow."
+  produces: "BACKLOG.md entry | SKILL.md skeleton"
+  bp_skill_version: "0.3.0"
 ---
 
 # okhp3-process-capture

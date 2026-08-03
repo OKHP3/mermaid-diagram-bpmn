@@ -20,6 +20,8 @@ metadata:
   author-github: https://github.com/OKHP3
   in_scope: "Skill-source selection, local publication mirrors, provenance, safe synchronization, validation handoff, and promotion preparation."
   out_of_scope: "Blind overwrites, deletion of unreviewed work, secret removal by guesswork, autonomous commits, pushes, pull requests, or publication."
+  produces: "skills/<name>/SKILL.md, promotion-manifest.md"
+  bp_skill_version: "0.3.0"
 ---
 
 # okhp3-skill-promotion
