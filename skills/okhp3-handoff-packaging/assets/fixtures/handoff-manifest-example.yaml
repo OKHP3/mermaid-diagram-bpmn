@@ -1,0 +1,56 @@
+manifest_version: "0.1"
+process_id: proc-purchase-approval
+process_name: Purchase Order Approval
+bundle_date: "2026-05-15"
+bundle_version: v1.0
+quality_band: A
+composite_score: 95
+
+artifacts:
+  - filename: pir.yaml
+    source_skill: process-intake-and-scope
+    status: present
+    sha256: "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+
+  - filename: pns.yaml
+    source_skill: process-narrative-authoring
+    status: present
+    sha256: "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+
+  - filename: bpmn-beta.mmd
+    source_skill: visual-process-modeling
+    status: present
+    sha256: "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+
+  - filename: sop.md
+    source_skill: sop-and-work-instruction-generation
+    status: present
+    sha256: "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+
+  - filename: validation-report.yaml
+    source_skill: process-validation-and-quality-scoring
+    status: present
+    sha256: "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+
+  - filename: stakeholder-register.yaml
+    source_skill: stakeholder-and-role-mapping
+    status: present
+    sha256: "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+
+  - filename: raci.md
+    source_skill: raci-and-governance-matrix-generation
+    status: present
+    sha256: "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+
+  - filename: sipoc.md
+    source_skill: sipoc-generation
+    status: present
+    sha256: "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+
+  - filename: decision-model.yaml
+    source_skill: decision-model-authoring
+    status: optional
+    sha256: ""
+
+missing_required: []
+missing_recommended: []
