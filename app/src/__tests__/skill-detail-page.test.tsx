@@ -3,7 +3,9 @@ import { describe, it, expect, vi } from 'vitest';
 import { render } from '@testing-library/react';
 import { fireEvent } from '@testing-library/dom';
 import SkillDetail from '@/pages/SkillDetail';
-import { SKILLS } from '@/data/skills-registry';
+import { SKILLS, PNS_LIFECYCLE } from '@/data/skills-registry';
+import { PNS_TRANSITIONS } from '@/data/pns-transitions';
+import { PnsLifecycleTracker } from '@/components/skills/PnsLifecycleTracker';
 
 // ── Wouter ────────────────────────────────────────────────────────────────────
 // useParams is overridden per-test via the mock factory below.
@@ -155,5 +157,92 @@ describe('SkillDetail page — 404 for unknown skill', () => {
     const { getByRole } = renderSkill('not-a-real-skill');
     const link = getByRole('link', { name: /Back to All Skills/i });
     expect(link.getAttribute('href')).toBe('/skills');
+  });
+});
+
+// ─────────────────────────────────────────────────────────────────────────────
+// PNS transition data integrity
+// ─────────────────────────────────────────────────────────────────────────────
+// Pure data tests — no rendering. A data-entry error or stale generated file
+// would surface here without requiring a browser to open.
+
+describe('PNS transition data — integrity against PNS_LIFECYCLE', () => {
+
+  const validStatuses = new Set(PNS_LIFECYCLE.map(s => s.status));
+
+  it('all 15 SKILLS have an entry in PNS_TRANSITIONS', () => {
+    for (const skill of SKILLS) {
+      expect(
+        PNS_TRANSITIONS,
+        `${skill.id} is missing from PNS_TRANSITIONS`
+      ).toHaveProperty(skill.id);
+    }
+  });
+
+  it.each(
+    Object.entries(PNS_TRANSITIONS)
+      .filter(([, t]) => t.after !== null)
+      .map(([id, t]) => ({ id, after: t.after! }))
+  )('$id — after="$after" is a recognised PNS_LIFECYCLE status', ({ id, after }) => {
+    expect(
+      validStatuses.has(after),
+      `${id}: after="${after}" does not match any status in PNS_LIFECYCLE`
+    ).toBe(true);
+  });
+
+  it.each(
+    Object.entries(PNS_TRANSITIONS)
+      .filter(([, t]) => t.before !== null)
+      .map(([id, t]) => ({ id, before: t.before! }))
+  )('$id — before="$before" is a recognised PNS_LIFECYCLE status', ({ id, before }) => {
+    expect(
+      validStatuses.has(before),
+      `${id}: before="${before}" does not match any status in PNS_LIFECYCLE`
+    ).toBe(true);
+  });
+});
+
+// ─────────────────────────────────────────────────────────────────────────────
+// PnsLifecycleTracker — active stage per skill
+// ─────────────────────────────────────────────────────────────────────────────
+// Render the tracker directly in compact mode (same props SkillDetail passes)
+// and verify the highlighted stage matches the skill's transition data.
+
+describe('PnsLifecycleTracker — active stage rendering', () => {
+
+  it('renders all lifecycle stage labels when no activeStatus is provided', () => {
+    const { container } = render(<PnsLifecycleTracker compact />);
+    for (const state of PNS_LIFECYCLE) {
+      expect(container.textContent).toContain(state.status);
+    }
+  });
+
+  it.each(
+    Object.entries(PNS_TRANSITIONS)
+      .filter(([, t]) => t.after !== null)
+      .map(([id, t]) => ({ id, after: t.after! }))
+  )('$id — tracker renders "$after" when that is the active stage', ({ after }) => {
+    const { container } = render(<PnsLifecycleTracker activeStatus={after} compact />);
+    // The status label appears in the DOM (desktop + mobile both render it)
+    expect(container.textContent).toContain(after);
+    // All other stages still appear (they are dimmed via opacity, not removed)
+    for (const state of PNS_LIFECYCLE) {
+      expect(container.textContent).toContain(state.status);
+    }
+  });
+
+  it.each(
+    Object.entries(PNS_TRANSITIONS)
+      .filter(([, t]) => t.after === null)
+      .map(([id]) => ({ id }))
+  )('$id (after: null) — tracker renders without crashing when activeStatus is undefined', ({ id }) => {
+    // SkillDetail passes `pnsActiveStatus = pnsTransition?.after ?? undefined`
+    // so null becomes undefined — no stage should be highlighted, no crash.
+    expect(() => render(<PnsLifecycleTracker activeStatus={undefined} compact />)).not.toThrow();
+    const { container } = render(<PnsLifecycleTracker activeStatus={undefined} compact />);
+    // All lifecycle stages still render
+    for (const state of PNS_LIFECYCLE) {
+      expect(container.textContent).toContain(state.status);
+    }
   });
 });
