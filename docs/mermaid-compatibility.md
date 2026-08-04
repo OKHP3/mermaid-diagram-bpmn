@@ -36,7 +36,8 @@ This test runs as part of the standard application test suite (`pnpm --filter @w
 | Pool/lane diagram produces `bpmn-pool`, `bpmn-lane`, `bpmn-flow-conditional`, `bpmn-gateway` classes | **source-verified** | `bpmn-plugin-integration.test.ts` |
 | FR-018: `styles()` reads live `themeVariables` at render time, not a static fallback | **source-verified** | `bpmn-plugin-integration.test.ts` — "FR-018: live theme-variable binding" describe block |
 | Plugin is externally consumable as an installable npm package | **packaged** | `lib/bpmn-plugin/` workspace package; `pnpm pack` produces 6-file tarball verified by `scripts/run-plugin-smoke.mjs` — 12/12 smoke assertions pass |
-| Plugin works in a real browser with default Mermaid security configuration | **not complete** | Phase 3: Mermaid Host Demo route and browser test required |
+| `MermaidHostDemo` component does not pass `securityLevel:'loose'` to `mermaid.initialize()` | **confirmed** | `mermaid-host-demo.test.tsx` — mocked unit test asserts the component's init call omits `securityLevel:'loose'`; this is a component-behaviour assertion, not a real-browser render |
+| Plugin renders in a real browser with default Mermaid security (automated E2E) | **not complete** | Live route `/mermaid-host-demo` confirms this manually; automated Playwright E2E deferred to follow-up task #185 |
 
 ---
 
@@ -47,7 +48,7 @@ This test runs as part of the standard application test suite (`pnpm --filter @w
 | **confirmed** | Verified by Vitest unit or corpus test against the application's own pipeline |
 | **source-verified** | Verified by a test that calls real `mermaid.render()` in a happy-dom environment |
 | **packaged** | Verified via a built `.tgz` artifact in a clean-install fixture |
-| **browser-verified** | Verified in a real browser DOM without `securityLevel: "loose"` |
+| **browser-verified** | Verified in a real browser DOM without `securityLevel: "loose"` — not yet achieved; target for automated Playwright E2E (#185) |
 | **not complete** | The claim cannot be made yet; work required is noted |
 
 ---
@@ -63,7 +64,7 @@ correctly preserves all elements.
 
 This is **not** a security bypass in production. In a real browser, the HTML parser correctly
 assigns SVG namespace to children of an SVG element, and DOMPurify works as expected. The
-Phase 3 Mermaid Host Demo route will verify this without `securityLevel: "loose"`.
+The Phase 3 `/mermaid-host-demo` route demonstrates this in a real browser. `app/src/__tests__/mermaid-host-demo.test.tsx` (mocked unit test) asserts the component does not pass `securityLevel: "loose"` to `mermaid.initialize()` — this is a **confirmed** component-behaviour claim. Automated real-browser E2E (Playwright) to upgrade this to **browser-verified** is a deferred follow-up (task #185).
 
 ---
 

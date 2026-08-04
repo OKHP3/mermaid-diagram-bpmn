@@ -216,10 +216,18 @@ export default function Architecture() {
         <p className="text-sm font-medium text-foreground mb-2">How it plugs into Mermaid</p>
         <p className="text-xs text-muted-foreground leading-relaxed">
           Mermaid supports external diagram types registered via <code className="font-mono bg-muted px-1 py-0.5 rounded">mermaid.registerExternalDiagrams()</code>.
-          This is the same mechanism used by community diagram types. The <code className="font-mono bg-muted px-1 py-0.5 rounded">bpmn-beta</code> plugin
-          will register a detector, parser, DB accessor, and renderer — matching the internal diagram type contract — without requiring changes to the Mermaid core codebase.
+          The <code className="font-mono bg-muted px-1 py-0.5 rounded">bpmn-beta</code> plugin
+          registers a detector, parser, DB accessor, and renderer — matching the internal diagram type contract — without requiring changes to the Mermaid core codebase.
           Upstream inclusion can be proposed after the syntax, renderer, and test suite are stable.
         </p>
+        <div className="flex flex-wrap gap-2 mt-3 text-[10px] font-mono">
+          <span className="px-2 py-0.5 rounded bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-300 border border-emerald-200/60 dark:border-emerald-800/60">
+            source-verified — registerExternalDiagrams + mermaid.render() tested in CI
+          </span>
+          <span className="px-2 py-0.5 rounded bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-300 border border-emerald-200/60 dark:border-emerald-800/60">
+            packaged — @okhp3/mermaid-diagram-bpmn@0.1.0 · 12/12 smoke assertions
+          </span>
+        </div>
       </div>
 
       {/* System combination thesis */}

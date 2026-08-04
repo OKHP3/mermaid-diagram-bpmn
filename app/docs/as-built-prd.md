@@ -1,3 +1,10 @@
+---
+> **Historical document — as of 2026-08-04 this record is partially superseded.**
+> The `registerExternalDiagrams()` GAP (FR-016) is now **resolved** — see `docs/mermaid-compatibility.md` for the current evidence-tier table.
+> The plugin package (`@okhp3/mermaid-diagram-bpmn@0.1.0`) and the Mermaid Host Demo route exist and are CI-tested.
+> Claims in this document about “GAP” or “not yet validated” for plugin integration no longer apply.
+---
+
 # As-Built PRD — BPMN for Mermaid (`bpmn-beta`)
 **Type:** Retrospective Requirements Document
 **Date:** 2026-05-21

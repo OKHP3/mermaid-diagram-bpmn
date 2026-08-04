@@ -2,6 +2,14 @@ import { Link } from "wouter";
 import type { CSSProperties } from "react";
 import { ArrowRight, GitBranch, FileCode2, Layers, CheckCircle2, ExternalLink, CheckCheck, FlaskConical, Clock, XCircle, Users, Building2, Bot, BookOpen, GitPullRequest } from "lucide-react";
 import { StatusRibbon } from "@/components/StatusRibbon";
+import {
+  BPMN_MERMAID_VERIFIED,
+  BPMN_PLAYGROUND_ONLY,
+  BPMN_EXPERIMENTAL,
+  BPMN_DEFERRED,
+  BPMN_OUT_OF_SCOPE,
+  PLUGIN_CAPABILITIES,
+} from "@/data/capability-registry";
 
 const MARKET_WEDGE = [
   { icon: Building2, segment: "Enterprise architects", pain: "Need process diagrams beside architecture docs", fit: "Git-native text diagrams fit architecture repositories" },
@@ -44,52 +52,18 @@ const RELATED_ISSUES = [
   { id: "#660", title: "Older BPMN 2.0 diagram request", url: "https://github.com/mermaid-js/mermaid/issues/660" },
 ];
 
+// Support matrix is derived from the canonical capability registry.
+// Edit app/src/data/capability-registry.ts to change claims — do not hardcode here.
 const SUPPORT_MATRIX = {
+  // All source-verified + packaged items (verified against real mermaid.render())
   implemented: [
-    "Start events",
-    "End events",
-    "Generic tasks",
-    "User tasks (person marker)",
-    "Service tasks (gear marker)",
-    "Script tasks (script marker)",
-    "Receive tasks (envelope marker)",
-    "Send tasks (filled envelope)",
-    "XOR gateways",
-    "AND gateways",
-    "OR gateways",
-    "Sequence flows (-->)",
-    "Conditional flow labels",
-    "Default flow marker (==>)",
-    "accTitle / accDescr directives",
-    "Auto left-to-right layout",
-    "Theme-aware SVG styling",
+    ...BPMN_MERMAID_VERIFIED.map(c => c.label),
+    // playground-only items follow (tested in BpmnRenderer, not in Mermaid integration test)
+    ...BPMN_PLAYGROUND_ONLY.map(c => c.label),
   ],
-  experimental: [
-    "Pools (headers, containers)",
-    "Lanes (one level deep)",
-    "Message flows (~~>)",
-    "Pool/lane-aware layout",
-    "Cross-pool flow routing",
-  ],
-  planned: [
-    "Formal Langium grammar",
-    "Mermaid registerExternalDiagrams() integration",
-    "Intermediate events",
-    "Timer / message / error markers",
-    "Deterministic pool/lane layout",
-    "Full Mermaid theme variable binding",
-    "Parser-enforced BPMN domain rules",
-    "Shape extraction from renderer",
-  ],
-  outOfScope: [
-    "BPMN XML import / export",
-    "Full BPMN 2.0 execution semantics",
-    "bpmn-js runtime dependency",
-    "Choreography diagrams",
-    "Conversation diagrams",
-    "Event subprocesses",
-    "Complex gateways",
-  ],
+  experimental: BPMN_EXPERIMENTAL.map(c => c.label),
+  deferred: BPMN_DEFERRED.map(c => c.label),
+  outOfScope: BPMN_OUT_OF_SCOPE.map(c => c.label),
 };
 
 interface MatrixColProps {
@@ -233,7 +207,7 @@ export default function Home() {
             Current support
           </h2>
           <p className="mt-1.5 text-sm text-muted-foreground max-w-2xl">
-            What the prototype renders today, what is experimental, what is on the roadmap, and what is explicitly outside scope.
+            What renders today (Mermaid-verified or React playground), what is experimental, what is deferred, and what is explicitly out of scope.
           </p>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
@@ -253,8 +227,8 @@ export default function Home() {
           />
           <MatrixCol
             icon={Clock}
-            label="Planned"
-            items={SUPPORT_MATRIX.planned}
+            label="Deferred"
+            items={SUPPORT_MATRIX.deferred}
             iconClass="text-primary/70"
             headerClass="bg-primary/5"
           />
