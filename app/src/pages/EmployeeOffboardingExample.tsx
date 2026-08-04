@@ -103,7 +103,7 @@ export default function EmployeeOffboardingExample() {
           </div>
         </div>
 
-        <ExamplePromptPanel steps={STEPS} downloadFilename="PROC-2025-108-prompts.txt" />
+        <ExamplePromptPanel steps={STEPS} downloadFilename="PROC-2025-108-prompts.txt" storageKey="bp-skill:prompts:employee-offboarding" />
       </section>
 
       {/* ── 15-Step Timeline ─────────────────────────────────── */}
