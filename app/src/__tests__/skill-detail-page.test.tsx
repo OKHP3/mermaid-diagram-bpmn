@@ -1,5 +1,5 @@
 // @vitest-environment happy-dom
-import { describe, it, expect, vi } from 'vitest';
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { render } from '@testing-library/react';
 import { fireEvent } from '@testing-library/dom';
 import SkillDetail from '@/pages/SkillDetail';
@@ -256,5 +256,56 @@ describe('SkillDetail — PNS lifecycle stage highlighted for each skill', () =>
       activePill,
       `SkillDetail for ${id}: expected no active pill when after=null`
     ).toBeUndefined();
+  });
+});
+
+// ─────────────────────────────────────────────────────────────────────────────
+// PnsLifecycleTracker — mobile scroll on mount
+// ─────────────────────────────────────────────────────────────────────────────
+// Verifies the useEffect fires scrollIntoView on the active mobile row element
+// when activeStatus is set, and does NOT fire when activeStatus is absent.
+// Also verifies the prefers-reduced-motion branch switches to instant scrolling.
+//
+// scrollIntoView is not natively implemented in happy-dom, so it is replaced
+// with a vi.fn() for the duration of each test and restored in afterEach.
+
+describe('PnsLifecycleTracker — mobile scroll on mount', () => {
+
+  let scrollIntoViewMock: ReturnType<typeof vi.fn>;
+  let originalScrollIntoView: typeof HTMLElement.prototype.scrollIntoView;
+
+  beforeEach(() => {
+    originalScrollIntoView = HTMLElement.prototype.scrollIntoView;
+    scrollIntoViewMock = vi.fn();
+    HTMLElement.prototype.scrollIntoView = scrollIntoViewMock;
+  });
+
+  afterEach(() => {
+    HTMLElement.prototype.scrollIntoView = originalScrollIntoView;
+    vi.restoreAllMocks();
+  });
+
+  it('calls scrollIntoView once with smooth scroll when activeStatus is set', () => {
+    // happy-dom's matchMedia returns matches: false by default → smooth
+    render(<PnsLifecycleTracker activeStatus="draft-intake" compact />);
+    expect(scrollIntoViewMock).toHaveBeenCalledOnce();
+    expect(scrollIntoViewMock).toHaveBeenCalledWith({ behavior: 'smooth', block: 'nearest' });
+  });
+
+  it('does not call scrollIntoView when activeStatus is not provided', () => {
+    render(<PnsLifecycleTracker compact />);
+    expect(scrollIntoViewMock).not.toHaveBeenCalled();
+  });
+
+  it('uses instant scroll behavior when prefers-reduced-motion is active', () => {
+    // Override matchMedia to signal reduced-motion preference
+    Object.defineProperty(window, 'matchMedia', {
+      writable: true,
+      configurable: true,
+      value: vi.fn().mockReturnValue({ matches: true }),
+    });
+    render(<PnsLifecycleTracker activeStatus="modeled" compact />);
+    expect(scrollIntoViewMock).toHaveBeenCalledOnce();
+    expect(scrollIntoViewMock).toHaveBeenCalledWith({ behavior: 'instant', block: 'nearest' });
   });
 });
