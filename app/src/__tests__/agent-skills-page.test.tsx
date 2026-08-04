@@ -534,6 +534,42 @@ describe('AgentSkills page — PNS section rows', () => {
       unmount();
     }
   });
+
+  // ── Pure-data pairing guard — no rendering required ────────────────────────
+  // Spot-checks that known title→standard pairs are still consistent in
+  // PNS_SECTIONS. If a future refactor reorders sections or swaps standards,
+  // this catches the mismatch at the registry level before the UI ever runs.
+
+  it('PNS_SECTIONS title→standard pairs are stable for known anchors (pure data, no render)', () => {
+    const byTitle = (t: string) => {
+      const s = PNS_SECTIONS.find(sec => sec.title === t);
+      if (!s) throw new Error(`PNS_SECTIONS: no section with title "${t}" — was it renamed or removed?`);
+      return s;
+    };
+
+    // Section 1 — Process Identification
+    expect(byTitle('Process Identification').standard).toContain('ISO 9001:2015 §4.4.1');
+    expect(byTitle('Process Identification').number).toBe(1);
+
+    // Section 2 — Scope & Boundaries
+    expect(byTitle('Scope & Boundaries').standard).toContain('BABOK v3 §6.1');
+    expect(byTitle('Scope & Boundaries').number).toBe(2);
+
+    // Section 5 — As-Is Activity Sequence (exercises BPM CBOK)
+    expect(byTitle('As-Is Activity Sequence').standard).toContain('BPM CBOK v4.0 KA 2');
+    expect(byTitle('As-Is Activity Sequence').number).toBe(5);
+
+    // Section 8 — Risks, Gaps & Exception Paths (exercises ISO 9001 §10)
+    expect(byTitle('Risks, Gaps & Exception Paths').standard).toContain('ISO 9001:2015 §10');
+    expect(byTitle('Risks, Gaps & Exception Paths').number).toBe(8);
+
+    // Section 13 — Document Control & Approvals (last section, anchors the count)
+    expect(byTitle('Document Control & Approvals').standard).toContain('ISO 9001:2015 §7.5.2');
+    expect(byTitle('Document Control & Approvals').number).toBe(13);
+
+    // Count guard — adding or removing a section without updating tests is visible
+    expect(PNS_SECTIONS).toHaveLength(13);
+  });
 });
 
 // ─────────────────────────────────────────────────────────────────────────────
