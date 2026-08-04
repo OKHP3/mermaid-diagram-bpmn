@@ -218,14 +218,13 @@ describe('SkillDetail — PNS lifecycle stage highlighted for each skill', () =>
 
   /**
    * Locate the pill div marked as active by the lifecycle tracker.
-   * The active pill is rendered with borderWidth: "1.5px" (inactive: "1px").
-   * Both desktop and mobile renderings are in the DOM; the desktop pills are
-   * the only ones with the rounded-full + border-width style combination.
+   * The active pill renders with aria-current="step"; inactive pills have no
+   * aria-current attribute.  This is stable across CSS refactors that move
+   * the visual active indicator (border-width, box-shadow, etc.).
    * Returns undefined when no stage is active.
    */
   function findActivePill(container: HTMLElement): HTMLElement | undefined {
-    return [...container.querySelectorAll('[class*="rounded-full"]')]
-      .find((el) => (el as HTMLElement).style.borderWidth === '1.5px') as HTMLElement | undefined;
+    return container.querySelector('[aria-current="step"]') as HTMLElement | undefined ?? undefined;
   }
 
   it.each(
@@ -240,7 +239,7 @@ describe('SkillDetail — PNS lifecycle stage highlighted for each skill', () =>
     const activePill = findActivePill(container);
     expect(
       activePill,
-      `SkillDetail for ${id}: expected an active pill (borderWidth 1.5px) for after="${after}"`
+      `SkillDetail for ${id}: expected an active pill (aria-current="step") for after="${after}"`
     ).not.toBeUndefined();
     expect(activePill!.textContent?.trim()).toBe(after);
   });

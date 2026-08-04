@@ -63,6 +63,7 @@ export function PnsLifecycleTracker({ withAnchors = false, activeStatus, compact
           const pillContent = (
             <div
               className={`px-2 py-1 rounded-full border ${pillTextClass} font-mono font-semibold text-center whitespace-nowrap transition-all duration-300`}
+              aria-current={isActive ? "step" : undefined}
               style={{
                 background: isActive
                   ? `hsl(var(--primary) / 0.22)`
