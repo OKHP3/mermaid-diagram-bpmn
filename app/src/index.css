@@ -306,6 +306,18 @@
     color: var(--okh-header-text);
   }
 
+  /* ---- Footer Replit brand link (official Replit orange) -------- */
+
+  .forge-footer-replit {
+    color: #F26207;
+    font-weight: 500;
+    transition: opacity 150ms;
+  }
+
+  .forge-footer-replit:hover {
+    opacity: 0.8;
+  }
+
   /* ---- Active-route underline indicator ------------------------- */
 
   .forge-nav-active-indicator {

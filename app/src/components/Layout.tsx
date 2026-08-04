@@ -16,9 +16,6 @@ const NAV_LINKS = [
 ] as const;
 
 const GITHUB_REPO = "https://github.com/OKHP3/mermaid-diagram-bpmn";
-const GITHUB_PAGES = "https://okhp3.github.io/mermaid-diagram-bpmn/";
-const DOCS_URL     = "https://github.com/OKHP3/mermaid-diagram-bpmn/tree/main/artifacts/mermaid-diagram-bpmn/docs";
-const OKH_SITE     = "https://overkillhill.com";
 
 function useDarkMode() {
   const [dark, setDark] = useState(() => {
@@ -171,63 +168,27 @@ export function Layout({ children }: { children: React.ReactNode }) {
       </main>
 
       {/* Forge footer */}
-      <footer className="forge-footer py-5 px-4">
-        <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-xs">
+      <footer className="forge-footer py-3 px-4">
+        <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-2 text-xs">
 
-          {/* Left — identity */}
+          {/* Left — copyright */}
           <span className="forge-footer-slug">
-            <code className="font-mono">mermaid-diagram-bpmn</code>
-            {" — "}contributor prototype · OverKill Hill P³
+            © {new Date().getFullYear()} OverKill Hill P³™. All rights reserved.
           </span>
 
-          {/* Right — links */}
-          <div className="flex flex-wrap items-center gap-x-4 gap-y-1.5">
+          {/* Right — built-with */}
+          <span className="forge-footer-slug">
+            Built with{" "}
             <a
-              href={GITHUB_REPO}
+              href="https://replit.com/refer/overkillhillp3/"
               target="_blank"
               rel="noopener noreferrer"
-              className="forge-footer-link flex items-center gap-1"
-              data-testid="link-github-footer"
+              className="forge-footer-replit"
+              data-testid="link-built-with-replit"
             >
-              <Github size={11} />
-              GitHub repo
+              Replit
             </a>
-            <a
-              href={GITHUB_PAGES}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="forge-footer-link"
-              data-testid="link-github-pages"
-            >
-              GitHub Pages
-            </a>
-            <a
-              href={DOCS_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="forge-footer-link"
-              data-testid="link-spec-docs"
-            >
-              Spec docs
-            </a>
-            <a
-              href="https://github.com/mermaid-js/mermaid/issues/7699"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="forge-footer-link"
-              data-testid="link-github-issue"
-            >
-              mermaid#7699
-            </a>
-            <a
-              href={OKH_SITE}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="forge-footer-link"
-            >
-              overkillhill.com
-            </a>
-          </div>
+          </span>
         </div>
       </footer>
     </div>
