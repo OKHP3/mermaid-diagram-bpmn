@@ -172,3 +172,86 @@ describe('ExamplePromptPanel — localStorage persistence', () => {
     expect(queryByRole('button', { name: /Reset to example/i })).toBeNull();
   });
 });
+
+// ── Download .txt ─────────────────────────────────────────────────────────────
+//
+// downloadTxt() builds the numbered phrase list, wraps it in a Blob, and
+// triggers an <a>.download. happy-dom supports Blob and URL.createObjectURL,
+// so we spy on createObjectURL to capture the Blob and read its text content.
+describe('ExamplePromptPanel — Download .txt', () => {
+  let capturedBlob: Blob | null = null;
+
+  beforeEach(() => {
+    capturedBlob = null;
+    localStorage.clear();
+    vi.spyOn(URL, 'createObjectURL').mockImplementation((obj: Blob | MediaSource) => {
+      capturedBlob = obj as Blob;
+      return 'blob:fake-url';
+    });
+    vi.spyOn(URL, 'revokeObjectURL').mockImplementation(() => {});
+  });
+
+  afterEach(() => {
+    localStorage.clear();
+    vi.restoreAllMocks();
+  });
+
+  it('produces a non-empty Blob when "Download .txt" is clicked', async () => {
+    const { getByRole } = renderOpen({ steps: STEPS, downloadFilename: 'test.txt' });
+    fireEvent.click(getByRole('button', { name: /Download .txt/i }));
+    expect(capturedBlob).not.toBeNull();
+    const text = await capturedBlob!.text();
+    expect(text.length).toBeGreaterThan(0);
+  });
+
+  it('uses text/plain MIME type', async () => {
+    const { getByRole } = renderOpen({ steps: STEPS, downloadFilename: 'test.txt' });
+    fireEvent.click(getByRole('button', { name: /Download .txt/i }));
+    expect(capturedBlob!.type).toBe('text/plain');
+  });
+
+  it('numbers each line with zero-padded two-digit prefix', async () => {
+    const { getByRole } = renderOpen({ steps: STEPS, downloadFilename: 'test.txt' });
+    fireEvent.click(getByRole('button', { name: /Download .txt/i }));
+    const text = await capturedBlob!.text();
+    expect(text).toContain('01. default phrase one');
+    expect(text).toContain('02. default phrase two');
+  });
+
+  it('separates phrases with a double newline', async () => {
+    const { getByRole } = renderOpen({ steps: STEPS, downloadFilename: 'test.txt' });
+    fireEvent.click(getByRole('button', { name: /Download .txt/i }));
+    const text = await capturedBlob!.text();
+    expect(text).toBe('01. default phrase one\n\n02. default phrase two');
+  });
+
+  it('reflects an edited phrase in the downloaded content', async () => {
+    const { getAllByRole, getByRole } = renderOpen({
+      steps: STEPS,
+      downloadFilename: 'test.txt',
+    });
+    const textareas = getAllByRole('textbox') as HTMLTextAreaElement[];
+    fireEvent.change(textareas[0], { target: { value: 'my custom phrase' } });
+    fireEvent.click(getByRole('button', { name: /Download .txt/i }));
+    const text = await capturedBlob!.text();
+    expect(text).toContain('01. my custom phrase');
+    expect(text).toContain('02. default phrase two');
+  });
+
+  it('does not contain the old phrase after an edit', async () => {
+    const { getAllByRole, getByRole } = renderOpen({
+      steps: STEPS,
+      downloadFilename: 'test.txt',
+    });
+    const textareas = getAllByRole('textbox') as HTMLTextAreaElement[];
+    fireEvent.change(textareas[0], { target: { value: 'replacement' } });
+    fireEvent.click(getByRole('button', { name: /Download .txt/i }));
+    const text = await capturedBlob!.text();
+    expect(text).not.toContain('default phrase one');
+  });
+
+  it('does not show "Download .txt" when no downloadFilename is supplied', () => {
+    const { queryByRole } = renderOpen({ steps: STEPS });
+    expect(queryByRole('button', { name: /Download .txt/i })).toBeNull();
+  });
+});
