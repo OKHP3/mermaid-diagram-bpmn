@@ -277,7 +277,7 @@ describe('PnsLifecycleTracker — mobile scroll on mount', () => {
   beforeEach(() => {
     originalScrollIntoView = HTMLElement.prototype.scrollIntoView;
     scrollIntoViewMock = vi.fn();
-    HTMLElement.prototype.scrollIntoView = scrollIntoViewMock;
+    HTMLElement.prototype.scrollIntoView = scrollIntoViewMock as unknown as typeof HTMLElement.prototype.scrollIntoView;
   });
 
   afterEach(() => {

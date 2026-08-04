@@ -109,6 +109,29 @@ All colors, stroke widths, and fills are expressed via `bpmn-*` CSS class names.
 
 ---
 
+## DEC-021: `docs/version-checklist.md` is authoritative for version numbering
+
+**Status:** Accepted (2026-08-04)
+
+`docs/version-checklist.md` is the single authoritative source for version
+numbers and completion criteria across this project. `app/docs/roadmap.md`
+previously maintained a conflicting v0.0.x / v0.1.0 scheme that diverged from
+the V0.x numbering in the checklist. As of this decision, `app/docs/roadmap.md`
+has been rewritten to reference V0.x numbers exclusively and defers all
+completion criteria to `docs/version-checklist.md`.
+
+**Rationale:** The two schemes described the same milestones under different
+labels with no cross-reference, making it impossible to determine which version
+a given commit belonged to. The checklist explicitly states "When this file and
+other files disagree, this file wins." Adopting that as a project-wide rule ends
+the ambiguity and prevents further drift.
+
+**How to apply:** When adding a new milestone to `app/docs/roadmap.md`, assign
+the V0.x number from `docs/version-checklist.md`. Do not introduce a parallel
+version scheme in roadmap, changelog, or UI copy.
+
+---
+
 ## DEC-020: `experimental` flag on BpmnExample entries
 
 **Status:** Accepted

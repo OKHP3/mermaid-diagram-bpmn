@@ -147,7 +147,7 @@ introduce flowchart metadata syntax as bpmn-beta syntax.
 The declared and checked-in stack is:
 
 - Node.js 24 compatibility line in Replit and GitHub Actions
-- pnpm 11, declared as `pnpm@11.16.0` in the root manifest
+- pnpm 10, declared as `pnpm@10.26.1` in the root manifest
 - TypeScript 7.0.2
 - React 19.2.7 and Vite 8.1.4
 - Tailwind CSS 4 through the Vite plugin

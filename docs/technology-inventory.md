@@ -29,7 +29,7 @@ production build and application test suite pass on the upgraded stack.
 | JavaScript                 | ESM JavaScript in 13 `.mjs` scripts plus browser output from TypeScript | ECMAScript target is intentionally `ES2022` | `package.json`, `app/package.json`, `tsconfig.base.json` |
 | TypeScript                 | 7.0.2 resolved, `~7.0.2` declared                                       | 7.0.2                                       | Root and workspace TypeScript compilation                |
 | Node.js                    | 24.11.1 on this workstation; Node 24 in Replit and CI                   | 24.18.0 LTS; 26.5.0 current                 | Node 24 is the selected compatibility line               |
-| pnpm                       | 11.7.0 locally; `pnpm@11.12.0` declared                                 | 11.12.0                                     | Workspace package manager and lockfile producer          |
+| pnpm                       | 10.26.1 (`pnpm@10.26.1` declared in root `package.json`)                | 11.12.0                                     | Workspace package manager and lockfile producer          |
 | React                      | 19.2.7                                                                  | 19.2.7                                      | Browser UI and SVG renderer                              |
 | React DOM                  | 19.2.7                                                                  | 19.2.7                                      | Browser mount in `app/src/main.tsx`                      |
 | Vite                       | 8.1.4                                                                   | 8.1.4                                       | Dev server and production bundler                        |
@@ -187,7 +187,7 @@ The repository now uses three layers of maintenance:
    a dependency is not covered by a package manifest, such as a runtime major
    version in `.replit` or an action tag.
 
-The root `package.json` now declares `packageManager: pnpm@11.12.0`. The deploy
+The root `package.json` declares `packageManager: pnpm@10.26.1`. The deploy
 workflow no longer hardcodes a separate pnpm major, so the workflow and local
 workspace use the same package-manager declaration.
 
