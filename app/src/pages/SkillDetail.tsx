@@ -6,6 +6,7 @@ import {
   SKILLS, PIPELINE_LAYERS, VARIABLE_FILES,
 } from "@/data/skills-registry";
 import { PnsBadge } from "@/components/skills/PnsBadge";
+import { PnsLifecycleTracker } from "@/components/skills/PnsLifecycleTracker";
 import { PNS_TRANSITIONS } from "@/data/pns-transitions";
 import { SkillMiniCard } from "@/components/skills/SkillMiniCard";
 import { SkillFrontmatterPreview } from "@/components/skills/SkillFrontmatterPreview";
@@ -66,6 +67,10 @@ export default function SkillDetail() {
     f.usedBy.includes(skill.id)
   );
 
+  // Outgoing PNS status this skill produces (null when skill doesn't advance the chain)
+  const pnsTransition = PNS_TRANSITIONS[skill.id];
+  const pnsActiveStatus = pnsTransition?.after ?? undefined;
+
   return (
     <div className="flex flex-col" style={{ "--layer-color": layerColor } as CSSProperties}>
 
@@ -113,9 +118,19 @@ export default function SkillDetail() {
           <h1 className="text-3xl sm:text-4xl font-bold text-foreground mb-4">
             {skill.displayName}
           </h1>
-          <p className="text-base text-muted-foreground leading-relaxed max-w-3xl">
+          <p className="text-base text-muted-foreground leading-relaxed max-w-3xl mb-8">
             {skill.description}
           </p>
+
+          {/* PNS lifecycle chain — compact read-only tracker with this skill's outgoing status highlighted */}
+          <div>
+            <p className="forge-eyebrow mb-3">PNS Lifecycle Position</p>
+            <PnsLifecycleTracker
+              withAnchors={false}
+              activeStatus={pnsActiveStatus}
+              compact
+            />
+          </div>
         </div>
       </div>
 

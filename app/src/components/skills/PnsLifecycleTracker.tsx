@@ -3,6 +3,8 @@ import { PNS_LIFECYCLE, SKILLS } from "@/data/skills-registry";
 interface PnsLifecycleTrackerProps {
   withAnchors?: boolean;
   activeStatus?: string;
+  /** Reduces pill and label font sizes for use in tighter spaces like page headers. */
+  compact?: boolean;
 }
 
 /**
@@ -29,7 +31,10 @@ function scrollToSkillRow(skillId: string) {
   });
 }
 
-export function PnsLifecycleTracker({ withAnchors = false, activeStatus }: PnsLifecycleTrackerProps) {
+export function PnsLifecycleTracker({ withAnchors = false, activeStatus, compact = false }: PnsLifecycleTrackerProps) {
+  const pillTextClass = compact ? "text-[9px]" : "text-[10px]";
+  const nameTextClass = compact ? "text-[8px]" : "text-[9px]";
+
   return (
     <div className="w-full">
       {/* Desktop: horizontal */}
@@ -42,7 +47,7 @@ export function PnsLifecycleTracker({ withAnchors = false, activeStatus }: PnsLi
 
           const pillContent = (
             <div
-              className="px-2 py-1 rounded-full border text-[10px] font-mono font-semibold text-center whitespace-nowrap transition-all duration-300"
+              className={`px-2 py-1 rounded-full border ${pillTextClass} font-mono font-semibold text-center whitespace-nowrap transition-all duration-300`}
               style={{
                 background: isActive
                   ? `hsl(var(--primary) / 0.22)`
@@ -87,7 +92,7 @@ export function PnsLifecycleTracker({ withAnchors = false, activeStatus }: PnsLi
                 )}
                 {/* Skill name below */}
                 <p
-                  className="mt-1.5 text-[9px] text-center leading-tight px-0.5 transition-colors duration-300"
+                  className={`mt-1.5 ${nameTextClass} text-center leading-tight px-0.5 transition-colors duration-300`}
                   style={{
                     color: isActive
                       ? "hsl(var(--primary))"
@@ -156,7 +161,7 @@ export function PnsLifecycleTracker({ withAnchors = false, activeStatus }: PnsLi
                     onClick={() => scrollToSkillRow(state.setBy)}
                   >
                     <code
-                      className="text-[10px] font-mono font-semibold transition-colors duration-300"
+                      className={`${pillTextClass} font-mono font-semibold transition-colors duration-300`}
                       style={{
                         color: isActive
                           ? "hsl(var(--primary))"
@@ -168,7 +173,7 @@ export function PnsLifecycleTracker({ withAnchors = false, activeStatus }: PnsLi
                   </button>
                 ) : (
                   <code
-                    className="text-[10px] font-mono font-semibold transition-colors duration-300"
+                    className={`${pillTextClass} font-mono font-semibold transition-colors duration-300`}
                     style={{
                       color: skill
                         ? "hsl(var(--primary))"
@@ -179,7 +184,7 @@ export function PnsLifecycleTracker({ withAnchors = false, activeStatus }: PnsLi
                   </code>
                 )}
                 <p
-                  className="text-[9px] mt-0.5 transition-colors duration-300"
+                  className={`${nameTextClass} mt-0.5 transition-colors duration-300`}
                   style={{
                     color: isActive
                       ? "hsl(var(--primary))"
