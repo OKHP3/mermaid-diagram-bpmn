@@ -2,7 +2,7 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, fireEvent } from '@testing-library/react';
 import { BpmnRenderer } from '../bpmn-renderer';
-import { LIGHT_THEME } from '../bpmn-styles';
+import { LIGHT_THEME, MERMAID_FALLBACK_THEME, buildMermaidTheme, getStyles } from '../bpmn-styles';
 
 const mockNavigate = vi.hoisted(() => vi.fn());
 
@@ -275,4 +275,56 @@ describe('BpmnRenderer — LIGHT_THEME color values in SVG style block', () => {
     expect(style.textContent).not.toContain('#111827'); // fallback primaryColor / mainBkg
     expect(style.textContent).not.toContain('#c46a2c'); // fallback lineColor / nodeBorder
   });
+});
+// ---------------------------------------------------------------------------
+// getStyles / buildMermaidTheme — Mermaid export path stays on resolved values
+// ---------------------------------------------------------------------------
+
+describe('getStyles — Mermaid export path uses resolved hex values', () => {
+
+  it('getStyles(buildMermaidTheme()) with representative themeVariables contains no hsl(var(...)) patterns', () => {
+    // Mermaid passes resolved themeVariables (concrete hex values, not CSS custom properties).
+    // The Mermaid export path must produce concrete colours so that exported SVGs do not
+    // contain unresolved var() tokens.
+    const representativeVars: Record<string, string> = {
+      primaryColor:  '#1f2937',
+      lineColor:     '#6b7280',
+      mainBkg:       '#1f2937',
+      nodeBorder:    '#6b7280',
+      clusterBkg:    '#111827',
+      textColor:     '#f9fafb',
+    };
+    const styles = getStyles(buildMermaidTheme(representativeVars));
+    expect(styles).not.toMatch(/hsl\(var\(/);
+  });
+
+  it('getStyles(buildMermaidTheme()) with representative themeVariables contains at least one hex value', () => {
+    const representativeVars: Record<string, string> = {
+      primaryColor:  '#1f2937',
+      lineColor:     '#6b7280',
+      mainBkg:       '#1f2937',
+      nodeBorder:    '#6b7280',
+      clusterBkg:    '#111827',
+      textColor:     '#f9fafb',
+    };
+    const styles = getStyles(buildMermaidTheme(representativeVars));
+    expect(styles).toMatch(/#[0-9a-fA-F]{3,6}/);
+  });
+
+  it('getStyles(buildMermaidTheme()) with no args falls back to MERMAID_FALLBACK_THEME hex values', () => {
+    // Called with no themeVariables — every slot falls back to MERMAID_FALLBACK_THEME.
+    const styles = getStyles(buildMermaidTheme());
+    expect(styles).toContain(MERMAID_FALLBACK_THEME.lineColor);   // '#c46a2c'
+    expect(styles).toContain(MERMAID_FALLBACK_THEME.textColor);   // '#e5e7eb'
+    expect(styles).not.toMatch(/hsl\(var\(/);
+  });
+
+  it('getStyles(LIGHT_THEME) contains hsl(var(...)) patterns — confirms LIGHT_THEME is CSS-variable-based', () => {
+    // This is the inverse guard: LIGHT_THEME must stay on CSS custom properties so it
+    // resolves correctly inside the browser.  If this test fails, LIGHT_THEME was changed
+    // to use concrete values, which would break the React renderer's theming.
+    const styles = getStyles(LIGHT_THEME);
+    expect(styles).toMatch(/hsl\(var\(/);
+  });
+
 });
