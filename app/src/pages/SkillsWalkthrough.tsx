@@ -5,6 +5,7 @@ import { ArrowRight, ArrowDown } from "lucide-react";
 import { BpmnRenderer } from "@/lib/bpmn-renderer";
 import { SKILLS, PIPELINE_LAYERS } from "@/data/skills-registry";
 import { PNS_TRANSITIONS } from "@/data/pns-transitions";
+import { WORKED_EXAMPLES } from "@/data/worked-examples";
 import { PnsLifecycleTracker } from "@/components/skills/PnsLifecycleTracker";
 import { PnsBadge } from "@/components/skills/PnsBadge";
 
@@ -168,12 +169,11 @@ export default function SkillsWalkthrough() {
           <a href="#walkthrough-table" className="forge-btn-outline inline-flex items-center gap-2">
             Jump to Walkthrough Table <ArrowDown size={14} />
           </a>
-          <Link href="/walkthrough/purchase-approval" className="forge-btn-outline inline-flex items-center gap-2">
-            Worked Example (Procurement) <ArrowRight size={14} />
-          </Link>
-          <Link href="/walkthrough/employee-offboarding" className="forge-btn-outline inline-flex items-center gap-2">
-            Worked Example (HR) <ArrowRight size={14} />
-          </Link>
+          {WORKED_EXAMPLES.map((ex) => (
+            <Link key={ex.slug} href={ex.path} className="forge-btn-outline inline-flex items-center gap-2">
+              {ex.title} <ArrowRight size={14} />
+            </Link>
+          ))}
         </div>
       </section>
 
