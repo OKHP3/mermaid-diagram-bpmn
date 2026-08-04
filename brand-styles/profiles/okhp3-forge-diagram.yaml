@@ -2,7 +2,7 @@ schema_version: "1.0"
 style:
   id: okhp3-forge-diagram
   display_name: OKH Forge Diagram Surface
-  version: "1.0.0"
+  version: "1.0.1"
   status: active
   purpose: >
     The always-dark diagram and code-panel sub-system of the OKH Forge UI.
@@ -13,7 +13,7 @@ style:
   owner_context: owned
   tags: [dark, diagram, mermaid, bpmn, code-panel, forge, okhp3, always-dark]
   created_on: "2026-08-03"
-  updated_on: "2026-08-03"
+  updated_on: "2026-08-04"
 
   parent_profile: okhp3-forge
   parent_notes: >
@@ -192,14 +192,15 @@ style:
             Applied to .forge-code-panel via --app-font-mono. Used for the
             DSL source editor alongside the diagram output.
         node-label:
-          family: >
-            Mermaid default — inherits from Mermaid's fontFamily theme var.
-            Recommend overriding to 'DM Sans' for Forge visual consistency.
+          family: "'DM Sans'"
+          fallback: [system-ui, sans-serif]
           notes: >
-            Mermaid renders node labels using its own font stack unless
-            fontFamily is set in themeVariables. The Forge app does not
-            currently override this, so node labels render in Mermaid's
-            default sans-serif.
+            Applied via .bpmn-text and .bpmn-text-label CSS classes injected
+            into the SVG <defs> block by getStyles(). The font-family value is
+            var(--app-font-sans, 'DM Sans', system-ui, sans-serif) — the custom
+            property resolves to the full DM Sans stack in inline SVG contexts;
+            the explicit 'DM Sans' fallback ensures the same font is used when
+            CSS custom properties are unavailable (e.g. external Mermaid renders).
 
     geometry:
       dot-grid:

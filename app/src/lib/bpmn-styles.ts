@@ -32,9 +32,9 @@ export function getStyles(options: BpmnThemeOptions): string {
     .bpmn-arrow { fill: ${options.lineColor}; }
     .bpmn-arrow-open { fill: none; stroke: ${options.lineColor}; stroke-width: 1; }
     .bpmn-slash { stroke: ${options.lineColor}; stroke-width: 1.5; }
-    .bpmn-text { fill: ${options.textColor}; font-family: var(--app-font-sans, sans-serif); }
-    .bpmn-text-muted { fill: ${options.lineColor}; opacity: 0.7; font-family: var(--app-font-mono, monospace); }
-    .bpmn-text-label { fill: ${options.textColor}; font-family: var(--app-font-sans, sans-serif); font-weight: 600; }
+    .bpmn-text { fill: ${options.textColor}; font-family: var(--app-font-sans, 'DM Sans', system-ui, sans-serif); }
+    .bpmn-text-muted { fill: ${options.lineColor}; opacity: 0.7; font-family: var(--app-font-mono, 'JetBrains Mono', monospace); }
+    .bpmn-text-label { fill: ${options.textColor}; font-family: var(--app-font-sans, 'DM Sans', system-ui, sans-serif); font-weight: 600; }
   `;
 }
 
