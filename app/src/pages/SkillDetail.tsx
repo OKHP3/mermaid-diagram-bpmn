@@ -12,6 +12,7 @@ import { SkillMiniCard } from "@/components/skills/SkillMiniCard";
 import { SkillFrontmatterPreview } from "@/components/skills/SkillFrontmatterPreview";
 import { InstallTabs } from "@/components/skills/InstallTabs";
 import { DownloadButton } from "@/components/skills/DownloadButton";
+import { WORKED_EXAMPLES } from "@/data/worked-examples";
 
 export default function SkillDetail() {
   const params = useParams<{ skillId: string }>();
@@ -65,6 +66,10 @@ export default function SkillDetail() {
 
   const usedContextFiles = VARIABLE_FILES.filter((f) =>
     f.usedBy.includes(skill.id)
+  );
+
+  const workedExamplesForSkill = WORKED_EXAMPLES.filter((ex) =>
+    ex.stepSkillIds.includes(skill.id)
   );
 
   // Outgoing PNS status this skill produces (null when skill doesn't advance the chain)
@@ -354,6 +359,40 @@ export default function SkillDetail() {
                     Variable Layer ↗
                   </Link>
                 </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ─── See it in action ────────────────────────────────── */}
+      {workedExamplesForSkill.length > 0 && (
+        <div className="border-t border-border bg-card/40">
+          <div className="max-w-7xl mx-auto w-full px-4 sm:px-6 py-10">
+            <h2 className="text-lg font-bold text-foreground mb-1">See it in Action</h2>
+            <p className="text-xs text-muted-foreground mb-5">
+              These worked examples trace every BP-SKILL step end-to-end. Each link jumps
+              directly to the step for this skill.
+            </p>
+            <div className="flex flex-col gap-3">
+              {workedExamplesForSkill.map((ex) => (
+                <a
+                  key={ex.slug}
+                  href={`${ex.path}#step-${skill.id}`}
+                  className="flex items-center justify-between px-4 py-3.5 rounded-xl border border-border bg-card hover:border-primary/40 hover:bg-primary/5 transition-colors group"
+                >
+                  <div>
+                    <p className="text-sm font-semibold text-foreground group-hover:text-primary transition-colors">
+                      {ex.title}
+                    </p>
+                    <p className="text-[10px] font-mono text-muted-foreground mt-0.5">
+                      Worked example · {ex.stepSkillIds.length} skills traced end-to-end
+                    </p>
+                  </div>
+                  <span className="text-xs text-primary font-semibold shrink-0 ml-4">
+                    Jump to step →
+                  </span>
+                </a>
               ))}
             </div>
           </div>

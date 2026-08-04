@@ -126,7 +126,7 @@ export default function EmployeeOffboardingExample() {
               if (!skill) return null;
               const layerColor = LAYER_COLOR[skill.layer] ?? "#888";
               return (
-                <div key={step.skillId} className="relative flex gap-4 sm:gap-6 pb-6 last:pb-0">
+                <div key={step.skillId} id={`step-${step.skillId}`} className="relative flex gap-4 sm:gap-6 pb-6 last:pb-0">
                   {/* Step circle */}
                   <div className="shrink-0 flex flex-col items-center z-10">
                     <div
