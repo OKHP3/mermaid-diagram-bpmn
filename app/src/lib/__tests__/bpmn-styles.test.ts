@@ -192,3 +192,31 @@ describe('buildMermaidTheme', () => {
     expect(theme.textColor).toBe('#666');
   });
 });
+// ── .bpmn-text-muted — fill must be lineColor, not textColor ─────────────────
+
+describe('getStyles — .bpmn-text-muted uses lineColor, not textColor', () => {
+  // CONCRETE_THEME has lineColor '#aabbcc' and textColor '#444444'.
+  // They are intentionally different so we can assert which one is used.
+  const css = getStyles(CONCRETE_THEME);
+
+  // Extract just the .bpmn-text-muted rule to avoid false positives from
+  // other rules that also reference lineColor.
+  const mutedRule = css.match(/\.bpmn-text-muted\s*\{[^}]+\}/)?.[0] ?? '';
+
+  it('.bpmn-text-muted rule is present', () => {
+    expect(mutedRule).not.toBe('');
+  });
+
+  it('.bpmn-text-muted fill is lineColor (#aabbcc), not textColor (#444444)', () => {
+    expect(mutedRule).toContain(`fill: ${CONCRETE_THEME.lineColor}`);
+    expect(mutedRule).not.toContain(`fill: ${CONCRETE_THEME.textColor}`);
+  });
+
+  it('.bpmn-text-muted contains opacity', () => {
+    expect(mutedRule).toContain('opacity');
+  });
+
+  it('.bpmn-text-muted opacity value is 0.7', () => {
+    expect(mutedRule).toContain('opacity: 0.7');
+  });
+});
