@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef, type CSSProperties } from "react";
 import { Link } from "wouter";
-import { ArrowLeft, ArrowRight, CheckCircle2, ChevronDown, Copy, Check } from "lucide-react";
+import { ArrowLeft, ArrowRight, CheckCircle2, ChevronDown, Copy, Check, Download } from "lucide-react";
 import { BpmnRenderer } from "@/lib/bpmn-renderer";
 import { SKILLS, PIPELINE_LAYERS } from "@/data/skills-registry";
 import { PURCHASE_APPROVAL_STEPS as STEPS } from "@/data/purchase-approval-steps";
@@ -98,6 +98,19 @@ function PromptSequencePanel() {
     timerRef.current = setTimeout(() => setCopied(false), 2000);
   }
 
+  function downloadTxt() {
+    const text = phrases
+      .map((phrase, i) => `${String(i + 1).padStart(2, "0")}. ${phrase}`)
+      .join("\n\n");
+    const blob = new Blob([text], { type: "text/plain" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "PROC-2024-042-prompts.txt";
+    a.click();
+    URL.revokeObjectURL(url);
+  }
+
   return (
     <div className="rounded-xl border border-border bg-card max-w-3xl mt-6 overflow-hidden">
       {/* Header / toggle */}
@@ -129,25 +142,39 @@ function PromptSequencePanel() {
             <p className="text-[10px] text-muted-foreground leading-tight max-w-sm">
               Edit trigger phrases to match your process name, then copy the full sequence.
             </p>
-            <button
-              type="button"
-              onClick={copyAll}
-              className="inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-lg shrink-0 ml-4 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/50"
-              style={{
-                background: copied
-                  ? "hsl(var(--primary) / 0.12)"
-                  : "hsl(var(--primary))",
-                color: copied ? "hsl(var(--primary))" : "#fff",
-                borderColor: copied ? "hsl(var(--primary) / 0.4)" : "transparent",
-                border: copied ? "1px solid" : "1px solid transparent",
-              }}
-            >
-              {copied ? (
-                <><Check size={12} /> Copied!</>
-              ) : (
-                <><Copy size={12} /> Copy all</>
-              )}
-            </button>
+            <div className="flex items-center gap-2 shrink-0 ml-4">
+              <button
+                type="button"
+                onClick={downloadTxt}
+                className="inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-lg transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/50"
+                style={{
+                  background: "hsl(var(--muted))",
+                  color: "hsl(var(--foreground))",
+                  border: "1px solid hsl(var(--border))",
+                }}
+              >
+                <Download size={12} /> Download .txt
+              </button>
+              <button
+                type="button"
+                onClick={copyAll}
+                className="inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-lg transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/50"
+                style={{
+                  background: copied
+                    ? "hsl(var(--primary) / 0.12)"
+                    : "hsl(var(--primary))",
+                  color: copied ? "hsl(var(--primary))" : "#fff",
+                  borderColor: copied ? "hsl(var(--primary) / 0.4)" : "transparent",
+                  border: copied ? "1px solid" : "1px solid transparent",
+                }}
+              >
+                {copied ? (
+                  <><Check size={12} /> Copied!</>
+                ) : (
+                  <><Copy size={12} /> Copy all</>
+                )}
+              </button>
+            </div>
           </div>
 
           {/* Phrase list */}
