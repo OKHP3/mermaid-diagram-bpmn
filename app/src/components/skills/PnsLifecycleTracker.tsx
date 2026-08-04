@@ -1,3 +1,4 @@
+import { useEffect, useRef } from "react";
 import { PNS_LIFECYCLE, SKILLS } from "@/data/skills-registry";
 
 interface PnsLifecycleTrackerProps {
@@ -34,6 +35,20 @@ function scrollToSkillRow(skillId: string) {
 export function PnsLifecycleTracker({ withAnchors = false, activeStatus, compact = false }: PnsLifecycleTrackerProps) {
   const pillTextClass = compact ? "text-[9px]" : "text-[10px]";
   const nameTextClass = compact ? "text-[8px]" : "text-[9px]";
+
+  // Mobile: scroll the active stage into view on mount so practitioners don't
+  // have to hunt when the active stage is near the bottom of the vertical list.
+  const activeMobileRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    if (!activeStatus || !activeMobileRef.current) return;
+    const prefersReducedMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)"
+    ).matches;
+    activeMobileRef.current.scrollIntoView({
+      behavior: prefersReducedMotion ? "instant" : "smooth",
+      block: "nearest",
+    });
+  }, [activeStatus]);
 
   return (
     <div className="w-full">
@@ -126,6 +141,7 @@ export function PnsLifecycleTracker({ withAnchors = false, activeStatus, compact
           return (
             <div
               key={state.status}
+              ref={isActive ? activeMobileRef : undefined}
               className="flex items-start gap-3 transition-opacity duration-300"
               style={{ opacity: activeStatus && !isActive ? 0.45 : 1 }}
             >
