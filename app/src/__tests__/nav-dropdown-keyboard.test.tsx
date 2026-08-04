@@ -1,0 +1,255 @@
+// @vitest-environment happy-dom
+/**
+ * Nav dropdown keyboard navigation
+ *
+ * Covers: open → first-item focus, arrow keys, Escape (return focus), Tab (close only).
+ * The Layout component is rendered in isolation; wouter and usePageTracking are mocked.
+ */
+import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { render, fireEvent, act } from '@testing-library/react';
+import { Layout } from '@/components/Layout';
+
+// ── Mocks ─────────────────────────────────────────────────────────────────────
+
+vi.mock('wouter', () => ({
+  Link: ({
+    href,
+    children,
+    ref: _ref,
+    ...rest
+  }: React.AnchorHTMLAttributes<HTMLAnchorElement> & { href: string; ref?: unknown }) => (
+    <a href={href} {...rest} ref={_ref as React.Ref<HTMLAnchorElement>}>
+      {children}
+    </a>
+  ),
+  useLocation: () => ['/', vi.fn()],
+}));
+
+vi.mock('@/hooks/usePageTracking', () => ({ usePageTracking: () => {} }));
+
+// ── Helpers ───────────────────────────────────────────────────────────────────
+
+function renderLayout() {
+  return render(<Layout><div>content</div></Layout>);
+}
+
+function getDropdownTrigger(
+  container: HTMLElement,
+  testId: 'nav-reference-dropdown' | 'nav-more-dropdown',
+) {
+  const el = container.querySelector(`[data-testid="${testId}"]`);
+  if (!el) throw new Error(`Trigger "${testId}" not found`);
+  return el as HTMLButtonElement;
+}
+
+function getDropdownItems(container: HTMLElement) {
+  const menu = container.querySelector('[role="menu"]');
+  if (!menu) throw new Error('role="menu" panel not found — is the dropdown open?');
+  return Array.from(menu.querySelectorAll('[role="menuitem"]')) as HTMLAnchorElement[];
+}
+
+// ── Tests ─────────────────────────────────────────────────────────────────────
+
+describe('NavDropdown — keyboard navigation', () => {
+
+  describe('Reference ▾ dropdown', () => {
+
+    it('opens the panel and moves focus to the first item on click', () => {
+      const { container } = renderLayout();
+      const trigger = getDropdownTrigger(container, 'nav-reference-dropdown');
+
+      act(() => { fireEvent.click(trigger); });
+
+      const items = getDropdownItems(container);
+      expect(items.length).toBeGreaterThan(0);
+      expect(document.activeElement).toBe(items[0]);
+    });
+
+    it('ArrowDown moves focus from first to second item', () => {
+      const { container } = renderLayout();
+      const trigger = getDropdownTrigger(container, 'nav-reference-dropdown');
+
+      act(() => { fireEvent.click(trigger); });
+      const items = getDropdownItems(container);
+
+      act(() => { fireEvent.keyDown(items[0], { key: 'ArrowDown' }); });
+      expect(document.activeElement).toBe(items[1]);
+    });
+
+    it('ArrowDown wraps from last item back to first', () => {
+      const { container } = renderLayout();
+      const trigger = getDropdownTrigger(container, 'nav-reference-dropdown');
+
+      act(() => { fireEvent.click(trigger); });
+      const items = getDropdownItems(container);
+      const last = items[items.length - 1];
+
+      act(() => { fireEvent.keyDown(last, { key: 'ArrowDown' }); });
+      expect(document.activeElement).toBe(items[0]);
+    });
+
+    it('ArrowUp moves focus from second to first item', () => {
+      const { container } = renderLayout();
+      const trigger = getDropdownTrigger(container, 'nav-reference-dropdown');
+
+      act(() => { fireEvent.click(trigger); });
+      const items = getDropdownItems(container);
+
+      // Manually focus second item
+      act(() => { items[1].focus(); });
+      act(() => { fireEvent.keyDown(items[1], { key: 'ArrowUp' }); });
+      expect(document.activeElement).toBe(items[0]);
+    });
+
+    it('ArrowUp wraps from first item to last', () => {
+      const { container } = renderLayout();
+      const trigger = getDropdownTrigger(container, 'nav-reference-dropdown');
+
+      act(() => { fireEvent.click(trigger); });
+      const items = getDropdownItems(container);
+
+      act(() => { fireEvent.keyDown(items[0], { key: 'ArrowUp' }); });
+      expect(document.activeElement).toBe(items[items.length - 1]);
+    });
+
+    it('Escape closes the panel and returns focus to the trigger', () => {
+      const { container } = renderLayout();
+      const trigger = getDropdownTrigger(container, 'nav-reference-dropdown');
+
+      act(() => { fireEvent.click(trigger); });
+      const items = getDropdownItems(container);
+
+      act(() => { fireEvent.keyDown(items[0], { key: 'Escape' }); });
+
+      // Panel should be gone
+      expect(container.querySelector('[role="menu"]')).toBeNull();
+      // Focus should be back on the trigger
+      expect(document.activeElement).toBe(trigger);
+    });
+
+    it('Tab closes the panel without forcing focus back to trigger', () => {
+      const { container } = renderLayout();
+      const trigger = getDropdownTrigger(container, 'nav-reference-dropdown');
+
+      act(() => { fireEvent.click(trigger); });
+      const items = getDropdownItems(container);
+
+      act(() => { fireEvent.keyDown(items[0], { key: 'Tab' }); });
+
+      expect(container.querySelector('[role="menu"]')).toBeNull();
+      // Focus is NOT forced back to trigger (Tab lets browser advance naturally)
+      expect(document.activeElement).not.toBe(trigger);
+    });
+
+    it('open → ArrowDown → select via Enter navigates correctly', () => {
+      const { container } = renderLayout();
+      const trigger = getDropdownTrigger(container, 'nav-reference-dropdown');
+
+      act(() => { fireEvent.click(trigger); });
+      const items = getDropdownItems(container);
+
+      // Move to second item
+      act(() => { fireEvent.keyDown(items[0], { key: 'ArrowDown' }); });
+      expect(document.activeElement).toBe(items[1]);
+
+      // Activate via click (simulates Enter on a link)
+      act(() => { fireEvent.click(items[1]); });
+
+      // Panel closes after selection
+      expect(container.querySelector('[role="menu"]')).toBeNull();
+    });
+  });
+
+  describe('More ▾ dropdown', () => {
+
+    it('opens the panel and moves focus to the first item', () => {
+      const { container } = renderLayout();
+      const trigger = getDropdownTrigger(container, 'nav-more-dropdown');
+
+      act(() => { fireEvent.click(trigger); });
+
+      const items = getDropdownItems(container);
+      expect(items.length).toBeGreaterThan(0);
+      expect(document.activeElement).toBe(items[0]);
+    });
+
+    it('Escape closes the More panel and returns focus to its trigger', () => {
+      const { container } = renderLayout();
+      const trigger = getDropdownTrigger(container, 'nav-more-dropdown');
+
+      act(() => { fireEvent.click(trigger); });
+      const items = getDropdownItems(container);
+
+      act(() => { fireEvent.keyDown(items[0], { key: 'Escape' }); });
+
+      expect(container.querySelector('[role="menu"]')).toBeNull();
+      expect(document.activeElement).toBe(trigger);
+    });
+  });
+
+  describe('Trigger button keyboard shortcuts', () => {
+
+    it('ArrowDown on the trigger opens the dropdown and focuses the first item', () => {
+      const { container } = renderLayout();
+      const trigger = getDropdownTrigger(container, 'nav-reference-dropdown');
+
+      act(() => { trigger.focus(); });
+      act(() => { fireEvent.keyDown(trigger, { key: 'ArrowDown' }); });
+
+      const items = getDropdownItems(container);
+      expect(items.length).toBeGreaterThan(0);
+      expect(document.activeElement).toBe(items[0]);
+    });
+
+    it('Escape on a closed trigger does nothing visible', () => {
+      const { container } = renderLayout();
+      const trigger = getDropdownTrigger(container, 'nav-reference-dropdown');
+
+      act(() => { trigger.focus(); });
+      act(() => { fireEvent.keyDown(trigger, { key: 'Escape' }); });
+
+      expect(container.querySelector('[role="menu"]')).toBeNull();
+    });
+  });
+
+  describe('ARIA attributes', () => {
+
+    it('trigger has aria-expanded="false" when closed', () => {
+      const { container } = renderLayout();
+      const trigger = getDropdownTrigger(container, 'nav-reference-dropdown');
+      expect(trigger.getAttribute('aria-expanded')).toBe('false');
+    });
+
+    it('trigger has aria-expanded="true" when open', () => {
+      const { container } = renderLayout();
+      const trigger = getDropdownTrigger(container, 'nav-reference-dropdown');
+
+      act(() => { fireEvent.click(trigger); });
+      expect(trigger.getAttribute('aria-expanded')).toBe('true');
+    });
+
+    it('trigger has aria-haspopup="true"', () => {
+      const { container } = renderLayout();
+      const trigger = getDropdownTrigger(container, 'nav-reference-dropdown');
+      expect(trigger.getAttribute('aria-haspopup')).toBe('true');
+    });
+
+    it('open panel has role="menu"', () => {
+      const { container } = renderLayout();
+      const trigger = getDropdownTrigger(container, 'nav-reference-dropdown');
+
+      act(() => { fireEvent.click(trigger); });
+      expect(container.querySelector('[role="menu"]')).not.toBeNull();
+    });
+
+    it('each item in the open panel has role="menuitem"', () => {
+      const { container } = renderLayout();
+      const trigger = getDropdownTrigger(container, 'nav-reference-dropdown');
+
+      act(() => { fireEvent.click(trigger); });
+      const items = getDropdownItems(container);
+      expect(items.length).toBeGreaterThan(0);
+      items.forEach(item => expect(item.getAttribute('role')).toBe('menuitem'));
+    });
+  });
+});

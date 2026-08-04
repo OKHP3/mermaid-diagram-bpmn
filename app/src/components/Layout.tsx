@@ -58,6 +58,8 @@ function NavDropdown({
 }) {
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
+  const triggerRef = useRef<HTMLButtonElement>(null);
+  const itemRefs = useRef<(HTMLAnchorElement | null)[]>([]);
 
   // Close on outside click
   useEffect(() => {
@@ -68,21 +70,53 @@ function NavDropdown({
     return () => document.removeEventListener("mousedown", handle);
   }, []);
 
-  // Close on Escape
+  // Focus first item when panel opens
   useEffect(() => {
-    function handle(e: KeyboardEvent) {
-      if (e.key === "Escape") setOpen(false);
+    if (open) {
+      itemRefs.current[0]?.focus();
     }
-    document.addEventListener("keydown", handle);
-    return () => document.removeEventListener("keydown", handle);
-  }, []);
+  }, [open]);
+
+  function close(returnFocus = true) {
+    setOpen(false);
+    if (returnFocus) triggerRef.current?.focus();
+  }
+
+  function handleTriggerKeyDown(e: React.KeyboardEvent<HTMLButtonElement>) {
+    if (e.key === "ArrowDown" || e.key === "Enter" || e.key === " ") {
+      e.preventDefault();
+      setOpen(true);
+    } else if (e.key === "Escape") {
+      close(true);
+    }
+  }
+
+  function handleItemKeyDown(e: React.KeyboardEvent<HTMLAnchorElement>, idx: number) {
+    if (e.key === "ArrowDown") {
+      e.preventDefault();
+      const next = (idx + 1) % links.length;
+      itemRefs.current[next]?.focus();
+    } else if (e.key === "ArrowUp") {
+      e.preventDefault();
+      const prev = (idx - 1 + links.length) % links.length;
+      itemRefs.current[prev]?.focus();
+    } else if (e.key === "Escape") {
+      e.preventDefault();
+      close(true);
+    } else if (e.key === "Tab") {
+      // Let Tab advance naturally; just close the panel without stealing focus
+      close(false);
+    }
+  }
 
   const groupActive = links.some(l => isLinkActive(l.href, location));
 
   return (
     <div ref={ref} className="relative">
       <button
+        ref={triggerRef}
         onClick={() => setOpen(o => !o)}
+        onKeyDown={handleTriggerKeyDown}
         className={`relative flex items-center gap-1 px-3 py-1.5 rounded text-sm forge-nav-link${groupActive ? " forge-nav-link--active" : ""}`}
         aria-expanded={open}
         aria-haspopup="true"
@@ -99,14 +133,20 @@ function NavDropdown({
       </button>
 
       {open && (
-        <div className="forge-nav-dropdown absolute top-full left-0 mt-1 py-1 min-w-[168px] rounded-md z-50">
-          {links.map(link => (
+        <div
+          className="forge-nav-dropdown absolute top-full left-0 mt-1 py-1 min-w-[168px] rounded-md z-50"
+          role="menu"
+        >
+          {links.map((link, idx) => (
             <Link
               key={link.href}
               href={link.href}
-              onClick={() => { setOpen(false); onNavigate(); }}
+              ref={(el: HTMLAnchorElement | null) => { itemRefs.current[idx] = el; }}
+              onClick={() => { close(false); onNavigate(); }}
+              onKeyDown={(e: React.KeyboardEvent<HTMLAnchorElement>) => handleItemKeyDown(e, idx)}
               className={`forge-nav-dropdown-item block px-4 py-2 text-sm${isLinkActive(link.href, location) ? " forge-nav-dropdown-item--active" : ""}`}
               data-testid={`nav-${link.label.toLowerCase().replace(/\s+/g, "-")}`}
+              role="menuitem"
             >
               {link.label}
             </Link>
