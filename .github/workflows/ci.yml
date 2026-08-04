@@ -42,5 +42,8 @@ jobs:
       - name: Check generated data files are up to date (fix locally with 'pnpm run regen:generated')
         run: pnpm run check:generated
 
+      - name: Validate skill frontmatter (fix with 'pnpm run skill:validate')
+        run: pnpm run skill:validate
+
       - name: Check Forge brand tokens match profile (no drift)
         run: pnpm run brand:check
