@@ -1,21 +1,123 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Link, useLocation } from "wouter";
-import { Moon, Sun, Menu, X, Github } from "lucide-react";
+import { Moon, Sun, Menu, X, Github, ChevronDown } from "lucide-react";
 import { SKILLS } from "../data/skills-registry";
 import { usePageTracking } from "../hooks/usePageTracking";
 
-const NAV_LINKS = [
-  { href: "/", label: "Home" },
-  { href: "/playground", label: "Playground" },
-  { href: "/dsl", label: "DSL Reference" },
-  { href: "/architecture", label: "Architecture" },
-  { href: "/roadmap", label: "Roadmap" },
-  { href: "/about", label: "About" },
-  { href: "/skills", label: "Agent Skills" },
+// ── Nav structure ────────────────────────────────────────────────────────────
+
+const FLAT_NAV = [
+  { href: "/",           label: "Home"         },
+  { href: "/playground", label: "Playground"   },
+  { href: "/skills",     label: "Agent Skills" },
+] as const;
+
+const REFERENCE_LINKS = [
+  { href: "/dsl",          label: "DSL Reference" },
+  { href: "/architecture", label: "Architecture"  },
+] as const;
+
+const MORE_LINKS = [
   { href: "/walkthrough", label: "Walkthrough" },
+  { href: "/roadmap",     label: "Roadmap"     },
+  { href: "/about",       label: "About"       },
+] as const;
+
+const ALL_NAV = [
+  ...FLAT_NAV,
+  ...REFERENCE_LINKS,
+  ...MORE_LINKS,
 ] as const;
 
 const GITHUB_REPO = "https://github.com/OKHP3/mermaid-diagram-bpmn";
+
+// ── Helpers ──────────────────────────────────────────────────────────────────
+
+function isLinkActive(href: string, location: string) {
+  return href === "/skills"
+    ? location === "/skills" || location.startsWith("/skills/")
+    : location === href;
+}
+
+// ── Dropdown component ───────────────────────────────────────────────────────
+
+type DropdownLink = { readonly href: string; readonly label: string };
+
+function NavDropdown({
+  label,
+  links,
+  location,
+  testId,
+  onNavigate,
+}: {
+  label: string;
+  links: readonly DropdownLink[];
+  location: string;
+  testId: string;
+  onNavigate: () => void;
+}) {
+  const [open, setOpen] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+
+  // Close on outside click
+  useEffect(() => {
+    function handle(e: MouseEvent) {
+      if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false);
+    }
+    document.addEventListener("mousedown", handle);
+    return () => document.removeEventListener("mousedown", handle);
+  }, []);
+
+  // Close on Escape
+  useEffect(() => {
+    function handle(e: KeyboardEvent) {
+      if (e.key === "Escape") setOpen(false);
+    }
+    document.addEventListener("keydown", handle);
+    return () => document.removeEventListener("keydown", handle);
+  }, []);
+
+  const groupActive = links.some(l => isLinkActive(l.href, location));
+
+  return (
+    <div ref={ref} className="relative">
+      <button
+        onClick={() => setOpen(o => !o)}
+        className={`relative flex items-center gap-1 px-3 py-1.5 rounded text-sm forge-nav-link${groupActive ? " forge-nav-link--active" : ""}`}
+        aria-expanded={open}
+        aria-haspopup="true"
+        data-testid={testId}
+      >
+        {label}
+        <ChevronDown
+          size={11}
+          className={`transition-transform duration-150 ${open ? "rotate-180" : ""}`}
+        />
+        {groupActive && (
+          <span className="forge-nav-active-indicator absolute bottom-0 left-3 right-3 h-0.5 rounded-full" />
+        )}
+      </button>
+
+      {open && (
+        <div className="forge-nav-dropdown absolute top-full left-0 mt-1 py-1 min-w-[168px] rounded-md z-50">
+          {links.map(link => (
+            <Link
+              key={link.href}
+              href={link.href}
+              onClick={() => { setOpen(false); onNavigate(); }}
+              className={`forge-nav-dropdown-item block px-4 py-2 text-sm${isLinkActive(link.href, location) ? " forge-nav-dropdown-item--active" : ""}`}
+              data-testid={`nav-${link.label.toLowerCase().replace(/\s+/g, "-")}`}
+            >
+              {link.label}
+            </Link>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
+// ── Dark-mode hook ────────────────────────────────────────────────────────────
 
 function useDarkMode() {
   const [dark, setDark] = useState(() => {
@@ -37,6 +139,8 @@ function useDarkMode() {
   return [dark, setDark] as const;
 }
 
+// ── Layout ────────────────────────────────────────────────────────────────────
+
 export function Layout({ children }: { children: React.ReactNode }) {
   const [dark, setDark] = useDarkMode();
   const [menuOpen, setMenuOpen] = useState(false);
@@ -50,33 +154,35 @@ export function Layout({ children }: { children: React.ReactNode }) {
       <header className="forge-header">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 flex items-center justify-between h-14">
 
-          {/* Logo */}
+          {/* Logo — title stacked above bpmn-beta badge */}
           <Link href="/" className="flex items-center gap-2.5 shrink-0" data-testid="link-home-logo">
             <img
               src={`${import.meta.env.BASE_URL}icon.png`}
               alt="BPMN for Mermaid icon"
               className="w-7 h-7 rounded-md object-cover ring-1 ring-white/10"
             />
-            <span className="font-semibold text-sm hidden sm:inline forge-brand-title">
-              BPMN for Mermaid
-            </span>
-            <code className="hidden md:inline text-xs font-mono px-1.5 py-0.5 rounded forge-brand-badge">
-              bpmn-beta
-            </code>
+            <div className="hidden sm:flex flex-col leading-tight gap-px">
+              <span className="font-semibold text-sm forge-brand-title">
+                BPMN for Mermaid
+              </span>
+              <code className="text-[10px] font-mono forge-brand-badge self-start px-1 py-px rounded">
+                bpmn-beta
+              </code>
+            </div>
           </Link>
 
           {/* Desktop nav */}
           <nav className="hidden md:flex items-center gap-0.5" aria-label="Main navigation">
-            {NAV_LINKS.map(link => {
-              const isActive = link.href === "/skills"
-                ? location === "/skills" || location.startsWith("/skills/")
-                : location === link.href;
+
+            {/* Flat top-level links */}
+            {FLAT_NAV.map(link => {
+              const isActive = isLinkActive(link.href, location);
               return (
                 <Link
                   key={link.href}
                   href={link.href}
                   className={`relative px-3 py-1.5 rounded text-sm forge-nav-link${isActive ? " forge-nav-link--active" : ""}`}
-                  data-testid={`nav-${link.label.toLowerCase().replace(/\s+/g, '-')}`}
+                  data-testid={`nav-${link.label.toLowerCase().replace(/\s+/g, "-")}`}
                 >
                   {link.label}
                   {isActive && (
@@ -85,6 +191,25 @@ export function Layout({ children }: { children: React.ReactNode }) {
                 </Link>
               );
             })}
+
+            {/* Reference ▾ */}
+            <NavDropdown
+              label="Reference"
+              links={REFERENCE_LINKS}
+              location={location}
+              testId="nav-reference-dropdown"
+              onNavigate={() => {}}
+            />
+
+            {/* More ▾ */}
+            <NavDropdown
+              label="More"
+              links={MORE_LINKS}
+              location={location}
+              testId="nav-more-dropdown"
+              onNavigate={() => {}}
+            />
+
           </nav>
 
           {/* Right side controls */}
@@ -123,16 +248,14 @@ export function Layout({ children }: { children: React.ReactNode }) {
           </div>
         </div>
 
-        {/* Mobile menu */}
+        {/* Mobile menu — flat list of all pages */}
         {menuOpen && (
           <nav
             className="md:hidden px-4 pb-3 pt-2 flex flex-col gap-0.5"
             style={{ borderTop: "1px solid var(--okh-header-border)" }}
           >
-            {NAV_LINKS.map(link => {
-              const isActive = link.href === "/skills"
-                ? location === "/skills" || location.startsWith("/skills/")
-                : location === link.href;
+            {ALL_NAV.map(link => {
+              const isActive = isLinkActive(link.href, location);
               return (
                 <Link
                   key={link.href}

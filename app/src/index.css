@@ -336,6 +336,29 @@
     background: var(--okh-header-active);
   }
 
+  /* ---- Nav dropdown panel --------------------------------------- */
+
+  .forge-nav-dropdown {
+    background: var(--okh-header-bg);
+    border: 1px solid var(--okh-header-border);
+    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.45);
+  }
+
+  .forge-nav-dropdown-item {
+    color: var(--okh-header-muted);
+    transition: background-color 150ms, color 150ms;
+  }
+
+  .forge-nav-dropdown-item:hover {
+    background: var(--okh-header-hover);
+    color: var(--okh-header-text);
+  }
+
+  .forge-nav-dropdown-item--active {
+    color: var(--okh-header-active);
+    font-weight: 600;
+  }
+
   /* ---- Blueprint grid texture ----------------------------------- */
 
   .forge-grid {
