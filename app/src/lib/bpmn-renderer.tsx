@@ -243,9 +243,17 @@ export interface BpmnRendererProps {
   source: string;
   nodeLinks?: Record<string, string>;
   nodeTooltips?: Record<string, string>;
+  /**
+   * Caption rendered below the SVG when the diagram has interactive nodes.
+   * - Omit (or pass `undefined`) to show the default "Click any node to navigate" hint
+   *   whenever `nodeLinks` is non-empty.
+   * - Pass a custom string to override the default hint text.
+   * - Pass `false` to suppress the hint entirely.
+   */
+  interactivityHint?: string | false;
 }
 
-export function BpmnRenderer({ source, nodeLinks, nodeTooltips }: BpmnRendererProps) {
+export function BpmnRenderer({ source, nodeLinks, nodeTooltips, interactivityHint }: BpmnRendererProps) {
   const [, navigate] = useLocation();
   const [hoveredNode, setHoveredNode] = useState<string | null>(null);
   const [tooltipPos, setTooltipPos] = useState<{ x: number; y: number }>({ x: 0, y: 0 });
@@ -353,6 +361,12 @@ export function BpmnRenderer({ source, nodeLinks, nodeTooltips }: BpmnRendererPr
               Click to view skill →
             </p>
           </div>
+        )}
+
+        {nodeLinks && interactivityHint !== false && (
+          <p className="mt-2 text-[10px] font-mono text-muted-foreground/50 text-center select-none">
+            {typeof interactivityHint === 'string' ? interactivityHint : 'Click any node to navigate'}
+          </p>
         )}
       </div>
     );

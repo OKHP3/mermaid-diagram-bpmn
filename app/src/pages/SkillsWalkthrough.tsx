@@ -183,7 +183,7 @@ export default function SkillsWalkthrough() {
             Rendered as a <code className="font-mono text-xs bg-muted px-1 rounded">bpmn-beta</code> diagram.
             Each box is a BP-SKILL skill. The flow follows the primary handoff sequence —
             see the table below for branch paths and optional tracks.
-            Click any skill to open its detail page. Scroll right to view the full pipeline.
+            Scroll right to view the full pipeline.
           </p>
 
           <div
@@ -195,6 +195,7 @@ export default function SkillsWalkthrough() {
                 source={PIPELINE_BPMN}
                 nodeLinks={PIPELINE_NODE_LINKS}
                 nodeTooltips={PIPELINE_NODE_TOOLTIPS}
+                interactivityHint="Click any skill to open its detail page"
               />
             </div>
           </div>
