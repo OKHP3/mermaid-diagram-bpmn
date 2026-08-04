@@ -35,7 +35,7 @@ This test runs as part of the standard application test suite (`pnpm --filter @w
 | SVG produced by adapter contains `bpmn-task`, `bpmn-event`, `bpmn-flow-sequence` classes | **source-verified** | `bpmn-plugin-integration.test.ts` |
 | Pool/lane diagram produces `bpmn-pool`, `bpmn-lane`, `bpmn-flow-conditional`, `bpmn-gateway` classes | **source-verified** | `bpmn-plugin-integration.test.ts` |
 | FR-018: `styles()` reads live `themeVariables` at render time, not a static fallback | **source-verified** | `bpmn-plugin-integration.test.ts` — "FR-018: live theme-variable binding" describe block |
-| Plugin is externally consumable as an installable npm package | **not complete** | Phase 2: package boundary and clean-install smoke fixture required |
+| Plugin is externally consumable as an installable npm package | **packaged** | `lib/bpmn-plugin/` workspace package; `pnpm pack` produces 6-file tarball verified by `scripts/run-plugin-smoke.mjs` — 12/12 smoke assertions pass |
 | Plugin works in a real browser with default Mermaid security configuration | **not complete** | Phase 3: Mermaid Host Demo route and browser test required |
 
 ---

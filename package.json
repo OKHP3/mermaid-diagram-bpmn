@@ -19,7 +19,10 @@
     "brand:check:test": "node --test scripts/check-forge-profile.test.mjs",
     "check:generated:test": "node --test scripts/check-generated.test.mjs",
     "skill:validate:test": "node --test scripts/validate-skills.test.mjs",
-    "deploy:playground": "pnpm --filter @workspace/mermaid-diagram-bpmn run build"
+    "deploy:playground": "pnpm --filter @workspace/mermaid-diagram-bpmn run build",
+    "plugin:build": "pnpm --filter @okhp3/mermaid-diagram-bpmn run build",
+    "plugin:pack": "pnpm --filter @okhp3/mermaid-diagram-bpmn run pack:dry-run",
+    "plugin:smoke": "node scripts/run-plugin-smoke.mjs"
   },
   "private": true,
   "packageManager": "pnpm@10.26.1",

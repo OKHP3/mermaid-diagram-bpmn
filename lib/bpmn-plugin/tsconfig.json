@@ -1,0 +1,14 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "include": ["../../app/src/lib/**/*.ts"],
+  "exclude": [
+    "../../app/src/lib/__tests__/**",
+    "../../app/src/lib/bpmn-renderer.tsx",
+    "../../app/src/lib/bpmn-examples.ts",
+    "node_modules"
+  ],
+  "compilerOptions": {
+    "noEmit": true,
+    "lib": ["esnext", "dom"]
+  }
+}
