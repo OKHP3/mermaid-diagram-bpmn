@@ -23,10 +23,9 @@ const REGISTRY = path.join(
   ROOT,
   "app/src/data/skills-registry.ts",
 );
-const COMMITTED_OUT = path.join(
-  ROOT,
-  "app/src/data/pns-transitions-auto.ts",
-);
+const COMMITTED_OUT = process.env.PNS_TRANSITIONS_COMMITTED_OVERRIDE
+  ? path.resolve(process.env.PNS_TRANSITIONS_COMMITTED_OVERRIDE)
+  : path.join(ROOT, "app/src/data/pns-transitions-auto.ts");
 
 const CHECK_MODE = process.argv.includes("--check");
 const OUT = CHECK_MODE

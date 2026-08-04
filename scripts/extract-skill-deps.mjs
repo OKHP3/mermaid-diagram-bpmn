@@ -20,7 +20,9 @@ import { parseSkillFrontmatter, getSkillField } from "./skill-frontmatter.mjs";
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, "..");
 const SKILLS_DIR = path.join(ROOT, "skills");
-const COMMITTED_OUT = path.join(ROOT, "app/src/data/skill-deps-auto.ts");
+const COMMITTED_OUT = process.env.SKILL_DEPS_COMMITTED_OVERRIDE
+  ? path.resolve(process.env.SKILL_DEPS_COMMITTED_OVERRIDE)
+  : path.join(ROOT, "app/src/data/skill-deps-auto.ts");
 
 const CHECK_MODE = process.argv.includes("--check");
 const OUT = CHECK_MODE
