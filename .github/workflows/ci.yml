@@ -42,6 +42,9 @@ jobs:
       - name: Check generated data files are up to date (fix locally with 'pnpm run regen:generated')
         run: pnpm run check:generated
 
+      - name: Test check:generated drift detection (exits 1 on injected mismatch)
+        run: pnpm run check:generated:test
+
       - name: Validate skill frontmatter (fix with 'pnpm run skill:validate')
         run: pnpm run skill:validate
 
