@@ -1,6 +1,60 @@
 import React from "react";
 import { CheckCheck, FlaskConical, Clock, Wrench, GitBranch, Database, Puzzle, Palette, Shield, AlignVerticalJustifyStart, CircleDot, ExternalLink } from "lucide-react";
 
+// ─── Shared link components ────────────────────────────────────────────────────
+
+interface ExternalLinkAnchorProps {
+  href: string;
+  children: React.ReactNode;
+  /** Extra Tailwind classes added to the <a> element (e.g. colour, weight). */
+  className?: string;
+}
+
+/**
+ * Inline external link that always enforces target="_blank",
+ * rel="noopener noreferrer", and appends an ExternalLink icon.
+ */
+function ExternalLinkAnchor({ href, children, className = "" }: ExternalLinkAnchorProps) {
+  return (
+    <a
+      href={href}
+      target="_blank"
+      rel="noopener noreferrer"
+      className={`inline-flex items-center gap-0.5 ${className}`}
+    >
+      {children}
+      <ExternalLink size={12} className="text-muted-foreground shrink-0" />
+    </a>
+  );
+}
+
+interface ExternalLinkRowProps {
+  href: string;
+  label: string;
+  description: string;
+}
+
+/**
+ * Reference-list row: left-side icon, link label, and a sub-description line.
+ * Enforces target="_blank" and rel="noopener noreferrer" via ExternalLinkAnchor.
+ */
+function ExternalLinkRow({ href, label, description }: ExternalLinkRowProps) {
+  return (
+    <li className="flex items-center gap-3 px-4 py-3">
+      <ExternalLink size={12} className="text-muted-foreground shrink-0" />
+      <div className="flex-1 min-w-0">
+        <ExternalLinkAnchor
+          href={href}
+          className="text-xs font-medium text-primary hover:underline underline-offset-2"
+        >
+          {label}
+        </ExternalLinkAnchor>
+        <p className="text-[10px] text-muted-foreground mt-0.5">{description}</p>
+      </div>
+    </li>
+  );
+}
+
 // ─── Version Ladder ────────────────────────────────────────────────────────────
 
 type VersionStatus = "done" | "current" | "planned";
@@ -117,11 +171,11 @@ const VERSION_LADDER: VersionStep[] = [
       "3+ real-world process examples contributed (beyond purchase-approval)",
       <>
         Mermaid issues{" "}
-        <a href="https://github.com/mermaid-js/mermaid/issues/7699" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-0.5 underline hover:text-foreground transition-colors">#7699<ExternalLink size={12} className="text-muted-foreground shrink-0" /></a>
+        <ExternalLinkAnchor href="https://github.com/mermaid-js/mermaid/issues/7699" className="underline hover:text-foreground transition-colors">#7699</ExternalLinkAnchor>
         {", "}
-        <a href="https://github.com/mermaid-js/mermaid/issues/2623" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-0.5 underline hover:text-foreground transition-colors">#2623<ExternalLink size={12} className="text-muted-foreground shrink-0" /></a>
+        <ExternalLinkAnchor href="https://github.com/mermaid-js/mermaid/issues/2623" className="underline hover:text-foreground transition-colors">#2623</ExternalLinkAnchor>
         {", "}
-        <a href="https://github.com/mermaid-js/mermaid/issues/660" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-0.5 underline hover:text-foreground transition-colors">#660<ExternalLink size={12} className="text-muted-foreground shrink-0" /></a>
+        <ExternalLinkAnchor href="https://github.com/mermaid-js/mermaid/issues/660" className="underline hover:text-foreground transition-colors">#660</ExternalLinkAnchor>
         {" engaged with prototype link"}
       </>,
       "BP-SKILL suite listed in agentskills.io directory",
@@ -219,9 +273,9 @@ const CONTRIBUTION_STEPS: { n: string; title: string; body: React.ReactNode }[] 
     body: (
       <>
         Read and comment on Mermaid GitHub issues{" "}
-        <a href={`${GITHUB_ISSUE_BASE}7699`} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-0.5 text-primary hover:underline underline-offset-2 font-medium">#7699<ExternalLink size={12} className="text-muted-foreground shrink-0" /></a>,{" "}
-        <a href={`${GITHUB_ISSUE_BASE}2623`} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-0.5 text-primary hover:underline underline-offset-2 font-medium">#2623<ExternalLink size={12} className="text-muted-foreground shrink-0" /></a>, and{" "}
-        <a href={`${GITHUB_ISSUE_BASE}660`} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-0.5 text-primary hover:underline underline-offset-2 font-medium">#660<ExternalLink size={12} className="text-muted-foreground shrink-0" /></a>.{" "}
+        <ExternalLinkAnchor href={`${GITHUB_ISSUE_BASE}7699`} className="text-primary hover:underline underline-offset-2 font-medium">#7699</ExternalLinkAnchor>,{" "}
+        <ExternalLinkAnchor href={`${GITHUB_ISSUE_BASE}2623`} className="text-primary hover:underline underline-offset-2 font-medium">#2623</ExternalLinkAnchor>, and{" "}
+        <ExternalLinkAnchor href={`${GITHUB_ISSUE_BASE}660`} className="text-primary hover:underline underline-offset-2 font-medium">#660</ExternalLinkAnchor>.{" "}
         Signal intent without prematurely locking syntax.
       </>
     ),
@@ -554,54 +608,21 @@ export default function Roadmap() {
           <p className="text-xs font-semibold text-foreground uppercase tracking-wide">Reference links</p>
         </div>
         <ul className="divide-y divide-border">
-          <li className="flex items-center gap-3 px-4 py-3">
-            <ExternalLink size={12} className="text-muted-foreground shrink-0" />
-            <div className="flex-1 min-w-0">
-              <a
-                href={`${GITHUB_ISSUE_BASE}7699`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-xs font-medium text-primary hover:underline underline-offset-2"
-              >
-                mermaid-js/mermaid #7699
-              </a>
-              <p className="text-[10px] text-muted-foreground mt-0.5">
-                BPMN diagram support proposal by Andreas Emrich (DFKI) — filed 2026-05-02
-              </p>
-            </div>
-          </li>
-          <li className="flex items-center gap-3 px-4 py-3">
-            <ExternalLink size={12} className="text-muted-foreground shrink-0" />
-            <div className="flex-1 min-w-0">
-              <a
-                href={`${GITHUB_ISSUE_BASE}2623`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-xs font-medium text-primary hover:underline underline-offset-2"
-              >
-                mermaid-js/mermaid #2623
-              </a>
-              <p className="text-[10px] text-muted-foreground mt-0.5">
-                Earlier BPMN / process diagram request in the Mermaid issue tracker
-              </p>
-            </div>
-          </li>
-          <li className="flex items-center gap-3 px-4 py-3">
-            <ExternalLink size={12} className="text-muted-foreground shrink-0" />
-            <div className="flex-1 min-w-0">
-              <a
-                href={`${GITHUB_ISSUE_BASE}660`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-xs font-medium text-primary hover:underline underline-offset-2"
-              >
-                mermaid-js/mermaid #660
-              </a>
-              <p className="text-[10px] text-muted-foreground mt-0.5">
-                Original BPMN diagram feature request in the Mermaid issue tracker
-              </p>
-            </div>
-          </li>
+          <ExternalLinkRow
+            href={`${GITHUB_ISSUE_BASE}7699`}
+            label="mermaid-js/mermaid #7699"
+            description="BPMN diagram support proposal by Andreas Emrich (DFKI) — filed 2026-05-02"
+          />
+          <ExternalLinkRow
+            href={`${GITHUB_ISSUE_BASE}2623`}
+            label="mermaid-js/mermaid #2623"
+            description="Earlier BPMN / process diagram request in the Mermaid issue tracker"
+          />
+          <ExternalLinkRow
+            href={`${GITHUB_ISSUE_BASE}660`}
+            label="mermaid-js/mermaid #660"
+            description="Original BPMN diagram feature request in the Mermaid issue tracker"
+          />
         </ul>
       </div>
     </div>
