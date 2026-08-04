@@ -17,7 +17,7 @@ import { ExampleStepTimeline } from "@/components/skills/ExampleStepTimeline";
  *   e1  – end event       → Publication & Handoff (the successful process outcome)
  *   e2  – end event       → Gap & Exception Analysis (the exception end state)
  */
-const PURCHASE_APPROVAL_NODE_LINKS: Record<string, string> = {
+export const PURCHASE_APPROVAL_NODE_LINKS: Record<string, string> = {
   s1: "/skills/okhp3-process-intake-and-scope",
   t1: "/skills/okhp3-as-is-process-capture",
   g1: "/skills/okhp3-process-gap-exception-analysis",

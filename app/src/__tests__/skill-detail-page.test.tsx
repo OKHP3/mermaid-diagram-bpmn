@@ -6,6 +6,7 @@ import SkillDetail from '@/pages/SkillDetail';
 import { SKILLS, PNS_LIFECYCLE } from '@/data/skills-registry';
 import { PNS_TRANSITIONS } from '@/data/pns-transitions';
 import { PnsLifecycleTracker } from '@/components/skills/PnsLifecycleTracker';
+import { PURCHASE_APPROVAL_NODE_LINKS } from '@/pages/PurchaseApprovalExample';
 
 // ── Wouter ────────────────────────────────────────────────────────────────────
 // useParams is overridden per-test via the mock factory below.
@@ -341,5 +342,39 @@ describe('PNS transition data — RACI & SIPOC governance skills', () => {
 
   it('SIPOC does not advance PNS lifecycle (after is null)', () => {
     expect(PNS_TRANSITIONS[SIPOC_ID].after).toBeNull();
+  });
+});
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Diagram node links — data integrity
+// ─────────────────────────────────────────────────────────────────────────────
+// Verifies that every /skills/<id> path in a node-link map resolves to a real
+// skill in SKILLS. A typo or stale skill id produces a 404 that would otherwise
+// ship silently — these tests catch it at the data level.
+
+describe('PURCHASE_APPROVAL_NODE_LINKS — all paths point to real skill pages', () => {
+  const skillIds = new Set(SKILLS.map(s => s.id));
+
+  it('every node link value is a /skills/<id> path', () => {
+    for (const [node, path] of Object.entries(PURCHASE_APPROVAL_NODE_LINKS)) {
+      expect(
+        path,
+        `Node "${node}" has a malformed path: "${path}" (expected /skills/<id>)`,
+      ).toMatch(/^\/skills\//);
+    }
+  });
+
+  it('every node link target id matches a real skill in SKILLS', () => {
+    for (const [node, path] of Object.entries(PURCHASE_APPROVAL_NODE_LINKS)) {
+      const id = path.replace('/skills/', '');
+      expect(
+        skillIds.has(id),
+        `Node "${node}" links to "/skills/${id}" but no skill with that id exists in SKILLS`,
+      ).toBe(true);
+    }
+  });
+
+  it('has at least one node link (map is not empty)', () => {
+    expect(Object.keys(PURCHASE_APPROVAL_NODE_LINKS).length).toBeGreaterThan(0);
   });
 });
