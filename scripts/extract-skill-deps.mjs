@@ -12,6 +12,7 @@
  */
 
 import fs from "fs";
+import os from "os";
 import path from "path";
 import { fileURLToPath } from "url";
 import { parseSkillFrontmatter, getSkillField } from "./skill-frontmatter.mjs";
@@ -19,10 +20,12 @@ import { parseSkillFrontmatter, getSkillField } from "./skill-frontmatter.mjs";
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, "..");
 const SKILLS_DIR = path.join(ROOT, "skills");
-const OUT = path.join(
-  ROOT,
-  "app/src/data/skill-deps-auto.ts",
-);
+const COMMITTED_OUT = path.join(ROOT, "app/src/data/skill-deps-auto.ts");
+
+const CHECK_MODE = process.argv.includes("--check");
+const OUT = CHECK_MODE
+  ? path.join(os.tmpdir(), "skill-deps-check.ts")
+  : COMMITTED_OUT;
 
 const BP_SKILL_IDS = [
   "okhp3-process-intake-and-scope",
@@ -73,7 +76,20 @@ const lines = [
 ];
 
 fs.writeFileSync(OUT, lines.join("\n"), "utf8");
-console.log(`[extract-skill-deps] Generated ${path.relative(ROOT, OUT)}`);
-for (const [id, d] of Object.entries(deps)) {
-  if (d.length > 0) console.log(`  ${id} -> [${d.join(", ")}]`);
+
+if (CHECK_MODE) {
+  const generated = fs.readFileSync(OUT, "utf8");
+  const committed = fs.readFileSync(COMMITTED_OUT, "utf8");
+  if (generated !== committed) {
+    console.error(
+      "[extract-skill-deps] FAIL: skill-deps-auto.ts is stale — run node scripts/extract-skill-deps.mjs",
+    );
+    process.exit(1);
+  }
+  console.log("[extract-skill-deps] OK: skill-deps-auto.ts is up to date.");
+} else {
+  console.log(`[extract-skill-deps] Generated ${path.relative(ROOT, OUT)}`);
+  for (const [id, d] of Object.entries(deps)) {
+    if (d.length > 0) console.log(`  ${id} -> [${d.join(", ")}]`);
+  }
 }
