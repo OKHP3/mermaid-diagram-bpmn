@@ -318,13 +318,13 @@
     background-image:
       linear-gradient(hsla(30, 30%, 38%, 0.055) 1px, transparent 1px),
       linear-gradient(90deg, hsla(30, 30%, 38%, 0.055) 1px, transparent 1px);
-    background-size: 32px 32px;
+    background-size: var(--forge-grid-size) var(--forge-grid-size);
   }
   .dark .forge-grid {
     background-image:
       linear-gradient(hsla(90, 30%, 60%, 0.065) 1px, transparent 1px),
       linear-gradient(90deg, hsla(90, 30%, 60%, 0.065) 1px, transparent 1px);
-    background-size: 32px 32px;
+    background-size: var(--forge-grid-size) var(--forge-grid-size);
   }
 
   /* Dot grid for diagram preview panel */

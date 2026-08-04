@@ -2,7 +2,7 @@ schema_version: "1.0"
 style:
   id: okhp3-forge
   display_name: OKH Forge UI System
-  version: "1.0.0"
+  version: "1.0.1"
   status: active
   purpose: >
     A warm-industrial design language for OverKill Hill P³ tools — structured
@@ -11,7 +11,7 @@ style:
   owner_context: owned
   tags: [industrial, warm, technical, forge, okhp3, dark-header, dual-mode]
   created_on: "2026-08-03"
-  updated_on: "2026-08-03"
+  updated_on: "2026-08-04"
 
   sources:
     - type: css
@@ -181,12 +181,9 @@ style:
         notes: >
           Light mode — warm brown tint (hsla 30 30% 38% 0.055).
           Dark mode — green tint (hsla 90 30% 60% 0.065).
-          The rendered grid size (32px) comes from the hardcoded background-size
-          in the .forge-grid class in index.css. A separate CSS variable
-          --forge-grid-size is declared as 28px in forge-tokens.css but is not
-          yet consumed by .forge-grid; this profile tracks the rendered size.
-          If --forge-grid-size is wired into the class, update this field and
-          bump version + updated_on.
+          --forge-grid-size (32px in forge-tokens.css) is consumed by
+          .forge-grid via background-size: var(--forge-grid-size) var(--forge-grid-size)
+          in index.css. Variable and rendered size are in agreement.
 
   direction:
     visual_narrative: >

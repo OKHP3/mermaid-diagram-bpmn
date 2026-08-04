@@ -299,16 +299,25 @@ for (const f of FONT_CHECKS) {
 (function checkGrid() {
   const label = '.forge-grid background-size (rendered grid size)';
   const profileField = 'tokens.geometry.grid.size';
-  const profileExpected = yamlScalar(profileText, 'size') ;
   // 'size' appears in other sections too; narrow to the grid block
   const gridBlock = profileText.match(/grid:\s*\n((?:[ \t]+.+\n)*)/m);
   const sizeFromGrid = gridBlock
     ? (gridBlock[1].match(/size:\s+"([^"]+)"/)?.[1] ?? null)
     : null;
   const expected = sizeFromGrid;
-  // CSS background-size may be "32px 32px"; profile may say "32px"
+  // CSS background-size may be a literal "32px 32px" or use a var() reference.
+  // If it's var(--some-var), resolve the variable from the CSS sources so the
+  // comparison still works after the variable was wired in.
   const cssRaw = forgeGridBgSize(indexCss);
-  const cssNorm = cssRaw ? cssRaw.split(/\s+/)[0] : null; // take the X dimension
+  let cssNorm = cssRaw ? cssRaw.split(/\s+/)[0] : null; // take the X dimension
+  if (cssNorm) {
+    const varRef = cssNorm.match(/^var\(\s*(--[^,\s)]+)/);
+    if (varRef) {
+      // Resolve the referenced variable from forge-tokens.css, then index.css.
+      const resolved = cssVar(forgeCss, varRef[1]) ?? cssVar(indexCss, varRef[1]);
+      cssNorm = resolved ? resolved.trim() : cssNorm;
+    }
+  }
   runCheck(label, cssNorm, expected, 'exact', profileField);
 })();
 
