@@ -14,6 +14,7 @@ import { VariableFileCard } from "@/components/skills/VariableFileCard";
 import { SkillFrontmatterPreview } from "@/components/skills/SkillFrontmatterPreview";
 import { ZipDownloadButton } from "@/components/skills/ZipDownloadButton";
 import { DownloadButton } from "@/components/skills/DownloadButton";
+import { ExternalLinkAnchor } from "@/components/ExternalLinkAnchor";
 
 // Derived once at module load — update automatically when SKILLS changes.
 const CORE_COUNT = SKILLS.filter((s) => s.status === "core").length;
@@ -137,7 +138,7 @@ export default function AgentSkills() {
         </p>
 
         <p className="text-sm text-muted-foreground leading-relaxed max-w-3xl mb-8">
-          The Agent Skills open standard (<a href="https://agentskills.io" target="_blank" rel="noopener noreferrer" className="text-primary underline-offset-2 hover:underline">agentskills.io</a>) defines a SKILL.md file format for packaging
+          The Agent Skills open standard (<ExternalLinkAnchor href="https://agentskills.io" className="text-primary underline-offset-2 hover:underline">agentskills.io</ExternalLinkAnchor>) defines a SKILL.md file format for packaging
           reusable AI agent capabilities as modular, portable, filesystem-resident instruction sets. As of
           May 2026, the format is adopted by Claude Code, OpenAI Codex, GitHub Copilot, Gemini CLI, Cursor,
           VS Code, and 30+ other platforms. The business process analysis domain has been absent from that
