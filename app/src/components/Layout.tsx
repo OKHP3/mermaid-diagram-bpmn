@@ -176,6 +176,20 @@ export function Layout({ children }: { children: React.ReactNode }) {
             © {new Date().getFullYear()} OverKill Hill P³™. All rights reserved.
           </span>
 
+          {/* Centre — disclaimer */}
+          <span className="forge-footer-slug text-center">
+            Not affiliated with Mermaid, Mermaid Chart, or{" "}
+            <a
+              href="https://mermaidchart.cello.so/UhVlNtC2MlS"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="forge-footer-mermaid"
+              data-testid="link-mermaid-ai"
+            >
+              Mermaid.ai
+            </a>
+          </span>
+
           {/* Right — built-with */}
           <span className="forge-footer-slug">
             Built with{" "}

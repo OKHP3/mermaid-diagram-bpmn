@@ -318,6 +318,18 @@
     opacity: 0.8;
   }
 
+  /* ---- Footer Mermaid brand link (official Mermaid pink) --------- */
+
+  .forge-footer-mermaid {
+    color: #FF3670;
+    font-weight: 500;
+    transition: opacity 150ms;
+  }
+
+  .forge-footer-mermaid:hover {
+    opacity: 0.8;
+  }
+
   /* ---- Active-route underline indicator ------------------------- */
 
   .forge-nav-active-indicator {
