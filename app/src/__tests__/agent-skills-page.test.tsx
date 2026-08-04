@@ -510,6 +510,30 @@ describe('AgentSkills page — PNS section rows', () => {
       unmount();
     }
   });
+
+  // ── 'Standard' column — correct standard text per section ─────────────────
+
+  it('opening the first PNS section row shows that section\'s standard text', () => {
+    const sec = PNS_SECTIONS[0];
+    const { getByRole, getByText } = renderAndOpenPns();
+    fireEvent.click(getByRole('button', { name: new RegExp(sec.title, 'i') }));
+    expect(
+      getByText(sec.standard),
+      `Section "${sec.title}" should show its standard text`,
+    ).not.toBeNull();
+  });
+
+  it('every PNS section shows its own standard text when opened', () => {
+    for (const sec of PNS_SECTIONS) {
+      const { getByRole, getByText, unmount } = renderAndOpenPns();
+      fireEvent.click(getByRole('button', { name: new RegExp(sec.title, 'i') }));
+      expect(
+        getByText(sec.standard),
+        `Section "${sec.title}" should show its standard text from PNS_SECTIONS`,
+      ).not.toBeNull();
+      unmount();
+    }
+  });
 });
 
 // ─────────────────────────────────────────────────────────────────────────────
