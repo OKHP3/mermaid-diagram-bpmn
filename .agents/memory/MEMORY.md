@@ -1,0 +1,1 @@
+- [happy-dom SVG innerHTML drop after defs](happy-dom-svg-defs-bug.md) — happy-dom drops SVG children after </defs> in HTML mode; fix: DOMParser(image/svg+xml) + securityLevel:'loose' in tests.

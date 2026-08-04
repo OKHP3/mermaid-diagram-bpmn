@@ -1,7 +1,7 @@
 # Mermaid Compatibility Reference
 ## `mermaid-diagram-bpmn` / `bpmn-beta`
 
-**Last updated:** 2026-05-21
+**Last updated:** 2026-08-04
 **Target repos:** `mermaid-js/mermaid` (≥ 10), `mermaid-js/mermaid-live-editor`
 
 ---
@@ -217,12 +217,34 @@ validation milestone — see Open Questions below.
 
 ---
 
+## Integration Test (PRD-03 §3 — verified)
+
+The plugin has been exercised against a real `mermaid.render()` call:
+
+```
+app/src/lib/__tests__/bpmn-plugin-integration.test.ts
+```
+
+The test:
+- Imports `mermaid@11.4.1` (the `MERMAID_VERSION_TARGET` pin)
+- Calls `mermaid.registerExternalDiagrams([bpmnPlugin])`
+- Calls `mermaid.render()` against `examples/01-linear-process.mmd` and `examples/08-purchase-order-approval.mmd`
+- Asserts the returned SVG contains `bpmn-task`, `bpmn-event`, `bpmn-flow-sequence`, `bpmn-pool`, `bpmn-lane`, `bpmn-gateway`, and `bpmn-flow-conditional` class names
+- Asserts the `<style>` block contains live theme color values (FR-018 — not a static fallback)
+- Asserts that invalid source text throws or returns non-empty SVG (TD-004)
+
+**Runs in CI** as part of `pnpm --filter @workspace/mermaid-diagram-bpmn run test` (see `.github/workflows/ci.yml` → "Unit tests" step). This step is merge-blocking.
+
+**Test environment note:** The test uses `securityLevel: 'loose'` when calling `mermaid.initialize()`. This disables DOMPurify sanitization inside the test runner. The reason: `happy-dom` (the Vitest DOM environment) drops all SVG sibling elements following a `<defs>` block when parsing HTML — DOMPurify re-parses the SVG string through this same HTML parser, which strips `<g>` nodes for flows and shapes. In a real browser, DOMPurify uses the native browser DOM and handles SVG content correctly; `securityLevel: 'loose'` is a test-only accommodation. The plugin's `draw()` function itself uses `DOMParser('image/svg+xml')` + `document.importNode` to inject content with correct SVG namespace in all environments.
+
+---
+
 ## What Is Not Yet Wired
 
 | Item | Status | Notes |
 |---|---|---|
 | `bpmn-plugin.ts` published to npm | Not done | Required before end-to-end test |
-| End-to-end test against `mermaid.render()` | Not done | Highest priority validation |
+| Integration test against `mermaid.render()` | **Done** — `app/src/lib/__tests__/bpmn-plugin-integration.test.ts` |
 | Langium grammar | Not done | Required for upstream Mermaid core PR |
 | `%%{init}%%` directive support | Not done | Allows per-diagram theme override |
 | `setDisplayMode` on BpmnDb | Stub not present | Add if Mermaid core requires it |
@@ -231,39 +253,30 @@ validation milestone — see Open Questions below.
 
 ## Open Questions
 
-| ID | Question | Blocks |
-|---|---|---|
-| CQ-001 | Does `registerExternalDiagrams()` call `parser.parse()` before `renderer.draw()`, or does draw re-parse from text? | Determines whether the shared-db copy pattern in parserDef is necessary |
-| CQ-002 | What Mermaid version should be pinned as `peerDependencies`? | npm package.json |
-| CQ-003 | Does Mermaid pass themeVariables as the `options` arg to `styles()`? | Theme binding correctness |
-| CQ-004 | Does `draw()` receive the SVG element created by Mermaid, or a container div? | `el.innerHTML` vs. attribute injection strategy |
-| CQ-005 | Does the live editor sandbox allow external diagram registration, or does it lock to a fixed diagram list? | Live editor compatibility |
+| ID | Question | Status | Blocks |
+|---|---|---|---|
+| CQ-001 | Does `registerExternalDiagrams()` call `parser.parse()` before `renderer.draw()`? | **Answered** — Yes, parser runs first; shared-db pattern is correct. | Resolved |
+| CQ-002 | What Mermaid version should be pinned as `peerDependencies`? | **Answered** — `^11.4.1` (`MERMAID_VERSION_TARGET`). | Resolved |
+| CQ-003 | Does Mermaid pass themeVariables as the `options` arg to `styles()`? | **Answered** — Yes. `styles(themeVars)` receives resolved theme variables; `_cachedThemeVars` captures them for `draw()`. | Resolved |
+| CQ-004 | Does `draw()` receive the SVG element `id` and must find it via `getElementById`? | **Answered** — Yes; Mermaid creates `<div id="d{id}"><svg id="{id}">` before calling `draw()`. | Resolved |
+| CQ-005 | Does the live editor sandbox allow external diagram registration? | Open — not yet tested end-to-end. | Live editor compatibility |
 
 ---
 
 ## Test Plan
 
-Before publishing the npm package, run these validation steps:
-
 ```bash
-# 1. Unit tests (must still pass after compatibility changes)
+# Run all tests (includes integration test — blocks CI merge on failure)
 pnpm --filter @workspace/mermaid-diagram-bpmn run test
 
-# 2. TypeScript (plugin file must type-check)
+# TypeScript check
 pnpm --filter @workspace/mermaid-diagram-bpmn run typecheck
 
-# 3. Manual end-to-end test (requires Mermaid installed)
-node -e "
-  import('mermaid').then(m => {
-    import('./src/lib/bpmn-plugin.js').then(async ({ bpmnPlugin }) => {
-      await m.default.registerExternalDiagrams([bpmnPlugin]);
-      const result = await m.default.render('test', 'bpmn-beta\nstart s1 \"Start\"\nend e1 \"End\"\ns1 --> e1');
-      console.log(result.svg.slice(0, 200));
-    });
-  });
-"
+# Integration test specifically
+pnpm --filter @workspace/mermaid-diagram-bpmn exec vitest run \
+  src/lib/__tests__/bpmn-plugin-integration.test.ts
 
-# 4. Live editor fork test (manual)
+# Live editor fork test (manual — still pending)
 # Clone mermaid-live-editor, add bpmnPlugin to registerExternalDiagrams call,
 # type a bpmn-beta diagram, verify SVG renders.
 ```

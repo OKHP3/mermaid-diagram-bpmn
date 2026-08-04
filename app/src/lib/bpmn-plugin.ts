@@ -32,6 +32,13 @@ import type { BpmnLayout, BpmnLayoutNode, PoolLayout, LaneLayout } from './bpmn-
 import { getStyles, buildMermaidTheme } from './bpmn-styles.js';
 
 // ---------------------------------------------------------------------------
+// Mermaid version this plugin is validated against.
+// Add `mermaid` as a devDependency pinned to this version when running
+// the plugin integration tests.
+// ---------------------------------------------------------------------------
+export const MERMAID_VERSION_TARGET = '11.4.1';
+
+// ---------------------------------------------------------------------------
 // Shared DiagramDB instance
 //
 // Mermaid convention: the parser populates a module-level db (exposed as
@@ -39,6 +46,16 @@ import { getStyles, buildMermaidTheme } from './bpmn-styles.js';
 // instance. Calling db.clear() before each parse prevents state leakage.
 // ---------------------------------------------------------------------------
 const db = new BpmnDb();
+
+// ---------------------------------------------------------------------------
+// FR-018: Live theme-variable cache
+//
+// Mermaid calls the styles() provider with resolved themeVariables before
+// each render. We cache those here so draw() can embed the same resolved
+// colors in the SVG <defs> without polling window.mermaid.mermaidAPI.
+// Falls back to MERMAID_FALLBACK_THEME for any missing key.
+// ---------------------------------------------------------------------------
+let _cachedThemeVars: Record<string, string> = {};
 
 // ---------------------------------------------------------------------------
 // ParserDefinition
@@ -277,11 +294,10 @@ async function draw(
   const vbW = layout.width + pad;
   const vbH = layout.hasPools ? layout.height + pad : layout.height + pad * 2;
 
-  // Read Mermaid's resolved theme variables if available (avoids hard-coded colors).
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const mermaidGlobal = typeof window !== 'undefined' ? (window as any).mermaid : undefined;
-  const themeVars = mermaidGlobal?.mermaidAPI?.getConfig?.()?.themeVariables ?? {};
-  const styles = getStyles(buildMermaidTheme(themeVars));
+  // FR-018: Use the theme variables last cached by the styles() provider.
+  // This gives us the resolved Mermaid themeVariables at render time instead
+  // of a static fallback, without requiring a window.mermaid global lookup.
+  const styles = getStyles(buildMermaidTheme(_cachedThemeVars));
 
   const title = drawDb.getAccTitle() ?? 'BPMN Diagram';
   const desc = drawDb.getAccDescription() ?? '';
@@ -292,7 +308,7 @@ async function draw(
   el.setAttribute('aria-labelledby', `${id}-title ${id}-desc`);
   el.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
 
-  el.innerHTML = [
+  const innerContent = [
     `<title id="${id}-title">${esc(title)}</title>`,
     `<desc id="${id}-desc">${esc(desc)}</desc>`,
     defsSvg(styles, id),
@@ -303,6 +319,53 @@ async function draw(
       return ln ? renderNodeSvg(node, ln) : '';
     }),
   ].join('\n');
+
+  // Inject SVG content via DOMParser('image/svg+xml') so every child element
+  // is created with the correct SVG namespace. Setting innerHTML directly on
+  // an existing SVG element is not reliable across DOM implementations:
+  // in happy-dom and jsdom, HTML-mode parsing inside an SVG context drops
+  // all sibling elements that follow a <defs> block (including <g> nodes
+  // for flows and tasks). DOMPurify re-parses the SVG string through the
+  // same HTML parser during sanitization, so any elements injected via
+  // direct innerHTML would be stripped a second time.
+  //
+  // DOMParser('image/svg+xml') uses the XML parser, which:
+  //  - Creates every element with the correct SVG namespace
+  //  - Preserves all text content (including CSS inside <style>)
+  //  - Does not have the post-<defs> sibling-drop bug
+  //
+  // document.importNode(child, true) then copies each parsed node into the
+  // live HTML document, preserving namespace assignments.
+  //
+  // Falls back to direct innerHTML for environments where DOMParser is
+  // unavailable (should not occur in any modern browser or Node.js).
+  let injected = false;
+  if (typeof DOMParser !== 'undefined') {
+    try {
+      const parser = new DOMParser();
+      const xmlDoc = parser.parseFromString(
+        `<svg xmlns="http://www.w3.org/2000/svg">${innerContent}</svg>`,
+        'image/svg+xml',
+      );
+      const parsedRoot = xmlDoc.documentElement;
+      // On XML parse error, documentElement is <parsererror>
+      if (parsedRoot.nodeName.toLowerCase() !== 'parsererror') {
+        while (el.firstChild) el.removeChild(el.firstChild);
+        const children = Array.from(parsedRoot.childNodes);
+        for (const child of children) {
+          el.appendChild(document.importNode(child, true));
+        }
+        injected = true;
+      }
+    } catch {
+      /* fall through to innerHTML */
+    }
+  }
+  if (!injected) {
+    // Direct innerHTML — works in real browsers where the HTML parser correctly
+    // assigns SVG namespace to children of an SVG element.
+    el.innerHTML = innerContent;
+  }
 }
 
 // ---------------------------------------------------------------------------
@@ -327,8 +390,11 @@ export const bpmnPlugin = {
       parser: parserDef,
       // DiagramStylesProvider: (options?) => string
       // Mermaid passes resolved themeVariables as `options`.
-      styles: (options?: Record<string, string>) =>
-        getStyles(buildMermaidTheme(options)),
+      // FR-018: Cache them here so draw() can use them at render time.
+      styles: (options?: Record<string, string>) => {
+        if (options) _cachedThemeVars = options;
+        return getStyles(buildMermaidTheme(options));
+      },
     },
   }),
 };
