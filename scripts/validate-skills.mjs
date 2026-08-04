@@ -16,7 +16,12 @@ import { parseSkillFrontmatter, getSkillField } from './skill-frontmatter.mjs';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const repoRoot = resolve(__dirname, '..');
-const skillsDir = join(repoRoot, 'skills');
+const skillsDir = process.env.SKILLS_DIR_OVERRIDE
+  ? resolve(process.env.SKILLS_DIR_OVERRIDE)
+  : join(repoRoot, 'skills');
+const contextDir = process.env.CONTEXT_DIR_OVERRIDE
+  ? resolve(process.env.CONTEXT_DIR_OVERRIDE)
+  : join(repoRoot, 'context');
 
 // ─── Employer name firewall (do not embed literal string) ─────────────────────
 const FORBIDDEN_EMPLOYER = ['B','u','i','l','d','e','r','s',' ','F','i','r','s','t',' ','S','o','u','r','c','e'].join('');
@@ -248,7 +253,6 @@ function validateSkill(skillDir) {
 // ─── C13: Context file v0.2 schema validation ─────────────────────────────────
 function validateContextFiles() {
   const p = '[context]';
-  const contextDir = join(repoRoot, 'context');
   if (!existsSync(contextDir)) {
     fail(`${p} C13: context/ directory exists`, 'context/ directory not found');
     return;

@@ -7,7 +7,9 @@ import { fileURLToPath } from 'node:url';
 import { getSkillField, parseSkillFrontmatter } from './skill-frontmatter.mjs';
 
 const root = resolve(fileURLToPath(new URL('..', import.meta.url)));
-const skillsRoot = join(root, '.agents', 'skills');
+const skillsRoot = process.env.AGENT_SKILLS_DIR_OVERRIDE
+  ? resolve(process.env.AGENT_SKILLS_DIR_OVERRIDE)
+  : join(root, '.agents', 'skills');
 const namePattern = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 const refPattern = /`((?:references|scripts|assets|context)\/[^\s`]+\.[a-zA-Z0-9]+)`/g;
 const failures = [];
