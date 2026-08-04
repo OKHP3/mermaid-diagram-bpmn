@@ -452,6 +452,64 @@ describe('AgentSkills page — PNS section rows', () => {
     expect(queryByText(first.documents)).toBeNull();
     expect(queryByText(second.documents)).not.toBeNull();
   });
+
+  // ── 'Not Applicable?' column — always-required vs conditional ─────────────
+
+  it('shows "Cannot be marked N/A — always required." for a section with naCondition === null', () => {
+    const alwaysRequired = PNS_SECTIONS.find(s => s.naCondition === null);
+    if (!alwaysRequired) throw new Error('Test setup: no PNS section with naCondition === null found');
+
+    const { getByRole, getByText } = renderAndOpenPns();
+    fireEvent.click(getByRole('button', { name: new RegExp(alwaysRequired.title, 'i') }));
+
+    expect(getByText('Cannot be marked N/A — always required.')).not.toBeNull();
+  });
+
+  it('shows the naCondition string for a section with a non-null naCondition', () => {
+    const conditional = PNS_SECTIONS.find(s => s.naCondition !== null);
+    if (!conditional) throw new Error('Test setup: no PNS section with non-null naCondition found');
+
+    const { getByRole, getByText } = renderAndOpenPns();
+    fireEvent.click(getByRole('button', { name: new RegExp(conditional.title, 'i') }));
+
+    expect(getByText(conditional.naCondition!)).not.toBeNull();
+  });
+
+  it('does not show the always-required message for a section with a non-null naCondition', () => {
+    const conditional = PNS_SECTIONS.find(s => s.naCondition !== null);
+    if (!conditional) throw new Error('Test setup: no PNS section with non-null naCondition found');
+
+    const { getByRole, queryByText } = renderAndOpenPns();
+    fireEvent.click(getByRole('button', { name: new RegExp(conditional.title, 'i') }));
+
+    expect(queryByText('Cannot be marked N/A — always required.')).toBeNull();
+  });
+
+  it('every section with naCondition === null shows the always-required message when opened', () => {
+    const alwaysRequired = PNS_SECTIONS.filter(s => s.naCondition === null);
+    for (const sec of alwaysRequired) {
+      const { getByRole, getByText, unmount } = renderAndOpenPns();
+      fireEvent.click(getByRole('button', { name: new RegExp(sec.title, 'i') }));
+      expect(
+        getByText('Cannot be marked N/A — always required.'),
+        `Section "${sec.title}" (naCondition null) should show the always-required message`,
+      ).not.toBeNull();
+      unmount();
+    }
+  });
+
+  it('every section with a non-null naCondition shows its own condition string when opened', () => {
+    const conditional = PNS_SECTIONS.filter(s => s.naCondition !== null);
+    for (const sec of conditional) {
+      const { getByRole, getByText, unmount } = renderAndOpenPns();
+      fireEvent.click(getByRole('button', { name: new RegExp(sec.title, 'i') }));
+      expect(
+        getByText(sec.naCondition!),
+        `Section "${sec.title}" should show its naCondition string`,
+      ).not.toBeNull();
+      unmount();
+    }
+  });
 });
 
 // ─────────────────────────────────────────────────────────────────────────────
