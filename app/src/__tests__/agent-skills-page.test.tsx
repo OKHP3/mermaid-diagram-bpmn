@@ -3,7 +3,7 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, fireEvent, within } from '@testing-library/react';
 import AgentSkills from '@/pages/AgentSkills';
 import { SkillCard } from '@/components/skills/SkillCard';
-import { SKILLS, PIPELINE_LAYERS } from '@/data/skills-registry';
+import { SKILLS, PIPELINE_LAYERS, PNS_SECTIONS } from '@/data/skills-registry';
 
 // ── Wouter ────────────────────────────────────────────────────────────────────
 vi.mock('wouter', () => ({
@@ -315,5 +315,78 @@ describe('SkillCard — description expand/collapse', () => {
     const descPara = container.querySelector('p.text-xs');
     expect(descPara?.textContent).toContain(shortSkill.description);
     expect(descPara?.textContent).not.toMatch(/…/);
+  });
+});
+
+// ─────────────────────────────────────────────────────────────────────────────
+// AgentSkills page — PNS section rows (inner accordion)
+// ─────────────────────────────────────────────────────────────────────────────
+
+describe('AgentSkills page — PNS section rows', () => {
+
+  /** Render the page and open the outer PNS toggle so the inner accordion is mounted. */
+  function renderAndOpenPns() {
+    const result = render(<AgentSkills />);
+    const h2 = result.getByRole('heading', {
+      level: 2,
+      name: /The Process Narrative Specification — The Handoff Artifact/i,
+    });
+    fireEvent.click(h2.closest('button')!);
+    return result;
+  }
+
+  it('renders all 13 section row buttons once the PNS panel is open', () => {
+    const { getAllByRole } = renderAndOpenPns();
+    // Every section title is unique — verify each one has a clickable button.
+    const sectionButtons = PNS_SECTIONS.map(sec =>
+      getAllByRole('button', { name: new RegExp(sec.title, 'i') })
+    );
+    expect(sectionButtons).toHaveLength(PNS_SECTIONS.length); // 13
+    sectionButtons.forEach(btns => expect(btns.length).toBeGreaterThanOrEqual(1));
+  });
+
+  it('clicking a section row reveals the Documents, Standard, and Not Applicable? column headings', () => {
+    const { getByRole, getByText } = renderAndOpenPns();
+    fireEvent.click(getByRole('button', { name: /Process Identification/i }));
+
+    expect(getByText('Documents')).not.toBeNull();
+    expect(getByText('Standard')).not.toBeNull();
+    expect(getByText('Not Applicable?')).not.toBeNull();
+  });
+
+  it('clicking a section row shows that section\'s actual content', () => {
+    const { getByRole, getByText } = renderAndOpenPns();
+    const sec = PNS_SECTIONS[0]; // Process Identification
+    fireEvent.click(getByRole('button', { name: new RegExp(sec.title, 'i') }));
+
+    // The documents text is rendered verbatim in a <p> inside the expanded panel.
+    expect(getByText(sec.documents)).not.toBeNull();
+  });
+
+  it('clicking the same row again collapses it and hides its content', () => {
+    const { getByRole, queryByText } = renderAndOpenPns();
+    const sec = PNS_SECTIONS[0];
+    const rowBtn = getByRole('button', { name: new RegExp(sec.title, 'i') });
+
+    fireEvent.click(rowBtn); // open
+    expect(queryByText(sec.documents)).not.toBeNull();
+
+    fireEvent.click(rowBtn); // close
+    expect(queryByText(sec.documents)).toBeNull();
+  });
+
+  it('opening a second row closes the first — only one row is open at a time', () => {
+    const { getByRole, queryByText } = renderAndOpenPns();
+    const first  = PNS_SECTIONS[0]; // Process Identification
+    const second = PNS_SECTIONS[1]; // Scope & Boundaries
+
+    fireEvent.click(getByRole('button', { name: new RegExp(first.title,  'i') }));
+    expect(queryByText(first.documents)).not.toBeNull();
+
+    fireEvent.click(getByRole('button', { name: new RegExp(second.title, 'i') }));
+
+    // First row content gone, second row content visible
+    expect(queryByText(first.documents)).toBeNull();
+    expect(queryByText(second.documents)).not.toBeNull();
   });
 });
