@@ -2,6 +2,7 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, fireEvent, within } from '@testing-library/react';
 import AgentSkills from '@/pages/AgentSkills';
+import { SkillCard } from '@/components/skills/SkillCard';
 import { SKILLS, PIPELINE_LAYERS } from '@/data/skills-registry';
 
 // ── Wouter ────────────────────────────────────────────────────────────────────
@@ -249,5 +250,70 @@ describe('AgentSkills page — section tab navigation', () => {
     expect(hasButton(/^Skills$/i)).toBe(true);
     expect(hasButton(/Variable Layer/i)).toBe(true);
     expect(hasButton(/PNS Schema/i)).toBe(true);
+  });
+});
+
+// ─────────────────────────────────────────────────────────────────────────────
+// SkillCard — description expand / collapse
+// ─────────────────────────────────────────────────────────────────────────────
+// These tests render SkillCard in isolation so they remain fast and focused.
+// DownloadButton and wouter Link are already mocked above.
+
+describe('SkillCard — description expand/collapse', () => {
+
+  // Use the first skill whose description exceeds the 120-char threshold.
+  const longSkill = SKILLS.find(s => s.description.length > 120);
+  if (!longSkill) throw new Error('Test setup: no skill with description > 120 chars found in SKILLS');
+
+  const shortSkill = {
+    ...SKILLS[0],
+    id: '_test_short',
+    description: 'Short description that fits within the 120-character limit easily.',
+  };
+
+  it('shows a truncated description (ending with "…") and a "More" button when description exceeds 120 chars', () => {
+    const { container, getByRole } = render(<SkillCard skill={longSkill} />);
+    const descPara = container.querySelector('p.text-xs');
+    expect(descPara?.textContent).toMatch(/…/);
+    expect(getByRole('button', { name: 'More' })).not.toBeNull();
+  });
+
+  it('clicking "More" reveals the full description and changes the button to "Less"', () => {
+    const { container, getByRole } = render(<SkillCard skill={longSkill} />);
+    fireEvent.click(getByRole('button', { name: 'More' }));
+
+    // Button label flips to "Less"
+    expect(getByRole('button', { name: 'Less' })).not.toBeNull();
+
+    // Paragraph now contains text beyond the first 120 chars (no truncation marker)
+    const descPara = container.querySelector('p.text-xs');
+    const fullText = longSkill.description;
+    expect(descPara?.textContent).toContain(fullText.slice(120));
+  });
+
+  it('clicking "Less" after expand re-truncates the description', () => {
+    const { container, getByRole } = render(<SkillCard skill={longSkill} />);
+    fireEvent.click(getByRole('button', { name: 'More' }));
+    fireEvent.click(getByRole('button', { name: 'Less' }));
+
+    // Back to truncated state
+    expect(getByRole('button', { name: 'More' })).not.toBeNull();
+    const descPara = container.querySelector('p.text-xs');
+    expect(descPara?.textContent).toMatch(/…/);
+    // Full text beyond 120 chars is no longer in the paragraph
+    expect(descPara?.textContent).not.toContain(longSkill.description.slice(121));
+  });
+
+  it('does not render a "More" or "Less" button when the description fits within 120 chars', () => {
+    const { queryByRole } = render(<SkillCard skill={shortSkill} />);
+    expect(queryByRole('button', { name: 'More' })).toBeNull();
+    expect(queryByRole('button', { name: 'Less' })).toBeNull();
+  });
+
+  it('shows the full short description without truncation', () => {
+    const { container } = render(<SkillCard skill={shortSkill} />);
+    const descPara = container.querySelector('p.text-xs');
+    expect(descPara?.textContent).toContain(shortSkill.description);
+    expect(descPara?.textContent).not.toMatch(/…/);
   });
 });
