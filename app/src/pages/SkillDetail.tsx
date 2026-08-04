@@ -376,7 +376,7 @@ export default function SkillDetail() {
             </p>
             <div className="flex flex-col gap-3">
               {workedExamplesForSkill.map((ex) => (
-                <a
+                <Link
                   key={ex.slug}
                   href={`${ex.path}#step-${skill.id}`}
                   className="flex items-center justify-between px-4 py-3.5 rounded-xl border border-border bg-card hover:border-primary/40 hover:bg-primary/5 transition-colors group"
@@ -392,7 +392,7 @@ export default function SkillDetail() {
                   <span className="text-xs text-primary font-semibold shrink-0 ml-4">
                     Jump to step →
                   </span>
-                </a>
+                </Link>
               ))}
             </div>
           </div>
