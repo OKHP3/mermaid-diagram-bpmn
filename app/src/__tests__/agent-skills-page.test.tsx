@@ -319,6 +319,69 @@ describe('SkillCard — description expand/collapse', () => {
 });
 
 // ─────────────────────────────────────────────────────────────────────────────
+// SKILLS registry — Core/Extension status integrity
+// ─────────────────────────────────────────────────────────────────────────────
+// Pure data tests — no rendering. If a new skill is added with a wrong or
+// missing status field these fail immediately, before any UI test runs.
+
+describe('SKILLS registry — Core/Extension status counts', () => {
+
+  it('has exactly 12 skills with status "core"', () => {
+    const coreSkills = SKILLS.filter((s) => s.status === 'core');
+    expect(
+      coreSkills,
+      `Expected 12 core skills but got ${coreSkills.length}: ${coreSkills.map(s => s.id).join(', ')}`
+    ).toHaveLength(12);
+  });
+
+  it('has exactly 3 skills with status "recommended-extension"', () => {
+    const extSkills = SKILLS.filter((s) => s.status === 'recommended-extension');
+    expect(
+      extSkills,
+      `Expected 3 extension skills but got ${extSkills.length}: ${extSkills.map(s => s.id).join(', ')}`
+    ).toHaveLength(3);
+  });
+
+  it('every skill status is either "core" or "recommended-extension"', () => {
+    const valid = new Set<string>(['core', 'recommended-extension']);
+    for (const skill of SKILLS) {
+      expect(
+        valid.has(skill.status),
+        `${skill.id} has unexpected status "${skill.status}"`
+      ).toBe(true);
+    }
+  });
+
+  it('"Core Only" filter shows exactly the 12 core skills — no extension skills visible', () => {
+    const { getByRole, queryByText } = renderAndOpenBrowser();
+    fireEvent.click(getByRole('button', { name: /Core Only/i }));
+
+    // No extension skill name should appear in the filtered grid
+    const extSkills = SKILLS.filter((s) => s.status === 'recommended-extension');
+    for (const ext of extSkills) {
+      expect(
+        queryByText(ext.displayName),
+        `Extension skill "${ext.displayName}" was visible after Core Only filter`
+      ).toBeNull();
+    }
+  });
+
+  it('"Extensions Only" filter shows exactly the 3 extension skills — no core skills visible', () => {
+    const { getByRole, queryByText } = renderAndOpenBrowser();
+    fireEvent.click(getByRole('button', { name: /Extensions Only/i }));
+
+    // No core skill name should appear in the filtered grid
+    const coreSkills = SKILLS.filter((s) => s.status === 'core');
+    for (const core of coreSkills) {
+      expect(
+        queryByText(core.displayName),
+        `Core skill "${core.displayName}" was visible after Extensions Only filter`
+      ).toBeNull();
+    }
+  });
+});
+
+// ─────────────────────────────────────────────────────────────────────────────
 // AgentSkills page — PNS section rows (inner accordion)
 // ─────────────────────────────────────────────────────────────────────────────
 
