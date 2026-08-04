@@ -309,3 +309,38 @@ describe('PnsLifecycleTracker — mobile scroll on mount', () => {
     expect(scrollIntoViewMock).toHaveBeenCalledWith({ behavior: 'instant', block: 'nearest' });
   });
 });
+
+// ── RACI & SIPOC PNS transition data ─────────────────────────────────────────
+//
+// These two skills consume PNS.md [modeled] but do not advance the lifecycle
+// status (after: null). Pinning their transition values here ensures a future
+// registry edit cannot silently drop the badges that appear on the skill
+// detail page and on the walked-through examples.
+describe('PNS transition data — RACI & SIPOC governance skills', () => {
+  const RACI_ID  = 'okhp3-raci-governance-matrix';
+  const SIPOC_ID = 'okhp3-sipoc-generation';
+
+  it('RACI has an entry in PNS_TRANSITIONS', () => {
+    expect(PNS_TRANSITIONS).toHaveProperty(RACI_ID);
+  });
+
+  it('SIPOC has an entry in PNS_TRANSITIONS', () => {
+    expect(PNS_TRANSITIONS).toHaveProperty(SIPOC_ID);
+  });
+
+  it('RACI reads PNS.md [modeled] — before is "modeled"', () => {
+    expect(PNS_TRANSITIONS[RACI_ID].before).toBe('modeled');
+  });
+
+  it('SIPOC reads PNS.md [modeled] — before is "modeled"', () => {
+    expect(PNS_TRANSITIONS[SIPOC_ID].before).toBe('modeled');
+  });
+
+  it('RACI does not advance PNS lifecycle (after is null)', () => {
+    expect(PNS_TRANSITIONS[RACI_ID].after).toBeNull();
+  });
+
+  it('SIPOC does not advance PNS lifecycle (after is null)', () => {
+    expect(PNS_TRANSITIONS[SIPOC_ID].after).toBeNull();
+  });
+});
