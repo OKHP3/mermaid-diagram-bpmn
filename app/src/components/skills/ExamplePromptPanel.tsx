@@ -14,22 +14,67 @@ interface ExamplePromptPanelProps {
    * The value is used as the filename, e.g. "PROC-2024-042-prompts.txt".
    */
   downloadFilename?: string;
+  /**
+   * When provided, edited phrases are persisted to localStorage under this key
+   * so they survive page refreshes. A "Reset to example" button appears
+   * whenever any phrase differs from the default.
+   */
+  storageKey?: string;
 }
 
-export function ExamplePromptPanel({ steps, downloadFilename }: ExamplePromptPanelProps) {
+export function ExamplePromptPanel({ steps, downloadFilename, storageKey }: ExamplePromptPanelProps) {
+  const defaultPhrases = steps.map((s) => s.triggerUsed);
+
   const [isOpen, setIsOpen] = useState(false);
-  const [phrases, setPhrases] = useState(() => steps.map((s) => s.triggerUsed));
+  const [phrases, setPhrases] = useState<string[]>(() => {
+    if (storageKey) {
+      try {
+        const saved = localStorage.getItem(storageKey);
+        if (saved) {
+          const parsed = JSON.parse(saved) as unknown;
+          if (Array.isArray(parsed) && parsed.length === defaultPhrases.length) {
+            return parsed as string[];
+          }
+        }
+      } catch {
+        // ignore corrupt storage
+      }
+    }
+    return [...defaultPhrases];
+  });
   const [copied, setCopied] = useState(false);
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => () => { if (timerRef.current) clearTimeout(timerRef.current); }, []);
 
+  const isDirty = storageKey
+    ? phrases.some((p, i) => p !== defaultPhrases[i])
+    : false;
+
   function updatePhrase(i: number, value: string) {
     setPhrases((prev) => {
       const next = [...prev];
       next[i] = value;
+      if (storageKey) {
+        try {
+          localStorage.setItem(storageKey, JSON.stringify(next));
+        } catch {
+          // storage unavailable
+        }
+      }
       return next;
     });
+  }
+
+  function resetPhrases() {
+    setPhrases([...defaultPhrases]);
+    if (storageKey) {
+      try {
+        localStorage.removeItem(storageKey);
+      } catch {
+        // storage unavailable
+      }
+    }
   }
 
   function buildText() {
@@ -99,6 +144,20 @@ export function ExamplePromptPanel({ steps, downloadFilename }: ExamplePromptPan
               Edit trigger phrases to match your process name, then copy the full sequence.
             </p>
             <div className="flex items-center gap-2 shrink-0 ml-4">
+              {isDirty && (
+                <button
+                  type="button"
+                  onClick={resetPhrases}
+                  className="inline-flex items-center gap-1.5 text-xs font-medium px-3 py-1.5 rounded-lg transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/50"
+                  style={{
+                    background: "hsl(var(--muted))",
+                    color: "hsl(var(--muted-foreground))",
+                    border: "1px solid hsl(var(--border))",
+                  }}
+                >
+                  Reset to example
+                </button>
+              )}
               {downloadFilename && (
                 <button
                   type="button"

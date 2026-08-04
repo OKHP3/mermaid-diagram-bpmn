@@ -80,7 +80,7 @@ export default function PurchaseApprovalExample() {
             </div>
           </div>
         </div>
-        <ExamplePromptPanel steps={STEPS} downloadFilename="PROC-2024-042-prompts.txt" />
+        <ExamplePromptPanel steps={STEPS} downloadFilename="PROC-2024-042-prompts.txt" storageKey="bp-skill:prompts:purchase-approval" />
       </section>
 
       {/* ── 15-Step Timeline ──────────────────────────────────── */}
@@ -249,3 +249,4 @@ export default function PurchaseApprovalExample() {
     </div>
   );
 }
+
