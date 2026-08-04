@@ -52,7 +52,7 @@ The proof-of-concept agent skill layer before the full pipeline was designed.
 
 ---
 
-### V0.3 — BP-SKILL suite — 15-skill pipeline scaffolded `[CURRENT]`
+### V0.3 — BP-SKILL suite — 15-skill pipeline scaffolded `[DONE]`
 
 The full lifecycle pipeline designed, documented, and surfaced in the app.
 
@@ -68,14 +68,14 @@ The full lifecycle pipeline designed, documented, and surfaced in the app.
 - [x] `bp_skill_version: "0.3.0"` in all 15 source SKILL.md files
 - [x] okhp3-* skills marked deprecated in frontmatter
 - [x] This version checklist published at `docs/version-checklist.md`
-- [ ] All 63 tests passing post-v0.3 changes (run: `pnpm --filter @workspace/mermaid-diagram-bpmn run test`)
-- [ ] `pnpm run typecheck` passes clean
+- [x] All tests passing (373/373 as of v0.1.0 tag; run: `pnpm --filter @workspace/mermaid-diagram-bpmn run test`)
+- [x] `pnpm run typecheck` passes clean
 
-**Current status:** Criteria above the blank line are met. Two validation checks remain.
+**Tag:** `v0.1.0` — 2026-08-04. All V0.3 criteria are met. This tag is the V0.3 baseline commit.
 
 ---
 
-### V0.4 — Content and interactivity `[PLANNED]`
+### V0.4 — Content and interactivity `[CURRENT]`
 
 Make the suite genuinely usable and the UI interactive.
 

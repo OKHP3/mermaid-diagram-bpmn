@@ -9,29 +9,39 @@ Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html) (pre-1.0)
 
 ## [Unreleased]
 
+---
+
+## [0.1.0] — 2026-08-04
+
 ### Added
 - `bpmn-plugin.ts` — `ExternalDiagramDefinition` entry point for `mermaid.registerExternalDiagrams()`; implements `draw`, `parser.yy`, scoped marker IDs, and live Mermaid theme variable binding
 - `docs/mermaid-compatibility.md` — full contract compliance reference for both `mermaid-js/mermaid` and `mermaid-js/mermaid-live-editor`
 - `AGENTS.md` — AI agent and contributor guidance (project identity, architecture constraints, module governance)
 - `CHANGELOG.md` — this file; backfilled from development history
-- `CONTRIBUTING.md` — contributor onboarding guide
+- `CONTRIBUTING.md` — contributor onboarding guide with brand profile, generated data, skill validation, and CI gate documentation
 - `LICENSE` — MIT
 - `docs/ROADMAP.md` — canonical versioned roadmap (migrated from retrospective)
-- `docs/DEPLOYMENT.md` — deployment documentation for GitHub Pages and Replit
-- `docs/RELEASE_CHECKLIST.md` — pre-release gate checklist
-- `docs/PRODUCT_BRIEF.md` — sharp product brief
-- `docs/LEGAL.md` — legal notes and brand policy
+- `docs/DEPLOYMENT.md`, `docs/RELEASE_CHECKLIST.md`, `docs/PRODUCT_BRIEF.md`, `docs/LEGAL.md` — supporting documentation
 - `docs/technical-debt-register.md` — prioritized known-debt register (TD-001–TD-017)
-- `docs/COPILOT_PROMPT_KIT.md` — reusable AI prompts for generating `bpmn-beta` diagrams
-- `docs/prototype-to-product-retrospective.md` — 90-day retrospective analysis
-- `docs/as-built-prd.md` — reverse-engineered requirements document
-- `standards/bpmn-beta-standard.md` — canonical DSL and module standards
-- `standards/parser-safety-checklist.md` — parser safety rules
+- `docs/version-checklist.md` — authoritative version criteria and completion gate
 
 ### Changed
 - `bpmn-detector.ts` — added optional `config?: MermaidConfig` second parameter to match `DiagramDetector` type signature
 - `bpmn-db.ts` — added `setDiagramTitle`, `getDiagramTitle`, `setDiagramId`, `bindFunctions`, `getConfig` to satisfy Mermaid `DiagramDB` interface
 - `bpmn-styles.ts` — added `MERMAID_FALLBACK_THEME` (concrete hex values for Mermaid SVG context); added `buildMermaidTheme()` mapping Mermaid themeVariables to `BpmnThemeOptions`
+- `ci.yml` — added `check:generated:test`, `skill:validate:test` as required CI gates alongside `brand:check:test`
+- `deploy-gh-pages.yml` — all CI quality gates (typecheck, unit tests, skill tests, generated data, skill validation, brand check) now run before the build step; a failing test can no longer reach the public GitHub Pages URL
+- Both `package.json` files bumped from `0.0.0` to `0.1.0`
+
+### Tests (373 total)
+- Node-link guards for all 11 `OFFBOARDING_NODE_LINKS` routes (verify each maps to a real skill id)
+- `aria-current="step"` on mobile lifecycle pill (desktop + mobile, active + inactive)
+- External-link icon guards for Walkthrough and both example pages
+- Purchase Approval and Employee Offboarding timeline end-marker rendering
+- `getStyles` / `buildMermaidTheme` confirms Mermaid export path uses resolved hex values (not CSS custom properties)
+- `.bpmn-text-muted` fill confirmed as `lineColor` (not `textColor`) with `opacity: 0.7`
+- Brand check drift tests: `--forge-grid-size` CSS variable, `.forge-grid background-size` in index.css (12 drift tests total)
+- PNS section number pure-data pairing guard (13 sections, 5 spot-checks)
 
 ---
 

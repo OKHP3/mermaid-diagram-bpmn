@@ -34,6 +34,33 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
+      - name: Type-check
+        run: pnpm run typecheck
+
+      - name: Unit tests
+        run: pnpm --filter @workspace/mermaid-diagram-bpmn run test
+
+      - name: Skill tests
+        run: pnpm run skill:test
+
+      - name: Check generated data files are up to date
+        run: pnpm run check:generated
+
+      - name: Test check:generated drift detection (exits 1 on injected mismatch)
+        run: pnpm run check:generated:test
+
+      - name: Validate skill frontmatter
+        run: pnpm run skill:validate
+
+      - name: Test skill:validate failure-mode detection (exits 1 on bad frontmatter)
+        run: pnpm run skill:validate:test
+
+      - name: Check Forge brand tokens match profile (no drift)
+        run: pnpm run brand:check
+
+      - name: Test brand:check drift detection (exits 1 on injected mismatch)
+        run: pnpm run brand:check:test
+
       - name: Generate skill static files
         run: pnpm --filter @workspace/mermaid-diagram-bpmn run skill:generate
 
