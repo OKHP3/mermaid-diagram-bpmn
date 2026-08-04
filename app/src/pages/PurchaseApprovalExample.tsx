@@ -327,11 +327,16 @@ export default function PurchaseApprovalExample() {
                         <div>
                           <p className="text-[9px] font-mono text-muted-foreground/70 mb-1">{step.outputLabel}</p>
                           {step.hasDiagram ? (
-                            <div className="rounded-lg border border-border bg-card overflow-x-auto">
-                              <div style={{ minWidth: 640, padding: "8px 12px" }}>
-                                <BpmnRenderer source={PURCHASE_APPROVAL_BPMN} />
+                            <>
+                              <div className="rounded-lg border border-border bg-card overflow-x-auto">
+                                <div style={{ minWidth: 640, padding: "8px 12px" }}>
+                                  <BpmnRenderer source={PURCHASE_APPROVAL_BPMN} />
+                                </div>
                               </div>
-                            </div>
+                              <p className="mt-2 text-[10px] font-mono text-muted-foreground/50">
+                                This diagram is illustrative only — nodes are not interactive in this example.
+                              </p>
+                            </>
                           ) : (
                             <pre className="text-[10px] font-mono text-foreground/70 leading-relaxed whitespace-pre-wrap bg-muted/40 rounded px-2.5 py-2 border border-border/50 overflow-x-auto">
                               {step.outputSnippet}
