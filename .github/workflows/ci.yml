@@ -47,3 +47,6 @@ jobs:
 
       - name: Check Forge brand tokens match profile (no drift)
         run: pnpm run brand:check
+
+      - name: Test brand:check drift detection (exits 1 on injected mismatch)
+        run: pnpm run brand:check:test

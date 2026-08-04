@@ -16,6 +16,7 @@
     "eval:run": "node scripts/run-eval-suite.mjs",
     "technology:check": "node scripts/check-technology-versions.mjs",
     "brand:check": "node scripts/check-forge-profile.mjs",
+    "brand:check:test": "node --test scripts/check-forge-profile.test.mjs",
     "deploy:playground": "pnpm --filter @workspace/mermaid-diagram-bpmn run build"
   },
   "private": true,

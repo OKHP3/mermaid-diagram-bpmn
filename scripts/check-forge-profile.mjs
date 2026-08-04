@@ -56,6 +56,16 @@ function readFile(relPath) {
   return readFileSync(resolve(root, relPath), 'utf-8');
 }
 
+// ─── Testability: env-var path overrides ─────────────────────────────────────
+// When set, these replace the real source files so tests can inject fixtures
+// without touching the live codebase.  All four must be absolute paths when
+// provided.  The script behaves identically whether overrides are set or not.
+function readSource(defaultRelPath, envKey) {
+  const override = process.env[envKey];
+  if (override) return readFileSync(override, 'utf-8');
+  return readFile(defaultRelPath);
+}
+
 // ─── Lightweight profile value extractor ─────────────────────────────────────
 // Rather than a full YAML parse, we extract specific known fields by pattern.
 // This is intentional: the profile has block scalars and inline arrays that
@@ -115,10 +125,10 @@ function cssClassProp(css, selector, property) {
 
 // ─── Load files ───────────────────────────────────────────────────────────────
 
-const profileText     = readFile(PROFILE_REL);
-const diagProfileText = readFile(DIAGRAM_PROFILE_REL);
-const forgeCss        = readFile('app/src/styles/forge-tokens.css');
-const indexCss        = readFile('app/src/index.css');
+const profileText     = readSource(PROFILE_REL,                        'FORGE_PROFILE_OVERRIDE');
+const diagProfileText = readSource(DIAGRAM_PROFILE_REL,                'DIAGRAM_PROFILE_OVERRIDE');
+const forgeCss        = readSource('app/src/styles/forge-tokens.css',  'FORGE_TOKENS_CSS_OVERRIDE');
+const indexCss        = readSource('app/src/index.css',                'INDEX_CSS_OVERRIDE');
 
 // ─── Extract version metadata from the profiles ───────────────────────────────
 // style.version is indented 2 spaces; schema_version is at root (0 spaces).
