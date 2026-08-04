@@ -3,12 +3,15 @@
  * check-forge-profile.mjs
  *
  * Validates that key token values in the Forge CSS source files match the
- * values declared in brand-styles/profiles/okhp3-forge.yaml.
+ * values declared in both brand-style profiles:
  *
- * The profile is the single source of truth. This script reads expected values
- * from the profile and compares them to what the CSS actually declares — so
- * updating the profile (+ version bump) is sufficient; the script never needs
- * its own constants edited.
+ *   okhp3-forge.yaml         — page-level palette, fonts, radius, grid
+ *   okhp3-forge-diagram.yaml — --mermaid-* render tokens + code-panel primitives
+ *
+ * The profiles are the single source of truth. This script reads expected
+ * values from each profile and compares them to what the CSS actually declares
+ * — so updating a profile (+ version bump) is sufficient; this script never
+ * needs its own constants edited.
  *
  * Run:  node scripts/check-forge-profile.mjs
  *       pnpm brand:check
@@ -18,24 +21,26 @@
  *           to match CSS (or vice-versa), bump style.version, and set
  *           style.updated_on before committing.
  *
- * What it checks
- * ──────────────
+ * What it checks — okhp3-forge.yaml
+ * ──────────────────────────────────
  * Palette  (forge-tokens.css):  --okh-forge-bg/paper/ink/teal/rust/amber/
  *                                code-bg/code-fg + --forge-footer-bg
  * Radius   (index.css):         --radius  ← tokens.geometry.radius.base
  * Fonts    (forge-tokens.css):  --app-font-display/sans/mono (partial match)
  * Grid     (index.css):         .forge-grid background-size ← tokens.geometry.grid.size
  *
- * Grid note: --forge-grid-size CSS variable is declared as 28px but is not
- * consumed by .forge-grid; the class hardcodes background-size: 32px 32px.
- * The profile tracks the rendered size. See CONTRIBUTING.md § "Forge brand
- * profile" for full guidance.
+ * What it checks — okhp3-forge-diagram.yaml
+ * ──────────────────────────────────────────
+ * Mermaid tokens (forge-tokens.css):  --mermaid-primary-color/primary-border-color/
+ *                                      line-color/cluster-bg/text-color
+ * Panel primitives (forge-tokens.css): --okh-forge-code-bg, --okh-forge-code-fg
  *
  * Extending this script
  * ─────────────────────
- * Add entries to CHECKS or FONT_CHECKS. Provide a profileExtractor function
- * that reads the expected value from the parsed profile object.  Expected
- * values come from the profile — never hardcode them in this script.
+ * Add entries to PALETTE_CHECKS, FONT_CHECKS, or DIAGRAM_CHECKS.
+ * Provide a profileExtract function that reads the expected value from the
+ * parsed profile text.  Expected values come from the profile — never
+ * hardcode them in this script.
  */
 
 import { readFileSync } from 'node:fs';
@@ -44,7 +49,8 @@ import { fileURLToPath } from 'node:url';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const root = resolve(__dirname, '..');
-const PROFILE_REL = 'brand-styles/profiles/okhp3-forge.yaml';
+const PROFILE_REL         = 'brand-styles/profiles/okhp3-forge.yaml';
+const DIAGRAM_PROFILE_REL = 'brand-styles/profiles/okhp3-forge-diagram.yaml';
 
 function readFile(relPath) {
   return readFileSync(resolve(root, relPath), 'utf-8');
@@ -92,11 +98,12 @@ function forgeGridBgSize(css) {
 
 // ─── Load files ───────────────────────────────────────────────────────────────
 
-const profileText = readFile(PROFILE_REL);
-const forgeCss    = readFile('app/src/styles/forge-tokens.css');
-const indexCss    = readFile('app/src/index.css');
+const profileText     = readFile(PROFILE_REL);
+const diagProfileText = readFile(DIAGRAM_PROFILE_REL);
+const forgeCss        = readFile('app/src/styles/forge-tokens.css');
+const indexCss        = readFile('app/src/index.css');
 
-// ─── Extract version metadata from the profile ────────────────────────────────
+// ─── Extract version metadata from the profiles ───────────────────────────────
 // style.version is indented 2 spaces; schema_version is at root (0 spaces).
 
 const styleVersionMatch = profileText.match(/^  version:\s+"([^"]+)"/m);
@@ -104,6 +111,12 @@ const styleVersion   = styleVersionMatch ? styleVersionMatch[1] : '(not found)';
 
 const updatedOnMatch = profileText.match(/^  updated_on:\s+"([^"]+)"/m);
 const updatedOn      = updatedOnMatch ? updatedOnMatch[1] : '(not found)';
+
+const diagVersionMatch = diagProfileText.match(/^  version:\s+"([^"]+)"/m);
+const diagVersion    = diagVersionMatch ? diagVersionMatch[1] : '(not found)';
+
+const diagUpdatedOnMatch = diagProfileText.match(/^  updated_on:\s+"([^"]+)"/m);
+const diagUpdatedOn  = diagUpdatedOnMatch ? diagUpdatedOnMatch[1] : '(not found)';
 
 // ─── Check definitions ────────────────────────────────────────────────────────
 //
@@ -247,6 +260,75 @@ const FONT_CHECKS = [
   },
 ];
 
+// ─── Diagram profile checks ───────────────────────────────────────────────────
+//
+// These check okhp3-forge-diagram.yaml against the --mermaid-* and
+// --okh-forge-code-* tokens in forge-tokens.css.
+//
+// If any of these tokens change in forge-tokens.css the diagram profile must be
+// updated to match (bump style.version + style.updated_on) before merging.
+//
+// Adding a new diagram token: add an entry here with the CSS var name, a
+// profileExtract that reads the expected value from the diagram profile text,
+// and the YAML path for error messages.
+
+const DIAGRAM_MERMAID_CHECKS = [
+  {
+    label: '--mermaid-primary-color (diagram node fill)',
+    cssVarName: '--mermaid-primary-color',
+    profileExtract: t => yamlScalar(t, 'primaryColor'),
+    profileField: `${DIAGRAM_PROFILE_REL}: mermaid_theme_vars.primaryColor`,
+    compare: 'exact',
+  },
+  {
+    label: '--mermaid-primary-border-color (diagram node border)',
+    cssVarName: '--mermaid-primary-border-color',
+    profileExtract: t => yamlScalar(t, 'primaryBorderColor'),
+    profileField: `${DIAGRAM_PROFILE_REL}: mermaid_theme_vars.primaryBorderColor`,
+    compare: 'exact',
+  },
+  {
+    label: '--mermaid-line-color (diagram connecting lines)',
+    cssVarName: '--mermaid-line-color',
+    profileExtract: t => yamlScalar(t, 'lineColor'),
+    profileField: `${DIAGRAM_PROFILE_REL}: mermaid_theme_vars.lineColor`,
+    compare: 'exact',
+  },
+  {
+    label: '--mermaid-cluster-bg (swim-lane pool fill)',
+    cssVarName: '--mermaid-cluster-bg',
+    profileExtract: t => yamlScalar(t, 'clusterBkg'),
+    profileField: `${DIAGRAM_PROFILE_REL}: mermaid_theme_vars.clusterBkg`,
+    compare: 'exact',
+  },
+  {
+    label: '--mermaid-text-color (diagram node text)',
+    cssVarName: '--mermaid-text-color',
+    profileExtract: t => yamlScalar(t, 'textColor'),
+    profileField: `${DIAGRAM_PROFILE_REL}: mermaid_theme_vars.textColor`,
+    compare: 'exact',
+  },
+];
+
+// These cross-check the code-panel primitives that the diagram profile also
+// declares (as diagram-bg / diagram-fg in tokens.color.foundation).
+const DIAGRAM_PANEL_CHECKS = [
+  {
+    label: '--okh-forge-code-bg → diagram-bg (diagram panel base)',
+    cssVarName: '--okh-forge-code-bg',
+    profileExtract: t => yamlScalar(t, 'diagram-bg'),
+    profileField: `${DIAGRAM_PROFILE_REL}: tokens.color.foundation.diagram-bg`,
+    compare: 'exact',
+  },
+  {
+    label: '--okh-forge-code-fg → diagram-fg (diagram panel text)',
+    cssVarName: '--okh-forge-code-fg',
+    profileExtract: t => yamlScalar(t, 'diagram-fg'),
+    profileField: `${DIAGRAM_PROFILE_REL}: tokens.color.foundation.diagram-fg`,
+    compare: 'exact',
+  },
+];
+
 // ─── Run checks ───────────────────────────────────────────────────────────────
 
 const failures = [];
@@ -321,16 +403,39 @@ for (const f of FONT_CHECKS) {
   runCheck(label, cssNorm, expected, 'exact', profileField);
 })();
 
+// ─── Diagram profile checks ───────────────────────────────────────────────────
+//
+// All diagram token values come from forge-tokens.css (same source as the main
+// profile).  Any --mermaid-* or --okh-forge-code-* change in forge-tokens.css
+// that alters a value declared in okhp3-forge-diagram.yaml must be reflected in
+// the diagram profile (+ version bump) before the check will pass.
+
+for (const c of DIAGRAM_MERMAID_CHECKS) {
+  const cssActual = cssVar(forgeCss, c.cssVarName);
+  const profileExpected = c.profileExtract(diagProfileText);
+  runCheck(c.label, cssActual, profileExpected, c.compare, c.profileField);
+}
+
+for (const c of DIAGRAM_PANEL_CHECKS) {
+  const cssActual = cssVar(forgeCss, c.cssVarName);
+  const profileExpected = c.profileExtract(diagProfileText);
+  runCheck(c.label, cssActual, profileExpected, c.compare, c.profileField);
+}
+
 // ─── Report ──────────────────────────────────────────────────────────────────
 
 console.log('');
 console.log('╔══════════════════════════════════════════════════════════════╗');
-console.log('║  Forge Brand Profile — token drift check                     ║');
+console.log('║  Forge Brand Profiles — token drift check                    ║');
 console.log('╚══════════════════════════════════════════════════════════════╝');
 console.log('');
-console.log(`  Profile:    ${PROFILE_REL}`);
-console.log(`  version:    ${styleVersion}`);
-console.log(`  updated_on: ${updatedOn}`);
+console.log(`  Profile (page):    ${PROFILE_REL}`);
+console.log(`  version:           ${styleVersion}`);
+console.log(`  updated_on:        ${updatedOn}`);
+console.log('');
+console.log(`  Profile (diagram): ${DIAGRAM_PROFILE_REL}`);
+console.log(`  version:           ${diagVersion}`);
+console.log(`  updated_on:        ${diagUpdatedOn}`);
 console.log('');
 
 if (passes.length > 0) {
