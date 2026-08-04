@@ -6,6 +6,35 @@ import { ExamplePromptPanel } from "@/components/skills/ExamplePromptPanel";
 import { ExampleStepTimeline } from "@/components/skills/ExampleStepTimeline";
 
 
+/**
+ * Node → skill detail route for the Employee Offboarding diagram.
+ * Mapping rationale (by node type / role in the process):
+ *   s1  – start event     → Intake & Scope       (process trigger: resignation confirmed)
+ *   t1  – user task       → Intake & Scope       (opening the offboarding case)
+ *   t2  – user task       → Stakeholder & Role Mapping (last working day involves all stakeholders)
+ *   t3  – user task       → As-Is Process Capture     (capturing what the leaver currently does)
+ *   t4  – user task       → Process Validation & Scoring (sign-off that transfer is complete)
+ *   t5  – service task    → Visual Process Modeling    (IT subprocess: account suspension)
+ *   t6  – user task       → Elicitation Interviews     (exit interview = formal elicitation)
+ *   t7  – user task       → SOP & Work Instructions    (equipment collection follows a checklist)
+ *   t8  – service task    → Process Measures & Controls (access revocation is a control step)
+ *   t9  – user task       → Publication & Handoff      (closing the record = final package)
+ *   e1  – end event       → Publication & Handoff      (completed offboarding outcome)
+ */
+const OFFBOARDING_NODE_LINKS: Record<string, string> = {
+  s1: "/skills/okhp3-process-intake-and-scope",
+  t1: "/skills/okhp3-process-intake-and-scope",
+  t2: "/skills/okhp3-stakeholder-and-role-mapping",
+  t3: "/skills/okhp3-as-is-process-capture",
+  t4: "/skills/okhp3-process-validation-scoring",
+  t5: "/skills/okhp3-visual-process-modeling",
+  t6: "/skills/okhp3-elicitation-interviews",
+  t7: "/skills/okhp3-sop-work-instructions",
+  t8: "/skills/okhp3-process-measures-controls",
+  t9: "/skills/okhp3-publication-handoff-packaging",
+  e1: "/skills/okhp3-publication-handoff-packaging",
+};
+
 const OFFBOARDING_BPMN = `bpmn-beta
 accTitle: Employee Offboarding — Voluntary Resignation
 accDescr: HR and management coordinate with IT to complete an employee departure.
@@ -112,6 +141,8 @@ export default function EmployeeOffboardingExample() {
           <ExampleStepTimeline
             steps={STEPS}
             bpmnSource={OFFBOARDING_BPMN}
+            nodeLinks={OFFBOARDING_NODE_LINKS}
+            interactivityHint="Click any node to open its skill detail page"
             endLabel="PROC-2025-108 packaged"
             endStatusCode="packaged"
           />
