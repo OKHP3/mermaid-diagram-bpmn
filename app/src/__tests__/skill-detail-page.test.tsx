@@ -203,46 +203,58 @@ describe('PNS transition data — integrity against PNS_LIFECYCLE', () => {
 });
 
 // ─────────────────────────────────────────────────────────────────────────────
-// PnsLifecycleTracker — active stage per skill
+// SkillDetail — PNS lifecycle stage highlighted for each skill
 // ─────────────────────────────────────────────────────────────────────────────
-// Render the tracker directly in compact mode (same props SkillDetail passes)
-// and verify the highlighted stage matches the skill's transition data.
+// Renders the full SkillDetail page (PnsLifecycleTracker is NOT mocked, so the
+// real component executes) and asserts the highlighted pill matches the skill's
+// PNS_TRANSITIONS[id].after value.
+//
+// Discriminating signal: the active pill is the ONLY pill with
+// `style="border-width: 1.5px"`. All inactive pills use `border-width: 1px`.
+// Checking this inline style value avoids false positives from label presence
+// alone (every status label renders in both desktop and mobile slots).
 
-describe('PnsLifecycleTracker — active stage rendering', () => {
+describe('SkillDetail — PNS lifecycle stage highlighted for each skill', () => {
 
-  it('renders all lifecycle stage labels when no activeStatus is provided', () => {
-    const { container } = render(<PnsLifecycleTracker compact />);
-    for (const state of PNS_LIFECYCLE) {
-      expect(container.textContent).toContain(state.status);
-    }
+  /**
+   * Locate the pill div marked as active by the lifecycle tracker.
+   * The active pill is rendered with borderWidth: "1.5px" (inactive: "1px").
+   * Both desktop and mobile renderings are in the DOM; the desktop pills are
+   * the only ones with the rounded-full + border-width style combination.
+   * Returns undefined when no stage is active.
+   */
+  function findActivePill(container: HTMLElement): HTMLElement | undefined {
+    return [...container.querySelectorAll('[class*="rounded-full"]')]
+      .find((el) => (el as HTMLElement).style.borderWidth === '1.5px') as HTMLElement | undefined;
+  }
+
+  it.each(
+    SKILLS
+      .filter((s) => {
+        const t = PNS_TRANSITIONS[s.id];
+        return t !== undefined && t.after !== null;
+      })
+      .map((s) => ({ id: s.id, displayName: s.displayName, after: PNS_TRANSITIONS[s.id].after! }))
+  )('$displayName — active pill text is "$after"', ({ id, after }) => {
+    const { container } = renderSkill(id);
+    const activePill = findActivePill(container);
+    expect(
+      activePill,
+      `SkillDetail for ${id}: expected an active pill (borderWidth 1.5px) for after="${after}"`
+    ).not.toBeUndefined();
+    expect(activePill!.textContent?.trim()).toBe(after);
   });
 
   it.each(
-    Object.entries(PNS_TRANSITIONS)
-      .filter(([, t]) => t.after !== null)
-      .map(([id, t]) => ({ id, after: t.after! }))
-  )('$id — tracker renders "$after" when that is the active stage', ({ after }) => {
-    const { container } = render(<PnsLifecycleTracker activeStatus={after} compact />);
-    // The status label appears in the DOM (desktop + mobile both render it)
-    expect(container.textContent).toContain(after);
-    // All other stages still appear (they are dimmed via opacity, not removed)
-    for (const state of PNS_LIFECYCLE) {
-      expect(container.textContent).toContain(state.status);
-    }
-  });
-
-  it.each(
-    Object.entries(PNS_TRANSITIONS)
-      .filter(([, t]) => t.after === null)
-      .map(([id]) => ({ id }))
-  )('$id (after: null) — tracker renders without crashing when activeStatus is undefined', ({ id }) => {
-    // SkillDetail passes `pnsActiveStatus = pnsTransition?.after ?? undefined`
-    // so null becomes undefined — no stage should be highlighted, no crash.
-    expect(() => render(<PnsLifecycleTracker activeStatus={undefined} compact />)).not.toThrow();
-    const { container } = render(<PnsLifecycleTracker activeStatus={undefined} compact />);
-    // All lifecycle stages still render
-    for (const state of PNS_LIFECYCLE) {
-      expect(container.textContent).toContain(state.status);
-    }
+    SKILLS
+      .filter((s) => PNS_TRANSITIONS[s.id]?.after === null)
+      .map((s) => ({ id: s.id, displayName: s.displayName }))
+  )('$displayName (after: null) — no active pill is rendered', ({ id }) => {
+    const { container } = renderSkill(id);
+    const activePill = findActivePill(container);
+    expect(
+      activePill,
+      `SkillDetail for ${id}: expected no active pill when after=null`
+    ).toBeUndefined();
   });
 });
