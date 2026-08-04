@@ -80,6 +80,57 @@ on your branch, fix the drift or the detector before requesting review.
 > The profile tracks this token under `tokens.geometry.grid.size`.  If you
 > change the variable value, update the profile and bump the version.
 
+## Generated data files
+
+Two data files are auto-generated from the skills directory and must be
+committed alongside any change that adds, removes, or renames a skill:
+
+| File | Generator script | Regen command |
+|---|---|---|
+| `app/src/data/pns-transitions-auto.ts` | `scripts/extract-pns-transitions.mjs` | `pnpm run regen:generated` |
+| `app/src/data/skill-deps-auto.ts` | `scripts/extract-skill-deps.mjs` | `pnpm run regen:generated` |
+
+Run both verification commands locally before opening a PR:
+
+```bash
+pnpm check:generated       # exits 0 when committed files match the source
+pnpm check:generated:test  # exits 0 when each drift detector fires correctly
+```
+
+`check:generated` re-runs the generators in `--check` mode and diffs the
+output against the committed files.  It exits non-zero if any file is stale,
+listing the first differing line.
+
+`check:generated:test` injects a known-stale line into a temp copy of each
+file and asserts that `check:generated` exits 1.  A broken detector (e.g.
+a regex that no longer matches) will fail here before it reaches CI.
+
+**Both steps run in CI and both must pass before a pull request can merge.**
+There is no `continue-on-error` exemption for either step.  If either exits 1
+on your branch, run `pnpm run regen:generated` and commit the updated files.
+
+## Skill frontmatter validation
+
+Every BP-SKILL in `skills/` must have a `SKILL.md` with valid frontmatter
+(name, description ≥ 50 chars, produces field, directory matching name).
+The same rule applies to agent skills in `.agents/skills/`.
+
+```bash
+pnpm skill:validate       # exits 0 when all SKILL.md files are valid
+pnpm skill:validate:test  # exits 0 when each failure mode fires correctly
+```
+
+`skill:validate` parses every `SKILL.md` and reports the first violation
+with a fix hint.
+
+`skill:validate:test` injects known-bad SKILL.md fixtures (short description,
+missing field, name/directory mismatch) and asserts that `skill:validate`
+exits 1 for each one.  A detector regression will fail here before CI.
+
+**Both steps run in CI and both must pass before a pull request can merge.**
+There is no `continue-on-error` exemption for either step.  Fix any reported
+frontmatter issue before requesting review.
+
 ## Current implementation status
 
 | Category | Elements |
