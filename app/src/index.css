@@ -277,6 +277,17 @@
     background: rgba(196, 106, 44, 0.12);
   }
 
+  /* ---- Mobile nav section labels -------------------------------- */
+
+  .forge-mobile-nav-label {
+    display: block;
+    color: var(--okh-header-muted);
+    font-size: 0.65rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
   /* ---- Header brand title & badge ------------------------------ */
 
   .forge-brand-title {

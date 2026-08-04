@@ -288,25 +288,62 @@ export function Layout({ children }: { children: React.ReactNode }) {
           </div>
         </div>
 
-        {/* Mobile menu — flat list of all pages */}
+        {/* Mobile menu — sectioned list mirroring desktop groups */}
         {menuOpen && (
           <nav
             className="md:hidden px-4 pb-3 pt-2 flex flex-col gap-0.5"
             style={{ borderTop: "1px solid var(--okh-header-border)" }}
+            aria-label="Mobile navigation"
           >
-            {ALL_NAV.map(link => {
-              const isActive = isLinkActive(link.href, location);
-              return (
+            {/* Top-level: Home, Playground, Agent Skills */}
+            {FLAT_NAV.map(link => (
+              <Link
+                key={link.href}
+                href={link.href}
+                onClick={() => setMenuOpen(false)}
+                className={`px-3 py-2.5 rounded text-sm forge-mobile-nav-link${isLinkActive(link.href, location) ? " forge-mobile-nav-link--active" : ""}`}
+              >
+                {link.label}
+              </Link>
+            ))}
+
+            {/* Reference section */}
+            <div
+              className="mt-2 pt-2 flex flex-col gap-0.5"
+              style={{ borderTop: "1px solid var(--okh-header-border)" }}
+            >
+              <span className="forge-mobile-nav-label px-3 pb-0.5">Reference</span>
+              {REFERENCE_LINKS.map(link => (
                 <Link
                   key={link.href}
                   href={link.href}
                   onClick={() => setMenuOpen(false)}
-                  className={`px-3 py-2.5 rounded text-sm forge-mobile-nav-link${isActive ? " forge-mobile-nav-link--active" : ""}`}
+                  className={`px-3 py-2.5 rounded text-sm forge-mobile-nav-link${isLinkActive(link.href, location) ? " forge-mobile-nav-link--active" : ""}`}
                 >
                   {link.label}
                 </Link>
-              );
-            })}
+              ))}
+            </div>
+
+            {/* More section */}
+            <div
+              className="mt-2 pt-2 flex flex-col gap-0.5"
+              style={{ borderTop: "1px solid var(--okh-header-border)" }}
+            >
+              <span className="forge-mobile-nav-label px-3 pb-0.5">More</span>
+              {MORE_LINKS.map(link => (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  onClick={() => setMenuOpen(false)}
+                  className={`px-3 py-2.5 rounded text-sm forge-mobile-nav-link${isLinkActive(link.href, location) ? " forge-mobile-nav-link--active" : ""}`}
+                >
+                  {link.label}
+                </Link>
+              ))}
+            </div>
+
+            {/* GitHub */}
             <div
               className="mt-2 pt-2 flex items-center gap-3"
               style={{ borderTop: "1px solid var(--okh-header-border)" }}
