@@ -232,6 +232,19 @@ const PALETTE_CHECKS = [
     profileField: 'tokens.geometry.radius.base',
     compare: 'exact',
   },
+  {
+    label: '--forge-grid-size (blueprint grid cell size)',
+    cssFile: 'forge', cssVarName: '--forge-grid-size',
+    profileExtract: t => {
+      // Narrow to the grid: block so we don't match 'size' from other sections
+      const gridBlock = t.match(/grid:\s*\n((?:[ \t]+.+\n)*)/m);
+      if (!gridBlock) return null;
+      const m = gridBlock[1].match(/size:\s+"([^"]+)"/);
+      return m ? m[1] : null;
+    },
+    profileField: 'tokens.geometry.grid.size',
+    compare: 'exact',
+  },
 ];
 
 // Font checks: the CSS value includes fallbacks; we require only the primary

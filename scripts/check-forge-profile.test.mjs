@@ -247,3 +247,23 @@ test('exits 1 when .forge-parse-error-bar border-color drifts from the diagram p
     `failure output should name the drifted token; got:\n${stdout}`,
   );
 });
+// ─── 11. Drift in forge-tokens.css (forge-grid-size) ─────────────────────────
+// Inject a wrong value for --forge-grid-size (real value is 32px).
+
+test('exits 1 when --forge-grid-size drifts from the forge profile', () => {
+  const original = readFileSync(REAL_FORGE_TOKENS, 'utf-8');
+  const drifted  = original.replace(
+    /--forge-grid-size\s*:\s*32px\s*;/,
+    '--forge-grid-size: 99px;',
+  );
+  assert.notEqual(original, drifted, 'fixture mutation must change the file content');
+
+  const forgeFixture = writeTmp(drifted);
+  const { exitCode, stdout } = runCheck({ FORGE_TOKENS_CSS_OVERRIDE: forgeFixture });
+
+  assert.equal(exitCode, 1, 'brand:check should exit 1 when --forge-grid-size drifts');
+  assert.ok(
+    stdout.includes('forge-grid-size') || stdout.includes('grid.size'),
+    `failure output should name the drifted token; got:\n${stdout}`,
+  );
+});
