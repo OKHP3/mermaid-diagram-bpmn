@@ -96,6 +96,23 @@ function forgeGridBgSize(css) {
   return sz ? sz[1].trim() : null;
 }
 
+/**
+ * Extract a CSS property value from the first rule block matching `selector`.
+ * Strips trailing `!important` before returning.
+ * Returns null if the selector or property is not found.
+ */
+function cssClassProp(css, selector, property) {
+  const blockRe = new RegExp(`${escapeRe(selector)}\\s*\\{([^}]+)\\}`, 's');
+  const blockMatch = css.match(blockRe);
+  if (!blockMatch) return null;
+  const inner = blockMatch[1];
+  // Anchor to line-start (with optional indentation) so 'color' doesn't
+  // accidentally match inside 'background-color'.
+  const propRe = new RegExp(`(?:^|\\n)[ \\t]*${escapeRe(property)}\\s*:\\s*([^;!\\n]+)`);
+  const propMatch = inner.match(propRe);
+  return propMatch ? propMatch[1].trim() : null;
+}
+
 // ─── Load files ───────────────────────────────────────────────────────────────
 
 const profileText     = readFile(PROFILE_REL);
@@ -329,6 +346,59 @@ const DIAGRAM_PANEL_CHECKS = [
   },
 ];
 
+// Tokens declared directly in index.css utility classes — not CSS variables.
+// Each entry reads from the class rule and compares to the diagram profile.
+const DIAGRAM_INDEX_CHECKS = [
+  {
+    label: '.forge-code-panel-tab border-color → tab-border',
+    cssSelector: '.forge-code-panel-tab',
+    cssProp: 'border-color',
+    profileExtract: t => yamlScalar(t, 'tab-border'),
+    profileField: `${DIAGRAM_PROFILE_REL}: tokens.color.foundation.tab-border`,
+    compare: 'exact',
+  },
+  {
+    label: '.forge-code-panel-tab color → tab-fg-muted',
+    cssSelector: '.forge-code-panel-tab',
+    cssProp: 'color',
+    profileExtract: t => yamlScalar(t, 'tab-fg-muted'),
+    profileField: `${DIAGRAM_PROFILE_REL}: tokens.color.foundation.tab-fg-muted`,
+    compare: 'exact',
+  },
+  {
+    label: '.forge-code-panel::placeholder color → placeholder',
+    cssSelector: '.forge-code-panel::placeholder',
+    cssProp: 'color',
+    profileExtract: t => yamlScalar(t, 'placeholder'),
+    profileField: `${DIAGRAM_PROFILE_REL}: tokens.color.foundation.placeholder`,
+    compare: 'exact',
+  },
+  {
+    label: '.forge-parse-error-text color → error-text',
+    cssSelector: '.forge-parse-error-text',
+    cssProp: 'color',
+    profileExtract: t => yamlScalar(t, 'error-text'),
+    profileField: `${DIAGRAM_PROFILE_REL}: tokens.color.foundation.error-text`,
+    compare: 'exact',
+  },
+  {
+    label: '.forge-parse-error-bar background → error-bg-tint',
+    cssSelector: '.forge-parse-error-bar',
+    cssProp: 'background',
+    profileExtract: t => yamlScalar(t, 'error-bg-tint'),
+    profileField: `${DIAGRAM_PROFILE_REL}: tokens.color.foundation.error-bg-tint`,
+    compare: 'exact',
+  },
+  {
+    label: '.forge-parse-error-bar border-color → error-border',
+    cssSelector: '.forge-parse-error-bar',
+    cssProp: 'border-color',
+    profileExtract: t => yamlScalar(t, 'error-border'),
+    profileField: `${DIAGRAM_PROFILE_REL}: tokens.color.foundation.error-border`,
+    compare: 'exact',
+  },
+];
+
 // ─── Run checks ───────────────────────────────────────────────────────────────
 
 const failures = [];
@@ -418,6 +488,13 @@ for (const c of DIAGRAM_MERMAID_CHECKS) {
 
 for (const c of DIAGRAM_PANEL_CHECKS) {
   const cssActual = cssVar(forgeCss, c.cssVarName);
+  const profileExpected = c.profileExtract(diagProfileText);
+  runCheck(c.label, cssActual, profileExpected, c.compare, c.profileField);
+}
+
+// Diagram tokens sourced from index.css class rules (not CSS variables).
+for (const c of DIAGRAM_INDEX_CHECKS) {
+  const cssActual = cssClassProp(indexCss, c.cssSelector, c.cssProp);
   const profileExpected = c.profileExtract(diagProfileText);
   runCheck(c.label, cssActual, profileExpected, c.compare, c.profileField);
 }
