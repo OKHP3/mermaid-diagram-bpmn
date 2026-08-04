@@ -193,3 +193,32 @@ describe('BpmnRenderer — bpmn-styles CSS injection', () => {
     expect(styles.length).toBe(1);
   });
 });
+
+// ── DM Sans font injection ────────────────────────────────────────────────────
+// The .bpmn-text and .bpmn-text-label classes declare
+//   font-family: var(--app-font-sans, 'DM Sans', system-ui, sans-serif)
+// These tests confirm the rendered SVG <style> block contains the DM Sans
+// fallback, and that the two node-label classes are present in the same block.
+// A future edit that drops the font-family or swaps the font will fail here.
+
+describe('BpmnRenderer — DM Sans font in SVG style block', () => {
+  it("<style> block contains 'DM Sans' as a font-family value", () => {
+    const { container } = render(<BpmnRenderer source={MINIMAL_SOURCE} />);
+    const style = container.querySelector('svg style')!;
+    expect(style.textContent).toContain('DM Sans');
+  });
+
+  it('<style> block declares font-family on .bpmn-text', () => {
+    const { container } = render(<BpmnRenderer source={MINIMAL_SOURCE} />);
+    const style = container.querySelector('svg style')!;
+    expect(style.textContent).toContain('.bpmn-text');
+    expect(style.textContent).toContain('font-family');
+  });
+
+  it('<style> block declares font-family on .bpmn-text-label', () => {
+    const { container } = render(<BpmnRenderer source={MINIMAL_SOURCE} />);
+    const style = container.querySelector('svg style')!;
+    expect(style.textContent).toContain('.bpmn-text-label');
+    expect(style.textContent).toContain('font-family');
+  });
+});
