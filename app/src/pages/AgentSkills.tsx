@@ -15,6 +15,10 @@ import { SkillFrontmatterPreview } from "@/components/skills/SkillFrontmatterPre
 import { ZipDownloadButton } from "@/components/skills/ZipDownloadButton";
 import { DownloadButton } from "@/components/skills/DownloadButton";
 
+// Derived once at module load — update automatically when SKILLS changes.
+const CORE_COUNT = SKILLS.filter((s) => s.status === "core").length;
+const EXT_COUNT  = SKILLS.filter((s) => s.status === "recommended-extension").length;
+
 const SECTION_TABS = [
   { id: "standard",  label: "The Standard" },
   { id: "pipeline",  label: "Pipeline" },
@@ -268,7 +272,11 @@ export default function AgentSkills() {
                   onClick={() => setStatusFilter(f)}
                   className={statusFilter === f ? "forge-tab-active" : "forge-tab"}
                 >
-                  {f === "all" ? "All Skills" : f === "core" ? "Core Only" : "Extensions Only"}
+                  {f === "all"
+                    ? `All Skills (${SKILLS.length})`
+                    : f === "core"
+                    ? `Core (${CORE_COUNT})`
+                    : `Extensions (${EXT_COUNT})`}
                 </button>
               ))}
             </div>

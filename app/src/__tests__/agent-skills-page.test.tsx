@@ -87,7 +87,7 @@ describe('AgentSkills page — Skill Browser', () => {
     const { getByRole, getAllByText } = renderAndOpenBrowser();
     const coreCount = SKILLS.filter((s) => s.status === 'core').length;
 
-    fireEvent.click(getByRole('button', { name: /Core Only/i }));
+    fireEvent.click(getByRole('button', { name: /^Core \(/ }));
 
     const badges = getAllByText(/^\d{2}\/15$/);
     expect(badges).toHaveLength(coreCount);
@@ -97,7 +97,7 @@ describe('AgentSkills page — Skill Browser', () => {
     const { getByRole, getAllByText } = renderAndOpenBrowser();
     const extCount = SKILLS.filter((s) => s.status === 'recommended-extension').length;
 
-    fireEvent.click(getByRole('button', { name: /Extensions Only/i }));
+    fireEvent.click(getByRole('button', { name: /^Extensions \(/ }));
 
     const badges = getAllByText(/^\d{2}\/15$/);
     expect(badges).toHaveLength(extCount);
@@ -106,8 +106,8 @@ describe('AgentSkills page — Skill Browser', () => {
   it('"All Skills" filter restores full set after a status filter', () => {
     const { getByRole, getAllByText } = renderAndOpenBrowser();
 
-    fireEvent.click(getByRole('button', { name: /Core Only/i }));
-    fireEvent.click(getByRole('button', { name: /All Skills/i }));
+    fireEvent.click(getByRole('button', { name: /^Core \(/ }));
+    fireEvent.click(getByRole('button', { name: /^All Skills \(/ }));
 
     expect(getAllByText(/^\d{2}\/15$/)).toHaveLength(15);
   });
@@ -148,7 +148,7 @@ describe('AgentSkills page — Skill Browser', () => {
       (s) => s.status === 'core' && s.layer === layer.id
     );
 
-    fireEvent.click(getByRole('button', { name: /Core Only/i }));
+    fireEvent.click(getByRole('button', { name: /^Core \(/ }));
     fireEvent.click(getByRole('button', { name: new RegExp(`^${layer.label}$`) }));
 
     if (combined.length === 0) {
@@ -160,7 +160,7 @@ describe('AgentSkills page — Skill Browser', () => {
 
   it('results count line appears when a filter is active', () => {
     const { getByRole, getByText } = renderAndOpenBrowser();
-    fireEvent.click(getByRole('button', { name: /Core Only/i }));
+    fireEvent.click(getByRole('button', { name: /^Core \(/ }));
     expect(getByText(/Showing \d+ of 15 skills/)).not.toBeNull();
   });
 
@@ -354,7 +354,7 @@ describe('SKILLS registry — Core/Extension status counts', () => {
 
   it('"Core Only" filter shows exactly the 12 core skills — no extension skills visible', () => {
     const { getByRole, queryByText } = renderAndOpenBrowser();
-    fireEvent.click(getByRole('button', { name: /Core Only/i }));
+    fireEvent.click(getByRole('button', { name: /^Core \(/ }));
 
     // No extension skill name should appear in the filtered grid
     const extSkills = SKILLS.filter((s) => s.status === 'recommended-extension');
@@ -368,7 +368,7 @@ describe('SKILLS registry — Core/Extension status counts', () => {
 
   it('"Extensions Only" filter shows exactly the 3 extension skills — no core skills visible', () => {
     const { getByRole, queryByText } = renderAndOpenBrowser();
-    fireEvent.click(getByRole('button', { name: /Extensions Only/i }));
+    fireEvent.click(getByRole('button', { name: /^Extensions \(/ }));
 
     // No core skill name should appear in the filtered grid
     const coreSkills = SKILLS.filter((s) => s.status === 'core');
