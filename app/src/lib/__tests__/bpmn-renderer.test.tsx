@@ -222,6 +222,19 @@ describe('BpmnRenderer — DM Sans font in SVG style block', () => {
     expect(style.textContent).toContain('.bpmn-text-label');
     expect(style.textContent).toContain('font-family');
   });
+
+  it("<style> block contains 'JetBrains Mono' as a font-family value for muted labels", () => {
+    const { container } = render(<BpmnRenderer source={MINIMAL_SOURCE} />);
+    const style = container.querySelector('svg style')!;
+    expect(style.textContent).toContain('JetBrains Mono');
+  });
+
+  it('<style> block declares font-family on .bpmn-text-muted', () => {
+    const { container } = render(<BpmnRenderer source={MINIMAL_SOURCE} />);
+    const style = container.querySelector('svg style')!;
+    expect(style.textContent).toContain('.bpmn-text-muted');
+    expect(style.textContent).toContain('font-family');
+  });
 });
 
 // ── LIGHT_THEME color values in style block ───────────────────────────────────
