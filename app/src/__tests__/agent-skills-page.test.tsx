@@ -584,4 +584,30 @@ describe('SkillCard — "View Details" link routes to the correct skill page', (
     const unique = new Set(hrefs);
     expect(unique.size).toBe(hrefs.length);
   });
+
+  // Keyboard / ARIA accessibility
+  // If the element gains tabIndex=-1, aria-hidden, or loses its link role,
+  // keyboard and screen-reader users lose access to every skill page silently.
+
+  it('"View Details" link is discoverable by role (accessible to AT)', () => {
+    const skill = SKILLS[0];
+    const { getByRole } = render(<SkillCard skill={skill} />);
+    // getByRole throws if no matching element exists
+    const link = getByRole('link', { name: /View Details/i });
+    expect(link).toBeTruthy();
+  });
+
+  it('"View Details" link does not have tabIndex="-1"', () => {
+    const skill = SKILLS[0];
+    const { getByRole } = render(<SkillCard skill={skill} />);
+    const link = getByRole('link', { name: /View Details/i });
+    expect(link.getAttribute('tabIndex') ?? link.getAttribute('tabindex')).not.toBe('-1');
+  });
+
+  it('"View Details" link does not have aria-hidden="true"', () => {
+    const skill = SKILLS[0];
+    const { getByRole } = render(<SkillCard skill={skill} />);
+    const link = getByRole('link', { name: /View Details/i });
+    expect(link.getAttribute('aria-hidden')).not.toBe('true');
+  });
 });
