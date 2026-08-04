@@ -163,3 +163,87 @@ test('exits 1 when .forge-code-panel-tab border-color drifts from the diagram pr
     `failure output should name the drifted token; got:\n${stdout}`,
   );
 });
+
+// ─── 7. Drift in index.css (tab-fg-muted) ────────────────────────────────────
+// Inject a wrong value for .forge-code-panel-tab color (real: rgba(230, 223, 201, 0.55)).
+
+test('exits 1 when .forge-code-panel-tab color drifts from the diagram profile', () => {
+  const original = readFileSync(REAL_INDEX_CSS, 'utf-8');
+  const drifted  = original.replace(
+    'color: rgba(230, 223, 201, 0.55);',
+    'color: rgba(0, 0, 0, 0.55);',
+  );
+  assert.notEqual(original, drifted, 'fixture mutation must change the file content');
+
+  const indexFixture = writeTmp(drifted);
+  const { exitCode, stdout } = runCheck({ INDEX_CSS_OVERRIDE: indexFixture });
+
+  assert.equal(exitCode, 1, 'brand:check should exit 1 when tab color drifts');
+  assert.ok(
+    stdout.includes('tab-fg-muted') || stdout.includes('forge-code-panel-tab'),
+    `failure output should name the drifted token; got:\n${stdout}`,
+  );
+});
+
+// ─── 8. Drift in index.css (placeholder) ─────────────────────────────────────
+// Inject a wrong value for .forge-code-panel::placeholder color (real: rgba(212, 201, 181, 0.30)).
+
+test('exits 1 when .forge-code-panel::placeholder color drifts from the diagram profile', () => {
+  const original = readFileSync(REAL_INDEX_CSS, 'utf-8');
+  const drifted  = original.replace(
+    'color: rgba(212, 201, 181, 0.30);',
+    'color: rgba(0, 0, 0, 0.30);',
+  );
+  assert.notEqual(original, drifted, 'fixture mutation must change the file content');
+
+  const indexFixture = writeTmp(drifted);
+  const { exitCode, stdout } = runCheck({ INDEX_CSS_OVERRIDE: indexFixture });
+
+  assert.equal(exitCode, 1, 'brand:check should exit 1 when placeholder color drifts');
+  assert.ok(
+    stdout.includes('placeholder') || stdout.includes('forge-code-panel'),
+    `failure output should name the drifted token; got:\n${stdout}`,
+  );
+});
+
+// ─── 9. Drift in index.css (error-bg-tint) ───────────────────────────────────
+// Inject a wrong value for .forge-parse-error-bar background (real: rgba(196, 106, 44, 0.12)).
+
+test('exits 1 when .forge-parse-error-bar background drifts from the diagram profile', () => {
+  const original = readFileSync(REAL_INDEX_CSS, 'utf-8');
+  const drifted  = original.replace(
+    /\.forge-parse-error-bar\s*\{[^}]*background\s*:\s*rgba\(196[^;]+;/s,
+    m => m.replace(/background\s*:\s*rgba\(196[^;]+;/, 'background: rgba(0, 0, 0, 0.12);'),
+  );
+  assert.notEqual(original, drifted, 'fixture mutation must change the file content');
+
+  const indexFixture = writeTmp(drifted);
+  const { exitCode, stdout } = runCheck({ INDEX_CSS_OVERRIDE: indexFixture });
+
+  assert.equal(exitCode, 1, 'brand:check should exit 1 when parse-error-bar background drifts');
+  assert.ok(
+    stdout.includes('error-bg-tint') || stdout.includes('parse-error-bar'),
+    `failure output should name the drifted token; got:\n${stdout}`,
+  );
+});
+
+// ─── 10. Drift in index.css (error-border) ───────────────────────────────────
+// Inject a wrong value for .forge-parse-error-bar border-color (real: #4a2018).
+
+test('exits 1 when .forge-parse-error-bar border-color drifts from the diagram profile', () => {
+  const original = readFileSync(REAL_INDEX_CSS, 'utf-8');
+  const drifted  = original.replace(
+    /\.forge-parse-error-bar\s*\{[^}]*border-color\s*:\s*#4a2018\s*;/s,
+    m => m.replace('#4a2018', '#000000'),
+  );
+  assert.notEqual(original, drifted, 'fixture mutation must change the file content');
+
+  const indexFixture = writeTmp(drifted);
+  const { exitCode, stdout } = runCheck({ INDEX_CSS_OVERRIDE: indexFixture });
+
+  assert.equal(exitCode, 1, 'brand:check should exit 1 when parse-error-bar border-color drifts');
+  assert.ok(
+    stdout.includes('error-border') || stdout.includes('parse-error-bar'),
+    `failure output should name the drifted token; got:\n${stdout}`,
+  );
+});
