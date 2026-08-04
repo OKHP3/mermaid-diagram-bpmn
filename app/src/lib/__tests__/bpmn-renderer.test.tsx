@@ -147,3 +147,49 @@ describe('BpmnRenderer — interactive behaviour', () => {
     expect(getByText(/No nodes parsed/)).toBeTruthy();
   });
 });
+
+// ── CSS injection ─────────────────────────────────────────────────────────────
+// Confirms that the renderer embeds a <style> block inside the SVG and that
+// the block contains the class names produced by getStyles().  If the
+// getStyles() call is ever accidentally removed the SVG will silently render
+// unstyled; these tests catch that regression.
+
+describe('BpmnRenderer — bpmn-styles CSS injection', () => {
+  it('renders a <style> element inside the SVG', () => {
+    const { container } = render(<BpmnRenderer source={MINIMAL_SOURCE} />);
+    const svg = container.querySelector('svg');
+    expect(svg, 'expected an <svg> element to be rendered').not.toBeNull();
+    const style = svg!.querySelector('style');
+    expect(style, 'expected a <style> element inside the SVG').not.toBeNull();
+  });
+
+  it('<style> block contains .bpmn-task class', () => {
+    const { container } = render(<BpmnRenderer source={MINIMAL_SOURCE} />);
+    const style = container.querySelector('svg style')!;
+    expect(style.textContent).toContain('.bpmn-task');
+  });
+
+  it('<style> block contains .bpmn-event class', () => {
+    const { container } = render(<BpmnRenderer source={MINIMAL_SOURCE} />);
+    const style = container.querySelector('svg style')!;
+    expect(style.textContent).toContain('.bpmn-event');
+  });
+
+  it('<style> block contains .bpmn-flow-sequence class', () => {
+    const { container } = render(<BpmnRenderer source={MINIMAL_SOURCE} />);
+    const style = container.querySelector('svg style')!;
+    expect(style.textContent).toContain('.bpmn-flow-sequence');
+  });
+
+  it('<style> block is non-empty', () => {
+    const { container } = render(<BpmnRenderer source={MINIMAL_SOURCE} />);
+    const style = container.querySelector('svg style')!;
+    expect(style.textContent!.trim().length).toBeGreaterThan(0);
+  });
+
+  it('exactly one <style> element is injected per SVG', () => {
+    const { container } = render(<BpmnRenderer source={MINIMAL_SOURCE} />);
+    const styles = container.querySelectorAll('svg style');
+    expect(styles.length).toBe(1);
+  });
+});
