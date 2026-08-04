@@ -16,8 +16,9 @@ pnpm --filter @workspace/mermaid-diagram-bpmn run test
 pnpm --filter @workspace/mermaid-diagram-bpmn run typecheck
 ```
 
-Both should pass before submitting a PR. The current Pages workflow does not
-run these checks as a deployment gate, so run them locally before review.
+Both should pass before submitting a PR. Both CI (pull requests) and the
+deploy workflow enforce these checks as a gate. Run them locally before
+opening a PR to catch issues early.
 
 ## Where things live
 
