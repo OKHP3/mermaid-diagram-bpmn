@@ -308,6 +308,37 @@ describe('PnsLifecycleTracker — mobile scroll on mount', () => {
     expect(scrollIntoViewMock).toHaveBeenCalledOnce();
     expect(scrollIntoViewMock).toHaveBeenCalledWith({ behavior: 'instant', block: 'nearest' });
   });
+
+  // ── aria-current="step" parity — mobile pill ───────────────────────────────
+  // In happy-dom both the hidden sm:flex (desktop) and sm:hidden (mobile)
+  // sections are present in the DOM simultaneously, so querySelectorAll finds
+  // one element per layout. The test uses the CODE tag to target the mobile
+  // element specifically (the non-linked path, withAnchors=false by default).
+
+  it('active mobile code element carries aria-current="step" (non-linked path)', () => {
+    const { container } = render(<PnsLifecycleTracker activeStatus="draft-intake" compact />);
+
+    // Both layouts render in happy-dom → expect exactly two [aria-current="step"] elements
+    const allActive = container.querySelectorAll('[aria-current="step"]');
+    expect(
+      allActive.length,
+      'expected exactly 2 aria-current="step" elements (desktop pill + mobile code)',
+    ).toBe(2);
+
+    // Mobile non-linked path renders a <code> element with aria-current="step"
+    const mobileCode = Array.from(allActive).find(el => el.tagName === 'CODE') as HTMLElement | undefined;
+    expect(
+      mobileCode,
+      'expected a <code> element with aria-current="step" (mobile non-linked path)',
+    ).not.toBeUndefined();
+    expect(mobileCode!.textContent?.trim()).toBe('draft-intake');
+  });
+
+  it('no aria-current="step" elements when activeStatus is not set', () => {
+    const { container } = render(<PnsLifecycleTracker compact />);
+    const allActive = container.querySelectorAll('[aria-current="step"]');
+    expect(allActive.length).toBe(0);
+  });
 });
 
 // ── RACI & SIPOC PNS transition data ─────────────────────────────────────────
