@@ -453,3 +453,53 @@ describe('AgentSkills page — PNS section rows', () => {
     expect(queryByText(second.documents)).not.toBeNull();
   });
 });
+
+// ─────────────────────────────────────────────────────────────────────────────
+// SkillCard — 'View Details' link href
+// ─────────────────────────────────────────────────────────────────────────────
+// Verifies that the "View Details" anchor href matches the skill's id.
+// Wouter's <Link> is already mocked as a plain <a> at the top of this file,
+// so getAttribute('href') returns the raw value passed to href={...}.
+
+describe('SkillCard — "View Details" link routes to the correct skill page', () => {
+
+  it('renders a "View Details" anchor with href="/skills/<skill.id>"', () => {
+    const skill = SKILLS[0];
+    const { getByRole } = render(<SkillCard skill={skill} />);
+    const link = getByRole('link', { name: /View Details/i });
+    expect(link.getAttribute('href')).toBe(`/skills/${skill.id}`);
+  });
+
+  it('every skill in SKILLS produces a "View Details" link with the matching href', () => {
+    for (const skill of SKILLS) {
+      const { getByRole, unmount } = render(<SkillCard skill={skill} />);
+      const link = getByRole('link', { name: /View Details/i });
+      expect(
+        link.getAttribute('href'),
+        `SkillCard for "${skill.id}" had wrong View Details href`,
+      ).toBe(`/skills/${skill.id}`);
+      unmount();
+    }
+  });
+
+  it('the browser grid renders a "View Details" link for every skill id', () => {
+    const { getAllByRole } = renderAndOpenBrowser();
+    const links = getAllByRole('link', { name: /View Details/i });
+    const hrefs = links.map(l => l.getAttribute('href'));
+
+    for (const skill of SKILLS) {
+      expect(
+        hrefs,
+        `No "View Details" link found for skill "${skill.id}"`,
+      ).toContain(`/skills/${skill.id}`);
+    }
+  });
+
+  it('no two skill cards share the same "View Details" href', () => {
+    const { getAllByRole } = renderAndOpenBrowser();
+    const hrefs = getAllByRole('link', { name: /View Details/i })
+      .map(l => l.getAttribute('href'));
+    const unique = new Set(hrefs);
+    expect(unique.size).toBe(hrefs.length);
+  });
+});
