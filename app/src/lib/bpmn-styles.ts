@@ -14,6 +14,7 @@ export function getStyles(options: BpmnThemeOptions): string {
     .bpmn-event-start-inner { fill: ${options.primaryColor}; opacity: 0.25; }
     .bpmn-task { fill: ${options.mainBkg}; stroke: ${options.nodeBorder}; stroke-width: 1.5; }
     .bpmn-task-hover { fill: ${options.primaryColor}; fill-opacity: 0.12; stroke: ${options.primaryColor}; stroke-width: 2; pointer-events: none; }
+    .bpmn-task-ext { fill: none; stroke: ${options.nodeBorder}; stroke-width: 2; stroke-dasharray: 5 3; pointer-events: none; }
     .bpmn-task-marker { stroke: ${options.lineColor}; fill: none; stroke-width: 1.5; }
     .bpmn-task-text { fill: ${options.textColor}; }
     .bpmn-gateway { fill: ${options.mainBkg}; stroke: ${options.lineColor}; stroke-width: 1.8; }

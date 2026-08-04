@@ -64,7 +64,7 @@ interface NodeInteraction {
   isHovered?: boolean;
 }
 
-function renderNode(node: BpmnNode, lnode: BpmnLayoutNode, interaction?: NodeInteraction) {
+function renderNode(node: BpmnNode, lnode: BpmnLayoutNode, interaction?: NodeInteraction, isDotted?: boolean) {
   const { x, y, width, height } = lnode;
   const hasClick = !!interaction?.onClick;
 
@@ -111,6 +111,9 @@ function renderNode(node: BpmnNode, lnode: BpmnLayoutNode, interaction?: NodeInt
         <rect x={x - hw} y={y - hh} width={width} height={height} rx={6} className="bpmn-task" />
         {interaction?.isHovered && (
           <rect x={x - hw} y={y - hh} width={width} height={height} rx={6} className="bpmn-task-hover" />
+        )}
+        {isDotted && (
+          <rect x={x - hw} y={y - hh} width={width} height={height} rx={6} className="bpmn-task-ext" />
         )}
         {node.subtype === 'user' && <UserTaskIcon x={iconX} y={iconY} />}
         {node.subtype === 'service' && <ServiceTaskIcon x={iconX} y={iconY} />}
@@ -251,9 +254,11 @@ export interface BpmnRendererProps {
    * - Pass `false` to suppress the hint entirely.
    */
   interactivityHint?: string | false;
+  /** Node IDs that should render with a dashed border (e.g. extension/optional skills). */
+  dottedNodeIds?: string[];
 }
 
-export function BpmnRenderer({ source, nodeLinks, nodeTooltips, interactivityHint }: BpmnRendererProps) {
+export function BpmnRenderer({ source, nodeLinks, nodeTooltips, interactivityHint, dottedNodeIds }: BpmnRendererProps) {
   const [, navigate] = useLocation();
   const [hoveredNode, setHoveredNode] = useState<string | null>(null);
   const [tooltipPos, setTooltipPos] = useState<{ x: number; y: number }>({ x: 0, y: 0 });
@@ -335,7 +340,8 @@ export function BpmnRenderer({ source, nodeLinks, nodeTooltips, interactivityHin
                   isHovered: hoveredNode === node.id,
                 }
               : undefined;
-            return renderNode(node, lnode, interaction);
+            const isDotted = !!(dottedNodeIds?.includes(node.id));
+            return renderNode(node, lnode, interaction, isDotted);
           })}
         </svg>
 

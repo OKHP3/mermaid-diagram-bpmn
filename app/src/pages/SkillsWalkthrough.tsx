@@ -21,9 +21,14 @@ SKILLS.forEach((skill) => {
   }
 });
 
+/** Node IDs for skills with status="recommended-extension" in the pipeline diagram. */
+const PIPELINE_EXTENSION_NODE_IDS: string[] = SKILLS
+  .filter((s) => s.status === "recommended-extension")
+  .map((s) => `sk${String(s.pipelineOrder).padStart(2, "0")}`);
+
 const PIPELINE_BPMN = `bpmn-beta
 accTitle: BP-SKILL v0.3 — 15-Skill Pipeline
-accDescr: Business process documentation lifecycle from intake to publication. Click any skill node to open its detail page.
+accDescr: Business process documentation lifecycle from intake to publication. Core skills use a solid border; extension skills use a dashed border. Click any skill node to open its detail page.
 
 start s0 "Process Request"
 task:user sk01 "01 · Intake & Scope"
@@ -196,6 +201,7 @@ export default function SkillsWalkthrough() {
                 nodeLinks={PIPELINE_NODE_LINKS}
                 nodeTooltips={PIPELINE_NODE_TOOLTIPS}
                 interactivityHint="Click any skill to open its detail page"
+                dottedNodeIds={PIPELINE_EXTENSION_NODE_IDS}
               />
             </div>
           </div>
@@ -203,6 +209,25 @@ export default function SkillsWalkthrough() {
           <p className="mt-3 text-[10px] font-mono text-muted-foreground/50">
             bpmn-beta · accTitle: BP-SKILL v0.3 — 15-Skill Pipeline
           </p>
+
+          {/* Legend */}
+          <div className="mt-4 flex flex-wrap gap-x-5 gap-y-2 items-center">
+            <span className="text-[9px] font-mono uppercase tracking-wider text-muted-foreground/50">
+              Border:
+            </span>
+            <div className="flex items-center gap-1.5">
+              <svg width="14" height="14" className="flex-shrink-0" aria-hidden="true">
+                <rect x="1" y="1" width="12" height="12" rx="2" fill="none" stroke="currentColor" strokeWidth="1.5" className="text-muted-foreground/60" />
+              </svg>
+              <span className="text-[9px] text-muted-foreground font-mono">Core</span>
+            </div>
+            <div className="flex items-center gap-1.5">
+              <svg width="14" height="14" className="flex-shrink-0" aria-hidden="true">
+                <rect x="1" y="1" width="12" height="12" rx="2" fill="none" stroke="currentColor" strokeWidth="1.5" strokeDasharray="3 2" className="text-muted-foreground/60" />
+              </svg>
+              <span className="text-[9px] text-muted-foreground font-mono">Extension</span>
+            </div>
+          </div>
         </div>
       </section>
 
