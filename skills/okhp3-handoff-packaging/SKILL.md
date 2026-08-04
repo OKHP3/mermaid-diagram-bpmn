@@ -2,8 +2,8 @@
 name: okhp3-handoff-packaging
 description: Assemble all validated BP-SKILL process artifacts into a publication-ready bundle with a manifest, approvals record, and completeness check. Use this skill when the user is ready to publish or hand off a complete process documentation set; when they ask to package the process docs, create a handoff bundle, publish the process artifacts, or generate a release package. Requires a passing validation report (Band A or B) before bundling. Produces a MANIFEST.yaml, APPROVALS.yaml, and a ZIP-ready directory structure.
 license: MIT
-homepage: https://github.com/overkillhill/mermaid-diagram-bpmn/tree/main/skills/publication-and-handoff-packaging
-repository: https://github.com/overkillhill/mermaid-diagram-bpmn
+homepage: https://github.com/OKHP3/mermaid-diagram-bpmn/tree/main/skills/publication-and-handoff-packaging
+repository: https://github.com/OKHP3/mermaid-diagram-bpmn
 metadata:
   bp_skill_version: "0.3.0"
   status: core

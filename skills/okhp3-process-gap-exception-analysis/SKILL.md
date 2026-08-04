@@ -16,13 +16,13 @@ metadata:
   depends_on: "okhp3-as-is-process-capture"
   tags: "gap-analysis, exception-analysis, process-improvement, root-cause, nonconformity, BPM-CBOK, six-sigma"
   triggers: "find the gaps in this process; what's wrong with the current process; exception analysis; where does this break; process gaps; analyze exceptions; root cause analysis; process improvement"
-  homepage: "https://github.com/overkillhill/mermaid-diagram-bpmn/tree/main/skills/okhp3-process-gap-exception-analysis"
-  repository: "https://github.com/overkillhill/mermaid-diagram-bpmn"
+  homepage: "https://github.com/OKHP3/mermaid-diagram-bpmn/tree/main/skills/okhp3-process-gap-exception-analysis"
+  repository: "https://github.com/OKHP3/mermaid-diagram-bpmn"
 ---
 
 # okhp3-process-gap-exception-analysis
 
-**BP-SKILL: Business Process Agent Skill Suite** · part of [mermaid-diagram-bpmn](https://github.com/overkillhill/mermaid-diagram-bpmn) · OverKill Hill P³
+**BP-SKILL: Business Process Agent Skill Suite** · part of [mermaid-diagram-bpmn](https://github.com/OKHP3/mermaid-diagram-bpmn) · OverKill Hill P³
 
 ---
 
@@ -159,4 +159,4 @@ Version 0.2.0 (this pass) added the `compatibility` declaration and the script f
 
 ## About
 
-Part of the **BP-SKILL: Business Process Agent Skill Suite**, published in [overkillhill/mermaid-diagram-bpmn](https://github.com/overkillhill/mermaid-diagram-bpmn). MIT License.
+Part of the **BP-SKILL: Business Process Agent Skill Suite**, published in [overkillhill/mermaid-diagram-bpmn](https://github.com/OKHP3/mermaid-diagram-bpmn). MIT License.

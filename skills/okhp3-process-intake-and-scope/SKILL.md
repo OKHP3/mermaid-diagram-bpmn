@@ -16,13 +16,13 @@ metadata:
   depends_on: ""
   tags: "process-intake, scope-definition, elicitation, BABOK, PIR, business-analysis, intake, process-boundary"
   triggers: "document this process; help me scope this workflow; capture the process steps; process intake; define process boundaries; what are the inputs and outputs; map this business process; process discovery; elicit requirements"
-  homepage: "https://github.com/overkillhill/mermaid-diagram-bpmn/tree/main/skills/okhp3-process-intake-and-scope"
-  repository: "https://github.com/overkillhill/mermaid-diagram-bpmn"
+  homepage: "https://github.com/OKHP3/mermaid-diagram-bpmn/tree/main/skills/okhp3-process-intake-and-scope"
+  repository: "https://github.com/OKHP3/mermaid-diagram-bpmn"
 ---
 
 # okhp3-process-intake-and-scope
 
-**BP-SKILL: Business Process Agent Skill Suite** · part of [mermaid-diagram-bpmn](https://github.com/overkillhill/mermaid-diagram-bpmn) · OverKill Hill P³
+**BP-SKILL: Business Process Agent Skill Suite** · part of [mermaid-diagram-bpmn](https://github.com/OKHP3/mermaid-diagram-bpmn) · OverKill Hill P³
 
 ---
 
@@ -199,4 +199,4 @@ Version 0.2.0 (this pass) added the `compatibility` declaration, per-script fall
 
 ## About
 
-Part of the **BP-SKILL: Business Process Agent Skill Suite**, published in [overkillhill/mermaid-diagram-bpmn](https://github.com/overkillhill/mermaid-diagram-bpmn). MIT License.
+Part of the **BP-SKILL: Business Process Agent Skill Suite**, published in [overkillhill/mermaid-diagram-bpmn](https://github.com/OKHP3/mermaid-diagram-bpmn). MIT License.

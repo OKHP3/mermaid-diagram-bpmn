@@ -16,13 +16,13 @@ metadata:
   depends_on: "okhp3-process-narrative-authoring"
   tags: "SOP, work-instructions, documented-information, ISO9001, procedure, process-document, work-instruction"
   triggers: "write an SOP; create work instructions; generate a procedure; SOP document; standard operating procedure; documented procedure; work instruction; ISO 9001 document"
-  homepage: "https://github.com/overkillhill/mermaid-diagram-bpmn/tree/main/skills/okhp3-sop-work-instructions"
-  repository: "https://github.com/overkillhill/mermaid-diagram-bpmn"
+  homepage: "https://github.com/OKHP3/mermaid-diagram-bpmn/tree/main/skills/okhp3-sop-work-instructions"
+  repository: "https://github.com/OKHP3/mermaid-diagram-bpmn"
 ---
 
 # okhp3-sop-work-instructions
 
-**BP-SKILL: Business Process Agent Skill Suite** · part of [mermaid-diagram-bpmn](https://github.com/overkillhill/mermaid-diagram-bpmn) · OverKill Hill P³
+**BP-SKILL: Business Process Agent Skill Suite** · part of [mermaid-diagram-bpmn](https://github.com/OKHP3/mermaid-diagram-bpmn) · OverKill Hill P³
 
 ---
 
@@ -166,4 +166,4 @@ Version 0.2.0 (this pass) added the `compatibility` declaration, the script fall
 
 ## About
 
-Part of the **BP-SKILL: Business Process Agent Skill Suite**, published in [overkillhill/mermaid-diagram-bpmn](https://github.com/overkillhill/mermaid-diagram-bpmn). MIT License.
+Part of the **BP-SKILL: Business Process Agent Skill Suite**, published in [overkillhill/mermaid-diagram-bpmn](https://github.com/OKHP3/mermaid-diagram-bpmn). MIT License.

@@ -16,13 +16,13 @@ metadata:
   depends_on: "okhp3-process-narrative-authoring"
   tags: "validation, quality-scoring, V1-V9, publication-gate, process-quality, ISO9001, BPM-CBOK"
   triggers: "validate the process; quality check; is this ready to publish; run the validation suite; quality score; publication gate; check the process docs; V1 through V9"
-  homepage: "https://github.com/overkillhill/mermaid-diagram-bpmn/tree/main/skills/okhp3-process-validation-scoring"
-  repository: "https://github.com/overkillhill/mermaid-diagram-bpmn"
+  homepage: "https://github.com/OKHP3/mermaid-diagram-bpmn/tree/main/skills/okhp3-process-validation-scoring"
+  repository: "https://github.com/OKHP3/mermaid-diagram-bpmn"
 ---
 
 # okhp3-process-validation-scoring
 
-**BP-SKILL: Business Process Agent Skill Suite** · part of [mermaid-diagram-bpmn](https://github.com/overkillhill/mermaid-diagram-bpmn) · OverKill Hill P³
+**BP-SKILL: Business Process Agent Skill Suite** · part of [mermaid-diagram-bpmn](https://github.com/OKHP3/mermaid-diagram-bpmn) · OverKill Hill P³
 
 ---
 
@@ -148,4 +148,4 @@ Version 0.2.0 (this pass) added the `compatibility` declaration, the orchestrato
 
 ## About
 
-Part of the **BP-SKILL: Business Process Agent Skill Suite**, published in [overkillhill/mermaid-diagram-bpmn](https://github.com/overkillhill/mermaid-diagram-bpmn). MIT License.
+Part of the **BP-SKILL: Business Process Agent Skill Suite**, published in [overkillhill/mermaid-diagram-bpmn](https://github.com/OKHP3/mermaid-diagram-bpmn). MIT License.

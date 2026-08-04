@@ -16,13 +16,13 @@ metadata:
   depends_on: "okhp3-process-narrative-authoring; okhp3-visual-process-modeling; okhp3-sop-work-instructions"
   tags: "publication, handoff, bundle, manifest, approvals, release, ISO9001, documented-information"
   triggers: "package the process docs; publish the process; handoff bundle; release package; create the publication bundle; finalize process documentation; ready to publish"
-  homepage: "https://github.com/overkillhill/mermaid-diagram-bpmn/tree/main/skills/okhp3-publication-handoff-packaging"
-  repository: "https://github.com/overkillhill/mermaid-diagram-bpmn"
+  homepage: "https://github.com/OKHP3/mermaid-diagram-bpmn/tree/main/skills/okhp3-publication-handoff-packaging"
+  repository: "https://github.com/OKHP3/mermaid-diagram-bpmn"
 ---
 
 # okhp3-publication-handoff-packaging
 
-**BP-SKILL: Business Process Agent Skill Suite** · part of [mermaid-diagram-bpmn](https://github.com/overkillhill/mermaid-diagram-bpmn) · OverKill Hill P³
+**BP-SKILL: Business Process Agent Skill Suite** · part of [mermaid-diagram-bpmn](https://github.com/OKHP3/mermaid-diagram-bpmn) · OverKill Hill P³
 
 ---
 
@@ -180,4 +180,4 @@ Version 0.2.0 (this pass) added the `compatibility` declaration and the script f
 
 ## About
 
-Part of the **BP-SKILL: Business Process Agent Skill Suite**, published in [overkillhill/mermaid-diagram-bpmn](https://github.com/overkillhill/mermaid-diagram-bpmn). MIT License.
+Part of the **BP-SKILL: Business Process Agent Skill Suite**, published in [overkillhill/mermaid-diagram-bpmn](https://github.com/OKHP3/mermaid-diagram-bpmn). MIT License.
