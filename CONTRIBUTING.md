@@ -55,21 +55,30 @@ sync with them:
 2. Bump `style.version` (patch → minor if a token role changes meaning; minor →
    major if a token is removed).
 3. Update `style.updated_on` to today's date (`YYYY-MM-DD`).
-4. Run the drift check to confirm nothing was missed:
+4. Run both the drift check and its failure-mode tests locally to confirm
+   nothing was missed and the guard itself still works:
 
 ```bash
-pnpm brand:check
+pnpm brand:check        # exits 0 when CSS matches the profile
+pnpm brand:check:test   # exits 0 when each drift detector fires correctly
 ```
 
-The check compares live CSS values against the profile's declared values and
-exits non-zero if any have drifted, listing each mismatch with the exact
+`brand:check` compares live CSS values against the profile's declared values
+and exits non-zero if any have drifted, listing each mismatch with the exact
 profile field to fix.
 
-> **Grid size note:** `--forge-grid-size` (currently `28px`) is a declared CSS
-> variable that is not yet consumed by the `.forge-grid` class. The class
-> hardcodes `background-size: 32px 32px` directly. The profile tracks the
-> rendered size (`32px`). If you wire up the variable, update the profile's
-> `tokens.geometry.grid.size` to match and bump the version.
+`brand:check:test` injects known-bad fixtures and asserts that `brand:check`
+exits 1 for each one.  A broken drift detector (e.g. wrong selector, stale
+regex) will fail here before it reaches CI.
+
+**Both steps run in CI and both must pass before a pull request can merge.**
+There is no `continue-on-error` exemption for either step.  If either exits 1
+on your branch, fix the drift or the detector before requesting review.
+
+> **Grid size note:** `--forge-grid-size` (`32px`) is consumed by the
+> `.forge-grid` class via `background-size: var(--forge-grid-size) ...`.
+> The profile tracks this token under `tokens.geometry.grid.size`.  If you
+> change the variable value, update the profile and bump the version.
 
 ## Current implementation status
 
