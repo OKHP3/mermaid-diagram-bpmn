@@ -8,6 +8,7 @@
     "typecheck:libs": "tsc --build",
     "typecheck": "pnpm run typecheck:libs && pnpm -r --filter \"./app\" --filter \"./scripts\" --if-present run typecheck",
     "check:generated": "node scripts/extract-pns-transitions.mjs --check && node scripts/extract-skill-deps.mjs --check",
+    "regen:generated": "node scripts/extract-pns-transitions.mjs && node scripts/extract-skill-deps.mjs",
     "skill:validate": "node scripts/validate-skills.mjs",
     "skill:validate:agents": "node scripts/validate-agent-skills.mjs",
     "skill:test": "node --test skills/okhp3-process-intake-and-scope/tests/*.test.mjs skills/okhp3-stakeholder-and-role-mapping/tests/*.test.mjs skills/okhp3-elicitation-interviews/tests/*.test.mjs skills/okhp3-as-is-process-capture/tests/*.test.mjs skills/okhp3-process-narrative-authoring/tests/*.test.mjs skills/okhp3-visual-process-modeling/tests/*.test.mjs skills/okhp3-process-gap-exception-analysis/tests/*.test.mjs skills/okhp3-future-state-change-strategy/tests/*.test.mjs skills/okhp3-decision-model-authoring/tests/*.test.mjs skills/okhp3-process-validation-scoring/tests/*.test.mjs skills/okhp3-process-measures-controls/tests/*.test.mjs skills/okhp3-sop-work-instructions/tests/*.test.mjs skills/okhp3-raci-governance-matrix/tests/*.test.mjs skills/okhp3-sipoc-generation/tests/*.test.mjs skills/okhp3-publication-handoff-packaging/tests/*.test.mjs skills/__tests__/pipeline.integration.test.mjs",

@@ -229,7 +229,7 @@ if (CHECK_MODE) {
   const committed = fs.readFileSync(COMMITTED_OUT, "utf8");
   if (generated !== committed) {
     console.error(
-      "[extract-pns-transitions] FAIL: pns-transitions-auto.ts is stale — run pnpm skill:pns",
+      "[extract-pns-transitions] FAIL: pns-transitions-auto.ts is stale — run pnpm run regen:generated",
     );
     process.exit(1);
   }

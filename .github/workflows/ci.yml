@@ -39,7 +39,7 @@ jobs:
       - name: Skill tests
         run: pnpm run skill:test
 
-      - name: Check generated data files are up to date
+      - name: Check generated data files are up to date (fix locally with 'pnpm run regen:generated')
         run: pnpm run check:generated
 
       - name: Check Forge brand tokens match profile (no drift)
