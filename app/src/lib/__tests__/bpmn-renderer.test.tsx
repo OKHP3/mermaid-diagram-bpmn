@@ -2,6 +2,7 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, fireEvent } from '@testing-library/react';
 import { BpmnRenderer } from '../bpmn-renderer';
+import { LIGHT_THEME } from '../bpmn-styles';
 
 const mockNavigate = vi.hoisted(() => vi.fn());
 
@@ -220,5 +221,45 @@ describe('BpmnRenderer — DM Sans font in SVG style block', () => {
     const style = container.querySelector('svg style')!;
     expect(style.textContent).toContain('.bpmn-text-label');
     expect(style.textContent).toContain('font-family');
+  });
+});
+
+// ── LIGHT_THEME color values in style block ───────────────────────────────────
+// The renderer calls getStyles(LIGHT_THEME) — so the <style> block must contain
+// LIGHT_THEME's CSS custom-property values, not MERMAID_FALLBACK_THEME's hex
+// literals.  A future swap of themes would change these values and fail here.
+
+describe('BpmnRenderer — LIGHT_THEME color values in SVG style block', () => {
+  it('<style> block contains LIGHT_THEME.mainBkg (hsl(var(--card)))', () => {
+    const { container } = render(<BpmnRenderer source={MINIMAL_SOURCE} />);
+    const style = container.querySelector('svg style')!;
+    expect(style.textContent).toContain(LIGHT_THEME.mainBkg);
+  });
+
+  it('<style> block contains LIGHT_THEME.nodeBorder (hsl(var(--border)))', () => {
+    const { container } = render(<BpmnRenderer source={MINIMAL_SOURCE} />);
+    const style = container.querySelector('svg style')!;
+    expect(style.textContent).toContain(LIGHT_THEME.nodeBorder);
+  });
+
+  it('<style> block contains LIGHT_THEME.primaryColor (hsl(var(--primary)))', () => {
+    const { container } = render(<BpmnRenderer source={MINIMAL_SOURCE} />);
+    const style = container.querySelector('svg style')!;
+    expect(style.textContent).toContain(LIGHT_THEME.primaryColor);
+  });
+
+  it('<style> block contains LIGHT_THEME.textColor (hsl(var(--foreground)))', () => {
+    const { container } = render(<BpmnRenderer source={MINIMAL_SOURCE} />);
+    const style = container.querySelector('svg style')!;
+    expect(style.textContent).toContain(LIGHT_THEME.textColor);
+  });
+
+  it('<style> block does NOT contain MERMAID_FALLBACK_THEME hex values', () => {
+    // If the renderer were accidentally switched to MERMAID_FALLBACK_THEME,
+    // these concrete hex values would appear.  Their absence confirms LIGHT_THEME is used.
+    const { container } = render(<BpmnRenderer source={MINIMAL_SOURCE} />);
+    const style = container.querySelector('svg style')!;
+    expect(style.textContent).not.toContain('#111827'); // fallback primaryColor / mainBkg
+    expect(style.textContent).not.toContain('#c46a2c'); // fallback lineColor / nodeBorder
   });
 });
