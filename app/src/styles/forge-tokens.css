@@ -47,9 +47,12 @@
   --forge-footer-border: rgba(255, 255, 255, 0.08);
 
   /* Blueprint grid texture */
-  --forge-grid-size:  32px;
-  --forge-grid-light: rgba(0, 0, 0, 0.028);
-  --forge-grid-dark:  rgba(255, 255, 255, 0.018);
+  --forge-grid-size:    32px;
+  --forge-grid-light:   rgba(0, 0, 0, 0.028);
+  --forge-grid-dark:    rgba(255, 255, 255, 0.018);
+
+  /* Diagram preview dot-grid */
+  --diagram-grid-size:  24px;
 
   /* Canonical Mermaid render tokens */
   --mermaid-primary-color:        #111827;

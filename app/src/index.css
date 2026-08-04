@@ -330,7 +330,7 @@
   /* Dot grid for diagram preview panel */
   .diagram-grid {
     background-image: radial-gradient(circle, hsl(var(--border)) 1px, transparent 1px);
-    background-size: 24px 24px;
+    background-size: var(--diagram-grid-size) var(--diagram-grid-size);
   }
 
   /* ---- Content -------------------------------------------------- */
