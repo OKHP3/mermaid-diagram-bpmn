@@ -13,7 +13,7 @@
 
 import { readFileSync, readdirSync, statSync, existsSync } from 'node:fs';
 import { resolve, join, dirname } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const REPO_ROOT = resolve(HERE, '..');
@@ -37,7 +37,7 @@ const PARSE_YAML_PATH = join(
   HERE,
   'src/parse-yaml-minimal.mjs'
 );
-const { parseYaml } = await import(PARSE_YAML_PATH);
+const { parseYaml } = await import(pathToFileURL(PARSE_YAML_PATH).href);
 
 /**
  * The minimal YAML parser coerces quoted numeric strings like "0.1" to the
@@ -64,7 +64,7 @@ async function loadModule(relPath) {
   if (moduleCache.has(relPath)) return moduleCache.get(relPath);
   const absPath = join(REPO_ROOT, relPath);
   if (!existsSync(absPath)) throw new Error(`Module not found: ${relPath}`);
-  const mod = await import(absPath);
+  const mod = await import(pathToFileURL(absPath).href);
   moduleCache.set(relPath, mod);
   return mod;
 }

@@ -37,7 +37,11 @@ plugin or BPMN execution platform.
   and multiple example diagrams are represented in the current source.
 - `app/src/lib/bpmn-plugin.ts` is an adapter source file. End-to-end validation
   against a live Mermaid `registerExternalDiagrams()` and `mermaid.render()`
-  host is still an open project gap.
+  host is verified by `app/src/lib/__tests__/bpmn-plugin-integration.test.ts`,
+  which runs real `mermaid@11.4.1` against two corpus examples and is a
+  merge-blocking CI check. See `docs/mermaid-compatibility.md` for the full
+  evidence record. What remains: a real package boundary and a browser-host
+  demo without `securityLevel: "loose"` (Phases 2 and 3 of PRD-04).
 - The 15 source skills and five evaluation suites are present. Generated skill
   and context copies are present under `app/public/`.
 - The application is intended to be static and browser-only. GitHub Pages is
@@ -51,13 +55,13 @@ by this guidance-only change:
   reports four portability or metadata failures: one package uses lowercase
   `skill.md`, and three packages have descriptions shorter than the required
   minimum.
-- `node scripts/extract-pns-transitions.mjs --check` reports that
-  `app/src/data/pns-transitions-auto.ts` is stale and needs regeneration.
-- The Pages workflow installs, generates, builds, and deploys, but does not run
-  the application test suite or typecheck as a deployment gate.
-- Dependency installation is available in the current checkout. The root
-  skill tests pass, but application typecheck, build, and application test
-  status should still be verified before release.
+- All generated files (`pns-transitions-auto.ts`, `skill-deps-auto.ts`) are
+  confirmed up to date as of the 2026-08-04 baseline run.
+- The Pages deployment workflow (`deploy-gh-pages.yml`) runs typecheck, app
+  tests, skill tests, and skill validation before the build step.
+- The full O1 verification suite passes on Linux: typecheck, app tests (390/390),
+  skill tests (196/196), check:generated, skill:validate (235/235), eval:run
+  (14/14), and build. See `docs/capability-ledger.md` for the baseline record.
 
 Treat these as evidence-backed risks. Do not silently describe them as fixed.
 
