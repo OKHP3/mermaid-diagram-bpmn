@@ -341,6 +341,17 @@ const DIAGRAM_MERMAID_CHECKS = [
 // declares (as diagram-bg / diagram-fg in tokens.color.foundation).
 const DIAGRAM_PANEL_CHECKS = [
   {
+    label: '--diagram-grid-size (dot-grid spacing)',
+    cssVarName: '--diagram-grid-size',
+    profileExtract: t => {
+      // Reads from tokens.geometry.dot-grid.size in okhp3-forge-diagram.yaml.
+      const dotGridBlock = t.match(/dot-grid:\s*\n((?:[ \t]+.+\n)*)/m);
+      return dotGridBlock ? (dotGridBlock[1].match(/size:\s+"([^"]+)"/)?.[1] ?? null) : null;
+    },
+    profileField: `${DIAGRAM_PROFILE_REL}: tokens.geometry.dot-grid.size`,
+    compare: 'exact',
+  },
+  {
     label: '--okh-forge-code-bg → diagram-bg (diagram panel base)',
     cssVarName: '--okh-forge-code-bg',
     profileExtract: t => yamlScalar(t, 'diagram-bg'),

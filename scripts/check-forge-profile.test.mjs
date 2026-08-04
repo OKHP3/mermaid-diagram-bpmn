@@ -121,7 +121,28 @@ test('exits 1 when .forge-parse-error-text color drifts from the diagram profile
   );
 });
 
-// ─── 5. Drift in index.css (tab border) ──────────────────────────────────────
+// ─── 5. Drift in forge-tokens.css (diagram-grid-size) ───────────────────────
+// Inject a wrong value for --diagram-grid-size (real value is 24px).
+
+test('exits 1 when --diagram-grid-size drifts from the diagram profile', () => {
+  const original = readFileSync(REAL_FORGE_TOKENS, 'utf-8');
+  const drifted  = original.replace(
+    /--diagram-grid-size\s*:\s*24px\s*;/,
+    '--diagram-grid-size: 99px;',
+  );
+  assert.notEqual(original, drifted, 'fixture mutation must change the file content');
+
+  const forgeFixture = writeTmp(drifted);
+  const { exitCode, stdout } = runCheck({ FORGE_TOKENS_CSS_OVERRIDE: forgeFixture });
+
+  assert.equal(exitCode, 1, 'brand:check should exit 1 when --diagram-grid-size drifts');
+  assert.ok(
+    stdout.includes('diagram-grid-size') || stdout.includes('dot-grid'),
+    `failure output should name the drifted token; got:\n${stdout}`,
+  );
+});
+
+// ─── 6. Drift in index.css (tab border) ──────────────────────────────────────
 // Inject a wrong value for .forge-code-panel-tab border-color (real value is #2a3124).
 
 test('exits 1 when .forge-code-panel-tab border-color drifts from the diagram profile', () => {
