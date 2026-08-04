@@ -267,3 +267,26 @@ test('exits 1 when --forge-grid-size drifts from the forge profile', () => {
     `failure output should name the drifted token; got:\n${stdout}`,
   );
 });
+// ─── 12. Drift in index.css (.forge-grid background-size) ────────────────────
+// Replace the first background-size in the .forge-grid block with a wrong
+// literal value so the resolved size no longer matches the profile's 32px.
+
+test('exits 1 when .forge-grid background-size drifts from the forge profile', () => {
+  const original = readFileSync(REAL_INDEX_CSS, 'utf-8');
+  // Replace only the first occurrence (light-mode block); the dark-mode block
+  // also has the same declaration but one change is enough to trigger the check.
+  const drifted = original.replace(
+    /background-size:\s*var\(--forge-grid-size\)\s*var\(--forge-grid-size\)/,
+    'background-size: 99px 99px',
+  );
+  assert.notEqual(original, drifted, 'fixture mutation must change the file content');
+
+  const indexFixture = writeTmp(drifted);
+  const { exitCode, stdout } = runCheck({ INDEX_CSS_OVERRIDE: indexFixture });
+
+  assert.equal(exitCode, 1, 'brand:check should exit 1 when .forge-grid background-size drifts');
+  assert.ok(
+    stdout.includes('forge-grid') || stdout.includes('grid.size') || stdout.includes('background-size'),
+    `failure output should name the drifted token; got:\n${stdout}`,
+  );
+});
