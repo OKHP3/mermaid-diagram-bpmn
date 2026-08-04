@@ -21,7 +21,7 @@ import { ExampleStepTimeline } from "@/components/skills/ExampleStepTimeline";
  *   t9  – user task       → Publication & Handoff      (closing the record = final package)
  *   e1  – end event       → Publication & Handoff      (completed offboarding outcome)
  */
-const OFFBOARDING_NODE_LINKS: Record<string, string> = {
+export const OFFBOARDING_NODE_LINKS: Record<string, string> = {
   s1: "/skills/okhp3-process-intake-and-scope",
   t1: "/skills/okhp3-process-intake-and-scope",
   t2: "/skills/okhp3-stakeholder-and-role-mapping",

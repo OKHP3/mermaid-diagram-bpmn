@@ -1,6 +1,7 @@
 import { describe, it, expect } from "vitest";
 import { PURCHASE_APPROVAL_STEPS } from "@/data/purchase-approval-steps";
 import { EMPLOYEE_OFFBOARDING_STEPS } from "@/data/employee-offboarding-steps";
+import { OFFBOARDING_NODE_LINKS } from "@/pages/EmployeeOffboardingExample";
 import { SKILLS } from "@/data/skills-registry";
 import { PNS_TRANSITIONS } from "@/data/pns-transitions-auto";
 
@@ -83,5 +84,36 @@ describe("pns-transitions registry", () => {
 
   it("PNS_TRANSITIONS covers all 15 BP-SKILL pipeline skills", () => {
     expect(Object.keys(PNS_TRANSITIONS)).toHaveLength(SKILLS.length);
+  });
+});
+
+describe("employee-offboarding node links", () => {
+  it("every OFFBOARDING_NODE_LINKS route points to a real skill id", () => {
+    const missing: string[] = [];
+    for (const [node, route] of Object.entries(OFFBOARDING_NODE_LINKS)) {
+      // Route format: "/skills/<skill-id>"
+      const skillId = route.replace(/^\/skills\//, "");
+      if (!registryIds.has(skillId)) {
+        missing.push(`${node}: "${route}" (id "${skillId}" not in registry)`);
+      }
+    }
+    expect(
+      missing,
+      "OFFBOARDING_NODE_LINKS routes that do not match a real skill id",
+    ).toHaveLength(0);
+  });
+
+  it("OFFBOARDING_NODE_LINKS has exactly 11 entries", () => {
+    expect(Object.keys(OFFBOARDING_NODE_LINKS)).toHaveLength(11);
+  });
+
+  it("every OFFBOARDING_NODE_LINKS route starts with /skills/", () => {
+    const invalid = Object.entries(OFFBOARDING_NODE_LINKS)
+      .filter(([, route]) => !route.startsWith("/skills/"))
+      .map(([node, route]) => `${node}: "${route}"`);
+    expect(
+      invalid,
+      "OFFBOARDING_NODE_LINKS routes not starting with /skills/",
+    ).toHaveLength(0);
   });
 });
