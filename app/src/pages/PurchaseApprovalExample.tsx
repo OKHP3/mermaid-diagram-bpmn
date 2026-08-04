@@ -10,6 +10,27 @@ import { ExamplePromptPanel } from "@/components/skills/ExamplePromptPanel";
 const LAYER_COLOR: Record<number, string> = {};
 PIPELINE_LAYERS.forEach((l) => { LAYER_COLOR[l.id] = l.color; });
 
+/**
+ * Node → skill detail route for the Purchase Approval diagram.
+ * Mapping rationale (by node type / role in the process):
+ *   s1  – start event     → Intake & Scope (documents the process trigger)
+ *   t1  – user task       → As-Is Process Capture (captures the review activity)
+ *   g1  – gateway         → Gap & Exception Analysis (documents the decision branch)
+ *   t2  – service task    → Visual Process Modeling (models the system-generated PO)
+ *   t3  – user task       → Gap & Exception Analysis (the rejection exception path)
+ *   e1  – end event       → Publication & Handoff (the successful process outcome)
+ *   e2  – end event       → Gap & Exception Analysis (the exception end state)
+ */
+const PURCHASE_APPROVAL_NODE_LINKS: Record<string, string> = {
+  s1: "/skills/okhp3-process-intake-and-scope",
+  t1: "/skills/okhp3-as-is-process-capture",
+  g1: "/skills/okhp3-process-gap-exception-analysis",
+  t2: "/skills/okhp3-visual-process-modeling",
+  t3: "/skills/okhp3-process-gap-exception-analysis",
+  e1: "/skills/okhp3-publication-handoff-packaging",
+  e2: "/skills/okhp3-process-gap-exception-analysis",
+};
+
 const PURCHASE_APPROVAL_BPMN = `bpmn-beta
 accTitle: Purchase Request Approval
 accDescr: A manager reviews a request and either approves or rejects it via an exclusive gateway.
@@ -173,12 +194,13 @@ export default function PurchaseApprovalExample() {
                             <>
                               <div className="rounded-lg border border-border bg-card overflow-x-auto">
                                 <div style={{ minWidth: 640, padding: "8px 12px" }}>
-                                  <BpmnRenderer source={PURCHASE_APPROVAL_BPMN} />
+                                  <BpmnRenderer
+                                    source={PURCHASE_APPROVAL_BPMN}
+                                    nodeLinks={PURCHASE_APPROVAL_NODE_LINKS}
+                                    interactivityHint="Click any node to open its skill detail page"
+                                  />
                                 </div>
                               </div>
-                              <p className="mt-2 text-[10px] font-mono text-muted-foreground/50">
-                                This diagram is illustrative only — nodes are not interactive in this example.
-                              </p>
                             </>
                           ) : (
                             <pre className="text-[10px] font-mono text-foreground/70 leading-relaxed whitespace-pre-wrap bg-muted/40 rounded px-2.5 py-2 border border-border/50 overflow-x-auto">
