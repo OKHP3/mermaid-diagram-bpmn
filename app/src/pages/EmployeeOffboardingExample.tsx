@@ -1,9 +1,11 @@
-import { useEffect, useState, useRef, type CSSProperties } from "react";
+import { useEffect, type CSSProperties } from "react";
 import { Link } from "wouter";
-import { ArrowLeft, ArrowRight, CheckCircle2, ChevronDown, Copy, Check } from "lucide-react";
+import { ArrowLeft, ArrowRight, CheckCircle2 } from "lucide-react";
 import { BpmnRenderer } from "@/lib/bpmn-renderer";
 import { SKILLS, PIPELINE_LAYERS } from "@/data/skills-registry";
 import { EMPLOYEE_OFFBOARDING_STEPS as STEPS } from "@/data/employee-offboarding-steps";
+import { ExamplePnsBadgePair } from "@/components/skills/ExamplePnsBadgePair";
+import { ExamplePromptPanel } from "@/components/skills/ExamplePromptPanel";
 
 const LAYER_COLOR: Record<number, string> = {};
 PIPELINE_LAYERS.forEach((l) => { LAYER_COLOR[l.id] = l.color; });
@@ -44,156 +46,6 @@ pool it "IT Services" {
 
 t1 ~~> t5
 t4 ~~> t8`;
-
-function PnsBadgePair({ consumed, produced }: { consumed: string | null; produced: string | null }) {
-  const setStyle = {
-    background: "hsl(var(--primary) / 0.12)",
-    borderColor: "hsl(var(--primary) / 0.4)",
-    color: "hsl(var(--primary))",
-  };
-  const readStyle = {
-    background: "hsl(var(--muted))",
-    borderColor: "hsl(var(--border))",
-    color: "hsl(var(--muted-foreground))",
-  };
-  return (
-    <div className="flex items-center gap-1.5 flex-wrap">
-      {consumed !== null ? (
-        <span className="px-1.5 py-0.5 rounded-full border text-[9px] font-mono font-semibold whitespace-nowrap" style={readStyle}>
-          {consumed}
-        </span>
-      ) : (
-        produced && (
-          <span className="px-1.5 py-0.5 rounded-full border text-[9px] font-mono whitespace-nowrap italic" style={readStyle}>
-            (no PNS yet)
-          </span>
-        )
-      )}
-      {produced && (
-        <>
-          <span className="text-[9px] text-muted-foreground/40 font-mono">→</span>
-          <span className="px-1.5 py-0.5 rounded-full border text-[9px] font-mono font-semibold whitespace-nowrap" style={setStyle}>
-            {produced}
-          </span>
-        </>
-      )}
-    </div>
-  );
-}
-
-function PromptSequencePanel() {
-  const [isOpen, setIsOpen] = useState(false);
-  const [phrases, setPhrases] = useState(() => STEPS.map((s) => s.triggerUsed));
-  const [copied, setCopied] = useState(false);
-  const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-
-  function updatePhrase(i: number, value: string) {
-    setPhrases((prev) => {
-      const next = [...prev];
-      next[i] = value;
-      return next;
-    });
-  }
-
-  async function copyAll() {
-    const text = phrases
-      .map((phrase, i) => `${String(i + 1).padStart(2, "0")}. ${phrase}`)
-      .join("\n\n");
-    try {
-      await navigator.clipboard.writeText(text);
-      setCopied(true);
-    } catch {
-      const ta = document.createElement("textarea");
-      ta.value = text;
-      ta.style.position = "fixed";
-      ta.style.opacity = "0";
-      document.body.appendChild(ta);
-      ta.select();
-      const ok = document.execCommand("copy");
-      document.body.removeChild(ta);
-      if (ok) setCopied(true);
-    }
-    if (timerRef.current) clearTimeout(timerRef.current);
-    timerRef.current = setTimeout(() => setCopied(false), 2000);
-  }
-
-  useEffect(() => () => { if (timerRef.current) clearTimeout(timerRef.current); }, []);
-
-  return (
-    <div className="rounded-xl border border-border bg-card max-w-3xl mt-6 overflow-hidden">
-      <button
-        type="button"
-        onClick={() => setIsOpen((o) => !o)}
-        className="w-full flex items-center justify-between px-5 py-3.5 text-left hover:bg-muted/30 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/50"
-        aria-expanded={isOpen}
-      >
-        <div className="flex items-center gap-2.5">
-          <Copy size={14} className="text-primary shrink-0" />
-          <span className="text-sm font-semibold text-foreground">Copy prompt sequence</span>
-          <span className="hidden sm:inline text-[10px] font-mono text-muted-foreground/60 border border-border rounded px-1.5 py-0.5">
-            {STEPS.length} triggers
-          </span>
-        </div>
-        <ChevronDown
-          size={16}
-          className="text-muted-foreground transition-transform duration-200 shrink-0"
-          style={{ transform: isOpen ? "rotate(180deg)" : "rotate(0deg)" }}
-        />
-      </button>
-
-      {isOpen && (
-        <div className="border-t border-border">
-          <div className="flex items-center justify-between px-5 py-2.5 bg-muted/20 border-b border-border">
-            <p className="text-[10px] text-muted-foreground leading-tight max-w-sm">
-              Edit trigger phrases to match your process name, then copy the full sequence.
-            </p>
-            <button
-              type="button"
-              onClick={copyAll}
-              className="inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-lg shrink-0 ml-4 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/50"
-              style={{
-                background: copied ? "hsl(var(--primary) / 0.12)" : "hsl(var(--primary))",
-                color: copied ? "hsl(var(--primary))" : "#fff",
-                border: copied ? "1px solid hsl(var(--primary) / 0.4)" : "1px solid transparent",
-              }}
-            >
-              {copied ? <><Check size={12} /> Copied!</> : <><Copy size={12} /> Copy all</>}
-            </button>
-          </div>
-          <ol className="divide-y divide-border">
-            {STEPS.map((step, i) => {
-              const skill = SKILLS.find((s) => s.id === step.skillId);
-              return (
-                <li key={step.skillId} className="flex items-start gap-3 px-5 py-3">
-                  <span
-                    className="text-[10px] font-mono font-bold shrink-0 mt-2.5 w-5 text-right"
-                    style={{ color: "hsl(var(--primary) / 0.7)" }}
-                  >
-                    {String(i + 1).padStart(2, "0")}
-                  </span>
-                  <div className="flex-1 min-w-0">
-                    {skill && (
-                      <p className="text-[9px] font-mono text-muted-foreground/50 mb-1">
-                        {skill.displayName}
-                      </p>
-                    )}
-                    <textarea
-                      value={phrases[i]}
-                      onChange={(e) => updatePhrase(i, e.target.value)}
-                      rows={2}
-                      className="w-full text-xs font-mono text-foreground bg-muted/30 border border-border/60 rounded px-2.5 py-1.5 resize-none leading-relaxed focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary/40 focus-visible:border-primary/40 transition-colors"
-                      aria-label={`Trigger phrase for skill ${i + 1}${skill ? `: ${skill.displayName}` : ""}`}
-                    />
-                  </div>
-                </li>
-              );
-            })}
-          </ol>
-        </div>
-      )}
-    </div>
-  );
-}
 
 export default function EmployeeOffboardingExample() {
   useEffect(() => {
@@ -251,7 +103,7 @@ export default function EmployeeOffboardingExample() {
           </div>
         </div>
 
-        <PromptSequencePanel />
+        <ExamplePromptPanel steps={STEPS} downloadFilename="PROC-2025-108-prompts.txt" />
       </section>
 
       {/* ── 15-Step Timeline ─────────────────────────────────── */}
@@ -308,7 +160,7 @@ export default function EmployeeOffboardingExample() {
                       >
                         {skill.layerLabel}
                       </span>
-                      <PnsBadgePair consumed={step.pnsConsumed} produced={step.pnsSet} />
+                      <ExamplePnsBadgePair consumed={step.pnsConsumed} produced={step.pnsSet} />
                     </div>
 
                     {/* Card body */}
