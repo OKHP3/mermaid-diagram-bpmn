@@ -117,11 +117,11 @@ const VERSION_LADDER: VersionStep[] = [
       "3+ real-world process examples contributed (beyond purchase-approval)",
       <>
         Mermaid issues{" "}
-        <a href="https://github.com/mermaid-js/mermaid/issues/7699" target="_blank" rel="noopener noreferrer" className="underline hover:text-foreground transition-colors">#7699</a>
+        <a href="https://github.com/mermaid-js/mermaid/issues/7699" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-0.5 underline hover:text-foreground transition-colors">#7699<ExternalLink size={12} className="text-muted-foreground shrink-0" /></a>
         {", "}
-        <a href="https://github.com/mermaid-js/mermaid/issues/2623" target="_blank" rel="noopener noreferrer" className="underline hover:text-foreground transition-colors">#2623</a>
+        <a href="https://github.com/mermaid-js/mermaid/issues/2623" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-0.5 underline hover:text-foreground transition-colors">#2623<ExternalLink size={12} className="text-muted-foreground shrink-0" /></a>
         {", "}
-        <a href="https://github.com/mermaid-js/mermaid/issues/660" target="_blank" rel="noopener noreferrer" className="underline hover:text-foreground transition-colors">#660</a>
+        <a href="https://github.com/mermaid-js/mermaid/issues/660" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-0.5 underline hover:text-foreground transition-colors">#660<ExternalLink size={12} className="text-muted-foreground shrink-0" /></a>
         {" engaged with prototype link"}
       </>,
       "BP-SKILL suite listed in agentskills.io directory",
@@ -219,9 +219,9 @@ const CONTRIBUTION_STEPS: { n: string; title: string; body: React.ReactNode }[] 
     body: (
       <>
         Read and comment on Mermaid GitHub issues{" "}
-        <a href={`${GITHUB_ISSUE_BASE}7699`} target="_blank" rel="noopener noreferrer" className="text-primary hover:underline underline-offset-2 font-medium">#7699</a>,{" "}
-        <a href={`${GITHUB_ISSUE_BASE}2623`} target="_blank" rel="noopener noreferrer" className="text-primary hover:underline underline-offset-2 font-medium">#2623</a>, and{" "}
-        <a href={`${GITHUB_ISSUE_BASE}660`} target="_blank" rel="noopener noreferrer" className="text-primary hover:underline underline-offset-2 font-medium">#660</a>.{" "}
+        <a href={`${GITHUB_ISSUE_BASE}7699`} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-0.5 text-primary hover:underline underline-offset-2 font-medium">#7699<ExternalLink size={12} className="text-muted-foreground shrink-0" /></a>,{" "}
+        <a href={`${GITHUB_ISSUE_BASE}2623`} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-0.5 text-primary hover:underline underline-offset-2 font-medium">#2623<ExternalLink size={12} className="text-muted-foreground shrink-0" /></a>, and{" "}
+        <a href={`${GITHUB_ISSUE_BASE}660`} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-0.5 text-primary hover:underline underline-offset-2 font-medium">#660<ExternalLink size={12} className="text-muted-foreground shrink-0" /></a>.{" "}
         Signal intent without prematurely locking syntax.
       </>
     ),
