@@ -74,6 +74,10 @@ Engage on #7699 publicly within 7 days of prototype stabilization. Frame `bpmn-b
 - Content: introduced `@okhp3/mermaid-diagram-bpmn@0.1.0`, linked live demo and GitHub repo, side-by-side syntax comparison vs the Emrich proposal, referenced `mermaid@11.4.1` integration test (16 assertions), cited arXiv 2507.11356 (Brissard, Cuppens, Zouaq) on conciseness and LLM process modeling quality, asked three open questions on maintainer appetite before committing to Langium grammar.
 - Next action: await maintainer response; do not follow up unless addressed directly. Use any response to inform DEC-013 (Langium vs. hand-written parser decision).
 
+**Follow-on outreach — issues #2623 and #660:** Comments also posted 2026-08-05 to the two earlier BPMN request issues.
+- #2623 (opened ~2022 — "BPMN support", motivated by Mermaid rendering in Notion): https://github.com/mermaid-js/mermaid/issues/2623#issuecomment-5198000488 — introduced prototype, linked live demo and repo, noted Notion distribution angle, asked same open questions on distribution path and maintainer appetite.
+- #660 (original 2018 BPMN request): https://github.com/mermaid-js/mermaid/issues/660#issuecomment-5198000626 — brief pointer acknowledging age of issue, linking current prototype and live playground.
+
 ---
 
 ## DEC-013: Parser strategy = hand-written prototype → Langium plugin
