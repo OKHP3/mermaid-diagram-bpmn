@@ -23,12 +23,46 @@ This repository contains three related assets:
 | Direct SVG renderer, no `bpmn-js` runtime dependency | Working |
 | Pool and lane containment | Experimental |
 | Message flows | Experimental |
-| Mermaid External Diagram adapter | Implemented as source adapter; npm packaging and end-to-end host validation pending |
+| Mermaid External Diagram adapter | **`@okhp3/mermaid-diagram-bpmn@0.1.0`** — packaged, source-verified against `mermaid@11.4.1` |
 | Langium grammar | Roadmap |
 | Full Mermaid `getStyles` / theme-variable integration | Roadmap |
 | Upstream Mermaid core PR | Future, after v1.0 stabilizes |
 
 `bpmn-beta` is not yet a production Mermaid plugin, not a full BPMN 2.0 implementation, not an executable BPMN engine, and not a BPMN XML round-trip tool.
+
+---
+
+## Using the plugin
+
+```bash
+npm install @okhp3/mermaid-diagram-bpmn
+npm install mermaid          # peer dependency
+```
+
+```typescript
+import mermaid from 'mermaid';
+import { bpmnPlugin } from '@okhp3/mermaid-diagram-bpmn';
+
+mermaid.initialize({ startOnLoad: false });
+await mermaid.registerExternalDiagrams([bpmnPlugin]);
+await mermaid.run();
+```
+
+Or render explicitly:
+
+```typescript
+const { svg } = await mermaid.render('my-diagram', `
+bpmn-beta
+start  s1  "Begin"
+task:user  t1  "Review"
+end    e1  "Done"
+s1 --> t1
+t1 --> e1
+`);
+document.getElementById('output').innerHTML = svg;
+```
+
+See the [Plugin Setup page](https://okhp3.github.io/mermaid-diagram-bpmn/plugin) for the full guide including version compatibility, testing notes, and DSL reference links.
 
 ---
 

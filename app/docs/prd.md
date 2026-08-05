@@ -1,3 +1,10 @@
+---
+> **Historical document — Draft v0.3 (2026-05-05).**
+> This is the original forward-looking PRD. It has been superseded by the as-built record (`app/docs/as-built-prd.md`),
+> the compatibility evidence table (`docs/mermaid-compatibility.md`), and the capability registry (`app/src/data/capability-registry.ts`).
+> Requirements marked “planned” in this document may now be complete; consult those sources for current status.
+---
+
 # PRD: bpmn-beta Diagram Type
 
 | Field | Value |

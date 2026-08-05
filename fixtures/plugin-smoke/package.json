@@ -1,0 +1,12 @@
+{
+  "name": "plugin-smoke",
+  "version": "1.0.0",
+  "type": "module",
+  "private": true,
+  "description": "Clean-install smoke test fixture for @okhp3/mermaid-diagram-bpmn. Installed by scripts/run-plugin-smoke.mjs — do not run pnpm install here directly.",
+  "dependencies": {
+    "@okhp3/mermaid-diagram-bpmn": "file:okhp3-mermaid-diagram-bpmn-0.1.0.tgz",
+    "happy-dom": "^20.10.6",
+    "mermaid": "11.4.1"
+  }
+}

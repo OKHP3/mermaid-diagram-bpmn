@@ -277,9 +277,10 @@ export default function About() {
         </p>
         <div className="flex flex-col gap-3">
           {[
-            { label: "Not an official Mermaid diagram type", intentional: false, note: "Does not yet render natively inside Mermaid consumers. The target external plugin architecture is documented but the artifact is still a React prototype." },
+            { label: "Not an official Mermaid diagram type", intentional: false, note: "The plugin adapter (@okhp3/mermaid-diagram-bpmn) registers via registerExternalDiagrams() and is source-verified against mermaid.render(). Upstream core inclusion requires community review and is not yet proposed." },
             { label: "Parser is hand-written", intentional: false, note: "Good for iteration; insufficient for upstream-quality grammar maturity. Strategy: hand-written prototype first, Langium for plugin v1." },
-            { label: "Pool/lane/message-flow support is experimental", intentional: false, note: "Cross-lane flow routing is approximate. Pool widths may not align. Verify output before relying on it." },
+            { label: "Pool/lane layout is approximate", intentional: false, note: "Pools and lanes render correctly (source-verified against mermaid.render()), but layout quality is prototype-grade — pool widths may not align and cross-lane routing is approximate. Verify output before relying on it." },
+            { label: "Message flow routing is experimental", intentional: false, note: "Message flows (~~>) and cross-pool routing are experimental. Class-level rendering works; routing geometry is approximate." },
             { label: "No BPMN XML import/export", intentional: true, note: "Intentional for v1. User writes lightweight DSL, not BPMN XML. XML is deliberately decoupled from diagram authoring." },
             { label: "No execution semantics", intentional: true, note: "Intentional. The target is descriptive diagramming, not workflow execution. This is also not in scope for a Mermaid diagram type." },
             { label: "No formal conformance certification", intentional: true, note: "The project avoids claiming full BPMN 2.0 conformance. It targets the Descriptive Conformance sub-class only." },

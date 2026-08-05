@@ -41,22 +41,27 @@ See `docs/version-checklist.md` V0.3 for the full criterion list.
 
 ---
 
-## V0.6 — Mermaid Plugin Packaging (Target: next, per PRD-03)
+## V0.6 — Mermaid Plugin Packaging ✅ Done (2026-08-04, via PRD-04)
 
-Wire the prototype to Mermaid's external diagram API. This is the load-bearing
-phase: `bpmn-plugin.ts` has never been validated against a live `mermaid.render()`
-host. See PRD-03 (`app/docs/PRD-03-plugin-convergence-directive.md`) for the
-detailed Definition of Done and execution plan.
+Wire the prototype to Mermaid's external diagram API.
+Completed across PRD-04 phases 1–4. See `docs/mermaid-compatibility.md` for
+the full evidence record and `docs/capability-ledger.md` for the baseline.
 
-- `registerExternalDiagrams()` integration — detector, parser, DB accessor, renderer
-  all registered and exercised against real Mermaid
-- Live theme variable binding — `getStyles()` reads live Mermaid theme vars at
-  render time (not a static fallback)
-- Parser errors shown inline in the playground, not as a blank preview (TD-004)
-- Plugin entry point (`mermaid-diagram-bpmn/plugin`) exported from package
-- Works when loaded via `<script>` tag against Mermaid CDN build
-- Demo page shows live Mermaid-rendered bpmn-beta output
-- Host-validation test in CI as a merge-blocking check
+- ✅ `registerExternalDiagrams()` integration — all 4 modules registered and
+  exercised against real `mermaid.render()` in `bpmn-plugin-integration.test.ts`
+- ✅ Live theme variable binding — FR-018 verified: `getStyles()` reads live
+  Mermaid `themeVariables` at render time (not a static fallback)
+- ✅ Plugin entry point (`@okhp3/mermaid-diagram-bpmn`) exported and packaged;
+  `pnpm pack` produces a clean 6-file tarball; 12/12 smoke assertions pass
+- ✅ Host demo page (`/mermaid-host-demo`) shows live Mermaid-rendered
+  `bpmn-beta` output without `securityLevel: 'loose'`
+- ✅ Plugin build, pack dry-run, and smoke test added as CI blocking steps
+- ✅ `docs/mermaid-compatibility.md` is the authoritative claim document with
+  evidence-tier table; every claim backed by a named test or corpus file
+
+Not completed in this phase (still deferred):
+- Parser errors shown inline in the playground (TD-004)
+- `<script>` tag CDN load path (requires npm publish and CDN distribution)
 
 ---
 
@@ -123,7 +128,7 @@ See `docs/version-checklist.md` V1.0 for the full criterion list.
 | `bpmn-parser.ts` | Active development | Coordinate first |
 | `bpmn-layout.ts` | Active development | Coordinate first |
 | `bpmn-renderer.tsx` | Active development | Coordinate first |
-| `bpmn-plugin.ts` | Unvalidated against live Mermaid | Needs end-to-end test (V0.6) |
+| `bpmn-plugin.ts` | Source-verified + packaged | `bpmn-plugin-integration.test.ts` passes; `@okhp3/mermaid-diagram-bpmn@0.1.0` packaged |
 | `bpmn-styles.ts` | Stable | Yes |
 | `bpmn-examples.ts` | Stable | Yes (add examples) |
 | Tests | Active | Yes — more is better |

@@ -56,3 +56,12 @@ jobs:
 
       - name: Test brand:check drift detection (exits 1 on injected mismatch)
         run: pnpm run brand:check:test
+
+      - name: Build plugin package
+        run: pnpm --filter @okhp3/mermaid-diagram-bpmn run build
+
+      - name: Plugin pack dry-run (verify published file list)
+        run: pnpm --filter @okhp3/mermaid-diagram-bpmn run pack:dry-run
+
+      - name: Plugin smoke test (clean-install fixture)
+        run: node scripts/run-plugin-smoke.mjs
