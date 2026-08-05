@@ -64,7 +64,7 @@ correctly preserves all elements.
 
 This is **not** a security bypass in production. In a real browser, the HTML parser correctly
 assigns SVG namespace to children of an SVG element, and DOMPurify works as expected. The
-The Phase 3 `/mermaid-host-demo` route demonstrates this in a real browser. `app/src/__tests__/mermaid-host-demo.test.tsx` (mocked unit test) asserts the component does not pass `securityLevel: "loose"` to `mermaid.initialize()` — this is a **confirmed** component-behaviour claim. Automated real-browser E2E (Playwright) to upgrade this to **browser-verified** is a deferred follow-up (task #185).
+Phase 3 `/mermaid-host-demo` route demonstrates this in a real browser. `app/src/__tests__/mermaid-host-demo.test.tsx` (mocked unit test) asserts the component does not pass `securityLevel: "loose"` to `mermaid.initialize()` — this is a **confirmed** component-behaviour claim. Automated real-browser E2E (Playwright) to upgrade this to **browser-verified** is a deferred follow-up (task #185).
 
 ---
 

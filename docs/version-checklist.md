@@ -100,15 +100,22 @@ Machine-checkable quality gates for the skill suite.
 
 ---
 
-### V0.6 — Mermaid plugin packaging `[PLANNED]`
+### V0.6 — Mermaid plugin packaging `[DONE]`
 
 Wire the prototype to Mermaid's external diagram API.
+Completed 2026-08-04 via PRD-04. See `docs/mermaid-compatibility.md` for the full evidence record.
 
-- [ ] `registerExternalDiagrams()` integration — detector, parser, DB accessor, renderer all registered
-- [ ] Theme variable binding — `getStyles()` reads live Mermaid theme vars at render time
-- [ ] Plugin entry point (`mermaid-diagram-bpmn/plugin`) exported from package
-- [ ] Works when loaded via `<script>` tag against Mermaid CDN build
-- [ ] Demo page shows live Mermaid-rendered bpmn-beta output
+- [x] `registerExternalDiagrams()` integration — detector, parser, DB accessor, renderer all registered
+  _(verified: `bpmn-plugin-integration.test.ts` — 16 assertions against real `mermaid@11.4.1`; runs in merge-blocking CI gate)_
+- [x] Theme variable binding — `getStyles()` reads live Mermaid theme vars at render time
+  _(verified: `bpmn-plugin-integration.test.ts` — "FR-018: live theme-variable binding" describe block)_
+- [x] Plugin entry point (`@okhp3/mermaid-diagram-bpmn`) exported from package
+  _(verified: `lib/bpmn-plugin/package.json` `exports` map; `scripts/run-plugin-smoke.mjs` — 12/12 smoke assertions on clean install)_
+- [x] Demo page shows live Mermaid-rendered `bpmn-beta` output
+  _(verified: `/mermaid-host-demo` route in public app; `mermaid-host-demo.test.tsx` component tests)_
+
+**Deferred from V0.6** (requires npm publish and CDN distribution; tracked in V0.9):
+- Works when loaded via `<script>` tag against Mermaid CDN build
 
 ---
 
@@ -131,10 +138,11 @@ Hardening before community exposure.
 
 - [ ] Full BPMN 2.0.2 Descriptive Conformance Sub-Class element matrix published
 - [ ] Accessibility audit — WCAG 2.1 AA on all rendered SVG output
-- [ ] Bundle size baseline documented (< 50 kB gzip target)
+- [x] Bundle size baseline documented (< 50 kB gzip target) — plugin: **19.63 kB / 5.68 kB gzip** (ESM); 16.42 kB / 5.20 kB gzip (CJS); verified 2026-08-05 via `pnpm --filter @okhp3/mermaid-diagram-bpmn run build`
 - [ ] Dependency audit — no critical CVEs, license compatibility verified
 - [ ] LLM benchmark prompts — identical prompts tested across ChatGPT, Claude, Gemini for bpmn-beta generation accuracy
-- [ ] CONTRIBUTING.md, SECURITY.md, CODE_OF_CONDUCT.md added to repo root
+- [x] CONTRIBUTING.md, SECURITY.md, CODE_OF_CONDUCT.md added to repo root
+  _(CONTRIBUTING.md and SECURITY.md were present; CODE_OF_CONDUCT.md added 2026-08-05 — Contributor Covenant 2.1)_
 
 ---
 

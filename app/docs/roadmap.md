@@ -60,8 +60,12 @@ the full evidence record and `docs/capability-ledger.md` for the baseline.
   evidence-tier table; every claim backed by a named test or corpus file
 
 Not completed in this phase (still deferred):
-- Parser errors shown inline in the playground (TD-004)
-- `<script>` tag CDN load path (requires npm publish and CDN distribution)
+- `<script>` tag CDN load path (requires npm publish and CDN distribution; tracked in V0.9)
+
+Resolved after initial V0.6 scope (now closed):
+- Parser errors shown inline in the playground (TD-004) — `Playground.tsx` has been confirmed to
+  show a parse-error badge and detail bar via `data-testid="text-parse-error"` and
+  `data-testid="text-parse-error-detail"`; resolved 2026-08-05
 
 ---
 
