@@ -13,10 +13,11 @@ const FLAT_NAV = [
 ] as const;
 
 const REFERENCE_LINKS = [
-  { href: "/dsl",                  label: "DSL Reference"  },
-  { href: "/architecture",         label: "Architecture"   },
-  { href: "/plugin",               label: "Plugin Setup"   },
-  { href: "/mermaid-host-demo",    label: "Host Demo"      },
+  { href: "/dsl",                  label: "DSL Reference"    },
+  { href: "/comparison",           label: "Syntax Comparison"},
+  { href: "/architecture",         label: "Architecture"     },
+  { href: "/plugin",               label: "Plugin Setup"     },
+  { href: "/mermaid-host-demo",    label: "Host Demo"        },
 ] as const;
 
 const MORE_LINKS = [

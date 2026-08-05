@@ -162,7 +162,7 @@ Prepare for external contribution and Mermaid engagement.
 - [x] Mermaid issue **#7699** engaged with prototype link — comment posted 2026-08-05: https://github.com/mermaid-js/mermaid/issues/7699#issuecomment-5196155299
 - [x] Mermaid issues **#2623** and **#660** engaged with prototype link — comments posted 2026-08-05: https://github.com/mermaid-js/mermaid/issues/2623#issuecomment-5198000488 and https://github.com/mermaid-js/mermaid/issues/660#issuecomment-5198000626
 - [ ] BP-SKILL suite listed in agentskills.io directory
-- [ ] Comparison matrix published: bpmn-beta vs. PlantUML, bpmn.io, Visio, Mermaid flowchart
+- [x] Comparison matrix published: bpmn-beta vs. DFKI #7699, PlantUML, Mermaid flowchart — live at `/comparison` (2026-08-05)
 - [ ] Release notes drafted for v0.9 → v1.0
 
 ---

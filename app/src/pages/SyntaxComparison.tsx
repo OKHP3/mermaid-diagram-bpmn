@@ -1,0 +1,512 @@
+import { ExternalLink } from "lucide-react";
+
+// ── Syntax examples ──────────────────────────────────────────────────────────
+
+// The shared process: a purchase-request approval workflow with two roles and
+// a split path. Concrete enough to exercise events, tasks, gateways, and flows.
+
+const BPMN_BETA = `bpmn-beta
+accTitle: Purchase Request Approval
+accDescr: A manager reviews a purchase request and either approves or rejects it.
+
+start s1 "Request Raised"
+task:user t1 "Submit Request"
+task:user t2 "Review Request"
+xor g1 "Approved?"
+task:service t3 "Create Purchase Order"
+task:user t4 "Notify: Rejected"
+end e1 "PO Issued"
+end e2 "Rejected"
+
+s1 --> t1
+t1 --> t2
+t2 --> g1
+g1 --> t3: "yes"
+g1 --> t4: "no"
+t3 --> e1
+t4 ==> e2`;
+
+const DFKI_7699 = `bpmn
+  startEvent[type:event,subtype:none,behaviour:start,label:Request Raised,lane:,pool:]
+  task1[type:task,subtype:user,label:Submit Request,lane:,pool:]
+  task2[type:task,subtype:user,label:Review Request,lane:,pool:]
+  gateway1[type:gateway,subtype:exclusive,markers:(),label:Approved?,lane:,pool:]
+  task3[type:task,subtype:service,label:Create Purchase Order,lane:,pool:]
+  task4[type:task,subtype:user,label:Notify: Rejected,lane:,pool:]
+  endEvent1[type:event,subtype:none,behaviour:end,label:PO Issued,lane:,pool:]
+  endEvent2[type:event,subtype:none,behaviour:end,label:Rejected,lane:,pool:]
+  startEvent --> task1 --> task2 --> gateway1
+  gateway1 -[type:control,labelLabel:yes]-> task3
+  gateway1 -[type:control,labelLabel:no]-> task4
+  task3 --> endEvent1
+  task4 --> endEvent2`;
+
+const PLANTUML = `@startuml
+!theme plain
+|Requester|
+start
+:Submit Request;
+|Manager|
+:Review Request;
+if (Approved?) then (yes)
+  :Create Purchase Order;
+  |Requester|
+  stop
+else (no)
+  :Notify: Rejected;
+  stop
+endif
+@enduml`;
+
+const MERMAID_FLOWCHART = `flowchart TD
+  s1([Request Raised])
+  t1[Submit Request]
+  t2[Review Request]
+  g1{Approved?}
+  t3[Create Purchase Order]
+  t4[Notify: Rejected]
+  e1([PO Issued])
+  e2([Rejected])
+
+  s1 --> t1
+  t1 --> t2
+  t2 --> g1
+  g1 -->|yes| t3
+  g1 -->|no| t4
+  t3 --> e1
+  t4 --> e2`;
+
+// ── Comparison data ──────────────────────────────────────────────────────────
+
+const SYNTAXES = [
+  {
+    id: "bpmn-beta",
+    label: "bpmn-beta",
+    tag: "This project",
+    tagClass: "bg-primary/10 text-primary border-primary/20",
+    code: BPMN_BETA,
+    lineCount: BPMN_BETA.trim().split("\n").length,
+    charCount: BPMN_BETA.trim().length,
+    strengths: [
+      "Mermaid-idiomatic — concise, defaults-first",
+      "BPMN-native shapes rendered in browser (events, gateways, pools)",
+      "No bpmn-js dependency, no XML",
+      "Task subtypes via colon notation (task:user, task:service, …)",
+      "Pool/lane blocks mirror BPMN collaboration diagrams",
+    ],
+    tradeoffs: [
+      "External plugin — not a core Mermaid diagram type yet",
+      "Hand-written prototype parser (Langium planned for v1)",
+      "Pool/lane layout is prototype-grade",
+    ],
+  },
+  {
+    id: "dfki-7699",
+    label: "DFKI proposal (#7699)",
+    tag: "Proposed — no implementation",
+    tagClass: "bg-amber-500/10 text-amber-700 dark:text-amber-400 border-amber-500/20",
+    code: DFKI_7699,
+    lineCount: DFKI_7699.trim().split("\n").length,
+    charCount: DFKI_7699.trim().length,
+    strengths: [
+      "Targets full BPMN 2.0 element set including all subtypes",
+      "Academic backing (Emrich & Hollax 2025, DFKI — paper in preparation)",
+      "Would be MIT-licensed core Mermaid if accepted",
+      "Explicit attribute structure aids machine parsing",
+    ],
+    tradeoffs: [
+      "No working implementation — proposer said \u201cI will try\u201d",
+      "Attribute-dictionary syntax (type:, subtype:, lane:, pool: on every element) is verbose",
+      "Empty fields still required (label:,lane:,pool:) — noisy for simple diagrams",
+      "Issue #7699 is in Triage with no maintainer response as of August 2026",
+    ],
+  },
+  {
+    id: "plantuml",
+    label: "PlantUML activity-beta",
+    tag: "Mature — different ecosystem",
+    tagClass: "bg-muted text-muted-foreground border-border",
+    code: PLANTUML,
+    lineCount: PLANTUML.trim().split("\n").length,
+    charCount: PLANTUML.trim().length,
+    strengths: [
+      "Mature toolchain with broad UML coverage",
+      "Swimlane partitions approximate pool/lane BPMN",
+      "Self-contained — no additional plugin required",
+      "Native in GitLab, Confluence, and many wiki tools",
+    ],
+    tradeoffs: [
+      "Not Mermaid-native — no GitHub/Notion/Obsidian rendering without a server",
+      "BPMN support is \u201cfrozen\u201d per maintainers; rendered as activity diagrams",
+      "No BPMN-shaped shapes (event circles, gateway diamonds with markers)",
+      "Requires Graphviz for layout; server-side rendering story only",
+    ],
+  },
+  {
+    id: "mermaid-flowchart",
+    label: "Mermaid flowchart",
+    tag: "Available now — not semantic BPMN",
+    tagClass: "bg-muted text-muted-foreground border-border",
+    code: MERMAID_FLOWCHART,
+    lineCount: MERMAID_FLOWCHART.trim().split("\n").length,
+    charCount: MERMAID_FLOWCHART.trim().length,
+    strengths: [
+      "Native Mermaid — renders everywhere Mermaid renders (GitHub, Notion, Obsidian, …)",
+      "Familiar syntax for anyone already using Mermaid",
+      "No setup — just write a fenced code block",
+      "Excellent LLM generation support (arXiv 2507.11356 — Mermaid wins 6/6 PMo criteria)",
+    ],
+    tradeoffs: [
+      "Not semantically BPMN — no event subtypes, gateway markers, message flows, or pools/lanes",
+      "Round nodes are not event circles; {braces} are not proper gateway diamonds",
+      "Cannot represent BPMN collaboration diagrams or cross-pool message flows",
+      "Semantically ambiguous for process readers trained on BPMN",
+    ],
+  },
+] as const;
+
+const CAPABILITY_MATRIX = [
+  {
+    capability: "Renders in GitHub / Notion / Obsidian natively",
+    notes: {
+      "bpmn-beta": "via external plugin",
+      "dfki-7699": "no implementation yet",
+      "plantuml": "GitLab / Confluence (not GitHub/Notion)",
+      "mermaid-flowchart": "✓ native",
+    },
+  },
+  {
+    capability: "BPMN event circles (start / end / intermediate)",
+    notes: {
+      "bpmn-beta": "✓ start, end (more planned)",
+      "dfki-7699": "proposed — all subtypes",
+      "plantuml": "approximate via activity shapes",
+      "mermaid-flowchart": "round node only (([…]))",
+    },
+  },
+  {
+    capability: "Gateway diamonds with BPMN markers (XOR / AND / OR)",
+    notes: {
+      "bpmn-beta": "✓ xor, and, or",
+      "dfki-7699": "proposed",
+      "plantuml": "if/else branching only",
+      "mermaid-flowchart": "generic {diamond} — no markers",
+    },
+  },
+  {
+    capability: "Task subtypes (user, service, script, send, receive)",
+    notes: {
+      "bpmn-beta": "✓ task:user, task:service, task:script, task:send, task:receive",
+      "dfki-7699": "proposed via subtype: attribute",
+      "plantuml": "not natively differentiated",
+      "mermaid-flowchart": "label convention only",
+    },
+  },
+  {
+    capability: "Pools and swim lanes",
+    notes: {
+      "bpmn-beta": "✓ pool { lane { } } blocks",
+      "dfki-7699": "proposed via lane:/pool: attributes on every element",
+      "plantuml": "| Swimlane | partitions",
+      "mermaid-flowchart": "subgraph only — not BPMN pools",
+    },
+  },
+  {
+    capability: "Message flows between pools",
+    notes: {
+      "bpmn-beta": "✓ ~~> operator (experimental)",
+      "dfki-7699": "proposed",
+      "plantuml": "not native BPMN message flow",
+      "mermaid-flowchart": "not representable",
+    },
+  },
+  {
+    capability: "No XML authoring",
+    notes: {
+      "bpmn-beta": "✓",
+      "dfki-7699": "✓ (proposed text DSL)",
+      "plantuml": "✓",
+      "mermaid-flowchart": "✓",
+    },
+  },
+  {
+    capability: "No bpmn-js / server-side dependency",
+    notes: {
+      "bpmn-beta": "✓ pure-JS SVG renderer",
+      "dfki-7699": "✓ (proposed)",
+      "plantuml": "✗ requires PlantUML server or JAR",
+      "mermaid-flowchart": "✓ client-side Mermaid only",
+    },
+  },
+  {
+    capability: "Working implementation today",
+    notes: {
+      "bpmn-beta": "✓ prototype — try in Playground",
+      "dfki-7699": "✗ not yet",
+      "plantuml": "✓ mature",
+      "mermaid-flowchart": "✓ native Mermaid",
+    },
+  },
+  {
+    capability: "Conciseness for simple processes",
+    notes: {
+      "bpmn-beta": "high — keyword + id + label per element",
+      "dfki-7699": "low — 6 attributes required per element",
+      "plantuml": "medium — @startuml wrapper + swimlane syntax",
+      "mermaid-flowchart": "high — but loses BPMN semantics",
+    },
+  },
+] as const;
+
+// ── Sub-components ────────────────────────────────────────────────────────────
+
+function CodeBlock({ label, tag, tagClass, code, lineCount, charCount }: {
+  label: string;
+  tag: string;
+  tagClass: string;
+  code: string;
+  lineCount: number;
+  charCount: number;
+}) {
+  return (
+    <div className="rounded-lg border border-border overflow-hidden flex flex-col">
+      <div className="flex items-center justify-between gap-2 px-4 py-2.5 border-b border-border bg-muted/50">
+        <div className="flex items-center gap-2 min-w-0">
+          <div className="flex gap-1.5 shrink-0">
+            <div className="w-2.5 h-2.5 rounded-full bg-muted-foreground/30" />
+            <div className="w-2.5 h-2.5 rounded-full bg-muted-foreground/30" />
+            <div className="w-2.5 h-2.5 rounded-full bg-muted-foreground/30" />
+          </div>
+          <span className="text-xs font-semibold text-foreground truncate">{label}</span>
+        </div>
+        <span className={`shrink-0 text-xs px-1.5 py-0.5 rounded border font-mono ${tagClass}`}>{tag}</span>
+      </div>
+      <pre className="p-4 text-xs font-mono text-foreground bg-card overflow-x-auto leading-relaxed whitespace-pre flex-1">
+        {code}
+      </pre>
+      <div className="flex gap-4 px-4 py-2 border-t border-border bg-muted/30 text-xs text-muted-foreground font-mono">
+        <span>{lineCount} lines</span>
+        <span>{charCount} chars</span>
+      </div>
+    </div>
+  );
+}
+
+// ── Page ──────────────────────────────────────────────────────────────────────
+
+export default function SyntaxComparison() {
+  return (
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 py-12">
+
+      {/* Header */}
+      <div className="mb-10">
+        <h1 className="text-2xl font-bold text-foreground" data-testid="heading-comparison">
+          Syntax Comparison
+        </h1>
+        <p className="mt-2 text-sm text-muted-foreground leading-relaxed max-w-2xl">
+          The same purchase-request approval process written in four different notations.
+          Comparing <strong className="text-foreground">bpmn-beta</strong> (this project),
+          the <strong className="text-foreground">DFKI #7699 proposed syntax</strong>,
+          <strong className="text-foreground"> PlantUML activity-beta</strong>, and
+          <strong className="text-foreground"> Mermaid flowchart</strong>.
+          Each notation has genuine strengths — this page is a factual reference, not a sales pitch.
+        </p>
+        <div className="mt-4 flex flex-wrap gap-3 text-xs text-muted-foreground">
+          <a
+            href="https://github.com/mermaid-js/mermaid/issues/7699"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-1.5 hover:text-foreground transition-colors"
+          >
+            Mermaid issue #7699 <ExternalLink size={11} />
+          </a>
+          <span>·</span>
+          <a
+            href="https://plantuml.com/activity-diagram-beta"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-1.5 hover:text-foreground transition-colors"
+          >
+            PlantUML activity-beta docs <ExternalLink size={11} />
+          </a>
+          <span>·</span>
+          <a
+            href="https://mermaid.js.org/syntax/flowchart.html"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-1.5 hover:text-foreground transition-colors"
+          >
+            Mermaid flowchart docs <ExternalLink size={11} />
+          </a>
+        </div>
+      </div>
+
+      {/* The process being compared */}
+      <section className="mb-12">
+        <h2 className="text-base font-semibold text-foreground mb-1" data-testid="heading-process">
+          The process
+        </h2>
+        <p className="text-xs text-muted-foreground mb-6 max-w-2xl leading-relaxed">
+          A requester raises a purchase request; a manager reviews it and either approves (creating
+          a purchase order) or rejects it (notifying the requester). Eight BPMN elements: one start
+          event, two end events, four tasks (two user, one service, one user), one exclusive gateway,
+          and seven sequence flows.
+        </p>
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+          {SYNTAXES.map(s => (
+            <CodeBlock
+              key={s.id}
+              label={s.label}
+              tag={s.tag}
+              tagClass={s.tagClass}
+              code={s.code}
+              lineCount={s.lineCount}
+              charCount={s.charCount}
+            />
+          ))}
+        </div>
+      </section>
+
+      {/* Strengths and trade-offs */}
+      <section className="mb-12">
+        <h2 className="text-base font-semibold text-foreground mb-1" data-testid="heading-strengths">
+          Strengths and trade-offs
+        </h2>
+        <p className="text-xs text-muted-foreground mb-6 max-w-2xl leading-relaxed">
+          Each notation occupies a different point in the trade-off space. Choose the one whose
+          strengths match your documentation workflow.
+        </p>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {SYNTAXES.map(s => (
+            <div key={s.id} className="rounded-lg border border-border bg-card p-5">
+              <div className="flex items-start justify-between gap-2 mb-3">
+                <span className="text-sm font-semibold text-foreground">{s.label}</span>
+                <span className={`shrink-0 text-xs px-1.5 py-0.5 rounded border font-mono ${s.tagClass}`}>{s.tag}</span>
+              </div>
+              <div className="mb-3">
+                <p className="text-xs font-semibold text-foreground mb-1.5 uppercase tracking-wide">Strengths</p>
+                <ul className="flex flex-col gap-1">
+                  {s.strengths.map((pt, i) => (
+                    <li key={i} className="text-xs text-muted-foreground leading-relaxed flex gap-2">
+                      <span className="text-primary shrink-0 mt-0.5">+</span>
+                      <span>{pt}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+              <div>
+                <p className="text-xs font-semibold text-foreground mb-1.5 uppercase tracking-wide">Trade-offs</p>
+                <ul className="flex flex-col gap-1">
+                  {s.tradeoffs.map((pt, i) => (
+                    <li key={i} className="text-xs text-muted-foreground leading-relaxed flex gap-2">
+                      <span className="text-muted-foreground/50 shrink-0 mt-0.5">–</span>
+                      <span>{pt}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* Capability matrix */}
+      <section className="mb-12">
+        <h2 className="text-base font-semibold text-foreground mb-1" data-testid="heading-matrix">
+          Capability matrix
+        </h2>
+        <p className="text-xs text-muted-foreground mb-6 max-w-2xl leading-relaxed">
+          Feature-by-feature comparison across all four notations.
+          ✓ = supported. ✗ = not supported. All other cells describe the level or caveat.
+        </p>
+        <div className="rounded-lg border border-border overflow-hidden">
+          <div className="overflow-x-auto">
+            <table className="w-full text-xs">
+              <thead>
+                <tr className="border-b border-border bg-muted/50">
+                  <th className="text-left px-4 py-3 font-semibold text-muted-foreground uppercase tracking-wide min-w-[180px]">Capability</th>
+                  <th className="text-left px-4 py-3 font-semibold text-muted-foreground uppercase tracking-wide min-w-[140px]">bpmn-beta</th>
+                  <th className="text-left px-4 py-3 font-semibold text-muted-foreground uppercase tracking-wide min-w-[140px]">DFKI #7699</th>
+                  <th className="text-left px-4 py-3 font-semibold text-muted-foreground uppercase tracking-wide min-w-[140px]">PlantUML</th>
+                  <th className="text-left px-4 py-3 font-semibold text-muted-foreground uppercase tracking-wide min-w-[140px]">Mermaid flowchart</th>
+                </tr>
+              </thead>
+              <tbody>
+                {CAPABILITY_MATRIX.map((row, i) => (
+                  <tr key={i} className={`border-b border-border last:border-0 ${i % 2 === 0 ? "bg-card" : "bg-muted/10"}`}>
+                    <td className="px-4 py-3 font-semibold text-foreground align-top leading-relaxed">{row.capability}</td>
+                    <td className="px-4 py-3 text-muted-foreground align-top leading-relaxed">{row.notes["bpmn-beta"]}</td>
+                    <td className="px-4 py-3 text-muted-foreground align-top leading-relaxed">{row.notes["dfki-7699"]}</td>
+                    <td className="px-4 py-3 text-muted-foreground align-top leading-relaxed">{row.notes["plantuml"]}</td>
+                    <td className="px-4 py-3 text-muted-foreground align-top leading-relaxed">{row.notes["mermaid-flowchart"]}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      {/* Context and methodology */}
+      <section className="mb-12">
+        <h2 className="text-base font-semibold text-foreground mb-1" data-testid="heading-context">
+          Context and methodology
+        </h2>
+        <p className="text-xs text-muted-foreground mb-4 max-w-2xl leading-relaxed">
+          This comparison is maintained by the bpmn-beta project team. All syntax examples are
+          hand-written for the same notional process and verified to be syntactically valid in their
+          respective parsers (except DFKI #7699, which has no parser yet; the example is transcribed
+          verbatim from the issue text with attributes extended to cover the additional elements).
+        </p>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-3xl">
+          <div className="p-4 rounded-lg border border-border bg-card">
+            <p className="text-xs font-semibold text-foreground mb-1.5">DFKI #7699 example source</p>
+            <p className="text-xs text-muted-foreground leading-relaxed">
+              The DFKI syntax is taken verbatim from{" "}
+              <a href="https://github.com/mermaid-js/mermaid/issues/7699" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline inline-flex items-center gap-1">
+                Mermaid issue #7699 <ExternalLink size={10} />
+              </a>{" "}
+              (filed 2026-05-02 by Andreas Emrich, DFKI IWi). The additional elements in this comparison
+              (tasks, gateway, second end event) follow the same attribute pattern as the original snippet.
+              The paper cited in the issue (Emrich & Hollax 2025) is described as in preparation;
+              no DOI or preprint URL exists publicly as of August 2026.
+            </p>
+          </div>
+          <div className="p-4 rounded-lg border border-border bg-card">
+            <p className="text-xs font-semibold text-foreground mb-1.5">LLM-friendliness research</p>
+            <p className="text-xs text-muted-foreground leading-relaxed">
+              Brissard, Cuppens, and Zouaq (Polytechnique Montréal, arXiv 2507.11356) empirically
+              compared nine Process Model Representations for LLM-based process modeling. Mermaid
+              scored highest across six criteria (token compactness, expressivity, human readability,
+              visualization, usability, extensibility). bpmn-beta is designed to preserve that
+              LLM-readability advantage while adding BPMN semantic precision.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* CTAs */}
+      <section>
+        <h2 className="text-base font-semibold text-foreground mb-4" data-testid="heading-next">
+          Try it or contribute
+        </h2>
+        <div className="flex flex-wrap gap-3">
+          <a href="/playground" className="forge-btn-primary inline-flex items-center gap-2 text-xs">
+            Try bpmn-beta in the Playground
+          </a>
+          <a
+            href="https://github.com/mermaid-js/mermaid/issues/7699"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="forge-btn-secondary inline-flex items-center gap-2 text-xs"
+          >
+            View Mermaid issue #7699 <ExternalLink size={11} />
+          </a>
+          <a href="/dsl" className="forge-btn-secondary inline-flex items-center gap-2 text-xs">
+            bpmn-beta DSL Reference
+          </a>
+        </div>
+      </section>
+    </div>
+  );
+}

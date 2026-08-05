@@ -13,6 +13,7 @@ import PurchaseApprovalExample from "@/pages/PurchaseApprovalExample";
 import EmployeeOffboardingExample from "@/pages/EmployeeOffboardingExample";
 import PluginInstallation from "@/pages/PluginInstallation";
 import MermaidHostDemo from "@/pages/MermaidHostDemo";
+import SyntaxComparison from "@/pages/SyntaxComparison";
 import NotFound from "@/pages/not-found";
 
 function Router() {
@@ -27,6 +28,7 @@ function Router() {
         <Route path="/about" component={About} />
         <Route path="/plugin" component={PluginInstallation} />
         <Route path="/mermaid-host-demo" component={MermaidHostDemo} />
+        <Route path="/comparison" component={SyntaxComparison} />
         <Route path="/walkthrough/purchase-approval" component={PurchaseApprovalExample} />
         <Route path="/walkthrough/employee-offboarding" component={EmployeeOffboardingExample} />
         <Route path="/walkthrough" component={SkillsWalkthrough} />
