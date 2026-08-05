@@ -1,6 +1,6 @@
 {
   "skill_name": "okhp3-skill-cataloger",
-  "skill_version": "1.6.1",
+  "skill_version": "1.7.0",
   "status": "designed_not_run",
   "notes": "Three discriminating evals are defined; no live benchmark results are claimed.",
   "evals": [

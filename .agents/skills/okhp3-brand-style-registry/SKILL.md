@@ -5,7 +5,7 @@ description: >
 license: MIT
 metadata:
   author: Jamie Hill (OverKill Hill P³)
-  version: "1.1.0"
+  version: "1.2.0"
   category: developer-tooling
   origin: okhp3/skillz
   homepage: https://overkillhill.com
@@ -21,6 +21,21 @@ metadata:
 Build a durable library of named visual profiles, then use it to create work that feels intentionally aligned instead of generically themed. Treat a profile as design evidence and reusable direction, not as permission to copy another organization’s identity.
 
 This skill has two operating modes: capture a source into a named profile, or apply one or more existing profiles to a target. Keep those modes separate. A capture updates the library only after provenance and confidence are recorded; an application changes the target only after the profile roles and target boundaries are explicit.
+
+---
+
+## Cardinal rule: brand name integrity
+
+A registered brand name string -- most notably **"OverKill Hill P³™"** -- must never break, wrap, or truncate across a line boundary in any target artifact (navigation bars, footers, headers, body copy, presentation slides, or exported documents). A mid-name line break (e.g. "OverKill Hill" wrapping away from "P³™") is a rendering defect, not a cosmetic nit, and must be fixed immediately wherever it is found -- including in artifacts this skill did not itself produce.
+
+When applying or auditing a profile that carries a brand name:
+
+- Join the name with non-breaking spaces (`&nbsp;` in HTML/JSX, `\u00A0` elsewhere) so the browser cannot insert a line break between words.
+- Also set `white-space: nowrap` (or the equivalent for the target medium) on the element rendering the name, as a second, independent guard -- the non-breaking spaces protect the name if the element itself can still wrap onto a new line at narrow widths.
+- Check the rendered result at narrow container widths (mobile nav, narrow sidebars, compressed columns) specifically, since that is where this defect surfaces first.
+- If you find an existing broken instance while doing unrelated work in a target repository, flag and fix it as part of that work; do not leave a known brand break unresolved.
+
+This rule applies to every registered brand name a profile declares, not only OverKill Hill P³™.
 
 ---
 
@@ -126,6 +141,7 @@ Report four things at the end of a capture or application run:
 2. The tokens and cues applied or intentionally not applied.
 3. Any unresolved source conflict, missing asset, or font-licensing concern.
 4. The target-specific verification completed and the remaining human review decisions.
+5. Confirmation that every registered brand name renders intact (no mid-name wrap) at the narrowest reviewed viewport -- see the cardinal rule above.
 
 ---
 

@@ -32,6 +32,9 @@ No external dependencies. Python 3.9+ only.
 What changed in v1.6.1 vs v1.6.0:
   - Normalize generated catalog output to one final newline.
 
+What changed in v1.7.0 vs v1.6.1:
+  - Exclude root skills/ publication mirrors from full distribution indexing.
+
 What changed in v1.6.0 vs v1.5.0:
   - Configured UTF-8 stdout and stderr so warning output remains portable in Windows consoles.
 
@@ -95,7 +98,7 @@ if hasattr(sys.stdout, "reconfigure"):
 if hasattr(sys.stderr, "reconfigure"):
     sys.stderr.reconfigure(encoding="utf-8")
 
-CATALOGER_VERSION = "1.6.1"
+CATALOGER_VERSION = "1.7.0"
 OKHP3_HOMEPAGE    = "https://overkillhill.com"
 OKHP3_GITHUB      = "https://github.com/OKHP3"
 
@@ -120,6 +123,7 @@ def display_timestamp(value: datetime) -> str:
 # Directories excluded from root scan in --full mode
 FULL_SKIP = frozenset({
     ".git", ".github", ".agents", ".claude", ".vscode",
+    "skills",
     "node_modules", "__pycache__", ".venv", "venv",
     "dist", "build", "coverage", ".nyc_output", "attached_assets",
     "docs",
@@ -425,6 +429,7 @@ def write_family_md(
 
     bio     = ""
     summary = extract_family_summary(family_dir, skills)
+    display_name: str | None = None
 
     absorb_this_run = False
 
@@ -433,6 +438,12 @@ def write_family_md(
             existing_text = family_md.read_text(encoding="utf-8")
         except (OSError, UnicodeDecodeError):
             existing_text = ""
+
+        # Preserve display_name from existing frontmatter so user-set
+        # capitalisation overrides are never silently dropped on regeneration.
+        existing_fm = parse_frontmatter(family_md)
+        if "display_name" in existing_fm:
+            display_name = existing_fm["display_name"]
 
         # Preserve bio: everything between the title line and FAMILY_SUMMARY_START
         title_m = re.search(r"^# .+\n", existing_text, re.MULTILINE)
@@ -466,9 +477,11 @@ def write_family_md(
     name = family_dir.name
 
     bio_section = f"\n{bio}\n\n" if bio else "\n"
+    display_name_line = f"display_name: {display_name}\n" if display_name else ""
     new_content = (
         f"---\n"
         f"family: {name}\n"
+        f"{display_name_line}"
         f"skill_count: {n}\n"
         f"generated_by: okhp3-skill-cataloger v{CATALOGER_VERSION}\n"
         f"generated_at: {now_iso}\n"

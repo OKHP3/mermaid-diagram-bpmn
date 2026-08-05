@@ -46,11 +46,12 @@ library-repo/
 ├── mermaid/<skill>/SKILL.md
 ├── universal/<skill>/SKILL.md
 ├── .agents/                 # excluded
+├── skills/<skill>/          # publication mirrors, excluded
 └── README.md                # root catalog output
 ```
 
-The run scans `<family>/<skill>/SKILL.md`, skips hidden/tool directories, and
-produces:
+The run scans `<family>/<skill>/SKILL.md`, skips hidden/tool directories and
+the root `skills/` publication mirror, and produces:
 
 - root `README.md` catalog section (created or updated between catalog markers);
 - `FAMILY.md` inside every active family unless `--no-family-md` is passed;
