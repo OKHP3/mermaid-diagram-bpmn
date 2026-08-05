@@ -1,5 +1,8 @@
 import { BpmnDb, BpmnNode } from './bpmn-db';
+import { ParseError } from './bpmn-error';
 export { BpmnDb } from './bpmn-db';
+export { ParseError } from './bpmn-error';
+export type { ParseErrorCode } from './bpmn-error';
 export type { BpmnNode, BpmnFlow, BpmnPool, BpmnLane } from './bpmn-db';
 
 type ContextEntry = { type: 'pool'; id: string } | { type: 'lane'; id: string };
@@ -44,7 +47,7 @@ export function parse(source: string): BpmnDb {
 
     if (line === '}') {
       if (contextStack.length === 0) {
-        throw new Error(`Line ${i + 1}: unexpected } — no open block`);
+        throw new ParseError(`Line ${i + 1}: unexpected } — no open block`, i + 1, 'UNEXPECTED_CLOSE_BRACE');
       }
       contextStack.pop();
       continue;
@@ -53,7 +56,7 @@ export function parse(source: string): BpmnDb {
     const poolMatch = line.match(POOL_PATTERN);
     if (poolMatch) {
       if (currentPool()) {
-        throw new Error(`Line ${i + 1}: pools cannot be nested`);
+        throw new ParseError(`Line ${i + 1}: pools cannot be nested`, i + 1, 'NESTED_POOL');
       }
       const poolId = poolMatch[1];
       const poolLabel = poolMatch[2];
@@ -65,8 +68,8 @@ export function parse(source: string): BpmnDb {
     const laneMatch = line.match(LANE_PATTERN);
     if (laneMatch) {
       const pool = currentPool();
-      if (!pool) throw new Error(`Line ${i + 1}: lane must be inside a pool block`);
-      if (currentLane()) throw new Error(`Line ${i + 1}: nested lanes are not supported`);
+      if (!pool) throw new ParseError(`Line ${i + 1}: lane must be inside a pool block`, i + 1, 'LANE_OUTSIDE_POOL');
+      if (currentLane()) throw new ParseError(`Line ${i + 1}: nested lanes are not supported`, i + 1, 'NESTED_LANE');
       const laneId = laneMatch[1];
       const laneLabel = laneMatch[2];
       db.addLane({ id: laneId, label: laneLabel, poolId: pool.id });
@@ -127,7 +130,7 @@ export function parse(source: string): BpmnDb {
     const msgMatch = line.match(MSG_FLOW_PATTERN);
     if (msgMatch) {
       if (contextStack.length > 0) {
-        throw new Error(`Line ${i + 1}: message flows (~~>) must be declared at the top level, not inside a pool or lane block`);
+        throw new ParseError(`Line ${i + 1}: message flows (~~>) must be declared at the top level, not inside a pool or lane block`, i + 1, 'MESSAGE_FLOW_INSIDE_BLOCK');
       }
       db.addFlow({ id: `f${++flowCounter}`, source: msgMatch[1], target: msgMatch[2], kind: 'message' });
       continue;

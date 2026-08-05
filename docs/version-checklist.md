@@ -143,6 +143,10 @@ Hardening before community exposure.
 - [ ] LLM benchmark prompts — identical prompts tested across ChatGPT, Claude, Gemini for bpmn-beta generation accuracy
 - [x] CONTRIBUTING.md, SECURITY.md, CODE_OF_CONDUCT.md added to repo root
   _(CONTRIBUTING.md and SECURITY.md were present; CODE_OF_CONDUCT.md added 2026-08-05 — Contributor Covenant 2.1)_
+- [x] Shared shape library extracted — geometry constants, `escapeXml`, `truncateLabel`, `taskMarkerSvg`, `gatewayMarkerSvg` live in `bpmn-shapes.ts`; both plugin and renderer import from it (TD-003, TD-012 resolved 2026-08-05)
+- [x] SVG renderer snapshot tests — 5 corpus fixtures snapshotted via `BpmnRenderer`; any shape/class/geometry change now fails CI (TD-005 resolved 2026-08-05)
+- [x] Layout regression tests — 20 assertions on flat and pool/lane layouts; node positions formula-verified (TD-006 resolved 2026-08-05)
+- [x] Typed `ParseError` class with `line`, `column`, `code` fields; all 5 parser throw sites updated; re-exported from `bpmn-parser.ts` (TD-010 resolved 2026-08-05)
 
 ---
 

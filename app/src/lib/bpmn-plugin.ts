@@ -30,6 +30,21 @@ import { parse } from './bpmn-parser.js';
 import { layoutGraph } from './bpmn-layout.js';
 import type { BpmnLayout, BpmnLayoutNode, PoolLayout, LaneLayout } from './bpmn-layout.js';
 import { getStyles, buildMermaidTheme } from './bpmn-styles.js';
+import {
+  escapeXml,
+  truncateLabel,
+  taskMarkerSvg,
+  gatewayMarkerSvg,
+  EVENT_RADIUS,
+  EVENT_START_INNER_RADIUS,
+  EVENT_END_INNER_RADIUS,
+  GATEWAY_HALF,
+  TASK_RX,
+  TASK_MARKER_OFFSET_X,
+  TASK_MARKER_OFFSET_Y,
+  LABEL_FONT_SIZE,
+  POOL_LABEL_FONT_SIZE,
+} from './bpmn-shapes.js';
 
 // ---------------------------------------------------------------------------
 // Mermaid version this plugin is validated against.
@@ -83,90 +98,38 @@ const parserDef = {
 };
 
 // ---------------------------------------------------------------------------
-// SVG string helpers (mirrors bpmn-renderer.tsx without React)
+// SVG string helpers (from bpmn-shapes.ts + local node/flow/pool assembly)
 //
-// Mermaid's draw() receives a DOM SVG element id and must inject content into
-// it imperatively. React's renderToStaticMarkup would also work but adds a
-// server-side React dep to the plugin bundle; plain string generation keeps
-// the plugin self-contained.
+// taskMarkerSvg(), gatewayMarkerSvg(), escapeXml(), truncateLabel() and all
+// geometry constants are imported from bpmn-shapes.ts (shared with the React
+// renderer). The full node/flow/pool assembly remains plugin-local since it
+// produces SVG strings rather than React JSX.
 // ---------------------------------------------------------------------------
 
-function esc(s: string | undefined): string {
-  return (s ?? '')
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;');
-}
 
-function taskMarkerSvg(subtype: string | undefined, ix: number, iy: number): string {
-  const t = `translate(${ix}, ${iy})`;
-  if (subtype === 'user') return `<g transform="${t}">
-    <circle cx="0" cy="-4" r="4" class="bpmn-task-marker"/>
-    <path d="M-6 8 C-6 2 6 2 6 8" class="bpmn-task-marker" stroke-linecap="round" fill="none"/>
-  </g>`;
-  if (subtype === 'service') return `<g transform="${t}">
-    <circle cx="0" cy="0" r="5" class="bpmn-task-marker"/>
-    <circle cx="0" cy="0" r="2" class="bpmn-task-marker"/>
-    <line x1="0" y1="-5" x2="0" y2="-7" class="bpmn-task-marker"/>
-    <line x1="0" y1="5" x2="0" y2="7" class="bpmn-task-marker"/>
-    <line x1="-5" y1="0" x2="-7" y2="0" class="bpmn-task-marker"/>
-    <line x1="5" y1="0" x2="7" y2="0" class="bpmn-task-marker"/>
-  </g>`;
-  if (subtype === 'script') return `<g transform="${t}">
-    <rect x="-5" y="-6" width="10" height="12" rx="1" class="bpmn-task-marker"/>
-    <line x1="-3" y1="-2" x2="3" y2="-2" class="bpmn-task-marker"/>
-    <line x1="-3" y1="1" x2="3" y2="1" class="bpmn-task-marker"/>
-    <line x1="-3" y1="4" x2="1" y2="4" class="bpmn-task-marker"/>
-  </g>`;
-  if (subtype === 'receive') return `<g transform="${t}">
-    <rect x="-6" y="-5" width="12" height="9" rx="1" class="bpmn-task-marker"/>
-    <polyline points="-5,-4 0,-1 5,-4" class="bpmn-task-marker" fill="none"/>
-  </g>`;
-  if (subtype === 'send') return `<g transform="${t}">
-    <rect x="-6" y="-5" width="12" height="9" rx="1" class="bpmn-task-marker"/>
-    <polyline points="-6,-5 0,0 6,-5" class="bpmn-task-marker" fill="none"/>
-  </g>`;
-  return '';
-}
 
-function gatewayMarkerSvg(subtype: string | undefined, x: number, y: number): string {
-  if (subtype === 'xor') return `
-    <line x1="${x-8}" y1="${y-8}" x2="${x+8}" y2="${y+8}" class="bpmn-gateway-marker" stroke-linecap="round"/>
-    <line x1="${x+8}" y1="${y-8}" x2="${x-8}" y2="${y+8}" class="bpmn-gateway-marker" stroke-linecap="round"/>`;
-  if (subtype === 'and') return `
-    <line x1="${x}" y1="${y-10}" x2="${x}" y2="${y+10}" class="bpmn-gateway-marker" stroke-linecap="round"/>
-    <line x1="${x-10}" y1="${y}" x2="${x+10}" y2="${y}" class="bpmn-gateway-marker" stroke-linecap="round"/>`;
-  if (subtype === 'or') return `
-    <circle cx="${x}" cy="${y}" r="8" class="bpmn-gateway-or-marker"/>
-    <line x1="${x}" y1="${y-5}" x2="${x}" y2="${y+5}" class="bpmn-gateway-or-marker" stroke-linecap="round"/>
-    <line x1="${x-5}" y1="${y}" x2="${x+5}" y2="${y}" class="bpmn-gateway-or-marker" stroke-linecap="round"/>`;
-  return '';
-}
 
 function renderNodeSvg(node: BpmnNode, lnode: BpmnLayoutNode): string {
   const { x, y, width, height } = lnode;
 
   if (node.kind === 'event' && node.position === 'start') return `<g>
-    <circle cx="${x}" cy="${y}" r="18" class="bpmn-event"/>
-    <circle cx="${x}" cy="${y}" r="10" class="bpmn-event-start-inner"/>
-    <text x="${x}" y="${y+30}" text-anchor="middle" font-size="11" class="bpmn-text">${esc(node.label)}</text>
+    <circle cx="${x}" cy="${y}" r="${EVENT_RADIUS}" class="bpmn-event"/>
+    <circle cx="${x}" cy="${y}" r="${EVENT_START_INNER_RADIUS}" class="bpmn-event-start-inner"/>
+    <text x="${x}" y="${y+30}" text-anchor="middle" font-size="${LABEL_FONT_SIZE}" class="bpmn-text">${escapeXml(node.label)}</text>
   </g>`;
 
   if (node.kind === 'event' && node.position === 'end') return `<g>
-    <circle cx="${x}" cy="${y}" r="18" class="bpmn-event-end"/>
-    <circle cx="${x}" cy="${y}" r="11" class="bpmn-event-end"/>
-    <text x="${x}" y="${y+30}" text-anchor="middle" font-size="11" class="bpmn-text">${esc(node.label)}</text>
+    <circle cx="${x}" cy="${y}" r="${EVENT_RADIUS}" class="bpmn-event-end"/>
+    <circle cx="${x}" cy="${y}" r="${EVENT_END_INNER_RADIUS}" class="bpmn-event-end"/>
+    <text x="${x}" y="${y+30}" text-anchor="middle" font-size="${LABEL_FONT_SIZE}" class="bpmn-text">${escapeXml(node.label)}</text>
   </g>`;
 
   if (node.kind === 'task') {
     const hw = width / 2, hh = height / 2;
-    const rawLabel = node.label ?? '';
-    const label = rawLabel.length > 18 ? rawLabel.slice(0, 16) + '…' : rawLabel;
     return `<g>
-      <rect x="${x-hw}" y="${y-hh}" width="${width}" height="${height}" rx="6" class="bpmn-task"/>
-      ${taskMarkerSvg(node.subtype, x - hw + 14, y - hh + 12)}
-      <text x="${x}" y="${y}" text-anchor="middle" dominant-baseline="middle" font-size="11" class="bpmn-text">${esc(label)}</text>
+      <rect x="${x-hw}" y="${y-hh}" width="${width}" height="${height}" rx="${TASK_RX}" class="bpmn-task"/>
+      ${taskMarkerSvg(node.subtype, x - hw + TASK_MARKER_OFFSET_X, y - hh + TASK_MARKER_OFFSET_Y)}
+      <text x="${x}" y="${y}" text-anchor="middle" dominant-baseline="middle" font-size="${LABEL_FONT_SIZE}" class="bpmn-text">${escapeXml(truncateLabel(node.label))}</text>
     </g>`;
   }
 
@@ -175,7 +138,7 @@ function renderNodeSvg(node: BpmnNode, lnode: BpmnLayoutNode): string {
     return `<g>
       <polygon points="${x},${y-h} ${x+h},${y} ${x},${y+h} ${x-h},${y}" class="bpmn-gateway"/>
       ${gatewayMarkerSvg(node.subtype, x, y)}
-      <text x="${x}" y="${y+h+14}" text-anchor="middle" font-size="11" class="bpmn-text">${esc(node.label)}</text>
+      <text x="${x}" y="${y+h+14}" text-anchor="middle" font-size="${LABEL_FONT_SIZE}" class="bpmn-text">${escapeXml(node.label)}</text>
     </g>`;
   }
   return '';
@@ -209,7 +172,7 @@ function renderFlowSvg(flow: BpmnFlow, layout: BpmnLayout, diagramId: string): s
     <line x1="${p1x}" y1="${p1y}" x2="${p2x}" y2="${p2y}"
       class="bpmn-flow-${flow.kind}" stroke-width="1.8"
       marker-end="${arrowEnd}" ${slashStart}/>
-    ${flow.label ? `<text x="${mx}" y="${my-8}" text-anchor="middle" font-size="10" class="bpmn-text-muted">${esc(flow.label)}</text>` : ''}
+    ${flow.label ? `<text x="${mx}" y="${my-8}" text-anchor="middle" font-size="10" class="bpmn-text-muted">${escapeXml(flow.label)}</text>` : ''}
   </g>`;
 }
 
@@ -220,15 +183,15 @@ function renderPoolsSvg(pools: PoolLayout[], lanes: LaneLayout[]): string {
       <rect x="${p.x}" y="${p.y}" width="${p.headerWidth}" height="${p.height}" class="bpmn-pool-header"/>
       <text x="${p.x + p.headerWidth/2}" y="${p.y + p.height/2}"
         text-anchor="middle" dominant-baseline="middle"
-        font-size="12" font-weight="600" class="bpmn-text-label"
-        transform="rotate(-90,${p.x + p.headerWidth/2},${p.y + p.height/2})">${esc(p.label)}</text>
+        font-size="${POOL_LABEL_FONT_SIZE}" font-weight="600" class="bpmn-text-label"
+        transform="rotate(-90,${p.x + p.headerWidth/2},${p.y + p.height/2})">${escapeXml(p.label)}</text>
     </g>`),
     ...lanes.map(l => `<g>
       <rect x="${l.x}" y="${l.y}" width="${l.width}" height="${l.height}" class="bpmn-lane"/>
       <rect x="${l.x}" y="${l.y}" width="${l.headerWidth}" height="${l.height}" class="bpmn-lane-header"/>
       <text x="${l.x + l.headerWidth/2}" y="${l.y + l.height/2}"
         text-anchor="middle" dominant-baseline="middle"
-        font-size="11" class="bpmn-text">${esc(l.label)}</text>
+        font-size="${LABEL_FONT_SIZE}" class="bpmn-text">${escapeXml(l.label)}</text>
     </g>`),
   ].join('\n');
 }
@@ -309,8 +272,8 @@ async function draw(
   el.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
 
   const innerContent = [
-    `<title id="${id}-title">${esc(title)}</title>`,
-    `<desc id="${id}-desc">${esc(desc)}</desc>`,
+    `<title id="${id}-title">${escapeXml(title)}</title>`,
+    `<desc id="${id}-desc">${escapeXml(desc)}</desc>`,
     defsSvg(styles, id),
     layout.hasPools ? renderPoolsSvg(layout.pools, layout.lanes) : '',
     ...drawDb.getFlows().map(f => renderFlowSvg(f, layout, id)),

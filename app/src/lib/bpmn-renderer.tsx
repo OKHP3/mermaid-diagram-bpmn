@@ -4,6 +4,18 @@ import { parse } from './bpmn-parser';
 import { layoutGraph, BpmnLayout, BpmnLayoutNode, PoolLayout, LaneLayout } from './bpmn-layout';
 import { BpmnNode, BpmnFlow } from './bpmn-db';
 import { getStyles, LIGHT_THEME } from './bpmn-styles';
+import {
+  truncateLabel,
+  EVENT_RADIUS,
+  EVENT_START_INNER_RADIUS,
+  EVENT_END_INNER_RADIUS,
+  GATEWAY_HALF,
+  TASK_RX,
+  TASK_MARKER_OFFSET_X,
+  TASK_MARKER_OFFSET_Y,
+  LABEL_FONT_SIZE,
+  POOL_LABEL_FONT_SIZE,
+} from './bpmn-shapes';
 
 function UserTaskIcon({ x, y }: { x: number; y: number }) {
   return (
@@ -71,9 +83,9 @@ function renderNode(node: BpmnNode, lnode: BpmnLayoutNode, interaction?: NodeInt
   if (node.kind === 'event' && node.position === 'start') {
     return (
       <g key={node.id}>
-        <circle cx={x} cy={y} r={18} className="bpmn-event" />
-        <circle cx={x} cy={y} r={10} className="bpmn-event-start-inner" />
-        <text x={x} y={y + 30} textAnchor="middle" fontSize="11" className="bpmn-text">
+        <circle cx={x} cy={y} r={EVENT_RADIUS} className="bpmn-event" />
+        <circle cx={x} cy={y} r={EVENT_START_INNER_RADIUS} className="bpmn-event-start-inner" />
+        <text x={x} y={y + 30} textAnchor="middle" fontSize={LABEL_FONT_SIZE} className="bpmn-text">
           {node.label}
         </text>
       </g>
@@ -83,9 +95,9 @@ function renderNode(node: BpmnNode, lnode: BpmnLayoutNode, interaction?: NodeInt
   if (node.kind === 'event' && node.position === 'end') {
     return (
       <g key={node.id}>
-        <circle cx={x} cy={y} r={18} className="bpmn-event-end" />
-        <circle cx={x} cy={y} r={11} className="bpmn-event-end" />
-        <text x={x} y={y + 30} textAnchor="middle" fontSize="11" className="bpmn-text">
+        <circle cx={x} cy={y} r={EVENT_RADIUS} className="bpmn-event-end" />
+        <circle cx={x} cy={y} r={EVENT_END_INNER_RADIUS} className="bpmn-event-end" />
+        <text x={x} y={y + 30} textAnchor="middle" fontSize={LABEL_FONT_SIZE} className="bpmn-text">
           {node.label}
         </text>
       </g>
@@ -95,8 +107,8 @@ function renderNode(node: BpmnNode, lnode: BpmnLayoutNode, interaction?: NodeInt
   if (node.kind === 'task') {
     const hw = width / 2;
     const hh = height / 2;
-    const iconX = x - hw + 14;
-    const iconY = y - hh + 12;
+    const iconX = x - hw + TASK_MARKER_OFFSET_X;
+    const iconY = y - hh + TASK_MARKER_OFFSET_Y;
     return (
       <g
         key={node.id}
@@ -108,27 +120,27 @@ function renderNode(node: BpmnNode, lnode: BpmnLayoutNode, interaction?: NodeInt
         onMouseEnter={interaction?.onEnter}
         onMouseLeave={interaction?.onLeave}
       >
-        <rect x={x - hw} y={y - hh} width={width} height={height} rx={6} className="bpmn-task" />
+        <rect x={x - hw} y={y - hh} width={width} height={height} rx={TASK_RX} className="bpmn-task" />
         {interaction?.isHovered && (
-          <rect x={x - hw} y={y - hh} width={width} height={height} rx={6} className="bpmn-task-hover" />
+          <rect x={x - hw} y={y - hh} width={width} height={height} rx={TASK_RX} className="bpmn-task-hover" />
         )}
         {isDotted && (
-          <rect x={x - hw} y={y - hh} width={width} height={height} rx={6} className="bpmn-task-ext" />
+          <rect x={x - hw} y={y - hh} width={width} height={height} rx={TASK_RX} className="bpmn-task-ext" />
         )}
         {node.subtype === 'user' && <UserTaskIcon x={iconX} y={iconY} />}
         {node.subtype === 'service' && <ServiceTaskIcon x={iconX} y={iconY} />}
         {node.subtype === 'script' && <ScriptTaskIcon x={iconX} y={iconY} />}
         {node.subtype === 'receive' && <ReceiveTaskIcon x={iconX} y={iconY} />}
         {node.subtype === 'send' && <SendTaskIcon x={iconX} y={iconY} />}
-        <text x={x} y={y} textAnchor="middle" dominantBaseline="middle" fontSize="11" className="bpmn-text">
-          {(node.label ?? '').length > 18 ? (node.label ?? '').slice(0, 16) + '…' : (node.label ?? '')}
+        <text x={x} y={y} textAnchor="middle" dominantBaseline="middle" fontSize={LABEL_FONT_SIZE} className="bpmn-text">
+          {truncateLabel(node.label)}
         </text>
       </g>
     );
   }
 
   if (node.kind === 'gateway') {
-    const half = 24;
+    const half = GATEWAY_HALF;
     return (
       <g key={node.id}>
         <polygon
@@ -154,7 +166,7 @@ function renderNode(node: BpmnNode, lnode: BpmnLayoutNode, interaction?: NodeInt
             <line x1={x - 5} y1={y} x2={x + 5} y2={y} className="bpmn-gateway-or-marker" strokeLinecap="round" />
           </>
         )}
-        <text x={x} y={y + half + 14} textAnchor="middle" fontSize="11" className="bpmn-text">
+        <text x={x} y={y + half + 14} textAnchor="middle" fontSize={LABEL_FONT_SIZE} className="bpmn-text">
           {node.label}
         </text>
       </g>
@@ -216,7 +228,7 @@ function renderPools(pools: PoolLayout[], lanes: LaneLayout[]) {
             x={pool.x + pool.headerWidth / 2}
             y={pool.y + pool.height / 2}
             textAnchor="middle" dominantBaseline="middle"
-            fontSize="12" fontWeight="600"
+            fontSize={POOL_LABEL_FONT_SIZE} fontWeight="600"
             className="bpmn-text-label"
             transform={`rotate(-90, ${pool.x + pool.headerWidth / 2}, ${pool.y + pool.height / 2})`}
           >
@@ -232,7 +244,7 @@ function renderPools(pools: PoolLayout[], lanes: LaneLayout[]) {
             x={lane.x + lane.headerWidth / 2}
             y={lane.y + lane.height / 2}
             textAnchor="middle" dominantBaseline="middle"
-            fontSize="11" className="bpmn-text"
+            fontSize={LABEL_FONT_SIZE} className="bpmn-text"
           >
             {lane.label}
           </text>
