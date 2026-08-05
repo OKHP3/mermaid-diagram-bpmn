@@ -293,6 +293,9 @@ A pure open-source plugin is unlikely to be a revenue product on its own. The pl
 - Update the project documentation to remove the "$300 billion BPM industry" framing and replace with the corrected BPM-software figure (USD 21.51B in 2025, Fortune Business Insights).
 - File a comment on Mermaid issue #7699 introducing bpmn-beta as prior art, professionally and without confrontation.
 
+**Phase D outreach completed 2026-08-05:**
+A comment was posted on Mermaid issue #7699 introducing `bpmn-beta` as a working prototype with a different DSL approach. Comment URL: https://github.com/mermaid-js/mermaid/issues/7699#issuecomment-5196155299. The comment included: repo link, live demo link, side-by-side syntax comparison, `mermaid@11.4.1` integration test reference, and three open questions inviting maintainer input before a Langium grammar port. See `app/docs/decisions.md` DEC-012 for the full execution record.
+
 **Stage 2 — Engage with maintainers (60–180 days):**
 - Open a parallel Mermaid issue specifically for `bpmn-beta` if #7699 has not progressed, framed as a complementary lightweight alternative, with a working PR or working external plugin as evidence.
 - Reach out to Mermaid Chart (Knut Sveidqvist directly via the open-source repo) and the DFKI authors (Emrich, IWi/DFKI Saarbrücken) to explore syntax-convergence — open-source norms favor collaboration over forking.

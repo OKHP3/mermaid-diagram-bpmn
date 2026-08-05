@@ -155,7 +155,8 @@ Hardening before community exposure.
 Prepare for external contribution and Mermaid engagement.
 
 - [ ] At least 3 real-world process examples contributed (not purchase-approval)
-- [ ] Mermaid issues #7699, #2623, #660 engaged with prototype link
+- [x] Mermaid issue **#7699** engaged with prototype link — comment posted 2026-08-05: https://github.com/mermaid-js/mermaid/issues/7699#issuecomment-5196155299
+- [ ] Mermaid issues #2623 and #660 engaged with prototype link
 - [ ] BP-SKILL suite listed in agentskills.io directory
 - [ ] Comparison matrix published: bpmn-beta vs. PlantUML, bpmn.io, Visio, Mermaid flowchart
 - [ ] Release notes drafted for v0.9 → v1.0

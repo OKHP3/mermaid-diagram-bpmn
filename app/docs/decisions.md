@@ -63,11 +63,16 @@ Issue #7699 is real, filed 2026-05-02 by Andreas Emrich (DFKI), status Triage, n
 
 ## DEC-012: Engagement strategy for Mermaid issue #7699
 
-**Status:** Proposed
+**Status:** Executed (2026-08-05)
 
 Engage on #7699 publicly within 7 days of prototype stabilization. Frame `bpmn-beta` as a complementary readable alternative to the Emrich proposal, not a competing fork. Offer the prototype URL, the DSL spec, and the comparison framing. Do not adopt the Emrich syntax. Do not propose merging the two efforts before syntax disagreements are surfaced.
 
 **Rationale:** The prototype is the differentiator. Emrich has academic weight but not running code. Public, generous, direct: "I built a different DSL approach because I prioritize readability; here it is, what do you think?" Mermaid maintainers and the community get to weigh in on syntax tradeoffs before either implementation is locked.
+
+**Execution record:** Comment posted 2026-08-05.
+- URL: https://github.com/mermaid-js/mermaid/issues/7699#issuecomment-5196155299
+- Content: introduced `@okhp3/mermaid-diagram-bpmn@0.1.0`, linked live demo and GitHub repo, side-by-side syntax comparison vs the Emrich proposal, referenced `mermaid@11.4.1` integration test (16 assertions), cited arXiv 2507.11356 (Brissard, Cuppens, Zouaq) on conciseness and LLM process modeling quality, asked three open questions on maintainer appetite before committing to Langium grammar.
+- Next action: await maintainer response; do not follow up unless addressed directly. Use any response to inform DEC-013 (Langium vs. hand-written parser decision).
 
 ---
 
