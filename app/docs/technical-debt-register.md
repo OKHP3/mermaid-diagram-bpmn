@@ -1,7 +1,7 @@
 # Technical Debt Register — BPMN for Mermaid
 
 **Project:** BPMN for Mermaid
-**Last updated:** 2026-08-04
+**Last updated:** 2026-08-05
 **Source:** Prototype-to-Product Retrospective (`docs/prototype-to-product-retrospective.md`)
 
 Items are tracked here so future maintainers and AI agents do not re-create known issues.
@@ -10,7 +10,7 @@ Items are tracked here so future maintainers and AI agents do not re-create know
 
 | Debt ID | Area | Issue | Impact | Severity | Recommended Fix | Effort | Status |
 |---|---|---|---|---|---|---|---|
-| TD-001 | Dependency hygiene | 40+ unused Radix UI + other template packages declared in `package.json` but not imported in `src/` | Credibility hazard; inflated install footprint; confuses agents | **Critical** | Audit imports; remove all unused deps | Small | Open |
+| TD-001 | Dependency hygiene | ~~40+ unused Radix UI + other template packages declared in `package.json` but not imported in `src/`~~ | ~~Credibility hazard; inflated install footprint; confuses agents~~ | **Critical** | Audit imports; remove all unused deps | Small | **Resolved 2026-08-05** — 44 packages removed (27 Radix UI primitives + 17 other template deps: `@hookform/resolvers`, `@tanstack/react-query`, `class-variance-authority`, `cmdk`, `date-fns`, `embla-carousel-react`, `framer-motion`, `input-otp`, `next-themes`, `react-day-picker`, `react-hook-form`, `react-icons`, `react-resizable-panels`, `recharts`, `sonner`, `vaul`, `zod`). All O1 commands pass after removal: 403/403 tests, typecheck clean, build succeeds, plugin smoke 12/12. |
 | TD-002 | Integration | ~~No `registerExternalDiagrams()` end-to-end verification — `bpmn-plugin.ts` has never been tested against a live `mermaid.render()` call~~ | ~~"Mermaid-native" claim is theoretical, not verified~~ | **High** | Wire against real Mermaid in a browser test; verify draw/parser/styles chain | Medium | **Resolved 2026-08-04** — `bpmn-plugin-integration.test.ts` passes: `registerExternalDiagrams` + `mermaid.render()` verified against two corpus examples; FR-018 theme binding verified; included in merge-blocking CI gate |
 | TD-003 | Architecture | Shape drawing logic is inline in `bpmn-renderer.tsx` AND duplicated in `bpmn-plugin.ts` draw function | Maintenance burden; shape changes require two-file sync | **High** | Extract to `src/lib/shapes/` — shared by both React component and draw function | Medium | Open |
 | TD-004 | UX / Error handling | ~~Parser errors surface as blank preview — no error message shown to user~~ | ~~Zero feedback for invalid syntax; developer experience gap~~ | **High** | Wrap render call in try/catch; display error + line number in preview panel | Small | **Resolved 2026-08-05** — `Playground.tsx` wires `getParseError()` to two inline elements: `data-testid="text-parse-error"` (header badge, always visible) and `data-testid="text-parse-error-detail"` (full message bar at bottom of source panel). Both are conditionally rendered on `parseError !== null`; verified by code inspection of `app/src/pages/Playground.tsx` lines 175–197. |
