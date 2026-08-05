@@ -47,5 +47,9 @@
   "devDependencies": {
     "@types/node": "catalog:",
     "vite": "catalog:"
+  },
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org",
+    "access": "public"
   }
 }

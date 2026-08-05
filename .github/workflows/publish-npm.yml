@@ -1,0 +1,64 @@
+name: Publish to npm
+
+# Triggered when a GitHub Release is published (tag: v0.x.y).
+# Also available as a manual dispatch for testing with --dry-run.
+#
+# Required repo secret: NPM_TOKEN
+#   Create at https://www.npmjs.com/settings/~/tokens
+#   Add as a GitHub Actions secret named NPM_TOKEN in the repo settings.
+
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: "Dry run (pnpm publish --dry-run, no real publish)"
+        type: boolean
+        default: true
+
+permissions:
+  contents: read
+
+jobs:
+  publish:
+    name: Build, smoke-test, and publish @okhp3/mermaid-diagram-bpmn
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v6
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: "24"
+          cache: "pnpm"
+          registry-url: "https://registry.npmjs.org"
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Type-check
+        run: pnpm run typecheck
+
+      - name: Unit tests
+        run: pnpm --filter @workspace/mermaid-diagram-bpmn run test
+
+      - name: Plugin smoke test (clean-install fixture)
+        run: node scripts/run-plugin-smoke.mjs
+
+      - name: Publish (dry run)
+        if: ${{ inputs.dry_run == true }}
+        run: pnpm --filter @okhp3/mermaid-diagram-bpmn publish --dry-run --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Publish to npm
+        if: ${{ github.event_name == 'release' || inputs.dry_run == false }}
+        run: pnpm --filter @okhp3/mermaid-diagram-bpmn publish --access public --no-git-checks
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

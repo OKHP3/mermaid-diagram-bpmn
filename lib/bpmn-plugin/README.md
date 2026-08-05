@@ -1,5 +1,9 @@
 # @okhp3/mermaid-diagram-bpmn
 
+[![npm version](https://img.shields.io/npm/v/@okhp3/mermaid-diagram-bpmn.svg)](https://www.npmjs.com/package/@okhp3/mermaid-diagram-bpmn)
+[![npm downloads](https://img.shields.io/npm/dm/@okhp3/mermaid-diagram-bpmn.svg)](https://www.npmjs.com/package/@okhp3/mermaid-diagram-bpmn)
+[![license](https://img.shields.io/npm/l/@okhp3/mermaid-diagram-bpmn.svg)](./README.md#licence)
+
 **bpmn-beta** — a text-first BPMN diagram type for [Mermaid](https://mermaid.js.org/).
 
 Write readable process models as a Markdown code fence. No XML. No bpmn-js runtime.

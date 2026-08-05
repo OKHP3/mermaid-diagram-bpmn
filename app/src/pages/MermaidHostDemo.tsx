@@ -206,6 +206,32 @@ export default function MermaidHostDemo() {
         </p>
       </header>
 
+      {/* ── Install snippet ─────────────────────────────────────────────────── */}
+      <div className="mb-8 rounded-lg border border-border bg-muted/30 overflow-hidden">
+        <div className="px-4 py-2.5 bg-muted/40 border-b border-border">
+          <span className="text-xs font-mono text-muted-foreground/70 uppercase tracking-widest">
+            Install
+          </span>
+        </div>
+        <div className="px-4 py-3 space-y-1">
+          <pre className="text-[12px] font-mono text-foreground leading-relaxed whitespace-pre-wrap">
+            <span className="text-muted-foreground/50 select-none">$ </span>
+            {'npm install @okhp3/mermaid-diagram-bpmn mermaid'}
+          </pre>
+          <p className="text-[11px] text-muted-foreground/60 mt-1">
+            Works with Mermaid ≥ 10 · peer dependency · MIT licence ·{' '}
+            <a
+              href="https://www.npmjs.com/package/@okhp3/mermaid-diagram-bpmn"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-primary hover:underline"
+            >
+              npmjs.com/package/@okhp3/mermaid-diagram-bpmn
+            </a>
+          </p>
+        </div>
+      </div>
+
       {/* ── Version metadata ────────────────────────────────────────────────── */}
       <div
         className="mb-8 flex flex-wrap gap-x-6 gap-y-2 p-4 rounded-lg border border-border bg-muted/30"
