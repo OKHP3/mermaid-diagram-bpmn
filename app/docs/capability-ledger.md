@@ -33,7 +33,7 @@ Authoritative record of validated runtime versions, test gate results, and build
 | Plugin smoke | `pnpm run plugin:smoke` | ✅ PASS — 12/12 assertions |
 | Production build | `pnpm --filter @workspace/mermaid-diagram-bpmn run build` | ✅ PASS |
 
-No gate failures. No release blockers identified.
+All local validation gates pass. **Release status: BLOCKED** — the consumer-install path is not functional until Task #198 resolves the npm 404 (see below).
 
 ### Plugin bundle size
 
