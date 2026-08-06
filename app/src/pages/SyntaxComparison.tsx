@@ -27,15 +27,18 @@ t3 --> e1
 t4 ==> e2`;
 
 // Verbatim from mermaid-js/mermaid#7699 (filed 2026-05-02 by Andreas Emrich, DFKI IWi).
-// This is the complete syntax example provided in the issue — a 4-element partial snippet,
-// not a full purchase-approval diagram. Reproduced exactly; nothing added or paraphrased.
+// Reproduced exactly from the "Basic process with exclusive gateway" fenced block in the issue.
+// Five elements; both branches shown. Nothing added or paraphrased.
 const DFKI_7699 = `bpmn
   startEvent[type:event,subtype:none,behaviour:start,label:,lane:,pool:]
   task[type:task,subtype:,label:Review Request,lane:,pool:]
   exclusiveGateway[type:gateway,subtype:exclusive,markers:(),label:Approved?,lane:,pool:]
   endEvent1[type:event,subtype:none,behaviour:end,label:Approved,lane:,pool:]
+  endEvent2[type:event,subtype:none,behaviour:end,label:Rejected,lane:,pool:]
+
   startEvent --> task --> exclusiveGateway
-  exclusiveGateway -[type:control,labelLabel:Yes]-> endEvent1`;
+  exclusiveGateway -[type:control,labelLabel:Yes]-> endEvent1
+  exclusiveGateway -[type:control,labelLabel:No]-> endEvent2`;
 
 const PLANTUML = `@startuml
 !theme plain
@@ -308,7 +311,7 @@ export default function SyntaxComparison() {
           <a href="https://github.com/mermaid-js/mermaid/issues/7699" target="_blank" rel="noopener noreferrer" className="underline underline-offset-2 hover:text-foreground transition-colors">
             DFKI issue #7699
           </a>{" "}
-          (the only example Emrich published; it covers four elements, not the full process).
+          (the only example Emrich published; five elements, not the full process).
           Each notation has genuine strengths — this page is a factual reference, not a sales pitch.
         </p>
         <div className="mt-4 flex flex-wrap gap-3 text-xs text-muted-foreground">
@@ -351,7 +354,7 @@ export default function SyntaxComparison() {
           a purchase order) or rejects it (notifying the requester). The bpmn-beta, PlantUML, and
           Mermaid flowchart columns each render this full process: one start event, two end events,
           four tasks, one exclusive gateway, and seven sequence flows. The DFKI #7699 column shows
-          only the verbatim snippet from the issue — four elements covering part of the approval
+          only the verbatim snippet from the issue — five elements covering an approval/rejection
           branch — because no fuller example was published.
         </p>
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
@@ -470,7 +473,7 @@ export default function SyntaxComparison() {
                 Mermaid issue #7699 <ExternalLink size={10} />
               </a>{" "}
               (filed 2026-05-02 by Andreas Emrich, DFKI IWi) — reproduced exactly, with nothing added
-              or paraphrased. The snippet covers four elements; no fuller example was published.
+              or paraphrased. The snippet covers five elements (both gateway branches); no fuller example was published.
               The paper cited in the issue (Emrich &amp; Hollax 2025) is described as in preparation;
               no DOI or preprint URL exists publicly as of August 2026.
             </p>
