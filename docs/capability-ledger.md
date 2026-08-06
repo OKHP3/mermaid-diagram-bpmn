@@ -131,8 +131,8 @@ The production build emits a chunk-size warning: the largest chunk (`index-*.js`
 | Typed `ParseError` with line/column/code | not tracked | **confirmed** | TD-010 resolved 2026-08-05; all 5 throw sites updated |
 | SVG renderer snapshot tests | not tracked | **confirmed** | 5 corpus snapshots CI-gated (TD-005 resolved 2026-08-05) |
 | Layout regression tests | not tracked | **confirmed** | 20 assertions on flat and pool/lane layouts (TD-006 resolved 2026-08-05) |
-| Plugin is externally consumable (installable) | not complete | **not complete — release blocker** | `lib/bpmn-plugin/package.json` has `exports` map and `0.1.0` version, but package is not published to npm registry (404). Task #198. |
-| npm registry: `@okhp3/mermaid-diagram-bpmn` | not tracked | **not published (404)** | README install instructions are broken until Task #198 resolves this |
+| Plugin is externally consumable (installable) | not complete | **not complete — release blocker** | `lib/bpmn-plugin/package.json` has `exports` map, `files` allowlist, `sideEffects: false`, and `0.1.0` version; smoke test wired in CI. Package not published: NPM_TOKEN not set in GitHub Actions secrets. |
+| npm registry: `@okhp3/mermaid-diagram-bpmn` | not tracked | **not published (404)** | README install instructions broken until NPM_TOKEN added to repo secrets and publish workflow triggered. |
 
 ### Open risks carried forward
 
