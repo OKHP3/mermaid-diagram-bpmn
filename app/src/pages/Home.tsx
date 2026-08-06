@@ -8,8 +8,50 @@ import {
   BPMN_EXPERIMENTAL,
   BPMN_DEFERRED,
   BPMN_OUT_OF_SCOPE,
-  PLUGIN_CAPABILITIES,
 } from "@/data/capability-registry";
+
+// ── Path cards (above-the-fold chooser) ─────────────────────────────────────
+
+const PATH_CARDS = [
+  {
+    id: "create",
+    layerColor: "#c46a2c", // forge rust — primary action
+    icon: FileCode2,
+    iconClass: "text-primary",
+    audience: "Developers · Analysts · Technical writers",
+    heading: "Write BPMN as text",
+    body: "Author process diagrams in a readable DSL. Commit them to Git, diff them in pull requests, render them in browser — no XML, no heavy modeler.",
+    cta: { label: "Open Playground", href: "/playground", testId: "button-open-playground" },
+    limitation: "Prototype parser — not production-grade.",
+    testId: "path-card-create",
+  },
+  {
+    id: "plugin",
+    layerColor: "#1c3a34", // forge teal — structural
+    icon: Layers,
+    iconClass: "text-emerald-700 dark:text-emerald-400",
+    audience: "Teams already using Mermaid",
+    heading: "Add BPMN to your Mermaid setup",
+    body: "Register bpmn-beta as an external plugin. BPMN shapes, gateways, and pools render alongside your existing flowcharts and sequence diagrams.",
+    cta: { label: "See the Plugin Demo", href: "/mermaid-host-demo", testId: "button-plugin-demo" },
+    limitation: "External plugin — not core Mermaid yet. Manual registration required.",
+    testId: "path-card-plugin",
+  },
+  {
+    id: "skills",
+    layerColor: "#e6a03c", // forge amber — accent
+    icon: GitBranch,
+    iconClass: "text-amber-600 dark:text-amber-400",
+    audience: "Process analysts · AI toolers",
+    heading: "15 agent skills for the full lifecycle",
+    body: "BP-SKILL brings BABOK v3, BPMN 2.0.2, and BPM CBOK into portable SKILL.md files. Take a process from intake to publication with your AI agent.",
+    cta: { label: "Browse the 15 Skills", href: "/skills", testId: "button-browse-skills" },
+    limitation: "Agent skill files — not a standalone app. Requires a SKILL.md-compatible agent.",
+    testId: "path-card-skills",
+  },
+] as const;
+
+// ── Other page data ──────────────────────────────────────────────────────────
 
 const MARKET_WEDGE = [
   { icon: Building2, segment: "Enterprise architects", pain: "Need process diagrams beside architecture docs", fit: "Git-native text diagrams fit architecture repositories" },
@@ -66,6 +108,50 @@ const SUPPORT_MATRIX = {
   outOfScope: BPMN_OUT_OF_SCOPE.map(c => c.label),
 };
 
+// ── Sub-components ────────────────────────────────────────────────────────────
+
+interface PathCardProps {
+  card: typeof PATH_CARDS[number];
+}
+
+function PathCard({ card }: PathCardProps) {
+  return (
+    <div
+      className="forge-card forge-layer-border-top flex flex-col"
+      style={{ "--layer-color": card.layerColor } as CSSProperties}
+      data-testid={card.testId}
+    >
+      {/* Header row: icon + audience */}
+      <div className="flex items-start justify-between gap-2 mb-3">
+        <card.icon size={20} className={card.iconClass} />
+        <span className="forge-eyebrow text-[10px] text-right leading-snug">{card.audience}</span>
+      </div>
+
+      {/* Heading */}
+      <h3 className="forge-card-title text-sm mb-2 leading-snug">{card.heading}</h3>
+
+      {/* Body */}
+      <p className="text-xs text-muted-foreground leading-relaxed flex-1 mb-5">{card.body}</p>
+
+      {/* CTA */}
+      <Link
+        href={card.cta.href}
+        className="forge-btn-primary inline-flex items-center gap-2 self-start mb-4 text-xs"
+        data-testid={card.cta.testId}
+      >
+        {card.cta.label}
+        <ArrowRight size={13} />
+      </Link>
+
+      {/* Limitation */}
+      <p className="text-[11px] text-muted-foreground/60 flex items-start gap-1.5">
+        <XCircle size={11} className="shrink-0 mt-0.5" />
+        {card.limitation}
+      </p>
+    </div>
+  );
+}
+
 interface MatrixColProps {
   icon: React.ElementType;
   label: string;
@@ -94,6 +180,8 @@ function MatrixCol({ icon: Icon, label, items, iconClass, headerClass }: MatrixC
   );
 }
 
+// ── Page ──────────────────────────────────────────────────────────────────────
+
 export default function Home() {
   return (
     <div className="flex flex-col">
@@ -101,68 +189,90 @@ export default function Home() {
       {/* Status ribbon */}
       <StatusRibbon />
 
-      {/* Hero */}
-      <section className="max-w-7xl mx-auto w-full px-4 sm:px-6 py-16 md:py-24">
-        <div className="max-w-3xl">
+      {/* ── Above-the-fold chooser ───────────────────────────────────────── */}
+      <section className="max-w-7xl mx-auto w-full px-4 sm:px-6 pt-10 pb-8 md:pt-14 md:pb-10">
 
-          <p className="forge-eyebrow mb-5" data-testid="badge-status">
+        {/* Compact brand heading */}
+        <div className="mb-7">
+          <p className="forge-eyebrow mb-4" data-testid="badge-status">
             The Forge — Contributor Prototype
           </p>
-
-          <div className="flex items-center gap-5 mb-1">
+          <div className="flex items-center gap-4 mb-3">
             <img
               src={`${import.meta.env.BASE_URL}icon.png`}
               alt="BPMN for Mermaid"
-              className="w-16 h-16 rounded-xl object-cover shrink-0 shadow-md"
+              className="w-12 h-12 rounded-xl object-cover shrink-0 shadow-md"
               data-testid="img-hero-icon"
             />
             <h1
-              className="text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight text-foreground leading-tight"
+              className="text-3xl sm:text-4xl font-bold tracking-tight text-foreground leading-tight"
               data-testid="heading-hero"
             >
               BPMN for Mermaid
             </h1>
           </div>
-
-          <p className="mt-4 font-mono font-medium text-lg text-primary" data-testid="text-dsl-keyword">
-            bpmn-beta
+          <p className="text-sm text-muted-foreground max-w-2xl leading-relaxed">
+            Two tools, one workbench — a Mermaid diagram plugin and a suite of agent skills for
+            business process modeling. Pick the path that matches what you're trying to do.
           </p>
+        </div>
 
-          <p className="mt-3 text-xs font-semibold uppercase tracking-widest text-muted-foreground/60">
-            Standards-aware · Text-first · Git-native
-          </p>
+        {/* Three intent-led path cards */}
+        <div
+          className="grid grid-cols-1 md:grid-cols-3 gap-4"
+          data-testid="path-chooser"
+        >
+          {PATH_CARDS.map(card => (
+            <PathCard key={card.id} card={card} />
+          ))}
+        </div>
+      </section>
 
-          <p className="mt-5 text-base text-muted-foreground leading-relaxed max-w-2xl">
-            A Mermaid-native diagram type for business process modeling. Text-first, version-controllable,
-            Markdown-compatible. Write BPMN the way you write flowcharts — then commit it.
-            The process-structure and notation layer of the{" "}
-            <a href="/about" className="text-primary underline underline-offset-2 hover:text-primary/80">
-              OKHP³ Visual Language Stack
-            </a>.
-          </p>
+      {/* ── Project context (below the chooser) ─────────────────────────── */}
+      <section className="border-t border-border">
+        <div className="max-w-7xl mx-auto w-full px-4 sm:px-6 py-10">
+          <div className="max-w-3xl">
 
-          {/* Project thesis card */}
-          <div className="mt-7 forge-card">
-            <p className="forge-eyebrow mb-2 text-primary/70">Project thesis</p>
-            <p className="text-sm text-foreground leading-relaxed">
-              Mermaid has a material diagram-type gap: BPMN 2.0 is not represented as a native syntax.
-              The credible path is not to force BPMN through{" "}
-              <code className="font-mono text-xs bg-muted px-1.5 py-0.5 rounded">flowchart</code>,
-              but to create a dedicated{" "}
-              <code className="font-mono text-xs bg-muted px-1.5 py-0.5 rounded">bpmn-beta</code> plugin
-              implementing a documented descriptive subset — and later propose upstream inclusion once the syntax stabilizes.
+            <p
+              className="font-mono font-medium text-lg text-primary mb-1"
+              data-testid="text-dsl-keyword"
+            >
+              bpmn-beta
             </p>
-          </div>
+            <p className="text-xs font-semibold uppercase tracking-widest text-muted-foreground/60 mb-4">
+              Standards-aware · Text-first · Git-native
+            </p>
+            <p className="text-sm text-muted-foreground leading-relaxed max-w-2xl mb-6">
+              A Mermaid-native diagram type for business process modeling. Text-first, version-controllable,
+              Markdown-compatible. Write BPMN the way you write flowcharts — then commit it.
+              The process-structure and notation layer of the{" "}
+              <a href="/about" className="text-primary underline underline-offset-2 hover:text-primary/80">
+                OKHP³ Visual Language Stack
+              </a>.
+            </p>
 
-          {/* CTAs */}
-          <div className="mt-7 flex flex-wrap gap-3">
-            <Link href="/playground" className="forge-btn-primary" data-testid="button-open-playground">
-              Open Playground
-              <ArrowRight size={15} />
-            </Link>
-            <Link href="/dsl" className="forge-btn-outline" data-testid="button-dsl-reference">
-              DSL Reference
-            </Link>
+            {/* Project thesis card */}
+            <div className="forge-card mb-6">
+              <p className="forge-eyebrow mb-2 text-primary/70">Project thesis</p>
+              <p className="text-sm text-foreground leading-relaxed">
+                Mermaid has a material diagram-type gap: BPMN 2.0 is not represented as a native syntax.
+                The credible path is not to force BPMN through{" "}
+                <code className="font-mono text-xs bg-muted px-1.5 py-0.5 rounded">flowchart</code>,
+                but to create a dedicated{" "}
+                <code className="font-mono text-xs bg-muted px-1.5 py-0.5 rounded">bpmn-beta</code> plugin
+                implementing a documented descriptive subset — and later propose upstream inclusion once the syntax stabilizes.
+              </p>
+            </div>
+
+            {/* Secondary CTAs */}
+            <div className="flex flex-wrap gap-3">
+              <Link href="/dsl" className="forge-btn-outline" data-testid="button-dsl-reference">
+                DSL Reference
+              </Link>
+              <Link href="/comparison" className="forge-btn-outline">
+                Syntax Comparison
+              </Link>
+            </div>
           </div>
         </div>
       </section>
