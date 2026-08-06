@@ -78,7 +78,7 @@ No results were assumed from prior session notes.
 
 **Verified by:** Task #197 (Restore clean-install validation baseline)  
 **Environment:** Linux (Replit), pnpm 10.26.1, Node.js 24.13.0  
-**Release status: BLOCKED** — all local validation gates pass, but the consumer-install path is non-functional until `@okhp3/mermaid-diagram-bpmn` is published to npm (tracked in Task #198).
+**Release status: GREEN** — all local validation gates pass and `@okhp3/mermaid-diagram-bpmn@0.1.1` is published and confirmed live on the npm registry (Task #198 resolved 2026-08-06).
 
 All commands were run from `pnpm install --frozen-lockfile` on the current checkout.
 
@@ -92,7 +92,7 @@ All commands were run from `pnpm install --frozen-lockfile` on the current check
 | Vite | 8.1.4 |
 | Vitest | 4.1.10 |
 | mermaid | 11.4.1 |
-| `@okhp3/mermaid-diagram-bpmn` | 0.1.0 |
+| `@okhp3/mermaid-diagram-bpmn` | 0.1.1 |
 
 ### Gate results
 
@@ -131,13 +131,13 @@ The production build emits a chunk-size warning: the largest chunk (`index-*.js`
 | Typed `ParseError` with line/column/code | not tracked | **confirmed** | TD-010 resolved 2026-08-05; all 5 throw sites updated |
 | SVG renderer snapshot tests | not tracked | **confirmed** | 5 corpus snapshots CI-gated (TD-005 resolved 2026-08-05) |
 | Layout regression tests | not tracked | **confirmed** | 20 assertions on flat and pool/lane layouts (TD-006 resolved 2026-08-05) |
-| Plugin is externally consumable (installable) | not complete | **not complete — release blocker** | `lib/bpmn-plugin/package.json` has `exports` map, `files` allowlist, `sideEffects: false`, and `0.1.0` version; smoke test wired in CI. Package not published: NPM_TOKEN not set in GitHub Actions secrets. |
-| npm registry: `@okhp3/mermaid-diagram-bpmn` | not tracked | **not published (404)** | README install instructions broken until NPM_TOKEN added to repo secrets and publish workflow triggered. |
+| Plugin is externally consumable (installable) | not complete | **confirmed** | `@okhp3/mermaid-diagram-bpmn@0.1.1` published 2026-08-06. `exports` map (ESM + CJS + types), `files` allowlist (`dist`, `README.md`), `sideEffects: false`. Smoke test (12/12) CI-gated in `publish-npm.yml`. |
+| npm registry: `@okhp3/mermaid-diagram-bpmn` | not tracked | **published — 0.1.1** | `npm view @okhp3/mermaid-diagram-bpmn` returns version `0.1.1`. README install instructions are functional. |
 
 ### Open risks carried forward
 
 | Risk | Detail |
 |---|---|
-| npm 404 | `@okhp3/mermaid-diagram-bpmn` is not on the npm registry. This is the highest-priority release blocker (Task #198). |
+| npm published | `@okhp3/mermaid-diagram-bpmn@0.1.1` confirmed live on registry 2026-08-06. README install instructions functional. |
 | Integration test runs under `securityLevel: "loose"` | Required by happy-dom's SVG parser limitation. Automated real-browser E2E without this workaround is tracked in Task #209. |
 | App main bundle >500 kB | Mermaid is bundled into the initial load. Lazy-loading tracked in Task #212. |

@@ -154,8 +154,8 @@ Hardening before community exposure.
 
 Prepare for external contribution and Mermaid engagement.
 
-- [ ] Package published to npm at `@okhp3/mermaid-diagram-bpmn`
-  _Publish infrastructure ready: `.github/workflows/publish-npm.yml` triggers on GitHub Release. Requires `NPM_TOKEN` secret added to the repo. Run manually via workflow_dispatch (dry_run: false) or publish a GitHub Release._
+- [x] Package published to npm at `@okhp3/mermaid-diagram-bpmn`
+  _Published 2026-08-06: `@okhp3/mermaid-diagram-bpmn@0.1.1` — exports map (ESM + CJS + types), `files` allowlist, `sideEffects: false`. Smoke test (12/12) CI-gated in `publish-npm.yml`. Confirmed live: `npm view @okhp3/mermaid-diagram-bpmn` returns `0.1.1`._
 - [ ] Works when loaded via `<script>` tag against Mermaid CDN build
   _(deferred from V0.6 — blocked on npm publish above)_
 - [ ] At least 3 real-world process examples contributed (not purchase-approval)
