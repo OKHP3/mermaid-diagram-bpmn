@@ -1,6 +1,6 @@
 {
   "name": "@okhp3/mermaid-diagram-bpmn",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "bpmn-beta diagram type plugin for Mermaid — readable, text-first BPMN process notation",
   "type": "module",
   "main": "./dist/index.cjs",
