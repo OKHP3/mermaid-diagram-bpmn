@@ -1,35 +1,32 @@
 import { useState, useEffect, useRef } from "react";
 import { Link, useLocation } from "wouter";
 import { Moon, Sun, Menu, X, Github, ChevronDown } from "lucide-react";
-import { SKILLS } from "../data/skills-registry";
 import { usePageTracking } from "../hooks/usePageTracking";
 
-// ── Nav structure ────────────────────────────────────────────────────────────
+// ── Nav structure (two-tier) ─────────────────────────────────────────────────
+//
+// Logo → Home (always)
+// Flat: Playground · Agent Skills
+// Plugin ▾: Plugin Setup · Host Demo · Syntax Comparison   (Use with Mermaid)
+// Learn  ▾: Walkthrough · DSL Reference · Architecture · Roadmap · About
 
-const FLAT_NAV = [
-  { href: "/",           label: "Home"         },
+const PRODUCT_NAV = [
   { href: "/playground", label: "Playground"   },
   { href: "/skills",     label: "Agent Skills" },
 ] as const;
 
-const REFERENCE_LINKS = [
-  { href: "/dsl",                  label: "DSL Reference"    },
-  { href: "/comparison",           label: "Syntax Comparison"},
-  { href: "/architecture",         label: "Architecture"     },
-  { href: "/plugin",               label: "Plugin Setup"     },
-  { href: "/mermaid-host-demo",    label: "Host Demo"        },
+const PLUGIN_LINKS = [
+  { href: "/plugin",            label: "Plugin Setup"      },
+  { href: "/mermaid-host-demo", label: "Host Demo"         },
+  { href: "/comparison",        label: "Syntax Comparison" },
 ] as const;
 
-const MORE_LINKS = [
-  { href: "/walkthrough", label: "Walkthrough" },
-  { href: "/roadmap",     label: "Roadmap"     },
-  { href: "/about",       label: "About"       },
-] as const;
-
-const ALL_NAV = [
-  ...FLAT_NAV,
-  ...REFERENCE_LINKS,
-  ...MORE_LINKS,
+const LEARN_LINKS = [
+  { href: "/walkthrough",  label: "Walkthrough"   },
+  { href: "/dsl",          label: "DSL Reference" },
+  { href: "/architecture", label: "Architecture"  },
+  { href: "/roadmap",      label: "Roadmap"       },
+  { href: "/about",        label: "About"         },
 ] as const;
 
 const GITHUB_REPO = "https://github.com/OKHP3/mermaid-diagram-bpmn";
@@ -42,7 +39,7 @@ function isLinkActive(href: string, location: string) {
     : location === href;
 }
 
-// ── Dropdown component ───────────────────────────────────────────────────────
+// ── Dropdown component ────────────────────────────────────────────────────────
 
 type DropdownLink = { readonly href: string; readonly label: string };
 
@@ -197,7 +194,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
       <header className="forge-header">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 flex items-center justify-between h-14">
 
-          {/* Logo — title stacked above bpmn-beta badge */}
+          {/* Logo — links to Home */}
           <Link href="/" className="flex items-center gap-2.5 shrink-0" data-testid="link-home-logo">
             <img
               src={`${import.meta.env.BASE_URL}icon.png`}
@@ -214,11 +211,11 @@ export function Layout({ children }: { children: React.ReactNode }) {
             </div>
           </Link>
 
-          {/* Desktop nav */}
+          {/* Desktop nav — two-tier: flat links + two dropdowns */}
           <nav className="hidden md:flex items-center gap-0.5" aria-label="Main navigation">
 
-            {/* Flat top-level links */}
-            {FLAT_NAV.map(link => {
+            {/* Playground (flat) */}
+            {PRODUCT_NAV.map(link => {
               const isActive = isLinkActive(link.href, location);
               return (
                 <Link
@@ -235,21 +232,21 @@ export function Layout({ children }: { children: React.ReactNode }) {
               );
             })}
 
-            {/* Reference ▾ */}
+            {/* Plugin ▾ — Use with Mermaid */}
             <NavDropdown
-              label="Reference"
-              links={REFERENCE_LINKS}
+              label="Plugin"
+              links={PLUGIN_LINKS}
               location={location}
-              testId="nav-reference-dropdown"
+              testId="nav-plugin-dropdown"
               onNavigate={() => {}}
             />
 
-            {/* More ▾ */}
+            {/* Learn ▾ — shared context */}
             <NavDropdown
-              label="More"
-              links={MORE_LINKS}
+              label="Learn"
+              links={LEARN_LINKS}
               location={location}
-              testId="nav-more-dropdown"
+              testId="nav-learn-dropdown"
               onNavigate={() => {}}
             />
 
@@ -291,15 +288,15 @@ export function Layout({ children }: { children: React.ReactNode }) {
           </div>
         </div>
 
-        {/* Mobile menu — sectioned list mirroring desktop groups */}
+        {/* Mobile menu — two-tier structure mirroring desktop */}
         {menuOpen && (
           <nav
             className="md:hidden px-4 pb-3 pt-2 flex flex-col gap-0.5"
             style={{ borderTop: "1px solid var(--okh-header-border)" }}
             aria-label="Mobile navigation"
           >
-            {/* Top-level: Home, Playground, Agent Skills */}
-            {FLAT_NAV.map(link => (
+            {/* Product flat links: Playground · Agent Skills */}
+            {PRODUCT_NAV.map(link => (
               <Link
                 key={link.href}
                 href={link.href}
@@ -310,13 +307,13 @@ export function Layout({ children }: { children: React.ReactNode }) {
               </Link>
             ))}
 
-            {/* Reference section */}
+            {/* Plugin section — Use with Mermaid */}
             <div
               className="mt-2 pt-2 flex flex-col gap-0.5"
               style={{ borderTop: "1px solid var(--okh-header-border)" }}
             >
-              <span className="forge-mobile-nav-label px-3 pb-0.5">Reference</span>
-              {REFERENCE_LINKS.map(link => (
+              <span className="forge-mobile-nav-label px-3 pb-0.5">Plugin</span>
+              {PLUGIN_LINKS.map(link => (
                 <Link
                   key={link.href}
                   href={link.href}
@@ -328,13 +325,13 @@ export function Layout({ children }: { children: React.ReactNode }) {
               ))}
             </div>
 
-            {/* More section */}
+            {/* Learn section — shared context */}
             <div
               className="mt-2 pt-2 flex flex-col gap-0.5"
               style={{ borderTop: "1px solid var(--okh-header-border)" }}
             >
-              <span className="forge-mobile-nav-label px-3 pb-0.5">More</span>
-              {MORE_LINKS.map(link => (
+              <span className="forge-mobile-nav-label px-3 pb-0.5">Learn</span>
+              {LEARN_LINKS.map(link => (
                 <Link
                   key={link.href}
                   href={link.href}

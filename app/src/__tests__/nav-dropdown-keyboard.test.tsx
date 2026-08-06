@@ -35,7 +35,7 @@ function renderLayout() {
 
 function getDropdownTrigger(
   container: HTMLElement,
-  testId: 'nav-reference-dropdown' | 'nav-more-dropdown',
+  testId: 'nav-plugin-dropdown' | 'nav-learn-dropdown',
 ) {
   const el = container.querySelector(`[data-testid="${testId}"]`);
   if (!el) throw new Error(`Trigger "${testId}" not found`);
@@ -52,11 +52,11 @@ function getDropdownItems(container: HTMLElement) {
 
 describe('NavDropdown — keyboard navigation', () => {
 
-  describe('Reference ▾ dropdown', () => {
+  describe('Plugin ▾ dropdown', () => {
 
     it('opens the panel and moves focus to the first item on click', () => {
       const { container } = renderLayout();
-      const trigger = getDropdownTrigger(container, 'nav-reference-dropdown');
+      const trigger = getDropdownTrigger(container, 'nav-plugin-dropdown');
 
       act(() => { fireEvent.click(trigger); });
 
@@ -67,7 +67,7 @@ describe('NavDropdown — keyboard navigation', () => {
 
     it('ArrowDown moves focus from first to second item', () => {
       const { container } = renderLayout();
-      const trigger = getDropdownTrigger(container, 'nav-reference-dropdown');
+      const trigger = getDropdownTrigger(container, 'nav-plugin-dropdown');
 
       act(() => { fireEvent.click(trigger); });
       const items = getDropdownItems(container);
@@ -78,7 +78,7 @@ describe('NavDropdown — keyboard navigation', () => {
 
     it('ArrowDown wraps from last item back to first', () => {
       const { container } = renderLayout();
-      const trigger = getDropdownTrigger(container, 'nav-reference-dropdown');
+      const trigger = getDropdownTrigger(container, 'nav-plugin-dropdown');
 
       act(() => { fireEvent.click(trigger); });
       const items = getDropdownItems(container);
@@ -90,7 +90,7 @@ describe('NavDropdown — keyboard navigation', () => {
 
     it('ArrowUp moves focus from second to first item', () => {
       const { container } = renderLayout();
-      const trigger = getDropdownTrigger(container, 'nav-reference-dropdown');
+      const trigger = getDropdownTrigger(container, 'nav-plugin-dropdown');
 
       act(() => { fireEvent.click(trigger); });
       const items = getDropdownItems(container);
@@ -103,7 +103,7 @@ describe('NavDropdown — keyboard navigation', () => {
 
     it('ArrowUp wraps from first item to last', () => {
       const { container } = renderLayout();
-      const trigger = getDropdownTrigger(container, 'nav-reference-dropdown');
+      const trigger = getDropdownTrigger(container, 'nav-plugin-dropdown');
 
       act(() => { fireEvent.click(trigger); });
       const items = getDropdownItems(container);
@@ -114,7 +114,7 @@ describe('NavDropdown — keyboard navigation', () => {
 
     it('Escape closes the panel and returns focus to the trigger', () => {
       const { container } = renderLayout();
-      const trigger = getDropdownTrigger(container, 'nav-reference-dropdown');
+      const trigger = getDropdownTrigger(container, 'nav-plugin-dropdown');
 
       act(() => { fireEvent.click(trigger); });
       const items = getDropdownItems(container);
@@ -129,7 +129,7 @@ describe('NavDropdown — keyboard navigation', () => {
 
     it('Tab closes the panel without forcing focus back to trigger', () => {
       const { container } = renderLayout();
-      const trigger = getDropdownTrigger(container, 'nav-reference-dropdown');
+      const trigger = getDropdownTrigger(container, 'nav-plugin-dropdown');
 
       act(() => { fireEvent.click(trigger); });
       const items = getDropdownItems(container);
@@ -143,7 +143,7 @@ describe('NavDropdown — keyboard navigation', () => {
 
     it('open → ArrowDown → select via Enter navigates correctly', () => {
       const { container } = renderLayout();
-      const trigger = getDropdownTrigger(container, 'nav-reference-dropdown');
+      const trigger = getDropdownTrigger(container, 'nav-plugin-dropdown');
 
       act(() => { fireEvent.click(trigger); });
       const items = getDropdownItems(container);
@@ -160,11 +160,11 @@ describe('NavDropdown — keyboard navigation', () => {
     });
   });
 
-  describe('More ▾ dropdown', () => {
+  describe('Learn ▾ dropdown', () => {
 
     it('opens the panel and moves focus to the first item', () => {
       const { container } = renderLayout();
-      const trigger = getDropdownTrigger(container, 'nav-more-dropdown');
+      const trigger = getDropdownTrigger(container, 'nav-learn-dropdown');
 
       act(() => { fireEvent.click(trigger); });
 
@@ -173,9 +173,9 @@ describe('NavDropdown — keyboard navigation', () => {
       expect(document.activeElement).toBe(items[0]);
     });
 
-    it('Escape closes the More panel and returns focus to its trigger', () => {
+    it('Escape closes the Learn panel and returns focus to its trigger', () => {
       const { container } = renderLayout();
-      const trigger = getDropdownTrigger(container, 'nav-more-dropdown');
+      const trigger = getDropdownTrigger(container, 'nav-learn-dropdown');
 
       act(() => { fireEvent.click(trigger); });
       const items = getDropdownItems(container);
@@ -191,7 +191,7 @@ describe('NavDropdown — keyboard navigation', () => {
 
     it('ArrowDown on the trigger opens the dropdown and focuses the first item', () => {
       const { container } = renderLayout();
-      const trigger = getDropdownTrigger(container, 'nav-reference-dropdown');
+      const trigger = getDropdownTrigger(container, 'nav-plugin-dropdown');
 
       act(() => { trigger.focus(); });
       act(() => { fireEvent.keyDown(trigger, { key: 'ArrowDown' }); });
@@ -203,7 +203,7 @@ describe('NavDropdown — keyboard navigation', () => {
 
     it('Escape on a closed trigger does nothing visible', () => {
       const { container } = renderLayout();
-      const trigger = getDropdownTrigger(container, 'nav-reference-dropdown');
+      const trigger = getDropdownTrigger(container, 'nav-plugin-dropdown');
 
       act(() => { trigger.focus(); });
       act(() => { fireEvent.keyDown(trigger, { key: 'Escape' }); });
@@ -216,13 +216,13 @@ describe('NavDropdown — keyboard navigation', () => {
 
     it('trigger has aria-expanded="false" when closed', () => {
       const { container } = renderLayout();
-      const trigger = getDropdownTrigger(container, 'nav-reference-dropdown');
+      const trigger = getDropdownTrigger(container, 'nav-plugin-dropdown');
       expect(trigger.getAttribute('aria-expanded')).toBe('false');
     });
 
     it('trigger has aria-expanded="true" when open', () => {
       const { container } = renderLayout();
-      const trigger = getDropdownTrigger(container, 'nav-reference-dropdown');
+      const trigger = getDropdownTrigger(container, 'nav-plugin-dropdown');
 
       act(() => { fireEvent.click(trigger); });
       expect(trigger.getAttribute('aria-expanded')).toBe('true');
@@ -230,13 +230,13 @@ describe('NavDropdown — keyboard navigation', () => {
 
     it('trigger has aria-haspopup="true"', () => {
       const { container } = renderLayout();
-      const trigger = getDropdownTrigger(container, 'nav-reference-dropdown');
+      const trigger = getDropdownTrigger(container, 'nav-plugin-dropdown');
       expect(trigger.getAttribute('aria-haspopup')).toBe('true');
     });
 
     it('open panel has role="menu"', () => {
       const { container } = renderLayout();
-      const trigger = getDropdownTrigger(container, 'nav-reference-dropdown');
+      const trigger = getDropdownTrigger(container, 'nav-plugin-dropdown');
 
       act(() => { fireEvent.click(trigger); });
       expect(container.querySelector('[role="menu"]')).not.toBeNull();
@@ -244,7 +244,7 @@ describe('NavDropdown — keyboard navigation', () => {
 
     it('each item in the open panel has role="menuitem"', () => {
       const { container } = renderLayout();
-      const trigger = getDropdownTrigger(container, 'nav-reference-dropdown');
+      const trigger = getDropdownTrigger(container, 'nav-plugin-dropdown');
 
       act(() => { fireEvent.click(trigger); });
       const items = getDropdownItems(container);
