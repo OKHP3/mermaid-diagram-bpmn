@@ -26,20 +26,16 @@ g1 --> t4: "no"
 t3 --> e1
 t4 ==> e2`;
 
+// Verbatim from mermaid-js/mermaid#7699 (filed 2026-05-02 by Andreas Emrich, DFKI IWi).
+// This is the complete syntax example provided in the issue — a 4-element partial snippet,
+// not a full purchase-approval diagram. Reproduced exactly; nothing added or paraphrased.
 const DFKI_7699 = `bpmn
-  startEvent[type:event,subtype:none,behaviour:start,label:Request Raised,lane:,pool:]
-  task1[type:task,subtype:user,label:Submit Request,lane:,pool:]
-  task2[type:task,subtype:user,label:Review Request,lane:,pool:]
-  gateway1[type:gateway,subtype:exclusive,markers:(),label:Approved?,lane:,pool:]
-  task3[type:task,subtype:service,label:Create Purchase Order,lane:,pool:]
-  task4[type:task,subtype:user,label:Notify: Rejected,lane:,pool:]
-  endEvent1[type:event,subtype:none,behaviour:end,label:PO Issued,lane:,pool:]
-  endEvent2[type:event,subtype:none,behaviour:end,label:Rejected,lane:,pool:]
-  startEvent --> task1 --> task2 --> gateway1
-  gateway1 -[type:control,labelLabel:yes]-> task3
-  gateway1 -[type:control,labelLabel:no]-> task4
-  task3 --> endEvent1
-  task4 --> endEvent2`;
+  startEvent[type:event,subtype:none,behaviour:start,label:,lane:,pool:]
+  task[type:task,subtype:,label:Review Request,lane:,pool:]
+  exclusiveGateway[type:gateway,subtype:exclusive,markers:(),label:Approved?,lane:,pool:]
+  endEvent1[type:event,subtype:none,behaviour:end,label:Approved,lane:,pool:]
+  startEvent --> task --> exclusiveGateway
+  exclusiveGateway -[type:control,labelLabel:Yes]-> endEvent1`;
 
 const PLANTUML = `@startuml
 !theme plain
@@ -102,8 +98,8 @@ const SYNTAXES = [
   },
   {
     id: "dfki-7699",
-    label: "DFKI proposal (#7699)",
-    tag: "Proposed — no implementation",
+    label: "DFKI #7699 — verbatim snippet",
+    tag: "Proposed — verbatim from issue, no implementation",
     tagClass: "bg-amber-500/10 text-amber-700 dark:text-amber-400 border-amber-500/20",
     code: DFKI_7699,
     lineCount: DFKI_7699.trim().split("\n").length,
@@ -304,11 +300,15 @@ export default function SyntaxComparison() {
           Syntax Comparison
         </h1>
         <p className="mt-2 text-sm text-muted-foreground leading-relaxed max-w-2xl">
-          The same purchase-request approval process written in four different notations.
-          Comparing <strong className="text-foreground">bpmn-beta</strong> (this project),
-          the <strong className="text-foreground">DFKI #7699 proposed syntax</strong>,
-          <strong className="text-foreground"> PlantUML activity-beta</strong>, and
-          <strong className="text-foreground"> Mermaid flowchart</strong>.
+          A purchase-request approval process written in three notations —{" "}
+          <strong className="text-foreground">bpmn-beta</strong> (this project),{" "}
+          <strong className="text-foreground">PlantUML activity-beta</strong>, and{" "}
+          <strong className="text-foreground">Mermaid flowchart</strong> — plus the{" "}
+          <strong className="text-foreground">verbatim syntax snippet</strong> from{" "}
+          <a href="https://github.com/mermaid-js/mermaid/issues/7699" target="_blank" rel="noopener noreferrer" className="underline underline-offset-2 hover:text-foreground transition-colors">
+            DFKI issue #7699
+          </a>{" "}
+          (the only example Emrich published; it covers four elements, not the full process).
           Each notation has genuine strengths — this page is a factual reference, not a sales pitch.
         </p>
         <div className="mt-4 flex flex-wrap gap-3 text-xs text-muted-foreground">
@@ -348,9 +348,11 @@ export default function SyntaxComparison() {
         </h2>
         <p className="text-xs text-muted-foreground mb-6 max-w-2xl leading-relaxed">
           A requester raises a purchase request; a manager reviews it and either approves (creating
-          a purchase order) or rejects it (notifying the requester). Eight BPMN elements: one start
-          event, two end events, four tasks (two user, one service, one user), one exclusive gateway,
-          and seven sequence flows.
+          a purchase order) or rejects it (notifying the requester). The bpmn-beta, PlantUML, and
+          Mermaid flowchart columns each render this full process: one start event, two end events,
+          four tasks, one exclusive gateway, and seven sequence flows. The DFKI #7699 column shows
+          only the verbatim snippet from the issue — four elements covering part of the approval
+          branch — because no fuller example was published.
         </p>
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
           {SYNTAXES.map(s => (
@@ -453,22 +455,23 @@ export default function SyntaxComparison() {
           Context and methodology
         </h2>
         <p className="text-xs text-muted-foreground mb-4 max-w-2xl leading-relaxed">
-          This comparison is maintained by the bpmn-beta project team. All syntax examples are
-          hand-written for the same notional process and verified to be syntactically valid in their
-          respective parsers (except DFKI #7699, which has no parser yet; the example is transcribed
-          verbatim from the issue text with attributes extended to cover the additional elements).
+          This comparison is maintained by the bpmn-beta project team. The bpmn-beta, PlantUML, and
+          Mermaid flowchart examples are hand-written for the same notional process and verified to
+          be syntactically valid in their respective parsers. The DFKI #7699 column reproduces the
+          complete verbatim example from the issue exactly — no elements were added or paraphrased;
+          no parser exists for it yet.
         </p>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-3xl">
           <div className="p-4 rounded-lg border border-border bg-card">
             <p className="text-xs font-semibold text-foreground mb-1.5">DFKI #7699 example source</p>
             <p className="text-xs text-muted-foreground leading-relaxed">
-              The DFKI syntax is taken verbatim from{" "}
+              The DFKI column is the <strong className="text-foreground">complete verbatim example</strong> from{" "}
               <a href="https://github.com/mermaid-js/mermaid/issues/7699" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline inline-flex items-center gap-1">
                 Mermaid issue #7699 <ExternalLink size={10} />
               </a>{" "}
-              (filed 2026-05-02 by Andreas Emrich, DFKI IWi). The additional elements in this comparison
-              (tasks, gateway, second end event) follow the same attribute pattern as the original snippet.
-              The paper cited in the issue (Emrich & Hollax 2025) is described as in preparation;
+              (filed 2026-05-02 by Andreas Emrich, DFKI IWi) — reproduced exactly, with nothing added
+              or paraphrased. The snippet covers four elements; no fuller example was published.
+              The paper cited in the issue (Emrich &amp; Hollax 2025) is described as in preparation;
               no DOI or preprint URL exists publicly as of August 2026.
             </p>
           </div>
