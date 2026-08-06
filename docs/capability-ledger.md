@@ -71,3 +71,73 @@ No results were assumed from prior session notes.
 
 - The AGENTS.md note about `pns-transitions-auto.ts` being stale was written before this baseline run. As of this run, `check:generated` confirms both files are up to date.
 - The 373/373 test count in `docs/version-checklist.md` (V0.3 tag) has grown to 390/390 as of this baseline. The additional 17 tests were added in post-v0.1.0 work (keyboard accessibility, aria attributes, brand checks, etc.).
+
+---
+
+## Baseline — 2026-08-06
+
+**Verified by:** Task #197 (Restore clean-install validation baseline)  
+**Environment:** Linux (Replit), pnpm 10.26.1, Node.js 24.13.0  
+**Release status: BLOCKED** — all local validation gates pass, but the consumer-install path is non-functional until `@okhp3/mermaid-diagram-bpmn` is published to npm (tracked in Task #198).
+
+All commands were run from `pnpm install --frozen-lockfile` on the current checkout.
+
+### Toolchain versions
+
+| Package | Version |
+|---|---|
+| Node.js | 24.13.0 |
+| pnpm | 10.26.1 |
+| TypeScript | ~7.0.2 |
+| Vite | 8.1.4 |
+| Vitest | 4.1.10 |
+| mermaid | 11.4.1 |
+| `@okhp3/mermaid-diagram-bpmn` | 0.1.0 |
+
+### Gate results
+
+| Command | Exit | Result |
+|---|---|---|
+| `pnpm install --frozen-lockfile` | 0 | PASS — lockfile up to date, no resolution step needed |
+| `pnpm run typecheck` | 0 | PASS — root libs, app, and scripts all clean |
+| `pnpm --filter @workspace/mermaid-diagram-bpmn run test` | 0 | PASS — **432/432 tests**, 23 files (up from 390/390 on 2026-08-04) |
+| `pnpm run skill:test` | 0 | PASS — 196/196 tests |
+| `pnpm run skill:validate` | 0 | PASS — 235/235 checks |
+| `pnpm run eval:run` | 0 | PASS — 14/14 fixtures, 100/100 pts |
+| `pnpm run check:generated` | 0 | PASS — both auto files up to date |
+| `pnpm run plugin:build` | 0 | PASS — ESM 20.01 kB / 5.88 kB gzip; CJS 16.74 kB / 5.40 kB gzip |
+| `pnpm run plugin:smoke` | 0 | PASS — 12/12 assertions |
+| `pnpm --filter @workspace/mermaid-diagram-bpmn run build` | 0 | PASS — production bundle built; chunk-size warning noted (see below) |
+
+### Plugin bundle size
+
+Both formats are within the <200 kB min+gzip NFR:
+
+| Format | Minified | Gzip |
+|---|---|---|
+| ESM (`dist/index.mjs`) | 20.01 kB | 5.88 kB |
+| CJS (`dist/index.cjs`) | 16.74 kB | 5.40 kB |
+
+### App bundle notes
+
+The production build emits a chunk-size warning: the largest chunk (`index-*.js`) is 631.80 kB / 179.92 kB gzip, driven by Mermaid bundled into the main chunk. Lazy-loading Mermaid on routes that need it is the resolution path (Task #212).
+
+### Updated capability claims (delta from 2026-08-04)
+
+| Claim | Status (2026-08-04) | Status (2026-08-06) | Notes |
+|---|---|---|---|
+| React playground renders supported DSL syntax | confirmed | **confirmed** | 432 tests now (was 390); new snapshot + layout regression tests added |
+| Shared shape library extracted | not tracked | **confirmed** | `bpmn-shapes.ts` — TD-003, TD-012 resolved 2026-08-05 |
+| Typed `ParseError` with line/column/code | not tracked | **confirmed** | TD-010 resolved 2026-08-05; all 5 throw sites updated |
+| SVG renderer snapshot tests | not tracked | **confirmed** | 5 corpus snapshots CI-gated (TD-005 resolved 2026-08-05) |
+| Layout regression tests | not tracked | **confirmed** | 20 assertions on flat and pool/lane layouts (TD-006 resolved 2026-08-05) |
+| Plugin is externally consumable (installable) | not complete | **not complete — release blocker** | `lib/bpmn-plugin/package.json` has `exports` map and `0.1.0` version, but package is not published to npm registry (404). Task #198. |
+| npm registry: `@okhp3/mermaid-diagram-bpmn` | not tracked | **not published (404)** | README install instructions are broken until Task #198 resolves this |
+
+### Open risks carried forward
+
+| Risk | Detail |
+|---|---|
+| npm 404 | `@okhp3/mermaid-diagram-bpmn` is not on the npm registry. This is the highest-priority release blocker (Task #198). |
+| Integration test runs under `securityLevel: "loose"` | Required by happy-dom's SVG parser limitation. Automated real-browser E2E without this workaround is tracked in Task #209. |
+| App main bundle >500 kB | Mermaid is bundled into the initial load. Lazy-loading tracked in Task #212. |
