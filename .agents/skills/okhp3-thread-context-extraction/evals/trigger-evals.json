@@ -1,0 +1,28 @@
+{
+  "skill_name": "okhp3-thread-context-extraction",
+  "skill_version": "2.0.0",
+  "should_trigger": [
+    "I pasted a mixed ChatGPT and Claude thread. Distill it into standalone repository context at balanced depth.",
+    "Evacuate this AI conversation before I delete the account. Preserve decisions, prompts, files, and next actions.",
+    "Use scan depth on this copied assistant thread and create a compact Markdown continuity brief.",
+    "Catalog this flattened transcript, including unknown speakers, image placeholders, citations, and a missing canvas.",
+    "Turn these prompt and response pairs into a portable artifact that another agent can resume without the original chat.",
+    "I do not know which platform produced this export. Extract the durable value and document uncertainty.",
+    "Before I close this AI service, preserve this pasted thread as an actionable cross-platform context packet.",
+    "Use comprehensive depth and focus on rejected alternatives, asset relationships, and decision rationale in this copied chat.",
+    "This flattened transcript includes system text, tool output, a Mermaid diagram, and a generated Markdown download. Extract it safely.",
+    "Distill these pasted AI exchanges, but make sure the implementation prompt and acceptance criteria are not compressed away."
+  ],
+  "should_not_trigger": [
+    "Summarize this two-paragraph article in three bullets.",
+    "Log into ChatGPT and download all of my conversations.",
+    "Create a lossless JSON archive of every token in this export.",
+    "Explain how Gemini pricing works today.",
+    "Build a Custom GPT from these product requirements.",
+    "Move the files in this folder to another directory without analyzing them.",
+    "Summarize yesterday's Slack channel and list action items.",
+    "Publish this already-finished Markdown note to Notion.",
+    "Research whether the claims in this AI answer are currently accurate.",
+    "Convert this Markdown document to PDF without changing its content."
+  ]
+}

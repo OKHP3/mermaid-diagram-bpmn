@@ -1,0 +1,6 @@
+interface:
+  display_name: "OKHP3 Source-backed Research"
+  short_description: "Research with traceable evidence"
+  default_prompt: "Use $okhp3-source-backed-research to answer this question with traceable sources and explicit uncertainty."
+policy:
+  allow_implicit_invocation: true

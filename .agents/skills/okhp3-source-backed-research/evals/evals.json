@@ -1,0 +1,11 @@
+{
+  "schema_version": "1.0",
+  "skill_name": "okhp3-source-backed-research",
+  "skill_version": "0.1.0",
+  "status": "not-run",
+  "evals": [
+    {"id":"normal","partition":"development","risk":"medium","prompt":"Research a changing technical fact using supplied local notes and authoritative public documentation.","expectations":["States the question and decision context.","Records source title, publisher, URL, retrieval date, and supported claim.","Separates source fact, interpretation, recommendation, and unknown."]},
+    {"id":"local-suffices","partition":"development","risk":"low","prompt":"Answer a question whose needed evidence is fully present in local files.","expectations":["Inventories local evidence before external retrieval.","Does not browse merely to decorate the answer.","Cites the local paths and states remaining uncertainty."]},
+    {"id":"blocked-access","partition":"holdout","risk":"high","prompt":"Produce a current recommendation when external access is unavailable and no local source settles it.","expectations":["Returns BLOCKED or explicitly limited output.","Does not invent current facts or citations.","Names the smallest next source check."]}
+  ]
+}

@@ -1,0 +1,6 @@
+interface:
+  display_name: "Thread Context Extraction"
+  short_description: "Evacuate pasted AI threads into portable Markdown"
+  default_prompt: "Extract the supplied AI thread into a standalone Markdown artifact at balanced depth."
+policy:
+  allow_implicit_invocation: true

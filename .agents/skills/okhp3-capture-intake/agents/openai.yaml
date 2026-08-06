@@ -1,0 +1,6 @@
+interface:
+  display_name: "OKHP3 Capture Intake"
+  short_description: "Preserve one raw item with provenance"
+  default_prompt: "Use $okhp3-capture-intake to preserve this item in the project inbox."
+policy:
+  allow_implicit_invocation: true

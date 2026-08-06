@@ -1,0 +1,82 @@
+{
+  "schema_version": "1.0",
+  "skill": {
+    "name": "okhp3-artifact-validation",
+    "version": "0.1.0",
+    "maturity": "candidate",
+    "evidence_status": "not-run"
+  },
+  "source": {
+    "repository": "OKHP3/skillz (this repl: overkill-hill/skillz)",
+    "package_path": ".agents/skills/okhp3-artifact-validation",
+    "selected_as_canonical_incubator": true,
+    "selection_reason": "Only known copy of this skill in the repository; no competing candidate to compare against."
+  },
+  "mirrors": [
+    {
+      "path": "skills/okhp3-artifact-validation",
+      "role": "publication-mirror",
+      "authorized": true,
+      "aggregate_sha256": "88b974564dbb92bdc080b287dd9845162fda96cd5077b8f9a7ea4391d51703eb"
+    }
+  ],
+  "canonical_target": {
+    "repository": "OKHP3/skillz",
+    "family": "universal",
+    "package_path": "universal/okhp3-artifact-validation",
+    "accepted_commit_or_hash": null
+  },
+  "inventory": [
+    "SKILL.md",
+    "agents/openai.yaml",
+    "evals/evals.json"
+  ],
+  "decision": {
+    "status": "mirrored",
+    "alternatives_considered": [],
+    "unresolved_items": [
+      "No canonical family assignment has been confirmed by the maintainer -- 'universal' is a reasonable default given the skill's project-agnostic scope, not a decision made by the maintainer."
+    ]
+  },
+  "safety": {
+    "license": "MIT",
+    "public_safety": "reviewed-clean",
+    "private_material_found": false,
+    "external_writes": "none-declared",
+    "adapter_differences": []
+  },
+  "authorization": {
+    "requested_actions": ["create-publication-mirror"],
+    "approved_actions": ["create-publication-mirror"],
+    "withheld_actions": ["commit", "push", "pull-request", "external-publication", "canonical-write"]
+  },
+  "verification": {
+    "checks": [
+      {
+        "check": "sync_skill_mirror.py --check (pre-sync)",
+        "result": "PASS",
+        "evidence": "destination absent, source hash 88b974...1703eb"
+      },
+      {
+        "check": "sync_skill_mirror.py --sync",
+        "result": "PASS",
+        "evidence": "skills/okhp3-artifact-validation-sync-report.json: comparison.exact=true, no missing/extra/changed files"
+      },
+      {
+        "check": "manual diff -rq source vs mirror",
+        "result": "PASS",
+        "evidence": "no output (byte-identical)"
+      }
+    ],
+    "review_record": null,
+    "verified_at": "2026-08-03",
+    "limitations": [
+      "okhp3-skill-foundry review (architecture/portability/evaluation/evidence gates) was not run against this candidate in this pass.",
+      "Canonical family placement (universal/) is a suggestion, not an authorized decision."
+    ]
+  },
+  "recovery": {
+    "path": "skills/okhp3-artifact-validation is a generated mirror; delete and re-run sync_skill_mirror.py --sync from .agents/skills/okhp3-artifact-validation to restore it.",
+    "pre_sync_git_status_recorded": true
+  }
+}

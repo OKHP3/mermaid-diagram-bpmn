@@ -1,0 +1,26 @@
+{
+  "events": [
+    {"value": 1.0, "weight": 2},
+    {"value": 0.0, "weight": 1},
+    {"value": 1.0, "weight": 3}
+  ],
+  "logistic": {
+    "intercept": 0.4,
+    "coefficients": {"form": 0.8, "pressure": -0.3},
+    "features": {"form": 0.5, "pressure": 0.2}
+  },
+  "predictions": [
+    {"probability": 0.6760, "outcome": 1},
+    {"probability": 0.2500, "outcome": 0}
+  ],
+  "feature_importance": [
+    {"name": "form", "importance": 0.50},
+    {"name": "pressure", "importance": 0.30},
+    {"name": "venue", "importance": 0.20}
+  ],
+  "top_k": 2,
+  "options": [
+    {"name": "A", "probability": 0.60, "success_value": 100, "failure_value": 0, "cost": 30},
+    {"name": "B", "probability": 0.45, "success_value": 120, "failure_value": 0, "cost": 20}
+  ]
+}

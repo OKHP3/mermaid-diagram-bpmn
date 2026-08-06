@@ -1,0 +1,60 @@
+{
+  "schema_version": "1.0",
+  "review_protocol": "equilibrium-v1",
+  "decision_question": "Does the initial outcome-modeling family merit an analytical structural-integrity handoff while live evaluation remains pending?",
+  "candidate": {
+    "skill_version": "1.0.0",
+    "package_manifest_sha256": "BA11B9A7C0771D4CC6EDE832E0858DAB28D7704B08BC940D40E665F68933D80B",
+    "hash_scope": "Core package decision artifacts at the final validation point."
+  },
+  "independence": {
+    "reviewer_contexts_separated": false,
+    "shared_model_or_source_limits": [
+      "The review was performed in one authoring context.",
+      "No isolated executor, independent reviewer, or unseen holdout owner was available."
+    ]
+  },
+  "initial_reviews": [
+    {
+      "role": "primary structural review",
+      "decision": "approve-with-limits",
+      "claims": [
+        {
+          "claim": "The family has a coherent portable core, narrow adapters, safety boundaries, and evidence-design records.",
+          "evidence_ids": ["SRC-01", "SRC-02", "CHG-01", "CHG-02"],
+          "confidence": "medium",
+          "consequence": "A missing separation would cause domain-objective or authorization errors.",
+          "assumptions": ["Structural inspection is sufficient for this analytical finding."]
+        }
+      ]
+    }
+  ],
+  "concordance": "not-assessed",
+  "disruptor": {
+    "triggered": false,
+    "falsification_hypotheses": [],
+    "test_results": [],
+    "reason": "No independent multi-reviewer context was available, so the conditional disruptor protocol was not run."
+  },
+  "negotiator": {
+    "triggered": false,
+    "decision": null,
+    "decisive_evidence_or_test": null,
+    "unresolved_items": [
+      "Live with-skill and without-skill task evaluation is not run.",
+      "An unseen release holdout is external-required.",
+      "Discovery precision and recall have not been measured in target clients."
+    ]
+  },
+  "release_decision": "approve-with-limits",
+  "limitations": [
+    "This record supports analytical structural integrity only.",
+    "It does not claim performance, uplift, production readiness, or independent approval.",
+    "The recorded hash covers SKILL.md, evals/evals.json, and benchmarks/benchmark.json; the review record and learning ledger are excluded to avoid circular hashing."
+  ],
+  "follow_up_conditions": [
+    "Run matched version-specific tasks with and without each adapter or the selected family route.",
+    "Use an external owner for an unseen release holdout.",
+    "Run discovery tests across supported clients before promoting the family beyond draftable maturity."
+  ]
+}

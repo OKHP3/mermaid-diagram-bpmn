@@ -1,0 +1,39 @@
+{
+  "skill_name": "okhp3-chatgpt-project-migration",
+  "skill_version": "1.0.0",
+  "evals": [
+    {
+      "id": 1,
+      "name": "export-first-project-inventory",
+      "prompt": "I have access to a large ChatGPT project and want a defensible capture before we put anything in our repository. Give me the first-pass plan and the exact local record I should create.",
+      "expectations": [
+        {"id": 1, "text": "Response names `project_capture_manifest.json` as the inventory record."},
+        {"id": 2, "text": "Response uses `conversation_id` rather than title as the primary match key."},
+        {"id": 3, "text": "Response separates an immutable archive outside the repository from `custom-gpts/ingestion/` staging."},
+        {"id": 4, "text": "Response uses the statuses `inventoried`, `captured`, `normalized`, `reconciled`, `routed`, or `exception`."}
+      ]
+    },
+    {
+      "id": 2,
+      "name": "branch-complete-normalization",
+      "prompt": "Our export parser produces a clean single transcript by following current_node. What must change so we can claim to have preserved every turn and regenerated answer?",
+      "expectations": [
+        {"id": 1, "text": "Response says to retain every key in the conversation `mapping` object."},
+        {"id": 2, "text": "Response explicitly rejects serializing only the `current_node` path."},
+        {"id": 3, "text": "Response requires `node_id`, `parent_id`, and `child_ids` in normalized nodes."},
+        {"id": 4, "text": "Response uses `source_locator` in the form `mapping.<node_id>` or identifies it as required."}
+      ]
+    },
+    {
+      "id": 3,
+      "name": "unmatched-thread-and-public-boundary",
+      "prompt": "A thread visible in the project UI has no export match, and the project may contain private material. Tell me what to do before we write a distilled repository document.",
+      "expectations": [
+        {"id": 1, "text": "Response assigns `no_match` and opens an exception rather than dropping the thread."},
+        {"id": 2, "text": "Response identifies Browser-based capture as the recovery path."},
+        {"id": 3, "text": "Response includes the exception states `open`, `recovered`, or `accepted_loss`."},
+        {"id": 4, "text": "Response distinguishes raw evidence from a public-safe artifact lane."}
+      ]
+    }
+  ]
+}

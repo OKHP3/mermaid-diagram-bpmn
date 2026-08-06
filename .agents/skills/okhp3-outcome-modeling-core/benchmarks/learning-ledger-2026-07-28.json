@@ -1,0 +1,112 @@
+{
+  "schema_version": "1.0",
+  "record_id": "outcome-modeling-family-1.0.0-2026-07-28",
+  "created_on": "2026-07-28",
+  "scope": "Create a composable outcome-modeling family from the user's multi-scale NFL and Moneyball reasoning, with NFL fantasy as the most detailed adapter.",
+  "candidate": {
+    "pre_change_version": "not-applicable-new-family",
+    "release_candidate_version": "1.0.0",
+    "pre_change_hash": "not-applicable-new-package",
+    "final_hash": "recorded for the core decision artifacts after final validation"
+  },
+  "evidence_sources": [
+    {
+      "id": "SRC-01",
+      "title": "User-supplied NFL, Moneyball, sales, advertising, and prediction-market reasoning",
+      "authority": "user-provided-primary-concept",
+      "retrieved_on": "2026-07-28",
+      "claim_used": "Repeated events can stabilize estimates, but prediction must remain separate from the economic objective and constraints.",
+      "decision": "accepted-as-conceptual-input",
+      "limitations": [
+        "The conceptual thread was not treated as statistical validation.",
+        "The user's approximate play counts and feature-count intuition remain hypotheses to test on data."
+      ]
+    },
+    {
+      "id": "SRC-02",
+      "title": "Local okhp3-skill-foundry version 3.1.0",
+      "path": ".agents/skills/okhp3-skill-foundry/SKILL.md",
+      "authority": "repository-methodology",
+      "retrieved_on": "2026-07-28",
+      "claim_used": "New skills need evidence-anchored development evaluations, explicit holdout state, version-matched benchmark status, provenance, and honest release limits.",
+      "decision": "accepted-as-authoring-contract"
+    },
+    {
+      "id": "SRC-03",
+      "title": "Anthropic public skills repository",
+      "url": "https://github.com/anthropics/skills",
+      "authority": "official-comparable-skill-library",
+      "retrieved_on": "2026-07-28",
+      "claim_used": "Portable skills are usefully organized as focused packages rather than one undifferentiated prompt.",
+      "decision": "accepted-for-architecture-pattern-only"
+    },
+    {
+      "id": "SRC-04",
+      "title": "Comparable sales forecast skill listing",
+      "url": "https://skillsmp.com/creators/anthropics/knowledge-work-plugins/sales-skills-forecast",
+      "authority": "comparable-marketplace-skill",
+      "retrieved_on": "2026-07-28",
+      "claim_used": "Sales forecasting benefits from explicit commit, upside, risk, and gap analysis.",
+      "decision": "accepted-for-gap-check-only"
+    },
+    {
+      "id": "SRC-05",
+      "title": "Comparable sports betting math skill listing",
+      "url": "https://skillsmp.com/creators/machina-sports/sports-skills/skills-betting",
+      "authority": "comparable-marketplace-skill",
+      "retrieved_on": "2026-07-28",
+      "claim_used": "Price comparison, implied probability, uncertainty, and transaction-cost concepts belong in a market adapter.",
+      "decision": "accepted-for-gap-check-only",
+      "limitations": [
+        "The family intentionally does not copy execution or wagering behavior from the comparable listing."
+      ]
+    }
+  ],
+  "review_passes": [
+    {
+      "id": "REV-01",
+      "role": "author structural review",
+      "finding": "The core and four adapters preserve the event-to-state, forecast, objective, constraints, and safe-stop separation.",
+      "decision": "accepted",
+      "independence": "not-independent"
+    },
+    {
+      "id": "REV-02",
+      "role": "author safety and portability review",
+      "finding": "Packages avoid current-data invention, private-data assumptions, unauthorized writes, trade execution, and guaranteed-outcome claims.",
+      "decision": "accepted",
+      "independence": "not-independent"
+    }
+  ],
+  "changes": [
+    {
+      "id": "CHG-01",
+      "hypothesis": "A shared core plus narrow adapters will preserve the reusable method while keeping sports, NFL fantasy, sales, and prediction-market rules distinct.",
+      "expected_benefit": "Less repeated explanation and fewer objective-function errors when the same modeling pattern moves between domains.",
+      "regression_risk": "A generic core could flatten domain-specific constraints or encourage unsupported current recommendations.",
+      "mitigation": "Require adapter routing, domain-specific intake, explicit data freshness, constrained objectives, and safe blocked outputs.",
+      "result": "Structural review passed; live task-quality and uplift evidence remain not-run.",
+      "applicability_limit": "The family is a reusable decision-support contract, not proof that a fixed number of variables predicts every domain."
+    },
+    {
+      "id": "CHG-02",
+      "hypothesis": "NFL fantasy should be a separate adapter because its objective is roster value under cost, replacement, scarcity, and correlation constraints rather than game-win probability.",
+      "expected_benefit": "Prevents sportsbook, team-win, and fantasy objectives from being conflated.",
+      "regression_risk": "A fantasy-specific package could be overfit to one scoring format or contest type.",
+      "mitigation": "Require scoring, roster, salary, slate, contest, and decision-date intake before ranking.",
+      "result": "Included as a separate adapter with design-ready evaluations; live evidence remains not-run.",
+      "applicability_limit": "No current player projection, injury, salary, or depth-chart claim is included."
+    }
+  ],
+  "rejected_alternatives": [
+    {
+      "alternative": "Create one monolithic prediction skill for all domains.",
+      "reason": "It would blur distinct objectives, constraints, data freshness, and safety boundaries."
+    },
+    {
+      "alternative": "Treat fewer than 200 variables as a universal rule or promise more than 95% outcome accuracy.",
+      "reason": "Feature sufficiency is an empirical, out-of-sample question and cannot be promoted from intuition to a fixed guarantee."
+    }
+  ],
+  "current_status": "analytical-structural-integrity-release-live-evaluation-pending"
+}

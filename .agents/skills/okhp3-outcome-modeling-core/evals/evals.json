@@ -1,0 +1,79 @@
+{
+  "skill_name": "okhp3-outcome-modeling-core",
+  "skill_version": "1.1.0",
+  "status": "design-ready",
+  "release_status": "analytical-structural-integrity",
+  "performance_evidence_status": "not-run",
+  "note": "Frozen evaluation design for the initial family release. No isolated live executor or unseen external holdout was available in this authoring run.",
+  "release_holdout": {
+    "status": "external-required",
+    "holdout_seen": true,
+    "reason": "The public development cases are visible to the author. A genuine release holdout must be controlled outside the optimizing context."
+  },
+  "evals": [
+    {
+      "id": "multi-scale-state-design",
+      "name": "multi-scale-state-design",
+      "partition": "development",
+      "risk": "high",
+      "prompt": "Design a reusable model for predicting customer renewal from interaction events collected over time.",
+      "fixtures": "Prompt-only scenario with no private customer data or live system access.",
+      "output_contract": "A time-aware model specification that separates event aggregation, probability estimation, and the renewal decision.",
+      "failure_consequence": "A leaky or objective-free model could produce a confident but unusable renewal intervention.",
+      "expectations": [
+        {"id": "target-boundary", "text": "Response defines an explicit target, forecast horizon, and as-of timestamp."},
+        {"id": "aggregation-ladder", "text": "Response includes the event-to-state aggregation ladder."},
+        {"id": "leakage-control", "text": "Response names a time-aware split or as-of leakage control."},
+        {"id": "decision-layer", "text": "Response separates the probability forecast from the decision objective and constraints."}
+      ]
+    },
+    {
+      "id": "feature-compression-test",
+      "name": "feature-compression-test",
+      "partition": "development",
+      "risk": "medium",
+      "prompt": "I have 240 correlated features and want to know whether fewer than 200 explain most of the useful signal.",
+      "fixtures": "Prompt-only scenario with a supplied feature count but no outcome table.",
+      "output_contract": "A nested feature-tier experiment with baseline, out-of-sample metrics, and leakage-aware feature inventory.",
+      "failure_consequence": "A feature-count slogan could be mistaken for validated compression or explanatory power.",
+      "expectations": [
+        {"id": "nested-tiers", "text": "Response proposes nested feature tiers including 10, 30, 60, 120, and 200 when supported."},
+        {"id": "baseline-metrics", "text": "Response requires comparison with a simple baseline using out-of-sample metrics."},
+        {"id": "signal-boundary", "text": "Response distinguishes explainable signal from raw winner-prediction accuracy or certainty."},
+        {"id": "feature-inventory", "text": "Response requires a feature inventory containing provenance, grain, cadence, and leakage risk."}
+      ]
+    },
+    {
+      "id": "intervention-aware-allocation",
+      "name": "intervention-aware-allocation",
+      "partition": "development",
+      "risk": "high",
+      "prompt": "Choose where to spend a limited budget when historical performance is correlated with customer quality and assigned opportunity difficulty.",
+      "fixtures": "Prompt-only scenario with confounding and opportunity-assignment language but no private records.",
+      "output_contract": "A bias-aware allocation specification with objective, constraints, and causal validation plan.",
+      "failure_consequence": "The system could reward selection bias or allocate scarce resources to the easiest opportunities.",
+      "expectations": [
+        {"id": "bias-check", "text": "Response checks selection bias, confounding, and opportunity assignment."},
+        {"id": "counterfactual", "text": "Response asks what would have happened without the proposed action."},
+        {"id": "objective-constraints", "text": "Response states an explicit objective function with cost or capacity constraints."},
+        {"id": "causal-design", "text": "Response recommends an experiment, holdout, or clearly labeled observational design when causal impact is claimed."}
+      ]
+    },
+    {
+      "id": "reproducible-calculation",
+      "name": "reproducible-calculation",
+      "partition": "development",
+      "risk": "medium",
+      "prompt": "Show how a small event history becomes a weighted state, probability, calibration score, and expected-value comparison.",
+      "fixtures": "examples/core-example.json and scripts/calculate-outcome-model.py.",
+      "output_contract": "A plain-language calculation that defines symbols, reports intermediate values, and preserves the distinction between forecast and decision.",
+      "failure_consequence": "A reader could mistake an unexplained number or arithmetic example for a validated forecast.",
+      "expectations": [
+        {"id": "formula-definition", "text": "Response defines the weighted mean, logistic probability, Brier score, and expected-value calculations."},
+        {"id": "intermediate-values", "text": "Response shows at least one intermediate calculation rather than only a final ranking."},
+        {"id": "plain-language", "text": "Response expands technical terms or points to the glossary for a non-specialist reader."},
+        {"id": "uncertainty-boundary", "text": "Response states that a synthetic calculation does not establish live predictive performance."}
+      ]
+    }
+  ]
+}

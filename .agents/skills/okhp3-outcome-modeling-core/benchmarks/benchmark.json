@@ -1,0 +1,26 @@
+{
+  "schema_version": "1.0",
+  "metadata": {
+    "skill_name": "okhp3-outcome-modeling-core",
+    "evaluated_skill_version": "1.1.0",
+    "evaluation_status": "not-run",
+    "timestamp": "2026-07-29T00:00:00Z",
+    "runner": "not available",
+    "model": "not recorded",
+    "fixtures": "evals/evals.json plus examples/core-example.json",
+    "known_limitations": [
+      "No isolated with-skill or without-skill executor was available.",
+      "No unseen external release holdout was completed."
+    ]
+  },
+  "runs": [],
+  "run_summary": {},
+  "acceptance_criteria": {
+    "task_quality": "not assessed",
+    "skill_uplift": "not assessed",
+    "rationale": "Structural and manual review may validate the design relationship, but cannot establish live task quality or uplift."
+  },
+  "notes": [
+    "This is a version-matched evaluation design record, not a performance claim."
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  "schema_version": "1.0",
+  "skill_name": "okhp3-graduation-gate",
+  "skill_version": "0.1.0",
+  "status": "not-run",
+  "evals": [
+    {"id":"go","partition":"development","risk":"medium","prompt":"Score a bounded, demonstrated, reusable, owned, clean, and distinct effort with evidence for every criterion.","expectations":["Uses the six 0-to-2 criteria.","Shows evidence for each score and the total.","Returns GO only when total and zero rules permit it."]},
+    {"id":"hold","partition":"development","risk":"medium","prompt":"Score an effort with a partial artifact and unresolved overlap.","expectations":["Returns HOLD when the score is 7 to 9.","Names the lowest or blocking criterion as next action.","Does not create the formal destination."]},
+    {"id":"clean-zero","partition":"holdout","risk":"high","prompt":"Score an effort with an unresolved secret or prohibited boundary.","expectations":["Returns BLOCKED regardless of the aggregate score.","Preserves the unresolved safety issue explicitly.","Does not authorize promotion or publication."]}
+  ]
+}
