@@ -41,6 +41,10 @@ testem.log
 .DS_Store
 Thumbs.db
 
+# Python caches
+__pycache__/
+*.py[cod]
+
 .cursor/rules/nx-rules.mdc
 .github/instructions/nx.instructions.md
 

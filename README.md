@@ -8,7 +8,7 @@ This repository contains three related assets:
 
 2. **A React playground app** — live parser, SVG renderer, DSL reference, architecture notes, roadmap, Agent Skills browser, and individual skill detail pages. Deployed at [okhp3.github.io/mermaid-diagram-bpmn](https://okhp3.github.io/mermaid-diagram-bpmn/).
 
-3. **BP-SKILL v0.3** — a 15-skill Business Process Agent Skill Suite packaged in the Agent Skills open standard. `bpmn-beta` is the visual output layer of a broader business process documentation methodology.
+3. **BP-SKILL v0.3** — a 15-skill Business Process Agent Skill Suite packaged in the Agent Skills open standard. The repository also carries three supplemental/meta packages used for process capture, handoff packaging, and skill promotion. `bpmn-beta` is the visual output layer of a broader business process documentation methodology.
 
 ---
 

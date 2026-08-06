@@ -47,14 +47,11 @@ plugin or BPMN execution platform.
 - The application is intended to be static and browser-only. GitHub Pages is
   deployed by `.github/workflows/deploy-gh-pages.yml`.
 
-The following issues were observed during this context pass and are not fixed
-by this guidance-only change:
+The following baseline notes describe the current repository state:
 
-- `node scripts/validate-skills.mjs` passes for all 15 source skills and all
-  nine context templates. The separate `.agents/skills` validator still
-  reports four portability or metadata failures: one package uses lowercase
-  `skill.md`, and three packages have descriptions shorter than the required
-  minimum.
+- `node scripts/validate-skills.mjs` passes for the 15 core BP-SKILL packages
+  plus three supplemental/meta packages, and all nine context templates. The
+  separate `.agents/skills` validator passes for all 18 local packages.
 - All generated files (`pns-transitions-auto.ts`, `skill-deps-auto.ts`) are
   confirmed up to date as of the 2026-08-04 baseline run.
 - The Pages deployment workflow (`deploy-gh-pages.yml`) runs typecheck, app
@@ -105,7 +102,7 @@ app/                         React/Vite static application package
                              required Replit registration file
 scripts/                     root validation and packaging scripts package
   src/parse-yaml-minimal.mjs shared YAML helper used by root scripts
-skills/                      15 source SKILL.md packages
+skills/                      15 core BP-SKILL packages plus three supplemental/meta packages
 context/                     nine source variable-layer templates
 evals/                       five evaluation suites
 docs/                        repository-level documentation
