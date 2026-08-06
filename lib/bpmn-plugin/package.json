@@ -48,6 +48,7 @@
     "@types/node": "catalog:",
     "vite": "catalog:"
   },
+  "sideEffects": false,
   "publishConfig": {
     "registry": "https://registry.npmjs.org",
     "access": "public"
