@@ -172,6 +172,7 @@ Prepare for external contribution and Mermaid engagement.
 - [x] Reply state confirmed via GitHub API — checked 2026-08-07: no maintainer replies to any OKHP3 comment on #7699, #2623, or #660. Key intelligence: (1) #7699 was formally approved by @pbrolin47/COLLABORATOR per a 2026-06-12 comment on #2623; (2) a second competitor @derari posted a working prototype and signalled PR intent on 2026-07-31; (3) recommended action is to wait until @derari's PR materialises before deciding on a second comment. Full analysis in `app/docs/competitive-landscape.md` Phase D reply-state check. Next re-check target: 2026-09-07.
 - [ ] BP-SKILL suite listed in agentskills.io directory
 - [x] Comparison matrix published: bpmn-beta vs. DFKI #7699, PlantUML, Mermaid flowchart — live at `/comparison` (2026-08-05)
+- [~] Wider distribution push sequenced — 2026-08-07: LinkedIn and HN Show HN post drafts complete; npm prerequisite confirmed live (`@okhp3/mermaid-diagram-bpmn@0.1.1`). Channel selected: LinkedIn first, then HN Show HN 24–48 h later. Full drafts and sequencing rules in `app/docs/competitive-landscape.md` Phase E section. Posting is a pending human action; update this entry with post URLs and response summary when published.
 - [ ] Release notes drafted for v0.9 → v1.0
 
 ---

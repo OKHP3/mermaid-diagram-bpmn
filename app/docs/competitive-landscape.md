@@ -320,6 +320,93 @@ Reply state for #7699, #2623, and #660 checked via GitHub API on 2026-08-07. Sum
 
 **Recommended next action:** Wait. Do not post a second comment on any issue until @derari's PR materializes and maintainer review reveals what syntax/approach is being favored. A second comment before a PR exists would add noise without leverage. The strategic options at that point are: (a) engage constructively on the open PR as a reviewer, (b) offer bpmn-beta's test suite and corpus as a contribution to whichever PR is moving, or (c) post a second comment with the syntax-comparison angle if the PR adopts a verbose/XML-flavored approach. Re-check reply state on or after 2026-09-07 (30 days).
 
+**Phase E — Wider distribution push — sequenced 2026-08-07:**
+
+**Prerequisite check:** npm publication confirmed live: `@okhp3/mermaid-diagram-bpmn@0.1.1` published 2026-08-06, `npm view @okhp3/mermaid-diagram-bpmn` returns `0.1.1`. Install path (`npm install @okhp3/mermaid-diagram-bpmn`) and smoke test (12/12) CI-gated in `publish-npm.yml`. Prerequisite is met.
+
+**Channel selection:** LinkedIn first (lower risk; professional network; controlled feedback loop), then HN Show HN 24–48 hours after LinkedIn engagement is assessed. HN is selected over r/programming, r/devtools, and Product Hunt because the primary target segment — developers writing technical documentation — is HN's core audience, and HN culture rewards working prototypes with honest technical detail and open acknowledgement of competing approaches.
+
+**Sequencing rules:**
+1. Do not post to HN before the LinkedIn post has at least 6 hours of settled engagement.
+2. Post the HN submission on a weekday (Tuesday–Thursday), 8–10 AM PT.
+3. Do not post to both channels on the same day.
+4. Put the link in a LinkedIn *comment*, not in the post body's first paragraph.
+5. No superlatives: no "first", "only", "zero competitors". Acknowledge the DFKI #7699 parallel proposal directly. Do not use the "$300B BPM industry" figure. Do not mention "zero BABOK skills" (claim is no longer accurate — see strategy.md).
+
+---
+
+**LinkedIn post draft (build-in-public, ready to publish):**
+
+Post this as body text; add the link (https://okhp3.github.io/mermaid-diagram-bpmn/) as the first comment, not in the post itself.
+
+> Six months ago I needed to document a process workflow in a GitHub PR — and hit the same wall I'd hit a dozen times before. Draw.io produces a binary blob. BPMN XML is machine-readable but not human-writable. Mermaid is ideal for sequence and flowchart diagrams, but it has no BPMN type.
+>
+> So I built a prototype: `bpmn-beta`, an external Mermaid diagram type plugin. Pools, lanes, tasks, gateways, message flows — authored as plain text, rendered to BPMN-shaped SVG in the browser. No bpmn-js dependency, no XML.
+>
+> ```
+> bpmn-beta
+>
+> pool procurement "Procurement" {
+>   lane buyer "Procurement Officer" {
+>     start s1 "Request Submitted"
+>     task:user t1 "Review Request"
+>     gateway g1 "Approved?"
+>     end e1 "Order Placed"
+>     end e2 "Request Rejected"
+>   }
+>   s1 --> t1 --> g1
+>   g1 --> e1
+>   g1 --> e2
+> }
+> ```
+>
+> Worth being upfront: there's a parallel proposal in the Mermaid issues (#7699, from DFKI researchers) targeting the same problem — their syntax is more complete but more verbose. I think there are real tradeoffs worth discussing. A side-by-side comparison is on the demo site.
+>
+> Alongside the diagram plugin, I've been building a 15-skill agent suite (BP-SKILL) — SKILL.md-format workflows for the full process documentation lifecycle from elicitation through publication. Researchers at Polytechnique Montréal found that Mermaid achieves the highest overall score across six criteria when evaluating nine process model representations for LLM-based process modeling (arXiv 2507.11356). The thesis: a Mermaid-flavoured BPMN DSL is positioned at the intersection of the two representations that perform best.
+>
+> Currently at v0.1.1, 717 tests, 5.68 kB gzip. Demo, npm, and GitHub in the comments. Happy to answer questions about the parser or renderer architecture.
+>
+> #BPMN #Mermaid #ProcessModeling #DiagramsAsCode #OpenSource #BuildInPublic
+
+*Comment text (first comment under the post):*
+> Demo and playground: https://okhp3.github.io/mermaid-diagram-bpmn/
+> npm: https://www.npmjs.com/package/@okhp3/mermaid-diagram-bpmn
+> GitHub: https://github.com/OKHP3/mermaid-diagram-bpmn
+
+---
+
+**HN Show HN post draft (ready to submit):**
+
+*Title:* `Show HN: bpmn-beta – BPMN process diagrams as readable text, without XML or bpmn-js`
+
+*Post body (submitted with the title; keep to ~4–6 paragraphs):*
+
+> BPMN (Business Process Model and Notation) is the standard for process diagrams, but every authoring tool requires either XML or a graphical modeler. I wanted process diagrams that live in a git repo alongside code, the way Mermaid works for sequence and flowchart diagrams.
+>
+> `bpmn-beta` is a Mermaid external diagram type plugin. You write pools, lanes, tasks (user/service/script), gateways (exclusive, parallel, inclusive), and cross-pool message flows in a concise text DSL; it renders to BPMN-shaped SVG in the browser with no bpmn-js dependency.
+>
+> There's a parallel BPMN proposal for Mermaid core (issue #7699, by DFKI researchers) with a more attribute-heavy syntax approach. The tradeoff is element completeness vs. readability; theirs targets full BPMN 2.0, mine targets the Descriptive Conformance subset (the 80% used in documentation-grade diagrams). A side-by-side syntax comparison is on the demo site at /comparison.
+>
+> Technical details: the parser is regex-based (TypeScript), no Langium grammar yet; the layout is custom (no dagre); the renderer emits plain SVG with CSS custom properties for theming. 717 tests. Bundle: 5.68 kB gzip (ESM). Mermaid peer dependency: >=10.0.0.
+>
+> The repo also includes a 15-skill agent suite (BP-SKILL) — SKILL.md-format workflows for business process documentation from elicitation through publication.
+>
+> Demo: https://okhp3.github.io/mermaid-diagram-bpmn/
+> npm: https://www.npmjs.com/package/@okhp3/mermaid-diagram-bpmn
+> GitHub: https://github.com/OKHP3/mermaid-diagram-bpmn
+
+---
+
+**Post status as of 2026-08-07:** Drafts complete. LinkedIn and HN posts not yet published — posting is a human action. The above drafts are publication-ready. Update this section with post URLs and dates when published, and add an initial response summary after 12 hours of monitoring.
+
+**Reply monitoring checklist (fill in when posts go live):**
+- [ ] LinkedIn post URL: ___
+- [ ] LinkedIn post published: ___ (date/time)
+- [ ] LinkedIn 12-hour response summary: ___
+- [ ] HN post URL: ___
+- [ ] HN post published: ___ (date/time, after LinkedIn engagement assessed)
+- [ ] HN 12-hour response summary: ___
+
 **Stage 2 — Engage with maintainers (60–180 days):**
 - Open a parallel Mermaid issue specifically for `bpmn-beta` if #7699 has not progressed, framed as a complementary lightweight alternative, with a working PR or working external plugin as evidence.
 - Reach out to Mermaid Chart (Knut Sveidqvist directly via the open-source repo) and the DFKI authors (Emrich, IWi/DFKI Saarbrücken) to explore syntax-convergence — open-source norms favor collaboration over forking.
