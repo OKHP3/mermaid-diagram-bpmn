@@ -190,6 +190,14 @@ export function Layout({ children }: { children: React.ReactNode }) {
   return (
     <div className="forge-shell">
 
+      {/* Skip link — keyboard users jump past the header to main content */}
+      <a
+        href="#main-content"
+        className="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-[200] focus:px-4 focus:py-2 focus:rounded focus:bg-background focus:text-foreground focus:ring-2 focus:ring-primary focus:outline-none"
+      >
+        Skip to main content
+      </a>
+
       {/* OKH Forge header — always-dark, sticky */}
       <header className="forge-header">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 flex items-center justify-between h-14">
@@ -281,9 +289,11 @@ export function Layout({ children }: { children: React.ReactNode }) {
               className="md:hidden forge-icon-btn p-2 rounded"
               onClick={() => setMenuOpen(o => !o)}
               aria-label="Toggle menu"
+              aria-expanded={menuOpen}
+              aria-controls="mobile-nav"
               data-testid="button-toggle-menu"
             >
-              {menuOpen ? <X size={17} /> : <Menu size={17} />}
+              {menuOpen ? <X size={17} aria-hidden="true" /> : <Menu size={17} aria-hidden="true" />}
             </button>
           </div>
         </div>
@@ -291,6 +301,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
         {/* Mobile menu — two-tier structure mirroring desktop */}
         {menuOpen && (
           <nav
+            id="mobile-nav"
             className="md:hidden px-4 pb-3 pt-2 flex flex-col gap-0.5"
             style={{ borderTop: "1px solid var(--okh-header-border)" }}
             aria-label="Mobile navigation"
@@ -363,7 +374,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
       </header>
 
       {/* Page body — forge blueprint grid texture */}
-      <main className="forge-main forge-grid">
+      <main id="main-content" className="forge-main forge-grid">
         {children}
       </main>
 

@@ -106,7 +106,8 @@ export default function AgentSkills() {
     <div className="flex flex-col">
 
       {/* Sticky section tabs */}
-      <div
+      <nav
+        aria-label="Page sections"
         className="sticky z-40 border-b border-border bg-background/95"
         style={{ top: "3.5rem", backdropFilter: "blur(8px)" }}
       >
@@ -116,6 +117,7 @@ export default function AgentSkills() {
               <button
                 key={tab.id}
                 onClick={() => scrollTo(tab.id)}
+                aria-current={activeSection === tab.id ? "true" : undefined}
                 className={`px-4 py-3 text-xs font-medium whitespace-nowrap shrink-0 forge-section-tab${activeSection === tab.id ? " forge-section-tab--active" : ""}`}
               >
                 {tab.label}
@@ -123,7 +125,7 @@ export default function AgentSkills() {
             ))}
           </div>
         </div>
-      </div>
+      </nav>
 
       {/* ─── Section 0: Start Here ─────────────────────────── */}
       <section id="start-here" className="border-b border-border">
@@ -234,15 +236,17 @@ export default function AgentSkills() {
             Click any skill to view its full specification.
           </p>
 
-          <div className="forge-tabs mb-6">
+          <div className="forge-tabs mb-6" role="group" aria-label="Pipeline view">
             <button
               onClick={() => setPipelineView("layers")}
+              aria-pressed={pipelineView === "layers"}
               className={pipelineView === "layers" ? "forge-tab-active" : "forge-tab"}
             >
               Layer View
             </button>
             <button
               onClick={() => setPipelineView("deps")}
+              aria-pressed={pipelineView === "deps"}
               className={pipelineView === "deps" ? "forge-tab-active" : "forge-tab"}
             >
               Dependency Flow
@@ -273,11 +277,12 @@ export default function AgentSkills() {
           {/* Filters */}
           <div className="flex flex-col sm:flex-row gap-3 mb-6">
             {/* Status filter */}
-            <div className="forge-tabs shrink-0">
+            <div className="forge-tabs shrink-0" role="group" aria-label="Filter by type">
               {(["all", "core", "extension"] as const).map((f) => (
                 <button
                   key={f}
                   onClick={() => setStatusFilter(f)}
+                  aria-pressed={statusFilter === f}
                   className={statusFilter === f ? "forge-tab-active" : "forge-tab"}
                 >
                   {f === "all"
@@ -290,9 +295,10 @@ export default function AgentSkills() {
             </div>
 
             {/* Layer filter */}
-            <div className="forge-tabs">
+            <div className="forge-tabs" role="group" aria-label="Filter by layer">
               <button
                 onClick={() => setLayerFilter(null)}
+                aria-pressed={layerFilter === null}
                 className={layerFilter === null ? "forge-tab-active" : "forge-tab"}
               >
                 All Layers
@@ -301,6 +307,7 @@ export default function AgentSkills() {
                 <button
                   key={l.id}
                   onClick={() => setLayerFilter(layerFilter === l.id ? null : l.id)}
+                  aria-pressed={layerFilter === l.id}
                   className={layerFilter === l.id ? "forge-layer-tab-active" : "forge-tab"}
                   style={{ "--layer-color": l.color } as CSSProperties}
                 >
@@ -311,11 +318,12 @@ export default function AgentSkills() {
 
             {/* Search */}
             <div className="relative flex-1 max-w-xs">
-              <Search size={13} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
+              <Search size={13} aria-hidden="true" className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
               <input
                 ref={searchRef}
                 type="text"
                 placeholder="Search skills…"
+                aria-label="Search skills"
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 className="w-full pl-8 pr-8 py-1.5 rounded-full border border-border bg-card text-xs text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary/40"
@@ -323,9 +331,10 @@ export default function AgentSkills() {
               {search && (
                 <button
                   onClick={() => setSearch("")}
+                  aria-label="Clear search"
                   className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
                 >
-                  <X size={11} />
+                  <X size={11} aria-hidden="true" />
                 </button>
               )}
             </div>

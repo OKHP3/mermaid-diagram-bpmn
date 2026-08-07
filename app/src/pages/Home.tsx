@@ -127,8 +127,8 @@ function PathCard({ card }: PathCardProps) {
         <span className="forge-eyebrow text-[10px] text-right leading-snug">{card.audience}</span>
       </div>
 
-      {/* Heading */}
-      <h3 className="forge-card-title text-sm mb-2 leading-snug">{card.heading}</h3>
+      {/* Heading — h2 so the document outline goes h1 → h2, not h1 → h3 (WCAG heading-order) */}
+      <h2 className="forge-card-title text-sm mb-2 leading-snug">{card.heading}</h2>
 
       {/* Body */}
       <p className="text-xs text-muted-foreground leading-relaxed flex-1 mb-5">{card.body}</p>
