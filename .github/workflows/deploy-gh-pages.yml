@@ -64,11 +64,18 @@ jobs:
       - name: Generate skill static files
         run: pnpm --filter @workspace/mermaid-diagram-bpmn run skill:generate
 
+      - name: Regenerate release manifest (bakes current date and confirms no drift)
+        run: pnpm run manifest:generate
+
+      - name: Release manifest drift check
+        run: pnpm run manifest:check
+
       - name: Build
         run: pnpm --filter @workspace/mermaid-diagram-bpmn run build
         env:
           NODE_ENV: production
           BASE_PATH: /mermaid-diagram-bpmn/
+          VITE_COMMIT_SHA: ${{ github.sha }}
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v5

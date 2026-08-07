@@ -159,18 +159,31 @@ if (CHECK_MODE) {
     }
   }
 
-  // Evidence tier IDs must match (order-insensitive).
-  const committedIds = (committed.evidenceTiers ?? [])
-    .map((t) => t.id)
-    .sort()
-    .join(',');
-  const generatedIds = EVIDENCE_TIERS.map((t) => t.id)
-    .sort()
-    .join(',');
-  if (committedIds !== generatedIds) {
-    diffs.push(
-      `  evidenceTiers.ids:\n    committed:  ${committedIds}\n    generated:  ${generatedIds}`,
-    );
+  // Evidence tiers: compare the full content of each tier entry (id, claim,
+  // evidence, tier). Index committed entries by id for lookup.
+  const committedById = Object.fromEntries(
+    (committed.evidenceTiers ?? []).map((t) => [t.id, t]),
+  );
+  for (const gen of EVIDENCE_TIERS) {
+    const com = committedById[gen.id];
+    if (!com) {
+      diffs.push(`  evidenceTiers[${gen.id}]: missing from committed manifest`);
+      continue;
+    }
+    for (const key of ['claim', 'evidence', 'tier']) {
+      if (com[key] !== gen[key]) {
+        diffs.push(
+          `  evidenceTiers[${gen.id}].${key}:\n    committed:  ${JSON.stringify(com[key])}\n    generated:  ${JSON.stringify(gen[key])}`,
+        );
+      }
+    }
+  }
+  // Catch any IDs in the committed file that are no longer in the source.
+  const generatedIds = new Set(EVIDENCE_TIERS.map((t) => t.id));
+  for (const com of committed.evidenceTiers ?? []) {
+    if (!generatedIds.has(com.id)) {
+      diffs.push(`  evidenceTiers[${com.id}]: present in committed manifest but removed from source`);
+    }
   }
 
   if (diffs.length > 0) {
