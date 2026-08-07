@@ -5,7 +5,7 @@
 |---|---|
 | Doc owner | Jamie Hill (OverKill Hill P³), audit and directive by Claude |
 | Prepared for | Replit agent (execution) and Jamie (approval) |
-| Status | Final — re-evaluation of verified current state + forward directive |
+| Status | **[PARTIALLY EXECUTED — 2026-08-04/06]** Phase A complete. Phases B–E remain as forward guidance. Superseded for active planning by PRD-06; this document is now a historical record of Phase A execution and an input to PRD-06. |
 | Date | 2026-08-04 |
 | Verified against | GitHub HEAD `1ba3518` (276 commits), re-cloned and independently run, not read from docs alone |
 | Relates to | `app/docs/prd.md` (v0.3), `docs/version-checklist.md`, `docs/strategy.md`, `app/docs/PRD-03-plugin-convergence-directive.md`, the informal "PRD-04" work (package boundary + demo route, referenced in commits and `docs/capability-ledger.md` but never written as its own document — Phase A below fixes that) |
@@ -47,8 +47,8 @@ PRD-03 flagged that the Mermaid plugin integration had gone unverified for nine 
 | R7 | TD-001 (40+ unused deps, Critical, blocks npm publish) | **Still open** | `app/docs/technical-debt-register.md`, not yet reached — correctly sequenced, this document's Phase B |
 | R8 | TD-003/TD-012 (duplicated shape logic) | **Still open** | Same source |
 | R9 | TD-005/TD-006 (no snapshot/layout regression tests) | **Still open** | Same source |
-| R10 | `version-checklist.md` V0.6 checkboxes vs `roadmap.md`'s "Done" claim | **Contradiction, unresolved** | Direct read of both files, same day |
-| R11 | "PRD-04" has no physical document | **Confirmed gap** | `grep -rl "PRD-04"` finds only references in `roadmap.md`, `AGENTS.md`, `docs/capability-ledger.md`; no `PRD-04*.md` file anywhere |
+| R10 | `version-checklist.md` V0.6 checkboxes vs `roadmap.md`'s "Done" claim | **Resolved 2026-08-04** (Phase A) | `docs/version-checklist.md` V0.6 now shows `[DONE]` with inline evidence citations; `app/docs/roadmap.md` defers to version-checklist per DEC-021 |
+| R11 | "PRD-04" has no physical document | **Resolved 2026-08-04** (Phase A) | `app/docs/PRD-04-plugin-convergence.md` created — retrospective record of all five plugin-convergence phases |
 | R12 | Mermaid issue #7699 status | **Changed since last research pass** | Live fetch: `Status: Approved`, `Required Grooming`, no linked PR, `Contributor needed` label present |
 | R13 | Bundle size | **Better than target, undocumented** | Real build output: 19.63 kB / 5.68 kB gzip (mjs), 16.42 kB / 5.20 kB gzip (cjs) — comfortably under both the original NFR (<200 kB) and the V0.8 target (<50 kB gzip), but `version-checklist.md` V0.8 still shows this unchecked |
 | R14 | `CODE_OF_CONDUCT.md` | **Missing** | Named in V0.8's checklist, not present in repo root |
@@ -75,7 +75,9 @@ R1–R4 got the project to "the plugin is real and provably works." That's V0.6.
 
 ## 4. Phased plan
 
-### Phase A — Close the books (target: under an hour, do this first)
+### Phase A — Close the books ✅ COMPLETE (2026-08-04/06)
+
+All Phase A items were executed as of 2026-08-06. `docs/version-checklist.md` V0.6 is [DONE] with evidence citations; `app/docs/PRD-04-plugin-convergence.md` exists; V0.8 bundle-size box is checked; `CODE_OF_CONDUCT.md` is in the repo root; TD-004 (parse errors) is resolved 2026-08-05. The items below are preserved as the historical record of what Phase A required.
 
 Small, cheap, and it's the discipline this whole project has been earning back since PRD-03. Do it before anything else so the record is clean going into Phase B.
 

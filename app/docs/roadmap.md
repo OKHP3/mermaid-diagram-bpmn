@@ -132,7 +132,7 @@ See `docs/version-checklist.md` V1.0 for the full criterion list.
 | `bpmn-parser.ts` | Active development | Coordinate first |
 | `bpmn-layout.ts` | Active development | Coordinate first |
 | `bpmn-renderer.tsx` | Active development | Coordinate first |
-| `bpmn-plugin.ts` | Source-verified + packaged | `bpmn-plugin-integration.test.ts` passes; `@okhp3/mermaid-diagram-bpmn@0.1.0` packaged |
+| `bpmn-plugin.ts` | Source-verified + published | `bpmn-plugin-integration.test.ts` passes; `@okhp3/mermaid-diagram-bpmn@0.1.1` published to npm |
 | `bpmn-styles.ts` | Stable | Yes |
 | `bpmn-examples.ts` | Stable | Yes (add examples) |
 | Tests | Active | Yes — more is better |
