@@ -111,9 +111,22 @@ Engagement approach:
 
 ## BP-SKILL positioning
 
-BP-SKILL is the first standards-conformant, lifecycle-complete business process agent skill suite in the SKILL.md ecosystem. As of May 2026, the agentskills.io directory contains 89,000+ skills. Zero implement a BABOK knowledge area.
+BP-SKILL is a lifecycle-complete, standards-conformant business process agent skill suite built on the SKILL.md format. It targets practitioners who use AI agents for business analysis work — BAs, process consultants, operations analysts — and want a portable, platform-agnostic instruction set that aligns to standards they already work with (BABOK v3, BPM CBOK v4.0, ISO 9001:2015).
 
-BP-SKILL targets practitioners who use AI agents for business analysis work — BAs, process consultants, operations analysts — and want a portable, platform-agnostic instruction set that aligns to standards they already work with (BABOK v3, BPM CBOK v4.0, ISO 9001:2015).
+**BABOK skill landscape — re-verified 2026-08-07:**
+
+The SKILL.md ecosystem has grown significantly since the project's initial positioning memo. Cross-agent registries report 93,000–164,000+ SKILL.md-format files as of August 2026 (GuildSkills: 164,000+ total / 93,000+ quality-filtered; OpenAgentSkill: 20,876 curated). Note: `agentskills.io` is the open standard specification site, not a searchable skill directory — the 89,000+ figure in earlier strategy drafts referred to skills across GitHub-indexed registries, not an agentskills.io internal catalog.
+
+At least two BABOK-implementing skill packages exist in public repositories as of 2026-08-07:
+
+| Package | BABOK coverage | Created | Stars | Notes |
+|---|---|---|---|---|
+| `s1dd4rth/babok` | All 6 knowledge areas, 50 techniques, 5 perspectives | 2026-04-29 | 0 | MIT; single comprehensive skill file |
+| `majiayu000/claude-skill-registry-data/business/ba-orchestration` | 14 techniques across strategic analysis, problem solving, planning, design | Unknown | N/A | Part of a multi-skill data repo |
+
+The prior claim “Zero implement a BABOK knowledge area” is no longer accurate and must not appear in any external post or issue comment. Neither package has measurable adoption as of the check date.
+
+**BP-SKILL’s defensible differentiation** is not uniqueness in the BABOK space but completeness and integration: 15 skills covering the full process lifecycle from elicitation through publication, the PNS handoff artifact as a structured interchange between lifecycle stages, and direct integration with the `bpmn-beta` diagram type via `okhp3-visual-process-modeling`. No comparable lifecycle-complete, BPMN-integrated business process skill suite has been identified in public registries as of 2026-08-07.
 
 ---
 
