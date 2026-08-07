@@ -22,7 +22,9 @@
     "deploy:playground": "pnpm --filter @workspace/mermaid-diagram-bpmn run build",
     "plugin:build": "pnpm --filter @okhp3/mermaid-diagram-bpmn run build",
     "plugin:pack": "pnpm --filter @okhp3/mermaid-diagram-bpmn run pack:dry-run",
-    "plugin:smoke": "node scripts/run-plugin-smoke.mjs"
+    "plugin:smoke": "node scripts/run-plugin-smoke.mjs",
+    "check:content": "node scripts/validate-content.mjs",
+    "check:content:test": "node --test scripts/validate-content.test.mjs"
   },
   "private": true,
   "packageManager": "pnpm@10.26.1",

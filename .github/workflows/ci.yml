@@ -66,6 +66,12 @@ jobs:
       - name: Plugin smoke test (clean-install fixture)
         run: node scripts/run-plugin-smoke.mjs
 
+      - name: Content-drift check (test count, Mermaid version, plugin version citations)
+        run: pnpm run check:content
+
+      - name: Test content-drift detection (exits 1 on injected stale claim)
+        run: pnpm run check:content:test
+
   e2e:
     name: Real-browser E2E — Mermaid host demo
     needs: checks

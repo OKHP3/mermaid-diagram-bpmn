@@ -1,0 +1,17 @@
+{
+  "_readme": [
+    "Canonical claim values for scripts/validate-content.mjs.",
+    "",
+    "HOW TO UPDATE",
+    "  testCount: After adding or removing tests, run the Vitest suite and update",
+    "    this number to match the total reported by 'pnpm --filter @workspace/mermaid-diagram-bpmn run test'.",
+    "    Then update the matching claim in app/docs/release-checklist.md.",
+    "    CI will fail if this file and the checklist disagree.",
+    "",
+    "  mermaidVersionTarget and pluginVersion are derived at runtime from",
+    "  app/src/lib/bpmn-plugin.ts and lib/bpmn-plugin/package.json respectively.",
+    "  They do not live here — do not add them."
+  ],
+  "testCount": 579,
+  "testCountUpdated": "2026-08-07"
+}
