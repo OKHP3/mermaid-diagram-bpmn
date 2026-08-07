@@ -69,7 +69,7 @@ Resolved after initial V0.6 scope (now closed):
 
 ---
 
-## V0.4 — Content and interactivity (Planned, after V0.3)
+## V0.4 — Content and interactivity (Current — see `docs/version-checklist.md` V0.4)
 
 Make the suite genuinely usable and the UI interactive.
 See `docs/version-checklist.md` V0.4 for the full criterion list.
