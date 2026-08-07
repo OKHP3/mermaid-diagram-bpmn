@@ -5,8 +5,11 @@
  * Verifies that validate-content.mjs:
  *   - exits 0 when all content claims match canonical sources
  *   - exits 1 (with an informative message) when the test-count claim is stale
- *   - exits 1 when a Mermaid version citation is wrong
- *   - exits 1 when a plugin version citation is wrong
+ *   - exits 1 when content-canon.json testCount disagrees with checklist
+ *   - exits 1 when a Mermaid version citation is wrong (version-checklist.md)
+ *   - exits 1 when a Mermaid version citation is wrong (capability-ledger.md)
+ *   - exits 1 when a plugin version citation is wrong (version-checklist.md)
+ *   - exits 1 when a required file is missing from the scan set
  *
  * The tests inject stale content via environment-variable overrides rather
  * than touching the real committed files.
@@ -30,15 +33,19 @@ const ROOT      = resolve(__dirname, '..');
 const VALIDATOR        = resolve(__dirname, 'validate-content.mjs');
 const REAL_CHECKLIST   = resolve(ROOT, 'app/docs/release-checklist.md');
 const REAL_CANON       = resolve(ROOT, 'scripts/content-canon.json');
-const REAL_README      = resolve(ROOT, 'README.md');
-const REAL_CAPABILITY  = resolve(ROOT, 'app/docs/capability-ledger.md');
 const REAL_VERSION_DOC = resolve(ROOT, 'docs/version-checklist.md');
+const REAL_LEDGER      = resolve(ROOT, 'docs/capability-ledger.md');
 
 /** Write content to a unique temp file and return its path. */
 function writeTmp(content, ext = '.md') {
   const p = join(tmpdir(), `bpmn-content-test-${randomBytes(6).toString('hex')}${ext}`);
   writeFileSync(p, content, 'utf-8');
   return p;
+}
+
+/** Path to a guaranteed non-existent file (for missing-file tests). */
+function nonExistentPath() {
+  return join(tmpdir(), `bpmn-missing-${randomBytes(6).toString('hex')}.md`);
 }
 
 /** Run validate-content.mjs with optional env-var overrides. */
@@ -65,22 +72,17 @@ test('validate-content exits 0 when all claims match canonical sources', () => {
 // ─── Check 1: Test count ──────────────────────────────────────────────────────
 
 test('validate-content exits 1 when test count in release-checklist is stale', () => {
-  const canon = JSON.parse(readFileSync(REAL_CANON, 'utf-8'));
-
-  // Build a stale checklist: use a count that is clearly wrong
+  const canon      = JSON.parse(readFileSync(REAL_CANON, 'utf-8'));
   const staleCount = canon.testCount + 999;
   const realContent = readFileSync(REAL_CHECKLIST, 'utf-8');
 
-  // Replace the real count with the stale one
   const staleContent = realContent.replace(
     /(\d{3,4})\s+as of (\d{4}-\d{2}-\d{2})/,
     `${staleCount} as of $2`,
   );
   const stalePath = writeTmp(staleContent, '.md');
 
-  const { exitCode, output } = runValidator({
-    CONTENT_CHECKLIST_OVERRIDE: stalePath,
-  });
+  const { exitCode, output } = runValidator({ CONTENT_CHECKLIST_OVERRIDE: stalePath });
 
   assert.equal(exitCode, 1, `expected exit 1 for stale test count; output:\n${output}`);
   assert.ok(
@@ -91,17 +93,11 @@ test('validate-content exits 1 when test count in release-checklist is stale', (
 });
 
 test('validate-content exits 1 when content-canon.json testCount disagrees with checklist', () => {
-  // Flip the situation: keep real checklist, inject a stale canon
-  const realChecklist = readFileSync(REAL_CHECKLIST, 'utf-8');
-  const realCanon     = JSON.parse(readFileSync(REAL_CANON, 'utf-8'));
-
-  // A canon that claims a different count
+  const realCanon  = JSON.parse(readFileSync(REAL_CANON, 'utf-8'));
   const staleCanon = { ...realCanon, testCount: realCanon.testCount + 999 };
   const staleCanonPath = writeTmp(JSON.stringify(staleCanon, null, 2), '.json');
 
-  const { exitCode, output } = runValidator({
-    CONTENT_CANON_OVERRIDE: staleCanonPath,
-  });
+  const { exitCode, output } = runValidator({ CONTENT_CANON_OVERRIDE: staleCanonPath });
 
   assert.equal(exitCode, 1, `expected exit 1 when canon disagrees; output:\n${output}`);
   assert.ok(
@@ -113,39 +109,72 @@ test('validate-content exits 1 when content-canon.json testCount disagrees with 
 
 // ─── Check 2: Mermaid version citation ───────────────────────────────────────
 
-test('validate-content exits 1 when a mermaid@X.Y.Z citation is wrong', () => {
-  // The mermaid@X.Y.Z citation lives in docs/version-checklist.md, not the
-  // release-checklist — inject a stale version into version-checklist via its override.
+test('validate-content exits 1 when a mermaid citation is stale in version-checklist.md', () => {
   const realContent = readFileSync(REAL_VERSION_DOC, 'utf-8');
 
-  // Confirm this file actually has the pattern before testing
   assert.ok(
     /mermaid@\d+\.\d+\.\d+/.test(realContent),
     'docs/version-checklist.md should contain a mermaid@X.Y.Z citation',
   );
 
-  const staleContent = realContent.replace(
-    /mermaid@(\d+\.\d+\.\d+)/,
-    'mermaid@0.0.0-stale',
-  );
-  const stalePath = writeTmp(staleContent, '.md');
+  const staleContent = realContent.replace(/mermaid@(\d+\.\d+\.\d+)/, 'mermaid@0.0.0-stale');
+  const stalePath    = writeTmp(staleContent, '.md');
 
-  const { exitCode, output } = runValidator({
-    CONTENT_VERSION_DOC_OVERRIDE: stalePath,
-  });
+  const { exitCode, output } = runValidator({ CONTENT_VERSION_DOC_OVERRIDE: stalePath });
 
   assert.equal(exitCode, 1, `expected exit 1 for stale mermaid version; output:\n${output}`);
   assert.ok(
-    output.toLowerCase().includes('mermaid@') ||
-    output.toLowerCase().includes('fail'),
-    `output should mention mermaid@ citation; got:\n${output}`,
+    output.toLowerCase().includes('mermaid@') || output.toLowerCase().includes('fail'),
+    `output should mention mermaid@; got:\n${output}`,
+  );
+});
+
+test('validate-content exits 1 when a mermaid citation is stale in capability-ledger.md', () => {
+  const realContent = readFileSync(REAL_LEDGER, 'utf-8');
+
+  // If the ledger has no mermaid@ citation currently, inject one to prove the check fires.
+  const hasCitation = /mermaid@\d+\.\d+\.\d+/.test(realContent);
+  const testContent = hasCitation
+    ? realContent.replace(/mermaid@(\d+\.\d+\.\d+)/, 'mermaid@0.0.0-stale')
+    : realContent + '\nmermaid@0.0.0-stale cited here for test purposes\n';
+
+  const stalePath = writeTmp(testContent, '.md');
+
+  const { exitCode, output } = runValidator({ CONTENT_LEDGER_OVERRIDE: stalePath });
+
+  assert.equal(exitCode, 1, `expected exit 1 for stale mermaid in ledger; output:\n${output}`);
+  assert.ok(
+    output.toLowerCase().includes('mermaid@') || output.toLowerCase().includes('fail'),
+    `output should mention mermaid@; got:\n${output}`,
   );
 });
 
 // ─── Check 3: Plugin version citation ────────────────────────────────────────
 
-test('validate-content exits 1 when a plugin version citation is wrong', () => {
+test('validate-content exits 1 when a plugin version citation is stale in version-checklist.md', () => {
   const realContent = readFileSync(REAL_VERSION_DOC, 'utf-8');
+  const staleContent = realContent.replace(
+    /@okhp3\/mermaid-diagram-bpmn@(\d+\.\d+\.\d+)/,
+    '@okhp3/mermaid-diagram-bpmn@0.0.0-stale',
+  );
+  const stalePath = writeTmp(staleContent, '.md');
+
+  const { exitCode, output } = runValidator({ CONTENT_VERSION_DOC_OVERRIDE: stalePath });
+
+  assert.equal(exitCode, 1, `expected exit 1 for stale plugin version; output:\n${output}`);
+  assert.ok(
+    output.toLowerCase().includes('mermaid-diagram-bpmn') || output.toLowerCase().includes('fail'),
+    `output should mention plugin citation; got:\n${output}`,
+  );
+});
+
+test('validate-content exits 1 when a plugin version citation is stale in capability-ledger.md', () => {
+  const realContent = readFileSync(REAL_LEDGER, 'utf-8');
+
+  assert.ok(
+    /@okhp3\/mermaid-diagram-bpmn@\d+\.\d+\.\d+/.test(realContent),
+    'docs/capability-ledger.md should contain an @okhp3/mermaid-diagram-bpmn@X.Y.Z citation',
+  );
 
   const staleContent = realContent.replace(
     /@okhp3\/mermaid-diagram-bpmn@(\d+\.\d+\.\d+)/,
@@ -153,14 +182,27 @@ test('validate-content exits 1 when a plugin version citation is wrong', () => {
   );
   const stalePath = writeTmp(staleContent, '.md');
 
+  const { exitCode, output } = runValidator({ CONTENT_LEDGER_OVERRIDE: stalePath });
+
+  assert.equal(exitCode, 1, `expected exit 1 for stale plugin in ledger; output:\n${output}`);
+  assert.ok(
+    output.toLowerCase().includes('mermaid-diagram-bpmn') || output.toLowerCase().includes('fail'),
+    `output should mention plugin citation; got:\n${output}`,
+  );
+});
+
+// ─── Required-file enforcement ────────────────────────────────────────────────
+
+test('validate-content exits 1 when the capability ledger is missing', () => {
   const { exitCode, output } = runValidator({
-    CONTENT_VERSION_DOC_OVERRIDE: stalePath,
+    CONTENT_LEDGER_OVERRIDE: nonExistentPath(),
   });
 
-  assert.equal(exitCode, 1, `expected exit 1 for stale plugin version; output:\n${output}`);
+  assert.equal(exitCode, 1, `expected exit 1 for missing ledger; output:\n${output}`);
   assert.ok(
-    output.toLowerCase().includes('mermaid-diagram-bpmn') ||
+    output.toLowerCase().includes('not found') ||
+    output.toLowerCase().includes('missing') ||
     output.toLowerCase().includes('fail'),
-    `output should mention plugin citation; got:\n${output}`,
+    `output should mention missing/not found; got:\n${output}`,
   );
 });

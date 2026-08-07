@@ -12,11 +12,18 @@
  * ──────
  *   1. TEST COUNT       — "N as of YYYY-MM-DD" in release-checklist.md must
  *                         match scripts/content-canon.json testCount.
- *   2. MERMAID VERSION  — every "mermaid@X.Y.Z" citation in key doc files
+ *   2. MERMAID VERSION  — every "mermaid@X.Y.Z" citation in public doc files
  *                         must equal MERMAID_VERSION_TARGET in bpmn-plugin.ts.
  *   3. PLUGIN VERSION   — every "@okhp3/mermaid-diagram-bpmn@X.Y.Z" citation
- *                         in key doc files must equal the version field in
+ *                         in public doc files must equal the version field in
  *                         lib/bpmn-plugin/package.json.
+ *
+ * Intentionally excluded files (changelog / historical decision records)
+ * ──────────────────────────────────────────────────────────────────────
+ *   app/docs/decisions.md     — records the plugin version that was current
+ *   app/docs/as-built-prd.md  — at the time of each decision/build; those
+ *                               historical @X.Y.Z strings are correct and
+ *                               must not be updated to the latest version.
  *
  * Usage (from workspace root)
  * ───────────────────────────
@@ -28,6 +35,7 @@
  *   CONTENT_CANON_OVERRIDE        — alternative path for content-canon.json
  *   CONTENT_CHECKLIST_OVERRIDE    — alternative path for release-checklist.md
  *   CONTENT_VERSION_DOC_OVERRIDE  — alternative path for docs/version-checklist.md
+ *   CONTENT_LEDGER_OVERRIDE       — alternative path for docs/capability-ledger.md
  *
  * HOW TO FIX FAILURES
  * ───────────────────
@@ -48,16 +56,25 @@ const ROOT      = resolve(__dirname, '..');
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
 
-function readText(abs) {
+/**
+ * Read a file, failing loudly if it does not exist.
+ * All primary scan sources are required — missing files indicate a repo
+ * structural problem that must not be silently ignored.
+ */
+function readRequired(abs, label) {
   if (!existsSync(abs)) {
-    console.error(`[validate-content] MISSING expected file: ${abs}`);
+    console.error(
+      `[validate-content] FAIL: required file not found: ${label}\n` +
+      `  Resolved to: ${abs}\n` +
+      `  If this file was intentionally removed, update the source list in validate-content.mjs.`,
+    );
     process.exit(1);
   }
   return readFileSync(abs, 'utf-8');
 }
 
-function readJson(abs) {
-  return JSON.parse(readText(abs));
+function readJson(abs, label) {
+  return JSON.parse(readRequired(abs, label));
 }
 
 /**
@@ -65,7 +82,7 @@ function readJson(abs) {
  * Returns [{ value, line }] — line is 1-based.
  */
 function findAll(text, pattern) {
-  const hits = [];
+  const hits  = [];
   const lines = text.split('\n');
   for (let i = 0; i < lines.length; i++) {
     const re = new RegExp(pattern.source, 'g');
@@ -79,29 +96,34 @@ function findAll(text, pattern) {
 
 // ── File paths (override-aware) ───────────────────────────────────────────────
 
-const CANON_PATH       = process.env.CONTENT_CANON_OVERRIDE
+const CANON_PATH        = process.env.CONTENT_CANON_OVERRIDE
   ?? resolve(ROOT, 'scripts/content-canon.json');
-const CHECKLIST_PATH   = process.env.CONTENT_CHECKLIST_OVERRIDE
+const CHECKLIST_PATH    = process.env.CONTENT_CHECKLIST_OVERRIDE
   ?? resolve(ROOT, 'app/docs/release-checklist.md');
-const VERSION_DOC_PATH = process.env.CONTENT_VERSION_DOC_OVERRIDE
+const VERSION_DOC_PATH  = process.env.CONTENT_VERSION_DOC_OVERRIDE
   ?? resolve(ROOT, 'docs/version-checklist.md');
-const README_PATH      = resolve(ROOT, 'README.md');
-const LEDGER_PATH      = resolve(ROOT, 'app/docs/capability-ledger.md');
-const PLUGIN_SRC_PATH  = resolve(ROOT, 'app/src/lib/bpmn-plugin.ts');
-const PLUGIN_PKG_PATH  = resolve(ROOT, 'lib/bpmn-plugin/package.json');
+const LEDGER_PATH       = process.env.CONTENT_LEDGER_OVERRIDE
+  ?? resolve(ROOT, 'docs/capability-ledger.md');
+const README_PATH       = resolve(ROOT, 'README.md');
+const ROADMAP_PATH      = resolve(ROOT, 'app/docs/roadmap.md');
+const PLUGIN_SRC_PATH   = resolve(ROOT, 'app/src/lib/bpmn-plugin.ts');
+const PLUGIN_PKG_PATH   = resolve(ROOT, 'lib/bpmn-plugin/package.json');
 
-// Labels for error messages (show the logical name, not the tmp path when overridden)
-const CHECKLIST_LABEL   = process.env.CONTENT_CHECKLIST_OVERRIDE
-  ? 'app/docs/release-checklist.md (override)' : 'app/docs/release-checklist.md';
-const VERSION_DOC_LABEL = process.env.CONTENT_VERSION_DOC_OVERRIDE
-  ? 'docs/version-checklist.md (override)' : 'docs/version-checklist.md';
+// Labels for error messages (show logical name when an override is active)
+function label(envKey, defaultPath) {
+  return process.env[envKey] ? `${defaultPath} (override)` : defaultPath;
+}
+
+const CHECKLIST_LABEL   = label('CONTENT_CHECKLIST_OVERRIDE',   'app/docs/release-checklist.md');
+const VERSION_DOC_LABEL = label('CONTENT_VERSION_DOC_OVERRIDE', 'docs/version-checklist.md');
+const LEDGER_LABEL      = label('CONTENT_LEDGER_OVERRIDE',      'docs/capability-ledger.md');
 
 // ── Load canonical sources ────────────────────────────────────────────────────
 
-const canon = readJson(CANON_PATH);
+const canon = readJson(CANON_PATH, 'scripts/content-canon.json');
 
 // MERMAID_VERSION_TARGET — extracted from bpmn-plugin.ts at runtime
-const pluginSrc = readText(PLUGIN_SRC_PATH);
+const pluginSrc = readRequired(PLUGIN_SRC_PATH, 'app/src/lib/bpmn-plugin.ts');
 const mvtMatch  = pluginSrc.match(/MERMAID_VERSION_TARGET\s*=\s*['"]([^'"]+)['"]/);
 if (!mvtMatch) {
   console.error('[validate-content] FAIL: MERMAID_VERSION_TARGET not found in app/src/lib/bpmn-plugin.ts');
@@ -110,15 +132,15 @@ if (!mvtMatch) {
 const MERMAID_VERSION_TARGET = mvtMatch[1];
 
 // Plugin version — from lib/bpmn-plugin/package.json
-const pluginPkg      = readJson(PLUGIN_PKG_PATH);
+const pluginPkg      = readJson(PLUGIN_PKG_PATH, 'lib/bpmn-plugin/package.json');
 const PLUGIN_VERSION = pluginPkg.version;
 
 // ── Accumulated failures ──────────────────────────────────────────────────────
 
 const failures = [];
 
-function fail(label, line, message) {
-  failures.push(`  ${label}:${line} — ${message}`);
+function fail(fileLabel, line, message) {
+  failures.push(`  ${fileLabel}:${line} — ${message}`);
 }
 
 // ── Check 1: Test count ───────────────────────────────────────────────────────
@@ -127,7 +149,7 @@ function fail(label, line, message) {
 // The number N must equal canon.testCount.
 
 {
-  const text = readText(CHECKLIST_PATH);
+  const text = readRequired(CHECKLIST_PATH, CHECKLIST_LABEL);
   const hits = findAll(text, /(\d{3,4})\s+as of \d{4}-\d{2}-\d{2}/);
 
   if (hits.length === 0) {
@@ -153,24 +175,37 @@ function fail(label, line, message) {
 
 // ── Check 2: Mermaid version citations ────────────────────────────────────────
 //
-// Every "mermaid@X.Y.Z" occurrence in key doc files must match
+// Every "mermaid@X.Y.Z" occurrence in public doc files must match
 // MERMAID_VERSION_TARGET from bpmn-plugin.ts.
+//
+// Required files are loaded with readRequired() — a missing file is a failure.
+// app/docs/roadmap.md is optional; it may not always cite a Mermaid version.
 
 const MERMAID_CITATION_SOURCES = [
-  [CHECKLIST_PATH,   CHECKLIST_LABEL],
-  [VERSION_DOC_PATH, VERSION_DOC_LABEL],
-  [README_PATH,      'README.md'],
-  [LEDGER_PATH,      'app/docs/capability-ledger.md'],
+  // [path, label, required]
+  [CHECKLIST_PATH,   CHECKLIST_LABEL,   true],
+  [VERSION_DOC_PATH, VERSION_DOC_LABEL, true],
+  [LEDGER_PATH,      LEDGER_LABEL,      true],
+  [README_PATH,      'README.md',       true],
+  [ROADMAP_PATH,     'app/docs/roadmap.md', false],
 ];
 
-for (const [filePath, label] of MERMAID_CITATION_SOURCES) {
-  if (!existsSync(filePath)) continue;
-  const text = readText(filePath);
+for (const [filePath, fileLabel, required] of MERMAID_CITATION_SOURCES) {
+  if (!existsSync(filePath)) {
+    if (required) {
+      failures.push(
+        `  ${fileLabel} — required file not found (path: ${filePath}). ` +
+        `If intentionally removed, update the source list in validate-content.mjs.`,
+      );
+    }
+    continue;
+  }
+  const text = readRequired(filePath, fileLabel);
   const hits = findAll(text, /mermaid@(\d+\.\d+\.\d+)/);
   for (const { value, line } of hits) {
     if (value !== MERMAID_VERSION_TARGET) {
       fail(
-        label,
+        fileLabel,
         line,
         `mermaid@${value} does not match MERMAID_VERSION_TARGET=${MERMAID_VERSION_TARGET} ` +
         `(app/src/lib/bpmn-plugin.ts). Update the citation or the target constant.`,
@@ -181,24 +216,38 @@ for (const [filePath, label] of MERMAID_CITATION_SOURCES) {
 
 // ── Check 3: Plugin version citations ─────────────────────────────────────────
 //
-// Every "@okhp3/mermaid-diagram-bpmn@X.Y.Z" occurrence in key doc files
+// Every "@okhp3/mermaid-diagram-bpmn@X.Y.Z" occurrence in public doc files
 // must match the version in lib/bpmn-plugin/package.json.
+//
+// Intentionally excluded: app/docs/decisions.md and app/docs/as-built-prd.md
+// (historical changelog records — their @X.Y.Z strings are correct for the
+// version that existed at the time of the decision and must not be updated).
 
 const PLUGIN_CITATION_SOURCES = [
-  [CHECKLIST_PATH,   CHECKLIST_LABEL],
-  [VERSION_DOC_PATH, VERSION_DOC_LABEL],
-  [README_PATH,      'README.md'],
-  [LEDGER_PATH,      'app/docs/capability-ledger.md'],
+  // [path, label, required]
+  [CHECKLIST_PATH,   CHECKLIST_LABEL,   true],
+  [VERSION_DOC_PATH, VERSION_DOC_LABEL, true],
+  [LEDGER_PATH,      LEDGER_LABEL,      true],
+  [README_PATH,      'README.md',       true],
+  [ROADMAP_PATH,     'app/docs/roadmap.md', false],
 ];
 
-for (const [filePath, label] of PLUGIN_CITATION_SOURCES) {
-  if (!existsSync(filePath)) continue;
-  const text = readText(filePath);
+for (const [filePath, fileLabel, required] of PLUGIN_CITATION_SOURCES) {
+  if (!existsSync(filePath)) {
+    if (required) {
+      failures.push(
+        `  ${fileLabel} — required file not found (path: ${filePath}). ` +
+        `If intentionally removed, update the source list in validate-content.mjs.`,
+      );
+    }
+    continue;
+  }
+  const text = readRequired(filePath, fileLabel);
   const hits = findAll(text, /@okhp3\/mermaid-diagram-bpmn@(\d+\.\d+\.\d+)/);
   for (const { value, line } of hits) {
     if (value !== PLUGIN_VERSION) {
       fail(
-        label,
+        fileLabel,
         line,
         `@okhp3/mermaid-diagram-bpmn@${value} does not match plugin version ${PLUGIN_VERSION} ` +
         `(lib/bpmn-plugin/package.json). Update the citation or bump the package version.`,
