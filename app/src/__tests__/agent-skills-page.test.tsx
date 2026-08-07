@@ -22,6 +22,7 @@ vi.mock('@/components/skills/ZipDownloadButton',     () => ({ ZipDownloadButton:
 vi.mock('@/components/skills/DownloadButton',        () => ({ DownloadButton:        ({ label }: { label: string }) => <button>{label}</button> }));
 vi.mock('@/components/skills/VariableFileCard',      () => ({ VariableFileCard:      () => <div data-testid="variable-file-card" /> }));
 vi.mock('@/components/skills/SkillFrontmatterPreview', () => ({ SkillFrontmatterPreview: () => <div data-testid="frontmatter-preview" /> }));
+vi.mock('@/components/skills/StartHerePanel',        () => ({ StartHerePanel:        () => <div data-testid="start-here-panel" /> }));
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
 

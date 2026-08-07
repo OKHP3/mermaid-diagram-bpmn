@@ -15,12 +15,14 @@ import { SkillFrontmatterPreview } from "@/components/skills/SkillFrontmatterPre
 import { ZipDownloadButton } from "@/components/skills/ZipDownloadButton";
 import { DownloadButton } from "@/components/skills/DownloadButton";
 import { ExternalLinkAnchor } from "@/components/ExternalLinkAnchor";
+import { StartHerePanel } from "@/components/skills/StartHerePanel";
 
 // Derived once at module load — update automatically when SKILLS changes.
 const CORE_COUNT = SKILLS.filter((s) => s.status === "core").length;
 const EXT_COUNT  = SKILLS.filter((s) => s.status === "recommended-extension").length;
 
 const SECTION_TABS = [
+  { id: "start-here", label: "Start Here" },
   { id: "standard",  label: "The Standard" },
   { id: "pipeline",  label: "Pipeline" },
   { id: "browser",   label: "Skills" },
@@ -122,6 +124,11 @@ export default function AgentSkills() {
           </div>
         </div>
       </div>
+
+      {/* ─── Section 0: Start Here ─────────────────────────── */}
+      <section id="start-here" className="border-b border-border">
+        <StartHerePanel onBrowseAll={() => scrollTo("browser")} />
+      </section>
 
       {/* ─── Section A: The Standard ──────────────────────────── */}
       <section id="standard" className="max-w-7xl mx-auto w-full px-4 sm:px-6 py-16">
