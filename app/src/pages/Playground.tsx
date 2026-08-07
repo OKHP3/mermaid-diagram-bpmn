@@ -68,6 +68,17 @@ export default function Playground() {
   const canvasRef = useRef<HTMLDivElement>(null);
   const dragRef = useRef<{ mx: number; my: number; tx: number; ty: number } | null>(null);
 
+  // Ref kept in sync with viewState on every render — lets native event handlers
+  // read current tx/ty without going stale inside a useEffect closure.
+  const viewStateRef = useRef(viewState);
+  viewStateRef.current = viewState;
+
+  // Ref tracking an in-progress single-finger touch pan gesture.
+  const touchRef = useRef<{
+    cx: number; cy: number;     // touch start position
+    startTx: number; startTy: number; // view origin at touch start
+  } | null>(null);
+
   // Wheel zoom — must be non-passive to call preventDefault
   useEffect(() => {
     const el = canvasRef.current;
@@ -86,6 +97,48 @@ export default function Playground() {
     };
     el.addEventListener("wheel", handler, { passive: false });
     return () => el.removeEventListener("wheel", handler);
+  }, []);
+
+  // Touch pan — single-finger drag; touchmove is non-passive so we can preventDefault
+  // and prevent the page from scrolling while the user pans the canvas.
+  useEffect(() => {
+    const el = canvasRef.current;
+    if (!el) return;
+
+    const onTouchStart = (e: TouchEvent) => {
+      if (e.touches.length !== 1) return;
+      const t = e.touches[0];
+      touchRef.current = {
+        cx: t.clientX,
+        cy: t.clientY,
+        startTx: viewStateRef.current.tx,
+        startTy: viewStateRef.current.ty,
+      };
+    };
+
+    const onTouchMove = (e: TouchEvent) => {
+      if (e.touches.length !== 1 || !touchRef.current) return;
+      e.preventDefault();
+      const t = e.touches[0];
+      const dx = t.clientX - touchRef.current.cx;
+      const dy = t.clientY - touchRef.current.cy;
+      const { startTx, startTy } = touchRef.current;
+      setViewState(vs => ({ ...vs, tx: startTx + dx, ty: startTy + dy }));
+    };
+
+    const onTouchEnd = () => { touchRef.current = null; };
+
+    el.addEventListener("touchstart", onTouchStart, { passive: true });
+    el.addEventListener("touchmove", onTouchMove, { passive: false });
+    el.addEventListener("touchend", onTouchEnd);
+    el.addEventListener("touchcancel", onTouchEnd);
+
+    return () => {
+      el.removeEventListener("touchstart", onTouchStart);
+      el.removeEventListener("touchmove", onTouchMove);
+      el.removeEventListener("touchend", onTouchEnd);
+      el.removeEventListener("touchcancel", onTouchEnd);
+    };
   }, []);
 
   // Cleanup timeouts on unmount
@@ -114,6 +167,45 @@ export default function Playground() {
   function handlePanEnd() {
     setIsDragging(false);
     dragRef.current = null;
+  }
+
+  // Keyboard zoom and pan — fires when the canvas has keyboard focus (tabIndex=0).
+  //   +  /  =   → zoom in
+  //   -         → zoom out
+  //   0         → reset view
+  //   Arrow keys → pan 40 px in the corresponding direction
+  function handleCanvasKeyDown(e: React.KeyboardEvent<HTMLDivElement>) {
+    switch (e.key) {
+      case "+":
+      case "=":
+        e.preventDefault();
+        zoomStep(1.2);
+        break;
+      case "-":
+        e.preventDefault();
+        zoomStep(1 / 1.2);
+        break;
+      case "0":
+        e.preventDefault();
+        resetView();
+        break;
+      case "ArrowLeft":
+        e.preventDefault();
+        setViewState(vs => ({ ...vs, tx: vs.tx + 40 }));
+        break;
+      case "ArrowRight":
+        e.preventDefault();
+        setViewState(vs => ({ ...vs, tx: vs.tx - 40 }));
+        break;
+      case "ArrowUp":
+        e.preventDefault();
+        setViewState(vs => ({ ...vs, ty: vs.ty + 40 }));
+        break;
+      case "ArrowDown":
+        e.preventDefault();
+        setViewState(vs => ({ ...vs, ty: vs.ty - 40 }));
+        break;
+    }
   }
 
   // Zoom buttons — centered on the viewport midpoint
@@ -410,7 +502,10 @@ export default function Playground() {
 
             {/* Zoom controls */}
             <div className="ml-auto flex items-center gap-0.5">
-              <span className="text-xs text-muted-foreground font-mono tabular-nums w-10 text-right mr-1">
+              <span
+                className="text-xs text-muted-foreground font-mono tabular-nums w-10 text-right mr-1"
+                data-testid="zoom-level"
+              >
                 {Math.round(viewState.scale * 100)}%
               </span>
               <button
@@ -443,7 +538,11 @@ export default function Playground() {
           {/* Pan / zoom canvas */}
           <div
             ref={canvasRef}
-            className="flex-1 diagram-grid overflow-hidden relative select-none"
+            tabIndex={0}
+            role="application"
+            aria-label="Diagram canvas — scroll to zoom, drag or touch to pan, arrow keys to pan, + / − to zoom by keyboard"
+            onKeyDown={handleCanvasKeyDown}
+            className="flex-1 diagram-grid overflow-hidden relative select-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/50 focus-visible:ring-inset"
             style={{ cursor: isDragging ? "grabbing" : "grab" }}
             onMouseDown={handleMouseDown}
             onMouseMove={handleMouseMove}
@@ -464,12 +563,13 @@ export default function Playground() {
               </div>
             </div>
 
-            {/* Hint — visible only at default zoom */}
-            {viewState.scale === 1 && viewState.tx === 0 && viewState.ty === 0 && (
-              <div className="absolute bottom-2 right-3 text-xs text-muted-foreground/40 font-mono pointer-events-none select-none">
-                scroll to zoom · drag to pan
-              </div>
-            )}
+            {/* Affordance hint — always visible; closes TD-016 */}
+            <div
+              className="absolute bottom-2 right-3 text-xs text-muted-foreground/40 font-mono pointer-events-none select-none"
+              data-testid="canvas-hint"
+            >
+              scroll to zoom · drag or touch to pan · +/− keys
+            </div>
           </div>
         </div>
       </div>

@@ -25,7 +25,7 @@ Items are tracked here so future maintainers and AI agents do not re-create know
 | TD-013 | Documentation | `About.tsx` decision summaries partially duplicate `docs/decisions.md` | Drift risk — one may be updated while the other isn't | **Medium** | Make `About.tsx` link to `docs/decisions.md` rather than embed summaries | Small | Open |
 | TD-014 | Versioning | ~~No GitHub releases or tags~~ | ~~No visible version history; no GitHub release notes~~ | **Medium** | Create release tags matching CHANGELOG versions | Small | **Resolved 2026-08-04** — `v0.1.0` git tag and GitHub Release created; both `package.json` files bumped from `0.0.0` to `0.1.0` |
 | TD-015 | Performance | `[...contextStack].reverse().find()` in parser inner loop | O(n²) for deeply nested pool/lane stacks | **Low** | Maintain separate `currentPool` and `currentLane` pointers | Small | Open |
-| TD-016 | UX polish | Pan/zoom controls not discoverable on first visit | Users miss interaction on complex diagrams | **Low** | Add first-visit tooltip or hint overlay | Small | Open |
+| TD-016 | UX polish | ~~Pan/zoom controls not discoverable on first visit~~ | ~~Users miss interaction on complex diagrams~~ | **Low** | Add first-visit tooltip or hint overlay | Small | **Resolved 2026-08-07** — Canvas hint now always visible (removed default-view-only condition); hint text updated to `scroll to zoom · drag or touch to pan · +/− keys`; keyboard zoom (+/=/0/arrows) and touch pan added in the same change. |
 | TD-017 | Accessibility | Per-element `aria-label` on SVG node groups deferred | Screen readers cannot announce individual nodes | **Low** | Add `aria-label` to each shape group (`<g aria-label="task: Review Order">`) | Large | Open |
 
 ---
