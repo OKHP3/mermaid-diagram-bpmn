@@ -296,6 +296,30 @@ A pure open-source plugin is unlikely to be a revenue product on its own. The pl
 **Phase D outreach completed 2026-08-05:**
 A comment was posted on Mermaid issue #7699 introducing `bpmn-beta` as a working prototype with a different DSL approach. Comment URL: https://github.com/mermaid-js/mermaid/issues/7699#issuecomment-5196155299. The comment included: repo link, live demo link, side-by-side syntax comparison, `mermaid@11.4.1` integration test reference, and three open questions inviting maintainer input before a Langium grammar port. See `app/docs/decisions.md` DEC-012 for the full execution record.
 
+Comments were also posted on issue #2623 (https://github.com/mermaid-js/mermaid/issues/2623#issuecomment-5198000488) and issue #660 (https://github.com/mermaid-js/mermaid/issues/660#issuecomment-5198000626) on the same date.
+
+**Phase D reply-state check — 2026-08-07:**
+
+Reply state for #7699, #2623, and #660 checked via GitHub API on 2026-08-07. Summary:
+
+| Issue | OKHP3 comment posted | New comments since 2026-08-05 | Maintainer reply to OKHP3? | Notes |
+|---|---|---|---|---|
+| **#7699** (DFKI proposal) | 2026-08-05 | 0 | No | Last maintainer activity: @knsv (COLLABORATOR) suggested merging with #2623 on 2026-05-28. No engagement with OKHP3 comment. |
+| **#2623** (BPMN + Notion) | 2026-08-05 | 0 | No | Last maintainer activity: @pbrolin47 (COLLABORATOR) on 2026-06-12 (see below). No engagement with OKHP3 comment. |
+| **#660** (2018 original) | 2026-08-05 | 0 | No | Dormant — last substantive comment was 2026-08-05. No engagement expected. |
+
+**Critical new intelligence since the Phase D outreach memo (2026-08-06):**
+
+1. **#7699 is formally approved.** On 2026-06-12, @pbrolin47 (COLLABORATOR) posted on #2623: *"Note: The issue [#7699] has been approved, and one contributor volunteered to create a PR for a MVP to support BPMN."* This supersedes the prior "Maintainer engagement on #7699 is zero" note in the Caveats section below. The competitive clock is running — a PR for #7699 is being actively prepared.
+
+2. **A second competing prototype exists: @derari.** GitHub user @derari posted a working bpmn prototype at `https://derari.github.io/mermaid-bpmn/editor.html` on 2026-07-25 in both #7699 and #2623. On 2026-07-31 they escalated: *"@knsv I have started using mermaid bpmn at my job and, in the process, I think I have ironed out most issues. I would be interested in contributing this as a PR."* @derari's prototype appears to use a regex-based parser (explicitly mentioned in their comment) similar to bpmn-beta's current approach.
+
+3. **@knsv engaged on #2623 in March 2026** with a community scoping request — far more substantive than previously documented. He asked the community to define the MVP BPMN element subset.
+
+4. **The competitive field is now: bpmn-beta (OKHP3), DFKI #7699 (Emrich), and @derari's prototype** — three independent BPMN-for-Mermaid implementations. The maintainers have at minimum approved the concept (#7699) and a PR volunteer is actively working on it.
+
+**Recommended next action:** Wait. Do not post a second comment on any issue until @derari's PR materializes and maintainer review reveals what syntax/approach is being favored. A second comment before a PR exists would add noise without leverage. The strategic options at that point are: (a) engage constructively on the open PR as a reviewer, (b) offer bpmn-beta's test suite and corpus as a contribution to whichever PR is moving, or (c) post a second comment with the syntax-comparison angle if the PR adopts a verbose/XML-flavored approach. Re-check reply state on or after 2026-09-07 (30 days).
+
 **Stage 2 — Engage with maintainers (60–180 days):**
 - Open a parallel Mermaid issue specifically for `bpmn-beta` if #7699 has not progressed, framed as a complementary lightweight alternative, with a working PR or working external plugin as evidence.
 - Reach out to Mermaid Chart (Knut Sveidqvist directly via the open-source repo) and the DFKI authors (Emrich, IWi/DFKI Saarbrücken) to explore syntax-convergence — open-source norms favor collaboration over forking.
@@ -318,7 +342,7 @@ A comment was posted on Mermaid issue #7699 introducing `bpmn-beta` as a working
 - **All market-research figures are vendor-funded.** Research Nester, Fortune Business Insights, Precedence Research, Grand View Research, MarketsandMarkets, and Straits Research are commercial firms whose primary product is selling reports to vendors in the markets they size. Treat all dollar figures as directional ranges, not as authoritative.
 - **Mermaid Chart's "8 million users" claim** is a company press-release figure (TechCrunch, 20 March 2024) with no independent verification; treat as a vendor claim.
 - **The Emrich & Hollax 2025 DFKI paper is not publicly available** as of the research date — it is explicitly described in issue #7699 as in preparation. No DOI or preprint URL was found via Google Scholar, arXiv, DFKI's publication index, or ResearchGate. Do not cite it as published peer-reviewed work.
-- **Maintainer engagement on #7699 is zero as of the snapshot.** This may change at any time and the strategic landscape would shift if a maintainer endorses or rejects #7699.
+- **Maintainer engagement on #7699: the issue was approved by 2026-06-12** (per @pbrolin47/COLLABORATOR on #2623) and a contributor (@derari) has volunteered to submit a PR. The prior "zero engagement" note is superseded. See Phase D reply-state check above for the current competitive picture.
 - **Mermaid star/user counts** vary across sources (~65k–78k stars; 8M users) and reflect different snapshot dates between 2024 and 2026.
 - **The BPMN "de facto standard" framing is consensus in academic and industry literature** but BPMN is not without critics; some communities (DEMO, Petri-net formalism, ArchiMate at enterprise-architecture level) treat BPMN as one notation among several.
 - **bpmn-beta has no public adoption metrics yet.** Avoid any framing that implies traction the project does not yet have.

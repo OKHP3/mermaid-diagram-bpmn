@@ -169,6 +169,7 @@ Prepare for external contribution and Mermaid engagement.
 - [ ] At least 3 real-world process examples contributed (not purchase-approval)
 - [x] Mermaid issue **#7699** engaged with prototype link — comment posted 2026-08-05: https://github.com/mermaid-js/mermaid/issues/7699#issuecomment-5196155299
 - [x] Mermaid issues **#2623** and **#660** engaged with prototype link — comments posted 2026-08-05: https://github.com/mermaid-js/mermaid/issues/2623#issuecomment-5198000488 and https://github.com/mermaid-js/mermaid/issues/660#issuecomment-5198000626
+- [x] Reply state confirmed via GitHub API — checked 2026-08-07: no maintainer replies to any OKHP3 comment on #7699, #2623, or #660. Key intelligence: (1) #7699 was formally approved by @pbrolin47/COLLABORATOR per a 2026-06-12 comment on #2623; (2) a second competitor @derari posted a working prototype and signalled PR intent on 2026-07-31; (3) recommended action is to wait until @derari's PR materialises before deciding on a second comment. Full analysis in `app/docs/competitive-landscape.md` Phase D reply-state check. Next re-check target: 2026-09-07.
 - [ ] BP-SKILL suite listed in agentskills.io directory
 - [x] Comparison matrix published: bpmn-beta vs. DFKI #7699, PlantUML, Mermaid flowchart — live at `/comparison` (2026-08-05)
 - [ ] Release notes drafted for v0.9 → v1.0
