@@ -15,6 +15,7 @@ function resolveTitle(pathname: string): string {
     '/walkthrough':                       'Walkthrough',
     '/walkthrough/purchase-approval':     'Walkthrough: Purchase Approval',
     '/walkthrough/employee-offboarding':  'Walkthrough: Employee Offboarding',
+    '/walkthrough/vendor-onboarding':     'Walkthrough: Vendor Onboarding',
   }
   if (titles[pathname]) return titles[pathname]
   if (pathname.startsWith('/skills/')) return 'Agent Skills: Skill Detail'
