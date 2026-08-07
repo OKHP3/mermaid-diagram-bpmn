@@ -194,3 +194,66 @@ The published plugin package (`@okhp3/mermaid-diagram-bpmn`) is well within the 
 | Mermaid loads only on routes that need it | not confirmed | **confirmed** | `React.lazy()` route splitting; all 579 tests pass post-change |
 | Plugin package < 200 kB min+gzip | confirmed (2026-08-06) | **re-confirmed** | ESM 5.7 kB / CJS 5.4 kB gzip |
 | Performance budget documented | not complete | **confirmed** | This section; baseline + ceilings committed |
+
+---
+
+## Visual and Mobile Regression Checks — 2026-08-07
+
+**Established by:** Task #213 (Visual and mobile regression checks)  
+**Tool:** Playwright (Chromium, headless), same installation as the host-demo E2E suite  
+**Spec file:** `app/e2e/visual-regression.spec.ts`
+
+### Surfaces and viewports covered
+
+| Page | Desktop | Mobile |
+|---|---|---|
+| Home (`/`) | 1280×800 | 375×812 |
+| Playground (`/playground`) | 1280×800 | 375×812 |
+| Agent Skills (`/skills`) | 1280×800 | 375×812 |
+
+### Two-layer check design
+
+**Layer 1 — Programmatic layout assertions (merge-blocking CI gates)**  
+These run on every push and pull request. No image baseline is required.
+
+| Assertion | Pages | Viewport |
+|---|---|---|
+| No horizontal overflow (`scrollWidth − clientWidth = 0`) | Home, Playground, Skills | Both |
+| Primary CTA / search input height ≥ 36 px | Home, Skills | Mobile |
+| Source textarea width ≥ 300 px | Playground | Mobile |
+| Key headings visible (`h1`, `data-testid="heading-*"`) | All three | Both |
+| Path cards count = 3 | Home | Both |
+| Example tab buttons present (≥ 1) | Playground | Desktop |
+| Search input `[aria-label="Search skills"]` visible | Skills | Both |
+| At least one `.forge-card` visible | Skills | Desktop |
+| Navigation present (`<nav>`) | Home | Mobile |
+
+**Layer 2 — Visual snapshot comparison (pixel diff)**  
+6 baseline PNGs are generated and committed automatically by CI on every push to `main` (`[skip ci]` commit). Pull requests compare against the committed baselines and fail if pixel diff exceeds the threshold.
+
+| Snapshot | Threshold |
+|---|---|
+| `home-desktop-linux.png` | 2 % |
+| `home-mobile-linux.png` | 2 % |
+| `playground-desktop-linux.png` | 3 % (diagram rendering variance) |
+| `playground-mobile-linux.png` | 3 % |
+| `skills-desktop-linux.png` | 2 % |
+| `skills-mobile-linux.png` | 2 % |
+
+Baseline images are stored in `app/e2e/__snapshots__/`. File names include the platform suffix (`-linux`, `-darwin`, `-win32`) to prevent cross-OS baseline conflicts.
+
+### CI job
+
+`visual-regression` job in `.github/workflows/ci.yml`:
+- **Main pushes:** runs `test:e2e:update-snapshots`, commits updated PNGs with `[skip ci]`
+- **Pull requests:** runs `test:e2e:visual` (comparison); fails on diff above threshold
+- Uploads `playwright-report/` + `__snapshots__/` as CI artifacts on failure (14-day retention)
+
+### Capability claims
+
+| Claim | Status | Notes |
+|---|---|---|
+| No horizontal overflow on Home, Playground, Skills at mobile (375 px) | **confirmed** | Programmatic assertion; CI-blocking |
+| Primary interactive controls meet minimum tap-target height | **confirmed** | ≥ 36 px; CI-blocking |
+| Visual baselines captured for 3 pages × 2 viewports | **confirmed** | 6 PNG baselines; regenerated on every main push |
+| Pixel-diff comparison blocks PRs on unexpected visual regression | **confirmed** | `maxDiffPixelRatio` 2–3 %; CI gate active on PRs |

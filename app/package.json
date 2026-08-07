@@ -10,7 +10,9 @@
     "serve": "vite preview --config vite.config.ts --host 0.0.0.0",
     "typecheck": "tsc -p tsconfig.json --noEmit",
     "test": "vitest run --config vitest.config.ts",
-    "test:e2e": "playwright test"
+    "test:e2e": "playwright test",
+    "test:e2e:visual": "playwright test e2e/visual-regression.spec.ts",
+    "test:e2e:update-snapshots": "playwright test e2e/visual-regression.spec.ts --update-snapshots"
   },
   "devDependencies": {
     "@playwright/test": "^1.62.1",

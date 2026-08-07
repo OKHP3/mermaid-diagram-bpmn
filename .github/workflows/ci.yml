@@ -111,3 +111,75 @@ jobs:
           name: playwright-report
           path: app/playwright-report/
           retention-days: 14
+
+  visual-regression:
+    name: Visual regression — mobile layout and snapshot checks
+    needs: checks
+    runs-on: ubuntu-latest
+    # Write access is needed so the job can commit updated snapshot baselines
+    # back to the repo on main-branch pushes.
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+        with:
+          # Use the GITHUB_TOKEN with write permission so git push works.
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v6
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: "24"
+          cache: "pnpm"
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Install Playwright Chromium browser
+        run: pnpm --filter @workspace/mermaid-diagram-bpmn exec playwright install chromium
+
+      - name: Build app (required before vite preview)
+        run: pnpm --filter @workspace/mermaid-diagram-bpmn run build
+
+      # ── Main branch: regenerate baselines and commit if changed ─────────────
+      # Always updating baselines on main ensures they reflect the current UI.
+      # PRs then compare against these committed baselines.
+      # The [skip ci] commit message token prevents an infinite trigger loop.
+      - name: Update visual baselines (main branch only)
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+        run: pnpm --filter @workspace/mermaid-diagram-bpmn run test:e2e:update-snapshots
+
+      - name: Commit updated baselines (main branch only)
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add app/e2e/__snapshots__/ || true
+          if ! git diff --cached --quiet; then
+            git commit -m "chore(snapshots): update visual regression baselines [skip ci]"
+            git push
+          else
+            echo "Visual baselines unchanged — nothing to commit."
+          fi
+
+      # ── Pull requests: compare against committed baselines ──────────────────
+      # Fails if any screenshot differs by more than the threshold defined in
+      # the spec (maxDiffPixelRatio: 0.02 / 0.03).
+      - name: Compare visual snapshots (pull request)
+        if: github.event_name == 'pull_request'
+        run: pnpm --filter @workspace/mermaid-diagram-bpmn run test:e2e:visual
+
+      - name: Upload visual regression report on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: visual-regression-report
+          path: |
+            app/playwright-report/
+            app/e2e/__snapshots__/
+          retention-days: 14
