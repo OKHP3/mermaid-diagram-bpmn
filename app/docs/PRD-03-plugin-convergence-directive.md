@@ -1,6 +1,15 @@
 # PRD-03: Plugin Convergence & Scope Discipline Directive
 ## BPMN for Mermaid (`OKHP3/mermaid-diagram-bpmn`)
 
+> **[ARCHIVED — executed 2026-08-04]** This directive was carried out via PRD-04 (Plugin
+> Convergence retrospective). The successor forward directive is
+> [PRD-05](PRD-05-upstream-readiness-directive.md) (Upstream Readiness & Hardening).
+> The current active cycle is
+> [PRD-06](PRD-06-product-convergence-and-distribution-experience.md) (Product Convergence
+> and Distribution Experience).
+> For release completion status, `docs/version-checklist.md` is the authoritative source
+> and supersedes all claims in this document.
+
 | Field | Value |
 |---|---|
 | Doc owner | Jamie Hill (OverKill Hill P³), audit and directive by Claude |

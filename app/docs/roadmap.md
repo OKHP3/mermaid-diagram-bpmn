@@ -34,7 +34,7 @@ See `docs/version-checklist.md` V0.2 for the full criterion list.
 
 ---
 
-## V0.3 — BP-SKILL suite (15-skill pipeline) ✅ Current (2026-08-04)
+## V0.3 — BP-SKILL suite (15-skill pipeline) ✅ Done (2026-08-04)
 
 The full lifecycle pipeline designed, documented, and surfaced in the app.
 See `docs/version-checklist.md` V0.3 for the full criterion list.

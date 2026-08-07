@@ -2,6 +2,10 @@
 
 This document is the authoritative definition of what constitutes a complete, releasable version of this project. It covers both the `bpmn-beta` DSL workstream and the BP-SKILL agent skill suite workstream. When the two disagree on version numbering, this file wins.
 
+**Authority scope.** This file supersedes all per-PRD release-state claims. The PRD lineage is:
+PRD-03 (audit directive, archived) → PRD-04 (plugin convergence, archived) → PRD-05 (upstream readiness, executed) → **PRD-06 (product convergence, current cycle)**.
+When `app/docs/roadmap.md`, `app/src/pages/About.tsx`, `README.md`, or any PRD states that a version is complete, planned, or current, this file is the ground truth. Update this file first; everything else is a derived view.
+
 ---
 
 ## How versions work

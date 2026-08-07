@@ -309,7 +309,7 @@ export default function About() {
         </h2>
         <div className="flex flex-col gap-3 max-w-2xl mb-6">
           <div className="forge-card" data-testid="card-bp-skill-suite">
-            <p className="text-sm font-semibold text-foreground mb-1">BP-SKILL v0.2 Suite</p>
+            <p className="text-sm font-semibold text-foreground mb-1">BP-SKILL v0.3 Suite</p>
             <p className="text-xs text-muted-foreground leading-relaxed">
               A companion suite of 15 agent skills covering the full bpmn-beta authoring lifecycle —
               from process discovery through publication. Designed for LLM-assisted documentation

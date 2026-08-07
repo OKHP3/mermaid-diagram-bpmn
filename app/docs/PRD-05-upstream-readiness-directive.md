@@ -10,6 +10,7 @@
 | Verified against | GitHub HEAD `1ba3518` (276 commits), re-cloned and independently run, not read from docs alone |
 | Relates to | `app/docs/prd.md` (v0.3), `docs/version-checklist.md`, `docs/strategy.md`, `app/docs/PRD-03-plugin-convergence-directive.md`, the informal "PRD-04" work (package boundary + demo route, referenced in commits and `docs/capability-ledger.md` but never written as its own document — Phase A below fixes that) |
 | Supersedes | Nothing formally. Corrects one claim from the PRD-03 verification pass (Section 1a below). |
+| Succeeded by | [PRD-06](PRD-06-product-convergence-and-distribution-experience.md) is the current active build directive (2026-08-06). Upstream readiness items from this document remain valid; PRD-06 adds the product convergence and distribution experience scope. |
 
 ---
 

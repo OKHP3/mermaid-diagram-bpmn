@@ -6,6 +6,11 @@
 > **Status:** Complete — all five phases merged to `main` 2026-08-04.
 > **Evidence summary:** See `docs/mermaid-compatibility.md` for the full evidence-tier table
 > and `docs/capability-ledger.md` for the pre-phase-0 baseline.
+>
+> **[ARCHIVED]** This document records work executed under the [PRD-03](PRD-03-plugin-convergence-directive.md)
+> mandate. The successor forward directive is [PRD-05](PRD-05-upstream-readiness-directive.md).
+> The current active cycle is [PRD-06](PRD-06-product-convergence-and-distribution-experience.md).
+> For release completion status, `docs/version-checklist.md` is the authoritative source.
 
 ---
 

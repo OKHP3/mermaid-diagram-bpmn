@@ -25,7 +25,7 @@ Use this checklist before tagging and deploying any release.
 
 ## Pre-release: tests and typecheck
 
-- [ ] `pnpm --filter @workspace/mermaid-diagram-bpmn run test` — all 58 tests pass
+- [ ] `pnpm --filter @workspace/mermaid-diagram-bpmn run test` — all tests pass (see `docs/version-checklist.md` for current count; 432 as of 2026-08-06)
 - [ ] `pnpm --filter @workspace/mermaid-diagram-bpmn run typecheck` — zero errors
 - [ ] No `console.log` in any lib module (test files excepted)
 
@@ -73,7 +73,7 @@ Use this checklist before tagging and deploying any release.
 
 ### Test C — Error handling
 - [ ] Type invalid syntax into playground
-- [ ] Error message displays (not a blank canvas) — *Note: this gap exists until BL-003 is fixed*
+- [ ] Error message displays (not a blank canvas) — *(TD-004 resolved 2026-08-05: parse-error badge and detail bar render on invalid syntax; verified via `data-testid="text-parse-error"` and `data-testid="text-parse-error-detail"` in `Playground.tsx`)*
 
 ### Test D — All 5 examples
 - [ ] Load each of the 5 examples from the selector
