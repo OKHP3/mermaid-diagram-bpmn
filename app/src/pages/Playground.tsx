@@ -10,6 +10,7 @@ import {
   Copy,
   Check,
   Download,
+  FileDown,
 } from "lucide-react";
 import { parse } from "@/lib/bpmn-parser";
 import { StatusRibbon } from "@/components/StatusRibbon";
@@ -51,6 +52,13 @@ export default function Playground() {
   const [downloadState, setDownloadState] = useState<"idle" | "empty">("idle");
   const downloadTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
+  // SVG export state: 'idle' | 'done'
+  const [svgExportState, setSvgExportState] = useState<"idle" | "done">("idle");
+  const svgExportTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  // Ref for the container holding the rendered BpmnRenderer SVG
+  const svgContainerRef = useRef<HTMLDivElement>(null);
+
   const parseError = getParseError(source);
   const activeExampleDef = BPMN_EXAMPLES.find(e => e.id === activeExample);
 
@@ -85,6 +93,7 @@ export default function Playground() {
     return () => {
       if (copyTimeoutRef.current) clearTimeout(copyTimeoutRef.current);
       if (downloadTimeoutRef.current) clearTimeout(downloadTimeoutRef.current);
+      if (svgExportTimeoutRef.current) clearTimeout(svgExportTimeoutRef.current);
     };
   }, []);
 
@@ -159,6 +168,27 @@ export default function Playground() {
       setCopyState("error");
       copyTimeoutRef.current = setTimeout(() => setCopyState("idle"), 2000);
     }
+  }
+
+  function handleExportSvg() {
+    if (svgExportTimeoutRef.current) clearTimeout(svgExportTimeoutRef.current);
+    const svgEl = svgContainerRef.current?.querySelector("svg");
+    if (!svgEl) return;
+    const serializer = new XMLSerializer();
+    const svgStr = serializer.serializeToString(svgEl);
+    const slug = activeExampleDef ? toFilenameSlug(activeExampleDef.name) : "diagram";
+    const filename = `${slug}.svg`;
+    const blob = new Blob([svgStr], { type: "image/svg+xml" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    setSvgExportState("done");
+    svgExportTimeoutRef.current = setTimeout(() => setSvgExportState("idle"), 2000);
   }
 
   function handleDownload() {
@@ -355,6 +385,29 @@ export default function Playground() {
               </span>
             )}
 
+            {/* SVG export button */}
+            <button
+              onClick={handleExportSvg}
+              disabled={!!parseError || !source.trim()}
+              aria-label={
+                svgExportState === "done"
+                  ? "SVG downloaded"
+                  : "Download rendered diagram as SVG file"
+              }
+              data-testid="button-export-svg"
+              title="Download rendered diagram as SVG"
+              className={`flex items-center gap-1 px-2 py-1 rounded text-xs transition-colors ${
+                !!parseError || !source.trim()
+                  ? "text-muted-foreground/40 cursor-not-allowed"
+                  : svgExportState === "done"
+                    ? "text-emerald-600 dark:text-emerald-400"
+                    : "text-muted-foreground hover:text-foreground hover:bg-muted/70"
+              }`}
+            >
+              <FileDown size={13} />
+              <span>{svgExportState === "done" ? "Saved!" : "SVG"}</span>
+            </button>
+
             {/* Zoom controls */}
             <div className="ml-auto flex items-center gap-0.5">
               <span className="text-xs text-muted-foreground font-mono tabular-nums w-10 text-right mr-1">
@@ -406,7 +459,9 @@ export default function Playground() {
                 height: "100%",
               }}
             >
-              <BpmnRenderer source={source} />
+              <div ref={svgContainerRef} style={{ width: "100%", height: "100%" }}>
+                <BpmnRenderer source={source} />
+              </div>
             </div>
 
             {/* Hint — visible only at default zoom */}
