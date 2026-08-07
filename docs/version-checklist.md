@@ -16,7 +16,10 @@ Version numbers follow `MAJOR.MINOR.PATCH`:
 - **1.0** — the first stable, contribution-ready release. Targets upstream Mermaid PR and BP-SKILL npm package.
 - **PATCH** — bug fixes and non-breaking content corrections within a minor version.
 
-A version is **complete** when every criterion in its checklist is checked. A version is **current** when it is the highest complete version. The current version is surfaced in the UI at `AgentSkills.tsx` line 120 and in the frontmatter of all SKILL.md files.
+A version is **complete** when every criterion in its checklist is checked.
+A version is **`[CURRENT]`** when it is the lowest in-progress version — the active focus of development.
+Versions may be completed out of sequence when independent workstreams converge on different timelines: for example, V0.6 (Mermaid plugin packaging) was completed 2026-08-04 before V0.4 (Content and interactivity) because the plugin path was on the critical upstream engagement track. V0.4 therefore remains `[CURRENT]` (lowest incomplete) while V0.6 is `[DONE]`.
+The `[CURRENT]` label is surfaced in the UI at `AgentSkills.tsx` and in the frontmatter of all SKILL.md files.
 
 ---
 
