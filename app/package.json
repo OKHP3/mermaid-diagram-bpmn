@@ -25,6 +25,7 @@
     "@types/react": "catalog:",
     "@types/react-dom": "catalog:",
     "@vitejs/plugin-react": "catalog:",
+    "axe-core": "^4.13.0",
     "clsx": "catalog:",
     "fflate": "catalog:",
     "happy-dom": "^20.10.6",
