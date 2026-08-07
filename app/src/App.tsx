@@ -20,6 +20,7 @@ const SkillDetail             = lazy(() => import("@/pages/SkillDetail"));
 const SkillsWalkthrough       = lazy(() => import("@/pages/SkillsWalkthrough"));
 const PurchaseApprovalExample    = lazy(() => import("@/pages/PurchaseApprovalExample"));
 const EmployeeOffboardingExample = lazy(() => import("@/pages/EmployeeOffboardingExample"));
+const VendorOnboardingExample    = lazy(() => import("@/pages/VendorOnboardingExample"));
 const PluginInstallation      = lazy(() => import("@/pages/PluginInstallation"));
 const MermaidHostDemo         = lazy(() => import("@/pages/MermaidHostDemo"));
 const SyntaxComparison        = lazy(() => import("@/pages/SyntaxComparison"));
@@ -60,6 +61,7 @@ function Router() {
           <Route path="/privacy" component={Privacy} />
           <Route path="/walkthrough/purchase-approval" component={PurchaseApprovalExample} />
           <Route path="/walkthrough/employee-offboarding" component={EmployeeOffboardingExample} />
+          <Route path="/walkthrough/vendor-onboarding" component={VendorOnboardingExample} />
           <Route path="/walkthrough" component={SkillsWalkthrough} />
           <Route path="/skills/:skillId" component={SkillDetail} />
           <Route path="/skills" component={AgentSkills} />

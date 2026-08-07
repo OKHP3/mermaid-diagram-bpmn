@@ -1,5 +1,6 @@
 import { PURCHASE_APPROVAL_STEPS } from "./purchase-approval-steps";
 import { EMPLOYEE_OFFBOARDING_STEPS } from "./employee-offboarding-steps";
+import { VENDOR_ONBOARDING_STEPS } from "./vendor-onboarding-steps";
 
 export interface WorkedExample {
   slug: string;
@@ -29,5 +30,11 @@ export const WORKED_EXAMPLES: WorkedExample[] = [
     title: "Employee Offboarding",
     path: "/walkthrough/employee-offboarding",
     stepSkillIds: EMPLOYEE_OFFBOARDING_STEPS.map((s) => s.skillId),
+  },
+  {
+    slug: "vendor-onboarding",
+    title: "Vendor Onboarding",
+    path: "/walkthrough/vendor-onboarding",
+    stepSkillIds: VENDOR_ONBOARDING_STEPS.map((s) => s.skillId),
   },
 ];

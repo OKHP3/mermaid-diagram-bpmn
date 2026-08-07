@@ -135,6 +135,12 @@ export default function PurchaseApprovalExample() {
             <Link href="/skills" className="forge-btn-primary inline-flex items-center gap-2">
               Browse All Skills <ArrowRight size={14} />
             </Link>
+            <Link href="/walkthrough/employee-offboarding" className="forge-btn-outline inline-flex items-center gap-2">
+              Employee Offboarding Example <ArrowRight size={14} />
+            </Link>
+            <Link href="/walkthrough/vendor-onboarding" className="forge-btn-outline inline-flex items-center gap-2">
+              Vendor Onboarding Example <ArrowRight size={14} />
+            </Link>
             <Link href="/walkthrough" className="forge-btn-outline inline-flex items-center gap-2">
               <ArrowLeft size={14} /> Walkthrough Table
             </Link>
