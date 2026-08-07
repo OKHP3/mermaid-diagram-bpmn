@@ -15,6 +15,7 @@
 
 import { BookOpen, FileText, Package, ArrowRight } from "lucide-react";
 import { ZipDownloadButton } from "./ZipDownloadButton";
+import { trackEvent } from "@/lib/analytics";
 
 interface StartHerePanelProps {
   /** Called when the user clicks "Browse all 15 skills". */
@@ -237,6 +238,7 @@ export function StartHerePanel({ onBrowseAll }: StartHerePanelProps) {
               label="Download Starter Pack"
               variant="primary"
               readme={STARTER_README}
+              onDownloaded={() => trackEvent('starter-pack-download')}
             />
           </div>
         </div>
