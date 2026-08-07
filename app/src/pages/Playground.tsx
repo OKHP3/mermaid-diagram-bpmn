@@ -1,7 +1,16 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 import { BpmnRenderer } from "@/lib/bpmn-renderer";
 import { BPMN_EXAMPLES, DEFAULT_EXAMPLE_ID } from "@/lib/bpmn-examples";
-import { AlertCircle, FlaskConical, ZoomIn, ZoomOut, Maximize2 } from "lucide-react";
+import {
+  AlertCircle,
+  FlaskConical,
+  ZoomIn,
+  ZoomOut,
+  Maximize2,
+  Copy,
+  Check,
+  Download,
+} from "lucide-react";
 import { parse } from "@/lib/bpmn-parser";
 import { StatusRibbon } from "@/components/StatusRibbon";
 
@@ -20,10 +29,27 @@ function getParseError(source: string): string | null {
   }
 }
 
+/** Derive a safe filename slug from an example name or fall back to "diagram". */
+function toFilenameSlug(name: string): string {
+  return name
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "")
+    || "diagram";
+}
+
 export default function Playground() {
   const defaultExample = BPMN_EXAMPLES.find(e => e.id === DEFAULT_EXAMPLE_ID) || BPMN_EXAMPLES[0];
   const [source, setSource] = useState(defaultExample.source);
   const [activeExample, setActiveExample] = useState<string | null>(defaultExample.id);
+
+  // copy state: 'idle' | 'copied' | 'error'
+  const [copyState, setCopyState] = useState<"idle" | "copied" | "error">("idle");
+  const copyTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  // download feedback state: 'idle' | 'empty'
+  const [downloadState, setDownloadState] = useState<"idle" | "empty">("idle");
+  const downloadTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const parseError = getParseError(source);
   const activeExampleDef = BPMN_EXAMPLES.find(e => e.id === activeExample);
@@ -52,6 +78,14 @@ export default function Playground() {
     };
     el.addEventListener("wheel", handler, { passive: false });
     return () => el.removeEventListener("wheel", handler);
+  }, []);
+
+  // Cleanup timeouts on unmount
+  useEffect(() => {
+    return () => {
+      if (copyTimeoutRef.current) clearTimeout(copyTimeoutRef.current);
+      if (downloadTimeoutRef.current) clearTimeout(downloadTimeoutRef.current);
+    };
   }, []);
 
   function handleMouseDown(e: React.MouseEvent) {
@@ -106,7 +140,58 @@ export default function Playground() {
     setActiveExample(null);
   }
 
+  // ── Copy / Download handlers ────────────────────────────────────────────────
+
+  async function handleCopy() {
+    if (copyTimeoutRef.current) clearTimeout(copyTimeoutRef.current);
+
+    if (!source.trim()) {
+      setCopyState("error");
+      copyTimeoutRef.current = setTimeout(() => setCopyState("idle"), 2000);
+      return;
+    }
+
+    try {
+      await navigator.clipboard.writeText(source);
+      setCopyState("copied");
+      copyTimeoutRef.current = setTimeout(() => setCopyState("idle"), 2000);
+    } catch {
+      setCopyState("error");
+      copyTimeoutRef.current = setTimeout(() => setCopyState("idle"), 2000);
+    }
+  }
+
+  function handleDownload() {
+    if (downloadTimeoutRef.current) clearTimeout(downloadTimeoutRef.current);
+    if (!source.trim()) {
+      setDownloadState("empty");
+      downloadTimeoutRef.current = setTimeout(() => setDownloadState("idle"), 2000);
+      return;
+    }
+    const slug = activeExampleDef ? toFilenameSlug(activeExampleDef.name) : "diagram";
+    const filename = `${slug}.mmd`;
+    const blob = new Blob([source], { type: "text/plain" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  }
+
   // ── Render ──────────────────────────────────────────────────────────────────
+
+  const copyLabel =
+    copyState === "copied" ? "Copied!" : copyState === "error" ? "Failed" : "Copy";
+  const copyAriaLabel =
+    copyState === "copied"
+      ? "Copied to clipboard"
+      : copyState === "error"
+        ? "Copy failed — clipboard access denied or source is empty"
+        : "Copy source to clipboard";
+
   return (
     <div className="flex flex-col flex-1 h-full">
 
@@ -168,17 +253,77 @@ export default function Playground() {
         <div
           className="flex flex-col md:w-1/2 border-b md:border-b-0 md:border-r min-h-[280px] md:min-h-0 border-[var(--okh-header-border)]"
         >
-          <div className="forge-code-panel-tab flex items-center justify-between px-4 py-2 border-b">
-            <span className="text-xs font-mono">
-              source.bpmn-beta
+          {/* Source panel toolbar */}
+          <div className="forge-code-panel-tab flex items-center gap-2 px-4 py-2 border-b">
+            <span className="text-xs font-mono shrink-0">source.bpmn-beta</span>
+
+            {/* Accessible live region for copy state announcements */}
+            <span
+              role="status"
+              aria-live="polite"
+              aria-atomic="true"
+              className="sr-only"
+              data-testid="copy-live-region"
+            >
+              {copyState === "copied"
+                ? "Source copied to clipboard"
+                : copyState === "error"
+                  ? "Copy failed. Clipboard access denied or source is empty."
+                  : ""}
             </span>
-            {parseError && (
-              <span className="flex items-center gap-1 text-xs forge-parse-error-text" data-testid="text-parse-error">
-                <AlertCircle size={11} />
-                Parse error
-              </span>
-            )}
+
+            <div className="ml-auto flex items-center gap-1">
+              {/* Copy button */}
+              <button
+                onClick={handleCopy}
+                aria-label={copyAriaLabel}
+                data-testid="button-copy-source"
+                title="Copy source to clipboard"
+                className={`flex items-center gap-1 px-2 py-1 rounded text-xs transition-colors ${
+                  copyState === "copied"
+                    ? "text-emerald-600 dark:text-emerald-400"
+                    : copyState === "error"
+                      ? "text-red-500 dark:text-red-400"
+                      : "text-muted-foreground hover:text-foreground hover:bg-muted/70"
+                }`}
+              >
+                {copyState === "copied" ? <Check size={11} /> : <Copy size={11} />}
+                <span>{copyLabel}</span>
+              </button>
+
+              {/* Download button */}
+              <button
+                onClick={handleDownload}
+                aria-label={
+                  downloadState === "empty"
+                    ? "Nothing to download — source is empty"
+                    : "Download source as .mmd file"
+                }
+                data-testid="button-download-mmd"
+                title="Download as .mmd file"
+                className={`flex items-center gap-1 px-2 py-1 rounded text-xs transition-colors ${
+                  downloadState === "empty"
+                    ? "text-amber-500 dark:text-amber-400"
+                    : "text-muted-foreground hover:text-foreground hover:bg-muted/70"
+                }`}
+              >
+                <Download size={11} />
+                <span>{downloadState === "empty" ? "Empty" : ".mmd"}</span>
+              </button>
+
+              {/* Parse error badge */}
+              {parseError && (
+                <span
+                  className="flex items-center gap-1 text-xs forge-parse-error-text"
+                  data-testid="text-parse-error"
+                >
+                  <AlertCircle size={11} />
+                  Parse error
+                </span>
+              )}
+            </div>
           </div>
+
           <textarea
             className="flex-1 p-4 text-sm resize-none focus-visible:outline-none leading-relaxed code-area forge-code-panel"
             value={source}
