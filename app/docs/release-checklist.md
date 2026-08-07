@@ -25,7 +25,7 @@ Use this checklist before tagging and deploying any release.
 
 ## Pre-release: tests and typecheck
 
-- [ ] `pnpm --filter @workspace/mermaid-diagram-bpmn run test` — all tests pass (see `docs/version-checklist.md` for current count; 432 as of 2026-08-06)
+- [ ] `pnpm --filter @workspace/mermaid-diagram-bpmn run test` — all tests pass (see `docs/version-checklist.md` for current count; 489 as of 2026-08-07)
 - [ ] `pnpm --filter @workspace/mermaid-diagram-bpmn run typecheck` — zero errors
 - [ ] No `console.log` in any lib module (test files excepted)
 
@@ -73,7 +73,7 @@ Use this checklist before tagging and deploying any release.
 
 ### Test C — Error handling
 - [ ] Type invalid syntax into playground
-- [ ] Error message displays (not a blank canvas) — *(TD-004 resolved 2026-08-05: parse-error badge and detail bar render on invalid syntax; verified via `data-testid="text-parse-error"` and `data-testid="text-parse-error-detail"` in `Playground.tsx`)*
+- [ ] Error message displays (not a blank canvas) — *(TD-004 resolved 2026-08-05; hardened 2026-08-07: parse-error badge (`data-testid="text-parse-error"`) and accessible detail bar (`role="alert"`, `aria-live="polite"`, `data-testid="text-parse-error-detail"`) render on invalid syntax; line number is carried from `ParseError.line` and surfaced in the message string and via `data-parse-error-line` attribute)*
 
 ### Test D — All 5 examples
 - [ ] Load each of the 5 examples from the selector

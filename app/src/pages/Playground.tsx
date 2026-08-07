@@ -12,21 +12,33 @@ import {
   Download,
   FileDown,
 } from "lucide-react";
-import { parse } from "@/lib/bpmn-parser";
+import { parse, ParseError } from "@/lib/bpmn-parser";
 import { StatusRibbon } from "@/components/StatusRibbon";
 
 const MIN_SCALE = 0.15;
 const MAX_SCALE = 8;
 
-function getParseError(source: string): string | null {
+interface ErrorInfo {
+  /** Human-readable error message; already contains "Line N: " prefix when the
+   *  parser knows the offending line. */
+  message: string;
+  /** 1-based source line number when a `ParseError` carries it; undefined
+   *  for non-positional errors (e.g. "no nodes found"). */
+  line?: number;
+}
+
+function getParseError(source: string): ErrorInfo | null {
   try {
     const db = parse(source);
     if (db.getNodes().length === 0 && source.trim().length > 10) {
-      return "No nodes found. Check your syntax — each node must be on its own line.";
+      return { message: "No nodes found. Check your syntax — each node must be on its own line." };
     }
     return null;
   } catch (e) {
-    return (e as Error).message;
+    if (e instanceof ParseError) {
+      return { message: e.message, line: e.line };
+    }
+    return { message: (e as Error).message };
   }
 }
 
@@ -456,10 +468,14 @@ export default function Playground() {
           />
           {parseError && (
             <div
+              role="alert"
+              aria-live="polite"
+              aria-atomic="true"
               className="px-4 py-2 border-t text-xs font-mono forge-parse-error-bar"
               data-testid="text-parse-error-detail"
+              {...(parseError.line != null ? { "data-parse-error-line": parseError.line } : {})}
             >
-              {parseError}
+              {parseError.message}
             </div>
           )}
         </div>
