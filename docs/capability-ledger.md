@@ -141,4 +141,56 @@ The production build emits a chunk-size warning: the largest chunk (`index-*.js`
 |---|---|
 | npm published | `@okhp3/mermaid-diagram-bpmn@0.1.1` confirmed live on registry 2026-08-06. README install instructions functional. |
 | Integration test runs under `securityLevel: "loose"` | Required by happy-dom's SVG parser limitation. Resolved in browser: automated Playwright E2E (`app/e2e/host-demo.spec.ts`) runs against a real Chromium DOM with default securityLevel ('strict') and all diagrams render correctly. |
-| App main bundle >500 kB | Mermaid is bundled into the initial load. Lazy-loading tracked in Task #212. |
+| App main bundle >500 kB | **Resolved 2026-08-07** — route-level lazy-loading implemented (Task #212). Main initial chunk reduced from 657 kB / 186 kB gzip to 232 kB / 73 kB gzip. Mermaid is now deferred to the `/mermaid-host-demo` route chunk only. |
+
+---
+
+## Performance Budget — 2026-08-07
+
+**Established by:** Task #212 (Performance budget and Mermaid lazy-loading)  
+**Environment:** Linux (Replit), Vite 8.1.4, pnpm 10.26.1, Node.js 24.13.0  
+**Build command:** `pnpm --filter @workspace/mermaid-diagram-bpmn run build`
+
+### Mermaid lazy-loading
+
+Before this task, `MermaidHostDemo.tsx` imported `mermaid` statically. Because `App.tsx` imported `MermaidHostDemo` statically, Mermaid and all its diagram sub-chunks (cytoscape, katex, sequenceDiagram, etc.) were included in every user's initial page load — even on routes that never render a diagram.
+
+**Fix:** All routes in `app/src/App.tsx` except `Home` are now loaded via `React.lazy()` + `Suspense`. Vite splits each lazy route into its own chunk at build time. Mermaid is only downloaded when a user navigates to `/mermaid-host-demo`.
+
+### Bundle size — baseline vs. after (min, no gzip unless noted)
+
+| Chunk | Before (2026-08-07) | After (2026-08-07) | Notes |
+|---|---|---|---|
+| `index-*.js` (main initial chunk) | 657.00 kB / **186 kB gzip** | 232.74 kB / **73 kB gzip** | −61% gzip; no mermaid on initial load |
+| `src-*.js` (app source) | bundled into index | 171.26 kB / 44 kB gzip | split out by lazy-loading |
+| `MermaidHostDemo-*.js` | bundled into index | 39.89 kB / 13.5 kB gzip | deferred; only loaded on `/mermaid-host-demo` |
+| Mermaid diagram sub-chunks (sum) | bundled into index | ~1 900 kB / ~650 kB gzip | deferred with MermaidHostDemo |
+| CSS | 82.71 kB / 13.4 kB gzip | 82.71 kB / 13.4 kB gzip | unchanged |
+
+### Plugin package size
+
+The published plugin package (`@okhp3/mermaid-diagram-bpmn`) is well within the <200 kB min+gzip NFR:
+
+| Format | Minified | Gzip |
+|---|---|---|
+| ESM (`dist/index.mjs`) | 20.0 kB | **5.7 kB** |
+| CJS (`dist/index.cjs`) | 16.7 kB | **5.4 kB** |
+
+### Performance budget (ceilings)
+
+| Metric | Ceiling | Measured | Status |
+|---|---|---|---|
+| Initial JS bundle (`index-*.js`) gzip | ≤ 150 kB | 73 kB | ✅ PASS |
+| Plugin ESM gzip | < 200 kB | 5.7 kB | ✅ PASS |
+| Plugin CJS gzip | < 200 kB | 5.4 kB | ✅ PASS |
+| Mermaid on non-diagram routes | 0 kB (deferred) | 0 kB | ✅ PASS |
+
+**Budget ceiling rationale:** The 150 kB gzip ceiling for the initial bundle reflects the current measured 73 kB with ~2× headroom for future route/component additions. If the initial chunk approaches 150 kB gzip, revisit whether any further route code can be deferred.
+
+### Capability claims updated
+
+| Claim | Previous status | New status | Notes |
+|---|---|---|---|
+| Mermaid loads only on routes that need it | not confirmed | **confirmed** | `React.lazy()` route splitting; all 579 tests pass post-change |
+| Plugin package < 200 kB min+gzip | confirmed (2026-08-06) | **re-confirmed** | ESM 5.7 kB / CJS 5.4 kB gzip |
+| Performance budget documented | not complete | **confirmed** | This section; baseline + ceilings committed |
