@@ -30,7 +30,7 @@ PRD-03 flagged that the Mermaid plugin integration had gone unverified for nine 
 
 **One live fact that changes the plan:** Mermaid issue #7699 (the DFKI BPMN proposal that `bpmn-beta` has been positioned against since DEC-005/DEC-012) has moved since the project's last research pass. It's now labeled `Status: Approved`, `Required Grooming`, `Type: New Diagram`, `Contributor needed`. No PR is linked, and there's no visible further activity from the original proposer beyond the May comment. Translation: Mermaid's maintainers have approved the *concept* of a BPMN diagram type, nobody has landed code yet, and the seat is open. That's a real, time-sensitive opening, and it changes the sequencing recommendation in Section 4.
 
-**One real gap remains, and it's cosmetic, not substantive:** `docs/version-checklist.md`'s own V0.6 section (Mermaid plugin packaging) still shows every box unchecked and status `[PLANNED]`, while `app/docs/roadmap.md` says "V0.6 Done, 2026-08-04, via PRD-04." Given everything verified above, the work supports checking those boxes. It reads like the team updated `roadmap.md` and the debt register but forgot to flip `version-checklist.md`'s own checklist for V0.6. Small, but `version-checklist.md` is the file that says it wins when the two disagree, so it should be corrected, not the other way around.
+**One real gap identified (now resolved — Phase A):** At the time of writing, `docs/version-checklist.md`'s V0.6 section still showed every box unchecked and status `[PLANNED]`, while `app/docs/roadmap.md` said "V0.6 Done, 2026-08-04, via PRD-04." Phase A corrected this: `docs/version-checklist.md` V0.6 is now `[DONE]` with inline evidence citations, and `app/docs/PRD-04-plugin-convergence.md` exists as the retroactive record. `docs/version-checklist.md` is the authoritative source; this document defers to it.
 
 ---
 
@@ -50,8 +50,8 @@ PRD-03 flagged that the Mermaid plugin integration had gone unverified for nine 
 | R10 | `version-checklist.md` V0.6 checkboxes vs `roadmap.md`'s "Done" claim | **Resolved 2026-08-04** (Phase A) | `docs/version-checklist.md` V0.6 now shows `[DONE]` with inline evidence citations; `app/docs/roadmap.md` defers to version-checklist per DEC-021 |
 | R11 | "PRD-04" has no physical document | **Resolved 2026-08-04** (Phase A) | `app/docs/PRD-04-plugin-convergence.md` created — retrospective record of all five plugin-convergence phases |
 | R12 | Mermaid issue #7699 status | **Changed since last research pass** | Live fetch: `Status: Approved`, `Required Grooming`, no linked PR, `Contributor needed` label present |
-| R13 | Bundle size | **Better than target, undocumented** | Real build output: 19.63 kB / 5.68 kB gzip (mjs), 16.42 kB / 5.20 kB gzip (cjs) — comfortably under both the original NFR (<200 kB) and the V0.8 target (<50 kB gzip), but `version-checklist.md` V0.8 still shows this unchecked |
-| R14 | `CODE_OF_CONDUCT.md` | **Missing** | Named in V0.8's checklist, not present in repo root |
+| R13 | Bundle size | **Resolved 2026-08-04** (Phase A) | `docs/version-checklist.md` V0.8 bundle-size box now checked; build output 19.63 kB / 5.68 kB gzip (mjs), 16.42 kB / 5.20 kB gzip (cjs) — under both the <200 kB NFR and <50 kB gzip V0.8 target |
+| R14 | `CODE_OF_CONDUCT.md` | **Resolved 2026-08-04** (Phase A) | `CODE_OF_CONDUCT.md` added to repo root; V0.8 checklist item confirmed |
 
 ---
 
