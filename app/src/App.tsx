@@ -24,6 +24,7 @@ const PluginInstallation      = lazy(() => import("@/pages/PluginInstallation"))
 const MermaidHostDemo         = lazy(() => import("@/pages/MermaidHostDemo"));
 const SyntaxComparison        = lazy(() => import("@/pages/SyntaxComparison"));
 const ReleasePage             = lazy(() => import("@/pages/ReleasePage"));
+const Privacy                 = lazy(() => import("@/pages/Privacy"));
 const NotFound                = lazy(() => import("@/pages/not-found"));
 
 /** Minimal fallback shown while a lazy route chunk is downloading. */
@@ -56,6 +57,7 @@ function Router() {
           <Route path="/mermaid-host-demo" component={MermaidHostDemo} />
           <Route path="/comparison" component={SyntaxComparison} />
           <Route path="/release" component={ReleasePage} />
+          <Route path="/privacy" component={Privacy} />
           <Route path="/walkthrough/purchase-approval" component={PurchaseApprovalExample} />
           <Route path="/walkthrough/employee-offboarding" component={EmployeeOffboardingExample} />
           <Route path="/walkthrough" component={SkillsWalkthrough} />

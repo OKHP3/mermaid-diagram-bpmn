@@ -16,6 +16,7 @@ import { ZipDownloadButton } from "@/components/skills/ZipDownloadButton";
 import { DownloadButton } from "@/components/skills/DownloadButton";
 import { ExternalLinkAnchor } from "@/components/ExternalLinkAnchor";
 import { StartHerePanel } from "@/components/skills/StartHerePanel";
+import { trackEvent } from "@/lib/analytics";
 
 // Derived once at module load — update automatically when SKILLS changes.
 const CORE_COUNT = SKILLS.filter((s) => s.status === "core").length;
@@ -211,6 +212,7 @@ export default function AgentSkills() {
             label="Download the Suite"
             variant="outline"
             readme={SUITE_README}
+          onDownloaded={() => trackEvent('suite-download')}
           />
           <a
             href="https://agentskills.io"
@@ -403,6 +405,7 @@ export default function AgentSkills() {
               filename={CONTEXT_PACK_FILENAME}
               label="Download context/ Template Pack"
               variant="outline"
+              onDownloaded={() => trackEvent('starter-pack-download')}
               readme={`# BP-SKILL v0.3 — Context / Variable Layer Templates\n\nBuilt by OverKill Hill P³™ — overkillhill.com\nSource: github.com/OKHP3/mermaid-diagram-bpmn\nLicensed MIT (code) / CC-BY-4.0 (documentation)\n`}
             />
           </div>

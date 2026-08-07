@@ -13,6 +13,8 @@ interface ZipDownloadButtonProps {
   className?: string;
   variant?: "primary" | "outline";
   readme?: string;
+  /** Called once after a successful download completes. Use for analytics. */
+  onDownloaded?: () => void;
 }
 
 export function ZipDownloadButton({
@@ -22,6 +24,7 @@ export function ZipDownloadButton({
   className = "",
   variant = "primary",
   readme,
+  onDownloaded,
 }: ZipDownloadButtonProps) {
   const [loading, setLoading] = useState(false);
   const [progress, setProgress] = useState(0);
@@ -77,6 +80,7 @@ export function ZipDownloadButton({
           a.click();
           a.remove();
           URL.revokeObjectURL(href);
+          onDownloaded?.();
           resolve();
         });
       });

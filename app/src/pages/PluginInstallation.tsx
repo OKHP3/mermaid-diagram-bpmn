@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { ExternalLink, Copy, Check, AlertCircle } from "lucide-react";
 import { MERMAID_VERSION_TARGET } from "@/lib/bpmn-plugin";
+import { trackEvent } from "@/lib/analytics";
 
 // ── npm publication status ────────────────────────────────────────────────────
 // Confirmed published: npm view @okhp3/mermaid-diagram-bpmn returns 0.1.1.
@@ -49,10 +50,13 @@ function CodeBlock({
   code,
   language = "bash",
   testId,
+  onCopy,
 }: {
   code: string;
   language?: string;
   testId?: string;
+  /** Called after a successful clipboard copy. Use for analytics. */
+  onCopy?: () => void;
 }) {
   const [copied, setCopied] = useState(false);
 
@@ -60,6 +64,7 @@ function CodeBlock({
     navigator.clipboard.writeText(code).then(() => {
       setCopied(true);
       setTimeout(() => setCopied(false), 1800);
+      onCopy?.();
     });
   }
 
@@ -165,6 +170,7 @@ export default function PluginInstallation() {
             language="bash"
             testId="code-install"
             code={`npm install @okhp3/mermaid-diagram-bpmn\nnpm install mermaid`}
+            onCopy={() => trackEvent('plugin-copy')}
           />
         ) : (
           <div className="rounded-lg border border-amber-200 dark:border-amber-900/50 bg-amber-50 dark:bg-amber-950/20 px-4 py-3 text-sm">

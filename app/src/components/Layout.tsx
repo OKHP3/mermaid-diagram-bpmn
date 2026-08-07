@@ -401,8 +401,8 @@ export function Layout({ children }: { children: React.ReactNode }) {
             </a>
           </span>
 
-          {/* Right — built-with */}
-          <span className="forge-footer-slug">
+          {/* Right — built-with + privacy */}
+          <span className="forge-footer-slug flex items-center gap-3">
             Built with{" "}
             <a
               href="https://replit.com/refer/overkillhillp3/"
@@ -413,6 +413,14 @@ export function Layout({ children }: { children: React.ReactNode }) {
             >
               Replit
             </a>
+            <span className="text-muted-foreground/30" aria-hidden="true">·</span>
+            <Link
+              href="/privacy"
+              className="text-muted-foreground/60 hover:text-foreground transition-colors"
+              data-testid="link-privacy-notice"
+            >
+              Privacy
+            </Link>
           </span>
         </div>
       </footer>

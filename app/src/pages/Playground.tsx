@@ -23,6 +23,7 @@ import {
 import { parse, ParseError } from "@/lib/bpmn-parser";
 import { lint } from "@/lib/bpmn-lint";
 import type { LintWarning } from "@/lib/bpmn-lint";
+import { trackEvent } from "@/lib/analytics";
 import { StatusRibbon } from "@/components/StatusRibbon";
 
 const MIN_SCALE = 0.15;
@@ -362,6 +363,7 @@ export default function Playground() {
     URL.revokeObjectURL(url);
     setSvgExportState("done");
     svgExportTimeoutRef.current = setTimeout(() => setSvgExportState("idle"), 2000);
+    trackEvent('playground-export-svg');
   }
 
   function handleDownload() {
