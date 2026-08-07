@@ -30,7 +30,7 @@ No results were assumed from prior session notes.
 | Claim | Evidence | Status | Required next test |
 |---|---|---|---|
 | React playground renders supported DSL syntax | Application tests (`bpmn-parser-corpus.test.ts`, `bpmn-renderer.test.tsx`, 390 total passing) | **confirmed** | Maintain regression coverage |
-| Mermaid source adapter tested via real `mermaid.render()` | `bpmn-plugin-integration.test.ts` — imports real `mermaid@11.4.1`, calls `registerExternalDiagrams`, renders both flat and pool/lane corpus examples, asserts `bpmn-*` classes present; test passes in 390/390 suite | **source-verified** | Test packaged artifact in a clean install (Phase 2) |
+| Mermaid source adapter tested via real `mermaid.render()` | `bpmn-plugin-integration.test.ts` — imports real `mermaid@11.4.1`, calls `registerExternalDiagrams`, renders both flat and pool/lane corpus examples, asserts `bpmn-*` classes present | **browser-verified** | Playwright E2E (`app/e2e/host-demo.spec.ts`) runs in real Chromium with default securityLevel ('strict'); covers flat flow, gateway, pool/lane, cross-pool, and error case |
 | Plugin is externally consumable as an installable package | No package boundary exists — `app/package.json` is `"private": true`, no `exports` map, no `files` allowlist, no clean-install fixture | **not complete** | Phase 2: package smoke fixture |
 | FR-018: Live theme-variable binding | `bpmn-plugin-integration.test.ts` — "FR-018: live theme-variable binding" describe block passes, `styles()` provider supplies resolved `themeVariables` at render time | **source-verified** | Verify in production browser (no `securityLevel: loose`) in Phase 3 |
 | TD-004: Parser errors show diagnostic, not blank preview | `bpmn-plugin-integration.test.ts` — "TD-004" describe block passes (bad source throws or returns non-empty SVG) | **source-verified** | Visual confirmation in browser; inline error display in React playground may need a separate check |
@@ -139,5 +139,5 @@ The production build emits a chunk-size warning: the largest chunk (`index-*.js`
 | Risk | Detail |
 |---|---|
 | npm published | `@okhp3/mermaid-diagram-bpmn@0.1.1` confirmed live on registry 2026-08-06. README install instructions functional. |
-| Integration test runs under `securityLevel: "loose"` | Required by happy-dom's SVG parser limitation. Automated real-browser E2E without this workaround is tracked in Task #209. |
+| Integration test runs under `securityLevel: "loose"` | Required by happy-dom's SVG parser limitation. Resolved in browser: automated Playwright E2E (`app/e2e/host-demo.spec.ts`) runs against a real Chromium DOM with default securityLevel ('strict') and all diagrams render correctly. |
 | App main bundle >500 kB | Mermaid is bundled into the initial load. Lazy-loading tracked in Task #212. |

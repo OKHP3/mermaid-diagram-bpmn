@@ -21,7 +21,19 @@ import { useState, useEffect } from 'react';
 import mermaid from 'mermaid';
 import { bpmnPlugin, MERMAID_VERSION_TARGET } from '@/lib/bpmn-plugin';
 import example01 from '../../examples/01-linear-process.mmd?raw';
+import example02 from '../../examples/02-gateway-decision.mmd?raw';
+import example06 from '../../examples/06-cross-pool-collaboration.mmd?raw';
 import example08 from '../../examples/08-purchase-order-approval.mmd?raw';
+
+// ── Error-case fixture ────────────────────────────────────────────────────────
+// Intentionally invalid bpmn-beta source used to exercise the error render path.
+// Nested pool blocks are explicitly rejected by the parser.
+const INVALID_SOURCE = `bpmn-beta
+pool p1 "Outer" {
+  pool p2 "Nested" {
+  }
+}
+`;
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 
@@ -153,10 +165,14 @@ export default function MermaidHostDemo() {
         // we use MERMAID_VERSION_TARGET as the validated reference.
         const mermaidVersion = MERMAID_VERSION_TARGET;
 
-        // ── Render both corpus examples ─────────────────────────────────────
+        // ── Render corpus examples covering all required E2E types ──────────
+        // Flat flow, gateway, pool/lane, cross-pool message flow, error case.
         const DIAGRAMS = [
-          { id: 'demo-linear',         title: '01-linear-process.mmd — flat diagram',       source: example01 },
-          { id: 'demo-purchase-order', title: '08-purchase-order-approval.mmd — pool/lanes', source: example08 },
+          { id: 'demo-linear',         title: '01 — Flat flow',                source: example01 },
+          { id: 'demo-gateway',        title: '02 — Gateway decision',         source: example02 },
+          { id: 'demo-purchase-order', title: '08 — Pool / lane collaboration', source: example08 },
+          { id: 'demo-cross-pool',     title: '06 — Cross-pool message flow',  source: example06 },
+          { id: 'demo-error-case',     title: 'Error case — invalid source',   source: INVALID_SOURCE },
         ];
 
         const results: DiagramResult[] = await Promise.all(

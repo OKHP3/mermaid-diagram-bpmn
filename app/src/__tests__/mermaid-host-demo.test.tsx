@@ -100,13 +100,17 @@ function makePurchaseOrderSvgStub(id: string): string {
 
 function setupHappyMocks() {
   mockRegisterExternalDiagrams.mockResolvedValue(undefined);
-  mockRender.mockImplementation((id: string) =>
-    Promise.resolve({
-      svg: id === 'demo-linear'
+  mockRender.mockImplementation((id: string) => {
+    // demo-error-case uses intentionally invalid source → render throws
+    if (id === 'demo-error-case') {
+      return Promise.reject(new Error('Line 2: pools cannot be nested'));
+    }
+    return Promise.resolve({
+      svg: id === 'demo-linear' || id === 'demo-gateway'
         ? makeSvgStub(id)
         : makePurchaseOrderSvgStub(id),
-    }),
-  );
+    });
+  });
 }
 
 // ── Tests ─────────────────────────────────────────────────────────────────────
@@ -153,13 +157,17 @@ describe('MermaidHostDemo — diagram rendering', () => {
     setupHappyMocks();
   });
 
-  it('calls mermaid.render() for both corpus examples', async () => {
+  it('calls mermaid.render() for all five diagram entries', async () => {
     render(<MermaidHostDemo />);
-    await waitFor(() => expect(mockRender).toHaveBeenCalledTimes(2));
+    // Five entries: flat flow, gateway, pool/lane, cross-pool, error-case
+    await waitFor(() => expect(mockRender).toHaveBeenCalledTimes(5));
 
     const renderIds = mockRender.mock.calls.map(([id]: [string]) => id);
     expect(renderIds).toContain('demo-linear');
+    expect(renderIds).toContain('demo-gateway');
     expect(renderIds).toContain('demo-purchase-order');
+    expect(renderIds).toContain('demo-cross-pool');
+    expect(renderIds).toContain('demo-error-case');
   });
 
   it('injects bpmn-task class from linear diagram SVG into DOM', async () => {

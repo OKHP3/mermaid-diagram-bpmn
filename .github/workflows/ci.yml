@@ -65,3 +65,41 @@ jobs:
 
       - name: Plugin smoke test (clean-install fixture)
         run: node scripts/run-plugin-smoke.mjs
+
+  e2e:
+    name: Real-browser E2E — Mermaid host demo
+    needs: checks
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v6
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: "24"
+          cache: "pnpm"
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Install Playwright Chromium browser
+        run: pnpm --filter @workspace/mermaid-diagram-bpmn exec playwright install chromium --with-deps
+
+      - name: Build app (required before vite preview)
+        run: pnpm --filter @workspace/mermaid-diagram-bpmn run build
+
+      - name: Run E2E suite (real browser, default securityLevel)
+        run: pnpm --filter @workspace/mermaid-diagram-bpmn run test:e2e
+
+      - name: Upload Playwright report on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: app/playwright-report/
+          retention-days: 14
