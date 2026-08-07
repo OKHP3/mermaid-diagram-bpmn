@@ -35,7 +35,15 @@ export const VENDOR_ONBOARDING_NODE_LINKS: Record<string, string> = {
   e1: "/skills/okhp3-publication-handoff-packaging",
 };
 
-const VENDOR_ONBOARDING_BPMN = `bpmn-beta
+/**
+ * Exported for diagram regression tests.
+ *
+ * Critical ordering invariant: the agreement must be drafted (t8) and signed (t9)
+ * BEFORE the purchase order is issued (t7).  The message-flow chain that enforces
+ * this is: t6 ~~> t8 ~~> t9 ~~> t7.  t7 has no incoming sequence flow from t6;
+ * it is only reachable via the cross-pool message flow from t9.
+ */
+export const VENDOR_ONBOARDING_BPMN = `bpmn-beta
 accTitle: Vendor Onboarding — New Supplier Qualification
 accDescr: Procurement, Legal, and the vendor coordinate to qualify and activate a new supplier.
 
@@ -55,7 +63,6 @@ pool procurement "Procurement" {
   t1 --> t2
   t2 --> t3
   t3 --> t6
-  t6 --> t7
   t7 --> e1
 }
 
@@ -73,8 +80,9 @@ t1 ~~> t4
 t2 ~~> t5
 t5 ~~> t3
 t4 ~~> t6
-t7 ~~> t8
-t8 ~~> t9`;
+t6 ~~> t8
+t8 ~~> t9
+t9 ~~> t7`;
 
 export default function VendorOnboardingExample() {
   useEffect(() => {
