@@ -11,7 +11,14 @@ import {
   Check,
   Download,
   FileDown,
+  Link,
 } from "lucide-react";
+import {
+  encodeSource,
+  isOverLimit,
+  parseShareParams,
+  SHARE_SOURCE_LIMIT,
+} from "@/lib/url-share";
 import { parse, ParseError } from "@/lib/bpmn-parser";
 import { StatusRibbon } from "@/components/StatusRibbon";
 
@@ -42,6 +49,27 @@ function getParseError(source: string): ErrorInfo | null {
   }
 }
 
+/**
+ * Read URL search params once at component initialisation and return the
+ * intended initial source + activeExample state.  Falls back to the default
+ * canonical example when no URL params are present or decoding fails.
+ */
+function computeInitialState(): { source: string; activeExample: string | null } {
+  const search = typeof window !== 'undefined' ? window.location.search : '';
+  const shared = parseShareParams(search);
+
+  if (shared?.kind === 'source') {
+    return { source: shared.source, activeExample: null };
+  }
+  if (shared?.kind === 'example') {
+    const ex = BPMN_EXAMPLES.find(e => e.id === shared.id);
+    if (ex) return { source: ex.source, activeExample: ex.id };
+  }
+
+  const defaultEx = BPMN_EXAMPLES.find(e => e.id === DEFAULT_EXAMPLE_ID) || BPMN_EXAMPLES[0];
+  return { source: defaultEx.source, activeExample: defaultEx.id };
+}
+
 /** Derive a safe filename slug from an example name or fall back to "diagram". */
 function toFilenameSlug(name: string): string {
   return name
@@ -52,9 +80,10 @@ function toFilenameSlug(name: string): string {
 }
 
 export default function Playground() {
-  const defaultExample = BPMN_EXAMPLES.find(e => e.id === DEFAULT_EXAMPLE_ID) || BPMN_EXAMPLES[0];
-  const [source, setSource] = useState(defaultExample.source);
-  const [activeExample, setActiveExample] = useState<string | null>(defaultExample.id);
+  // Initialise from URL params (?src= or ?example=) on first render to avoid a
+  // flash of the default content when a shared link is opened.
+  const [source, setSource] = useState<string>(() => computeInitialState().source);
+  const [activeExample, setActiveExample] = useState<string | null>(() => computeInitialState().activeExample);
 
   // copy state: 'idle' | 'copied' | 'error'
   const [copyState, setCopyState] = useState<"idle" | "copied" | "error">("idle");
@@ -67,6 +96,10 @@ export default function Playground() {
   // SVG export state: 'idle' | 'done'
   const [svgExportState, setSvgExportState] = useState<"idle" | "done">("idle");
   const svgExportTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  // Share state: 'idle' | 'copied' | 'toolong'
+  const [shareState, setShareState] = useState<"idle" | "copied" | "toolong">("idle");
+  const shareTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   // Ref for the container holding the rendered BpmnRenderer SVG
   const svgContainerRef = useRef<HTMLDivElement>(null);
@@ -159,6 +192,7 @@ export default function Playground() {
       if (copyTimeoutRef.current) clearTimeout(copyTimeoutRef.current);
       if (downloadTimeoutRef.current) clearTimeout(downloadTimeoutRef.current);
       if (svgExportTimeoutRef.current) clearTimeout(svgExportTimeoutRef.current);
+      if (shareTimeoutRef.current) clearTimeout(shareTimeoutRef.current);
     };
   }, []);
 
@@ -245,12 +279,24 @@ export default function Playground() {
       setSource(ex.source);
       setActiveExample(ex.id);
       resetView();
+      // Keep the address bar shareable: canonical examples use the lightweight
+      // ?example=<id> form so the URL remains human-readable.
+      const url = new URL(window.location.href);
+      url.searchParams.set('example', id);
+      url.searchParams.delete('src');
+      history.replaceState(null, '', url.toString());
     }
   }
 
   function handleSourceChange(val: string) {
     setSource(val);
     setActiveExample(null);
+    // Clear stale URL params when the user starts editing freely.
+    // The Share button builds a fresh ?src= link on demand.
+    const url = new URL(window.location.href);
+    url.searchParams.delete('example');
+    url.searchParams.delete('src');
+    history.replaceState(null, '', url.toString());
   }
 
   // ── Copy / Download handlers ────────────────────────────────────────────────
@@ -313,6 +359,38 @@ export default function Playground() {
     a.click();
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
+  }
+
+  // ── Share handler ────────────────────────────────────────────────────────────
+  async function handleShare() {
+    if (shareTimeoutRef.current) clearTimeout(shareTimeoutRef.current);
+
+    if (isOverLimit(source)) {
+      setShareState("toolong");
+      shareTimeoutRef.current = setTimeout(() => setShareState("idle"), 3_500);
+      return;
+    }
+
+    // Build the shareable URL fresh — don't rely on window.location.href being
+    // current since handleSourceChange deliberately clears URL params while the
+    // user edits.
+    const url = new URL(window.location.href);
+    if (activeExample) {
+      url.searchParams.set('example', activeExample);
+      url.searchParams.delete('src');
+    } else if (source.trim()) {
+      url.searchParams.set('src', encodeSource(source));
+      url.searchParams.delete('example');
+    }
+
+    try {
+      await navigator.clipboard.writeText(url.toString());
+      setShareState("copied");
+      shareTimeoutRef.current = setTimeout(() => setShareState("idle"), 2_000);
+    } catch {
+      // Clipboard access denied — silent fallback
+      setShareState("idle");
+    }
   }
 
   // ── Render ──────────────────────────────────────────────────────────────────
@@ -445,6 +523,36 @@ export default function Playground() {
                 <span>{downloadState === "empty" ? "Empty" : ".mmd"}</span>
               </button>
 
+              {/* Share button — copies the current URL (with encoded source) to clipboard */}
+              <button
+                onClick={handleShare}
+                aria-label={
+                  shareState === "copied"
+                    ? "Shareable link copied to clipboard"
+                    : shareState === "toolong"
+                      ? "Source is too large to share via URL — download the .mmd file instead"
+                      : "Copy shareable link to clipboard"
+                }
+                data-testid="button-share-url"
+                title="Copy shareable link"
+                className={`flex items-center gap-1 px-2 py-1 rounded text-xs transition-colors ${
+                  shareState === "copied"
+                    ? "text-emerald-600 dark:text-emerald-400"
+                    : shareState === "toolong"
+                      ? "text-amber-500 dark:text-amber-400"
+                      : "text-muted-foreground hover:text-foreground hover:bg-muted/70"
+                }`}
+              >
+                {shareState === "copied" ? <Check size={11} /> : <Link size={11} />}
+                <span>
+                  {shareState === "copied"
+                    ? "Copied!"
+                    : shareState === "toolong"
+                      ? "Too long"
+                      : "Share"}
+                </span>
+              </button>
+
               {/* Parse error badge */}
               {parseError && (
                 <span
@@ -457,6 +565,23 @@ export default function Playground() {
               )}
             </div>
           </div>
+
+          {/* Over-limit notice — shown when source exceeds the URL encoding limit */}
+          {isOverLimit(source) && (
+            <div
+              role="alert"
+              aria-live="polite"
+              aria-atomic="true"
+              className="px-4 py-2 flex items-center gap-2 text-xs border-b border-amber-300/60 bg-amber-50/80 dark:bg-amber-900/20 text-amber-800 dark:text-amber-300"
+              data-testid="banner-url-too-long"
+            >
+              <AlertCircle size={11} className="shrink-0" />
+              <span>
+                Source exceeds the {Math.round(SHARE_SOURCE_LIMIT / 1000)} kB URL limit — sharing via link is unavailable.
+                {" "}Use the <strong>.mmd</strong> download button to save and share this diagram.
+              </span>
+            </div>
+          )}
 
           <textarea
             className="flex-1 p-4 text-sm resize-none focus-visible:outline-none leading-relaxed code-area forge-code-panel"
