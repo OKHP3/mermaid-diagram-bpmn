@@ -169,6 +169,9 @@ export default function EmployeeOffboardingExample() {
             <Link href="/walkthrough/purchase-approval" className="forge-btn-outline inline-flex items-center gap-2">
               Purchase Approval Example <ArrowRight size={14} />
             </Link>
+            <Link href="/walkthrough/vendor-onboarding" className="forge-btn-outline inline-flex items-center gap-2">
+              Vendor Onboarding Example <ArrowRight size={14} />
+            </Link>
             <Link href="/walkthrough" className="forge-btn-outline inline-flex items-center gap-2">
               <ArrowLeft size={14} /> Walkthrough Table
             </Link>
