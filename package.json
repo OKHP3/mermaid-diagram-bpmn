@@ -24,7 +24,9 @@
     "plugin:pack": "pnpm --filter @okhp3/mermaid-diagram-bpmn run pack:dry-run",
     "plugin:smoke": "node scripts/run-plugin-smoke.mjs",
     "check:content": "node scripts/validate-content.mjs",
-    "check:content:test": "node --test scripts/validate-content.test.mjs"
+    "check:content:test": "node --test scripts/validate-content.test.mjs",
+    "manifest:generate": "node scripts/generate-manifest.mjs",
+    "manifest:check": "node scripts/generate-manifest.mjs --check"
   },
   "private": true,
   "packageManager": "pnpm@10.26.1",

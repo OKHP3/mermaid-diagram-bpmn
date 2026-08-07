@@ -75,6 +75,9 @@ jobs:
       - name: Test content-drift detection (exits 1 on injected stale claim)
         run: pnpm run check:content:test
 
+      - name: Release manifest check (version + compat range must match canonical sources)
+        run: pnpm run manifest:check
+
   e2e:
     name: Real-browser E2E — Mermaid host demo
     needs: checks
@@ -102,6 +105,8 @@ jobs:
         run: pnpm --filter @workspace/mermaid-diagram-bpmn exec playwright install chromium
 
       - name: Build app (required before vite preview)
+        env:
+          VITE_COMMIT_SHA: ${{ github.sha }}
         run: pnpm --filter @workspace/mermaid-diagram-bpmn run build
 
       - name: Run E2E suite (real browser, default securityLevel)
@@ -147,6 +152,8 @@ jobs:
         run: pnpm --filter @workspace/mermaid-diagram-bpmn exec playwright install chromium
 
       - name: Build app (required before vite preview)
+        env:
+          VITE_COMMIT_SHA: ${{ github.sha }}
         run: pnpm --filter @workspace/mermaid-diagram-bpmn run build
 
       # ── Main branch: regenerate baselines and commit if changed ─────────────

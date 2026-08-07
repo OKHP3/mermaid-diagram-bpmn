@@ -411,6 +411,12 @@ expect(installedMermaidVersion).toBe(MERMAID_VERSION_TARGET); // '${MERMAID_VERS
               external: true,
               desc: "Mermaid's official guide to registerExternalDiagrams()",
             },
+            {
+              href: "/release",
+              label: "Release Manifest",
+              external: false,
+              desc: "Plugin version, Mermaid compat range, source commit, and capability evidence tiers",
+            },
           ].map((link) => (
             <li key={link.href} data-testid={`resource-${link.label.toLowerCase().replace(/[^a-z0-9]+/g, "-")}`}>
               <a
