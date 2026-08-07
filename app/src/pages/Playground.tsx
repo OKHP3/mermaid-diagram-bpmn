@@ -23,6 +23,7 @@ import {
 import { parse, ParseError } from "@/lib/bpmn-parser";
 import { lint } from "@/lib/bpmn-lint";
 import type { LintWarning } from "@/lib/bpmn-lint";
+import { validate } from "@/lib/bpmn-validate";
 import { trackEvent } from "@/lib/analytics";
 import { StatusRibbon } from "@/components/StatusRibbon";
 
@@ -53,16 +54,29 @@ function getParseError(source: string): ErrorInfo | null {
   }
 }
 
+/** Shape shared by lint warnings and validation errors for display purposes. */
+interface DiagnosticWarning {
+  code: string;
+  message: string;
+  nodeId?: string;
+}
+
 /**
- * Run the domain-rule lint pass and return advisory warnings.
- * Returns an empty array when the source has a hard parse error (errors take
- * priority) or when the source is clean.  Never throws.
+ * Run the domain-rule lint pass and the semantic validation pass and return
+ * all advisory diagnostics combined.  Returns an empty array when the source
+ * has a hard parse error (errors take priority) or when the source is clean.
+ * Never throws.
  */
-function getLintWarnings(source: string): LintWarning[] {
+function getAllWarnings(source: string): DiagnosticWarning[] {
   try {
     const db = parse(source);
     if (db.getNodes().length === 0) return [];
-    return lint(db);
+    const lintWarns: LintWarning[] = lint(db);
+    const validationErrs = validate(db);
+    return [
+      ...lintWarns,
+      ...validationErrs.map(e => ({ code: e.code, message: e.message, nodeId: e.nodeId })),
+    ];
   } catch {
     // Parse error — no warnings shown alongside hard errors.
     return [];
@@ -125,10 +139,10 @@ export default function Playground() {
   const svgContainerRef = useRef<HTMLDivElement>(null);
 
   const parseError = getParseError(source);
-  // Lint warnings are only computed when there is no hard parse error.
-  // Passing the same source is fast — the parse is pure and sub-millisecond
-  // for the diagram sizes the Playground handles.
-  const lintWarnings = parseError ? [] : getLintWarnings(source);
+  // All warnings (lint + semantic validation) are only computed when there is
+  // no hard parse error. The parse is pure and sub-millisecond for the diagram
+  // sizes the Playground handles, so calling it twice is acceptable.
+  const allWarnings = parseError ? [] : getAllWarnings(source);
   const activeExampleDef = BPMN_EXAMPLES.find(e => e.id === activeExample);
 
   // ── Pan / zoom state ────────────────────────────────────────────────────────
@@ -590,13 +604,13 @@ export default function Playground() {
               )}
 
               {/* Lint warning badge — shown when there are advisory warnings but no hard parse error */}
-              {!parseError && lintWarnings.length > 0 && (
+              {!parseError && allWarnings.length > 0 && (
                 <span
                   className="flex items-center gap-1 text-xs text-amber-600 dark:text-amber-400"
                   data-testid="badge-lint-warnings"
                 >
                   <TriangleAlert size={11} />
-                  {lintWarnings.length === 1 ? "1 warning" : `${lintWarnings.length} warnings`}
+                  {allWarnings.length === 1 ? "1 warning" : `${allWarnings.length} warnings`}
                 </span>
               )}
             </div>
@@ -645,7 +659,7 @@ export default function Playground() {
               but the diagram violates one or more domain rules).
               Visually distinct from the error bar: amber tint, TriangleAlert icon,
               "Warning" label instead of "Error". */}
-          {!parseError && lintWarnings.length > 0 && (
+          {!parseError && allWarnings.length > 0 && (
             <div
               role="status"
               aria-live="polite"
@@ -656,14 +670,14 @@ export default function Playground() {
               <div className="px-3 py-1.5 flex items-center gap-1.5 border-b border-amber-200/60 dark:border-amber-700/40">
                 <TriangleAlert size={11} className="text-amber-600 dark:text-amber-400 shrink-0" />
                 <span className="text-xs font-semibold text-amber-700 dark:text-amber-300 uppercase tracking-wide">
-                  {lintWarnings.length === 1 ? "1 Warning" : `${lintWarnings.length} Warnings`}
+                  {allWarnings.length === 1 ? "1 Warning" : `${allWarnings.length} Warnings`}
                 </span>
                 <span className="ml-1 text-xs text-amber-600/70 dark:text-amber-400/70 font-normal">
                   · diagram still renders
                 </span>
               </div>
               <ul className="py-1" aria-label="Lint warnings">
-                {lintWarnings.map((w, i) => (
+                {allWarnings.map((w, i) => (
                   <li
                     key={w.code + (w.nodeId ?? '') + i}
                     data-testid={`lint-warning-${w.code}-${w.nodeId ?? i}`}
