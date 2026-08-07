@@ -7,8 +7,8 @@ settings:
 catalogs:
   default:
     '@replit/vite-plugin-cartographer':
-      specifier: ^0.5.5
-      version: 0.5.5
+      specifier: ^0.6.1
+      version: 0.6.1
     '@replit/vite-plugin-dev-banner':
       specifier: ^0.1.1
       version: 0.1.2
@@ -166,7 +166,7 @@ importers:
         version: 1.62.1
       '@replit/vite-plugin-cartographer':
         specifier: 'catalog:'
-        version: 0.5.5
+        version: 0.6.1
       '@replit/vite-plugin-dev-banner':
         specifier: 'catalog:'
         version: 0.1.2
@@ -380,8 +380,8 @@ packages:
     engines: {node: '>=20'}
     hasBin: true
 
-  '@replit/vite-plugin-cartographer@0.5.5':
-    resolution: {integrity: sha512-iEXsvofgEQb1BSjMflHfuqVbRhWqI7n8u5ESSH+cSoxHgX4Lk8wM7qHk1h7u1BZSwqmPn8ftsRFSN4IVvUzB5w==}
+  '@replit/vite-plugin-cartographer@0.6.1':
+    resolution: {integrity: sha512-t1TBE22lctrkKBB60b8K6D0BA4teO/mw9++VMEyRw2ASNZZ0Nbgmjw+ftybrl1H66mg3tSNsx204QbbeAjMsfA==}
 
   '@replit/vite-plugin-dev-banner@0.1.2':
     resolution: {integrity: sha512-YfW3U1xKnLrqvSiTzXeEX8AG+Vpz7XwBsJHNvGbp841AE1mLvishMQi2Zw7ApyHp+9EMGthXuCjP+mLbl3IuGA==}
@@ -1914,7 +1914,7 @@ snapshots:
     dependencies:
       playwright: 1.62.1
 
-  '@replit/vite-plugin-cartographer@0.5.5':
+  '@replit/vite-plugin-cartographer@0.6.1':
     dependencies:
       '@babel/parser': 7.29.0
       '@babel/traverse': 7.29.0
