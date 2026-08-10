@@ -37,8 +37,8 @@ catalogs:
       specifier: ^0.8.3
       version: 0.8.3
     lucide-react:
-      specifier: ^0.545.0
-      version: 0.545.0
+      specifier: ^1.29.0
+      version: 1.30.0
     react:
       specifier: 19.2.7
       version: 19.2.7
@@ -211,7 +211,7 @@ importers:
         version: 20.10.6
       lucide-react:
         specifier: 'catalog:'
-        version: 0.545.0(react@19.2.7)
+        version: 1.30.0(react@19.2.7)
       mermaid:
         specifier: 11.4.1
         version: 11.4.1
@@ -1364,8 +1364,8 @@ packages:
   lodash-es@4.18.1:
     resolution: {integrity: sha512-J8xewKD/Gk22OZbhpOVSwcs60zhd95ESDwezOFuA3/099925PdHJ7OFHNTGtajL3AlZkykD32HykiMo+BIBI8A==}
 
-  lucide-react@0.545.0:
-    resolution: {integrity: sha512-7r1/yUuflQDSt4f1bpn5ZAocyIxcTyVyBBChSVtBKn5M+392cPmI5YJMWOJKk/HUWGm5wg83chlAZtCcGbEZtw==}
+  lucide-react@1.30.0:
+    resolution: {integrity: sha512-tUIr2jXLbWpCkdtH8XP7P7YppM9ueWgTky99lpWDY6z5REs6B+O6ZQ3U5tHkUUY59ANyOv/PBcs8E4Fe3KO3eA==}
     peerDependencies:
       react: ^16.5.1 || ^17.0.0 || ^18.0.0 || ^19.0.0
 
@@ -2793,7 +2793,7 @@ snapshots:
 
   lodash-es@4.18.1: {}
 
-  lucide-react@0.545.0(react@19.2.7):
+  lucide-react@1.30.0(react@19.2.7):
     dependencies:
       react: 19.2.7
 
