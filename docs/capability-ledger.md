@@ -210,6 +210,11 @@ The published plugin package (`@okhp3/mermaid-diagram-bpmn`) is well within the 
 | Home (`/`) | 1280×800 | 375×812 |
 | Playground (`/playground`) | 1280×800 | 375×812 |
 | Agent Skills (`/skills`) | 1280×800 | 375×812 |
+| Walkthrough hub (`/walkthrough`) | 1280×800 | 375×812 |
+| Purchase Approval walkthrough (`/walkthrough/purchase-approval`) | 1280×800 | 375×812 |
+| Employee Offboarding walkthrough (`/walkthrough/employee-offboarding`) | 1280×800 | 375×812 |
+| Vendor Onboarding walkthrough (`/walkthrough/vendor-onboarding`) | 1280×800 | 375×812 |
+| Mermaid Host Demo (`/mermaid-host-demo`) | 1280×800 | — |
 
 ### Two-layer check design
 
@@ -218,7 +223,8 @@ These run on every push and pull request. No image baseline is required.
 
 | Assertion | Pages | Viewport |
 |---|---|---|
-| No horizontal overflow (`scrollWidth − clientWidth = 0`) | Home, Playground, Skills | Both |
+| No horizontal overflow (`scrollWidth − clientWidth = 0`) | Home, Playground, Skills, Walkthrough hub, and all worked examples | Both |
+| No horizontal overflow (`scrollWidth − clientWidth = 0`) | Mermaid Host Demo | Desktop |
 | Primary CTA / search input height ≥ 36 px | Home, Skills | Mobile |
 | Source textarea width ≥ 300 px | Playground | Mobile |
 | Key headings visible (`h1`, `data-testid="heading-*"`) | All three | Both |
@@ -227,9 +233,12 @@ These run on every push and pull request. No image baseline is required.
 | Search input `[aria-label="Search skills"]` visible | Skills | Both |
 | At least one `.forge-card` visible | Skills | Desktop |
 | Navigation present (`<nav>`) | Home | Mobile |
+| Heading, rendered pipeline SVG, and handoff table present | Walkthrough hub | Both |
+| Key `h1` plus exactly 15 timeline steps present | Purchase Approval, Employee Offboarding, Vendor Onboarding | Both |
+| Heading, four rendered SVG panels, and intentional error panel present | Mermaid Host Demo | Desktop |
 
 **Layer 2 — Visual snapshot comparison (pixel diff)**  
-6 baseline PNGs are generated and committed automatically by CI on every push to `main` (`[skip ci]` commit). Pull requests compare against the committed baselines and fail if pixel diff exceeds the threshold.
+15 baseline PNGs are generated and committed automatically by CI on every push to `main` (`[skip ci]` commit). Pull requests compare against the committed baselines and fail if pixel diff exceeds the threshold.
 
 | Snapshot | Threshold |
 |---|---|
@@ -239,6 +248,15 @@ These run on every push and pull request. No image baseline is required.
 | `playground-mobile-linux.png` | 3 % |
 | `skills-desktop-linux.png` | 2 % |
 | `skills-mobile-linux.png` | 2 % |
+| `walkthrough-desktop-linux.png` | 3 % (wide BPMN pipeline) |
+| `walkthrough-mobile-linux.png` | 3 % (wide BPMN pipeline) |
+| `purchase-approval-desktop-linux.png` | 2 % |
+| `purchase-approval-mobile-linux.png` | 2 % |
+| `employee-offboarding-desktop-linux.png` | 2 % |
+| `employee-offboarding-mobile-linux.png` | 2 % |
+| `vendor-onboarding-desktop-linux.png` | 2 % |
+| `vendor-onboarding-mobile-linux.png` | 2 % |
+| `mermaid-host-demo-desktop-linux.png` | 3 % (SVG sub-pixel variance) |
 
 Baseline images are stored in `app/e2e/__snapshots__/`. File names include the platform suffix (`-linux`, `-darwin`, `-win32`) to prevent cross-OS baseline conflicts.
 
@@ -253,9 +271,12 @@ Baseline images are stored in `app/e2e/__snapshots__/`. File names include the p
 
 | Claim | Status | Notes |
 |---|---|---|
-| No horizontal overflow on Home, Playground, Skills at mobile (375 px) | **confirmed** | Programmatic assertion; CI-blocking |
+| No horizontal overflow on Home, Playground, Skills, Walkthrough hub, and all worked examples at mobile (375 px) | **confirmed** | Programmatic assertion; CI-blocking |
+| Walkthrough hub shows its heading, 15-skill BPMN pipeline, and full handoff reference | **confirmed** | Programmatic assertion at desktop and mobile; CI-blocking |
+| All three worked examples show their heading and complete 15-step process timeline | **confirmed** | Programmatic assertion at desktop and mobile; CI-blocking |
+| Mermaid Host Demo has a settled desktop visual guard after all diagram panels reach terminal state | **confirmed** | Four SVG and intentional error-panel assertions precede its committed baseline |
 | Primary interactive controls meet minimum tap-target height | **confirmed** | ≥ 36 px; CI-blocking |
-| Visual baselines captured for 3 pages × 2 viewports | **confirmed** | 6 PNG baselines; regenerated on every main push |
+| Visual baselines capture 8 pages across 15 viewport surfaces | **confirmed** | 15 Linux/Chromium PNG baselines are committed and compared by the PR gate |
 | Pixel-diff comparison blocks PRs on unexpected visual regression | **confirmed** | `maxDiffPixelRatio` 2–3 %; CI gate active on PRs |
 
 ---

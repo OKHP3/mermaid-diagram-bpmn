@@ -12,7 +12,8 @@
  *    These are the merge-blocking CI gates.
  *
  * 2. VISUAL SNAPSHOTS (pixel comparison against committed baselines)
- *    - Home, Playground, and AgentSkills at 1280×800 (desktop) and 375×812 (mobile)
+ *    - Home, Playground, AgentSkills, Walkthrough hub, and worked examples at
+ *      1280×800 (desktop) and 375×812 (mobile); Mermaid Host Demo at desktop
  *    - maxDiffPixelRatio: 0.02 (2 %) for content pages; 0.03 for the Playground
  *      (diagram rendering has minor sub-pixel variance)
  *    - Baselines are Linux/Chromium PNGs stored in app/e2e/__snapshots__/.
@@ -52,6 +53,38 @@ async function assertNoHorizontalOverflow(page: Page, label: string) {
     () => document.documentElement.scrollWidth - document.documentElement.clientWidth,
   );
   expect(overflow, `${label}: horizontal overflow = ${overflow}px`).toBe(0);
+}
+
+/** Load a worked example and verify its complete 15-step process timeline. */
+async function loadWalkthroughExample(page: Page, path: string, heading: string) {
+  await loadPage(page, path, 'h1');
+  await expect(page.getByRole('heading', { level: 1, name: heading })).toBeVisible();
+
+  const steps = page.locator('[id^="step-"]');
+  await expect(steps).toHaveCount(15);
+  await expect(steps.first()).toBeVisible();
+}
+
+/** Load the Walkthrough hub and wait for its pipeline and handoff table. */
+async function loadWalkthroughHub(page: Page) {
+  await loadPage(page, '/walkthrough', '[data-testid="walkthrough-pipeline-diagram"]');
+  await expect(page.getByRole('heading', { level: 1, name: 'BP-SKILL Suite Walkthrough' })).toBeVisible();
+  await expect(page.locator('[data-testid="walkthrough-pipeline-diagram"] svg')).toBeVisible();
+  await expect(page.locator('[data-testid="walkthrough-table"]')).toBeVisible();
+  await expect(page.locator('[id^="row-"][id$="-lg"]')).toHaveCount(15);
+  await expect(page.locator('[id^="row-"][id$="-sm"]')).toHaveCount(15);
+}
+
+/** Load the lazy Mermaid demo and wait for every documented terminal panel state. */
+async function loadMermaidHostDemo(page: Page) {
+  await loadPage(page, '/mermaid-host-demo', '[data-testid="version-metadata"]');
+  await expect(page.getByRole('heading', { level: 1, name: 'Mermaid Host Demo' })).toBeVisible();
+  await Promise.all(
+    ['demo-linear', 'demo-gateway', 'demo-purchase-order', 'demo-cross-pool'].map((diagramId) =>
+      expect(page.locator(`[data-testid="svg-output-${diagramId}"] svg`)).toBeVisible({ timeout: 30_000 }),
+    ),
+  );
+  await expect(page.locator('[data-testid="error-demo-error-case"]')).toBeVisible({ timeout: 30_000 });
 }
 
 // ── Home — desktop ────────────────────────────────────────────────────────────
@@ -255,6 +288,188 @@ test.describe('AgentSkills — mobile 375×812', () => {
   test('visual snapshot', async ({ page }) => {
     await loadPage(page, '/skills', '[aria-label="Search skills"]');
     await expect(page).toHaveScreenshot('skills-mobile.png', { maxDiffPixelRatio: 0.02 });
+  });
+});
+
+// ── Walkthrough hub ────────────────────────────────────────────────────────────
+
+test.describe('Walkthrough hub — desktop 1280×800', () => {
+  test.use({ viewport: DESKTOP });
+
+  test('no horizontal overflow', async ({ page }) => {
+    await loadWalkthroughHub(page);
+    await assertNoHorizontalOverflow(page, 'Walkthrough hub/desktop');
+  });
+
+  test('heading, pipeline diagram, and handoff table are present', async ({ page }) => {
+    await loadWalkthroughHub(page);
+  });
+
+  test('visual snapshot', async ({ page }) => {
+    await loadWalkthroughHub(page);
+    await page.locator('[data-testid="walkthrough-pipeline-diagram"]').scrollIntoViewIfNeeded();
+    await expect(page).toHaveScreenshot('walkthrough-desktop.png', { maxDiffPixelRatio: 0.03 });
+  });
+});
+
+test.describe('Walkthrough hub — mobile 375×812', () => {
+  test.use({ viewport: MOBILE });
+
+  test('no horizontal overflow', async ({ page }) => {
+    await loadWalkthroughHub(page);
+    await assertNoHorizontalOverflow(page, 'Walkthrough hub/mobile');
+  });
+
+  test('heading, pipeline diagram, and handoff table are present', async ({ page }) => {
+    await loadWalkthroughHub(page);
+  });
+
+  test('visual snapshot', async ({ page }) => {
+    await loadWalkthroughHub(page);
+    await page.locator('[data-testid="walkthrough-pipeline-diagram"]').scrollIntoViewIfNeeded();
+    await expect(page).toHaveScreenshot('walkthrough-mobile.png', { maxDiffPixelRatio: 0.03 });
+  });
+});
+
+// ── Purchase Approval worked example ───────────────────────────────────────────
+
+test.describe('Purchase Approval walkthrough — desktop 1280×800', () => {
+  test.use({ viewport: DESKTOP });
+
+  test('no horizontal overflow', async ({ page }) => {
+    await loadWalkthroughExample(page, '/walkthrough/purchase-approval', 'Purchase Approval');
+    await assertNoHorizontalOverflow(page, 'Purchase Approval/desktop');
+  });
+
+  test('heading and 15-step timeline are present', async ({ page }) => {
+    await loadWalkthroughExample(page, '/walkthrough/purchase-approval', 'Purchase Approval');
+  });
+
+  test('visual snapshot', async ({ page }) => {
+    await loadWalkthroughExample(page, '/walkthrough/purchase-approval', 'Purchase Approval');
+    await page.locator('[id^="step-"]').first().scrollIntoViewIfNeeded();
+    await expect(page).toHaveScreenshot('purchase-approval-desktop.png', { maxDiffPixelRatio: 0.02 });
+  });
+});
+
+test.describe('Purchase Approval walkthrough — mobile 375×812', () => {
+  test.use({ viewport: MOBILE });
+
+  test('no horizontal overflow', async ({ page }) => {
+    await loadWalkthroughExample(page, '/walkthrough/purchase-approval', 'Purchase Approval');
+    await assertNoHorizontalOverflow(page, 'Purchase Approval/mobile');
+  });
+
+  test('heading and 15-step timeline are present', async ({ page }) => {
+    await loadWalkthroughExample(page, '/walkthrough/purchase-approval', 'Purchase Approval');
+  });
+
+  test('visual snapshot', async ({ page }) => {
+    await loadWalkthroughExample(page, '/walkthrough/purchase-approval', 'Purchase Approval');
+    await page.locator('[id^="step-"]').first().scrollIntoViewIfNeeded();
+    await expect(page).toHaveScreenshot('purchase-approval-mobile.png', { maxDiffPixelRatio: 0.02 });
+  });
+});
+
+// ── Employee Offboarding worked example ────────────────────────────────────────
+
+test.describe('Employee Offboarding walkthrough — desktop 1280×800', () => {
+  test.use({ viewport: DESKTOP });
+
+  test('no horizontal overflow', async ({ page }) => {
+    await loadWalkthroughExample(page, '/walkthrough/employee-offboarding', 'Employee Offboarding');
+    await assertNoHorizontalOverflow(page, 'Employee Offboarding/desktop');
+  });
+
+  test('heading and 15-step timeline are present', async ({ page }) => {
+    await loadWalkthroughExample(page, '/walkthrough/employee-offboarding', 'Employee Offboarding');
+  });
+
+  test('visual snapshot', async ({ page }) => {
+    await loadWalkthroughExample(page, '/walkthrough/employee-offboarding', 'Employee Offboarding');
+    await page.locator('[id^="step-"]').first().scrollIntoViewIfNeeded();
+    await expect(page).toHaveScreenshot('employee-offboarding-desktop.png', { maxDiffPixelRatio: 0.02 });
+  });
+});
+
+test.describe('Employee Offboarding walkthrough — mobile 375×812', () => {
+  test.use({ viewport: MOBILE });
+
+  test('no horizontal overflow', async ({ page }) => {
+    await loadWalkthroughExample(page, '/walkthrough/employee-offboarding', 'Employee Offboarding');
+    await assertNoHorizontalOverflow(page, 'Employee Offboarding/mobile');
+  });
+
+  test('heading and 15-step timeline are present', async ({ page }) => {
+    await loadWalkthroughExample(page, '/walkthrough/employee-offboarding', 'Employee Offboarding');
+  });
+
+  test('visual snapshot', async ({ page }) => {
+    await loadWalkthroughExample(page, '/walkthrough/employee-offboarding', 'Employee Offboarding');
+    await page.locator('[id^="step-"]').first().scrollIntoViewIfNeeded();
+    await expect(page).toHaveScreenshot('employee-offboarding-mobile.png', { maxDiffPixelRatio: 0.02 });
+  });
+});
+
+// ── Vendor Onboarding worked example ───────────────────────────────────────────
+
+test.describe('Vendor Onboarding walkthrough — desktop 1280×800', () => {
+  test.use({ viewport: DESKTOP });
+
+  test('no horizontal overflow', async ({ page }) => {
+    await loadWalkthroughExample(page, '/walkthrough/vendor-onboarding', 'Vendor Onboarding');
+    await assertNoHorizontalOverflow(page, 'Vendor Onboarding/desktop');
+  });
+
+  test('heading and 15-step timeline are present', async ({ page }) => {
+    await loadWalkthroughExample(page, '/walkthrough/vendor-onboarding', 'Vendor Onboarding');
+  });
+
+  test('visual snapshot', async ({ page }) => {
+    await loadWalkthroughExample(page, '/walkthrough/vendor-onboarding', 'Vendor Onboarding');
+    await page.locator('[id^="step-"]').first().scrollIntoViewIfNeeded();
+    await expect(page).toHaveScreenshot('vendor-onboarding-desktop.png', { maxDiffPixelRatio: 0.02 });
+  });
+});
+
+test.describe('Vendor Onboarding walkthrough — mobile 375×812', () => {
+  test.use({ viewport: MOBILE });
+
+  test('no horizontal overflow', async ({ page }) => {
+    await loadWalkthroughExample(page, '/walkthrough/vendor-onboarding', 'Vendor Onboarding');
+    await assertNoHorizontalOverflow(page, 'Vendor Onboarding/mobile');
+  });
+
+  test('heading and 15-step timeline are present', async ({ page }) => {
+    await loadWalkthroughExample(page, '/walkthrough/vendor-onboarding', 'Vendor Onboarding');
+  });
+
+  test('visual snapshot', async ({ page }) => {
+    await loadWalkthroughExample(page, '/walkthrough/vendor-onboarding', 'Vendor Onboarding');
+    await page.locator('[id^="step-"]').first().scrollIntoViewIfNeeded();
+    await expect(page).toHaveScreenshot('vendor-onboarding-mobile.png', { maxDiffPixelRatio: 0.02 });
+  });
+});
+
+// ── Mermaid Host Demo — desktop ────────────────────────────────────────────────
+
+test.describe('Mermaid Host Demo — desktop 1280×800', () => {
+  test.use({ viewport: DESKTOP });
+
+  test('no horizontal overflow', async ({ page }) => {
+    await loadMermaidHostDemo(page);
+    await assertNoHorizontalOverflow(page, 'Mermaid Host Demo/desktop');
+  });
+
+  test('heading and rendered diagram panels are present', async ({ page }) => {
+    await loadMermaidHostDemo(page);
+    await expect(page.locator('[data-testid^="diagram-panel-"]')).toHaveCount(5);
+  });
+
+  test('visual snapshot', async ({ page }) => {
+    await loadMermaidHostDemo(page);
+    await page.locator('[data-testid="diagram-panel-demo-linear"]').scrollIntoViewIfNeeded();
+    await expect(page).toHaveScreenshot('mermaid-host-demo-desktop.png', { maxDiffPixelRatio: 0.03 });
   });
 });
 

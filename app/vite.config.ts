@@ -47,6 +47,12 @@ export default defineConfig(async ({ command: _command }) => {
       emptyOutDir: true,
       manifest: true,
     },
+    // Mermaid is intentionally lazy in production. Pre-optimizing it only for
+    // the Vite dev server prevents the preview proxy from timing out while it
+    // first transforms this large dependency after opening the Host Demo route.
+    optimizeDeps: {
+      include: ["mermaid"],
+    },
     server: {
       port,
       strictPort: true,

@@ -34,3 +34,7 @@ externalPort = 3000
 [[ports]]
 localPort = 20820
 externalPort = 80
+
+[nix]
+channel = "stable-25_05"
+packages = ["glib", "nspr", "nss", "atk", "xorg.libX11", "xorg.libXcomposite", "xorg.libXdamage", "xorg.libXext", "xorg.libXfixes", "xorg.libXrandr", "libgbm", "libxkbcommon", "alsa-lib"]

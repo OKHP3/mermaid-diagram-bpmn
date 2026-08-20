@@ -194,6 +194,7 @@ export default function SkillsWalkthrough() {
           <div
             className="rounded-xl border border-border bg-card overflow-x-auto"
             style={{ minHeight: 180 }}
+            data-testid="walkthrough-pipeline-diagram"
           >
             <div style={{ minWidth: 2400, padding: "12px 16px" }}>
               <BpmnRenderer
@@ -232,7 +233,7 @@ export default function SkillsWalkthrough() {
       </section>
 
       {/* ── Walkthrough Table ─────────────────────────────────── */}
-      <section id="walkthrough-table" className="border-t border-border">
+      <section id="walkthrough-table" className="border-t border-border" data-testid="walkthrough-table">
         <div className="max-w-7xl mx-auto w-full px-4 sm:px-6 py-12">
           <p className="forge-eyebrow mb-3">Walkthrough Table</p>
           <h2 className="text-xl font-bold text-foreground mb-2">
