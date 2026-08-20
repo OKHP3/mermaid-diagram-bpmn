@@ -98,11 +98,8 @@ vi.mock('@/lib/bpmn-renderer', () => ({
 // Heavy AgentSkills sub-components
 vi.mock('@/components/skills/PipelineDiagram',          () => ({ PipelineDiagram:          () => <div data-testid="pipeline-diagram" /> }));
 vi.mock('@/components/skills/DependencyFlowDiagram',    () => ({ DependencyFlowDiagram:    () => <div data-testid="dep-flow-diagram" /> }));
-vi.mock('@/components/skills/PnsLifecycleTracker',      () => ({ PnsLifecycleTracker:      () => <div data-testid="pns-lifecycle" /> }));
 vi.mock('@/components/skills/ZipDownloadButton',        () => ({ ZipDownloadButton:        ({ label }: { label: string }) => <button>{label}</button> }));
-vi.mock('@/components/skills/DownloadButton',           () => ({ DownloadButton:           ({ label }: { label: string }) => <button>{label}</button> }));
 vi.mock('@/components/skills/VariableFileCard',         () => ({ VariableFileCard:         () => <div data-testid="variable-file-card" /> }));
-vi.mock('@/components/skills/SkillFrontmatterPreview',  () => ({ SkillFrontmatterPreview:  () => <div data-testid="frontmatter-preview" /> }));
 vi.mock('@/components/skills/StartHerePanel',           () => ({ StartHerePanel:           () => <div data-testid="start-here-panel" /> }));
 
 // Layout sub-components that fire analytics or use browser APIs
