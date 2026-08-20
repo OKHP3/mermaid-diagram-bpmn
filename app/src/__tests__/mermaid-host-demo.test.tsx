@@ -31,7 +31,7 @@
  */
 
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { render, screen, waitFor } from '@testing-library/react';
+import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 
 // ── Mock declarations (must use vi.hoisted so they are available inside the ──
 // ── vi.mock() factory, which is hoisted to the top of the file by Vitest).  ──
@@ -53,7 +53,7 @@ vi.mock('mermaid', () => ({
 // Lightweight stub so vi.mock of bpmn-plugin resolves quickly.
 vi.mock('@/lib/bpmn-plugin', () => ({
   bpmnPlugin: { id: 'bpmn-beta', detector: () => false, loader: async () => ({}) },
-  MERMAID_VERSION_TARGET: '11.4.1',
+  MERMAID_VERSION_TARGET: '99.99.99',
 }));
 
 // ── Component import (after mocks) ────────────────────────────────────────────
@@ -151,6 +151,37 @@ describe('MermaidHostDemo — initialization', () => {
   });
 });
 
+describe('MermaidHostDemo — install snippet', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+    setupHappyMocks();
+  });
+
+  it('shows a published npm badge and the exact Mermaid version target', () => {
+    render(<MermaidHostDemo />);
+
+    expect(screen.getByTestId('host-demo-npm-status-badge').textContent).toContain('published on npm');
+    expect(screen.getByTestId('host-demo-install').textContent).toContain('Works with Mermaid 99.99.99');
+  });
+
+  it('copies the install command and confirms the copy', async () => {
+    const writeText = vi.fn().mockResolvedValue(undefined);
+    Object.defineProperty(navigator, 'clipboard', {
+      value: { writeText },
+      configurable: true,
+      writable: true,
+    });
+    render(<MermaidHostDemo />);
+
+    fireEvent.click(screen.getByTestId('host-demo-install-copy-btn'));
+
+    await waitFor(() => {
+      expect(writeText).toHaveBeenCalledWith('npm install @okhp3/mermaid-diagram-bpmn mermaid');
+      expect(screen.getByTestId('host-demo-install-copy-btn').textContent).toContain('copied');
+    });
+  });
+});
+
 describe('MermaidHostDemo — diagram rendering', () => {
   beforeEach(() => {
     vi.clearAllMocks();
@@ -221,7 +252,7 @@ describe('MermaidHostDemo — diagram rendering', () => {
     await waitFor(() => {
       expect(screen.getByTestId('version-metadata')).not.toBeNull();
     });
-    expect(screen.getByTestId('version-metadata').textContent).toContain('11.4.1');
+    expect(screen.getByTestId('version-metadata').textContent).toContain('99.99.99');
   });
 });
 

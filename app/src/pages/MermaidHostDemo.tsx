@@ -18,6 +18,7 @@
  */
 
 import { useState, useEffect } from 'react';
+import { Check, Copy, ExternalLink } from 'lucide-react';
 import mermaid from 'mermaid';
 import { bpmnPlugin, MERMAID_VERSION_TARGET } from '@/lib/bpmn-plugin';
 import example01 from '../../examples/01-linear-process.mmd?raw';
@@ -34,6 +35,7 @@ pool p1 "Outer" {
   }
 }
 `;
+const INSTALL_COMMAND = 'npm install @okhp3/mermaid-diagram-bpmn mermaid';
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 
@@ -69,6 +71,73 @@ function Badge({ label, value, ok }: { label: string; value: string; ok?: boolea
         {value}
       </code>
     </div>
+  );
+}
+
+function InstallSnippet() {
+  const [copied, setCopied] = useState(false);
+
+  function copyInstallCommand() {
+    navigator.clipboard.writeText(INSTALL_COMMAND).then(() => {
+      setCopied(true);
+      setTimeout(() => setCopied(false), 1800);
+    });
+  }
+
+  return (
+    <section
+      className="mb-8 rounded-lg border border-border bg-muted/30 overflow-hidden"
+      data-testid="host-demo-install"
+    >
+      <div className="flex flex-wrap items-center justify-between gap-3 px-4 py-2.5 bg-muted/40 border-b border-border">
+        <span className="text-xs font-mono text-muted-foreground/70 uppercase tracking-widest">
+          Install
+        </span>
+        <div className="flex items-center gap-2">
+          <span
+            className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800 text-[11px] font-mono text-emerald-700 dark:text-emerald-300"
+            data-testid="host-demo-npm-status-badge"
+          >
+            <Check size={10} aria-hidden="true" />
+            published on npm
+          </span>
+          <a
+            href="https://www.npmjs.com/package/@okhp3/mermaid-diagram-bpmn"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-[11px] text-primary hover:underline underline-offset-2 inline-flex items-center gap-1"
+          >
+            npmjs.com <ExternalLink size={9} aria-hidden="true" />
+          </a>
+        </div>
+      </div>
+      <div className="flex items-center justify-between px-4 py-2 border-b border-border bg-muted/20">
+        <span className="text-[10px] font-mono text-muted-foreground/60 uppercase tracking-widest">
+          bash
+        </span>
+        <button
+          type="button"
+          onClick={copyInstallCommand}
+          className="flex items-center gap-1.5 text-[10px] font-mono text-muted-foreground/60 hover:text-foreground transition-colors"
+          aria-label="Copy install command to clipboard"
+          data-testid="host-demo-install-copy-btn"
+        >
+          {copied ? <Check size={11} aria-hidden="true" /> : <Copy size={11} aria-hidden="true" />}
+          {copied ? 'copied' : 'copy'}
+        </button>
+      </div>
+      <div className="px-4 py-3 space-y-1">
+        <pre className="text-[12px] font-mono text-foreground leading-relaxed whitespace-pre-wrap">
+          <code>
+            <span className="text-muted-foreground/50 select-none">$ </span>
+            {INSTALL_COMMAND}
+          </code>
+        </pre>
+        <p className="text-[11px] text-muted-foreground/60 mt-1">
+          Works with Mermaid {MERMAID_VERSION_TARGET} · peer dependency · MIT licence
+        </p>
+      </div>
+    </section>
   );
 }
 
@@ -223,30 +292,7 @@ export default function MermaidHostDemo() {
       </header>
 
       {/* ── Install snippet ─────────────────────────────────────────────────── */}
-      <div className="mb-8 rounded-lg border border-border bg-muted/30 overflow-hidden">
-        <div className="px-4 py-2.5 bg-muted/40 border-b border-border">
-          <span className="text-xs font-mono text-muted-foreground/70 uppercase tracking-widest">
-            Install
-          </span>
-        </div>
-        <div className="px-4 py-3 space-y-1">
-          <pre className="text-[12px] font-mono text-foreground leading-relaxed whitespace-pre-wrap">
-            <span className="text-muted-foreground/50 select-none">$ </span>
-            {'npm install @okhp3/mermaid-diagram-bpmn mermaid'}
-          </pre>
-          <p className="text-[11px] text-muted-foreground/60 mt-1">
-            Works with Mermaid ≥ 10 · peer dependency · MIT licence ·{' '}
-            <a
-              href="https://www.npmjs.com/package/@okhp3/mermaid-diagram-bpmn"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-primary hover:underline"
-            >
-              npmjs.com/package/@okhp3/mermaid-diagram-bpmn
-            </a>
-          </p>
-        </div>
-      </div>
+      <InstallSnippet />
 
       {/* ── Version metadata ────────────────────────────────────────────────── */}
       <div
