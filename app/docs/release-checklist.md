@@ -25,7 +25,7 @@ Use this checklist before tagging and deploying any release.
 
 ## Pre-release: tests and typecheck
 
-- [ ] `pnpm --filter @workspace/mermaid-diagram-bpmn run test` — all tests pass (see `docs/version-checklist.md` for current count; 579 as of 2026-08-07)
+- [ ] `pnpm --filter @workspace/mermaid-diagram-bpmn run test` — all tests pass (see `docs/version-checklist.md` for current count; 790 as of 2026-08-20)
 - [ ] `pnpm --filter @workspace/mermaid-diagram-bpmn run typecheck` — zero errors
 - [ ] No `console.log` in any lib module (test files excepted)
 
