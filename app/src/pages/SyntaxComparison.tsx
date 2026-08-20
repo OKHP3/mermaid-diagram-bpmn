@@ -235,7 +235,7 @@ const CAPABILITY_MATRIX = [
     capability: "Working implementation today",
     notes: {
       "bpmn-beta": "✓ prototype — try in Playground",
-      "dfki-7699": "✗ not yet",
+      "dfki-7699": "community prototype linked; DFKI author’s work not public",
       "plantuml": "✓ mature",
       "mermaid-flowchart": "✓ native Mermaid",
     },
