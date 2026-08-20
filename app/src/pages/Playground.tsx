@@ -32,6 +32,7 @@ const MIN_SCALE = 0.15;
 const MAX_SCALE = 8;
 const EDITOR_PADDING_PX = 16;
 const EDITOR_LINE_HEIGHT_PX = 23;
+const URL_SYNC_DEBOUNCE_MS = 400;
 
 interface ErrorInfo {
   /** Human-readable error message; already contains "Line N: " prefix when the
@@ -139,6 +140,7 @@ export default function Playground() {
   // Share state: 'idle' | 'copied' | 'toolong'
   const [shareState, setShareState] = useState<"idle" | "copied" | "toolong">("idle");
   const shareTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const sourceUrlSyncTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   // Ref for the container holding the rendered BpmnRenderer SVG
   const svgContainerRef = useRef<HTMLDivElement>(null);
@@ -306,6 +308,7 @@ export default function Playground() {
       if (downloadTimeoutRef.current) clearTimeout(downloadTimeoutRef.current);
       if (svgExportTimeoutRef.current) clearTimeout(svgExportTimeoutRef.current);
       if (shareTimeoutRef.current) clearTimeout(shareTimeoutRef.current);
+      if (sourceUrlSyncTimeoutRef.current) clearTimeout(sourceUrlSyncTimeoutRef.current);
     };
   }, []);
 
@@ -386,9 +389,17 @@ export default function Playground() {
   }
 
   // ── Example / source handlers ───────────────────────────────────────────────
+  function cancelPendingSourceUrlSync() {
+    if (sourceUrlSyncTimeoutRef.current) {
+      clearTimeout(sourceUrlSyncTimeoutRef.current);
+      sourceUrlSyncTimeoutRef.current = null;
+    }
+  }
+
   function selectExample(id: string) {
     const ex = BPMN_EXAMPLES.find(e => e.id === id);
     if (ex) {
+      cancelPendingSourceUrlSync();
       setSource(ex.source);
       setActiveExample(ex.id);
       resetView();
@@ -404,12 +415,24 @@ export default function Playground() {
   function handleSourceChange(val: string) {
     setSource(val);
     setActiveExample(null);
-    // Clear stale URL params when the user starts editing freely.
-    // The Share button builds a fresh ?src= link on demand.
-    const url = new URL(window.location.href);
-    url.searchParams.delete('example');
-    url.searchParams.delete('src');
-    history.replaceState(null, '', url.toString());
+    cancelPendingSourceUrlSync();
+
+    // Keep direct address-bar copies shareable without replacing history on every
+    // keystroke. The delayed callback runs after React has completed the input
+    // update, which keeps synchronous component tests free of URL side effects.
+    sourceUrlSyncTimeoutRef.current = setTimeout(() => {
+      const url = new URL(window.location.href);
+      url.searchParams.delete('example');
+
+      if (!val.trim() || isOverLimit(val)) {
+        url.searchParams.delete('src');
+      } else {
+        url.searchParams.set('src', encodeSource(val));
+      }
+
+      history.replaceState(null, '', url.toString());
+      sourceUrlSyncTimeoutRef.current = null;
+    }, URL_SYNC_DEBOUNCE_MS);
   }
 
   // ── Copy / Download handlers ────────────────────────────────────────────────
@@ -508,9 +531,8 @@ export default function Playground() {
       return;
     }
 
-    // Build the shareable URL fresh — don't rely on window.location.href being
-    // current since handleSourceChange deliberately clears URL params while the
-    // user edits.
+    // Build the shareable URL fresh so Share remains correct even when clicked
+    // before a pending address-bar synchronization has completed.
     const url = new URL(window.location.href);
     if (activeExample) {
       url.searchParams.set('example', activeExample);
