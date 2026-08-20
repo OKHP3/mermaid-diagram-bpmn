@@ -571,6 +571,14 @@ describe('AgentSkills page — PNS section rows', () => {
     // Count guard — adding or removing a section without updating tests is visible
     expect(PNS_SECTIONS).toHaveLength(13);
   });
+
+  it('PNS section numbers form a contiguous sequence from 1 to 13 (pure data, no render)', () => {
+    const sectionNumbers = PNS_SECTIONS
+      .map(section => section.number)
+      .sort((a, b) => a - b);
+
+    expect(sectionNumbers).toEqual([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13]);
+  });
 });
 
 // ─────────────────────────────────────────────────────────────────────────────
