@@ -17,6 +17,17 @@ end e1 "End"
 s1 --> t1
 t1 --> e1`;
 
+const ACCESSIBLE_SOURCE = `bpmn-beta
+accTitle: Purchase request review
+accDescr: A reviewer checks a purchase request and records the outcome.
+start s1 "Start"
+task t1 "Review request"
+task t2 "Record outcome"
+end e1 "End"
+s1 --> t1
+t1 --> t2
+t2 --> e1`;
+
 describe('BpmnRenderer — interactive behaviour', () => {
   beforeEach(() => {
     mockNavigate.mockReset();
@@ -146,6 +157,48 @@ describe('BpmnRenderer — interactive behaviour', () => {
   it('renders an error message for invalid source', () => {
     const { getByText } = render(<BpmnRenderer source="not-valid-bpmn" />);
     expect(getByText(/No nodes parsed/)).toBeTruthy();
+  });
+});
+
+// ── SVG accessibility semantics ───────────────────────────────────────────────
+
+describe('BpmnRenderer — SVG accessibility semantics', () => {
+  it('identifies the root SVG as an image', () => {
+    const { container } = render(<BpmnRenderer source={ACCESSIBLE_SOURCE} />);
+    expect(container.querySelector('svg')?.getAttribute('role')).toBe('img');
+  });
+
+  it('labels the SVG with its accessibility title', () => {
+    const { container } = render(<BpmnRenderer source={ACCESSIBLE_SOURCE} />);
+    const svg = container.querySelector('svg')!;
+    const title = svg.querySelector('title')!;
+
+    expect(title.textContent).toBe('Purchase request review');
+    expect(svg.getAttribute('aria-labelledby')?.split(/\s+/)).toContain(title.id);
+  });
+
+  it('includes the diagram accessibility description', () => {
+    const { container } = render(<BpmnRenderer source={ACCESSIBLE_SOURCE} />);
+    const description = container.querySelector('svg desc');
+
+    expect(description?.textContent).toBe(
+      'A reviewer checks a purchase request and records the outcome.',
+    );
+  });
+
+  it('gives every linked task button a non-empty accessible name', () => {
+    const { container } = render(
+      <BpmnRenderer
+        source={ACCESSIBLE_SOURCE}
+        nodeLinks={{ t1: '/skills/review', t2: '/skills/record' }}
+      />,
+    );
+    const linkedTasks = container.querySelectorAll('svg g[role="button"]');
+
+    expect(linkedTasks).toHaveLength(2);
+    linkedTasks.forEach(task => {
+      expect(task.getAttribute('aria-label')?.trim()).toBeTruthy();
+    });
   });
 });
 

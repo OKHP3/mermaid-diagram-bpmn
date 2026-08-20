@@ -113,6 +113,7 @@ function renderNode(node: BpmnNode, lnode: BpmnLayoutNode, interaction?: NodeInt
       <g
         key={node.id}
         role={hasClick ? 'button' : undefined}
+        aria-label={hasClick ? `Open ${node.label || 'task'}` : undefined}
         tabIndex={hasClick ? 0 : undefined}
         style={hasClick ? { cursor: 'pointer' } : undefined}
         onClick={interaction?.onClick}
