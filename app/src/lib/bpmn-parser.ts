@@ -24,12 +24,11 @@ export function parse(source: string): BpmnDb {
 
   const contextStack: ContextEntry[] = [];
   let flowCounter = 0;
-
-  const currentPool = (): ContextEntry | undefined =>
-    [...contextStack].reverse().find(c => c.type === 'pool');
-
-  const currentLane = (): ContextEntry | undefined =>
-    [...contextStack].reverse().find(c => c.type === 'lane');
+  // Keep direct references so context lookups stay O(1) per parsed line. These
+  // are parser-local (rather than module-global) to keep concurrent parse calls
+  // independent.
+  let currentPoolRef: ContextEntry | undefined;
+  let currentLaneRef: ContextEntry | undefined;
 
   for (let i = 0; i < lines.length; i++) {
     const line = lines[i];
@@ -49,33 +48,40 @@ export function parse(source: string): BpmnDb {
       if (contextStack.length === 0) {
         throw new ParseError(`Line ${i + 1}: unexpected } — no open block`, i + 1, 'UNEXPECTED_CLOSE_BRACE');
       }
-      contextStack.pop();
+      const closedContext = contextStack.pop();
+      if (closedContext?.type === 'lane') {
+        currentLaneRef = undefined;
+      } else {
+        currentPoolRef = undefined;
+      }
       continue;
     }
 
     const poolMatch = line.match(POOL_PATTERN);
     if (poolMatch) {
-      if (currentPool()) {
+      if (currentPoolRef) {
         throw new ParseError(`Line ${i + 1}: pools cannot be nested`, i + 1, 'NESTED_POOL');
       }
       const poolId = poolMatch[1];
       const poolLabel = poolMatch[2];
       db.addPool({ id: poolId, label: poolLabel, laneIds: [] });
-      contextStack.push({ type: 'pool', id: poolId });
+      currentPoolRef = { type: 'pool', id: poolId };
+      contextStack.push(currentPoolRef);
       continue;
     }
 
     const laneMatch = line.match(LANE_PATTERN);
     if (laneMatch) {
-      const pool = currentPool();
+      const pool = currentPoolRef;
       if (!pool) throw new ParseError(`Line ${i + 1}: lane must be inside a pool block`, i + 1, 'LANE_OUTSIDE_POOL');
-      if (currentLane()) throw new ParseError(`Line ${i + 1}: nested lanes are not supported`, i + 1, 'NESTED_LANE');
+      if (currentLaneRef) throw new ParseError(`Line ${i + 1}: nested lanes are not supported`, i + 1, 'NESTED_LANE');
       const laneId = laneMatch[1];
       const laneLabel = laneMatch[2];
       db.addLane({ id: laneId, label: laneLabel, poolId: pool.id });
       const poolObj = db.getPools().find(p => p.id === pool.id);
       if (poolObj) poolObj.laneIds.push(laneId);
-      contextStack.push({ type: 'lane', id: laneId });
+      currentLaneRef = { type: 'lane', id: laneId };
+      contextStack.push(currentLaneRef);
       continue;
     }
 
@@ -84,8 +90,8 @@ export function parse(source: string): BpmnDb {
       const typeStr = nodeMatch[1];
       const nodeId = nodeMatch[2];
       const label = nodeMatch[3];
-      const pool = currentPool();
-      const lane = currentLane();
+      const pool = currentPoolRef;
+      const lane = currentLaneRef;
 
       let kind: BpmnNode['kind'];
       let subtype: string | undefined;

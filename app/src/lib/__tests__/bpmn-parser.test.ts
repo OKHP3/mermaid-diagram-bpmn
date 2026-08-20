@@ -175,6 +175,22 @@ pool p1 "Buyer" {
     expect(s1?.poolId).toBe('p1');
   });
 
+  it('clears lane context after a lane closes while retaining its pool context', () => {
+    const src = `bpmn-beta
+pool p1 "Buyer" {
+  lane l1 "Requester" {
+    task t1 "Submit"
+  }
+  task t2 "Archive request"
+}`;
+    const db = parse(src);
+    const laneTask = db.getNodes().find(n => n.id === 't1');
+    const poolTask = db.getNodes().find(n => n.id === 't2');
+
+    expect(laneTask).toMatchObject({ poolId: 'p1', laneId: 'l1' });
+    expect(poolTask).toMatchObject({ poolId: 'p1', laneId: undefined });
+  });
+
   it('throws on nested pools', () => {
     const src = `bpmn-beta
 pool p1 "Outer" {
