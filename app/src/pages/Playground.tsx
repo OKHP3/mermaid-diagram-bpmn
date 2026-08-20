@@ -890,7 +890,7 @@ export default function Playground() {
             ref={canvasRef}
             tabIndex={0}
             role="application"
-            aria-label="Diagram canvas — scroll to zoom, drag or touch to pan, arrow keys to pan, + / − to zoom by keyboard"
+            aria-label="Diagram canvas. Keyboard controls: arrow keys pan, plus or minus zoom, and 0 resets the view. Scroll to zoom; drag or touch to pan."
             onKeyDown={handleCanvasKeyDown}
             className="flex-1 diagram-grid overflow-hidden relative select-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/50 focus-visible:ring-inset"
             style={{ cursor: isDragging ? "grabbing" : "grab" }}

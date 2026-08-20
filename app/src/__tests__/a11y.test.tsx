@@ -179,6 +179,17 @@ describe('WCAG 2.2 AA — Playground page', () => {
     expect(label, 'textarea must have aria-label or aria-labelledby').toBeTruthy();
   });
 
+  it('diagram canvas announces keyboard pan, zoom, and reset controls', () => {
+    const { container } = renderInLayout(<Playground />);
+    const canvas = container.querySelector('[data-testid="div-diagram-preview"]');
+    expect(canvas, 'diagram canvas should exist').not.toBeNull();
+
+    const instructions = canvas!.getAttribute('aria-label') ?? '';
+    expect(instructions, 'canvas should describe arrow-key panning').toMatch(/arrow keys?.*pan/i);
+    expect(instructions, 'canvas should describe plus/minus zooming').toMatch(/plus.*minus.*zoom/i);
+    expect(instructions, 'canvas should describe the 0 reset shortcut').toMatch(/0.*reset/i);
+  });
+
   it('copy-status live region has role="status" and aria-live', () => {
     // The parse error panel (role="alert", aria-live="polite") is conditionally rendered
     // only when parseError is truthy — its aria attributes are verified in
