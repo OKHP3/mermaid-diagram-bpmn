@@ -1,2 +1,3 @@
 - [happy-dom SVG innerHTML drop after defs](happy-dom-svg-defs-bug.md) — happy-dom drops SVG children after </defs> in HTML mode; fix: DOMParser(image/svg+xml) + securityLevel:'loose' in tests.
 - [Post-merge install timeout](post-merge-install-timeout.md) — workspace pnpm installs can exceed the default 20-second setup limit even when healthy.
+- [Playwright system libraries](playwright-system-libraries.md) — a cached Chromium can still fail to launch when the environment lacks shared libraries.

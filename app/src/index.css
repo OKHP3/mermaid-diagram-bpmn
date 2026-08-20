@@ -365,6 +365,12 @@
     color: var(--okh-header-text);
   }
 
+  .forge-nav-dropdown-item:focus-visible {
+    outline: 2px solid var(--okh-forge-amber);
+    outline-offset: 2px;
+    border-radius: 0.25rem;
+  }
+
   .forge-nav-dropdown-item--active {
     color: var(--okh-header-active);
     font-weight: 600;

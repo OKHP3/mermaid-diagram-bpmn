@@ -257,3 +257,51 @@ test.describe('AgentSkills — mobile 375×812', () => {
     await expect(page).toHaveScreenshot('skills-mobile.png', { maxDiffPixelRatio: 0.02 });
   });
 });
+
+// ── Header dropdown keyboard focus — desktop ───────────────────────────────────
+
+test.describe('Header dropdown keyboard focus — desktop', () => {
+  test.use({ viewport: DESKTOP });
+
+  test('Arrow-key navigation shows a distinct focus ring in light and dark themes', async ({ page }) => {
+    await loadPage(page, '/playground', '[data-testid="heading-playground"]');
+    const trigger = page.locator('[data-testid="nav-plugin-dropdown"]');
+
+    async function assertFocusRing() {
+      await trigger.focus();
+      await page.keyboard.press('ArrowDown');
+
+      const menuItems = page.locator('[role="menuitem"]');
+      const focusedItem = menuItems.first();
+      await expect(focusedItem).toBeFocused();
+      const focusStyle = await focusedItem.evaluate(element => {
+        const style = getComputedStyle(element);
+        return {
+          outlineStyle: style.outlineStyle,
+          outlineWidth: style.outlineWidth,
+          outlineOffset: style.outlineOffset,
+        };
+      });
+      expect(focusStyle.outlineStyle).toBe('solid');
+      expect(parseFloat(focusStyle.outlineWidth)).toBeGreaterThanOrEqual(2);
+      expect(parseFloat(focusStyle.outlineOffset)).toBeGreaterThanOrEqual(1);
+
+      // A hovered non-focused item retains the hover treatment without the
+      // keyboard-only outline, so the focused item remains unambiguous.
+      const hoveredItem = menuItems.nth(1);
+      await hoveredItem.hover();
+      const hoverOutlineStyle = await hoveredItem.evaluate(
+        element => getComputedStyle(element).outlineStyle,
+      );
+      expect(hoverOutlineStyle).toBe('none');
+
+      await page.keyboard.press('Escape');
+      await expect(page.locator('[role="menu"]')).toHaveCount(0);
+    }
+
+    await assertFocusRing();
+    await page.locator('[data-testid="button-toggle-theme"]').click();
+    await expect(page.locator('html')).toHaveClass(/dark/);
+    await assertFocusRing();
+  });
+});
