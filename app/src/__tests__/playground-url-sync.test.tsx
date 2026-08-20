@@ -9,7 +9,7 @@
  */
 
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { act, fireEvent, render, screen } from "@testing-library/react";
+import { act, fireEvent, render, screen, waitFor } from "@testing-library/react";
 
 vi.mock("@/lib/bpmn-renderer", () => ({
   BpmnRenderer: () => <svg data-testid="mock-renderer" />,
@@ -65,13 +65,19 @@ describe("Playground — debounced address-bar sharing", () => {
 
     changeSource(SOURCE_A);
     await advanceUrlSync(399);
-    expect(parseShareParams(window.location.search)).toEqual({
+    expect(await parseShareParams(window.location.search)).toEqual({
       kind: "example",
       id: "01-linear",
     });
 
     await advanceUrlSync(1);
-    expect(parseShareParams(window.location.search)).toEqual({
+    // The debounce has elapsed under fake time. Native CompressionStream work
+    // completes on the real event loop, so restore it before observing the URL.
+    vi.useRealTimers();
+    await waitFor(() => {
+      expect(window.location.search).not.toBe("?example=01-linear");
+    });
+    expect(await parseShareParams(window.location.search)).toEqual({
       kind: "source",
       source: SOURCE_A,
     });
@@ -88,8 +94,13 @@ describe("Playground — debounced address-bar sharing", () => {
     changeSource(SOURCE_B);
     await advanceUrlSync(400);
 
-    expect(replaceState).toHaveBeenCalledOnce();
-    expect(parseShareParams(window.location.search)).toEqual({
+    // The debounce has elapsed under fake time. Native CompressionStream work
+    // completes on the real event loop, so restore it before observing the URL.
+    vi.useRealTimers();
+    await waitFor(() => {
+      expect(replaceState).toHaveBeenCalledOnce();
+    });
+    expect(await parseShareParams(window.location.search)).toEqual({
       kind: "source",
       source: SOURCE_B,
     });
@@ -108,7 +119,6 @@ describe("Playground — debounced address-bar sharing", () => {
   });
 
   it("Share copies the edited source even before the pending URL sync finishes", async () => {
-    vi.useFakeTimers();
     const writeText = vi.fn().mockResolvedValue(undefined);
     Object.defineProperty(navigator, "clipboard", {
       value: { writeText },
@@ -117,15 +127,13 @@ describe("Playground — debounced address-bar sharing", () => {
     render(<Playground />);
 
     changeSource(SOURCE_A);
-    await act(async () => {
-      fireEvent.click(screen.getByTestId("button-share-url"));
-      await Promise.resolve();
-      await Promise.resolve();
+    fireEvent.click(screen.getByTestId("button-share-url"));
+    await waitFor(() => {
+      expect(writeText).toHaveBeenCalledOnce();
     });
 
-    expect(writeText).toHaveBeenCalledOnce();
     const copiedUrl = new URL(writeText.mock.calls[0][0]);
-    expect(parseShareParams(copiedUrl.search)).toEqual({
+    expect(await parseShareParams(copiedUrl.search)).toEqual({
       kind: "source",
       source: SOURCE_A,
     });

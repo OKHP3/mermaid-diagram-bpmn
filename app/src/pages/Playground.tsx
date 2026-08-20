@@ -88,19 +88,19 @@ function getAllWarnings(source: string): DiagnosticWarning[] {
 }
 
 /**
- * Read URL search params once at component initialisation and return the
- * intended initial source + activeExample state.  Falls back to the default
- * canonical example when no URL params are present or decoding fails.
+ * Resolve examples synchronously during initialisation. Compressed source
+ * payloads are decoded after mounting because Compression Streams are async.
  */
 function computeInitialState(): { source: string; activeExample: string | null } {
   const search = typeof window !== 'undefined' ? window.location.search : '';
-  const shared = parseShareParams(search);
+  const params = new URLSearchParams(search);
+  const encodedSource = params.get('src');
+  const exampleId = params.get('example');
 
-  if (shared?.kind === 'source') {
-    return { source: shared.source, activeExample: null };
-  }
-  if (shared?.kind === 'example') {
-    const ex = BPMN_EXAMPLES.find(e => e.id === shared.id);
+  // `src` takes precedence over `example`; leave the default in place until
+  // the asynchronous source decoder hydrates the shared diagram.
+  if (!encodedSource && exampleId) {
+    const ex = BPMN_EXAMPLES.find(e => e.id === exampleId);
     if (ex) return { source: ex.source, activeExample: ex.id };
   }
 
@@ -141,6 +141,8 @@ export default function Playground() {
   const [shareState, setShareState] = useState<"idle" | "copied" | "toolong">("idle");
   const shareTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const sourceUrlSyncTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const sourceUrlSyncVersionRef = useRef(0);
+  const userChangedSourceRef = useRef(false);
 
   // Ref for the container holding the rendered BpmnRenderer SVG
   const svgContainerRef = useRef<HTMLDivElement>(null);
@@ -151,6 +153,23 @@ export default function Playground() {
   // sizes the Playground handles, so calling it twice is acceptable.
   const allWarnings = parseError ? [] : getAllWarnings(source);
   const activeExampleDef = BPMN_EXAMPLES.find(e => e.id === activeExample);
+
+  // Hydrate arbitrary ?src= links after the Compression Streams API decodes
+  // them. A user edit or example selection always wins over a late decode.
+  useEffect(() => {
+    let disposed = false;
+    const search = window.location.search;
+
+    void parseShareParams(search).then(shared => {
+      if (disposed || userChangedSourceRef.current || shared?.kind !== 'source') return;
+      setSource(shared.source);
+      setActiveExample(null);
+    });
+
+    return () => {
+      disposed = true;
+    };
+  }, []);
 
   // Position the editor at a parser-reported line without moving keyboard focus.
   // The stripe itself is rendered in a sibling layer and follows textarea scrolling.
@@ -309,6 +328,7 @@ export default function Playground() {
       if (svgExportTimeoutRef.current) clearTimeout(svgExportTimeoutRef.current);
       if (shareTimeoutRef.current) clearTimeout(shareTimeoutRef.current);
       if (sourceUrlSyncTimeoutRef.current) clearTimeout(sourceUrlSyncTimeoutRef.current);
+      sourceUrlSyncVersionRef.current += 1;
     };
   }, []);
 
@@ -390,15 +410,39 @@ export default function Playground() {
 
   // ── Example / source handlers ───────────────────────────────────────────────
   function cancelPendingSourceUrlSync() {
+    sourceUrlSyncVersionRef.current += 1;
     if (sourceUrlSyncTimeoutRef.current) {
       clearTimeout(sourceUrlSyncTimeoutRef.current);
       sourceUrlSyncTimeoutRef.current = null;
     }
   }
 
+  async function synchronizeSourceUrl(sourceToSync: string, version: number) {
+    const url = new URL(window.location.href);
+    url.searchParams.delete('example');
+
+    if (!sourceToSync.trim() || isOverLimit(sourceToSync)) {
+      url.searchParams.delete('src');
+    } else {
+      try {
+        const encoded = await encodeSource(sourceToSync);
+        if (version !== sourceUrlSyncVersionRef.current) return;
+        url.searchParams.set('src', encoded);
+      } catch {
+        // Encoding failures should never leave a stale source URL behind.
+        url.searchParams.delete('src');
+      }
+    }
+
+    if (version === sourceUrlSyncVersionRef.current) {
+      history.replaceState(null, '', url.toString());
+    }
+  }
+
   function selectExample(id: string) {
     const ex = BPMN_EXAMPLES.find(e => e.id === id);
     if (ex) {
+      userChangedSourceRef.current = true;
       cancelPendingSourceUrlSync();
       setSource(ex.source);
       setActiveExample(ex.id);
@@ -413,25 +457,18 @@ export default function Playground() {
   }
 
   function handleSourceChange(val: string) {
+    userChangedSourceRef.current = true;
     setSource(val);
     setActiveExample(null);
     cancelPendingSourceUrlSync();
+    const version = sourceUrlSyncVersionRef.current;
 
     // Keep direct address-bar copies shareable without replacing history on every
     // keystroke. The delayed callback runs after React has completed the input
     // update, which keeps synchronous component tests free of URL side effects.
     sourceUrlSyncTimeoutRef.current = setTimeout(() => {
-      const url = new URL(window.location.href);
-      url.searchParams.delete('example');
-
-      if (!val.trim() || isOverLimit(val)) {
-        url.searchParams.delete('src');
-      } else {
-        url.searchParams.set('src', encodeSource(val));
-      }
-
-      history.replaceState(null, '', url.toString());
       sourceUrlSyncTimeoutRef.current = null;
+      void synchronizeSourceUrl(val, version);
     }, URL_SYNC_DEBOUNCE_MS);
   }
 
@@ -538,8 +575,13 @@ export default function Playground() {
       url.searchParams.set('example', activeExample);
       url.searchParams.delete('src');
     } else if (source.trim()) {
-      url.searchParams.set('src', encodeSource(source));
-      url.searchParams.delete('example');
+      try {
+        url.searchParams.set('src', await encodeSource(source));
+        url.searchParams.delete('example');
+      } catch {
+        setShareState("idle");
+        return;
+      }
     }
 
     try {
@@ -747,7 +789,7 @@ export default function Playground() {
             >
               <AlertCircle size={11} className="shrink-0" />
               <span>
-                Source exceeds the {Math.round(SHARE_SOURCE_LIMIT / 1000)} kB URL limit — sharing via link is unavailable.
+                Source exceeds the {Math.round(SHARE_SOURCE_LIMIT / 1000)} kB sharing limit — sharing via link is unavailable.
                 {" "}Use the <strong>.mmd</strong> download button to save and share this diagram.
               </span>
             </div>
