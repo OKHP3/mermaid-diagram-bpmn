@@ -36,6 +36,15 @@ jobs:
       - name: Type-check
         run: pnpm run typecheck
 
+      - name: Build app (produces the manifest for the bundle-size gate)
+        run: pnpm --filter @workspace/mermaid-diagram-bpmn run build
+
+      - name: Check initial JavaScript bundle size
+        run: pnpm run check:bundle-size
+
+      - name: Test bundle-size failure detection (exits 1 on oversized chunk)
+        run: pnpm run check:bundle-size:test
+
       - name: Unit tests
         run: pnpm --filter @workspace/mermaid-diagram-bpmn run test
 

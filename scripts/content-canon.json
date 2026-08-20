@@ -13,5 +13,6 @@
     "  They do not live here — do not add them."
   ],
   "testCount": 579,
-  "testCountUpdated": "2026-08-07"
+  "testCountUpdated": "2026-08-07",
+  "bundleSizeCeilingKbGzip": 150
 }
