@@ -1,7 +1,8 @@
 import { Link } from "wouter";
 import type { CSSProperties } from "react";
-import { ArrowRight, GitBranch, FileCode2, Layers, CheckCircle2, ExternalLink, CheckCheck, FlaskConical, Clock, XCircle, Users, Building2, Bot, BookOpen, GitPullRequest } from "lucide-react";
+import { ArrowRight, GitBranch, FileCode2, Layers, CheckCircle2, CheckCheck, FlaskConical, Clock, XCircle, Users, Building2, Bot, BookOpen, GitPullRequest } from "lucide-react";
 import { StatusRibbon } from "@/components/StatusRibbon";
+import { ExternalLinkAnchor } from "@/components/ExternalLinkAnchor";
 import {
   BPMN_MERMAID_VERIFIED,
   BPMN_PLAYGROUND_ONLY,
@@ -550,18 +551,15 @@ t3 ==> e2`}</pre>
           <p className="forge-eyebrow mb-4">Related Mermaid GitHub issues</p>
           <div className="flex flex-wrap gap-3">
             {RELATED_ISSUES.map(issue => (
-              <a
+              <ExternalLinkAnchor
                 key={issue.id}
                 href={issue.url}
-                target="_blank"
-                rel="noopener noreferrer"
                 className="inline-flex items-center gap-2 px-3.5 py-2 rounded-lg border border-border bg-card text-sm hover:border-primary/40 hover:shadow-sm transition-all"
                 data-testid={`link-issue-${issue.id}`}
               >
                 <code className="font-mono text-xs text-primary font-bold">{issue.id}</code>
                 <span className="text-muted-foreground text-xs">{issue.title}</span>
-                <ExternalLink size={10} className="text-muted-foreground/50" />
-              </a>
+              </ExternalLinkAnchor>
             ))}
           </div>
         </div>

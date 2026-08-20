@@ -1,5 +1,6 @@
 import { Link } from "wouter";
-import { ExternalLink, AlertTriangle, ArrowRight } from "lucide-react";
+import { AlertTriangle, ArrowRight } from "lucide-react";
+import { ExternalLinkAnchor } from "@/components/ExternalLinkAnchor";
 
 interface Decision {
   id: string;
@@ -94,10 +95,8 @@ export default function About() {
           the risks this project is managing, and how to get involved.
         </p>
         <div className="flex items-center gap-3 mt-4 flex-wrap" data-testid="about-badges">
-          <a
+          <ExternalLinkAnchor
             href="https://github.com/OKHP3/mermaid-diagram-bpmn/actions/workflows/deploy-gh-pages.yml"
-            target="_blank"
-            rel="noopener noreferrer"
             aria-label="Deploy to GitHub Pages workflow status"
           >
             <img
@@ -105,7 +104,7 @@ export default function About() {
               alt="Deploy to GitHub Pages"
               height="20"
             />
-          </a>
+          </ExternalLinkAnchor>
           <img
             src="https://img.shields.io/badge/BP--SKILL-15%20skills-5b6ee1?style=flat&logo=data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxNiAxNiI+PHBhdGggZmlsbD0id2hpdGUiIGQ9Ik04IDFhNyA3IDAgMSAwIDAgMTRBNyA3IDAgMCAwIDggMXptMCAyYTUgNSAwIDEgMSAwIDEwQTUgNSAwIDAgMSA4IDN6bS0uNSAydjQuNWwzLjUgMi0uNS44LTQtMi4zVjV6Ii8+PC9zdmc+"
             alt="BP-SKILL: 15 skills"
@@ -365,17 +364,14 @@ export default function About() {
         </h2>
         <div className="flex flex-col gap-2">
           {CONTRIBUTE_LINKS.map(link => (
-            <a
+            <ExternalLinkAnchor
               key={link.url}
               href={link.url}
-              target="_blank"
-              rel="noopener noreferrer"
               className="flex items-center gap-3 px-4 py-3 rounded-lg border border-border bg-card hover:border-primary/50 hover:bg-accent/30 transition-colors group"
               data-testid={`link-ref-${link.label.slice(0, 20).toLowerCase().replace(/\s+/g, '-')}`}
             >
               <span className="text-xs text-foreground flex-1">{link.label}</span>
-              <ExternalLink size={12} className="text-muted-foreground/60 group-hover:text-muted-foreground transition-colors shrink-0" />
-            </a>
+            </ExternalLinkAnchor>
           ))}
         </div>
       </section>

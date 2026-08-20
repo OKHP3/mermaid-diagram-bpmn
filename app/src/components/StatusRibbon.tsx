@@ -1,4 +1,5 @@
 import { FlaskConical } from "lucide-react";
+import { ExternalLinkAnchor } from "@/components/ExternalLinkAnchor";
 
 export function StatusRibbon() {
   return (
@@ -13,14 +14,12 @@ export function StatusRibbon() {
       <p className="text-xs text-foreground/80 leading-relaxed">
         <span className="font-semibold text-foreground">Prototype.</span>
         {" "}DSL unstable · Not full BPMN 2.0 · No BPMN XML import/export · No bpmn-js runtime ·{" "}
-        <a
+        <ExternalLinkAnchor
           href="https://github.com/OKHP3/mermaid-diagram-bpmn"
-          target="_blank"
-          rel="noopener noreferrer"
           className="text-primary underline-offset-2 hover:underline font-medium"
         >
           OKHP3/mermaid-diagram-bpmn
-        </a>
+        </ExternalLinkAnchor>
       </p>
     </div>
   );

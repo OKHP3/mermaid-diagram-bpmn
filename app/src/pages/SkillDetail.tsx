@@ -1,7 +1,8 @@
 import { useEffect } from "react";
 import type { CSSProperties } from "react";
 import { Link, useParams } from "wouter";
-import { ArrowLeft, ExternalLink } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
+import { ExternalLinkAnchor } from "@/components/ExternalLinkAnchor";
 import {
   SKILLS, PIPELINE_LAYERS, VARIABLE_FILES,
 } from "@/data/skills-registry";
@@ -405,14 +406,12 @@ export default function SkillDetail() {
           <Link href="/skills" className="forge-btn-outline text-sm">
             <ArrowLeft size={13} /> All Skills
           </Link>
-          <a
+          <ExternalLinkAnchor
             href={`https://github.com/OKHP3/mermaid-diagram-bpmn/tree/main/skills/${skill.id}`}
-            target="_blank"
-            rel="noopener noreferrer"
             className="inline-flex items-center gap-1.5 text-xs text-muted-foreground hover:text-primary transition-colors"
           >
-            View on GitHub <ExternalLink size={11} />
-          </a>
+            View on GitHub
+          </ExternalLinkAnchor>
         </div>
       </div>
 

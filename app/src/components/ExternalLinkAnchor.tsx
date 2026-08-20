@@ -1,7 +1,8 @@
 import React from "react";
 import { ExternalLink } from "lucide-react";
 
-interface ExternalLinkAnchorProps {
+interface ExternalLinkAnchorProps
+  extends Omit<React.AnchorHTMLAttributes<HTMLAnchorElement>, "href" | "children" | "target" | "rel"> {
   href: string;
   children: React.ReactNode;
   /** Extra Tailwind classes added to the <a> element (e.g. colour, weight). */
@@ -12,9 +13,15 @@ interface ExternalLinkAnchorProps {
  * Inline external link that always enforces target="_blank",
  * rel="noopener noreferrer", and appends an ExternalLink icon.
  */
-export function ExternalLinkAnchor({ href, children, className = "" }: ExternalLinkAnchorProps) {
+export function ExternalLinkAnchor({
+  href,
+  children,
+  className = "",
+  ...anchorProps
+}: ExternalLinkAnchorProps) {
   return (
     <a
+      {...anchorProps}
       href={href}
       target="_blank"
       rel="noopener noreferrer"
