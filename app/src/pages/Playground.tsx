@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect, useCallback } from "react";
+import { useState, useRef, useEffect, useCallback, useMemo } from "react";
 import { BpmnRenderer } from "@/lib/bpmn-renderer";
 import { BPMN_EXAMPLES, DEFAULT_EXAMPLE_ID } from "@/lib/bpmn-examples";
 import { EXPORT_THEME, getStyles } from "@/lib/bpmn-styles";
@@ -43,18 +43,44 @@ interface ErrorInfo {
   line?: number;
 }
 
-function getParseError(source: string): ErrorInfo | null {
+interface SourceDiagnostics {
+  parseError: ErrorInfo | null;
+  allWarnings: DiagnosticWarning[];
+}
+
+/**
+ * Parse source once, then derive both hard-error state and advisory diagnostics
+ * from the same BpmnDb. Hard parse errors take precedence over warnings.
+ */
+function getSourceDiagnostics(source: string): SourceDiagnostics {
   try {
     const db = parse(source);
-    if (db.getNodes().length === 0 && source.trim().length > 10) {
-      return { message: "No nodes found. Check your syntax — each node must be on its own line." };
+    const nodes = db.getNodes();
+    if (nodes.length === 0 && source.trim().length > 10) {
+      return {
+        parseError: {
+          message: "No nodes found. Check your syntax — each node must be on its own line.",
+        },
+        allWarnings: [],
+      };
     }
-    return null;
+    if (nodes.length === 0) {
+      return { parseError: null, allWarnings: [] };
+    }
+    const lintWarns: LintWarning[] = lint(db);
+    const validationErrs = validate(db);
+    return {
+      parseError: null,
+      allWarnings: [
+        ...lintWarns,
+        ...validationErrs.map(e => ({ code: e.code, message: e.message, nodeId: e.nodeId })),
+      ],
+    };
   } catch (e) {
     if (e instanceof ParseError) {
-      return { message: e.message, line: e.line };
+      return { parseError: { message: e.message, line: e.line }, allWarnings: [] };
     }
-    return { message: (e as Error).message };
+    return { parseError: { message: (e as Error).message }, allWarnings: [] };
   }
 }
 
@@ -63,28 +89,6 @@ interface DiagnosticWarning {
   code: string;
   message: string;
   nodeId?: string;
-}
-
-/**
- * Run the domain-rule lint pass and the semantic validation pass and return
- * all advisory diagnostics combined.  Returns an empty array when the source
- * has a hard parse error (errors take priority) or when the source is clean.
- * Never throws.
- */
-function getAllWarnings(source: string): DiagnosticWarning[] {
-  try {
-    const db = parse(source);
-    if (db.getNodes().length === 0) return [];
-    const lintWarns: LintWarning[] = lint(db);
-    const validationErrs = validate(db);
-    return [
-      ...lintWarns,
-      ...validationErrs.map(e => ({ code: e.code, message: e.message, nodeId: e.nodeId })),
-    ];
-  } catch {
-    // Parse error — no warnings shown alongside hard errors.
-    return [];
-  }
 }
 
 /**
@@ -147,11 +151,10 @@ export default function Playground() {
   // Ref for the container holding the rendered BpmnRenderer SVG
   const svgContainerRef = useRef<HTMLDivElement>(null);
 
-  const parseError = getParseError(source);
-  // All warnings (lint + semantic validation) are only computed when there is
-  // no hard parse error. The parse is pure and sub-millisecond for the diagram
-  // sizes the Playground handles, so calling it twice is acceptable.
-  const allWarnings = parseError ? [] : getAllWarnings(source);
+  const { parseError, allWarnings } = useMemo(
+    () => getSourceDiagnostics(source),
+    [source],
+  );
   const activeExampleDef = BPMN_EXAMPLES.find(e => e.id === activeExample);
 
   // Hydrate arbitrary ?src= links after the Compression Streams API decodes
