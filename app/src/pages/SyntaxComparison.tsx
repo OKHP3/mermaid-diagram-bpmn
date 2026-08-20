@@ -26,19 +26,13 @@ g1 --> t4: "no"
 t3 --> e1
 t4 ==> e2`;
 
-// Verbatim from mermaid-js/mermaid#7699 (filed 2026-05-02 by Andreas Emrich, DFKI IWi).
-// Reproduced exactly from the "Basic process with exclusive gateway" fenced block in the issue.
-// Five elements; both branches shown. Nothing added or paraphrased.
+// Verbatim from Andreas Emrich's 2026-05-24 comment on mermaid-js/mermaid#7699.
+// This is the author's later proposed simple/default layer, shown exactly as published.
+// Reviewed against the primary issue on 2026-08-20; nothing added or paraphrased.
 const DFKI_7699 = `bpmn
-  startEvent[type:event,subtype:none,behaviour:start,label:,lane:,pool:]
-  task[type:task,subtype:,label:Review Request,lane:,pool:]
-  exclusiveGateway[type:gateway,subtype:exclusive,markers:(),label:Approved?,lane:,pool:]
-  endEvent1[type:event,subtype:none,behaviour:end,label:Approved,lane:,pool:]
-  endEvent2[type:event,subtype:none,behaviour:end,label:Rejected,lane:,pool:]
-
-  startEvent --> task --> exclusiveGateway
-  exclusiveGateway -[type:control,labelLabel:Yes]-> endEvent1
-  exclusiveGateway -[type:control,labelLabel:No]-> endEvent2`;
+  start --> review[Review Request] --> approved{Approved?}
+  approved -- Yes --> accepted[Approved]
+  approved -- No --> rejected[Rejected]`;
 
 const PLANTUML = `@startuml
 !theme plain
@@ -101,23 +95,23 @@ const SYNTAXES = [
   },
   {
     id: "dfki-7699",
-    label: "DFKI #7699 — verbatim snippet",
-    tag: "Proposed — verbatim from issue, no implementation",
+      label: "DFKI #7699 — current proposal",
+      tag: "Proposed — author update, verbatim",
     tagClass: "bg-amber-500/10 text-amber-700 dark:text-amber-400 border-amber-500/20",
     code: DFKI_7699,
     lineCount: DFKI_7699.trim().split("\n").length,
     charCount: DFKI_7699.trim().length,
     strengths: [
-      "Targets full BPMN 2.0 element set including all subtypes",
-      "Academic backing (Emrich & Hollax 2025, DFKI — paper in preparation)",
+        "Later author update proposes a concise Mermaid-like default layer",
+        "Optional detailed syntax is proposed for precise BPMN semantics",
+        "Original issue targets a full BPMN 2.0 element set including subtypes",
       "Would be MIT-licensed core Mermaid if accepted",
-      "Explicit attribute structure aids machine parsing",
     ],
     tradeoffs: [
-      "No working implementation — proposer said \u201cI will try\u201d",
-      "Attribute-dictionary syntax (type:, subtype:, lane:, pool: on every element) is verbose",
-      "Empty fields still required (label:,lane:,pool:) — noisy for simple diagrams",
-      "Issue #7699 is in Triage with no maintainer response as of August 2026",
+        "No public implementation or pull request is linked from the issue",
+        "The tiered syntax and its normalization rules are still proposed, not specified",
+        "The original detailed form remains attribute-heavy for advanced elements",
+        "Issue is open and marked Status: Approved (reviewed 2026-08-20)",
     ],
   },
   {
@@ -178,7 +172,7 @@ const CAPABILITY_MATRIX = [
     capability: "BPMN event circles (start / end / intermediate)",
     notes: {
       "bpmn-beta": "✓ start, end (more planned)",
-      "dfki-7699": "proposed — all subtypes",
+      "dfki-7699": "proposed — original issue targets all subtypes",
       "plantuml": "approximate via activity shapes",
       "mermaid-flowchart": "round node only (([…]))",
     },
@@ -196,7 +190,7 @@ const CAPABILITY_MATRIX = [
     capability: "Task subtypes (user, service, script, send, receive)",
     notes: {
       "bpmn-beta": "✓ task:user, task:service, task:script, task:send, task:receive",
-      "dfki-7699": "proposed via subtype: attribute",
+      "dfki-7699": "proposed via optional detailed syntax",
       "plantuml": "not natively differentiated",
       "mermaid-flowchart": "label convention only",
     },
@@ -205,7 +199,7 @@ const CAPABILITY_MATRIX = [
     capability: "Pools and swim lanes",
     notes: {
       "bpmn-beta": "✓ pool { lane { } } blocks",
-      "dfki-7699": "proposed via lane:/pool: attributes on every element",
+      "dfki-7699": "proposed via detailed syntax; original issue shows pool attributes",
       "plantuml": "| Swimlane | partitions",
       "mermaid-flowchart": "subgraph only — not BPMN pools",
     },
@@ -250,7 +244,7 @@ const CAPABILITY_MATRIX = [
     capability: "Conciseness for simple processes",
     notes: {
       "bpmn-beta": "high — keyword + id + label per element",
-      "dfki-7699": "low — 6 attributes required per element",
+      "dfki-7699": "not settled — concise default layer; detailed tier is more verbose",
       "plantuml": "medium — @startuml wrapper + swimlane syntax",
       "mermaid-flowchart": "high — but loses BPMN semantics",
     },
@@ -311,7 +305,7 @@ export default function SyntaxComparison() {
           <a href="https://github.com/mermaid-js/mermaid/issues/7699" target="_blank" rel="noopener noreferrer" className="underline underline-offset-2 hover:text-foreground transition-colors">
             DFKI issue #7699
           </a>{" "}
-          (the only example Emrich published; five elements, not the full process).
+          (the author's later proposed simple/default layer; five elements, not the full process).
           Each notation has genuine strengths — this page is a factual reference, not a sales pitch.
         </p>
         <div className="mt-4 flex flex-wrap gap-3 text-xs text-muted-foreground">
@@ -354,8 +348,9 @@ export default function SyntaxComparison() {
           a purchase order) or rejects it (notifying the requester). The bpmn-beta, PlantUML, and
           Mermaid flowchart columns each render this full process: one start event, two end events,
           four tasks, one exclusive gateway, and seven sequence flows. The DFKI #7699 column shows
-          only the verbatim snippet from the issue — five elements covering an approval/rejection
-          branch — because no fuller example was published.
+          the author's later, verbatim simple/default snippet from the issue — five elements covering
+          a simplified approval/rejection branch. The issue also contains earlier detailed and
+          pool-oriented examples; this page does not combine or rewrite them.
         </p>
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
           {SYNTAXES.map(s => (
@@ -460,22 +455,23 @@ export default function SyntaxComparison() {
         <p className="text-xs text-muted-foreground mb-4 max-w-2xl leading-relaxed">
           This comparison is maintained by the bpmn-beta project team. The bpmn-beta, PlantUML, and
           Mermaid flowchart examples are hand-written for the same notional process and verified to
-          be syntactically valid in their respective parsers. The DFKI #7699 column reproduces the
-          complete verbatim example from the issue exactly — no elements were added or paraphrased;
-          no parser exists for it yet.
+          be syntactically valid in their respective parsers. The DFKI #7699 column reproduces one
+          complete, later author-authored fenced example from the issue exactly — no elements were
+          added, combined, or paraphrased. It remains a proposal, not an implemented Mermaid parser.
         </p>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-3xl">
           <div className="p-4 rounded-lg border border-border bg-card">
             <p className="text-xs font-semibold text-foreground mb-1.5">DFKI #7699 example source</p>
             <p className="text-xs text-muted-foreground leading-relaxed">
-              The DFKI column is the <strong className="text-foreground">complete verbatim example</strong> from{" "}
+              The DFKI column is the <strong className="text-foreground">complete verbatim simple/default example</strong> from{" "}
               <a href="https://github.com/mermaid-js/mermaid/issues/7699" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline inline-flex items-center gap-1">
                 Mermaid issue #7699 <ExternalLink size={10} />
               </a>{" "}
-              (filed 2026-05-02 by Andreas Emrich, DFKI IWi) — reproduced exactly, with nothing added
-              or paraphrased. The snippet covers five elements (both gateway branches); no fuller example was published.
-              The paper cited in the issue (Emrich &amp; Hollax 2025) is described as in preparation;
-              no DOI or preprint URL exists publicly as of August 2026.
+              — the later 2026-05-24 author update by Andreas Emrich. It is reproduced exactly, with
+              nothing added, combined, or paraphrased. The issue also includes earlier detailed and
+              pool examples. The cited Emrich &amp; Hollax 2025 paper remains described there as in
+              preparation; a DOI or preprint was not found in the primary issue or an exact-title and
+              author search, reviewed 2026-08-20.
             </p>
           </div>
           <div className="p-4 rounded-lg border border-border bg-card">

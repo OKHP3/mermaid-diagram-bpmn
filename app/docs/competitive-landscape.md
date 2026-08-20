@@ -2,7 +2,7 @@
 
 ## TL;DR
 
-- **No existing tool today lets you author BPMN-semantic diagrams in a readable, Mermaid-native text DSL without either BPMN XML or a heavyweight bpmn-js/modeler runtime.** That is the genuine, defensible whitespace bpmn-beta occupies — but the competing DFKI proposal (Mermaid issue #7699, filed 2026-05-02 by Andreas Emrich) targets the same gap with a more metadata-heavy syntax, so positioning must be sharp on *readability and conciseness*, not just on "BPMN in Mermaid."
+- **No released tool today lets you author BPMN-semantic diagrams in a readable, Mermaid-native text DSL without either BPMN XML or a heavyweight bpmn-js/modeler runtime.** That is the genuine, defensible whitespace bpmn-beta occupies — but the competing DFKI proposal (Mermaid issue #7699, filed 2026-05-02 by Andreas Emrich) targets the same gap with an evolving tiered syntax, so positioning must be sharp on working evidence and clarity, not just on "BPMN in Mermaid."
 - **Market-size claims in the source document need correction.** There is no credible "$300 billion BPM industry" figure: the BPM *software* market is roughly USD 21.51B in 2025 per Fortune Business Insights (growing at 17.2% CAGR to USD 91.87B by 2034), while the much larger Business Process *Outsourcing* (BPO) market is ~USD 300–415B in 2025. These are entirely different markets and the source document conflates them. BPMN being "the de facto standard for process modeling" is well-supported in the literature; that one stands.
 - **The realistic path is the external plugin first, with patient upstream advocacy second.** Mermaid Chart (the commercial entity behind core Mermaid) has raised USD 7.5M and is targeting ServiceNow-class workflow automation as its long-term vision — BPMN is strategically adjacent to that vision, which is a tailwind. But the parallel DFKI proposal #7699 already has the maintainers' attention (with a forthcoming academic paper as backing), so a community contributor proposing bpmn-beta must differentiate on syntax quality, working prototype evidence, and LLM-friendliness rather than novelty alone.
 
@@ -44,37 +44,34 @@
 | **GitHub/GitLab native rendering** | Renders Mermaid (since Feb 2022) and PlantUML (GitLab) | Whatever the embedded DSL supports | n/a | Frictionless dev-doc rendering of Mermaid | Inherits Mermaid's lack of BPMN |
 | **`benjamen/mermaid-bpmn-plugin`** (existing community plugin) | Yes (Mermaid plugin) | Partial | MIT (GitHub) | Demonstrates feasibility — there is already a community attempt | Low activity; not a maintained, fleshed-out DSL |
 | **`signavio/bpmn2constraints`** | No — BPMN XML/JSON in, Mermaid flowchart out (one-way) | Renders to flowchart, not BPMN-native | Open source | Useful for ETL of existing BPMN | One-way export; flowchart-style output, not BPMN-shaped |
-| **DFKI proposal — Mermaid issue #7699** | Yes — proposed | Targets full BPMN 2.0 element set | Would be MIT (Mermaid core) | Academic backing (Emrich & Hollax 2025, in prep at DFKI); proposer says "I will try and implement it myself" | Syntax is metadata-heavy and verbose (see §1.3 below); not as readable as Mermaid idiom |
+| **DFKI proposal — Mermaid issue #7699** | Yes — proposed | Targets full BPMN 2.0 element set | Would be MIT (Mermaid core) | Later author update proposes a concise default layer with detailed syntax for advanced semantics | Syntax direction is still evolving; no public implementation or PR is linked from the issue (see §1.3 below) |
 
 ### 1.3 The DFKI competing proposal (Mermaid issue #7699) — what it actually proposes
 
-The competing proposal, filed by Andreas Emrich (senior researcher at DFKI's Institute for Information Systems, Saarbrücken, under Prof. Peter Loos / Prof. Peter Fettke; not a professor himself) on 2026-05-02 as **"Add Native BPMN 2.0 Support to Mermaid.js"**, advocates a DSL that is *not* XML-flavored but is **metadata-bracketed and verbose**. Verbatim example from the issue:
+The competing proposal, filed by Andreas Emrich (senior researcher at DFKI's Institute for Information Systems, Saarbrücken, under Prof. Peter Loos / Prof. Peter Fettke; not a professor himself) on 2026-05-02 as **"Add Native BPMN 2.0 Support to Mermaid.js"**, originally included a detailed attribute form and a pool/message-flow example. In a later author update on 2026-05-24, Emrich proposed a tiered model with a concise default layer. The current comparison should show that later example verbatim:
 
 ```
 bpmn
-  startEvent[type:event,subtype:none,behaviour:start,label:,lane:,pool:]
-  task[type:task,subtype:,label:Review Request,lane:,pool:]
-  exclusiveGateway[type:gateway,subtype:exclusive,markers:(),label:Approved?,lane:,pool:]
-  endEvent1[type:event,subtype:none,behaviour:end,label:Approved,lane:,pool:]
-  startEvent --> task --> exclusiveGateway
-  exclusiveGateway -[type:control,labelLabel:Yes]-> endEvent1
+  start --> review[Review Request] --> approved{Approved?}
+  approved -- Yes --> accepted[Approved]
+  approved -- No --> rejected[Rejected]
 ```
 
 Key facts about the proposal:
 
 - **Title:** "Add Native BPMN 2.0 Support to Mermaid.js"
 - **Filed by:** GitHub user `andreas-emrich` (DFKI IWi group, Saarland Informatics Campus)
-- **Backing paper:** Emrich, A., Hollax, J. (2025), "Domain-Specific Languages for Business Process Modeling: Mermaid Diagrams for BPMN", DFKI — **described in the issue text as in preparation; no DOI, arXiv ID, or preprint URL exists publicly as of May 2026**
-- **Maintainer engagement:** None as of the snapshot — the issue sits in "Status: Triage" with no comments from Knut Sveidqvist (knsv) or Sidharth Vinod (sidharthv96)
+- **Backing paper:** Emrich, A., Hollax, J. (2025), "Domain-Specific Languages for Business Process Modeling: Mermaid Diagrams for BPMN", DFKI — **still described in the issue as in preparation. No DOI, arXiv ID, or preprint URL was found in the primary issue or an exact-title/author search, reviewed 2026-08-20.**
+- **Maintainer engagement:** The issue is open and labelled **Status: Approved**. On 2026-05-28, Mermaid collaborator @knsv suggested merging it with #2623; the issue contains subsequent community discussion.
 - **Element ambition:** start/end events with all subtypes, tasks (send/receive/user/manual/service/script/business rule), all gateways (exclusive/parallel/inclusive/event-based/complex), intermediate events, sequence/message flows, subprocesses (expanded/collapsed), call activities, pools, lanes, boundary events
-- **Implementation commitment:** "I will try and implement it myself."
+- **Implementation status:** The later author update describes local detector, parser, renderer, and shape work, but no public implementation or pull request is linked from #7699.
 
-**Honest comparative read:** The DFKI syntax is closer to a flattened XML attribute dump (`type:event,subtype:none,behaviour:start,label:,lane:,pool:` on every element) than to the terse Markdown-inspired idiom that has made Mermaid popular. This is the genuine differentiation lane for bpmn-beta — a syntax that *feels like Mermaid* (concise, defaults-first, infer-from-shape) rather than one that *encodes BPMN attribute dictionaries*.
+**Honest comparative read:** The original detailed form is close to an attribute dictionary (`type:event,subtype:none,behaviour:start,label:,lane:,pool:`), but the later simple/default layer is intentionally Mermaid-like. The proposal does not yet publish a grammar, normalization rules, or runnable implementation, so its syntax should not be treated as settled. bpmn-beta's differentiation must rest on a working, documented implementation and clear scope rather than on claiming that the competing proposal is inherently verbose.
 
 ### 1.4 Implications for bpmn-beta
 
 - The competitive whitespace is real: no tool combines (a) text-first DSL, (b) BPMN-shaped rendering, (c) no XML, (d) no bpmn-js dependency, and (e) Mermaid-idiom readability.
-- The DFKI proposal already occupies (a)–(d) but arguably misses (e). bpmn-beta should lead with side-by-side syntax comparisons.
+- The DFKI proposal now explicitly targets a concise default layer as well as detailed forms. bpmn-beta should lead with working behavior, a clear scope, and honest side-by-side syntax comparisons.
 - "PlantUML already does BPMN" is a common objection — the truthful response is that PlantUML's BPMN support is frozen/third-party and renders activity-diagram approximations, not BPMN-native artifacts.
 
 ---
@@ -160,7 +157,7 @@ This claim is **well-supported**. Multiple independent sources frame BPMN as the
 
 Per the mermaid-js DeepWiki (indexed 16 May 2026) and the mermaid.js.org diagram-syntax reference, the native diagram types are: **flowchart, sequenceDiagram, classDiagram, stateDiagram(-v2), erDiagram, gantt, journey, pie, requirementDiagram, gitGraph, C4 (C4Context et al.), mindmap, timeline, sankey, xychart-beta, block, quadrantChart, packet, kanban, architecture-beta, treemap, radar, and Ishikawa (added 2024–2025)**.
 
-**BPMN is absent from this list.** Issue #2623 (BPMN support, opened in the issue tracker because "Mermaid is now supported in Notion") and issue #660 (the earlier 2018 BPMN attempt) confirm that BPMN has been requested multiple times over many years and never landed. The competing proposal #7699 (May 2026) is the most recent attempt and is still in Triage.
+**BPMN is absent from this list.** Issue #2623 (BPMN support, opened in the issue tracker because "Mermaid is now supported in Notion") and issue #660 (the earlier 2018 BPMN attempt) confirm that BPMN has been requested multiple times over many years and never landed. The competing proposal #7699 (May 2026) is open and marked Status: Approved, reviewed 2026-08-20.
 
 ### 3.4 Mermaid adoption claims
 
@@ -216,10 +213,10 @@ No public statement from Mermaid Chart explicitly mentions BPMN. However:
 
 Honest assessment:
 
-- The maintainers have **not yet engaged** with #7699 as of the snapshot — the issue sits in Status: Triage with no comments. This is normal for a new proposal in a popular repo and does not signal endorsement or rejection.
-- Two competing proposals for the same diagram type *can* be merged or chosen between by the maintainers. Mermaid has historically chosen syntaxes that *feel like Mermaid*; the DFKI syntax does not (metadata-bracket-heavy).
-- The DFKI proposer has stated "I will try and implement it myself" — meaning a draft PR may be forthcoming.
-- Academic backing (the forthcoming Emrich & Hollax 2025 DFKI paper) gives the DFKI proposal credibility weight, but the paper is **not yet published** and cannot be cited as peer-reviewed support today.
+- #7699 is open and marked **Status: Approved**. Mermaid collaborator @knsv suggested merging it with #2623 on 2026-05-28, so it should not be characterized as unreviewed or still in Triage.
+- Two competing proposals for the same diagram type *can* be merged or chosen between by maintainers. The DFKI author has since proposed a Mermaid-like simple layer as well as a detailed layer, so syntax is an evolving comparison rather than a fixed contrast.
+- The DFKI author describes local prototype work in the issue, but #7699 does not link a public implementation or pull request.
+- The cited Emrich & Hollax 2025 paper remains unavailable publicly as of the 2026-08-20 review and cannot be cited as peer-reviewed support today.
 - A community contributor who arrives with (a) a working prototype rendering BPMN SVG in-browser, (b) no bpmn-js dependency, (c) a syntax that is demonstrably more concise and Mermaid-idiomatic than #7699, and (d) the explicit `bpmn-beta` naming aligned with Mermaid's existing convention, has a credible path. The realistic outcomes are:
   - (i) bpmn-beta lands as the external plugin and is referenced from #7699 as prior art;
   - (ii) the two proposals are synthesized — likely DFKI's element coverage with a more Mermaid-idiomatic surface syntax;
@@ -235,8 +232,8 @@ The defensible strategic move is to ship the external plugin, document the synta
 
 | Differentiator | Defensible? | Notes |
 |---|---|---|
-| "First text-first BPMN DSL that renders BPMN-native shapes in browser without bpmn-js" | **Yes — as of May 2026.** Existing options either use XML+bpmn-js (Camunda, Kroki, bpmn.io ecosystem) or are not BPMN-shaped (PlantUML activity-beta, flowchart approximations). | DFKI #7699 is conceptually the same lane but has no working prototype yet (proposer stated "I will try"). bpmn-beta has a working prototype. |
-| "Mermaid-idiomatic syntax — concise, defaults-first" | **Yes if demonstrated.** The DFKI alternative is explicitly metadata-heavy. Side-by-side syntax comparison is the strongest single piece of marketing collateral. | This is the most important point of differentiation. |
+| "First text-first BPMN DSL that renders BPMN-native shapes in browser without bpmn-js" | **Not defensible as a broad first claim.** The existing landscape includes parallel proposals and prototypes; position bpmn-beta on its actual implementation and scope instead. | #7699 is conceptually in the same lane and its author describes local prototype work; a separate community prototype is also public. |
+| "Mermaid-idiomatic syntax — concise, defaults-first" | **Only if demonstrated.** #7699's later simple layer aims for the same goal, while its original detailed form is verbose. Side-by-side, source-linked comparisons are the strongest evidence. | Treat this as a comparison of implemented behavior and documented rules, not a claim about intent. |
 | "LLM-friendly text format for BPMN" | **Yes, with the right citation.** Anchor in arXiv 2507.11356 (Brissard, Cuppens, Zouaq, Polytechnique Montréal — Mermaid wins 6/6 PMo criteria across the 9-PMR PMo Dataset) and MermaidSeqBench (Shbita et al., IBM Research, arXiv 2511.14967) as evidence that Mermaid-shaped DSLs are the empirically best LLM target for structured diagram generation. | Do NOT claim "best for LLM BPMN generation" until a BPMN-specific benchmark exists. |
 | "Targets Descriptive Conformance subset, not full BPMN execution" | **Honest and correct.** OMG's Descriptive Conformance Sub-Class is the lightweight set: events, tasks, gateways, sequence/message flows, pools/lanes, annotations — exactly the documentation-grade subset, not the executable subset. This is also what 80%+ of real-world BPMN diagrams use. | This framing makes the project's scope defensible against "but you don't do BPMN execution" critiques. |
 | "Ecosystem fit: ships natively where Mermaid renders" | **Yes.** GitHub native rendering (since Feb 2022), GitLab, Notion, Obsidian, VS Code, Mintlify, ReadMe all render Mermaid. An external Mermaid plugin inherits much of this surface; an upstream-merged diagram type inherits all of it. | Single biggest distribution lever. |
@@ -270,7 +267,7 @@ These should appear in public documentation rather than be hidden:
 |---|---|
 | "The third-party BPM industry is valued at over $300 billion" | Remove. Per Fortune Business Insights (2025), the BPM *software* market is USD 21.51B in 2025 (CAGR 17.2% to USD 91.87B by 2034); the BPO services market is the ~USD 300–400B figure but is unrelated to diagramming. |
 | "BPMN for Mermaid is the AI-native BPMN format" | "Mermaid was the highest-scoring of nine process model representations evaluated for LLM-based process modeling (Brissard, Cuppens, Zouaq, Polytechnique Montréal, arXiv 2507.11356, 2025). bpmn-beta extends that strength into BPMN semantics." |
-| "First and only Mermaid-native BPMN solution" | "First working prototype of a Mermaid-native BPMN DSL that renders BPMN-shaped SVG without an XML or bpmn-js dependency. A parallel academic proposal (Mermaid issue #7699, May 2026) targets the same problem with a more metadata-heavy syntax." |
+| "First and only Mermaid-native BPMN solution" | "A working Mermaid-native BPMN DSL that renders BPMN-shaped SVG without an XML or bpmn-js dependency. Parallel proposals and prototypes, including Mermaid issue #7699, target the same problem." |
 | "BPMN is *the* standard" | "BPMN 2.0 is the OMG-maintained ISO/IEC 19510 standard and the most widely cited de facto standard for process modeling." |
 
 ### 5.5 The narrow commercial wedge
@@ -360,7 +357,7 @@ Post this as body text; add the link (https://okhp3.github.io/mermaid-diagram-bp
 > }
 > ```
 >
-> Worth being upfront: there's a parallel proposal in the Mermaid issues (#7699, from DFKI researchers) targeting the same problem — their syntax is more complete but more verbose. I think there are real tradeoffs worth discussing. A side-by-side comparison is on the demo site.
+> Worth being upfront: there's a parallel proposal in the Mermaid issues (#7699, from DFKI researchers) targeting the same problem. Its author has proposed both a concise default layer and a more detailed layer, so the design is still evolving. A source-linked side-by-side comparison is on the demo site.
 >
 > Alongside the diagram plugin, I've been building a 15-skill agent suite (BP-SKILL) — SKILL.md-format workflows for the full process documentation lifecycle from elicitation through publication. Researchers at Polytechnique Montréal found that Mermaid achieves the highest overall score across six criteria when evaluating nine process model representations for LLM-based process modeling (arXiv 2507.11356). The thesis: a Mermaid-flavoured BPMN DSL is positioned at the intersection of the two representations that perform best.
 >
@@ -385,7 +382,7 @@ Post this as body text; add the link (https://okhp3.github.io/mermaid-diagram-bp
 >
 > `bpmn-beta` is a Mermaid external diagram type plugin. You write pools, lanes, tasks (user/service/script), gateways (exclusive, parallel, inclusive), and cross-pool message flows in a concise text DSL; it renders to BPMN-shaped SVG in the browser with no bpmn-js dependency.
 >
-> There's a parallel BPMN proposal for Mermaid core (issue #7699, by DFKI researchers) with a more attribute-heavy syntax approach. The tradeoff is element completeness vs. readability; theirs targets full BPMN 2.0, mine targets the Descriptive Conformance subset (the 80% used in documentation-grade diagrams). A side-by-side syntax comparison is on the demo site at /comparison.
+> There's a parallel BPMN proposal for Mermaid core (issue #7699, by DFKI researchers). Its author has proposed both a simple default layer and a detailed BPMN-aware layer; the design is still evolving. The proposal targets full BPMN 2.0, while mine targets the Descriptive Conformance subset used in documentation-grade diagrams. A source-linked side-by-side syntax comparison is on the demo site at /comparison.
 >
 > Technical details: the parser is regex-based (TypeScript), no Langium grammar yet; the layout is custom (no dagre); the renderer emits plain SVG with CSS custom properties for theming. 717 tests. Bundle: 5.68 kB gzip (ESM). Mermaid peer dependency: >=10.0.0.
 >
@@ -428,7 +425,7 @@ Post this as body text; add the link (https://okhp3.github.io/mermaid-diagram-bp
 
 - **All market-research figures are vendor-funded.** Research Nester, Fortune Business Insights, Precedence Research, Grand View Research, MarketsandMarkets, and Straits Research are commercial firms whose primary product is selling reports to vendors in the markets they size. Treat all dollar figures as directional ranges, not as authoritative.
 - **Mermaid Chart's "8 million users" claim** is a company press-release figure (TechCrunch, 20 March 2024) with no independent verification; treat as a vendor claim.
-- **The Emrich & Hollax 2025 DFKI paper is not publicly available** as of the research date — it is explicitly described in issue #7699 as in preparation. No DOI or preprint URL was found via Google Scholar, arXiv, DFKI's publication index, or ResearchGate. Do not cite it as published peer-reviewed work.
+- **The Emrich & Hollax 2025 DFKI paper is not publicly available** as of the 2026-08-20 review — it is explicitly described in issue #7699 as in preparation. No DOI or preprint URL was found in the primary issue or an exact-title/author search. Do not cite it as published peer-reviewed work.
 - **Maintainer engagement on #7699: the issue was approved by 2026-06-12** (per @pbrolin47/COLLABORATOR on #2623) and a contributor (@derari) has volunteered to submit a PR. The prior "zero engagement" note is superseded. See Phase D reply-state check above for the current competitive picture.
 - **Mermaid star/user counts** vary across sources (~65k–78k stars; 8M users) and reflect different snapshot dates between 2024 and 2026.
 - **The BPMN "de facto standard" framing is consensus in academic and industry literature** but BPMN is not without critics; some communities (DEMO, Petri-net formalism, ArchiMate at enterprise-architecture level) treat BPMN as one notation among several.
