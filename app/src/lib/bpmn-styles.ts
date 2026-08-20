@@ -5,9 +5,14 @@ export interface BpmnThemeOptions {
   clusterBkg: string;
   textColor: string;
   primaryColor: string;
+  fontFamily?: string;
+  monoFontFamily?: string;
 }
 
 export function getStyles(options: BpmnThemeOptions): string {
+  const fontFamily = options.fontFamily ?? "var(--app-font-sans, 'DM Sans', system-ui, sans-serif)";
+  const monoFontFamily = options.monoFontFamily ?? "var(--app-font-mono, 'JetBrains Mono', monospace)";
+
   return `
     .bpmn-event { fill: ${options.mainBkg}; stroke: ${options.nodeBorder}; stroke-width: 2; }
     .bpmn-event-end { fill: ${options.primaryColor}; stroke: ${options.primaryColor}; stroke-width: 3; }
@@ -32,9 +37,9 @@ export function getStyles(options: BpmnThemeOptions): string {
     .bpmn-arrow { fill: ${options.lineColor}; }
     .bpmn-arrow-open { fill: none; stroke: ${options.lineColor}; stroke-width: 1; }
     .bpmn-slash { stroke: ${options.lineColor}; stroke-width: 1.5; }
-    .bpmn-text { fill: ${options.textColor}; font-family: var(--app-font-sans, 'DM Sans', system-ui, sans-serif); }
-    .bpmn-text-muted { fill: ${options.lineColor}; opacity: 0.7; font-family: var(--app-font-mono, 'JetBrains Mono', monospace); }
-    .bpmn-text-label { fill: ${options.textColor}; font-family: var(--app-font-sans, 'DM Sans', system-ui, sans-serif); font-weight: 600; }
+    .bpmn-text { fill: ${options.textColor}; font-family: ${fontFamily}; }
+    .bpmn-text-muted { fill: ${options.lineColor}; opacity: 0.7; font-family: ${monoFontFamily}; }
+    .bpmn-text-label { fill: ${options.textColor}; font-family: ${fontFamily}; font-weight: 600; }
   `;
 }
 
@@ -46,6 +51,19 @@ export const LIGHT_THEME: BpmnThemeOptions = {
   clusterBkg: 'hsl(var(--muted))',
   textColor: 'hsl(var(--foreground))',
   primaryColor: 'hsl(var(--primary))',
+};
+
+// Used only for downloaded SVGs. Vector editors do not resolve the app's CSS
+// custom properties, so exports must carry the resolved light-palette values.
+export const EXPORT_THEME: BpmnThemeOptions = {
+  lineColor: '#0f172a',
+  mainBkg: '#f6f2ee',
+  nodeBorder: '#e9d4af',
+  clusterBkg: '#e9e4dd',
+  textColor: '#0f172a',
+  primaryColor: '#c46a2c',
+  fontFamily: "'DM Sans', system-ui, sans-serif",
+  monoFontFamily: "'JetBrains Mono', 'Menlo', monospace",
 };
 
 // Fallback theme with concrete values for Mermaid's SVG context where CSS

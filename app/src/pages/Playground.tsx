@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 import { BpmnRenderer } from "@/lib/bpmn-renderer";
 import { BPMN_EXAMPLES, DEFAULT_EXAMPLE_ID } from "@/lib/bpmn-examples";
+import { EXPORT_THEME, getStyles } from "@/lib/bpmn-styles";
 import {
   AlertCircle,
   TriangleAlert,
@@ -362,8 +363,24 @@ export default function Playground() {
     if (svgExportTimeoutRef.current) clearTimeout(svgExportTimeoutRef.current);
     const svgEl = svgContainerRef.current?.querySelector("svg");
     if (!svgEl) return;
+
+    // Export a copy so the live renderer remains bound to its CSS-variable theme.
+    // Vector editors do not resolve those variables, so replace all SVG styles
+    // with a concrete light-palette theme before serializing.
+    const exportSvg = svgEl.cloneNode(true) as SVGSVGElement;
+    exportSvg.querySelectorAll("style").forEach(style => style.remove());
+    const svgNamespace = "http://www.w3.org/2000/svg";
+    const defs = exportSvg.querySelector("defs")
+      ?? document.createElementNS(svgNamespace, "defs");
+    if (!defs.parentNode) {
+      exportSvg.insertBefore(defs, exportSvg.firstChild);
+    }
+    const style = document.createElementNS(svgNamespace, "style");
+    style.textContent = getStyles(EXPORT_THEME);
+    defs.insertBefore(style, defs.firstChild);
+
     const serializer = new XMLSerializer();
-    const svgStr = serializer.serializeToString(svgEl);
+    const svgStr = serializer.serializeToString(exportSvg);
     const slug = activeExampleDef ? toFilenameSlug(activeExampleDef.name) : "diagram";
     const filename = `${slug}.svg`;
     const blob = new Blob([svgStr], { type: "image/svg+xml" });

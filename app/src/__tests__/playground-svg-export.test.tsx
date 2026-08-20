@@ -42,6 +42,7 @@ vi.mock("@/lib/bpmn-renderer", () => ({
         <title>Mock BPMN Diagram</title>
         <desc>A mock bpmn-beta diagram for test</desc>
         <circle cx="50" cy="50" r="18" className="bpmn-event" />
+        <style>{".bpmn-event { fill: hsl(var(--card)); }"}</style>
       </svg>
     );
   },
@@ -54,6 +55,7 @@ vi.mock("@/components/StatusRibbon", () => ({
 
 import Playground from "@/pages/Playground";
 import { BPMN_EXAMPLES, DEFAULT_EXAMPLE_ID } from "@/lib/bpmn-examples";
+import { EXPORT_THEME } from "@/lib/bpmn-styles";
 
 // ── Download stub helpers ─────────────────────────────────────────────────────
 
@@ -180,6 +182,15 @@ describe("Playground — SVG export download", () => {
     fireEvent.click(screen.getByTestId("button-export-svg"));
     const text = await capturedBlob!.text();
     expect(text).toContain("mock bpmn-beta diagram");
+  });
+
+  it("Blob content embeds resolved styles without CSS custom properties", async () => {
+    render(<Playground />);
+    fireEvent.click(screen.getByTestId("button-export-svg"));
+    const text = await capturedBlob!.text();
+
+    expect(text).toContain(EXPORT_THEME.primaryColor);
+    expect(text).not.toContain("var(--");
   });
 
   it("download filename ends with .svg", () => {
