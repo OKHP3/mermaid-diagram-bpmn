@@ -521,6 +521,12 @@
     color: #e87c5c;
   }
 
+  .forge-editor-error-line {
+    background: linear-gradient(90deg, rgba(196, 106, 44, 0.30), rgba(196, 106, 44, 0.12));
+    border-left: 3px solid #e87c5c;
+    box-shadow: inset 0 1px rgba(232, 124, 92, 0.35), inset 0 -1px rgba(232, 124, 92, 0.2);
+  }
+
   /* ---- Pipeline table cells ------------------------------------- */
 
   .forge-pipeline-end {

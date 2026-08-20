@@ -30,6 +30,8 @@ import { StatusRibbon } from "@/components/StatusRibbon";
 
 const MIN_SCALE = 0.15;
 const MAX_SCALE = 8;
+const EDITOR_PADDING_PX = 16;
+const EDITOR_LINE_HEIGHT_PX = 23;
 
 interface ErrorInfo {
   /** Human-readable error message; already contains "Line N: " prefix when the
@@ -119,6 +121,8 @@ export default function Playground() {
   // flash of the default content when a shared link is opened.
   const [source, setSource] = useState<string>(() => computeInitialState().source);
   const [activeExample, setActiveExample] = useState<string | null>(() => computeInitialState().activeExample);
+  const [editorScrollTop, setEditorScrollTop] = useState(0);
+  const sourceEditorRef = useRef<HTMLTextAreaElement>(null);
 
   // copy state: 'idle' | 'copied' | 'error'
   const [copyState, setCopyState] = useState<"idle" | "copied" | "error">("idle");
@@ -145,6 +149,23 @@ export default function Playground() {
   // sizes the Playground handles, so calling it twice is acceptable.
   const allWarnings = parseError ? [] : getAllWarnings(source);
   const activeExampleDef = BPMN_EXAMPLES.find(e => e.id === activeExample);
+
+  // Position the editor at a parser-reported line without moving keyboard focus.
+  // The stripe itself is rendered in a sibling layer and follows textarea scrolling.
+  useEffect(() => {
+    if (parseError?.line == null) return;
+
+    const editor = sourceEditorRef.current;
+    if (!editor) return;
+
+    const lineTop = (parseError.line - 1) * EDITOR_LINE_HEIGHT_PX;
+    const targetScrollTop = Math.max(
+      0,
+      lineTop - (editor.clientHeight - EDITOR_LINE_HEIGHT_PX) / 2,
+    );
+    editor.scrollTop = targetScrollTop;
+    setEditorScrollTop(targetScrollTop);
+  }, [parseError?.line]);
 
   // ── Pan / zoom state ────────────────────────────────────────────────────────
   const [viewState, setViewState] = useState({ scale: 1, tx: 0, ty: 0 });
@@ -710,14 +731,32 @@ export default function Playground() {
             </div>
           )}
 
-          <textarea
-            className="flex-1 p-4 text-sm resize-none focus-visible:outline-none leading-relaxed code-area forge-code-panel"
-            value={source}
-            onChange={e => handleSourceChange(e.target.value)}
-            spellCheck={false}
-            aria-label="bpmn-beta source code editor"
-            data-testid="textarea-bpmn-source"
-          />
+          <div className="relative flex-1 min-h-0 forge-code-panel">
+            {parseError?.line != null && (
+              <div
+                aria-hidden="true"
+                className="forge-editor-error-line absolute left-0 right-0 pointer-events-none"
+                data-testid="editor-error-line-highlight"
+                data-error-line={parseError.line}
+                style={{
+                  top: `${EDITOR_PADDING_PX + (parseError.line - 1) * EDITOR_LINE_HEIGHT_PX}px`,
+                  height: `${EDITOR_LINE_HEIGHT_PX}px`,
+                  transform: `translateY(-${editorScrollTop}px)`,
+                }}
+              />
+            )}
+            <textarea
+              ref={sourceEditorRef}
+              className="absolute inset-0 w-full h-full p-4 text-sm resize-none focus-visible:outline-none leading-relaxed code-area bg-transparent"
+              value={source}
+              onChange={e => handleSourceChange(e.target.value)}
+              onScroll={e => setEditorScrollTop(e.currentTarget.scrollTop)}
+              spellCheck={false}
+              aria-label="bpmn-beta source code editor"
+              data-testid="textarea-bpmn-source"
+              style={{ lineHeight: `${EDITOR_LINE_HEIGHT_PX}px` }}
+            />
+          </div>
           {parseError && (
             <div
               role="alert"

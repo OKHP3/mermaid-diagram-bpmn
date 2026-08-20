@@ -126,6 +126,39 @@ describe("Playground error panel — line number surfacing", () => {
     // "No nodes found" is not a ParseError — no line attribute
     expect(detail.getAttribute("data-parse-error-line")).toBeNull();
   });
+
+  it("highlights the parser-reported source line in the editor", () => {
+    render(<Playground />);
+    setSource(SOURCE_WITH_NESTED_POOL);
+
+    const detail = screen.getByTestId("text-parse-error-detail");
+    const highlight = screen.getByTestId("editor-error-line-highlight");
+
+    expect(highlight.getAttribute("data-error-line")).toBe(
+      detail.getAttribute("data-parse-error-line"),
+    );
+    expect(highlight.getAttribute("aria-hidden")).toBe("true");
+  });
+
+  it("clears the editor highlight when the parse error resolves", () => {
+    render(<Playground />);
+    setSource(SOURCE_WITH_NESTED_POOL);
+    expect(screen.getByTestId("editor-error-line-highlight")).not.toBeNull();
+
+    setSource(VALID_SOURCE);
+
+    expect(screen.queryByTestId("editor-error-line-highlight")).toBeNull();
+  });
+
+  it("clears the editor highlight when a new example is loaded", () => {
+    render(<Playground />);
+    setSource(SOURCE_WITH_NESTED_POOL);
+    expect(screen.getByTestId("editor-error-line-highlight")).not.toBeNull();
+
+    fireEvent.click(screen.getByTestId("button-example-01-linear"));
+
+    expect(screen.queryByTestId("editor-error-line-highlight")).toBeNull();
+  });
 });
 
 // ── Accessibility ─────────────────────────────────────────────────────────────
