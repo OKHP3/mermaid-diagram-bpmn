@@ -212,6 +212,25 @@ describe('NavDropdown — keyboard navigation', () => {
     });
   });
 
+  describe('Mobile menu keyboard dismissal', () => {
+    it('Escape closes the mobile menu and returns focus to its toggle', () => {
+      const { container } = renderLayout();
+      const toggle = container.querySelector('[data-testid="button-toggle-menu"]') as HTMLButtonElement;
+
+      act(() => { fireEvent.click(toggle); });
+      const mobileNav = container.querySelector('#mobile-nav');
+      expect(mobileNav).not.toBeNull();
+
+      const firstMobileLink = mobileNav!.querySelector('a') as HTMLAnchorElement;
+      act(() => { firstMobileLink.focus(); });
+      act(() => { fireEvent.keyDown(firstMobileLink, { key: 'Escape' }); });
+
+      expect(container.querySelector('#mobile-nav')).toBeNull();
+      expect(toggle.getAttribute('aria-expanded')).toBe('false');
+      expect(document.activeElement).toBe(toggle);
+    });
+  });
+
   describe('ARIA attributes', () => {
 
     it('trigger has aria-expanded="false" when closed', () => {

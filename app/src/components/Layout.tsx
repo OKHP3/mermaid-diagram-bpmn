@@ -184,8 +184,21 @@ function useDarkMode() {
 export function Layout({ children }: { children: React.ReactNode }) {
   const [dark, setDark] = useDarkMode();
   const [menuOpen, setMenuOpen] = useState(false);
+  const mobileMenuToggleRef = useRef<HTMLButtonElement>(null);
   const [location] = useLocation();
   usePageTracking();
+
+  function closeMobileMenu(returnFocus = true) {
+    setMenuOpen(false);
+    if (returnFocus) mobileMenuToggleRef.current?.focus();
+  }
+
+  function handleMobileMenuKeyDown(e: React.KeyboardEvent<HTMLElement>) {
+    if (e.key === "Escape") {
+      e.preventDefault();
+      closeMobileMenu(true);
+    }
+  }
 
   return (
     <div className="forge-shell">
@@ -286,6 +299,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
 
             {/* Mobile menu toggle */}
             <button
+              ref={mobileMenuToggleRef}
               className="md:hidden forge-icon-btn p-2 rounded"
               onClick={() => setMenuOpen(o => !o)}
               aria-label="Toggle menu"
@@ -305,6 +319,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
             className="md:hidden px-4 pb-3 pt-2 flex flex-col gap-0.5"
             style={{ borderTop: "1px solid var(--okh-header-border)" }}
             aria-label="Mobile navigation"
+            onKeyDown={handleMobileMenuKeyDown}
           >
             {/* Product flat links: Playground · Agent Skills */}
             {PRODUCT_NAV.map(link => (
