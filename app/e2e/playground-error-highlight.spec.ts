@@ -11,7 +11,9 @@ import { test, expect } from '@playwright/test';
 
 const leadingComments = Array.from(
   { length: 40 },
-  (_, index) => `%% Context note ${index + 1}`,
+  (index) => index === 20
+    ? `%% ${'A deliberately long editor comment. '.repeat(16)}`
+    : `%% Context note ${index + 1}`,
 );
 const INVALID_SOURCE = [
   'bpmn-beta',
@@ -36,6 +38,8 @@ test('highlights and scrolls to the physical error line without painting outside
 
   await expect(errorDetail).toHaveAttribute('data-parse-error-line', String(ERROR_LINE));
   await expect(highlight).toHaveAttribute('data-error-line', String(ERROR_LINE));
+  await expect(highlight).toHaveCSS('top', `${16 + (ERROR_LINE - 1) * 23}px`);
+  await expect(textarea).toHaveAttribute('wrap', 'off');
   await expect.poll(() => textarea.evaluate((editor) => editor.scrollTop)).toBeGreaterThan(0);
 
   await textarea.evaluate((editor) => {

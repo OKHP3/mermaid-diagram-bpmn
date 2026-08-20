@@ -144,12 +144,14 @@ describe("Playground error panel — line number surfacing", () => {
 
     const detail = screen.getByTestId("text-parse-error-detail");
     const highlight = screen.getByTestId("editor-error-line-highlight");
+    const editor = screen.getByTestId("textarea-bpmn-source");
 
     expect(detail.getAttribute("data-parse-error-line")).toBe("7");
     expect(highlight.getAttribute("data-error-line")).toBe(
       detail.getAttribute("data-parse-error-line"),
     );
     expect(highlight.getAttribute("aria-hidden")).toBe("true");
+    expect(editor.getAttribute("wrap")).toBe("off");
   });
 
   it("clears the editor highlight when the parse error resolves", () => {

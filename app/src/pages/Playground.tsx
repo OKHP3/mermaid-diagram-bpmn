@@ -755,6 +755,7 @@ export default function Playground() {
               onChange={e => handleSourceChange(e.target.value)}
               onScroll={e => setEditorScrollTop(e.currentTarget.scrollTop)}
               spellCheck={false}
+              wrap="off"
               aria-label="bpmn-beta source code editor"
               data-testid="textarea-bpmn-source"
               style={{ lineHeight: `${EDITOR_LINE_HEIGHT_PX}px` }}
