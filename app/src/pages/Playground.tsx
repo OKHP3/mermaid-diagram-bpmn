@@ -157,11 +157,22 @@ export default function Playground() {
   const viewStateRef = useRef(viewState);
   viewStateRef.current = viewState;
 
-  // Ref tracking an in-progress single-finger touch pan gesture.
-  const touchRef = useRef<{
-    cx: number; cy: number;     // touch start position
-    startTx: number; startTy: number; // view origin at touch start
-  } | null>(null);
+  // Ref tracking an in-progress touch gesture: single-finger pan or two-finger pinch.
+  const touchRef = useRef<
+    | {
+      kind: "pan";
+      cx: number; cy: number;     // touch start position
+      startTx: number; startTy: number; // view origin at touch start
+    }
+    | {
+      kind: "pinch";
+      midpointX: number; midpointY: number;
+      startDistance: number;
+      startScale: number;
+      startTx: number; startTy: number;
+    }
+    | null
+  >(null);
 
   // Wheel zoom — must be non-passive to call preventDefault
   useEffect(() => {
@@ -183,31 +194,73 @@ export default function Playground() {
     return () => el.removeEventListener("wheel", handler);
   }, []);
 
-  // Touch pan — single-finger drag; touchmove is non-passive so we can preventDefault
-  // and prevent the page from scrolling while the user pans the canvas.
+  // Touch gestures — single-finger drag pans; two fingers pinch to zoom about their
+  // midpoint. Touchmove is non-passive so gestures do not scroll the page.
   useEffect(() => {
     const el = canvasRef.current;
     if (!el) return;
 
-    const onTouchStart = (e: TouchEvent) => {
-      if (e.touches.length !== 1) return;
-      const t = e.touches[0];
-      touchRef.current = {
-        cx: t.clientX,
-        cy: t.clientY,
-        startTx: viewStateRef.current.tx,
-        startTy: viewStateRef.current.ty,
+    const getTouchMidpoint = (first: Touch, second: Touch) => {
+      const rect = el.getBoundingClientRect();
+      return {
+        x: (first.clientX + second.clientX) / 2 - rect.left,
+        y: (first.clientY + second.clientY) / 2 - rect.top,
       };
     };
 
+    const getTouchDistance = (first: Touch, second: Touch) =>
+      Math.hypot(second.clientX - first.clientX, second.clientY - first.clientY);
+
+    const onTouchStart = (e: TouchEvent) => {
+      if (e.touches.length === 1) {
+        const t = e.touches[0];
+        touchRef.current = {
+          kind: "pan",
+          cx: t.clientX,
+          cy: t.clientY,
+          startTx: viewStateRef.current.tx,
+          startTy: viewStateRef.current.ty,
+        };
+      } else if (e.touches.length === 2) {
+        const [first, second] = [e.touches[0], e.touches[1]];
+        const midpoint = getTouchMidpoint(first, second);
+        touchRef.current = {
+          kind: "pinch",
+          midpointX: midpoint.x,
+          midpointY: midpoint.y,
+          startDistance: getTouchDistance(first, second),
+          startScale: viewStateRef.current.scale,
+          startTx: viewStateRef.current.tx,
+          startTy: viewStateRef.current.ty,
+        };
+      }
+    };
+
     const onTouchMove = (e: TouchEvent) => {
-      if (e.touches.length !== 1 || !touchRef.current) return;
-      e.preventDefault();
-      const t = e.touches[0];
-      const dx = t.clientX - touchRef.current.cx;
-      const dy = t.clientY - touchRef.current.cy;
-      const { startTx, startTy } = touchRef.current;
-      setViewState(vs => ({ ...vs, tx: startTx + dx, ty: startTy + dy }));
+      const gesture = touchRef.current;
+      if (!gesture) return;
+
+      if (e.touches.length === 1 && gesture.kind === "pan") {
+        e.preventDefault();
+        const t = e.touches[0];
+        const dx = t.clientX - gesture.cx;
+        const dy = t.clientY - gesture.cy;
+        setViewState(vs => ({ ...vs, tx: gesture.startTx + dx, ty: gesture.startTy + dy }));
+      } else if (e.touches.length === 2 && gesture.kind === "pinch") {
+        e.preventDefault();
+        const [first, second] = [e.touches[0], e.touches[1]];
+        const distance = getTouchDistance(first, second);
+        const newScale = Math.min(
+          MAX_SCALE,
+          Math.max(MIN_SCALE, gesture.startScale * (distance / gesture.startDistance)),
+        );
+        const ratio = newScale / gesture.startScale;
+        setViewState({
+          scale: newScale,
+          tx: gesture.midpointX + ratio * (gesture.startTx - gesture.midpointX),
+          ty: gesture.midpointY + ratio * (gesture.startTy - gesture.midpointY),
+        });
+      }
     };
 
     const onTouchEnd = () => { touchRef.current = null; };

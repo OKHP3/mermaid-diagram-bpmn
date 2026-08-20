@@ -8,6 +8,7 @@
  *   - Canvas is keyboard-focusable (tabIndex=0) and has an accessible aria-label
  *   - Keyboard shortcuts: + / = zoom in, - zoom out, 0 resets, arrow keys pan
  *   - Touch single-finger drag updates the translate (tx/ty)
+ *   - Two-finger pinch zooms around the touch midpoint
  *   - Affordance hint is always visible and mentions keyboard shortcuts
  *
  * Test strategy:
@@ -251,25 +252,51 @@ describe("Playground canvas — touch pan", () => {
     expect(transform).toContain("50px");
   });
 
-  it("multi-finger touch is ignored (does not start a pan)", async () => {
+  it("pinch spread increases scale around the two-touch midpoint", async () => {
     render(<Playground />);
     const canvas = getCanvas();
-    const before = getTransform();
 
     await act(async () => {
       fireEvent.touchStart(canvas, {
         touches: [
-          { clientX: 100, clientY: 80, identifier: 0 },
-          { clientX: 200, clientY: 80, identifier: 1 },
+          { clientX: 100, clientY: 100, identifier: 0 },
+          { clientX: 200, clientY: 100, identifier: 1 },
+        ],
+      });
+      const moveResult = fireEvent.touchMove(canvas, {
+        touches: [
+          { clientX: 50, clientY: 100, identifier: 0 },
+          { clientX: 250, clientY: 100, identifier: 1 },
+        ],
+      });
+      expect(moveResult).toBe(false);
+    });
+
+    expect(getZoomPct()).toBe(200);
+    // The midpoint stays at x=150, so scale 2 moves the origin to -150px.
+    expect(getTransform()).toContain("-150px");
+  });
+
+  it("pinch close decreases scale", async () => {
+    render(<Playground />);
+    const canvas = getCanvas();
+
+    await act(async () => {
+      fireEvent.touchStart(canvas, {
+        touches: [
+          { clientX: 50, clientY: 100, identifier: 0 },
+          { clientX: 250, clientY: 100, identifier: 1 },
         ],
       });
       fireEvent.touchMove(canvas, {
-        touches: [{ clientX: 150, clientY: 100, identifier: 0 }],
+        touches: [
+          { clientX: 100, clientY: 100, identifier: 0 },
+          { clientX: 200, clientY: 100, identifier: 1 },
+        ],
       });
     });
 
-    // touchRef should be null after a 2-finger start, so no pan happened
-    expect(getTransform()).toBe(before);
+    expect(getZoomPct()).toBe(50);
   });
 });
 
