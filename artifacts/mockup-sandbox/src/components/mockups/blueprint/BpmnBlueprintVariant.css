@@ -1,0 +1,73 @@
+.bpv-root {
+  --paper: #eef2f5;
+  --paper-deep: #dfe7ec;
+  --ink: #132b3a;
+  --muted: #59717d;
+  --line: #b8c8d0;
+  --blue: #166a8f;
+  --coral: #d5634f;
+  --yellow: #e9b44c;
+  min-height: 100%;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: "DM Sans", ui-sans-serif, system-ui, sans-serif;
+}
+.bpv-root * { box-sizing: border-box; }
+.bpv-root button, .bpv-root a { font: inherit; }
+.bpv-header { background: var(--ink); color: #e8f0f2; border-bottom: 4px solid var(--coral); }
+.bpv-shell { max-width: 1180px; margin: 0 auto; padding: 0 28px; }
+.bpv-nav { height: 68px; display:flex; align-items:center; justify-content:space-between; gap:20px; }
+.bpv-brand { display:flex; align-items:center; gap:12px; color:inherit; text-decoration:none; }
+.bpv-mark { width:34px; height:34px; border:2px solid var(--yellow); display:grid; place-items:center; font-family:Georgia,serif; font-size:20px; transform:rotate(-8deg); }
+.bpv-brand strong { display:block; font-size:14px; letter-spacing:.01em; }
+.bpv-brand small { display:block; color:#98b1bb; font:11px "JetBrains Mono",monospace; margin-top:2px; }
+.bpv-links { display:flex; align-items:center; gap:5px; }
+.bpv-links a, .bpv-links button { color:#b5c8ce; text-decoration:none; border:0; background:transparent; padding:9px 11px; font-size:12px; cursor:pointer; }
+.bpv-links a:hover, .bpv-links button:hover { color:#fff; background:#214353; }
+.bpv-tools { display:flex; gap:7px; align-items:center; }
+.bpv-tool { border:1px solid #53717b; color:#d7e4e6; background:transparent; width:32px; height:32px; cursor:pointer; }
+.bpv-tool:hover { border-color:var(--yellow); color:var(--yellow); }
+.bpv-ribbon { border-bottom:1px solid var(--line); background:var(--paper-deep); }
+.bpv-ribbon-inner { display:flex; align-items:center; justify-content:space-between; padding:9px 28px; font:11px "JetBrains Mono",monospace; color:var(--muted); }
+.bpv-live { color:#2b7568; font-weight:700; }
+.bpv-live i { display:inline-block; width:7px; height:7px; border-radius:50%; background:#2b9b80; margin-right:7px; }
+.bpv-hero { padding:54px 0 46px; border-bottom:1px solid var(--line); }
+.bpv-kicker { color:var(--blue); font:700 11px "JetBrains Mono",monospace; text-transform:uppercase; letter-spacing:.14em; margin:0 0 14px; }
+.bpv-hero h1, .bpv-section-title { font-family:Georgia, "Times New Roman", serif; font-weight:400; letter-spacing:-.045em; }
+.bpv-hero h1 { font-size:clamp(38px,6vw,66px); line-height:.98; max-width:680px; margin:0 0 18px; }
+.bpv-hero h1 em { color:var(--coral); font-style:normal; }
+.bpv-hero p { max-width:650px; color:var(--muted); line-height:1.65; font-size:14px; margin:0 0 26px; }
+.bpv-actions { display:flex; flex-wrap:wrap; gap:10px; }
+.bpv-btn { border:1px solid var(--blue); background:var(--blue); color:#f5f8f8; padding:11px 16px; cursor:pointer; font-size:12px; font-weight:700; }
+.bpv-btn.secondary { color:var(--blue); background:transparent; }
+.bpv-btn:hover { transform:translateY(-1px); filter:brightness(1.06); }
+.bpv-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:14px; padding:30px 0 38px; }
+.bpv-card { border:1px solid var(--line); background:#f5f7f8; padding:20px; min-height:220px; display:flex; flex-direction:column; position:relative; }
+.bpv-card:before { content:""; position:absolute; top:-1px; left:-1px; right:-1px; height:4px; background:var(--blue); }
+.bpv-card:nth-child(2):before { background:var(--coral); }.bpv-card:nth-child(3):before { background:var(--yellow); }
+.bpv-card-index { color:var(--muted); font:11px "JetBrains Mono",monospace; margin-bottom:22px; }
+.bpv-card h2 { font:400 22px Georgia,serif; margin:0 0 10px; letter-spacing:-.03em; }
+.bpv-card p { color:var(--muted); font-size:12px; line-height:1.55; margin:0 0 18px; }
+.bpv-card button { margin-top:auto; align-self:flex-start; border:0; padding:8px 0; color:var(--blue); background:transparent; font-weight:700; font-size:12px; cursor:pointer; }
+.bpv-divider { border-top:1px solid var(--line); }
+.bpv-context { display:grid; grid-template-columns:1fr 1.1fr; gap:48px; padding:46px 0; }
+.bpv-section-title { margin:0 0 13px; font-size:32px; }
+.bpv-context-copy { color:var(--muted); line-height:1.65; font-size:13px; }
+.bpv-note { border-left:4px solid var(--coral); padding:12px 0 12px 17px; margin-top:22px; color:var(--ink); font:15px Georgia,serif; line-height:1.45; }
+.bpv-code { background:var(--ink); color:#d3e3e5; border:1px solid #294c5b; overflow:hidden; }
+.bpv-code-head { display:flex; justify-content:space-between; align-items:center; padding:11px 14px; border-bottom:1px solid #294c5b; color:#91aeb7; font:10px "JetBrains Mono",monospace; }
+.bpv-code pre { margin:0; padding:18px; overflow:auto; font:11px/1.75 "JetBrains Mono",monospace; }
+.bpv-code .kw { color:#f1c56b; }.bpv-code .id { color:#8ec5d8; }.bpv-code .str { color:#eb8c79; }
+.bpv-matrix { padding:42px 0; }
+.bpv-matrix-head { display:flex; justify-content:space-between; align-items:end; margin-bottom:20px; }
+.bpv-matrix-head p { color:var(--muted); font-size:12px; margin:0; max-width:410px; line-height:1.5; }
+.bpv-matrix-grid { display:grid; grid-template-columns:repeat(4,1fr); border:1px solid var(--line); }
+.bpv-matrix-col { min-height:178px; border-right:1px solid var(--line); }.bpv-matrix-col:last-child{border-right:0}
+.bpv-matrix-col h3 { font-size:11px; letter-spacing:.08em; text-transform:uppercase; padding:13px 14px; margin:0; border-bottom:1px solid var(--line); color:var(--blue); }
+.bpv-matrix-col:nth-child(2) h3 {color:var(--coral)} .bpv-matrix-col:nth-child(3) h3{color:#a17717}
+.bpv-matrix-col ul { list-style:none; padding:12px 14px; margin:0; }.bpv-matrix-col li { font-size:11px; margin-bottom:10px; color:var(--muted); }.bpv-matrix-col li:before{content:"—"; color:var(--line); margin-right:7px}
+.bpv-footer { margin-top:14px; background:var(--ink); color:#9bb2b9; padding:24px 0; font-size:11px; }
+@media (max-width: 760px) {
+  .bpv-shell { padding:0 18px; }.bpv-links { display:none; }.bpv-nav {height:60px}.bpv-ribbon-inner{padding:9px 18px}.bpv-ribbon-inner span:last-child{display:none}
+  .bpv-hero{padding:38px 0 34px}.bpv-grid,.bpv-context,.bpv-matrix-grid{grid-template-columns:1fr}.bpv-context{gap:26px}.bpv-matrix-col{border-right:0;border-bottom:1px solid var(--line);min-height:0}.bpv-matrix-col:last-child{border-bottom:0}.bpv-matrix-head{display:block}.bpv-matrix-head p{margin-top:8px}.bpv-hero h1{font-size:45px}
+}
