@@ -76,6 +76,7 @@ jobs:
           NODE_ENV: production
           BASE_PATH: /mermaid-diagram-bpmn/
           VITE_COMMIT_SHA: ${{ github.sha }}
+          VITE_ANALYTICS_ENDPOINT: ${{ secrets.VITE_ANALYTICS_ENDPOINT }}
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v5
