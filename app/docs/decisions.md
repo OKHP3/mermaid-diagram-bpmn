@@ -3,6 +3,10 @@
 Durable governance log. Decisions are numbered in the order they were captured.  
 Statuses: **Accepted** · **Proposed** · **Pending** · **Resolved** · **Superseded**
 
+> **Canonical record:** This document is the single source of truth for project decisions.
+> The public About page links here and intentionally does not repeat decision summaries.
+> Contributors should update this log whenever a decision or its rationale changes.
+
 ---
 
 ## DEC-001: Layout engine = coordinate-hint hybrid
