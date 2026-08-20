@@ -13,7 +13,8 @@
  * environment — not in the browser.
  */
 
-import { BookOpen, FileText, Package, ArrowRight } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
+import { BookOpen, FileText, ArrowRight, Check, Copy } from "lucide-react";
 import { ZipDownloadButton } from "./ZipDownloadButton";
 import { trackEvent } from "@/lib/analytics";
 
@@ -37,6 +38,7 @@ const STARTER_CONTEXT_FILES = [
   },
 ] as const;
 const STARTER_PACK_FILENAME = "bp-skill-starter-pack.zip";
+const FIRST_AGENT_PROMPT = "Scope the [process name] process using the Process Intake & Scope skill";
 
 const STARTER_README = `# BP-SKILL Starter Pack — Process Intake & Scope
 
@@ -83,6 +85,65 @@ Skills run in a compatible agent environment (Claude Code, OpenAI Codex,
 GitHub Copilot, Gemini CLI, Cursor, VS Code, etc.).
 They are not executed by the website you downloaded this from.
 `;
+
+function FirstAgentPrompt() {
+  const [copyState, setCopyState] = useState<"idle" | "copied" | "error">("idle");
+  const resetTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(() => () => {
+    if (resetTimeoutRef.current) clearTimeout(resetTimeoutRef.current);
+  }, []);
+
+  async function handleCopy() {
+    if (resetTimeoutRef.current) clearTimeout(resetTimeoutRef.current);
+
+    try {
+      await navigator.clipboard.writeText(FIRST_AGENT_PROMPT);
+      setCopyState("copied");
+    } catch {
+      setCopyState("error");
+    }
+
+    resetTimeoutRef.current = setTimeout(() => setCopyState("idle"), 2_000);
+  }
+
+  const copied = copyState === "copied";
+  const failed = copyState === "error";
+  const buttonLabel = copied ? "Copied" : failed ? "Try again" : "Copy prompt";
+  const buttonAriaLabel = copied
+    ? "First agent prompt copied to clipboard"
+    : failed
+      ? "Copy first agent prompt failed — try again"
+      : "Copy first agent prompt to clipboard";
+
+  return (
+    <div className="pt-3 border-t border-border/70" data-testid="starter-agent-prompt">
+      <div className="flex items-center justify-between gap-3 mb-2">
+        <p className="text-[10px] font-mono uppercase tracking-widest text-muted-foreground/60">
+          First prompt to paste
+        </p>
+        <span className="sr-only" aria-live="polite">
+          {copied ? "First agent prompt copied to clipboard" : failed ? "Copy failed" : ""}
+        </span>
+      </div>
+      <div className="forge-code-panel rounded-md border border-primary/20 p-2.5">
+        <pre className="whitespace-pre-wrap break-words text-[11px] leading-relaxed font-mono">
+          <code>{FIRST_AGENT_PROMPT}</code>
+        </pre>
+        <button
+          type="button"
+          onClick={handleCopy}
+          className="forge-btn-outline mt-2 inline-flex items-center gap-1.5 px-2.5 py-1.5 text-[11px]"
+          aria-label={buttonAriaLabel}
+          data-testid="button-copy-first-agent-prompt"
+        >
+          {copied ? <Check size={12} aria-hidden="true" /> : <Copy size={12} aria-hidden="true" />}
+          {buttonLabel}
+        </button>
+      </div>
+    </div>
+  );
+}
 
 // ── Component ─────────────────────────────────────────────────────────────────
 
@@ -209,6 +270,7 @@ export function StartHerePanel({ onBrowseAll }: StartHerePanelProps) {
           <p className="text-[10px] text-muted-foreground/70 italic mt-auto pt-1">
             One document. 13 required sections. ISO 9001 / BABOK / IEEE 29148 aligned.
           </p>
+          <FirstAgentPrompt />
         </div>
 
         {/* Step 4 — Starter pack download */}

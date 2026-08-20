@@ -18,7 +18,7 @@
  */
 
 import { describe, it, expect, vi, beforeEach } from "vitest";
-import { render, screen } from "@testing-library/react";
+import { act, fireEvent, render, screen } from "@testing-library/react";
 import AgentSkills from "@/pages/AgentSkills";
 
 // ── Module mocks (same pattern as agent-skills-page.test.tsx) ─────────────────
@@ -140,6 +140,38 @@ describe("Agent Skills — Start Here expected artifact", () => {
   it("names PNS.md as the central handoff artifact", () => {
     const card = screen.getByTestId("start-here-first-artifact");
     expect(card.textContent).toContain("PNS.md");
+  });
+
+  it("shows the first agent prompt with a visible process-name placeholder", () => {
+    const prompt = screen.getByTestId("starter-agent-prompt");
+    expect(prompt.querySelector("pre code")?.textContent).toBe(
+      "Scope the [process name] process using the Process Intake & Scope skill",
+    );
+  });
+
+  it("copies the first agent prompt and confirms success", async () => {
+    const writeText = vi.fn().mockResolvedValue(undefined);
+    Object.defineProperty(navigator, "clipboard", {
+      value: { writeText },
+      configurable: true,
+      writable: true,
+    });
+
+    await act(async () => {
+      fireEvent.click(screen.getByTestId("button-copy-first-agent-prompt"));
+      await Promise.resolve();
+    });
+
+    expect(writeText).toHaveBeenCalledWith(
+      "Scope the [process name] process using the Process Intake & Scope skill",
+    );
+    expect(screen.getByTestId("button-copy-first-agent-prompt").textContent).toContain("Copied");
+  });
+
+  it("has a keyboard-focusable copy button with an accessible label", () => {
+    const button = screen.getByTestId("button-copy-first-agent-prompt");
+    expect(button.tagName).toBe("BUTTON");
+    expect(button.getAttribute("aria-label")).toBe("Copy first agent prompt to clipboard");
   });
 });
 
