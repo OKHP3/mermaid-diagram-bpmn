@@ -59,6 +59,17 @@ pool p1 "Outer" {
   }
 }`;
 
+/** A ParseError after comments and blank lines; its physical error line is 7. */
+const SOURCE_WITH_GAPS_BEFORE_ERROR = `bpmn-beta
+%% Document the outer participant
+
+pool p1 "Outer" {
+  %% This nested pool is invalid
+
+  pool p2 "Inner" {
+  }
+}`;
+
 /** A source that is syntactically legal but has no nodes (>10 chars). */
 const SOURCE_NO_NODES = `bpmn-beta
 %% This is a long comment with no actual node definitions whatsoever`;
@@ -129,11 +140,12 @@ describe("Playground error panel — line number surfacing", () => {
 
   it("highlights the parser-reported source line in the editor", () => {
     render(<Playground />);
-    setSource(SOURCE_WITH_NESTED_POOL);
+    setSource(SOURCE_WITH_GAPS_BEFORE_ERROR);
 
     const detail = screen.getByTestId("text-parse-error-detail");
     const highlight = screen.getByTestId("editor-error-line-highlight");
 
+    expect(detail.getAttribute("data-parse-error-line")).toBe("7");
     expect(highlight.getAttribute("data-error-line")).toBe(
       detail.getAttribute("data-parse-error-line"),
     );

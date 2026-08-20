@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { parse } from '../bpmn-parser';
+import { parse, ParseError } from '../bpmn-parser';
 
 describe('parse — header and directives', () => {
   it('accepts bpmn-beta header', () => {
@@ -199,6 +199,29 @@ pool p1 "Outer" {
   }
 }`;
     expect(() => parse(src)).toThrow();
+  });
+
+  it('reports the physical source line through blank lines and comments', () => {
+    const src = `bpmn-beta
+%% Document the outer participant
+
+pool p1 "Outer" {
+  %% This nested pool is invalid
+
+  pool p2 "Inner" {
+  }
+}`;
+    let error: unknown;
+
+    try {
+      parse(src);
+    } catch (caught) {
+      error = caught;
+    }
+
+    expect(error).toBeInstanceOf(ParseError);
+    expect((error as ParseError).line).toBe(7);
+    expect((error as ParseError).message).toContain('Line 7');
   });
 
   it('throws on lane outside pool', () => {

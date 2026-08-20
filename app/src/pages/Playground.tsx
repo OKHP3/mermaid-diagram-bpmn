@@ -731,7 +731,10 @@ export default function Playground() {
             </div>
           )}
 
-          <div className="relative flex-1 min-h-0 forge-code-panel">
+          <div
+            className="relative flex-1 min-h-0 overflow-hidden forge-code-panel"
+            data-testid="source-editor-viewport"
+          >
             {parseError?.line != null && (
               <div
                 aria-hidden="true"
