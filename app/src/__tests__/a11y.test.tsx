@@ -16,6 +16,8 @@
  *   - Home page
  *   - Playground page
  *   - AgentSkills page
+ *   - SkillDetail page
+ *   - About page
  *
  * @vitest-environment happy-dom
  */
@@ -66,7 +68,7 @@ vi.mock('wouter', () => ({
   Link:        ({ href, children, ...rest }: React.AnchorHTMLAttributes<HTMLAnchorElement> & { href: string }) =>
     <a href={href} {...rest}>{children}</a>,
   useLocation: () => ['/', vi.fn()],
-  useParams:   () => ({}),
+  useParams:   () => ({ skillId: 'okhp3-process-intake-and-scope' }),
 }));
 
 // Mermaid — Playground imports it; stub so no real renderer runs
@@ -112,6 +114,8 @@ vi.mock('@/components/StatusRibbon', () => ({ StatusRibbon: () => null }));
 import Home        from '@/pages/Home';
 import Playground  from '@/pages/Playground';
 import AgentSkills from '@/pages/AgentSkills';
+import SkillDetail from '@/pages/SkillDetail';
+import About       from '@/pages/About';
 import { Layout }  from '@/components/Layout';
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
@@ -271,6 +275,30 @@ describe('WCAG 2.2 AA — AgentSkills page', () => {
       toggle!.hasAttribute('aria-expanded'),
       'mobile toggle must have aria-expanded',
     ).toBe(true);
+  });
+});
+
+// ── Skill detail page ────────────────────────────────────────────────────────
+
+describe('WCAG 2.2 AA — SkillDetail page', () => {
+  beforeEach(() => { vi.clearAllMocks(); });
+
+  it('has no axe violations for a real skill route', async () => {
+    const { container } = renderInLayout(<SkillDetail />);
+    const violations = await runAxe(container);
+    expect(violations, violations.join('\n\n')).toHaveLength(0);
+  });
+});
+
+// ── About page ───────────────────────────────────────────────────────────────
+
+describe('WCAG 2.2 AA — About page', () => {
+  beforeEach(() => { vi.clearAllMocks(); });
+
+  it('has no axe violations', async () => {
+    const { container } = renderInLayout(<About />);
+    const violations = await runAxe(container);
+    expect(violations, violations.join('\n\n')).toHaveLength(0);
   });
 });
 
