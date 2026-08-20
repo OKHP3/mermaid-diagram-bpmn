@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import { Link, useLocation } from "wouter";
 import { Moon, Sun, Menu, X, Github, ChevronDown } from "lucide-react";
 import { usePageTracking } from "../hooks/usePageTracking";
+import { loadMermaidHostDemo } from "@/lib/route-loaders";
 
 // ── Nav structure (two-tier) ─────────────────────────────────────────────────
 //
@@ -51,12 +52,14 @@ function NavDropdown({
   location,
   testId,
   onNavigate,
+  onRouteIntent,
 }: {
   label: string;
   links: readonly DropdownLink[];
   location: string;
   testId: string;
   onNavigate: () => void;
+  onRouteIntent?: (href: string) => void;
 }) {
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
@@ -145,6 +148,8 @@ function NavDropdown({
               href={link.href}
               ref={(el: HTMLAnchorElement | null) => { itemRefs.current[idx] = el; }}
               onClick={() => { close(false); onNavigate(); }}
+              onMouseEnter={() => onRouteIntent?.(link.href)}
+              onFocus={() => onRouteIntent?.(link.href)}
               onKeyDown={(e: React.KeyboardEvent<HTMLAnchorElement>) => handleItemKeyDown(e, idx)}
               className={`forge-nav-dropdown-item block px-4 py-2 text-sm${isLinkActive(link.href, location) ? " forge-nav-dropdown-item--active" : ""}`}
               data-testid={`nav-${link.label.toLowerCase().replace(/\s+/g, "-")}`}
@@ -199,6 +204,12 @@ export function Layout({ children }: { children: React.ReactNode }) {
     if (e.key === "Escape") {
       e.preventDefault();
       closeMobileMenu(true);
+    }
+  }
+
+  function prefetchRoute(href: string) {
+    if (href === "/mermaid-host-demo") {
+      void loadMermaidHostDemo();
     }
   }
 
@@ -262,6 +273,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
               location={location}
               testId="nav-plugin-dropdown"
               onNavigate={() => {}}
+              onRouteIntent={prefetchRoute}
             />
 
             {/* Learn ▾ — shared context */}
@@ -345,7 +357,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
                 <Link
                   key={link.href}
                   href={link.href}
-                  onClick={() => setMenuOpen(false)}
+                  onClick={() => { prefetchRoute(link.href); setMenuOpen(false); }}
                   className={`px-3 py-2.5 rounded text-sm forge-mobile-nav-link${isLinkActive(link.href, location) ? " forge-mobile-nav-link--active" : ""}`}
                 >
                   {link.label}

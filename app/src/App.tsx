@@ -1,6 +1,7 @@
 import { lazy, Suspense } from "react";
 import { Switch, Route, Router as WouterRouter } from "wouter";
 import { Layout } from "@/components/Layout";
+import { loadMermaidHostDemo } from "@/lib/route-loaders";
 
 // Home is eager-loaded — it is the initial route and must render without a
 // network round-trip for the first paint.
@@ -22,7 +23,7 @@ const PurchaseApprovalExample    = lazy(() => import("@/pages/PurchaseApprovalEx
 const EmployeeOffboardingExample = lazy(() => import("@/pages/EmployeeOffboardingExample"));
 const VendorOnboardingExample    = lazy(() => import("@/pages/VendorOnboardingExample"));
 const PluginInstallation      = lazy(() => import("@/pages/PluginInstallation"));
-const MermaidHostDemo         = lazy(() => import("@/pages/MermaidHostDemo"));
+const MermaidHostDemo         = lazy(loadMermaidHostDemo);
 const SyntaxComparison        = lazy(() => import("@/pages/SyntaxComparison"));
 const ReleasePage             = lazy(() => import("@/pages/ReleasePage"));
 const Privacy                 = lazy(() => import("@/pages/Privacy"));

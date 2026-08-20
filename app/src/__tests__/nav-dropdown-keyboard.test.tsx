@@ -12,6 +12,7 @@ import { Layout } from '@/components/Layout';
 // ── Mocks ─────────────────────────────────────────────────────────────────────
 
 const mockRoute = vi.hoisted(() => ({ location: '/' }));
+const mockLoadMermaidHostDemo = vi.hoisted(() => vi.fn(() => Promise.resolve({ default: () => null })));
 
 vi.mock('wouter', () => ({
   Link: ({
@@ -28,6 +29,7 @@ vi.mock('wouter', () => ({
 }));
 
 vi.mock('@/hooks/usePageTracking', () => ({ usePageTracking: () => {} }));
+vi.mock('@/lib/route-loaders', () => ({ loadMermaidHostDemo: mockLoadMermaidHostDemo }));
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
 
@@ -55,6 +57,7 @@ function getDropdownItems(container: HTMLElement) {
 describe('NavDropdown — keyboard navigation', () => {
   beforeEach(() => {
     mockRoute.location = '/';
+    vi.clearAllMocks();
   });
 
   describe('Home logo keyboard access', () => {
@@ -198,6 +201,21 @@ describe('NavDropdown — keyboard navigation', () => {
       // Panel closes after selection
       expect(container.querySelector('[role="menu"]')).toBeNull();
     });
+
+    it('prefetches the Host Demo chunk when its link is hovered or focused', () => {
+      const { container } = renderLayout();
+      const trigger = getDropdownTrigger(container, 'nav-plugin-dropdown');
+
+      act(() => { fireEvent.click(trigger); });
+      const hostDemoLink = container.querySelector('a[href="/mermaid-host-demo"]') as HTMLAnchorElement;
+      expect(hostDemoLink).toBeTruthy();
+
+      act(() => { fireEvent.mouseEnter(hostDemoLink); });
+      expect(mockLoadMermaidHostDemo).toHaveBeenCalledTimes(1);
+
+      act(() => { fireEvent.focus(hostDemoLink); });
+      expect(mockLoadMermaidHostDemo).toHaveBeenCalledTimes(2);
+    });
   });
 
   describe('Learn ▾ dropdown', () => {
@@ -270,6 +288,18 @@ describe('NavDropdown — keyboard navigation', () => {
   });
 
   describe('Mobile menu keyboard dismissal', () => {
+    it('prefetches the Host Demo chunk when its mobile menu item is tapped', () => {
+      const { container } = renderLayout();
+      const toggle = container.querySelector('[data-testid="button-toggle-menu"]') as HTMLButtonElement;
+
+      act(() => { fireEvent.click(toggle); });
+      const hostDemoLink = container.querySelector('#mobile-nav a[href="/mermaid-host-demo"]') as HTMLAnchorElement;
+      expect(hostDemoLink).toBeTruthy();
+
+      act(() => { fireEvent.click(hostDemoLink); });
+      expect(mockLoadMermaidHostDemo).toHaveBeenCalledTimes(1);
+    });
+
     it('Escape closes the mobile menu and returns focus to its toggle', () => {
       const { container } = renderLayout();
       const toggle = container.querySelector('[data-testid="button-toggle-menu"]') as HTMLButtonElement;
