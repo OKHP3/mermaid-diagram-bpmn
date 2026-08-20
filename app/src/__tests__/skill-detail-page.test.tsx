@@ -334,6 +334,29 @@ describe('PnsLifecycleTracker — mobile scroll on mount', () => {
     expect(mobileCode!.textContent?.trim()).toBe('draft-intake');
   });
 
+  it('active desktop linked button carries aria-current="step"', () => {
+    const { getAllByRole } = render(
+      <PnsLifecycleTracker
+        activeStatus="draft-intake"
+        withAnchors
+        compact
+      />,
+    );
+
+    const stageButtons = getAllByRole('button', {
+      name: 'Jump to Process Intake & Scope in the table',
+    });
+    const desktopButton = stageButtons.find((button) =>
+      button.querySelector('div[aria-current="step"]'),
+    );
+
+    expect(
+      desktopButton,
+      'expected the active desktop lifecycle pill to be inside a linked button',
+    ).not.toBeUndefined();
+    expect(desktopButton!.getAttribute('aria-current')).toBe('step');
+  });
+
   it('no aria-current="step" elements when activeStatus is not set', () => {
     const { container } = render(<PnsLifecycleTracker compact />);
     const allActive = container.querySelectorAll('[aria-current="step"]');

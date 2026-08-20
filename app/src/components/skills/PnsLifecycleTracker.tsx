@@ -98,7 +98,7 @@ export function PnsLifecycleTracker({ withAnchors = false, activeStatus, compact
                     type="button"
                     className="block w-full hover:opacity-80 transition-opacity focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/50 rounded-full"
                     aria-label={`Jump to ${skill.displayName} in the table`}
-                    aria-current={isActive ? "true" : undefined}
+                    aria-current={isActive ? "step" : undefined}
                     onClick={() => scrollToSkillRow(state.setBy)}
                   >
                     {pillContent}
