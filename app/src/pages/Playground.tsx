@@ -781,6 +781,43 @@ export default function Playground() {
             </div>
           </div>
 
+          {/* Lint warning panel — advisory; shown alongside the rendered diagram.
+              It sits below the editor toolbar so authors can see it without
+              scrolling the workspace. */}
+          {!parseError && allWarnings.length > 0 && (
+            <div
+              role="status"
+              aria-live="polite"
+              aria-atomic="true"
+              className="border-b border-amber-300/60 bg-amber-50/80 dark:bg-amber-900/20"
+              data-testid="div-lint-warnings"
+            >
+              <div className="px-3 py-1.5 flex items-center gap-1.5 border-b border-amber-200/60 dark:border-amber-700/40">
+                <TriangleAlert size={11} className="text-amber-600 dark:text-amber-400 shrink-0" />
+                <span className="text-xs font-semibold text-amber-700 dark:text-amber-300 uppercase tracking-wide">
+                  {allWarnings.length === 1 ? "1 Warning" : `${allWarnings.length} Warnings`}
+                </span>
+                <span className="ml-1 text-xs text-amber-600/70 dark:text-amber-400/70 font-normal">
+                  · diagram still renders
+                </span>
+              </div>
+              <ul className="py-1" aria-label="Lint warnings">
+                {allWarnings.map((w, i) => (
+                  <li
+                    key={w.code + (w.nodeId ?? '') + i}
+                    data-testid={`lint-warning-${w.code}-${w.nodeId ?? i}`}
+                    className="px-3 py-1 text-xs text-amber-800 dark:text-amber-200 flex items-start gap-2"
+                  >
+                    <span className="shrink-0 mt-0.5 text-amber-500 dark:text-amber-400 font-mono text-[10px] leading-4 select-none">
+                      ▸
+                    </span>
+                    {w.message}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+
           {/* Over-limit notice — shown when source exceeds the URL encoding limit */}
           {isOverLimit(source) && (
             <div
@@ -841,44 +878,6 @@ export default function Playground() {
             </div>
           )}
 
-          {/* Lint warning panel — advisory; shown alongside the rendered diagram.
-              Only appears when there is no hard parse error (parsing succeeded
-              but the diagram violates one or more domain rules).
-              Visually distinct from the error bar: amber tint, TriangleAlert icon,
-              "Warning" label instead of "Error". */}
-          {!parseError && allWarnings.length > 0 && (
-            <div
-              role="status"
-              aria-live="polite"
-              aria-atomic="true"
-              className="border-t border-amber-300/60 bg-amber-50/80 dark:bg-amber-900/20"
-              data-testid="div-lint-warnings"
-            >
-              <div className="px-3 py-1.5 flex items-center gap-1.5 border-b border-amber-200/60 dark:border-amber-700/40">
-                <TriangleAlert size={11} className="text-amber-600 dark:text-amber-400 shrink-0" />
-                <span className="text-xs font-semibold text-amber-700 dark:text-amber-300 uppercase tracking-wide">
-                  {allWarnings.length === 1 ? "1 Warning" : `${allWarnings.length} Warnings`}
-                </span>
-                <span className="ml-1 text-xs text-amber-600/70 dark:text-amber-400/70 font-normal">
-                  · diagram still renders
-                </span>
-              </div>
-              <ul className="py-1" aria-label="Lint warnings">
-                {allWarnings.map((w, i) => (
-                  <li
-                    key={w.code + (w.nodeId ?? '') + i}
-                    data-testid={`lint-warning-${w.code}-${w.nodeId ?? i}`}
-                    className="px-3 py-1 text-xs text-amber-800 dark:text-amber-200 flex items-start gap-2"
-                  >
-                    <span className="shrink-0 mt-0.5 text-amber-500 dark:text-amber-400 font-mono text-[10px] leading-4 select-none">
-                      ▸
-                    </span>
-                    {w.message}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          )}
         </div>
 
         {/* Preview panel */}
