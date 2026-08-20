@@ -79,9 +79,13 @@ jobs:
         run: pnpm run manifest:check
 
   e2e:
-    name: Real-browser E2E — Mermaid host demo
+    name: Real-browser E2E — Mermaid host demo (${{ matrix.browser }})
     needs: checks
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        browser: [chromium, firefox, webkit]
 
     steps:
       - name: Checkout
@@ -99,24 +103,24 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Install Playwright Chromium browser
-        # ubuntu-latest already ships the required system libraries;
-        # --with-deps is not needed and fails on restricted apt environments.
-        run: pnpm --filter @workspace/mermaid-diagram-bpmn exec playwright install chromium
+      - name: Install Playwright ${{ matrix.browser }} browser
+        # Install each engine with its runtime libraries. The matrix exposes
+        # browser-specific SVG/DOMPurify differences as separate CI jobs.
+        run: pnpm --filter @workspace/mermaid-diagram-bpmn exec playwright install --with-deps ${{ matrix.browser }}
 
       - name: Build app (required before vite preview)
         env:
           VITE_COMMIT_SHA: ${{ github.sha }}
         run: pnpm --filter @workspace/mermaid-diagram-bpmn run build
 
-      - name: Run E2E suite (real browser, default securityLevel)
-        run: pnpm --filter @workspace/mermaid-diagram-bpmn run test:e2e
+      - name: Run E2E suite in ${{ matrix.browser }} (default securityLevel)
+        run: pnpm --filter @workspace/mermaid-diagram-bpmn run test:e2e --project=${{ matrix.browser }}
 
       - name: Upload Playwright report on failure
         if: failure()
         uses: actions/upload-artifact@v4
         with:
-          name: playwright-report
+          name: playwright-report-${{ matrix.browser }}
           path: app/playwright-report/
           retention-days: 14
 

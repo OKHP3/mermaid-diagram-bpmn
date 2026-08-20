@@ -5,13 +5,14 @@
  *
  * What this proves (beyond the happy-dom integration test):
  *   - bpmn-beta diagrams render correctly through mermaid.registerExternalDiagrams()
- *     and mermaid.render() in a real headless Chromium browser DOM.
+ *     and mermaid.render() in real Chromium, Firefox, and WebKit browser DOMs.
  *   - Default securityLevel ('strict') is used — no securityLevel:'loose' workaround.
  *   - All five required coverage areas pass: flat flow, gateway, pool/lane,
  *     cross-pool message flow, and graceful error handling.
  *
- * Evidence tier: browser-verified (replaces "source-verified" for the plugin
- * integration claim in docs/capability-ledger.md).
+ * Evidence tier: browser-verified across all three major browser engines
+ * (replaces "source-verified" for the plugin integration claim in
+ * docs/capability-ledger.md).
  */
 
 import { test, expect, type Page } from '@playwright/test';

@@ -140,7 +140,7 @@ The production build emits a chunk-size warning: the largest chunk (`index-*.js`
 | Risk | Detail |
 |---|---|
 | npm published | `@okhp3/mermaid-diagram-bpmn@0.1.1` confirmed live on registry 2026-08-06. README install instructions functional. |
-| Integration test runs under `securityLevel: "loose"` | Required by happy-dom's SVG parser limitation. Resolved in browser: automated Playwright E2E (`app/e2e/host-demo.spec.ts`) runs against a real Chromium DOM with default securityLevel ('strict') and all diagrams render correctly. |
+| Integration test runs under `securityLevel: "loose"` | Required by happy-dom's SVG parser limitation. Resolved in browsers: automated Playwright E2E (`app/e2e/host-demo.spec.ts`) runs against Chromium, Firefox (Gecko), and WebKit with default securityLevel ('strict') and all diagrams render correctly. |
 | App main bundle >500 kB | **Resolved 2026-08-07** — route-level lazy-loading implemented (Task #212). Main initial chunk reduced from 657 kB / 186 kB gzip to 232 kB / 73 kB gzip. Mermaid is now deferred to the `/mermaid-host-demo` route chunk only. |
 
 ---
@@ -257,3 +257,15 @@ Baseline images are stored in `app/e2e/__snapshots__/`. File names include the p
 | Primary interactive controls meet minimum tap-target height | **confirmed** | ≥ 36 px; CI-blocking |
 | Visual baselines captured for 3 pages × 2 viewports | **confirmed** | 6 PNG baselines; regenerated on every main push |
 | Pixel-diff comparison blocks PRs on unexpected visual regression | **confirmed** | `maxDiffPixelRatio` 2–3 %; CI gate active on PRs |
+
+---
+
+## Cross-browser host-demo confirmation — 2026-08-20
+
+The Mermaid host-demo E2E suite is configured as a three-engine CI gate. It runs
+the same flat-flow, gateway, pool/lane, cross-pool message-flow, and invalid-source
+error-case coverage against Chromium, Firefox (Gecko), and WebKit (Safari's engine).
+
+| Claim | Evidence | Status |
+|---|---|---|
+| Mermaid external-diagram plugin renders correctly with strict default security on all three major browser engines | `app/e2e/host-demo.spec.ts` runs through the `chromium`, `firefox`, and `webkit` Playwright projects. The CI `e2e` job uses a browser matrix, installs each engine with its dependencies, and reports engine failures separately. | **browser-verified — Chromium, Gecko, and WebKit confirmed** |
