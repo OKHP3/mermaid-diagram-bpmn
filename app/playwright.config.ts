@@ -3,8 +3,10 @@
  *
  * Playwright configuration for the real-browser E2E suite.
  *
- * Covers two spec files:
+ * Covers browser spec files:
  *   - e2e/host-demo.spec.ts     — mermaid.registerExternalDiagrams() integration (Task #209)
+ *   - e2e/playground-error-highlight.spec.ts — Playground source diagnostics and compressed URL fallback
+ *   - e2e/url-sharing.spec.ts   — canonical and custom Playground shared URLs
  *   - e2e/visual-regression.spec.ts — mobile layout and visual snapshot checks (Task #213)
  *
  * Prerequisites: the app must be built before this suite runs.
