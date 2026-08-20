@@ -216,6 +216,17 @@ The published plugin package (`@okhp3/mermaid-diagram-bpmn`) is well within the 
 | Vendor Onboarding walkthrough (`/walkthrough/vendor-onboarding`) | 1280×800 | 375×812 |
 | Mermaid Host Demo (`/mermaid-host-demo`) | 1280×800 | — |
 
+### Dark-mode desktop coverage
+
+Playwright emulates `prefers-color-scheme: dark` before navigation and seeds the
+application's persisted dark-theme preference, ensuring the class-based `dark:`
+variants are visible in the snapshots.
+
+| Page | Desktop | Baseline |
+|---|---|---|
+| Home (`/`) | 1280×800 | `home-desktop-dark-linux.png` |
+| Agent Skills (`/skills`) | 1280×800 | `skills-desktop-dark-linux.png` |
+
 ### Two-layer check design
 
 **Layer 1 — Programmatic layout assertions (merge-blocking CI gates)**  
@@ -238,15 +249,17 @@ These run on every push and pull request. No image baseline is required.
 | Heading, four rendered SVG panels, and intentional error panel present | Mermaid Host Demo | Desktop |
 
 **Layer 2 — Visual snapshot comparison (pixel diff)**  
-15 baseline PNGs are generated and committed automatically by CI on every push to `main` (`[skip ci]` commit). Pull requests compare against the committed baselines and fail if pixel diff exceeds the threshold.
+17 baseline PNGs are generated and committed automatically by CI on every push to `main` (`[skip ci]` commit). Pull requests compare against the committed baselines and fail if pixel diff exceeds the threshold.
 
 | Snapshot | Threshold |
 |---|---|
 | `home-desktop-linux.png` | 2 % |
+| `home-desktop-dark-linux.png` | 2 % |
 | `home-mobile-linux.png` | 2 % |
 | `playground-desktop-linux.png` | 3 % (diagram rendering variance) |
 | `playground-mobile-linux.png` | 3 % |
 | `skills-desktop-linux.png` | 2 % |
+| `skills-desktop-dark-linux.png` | 2 % |
 | `skills-mobile-linux.png` | 2 % |
 | `walkthrough-desktop-linux.png` | 3 % (wide BPMN pipeline) |
 | `walkthrough-mobile-linux.png` | 3 % (wide BPMN pipeline) |
@@ -275,8 +288,9 @@ Baseline images are stored in `app/e2e/__snapshots__/`. File names include the p
 | Walkthrough hub shows its heading, 15-skill BPMN pipeline, and full handoff reference | **confirmed** | Programmatic assertion at desktop and mobile; CI-blocking |
 | All three worked examples show their heading and complete 15-step process timeline | **confirmed** | Programmatic assertion at desktop and mobile; CI-blocking |
 | Mermaid Host Demo has a settled desktop visual guard after all diagram panels reach terminal state | **confirmed** | Four SVG and intentional error-panel assertions precede its committed baseline |
+| Home and Agent Skills dark palettes are protected from visual regressions | **confirmed** | Browser dark-media emulation and persisted app preference activate class-based dark variants before desktop snapshots |
 | Primary interactive controls meet minimum tap-target height | **confirmed** | ≥ 36 px; CI-blocking |
-| Visual baselines capture 8 pages across 15 viewport surfaces | **confirmed** | 15 Linux/Chromium PNG baselines are committed and compared by the PR gate |
+| Visual baselines capture 8 pages across 17 viewport surfaces | **confirmed** | 17 Linux/Chromium PNG baselines are committed and compared by the PR gate |
 | Pixel-diff comparison blocks PRs on unexpected visual regression | **confirmed** | `maxDiffPixelRatio` 2–3 %; CI gate active on PRs |
 
 ---
