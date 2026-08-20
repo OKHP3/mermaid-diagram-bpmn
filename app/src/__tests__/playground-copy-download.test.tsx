@@ -258,6 +258,36 @@ describe("Playground — download .mmd button", () => {
     expect(capturedDownloadAttr).toBe(`${expectedSlug}.mmd`);
   });
 
+  it("uses the parsed accTitle as the filename when downloading custom source", async () => {
+    render(<Playground />);
+
+    await act(async () => {
+      fireEvent.change(screen.getByTestId("textarea-bpmn-source"), {
+        target: {
+          value: 'bpmn-beta\naccTitle: Purchase Approval\nstart s1 "Submit request"',
+        },
+      });
+    });
+
+    fireEvent.click(screen.getByTestId("button-download-mmd"));
+
+    expect(capturedDownloadAttr).toBe("purchase-approval.mmd");
+  });
+
+  it("falls back to diagram.mmd when custom source has no accTitle", async () => {
+    render(<Playground />);
+
+    await act(async () => {
+      fireEvent.change(screen.getByTestId("textarea-bpmn-source"), {
+        target: { value: 'bpmn-beta\nstart s1 "Submit request"' },
+      });
+    });
+
+    fireEvent.click(screen.getByTestId("button-download-mmd"));
+
+    expect(capturedDownloadAttr).toBe("diagram.mmd");
+  });
+
   it("revokes the object URL after download", () => {
     render(<Playground />);
     fireEvent.click(screen.getByTestId("button-download-mmd"));

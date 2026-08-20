@@ -404,7 +404,14 @@ export default function Playground() {
       downloadTimeoutRef.current = setTimeout(() => setDownloadState("idle"), 2000);
       return;
     }
-    const slug = activeExampleDef ? toFilenameSlug(activeExampleDef.name) : "diagram";
+    let slug = activeExampleDef ? toFilenameSlug(activeExampleDef.name) : "diagram";
+    if (!activeExampleDef) {
+      try {
+        slug = toFilenameSlug(parse(source).getAccTitle() ?? "diagram");
+      } catch {
+        // A download should remain available while the author is fixing invalid source.
+      }
+    }
     const filename = `${slug}.mmd`;
     const blob = new Blob([source], { type: "text/plain" });
     const url = URL.createObjectURL(blob);
