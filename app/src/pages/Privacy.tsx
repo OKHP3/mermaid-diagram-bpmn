@@ -114,6 +114,11 @@ export default function Privacy() {
           that have not configured an endpoint, every tracking call is a no-op.
         </p>
         <p className="text-sm text-muted-foreground leading-relaxed mt-3">
+          We also honour your browser&apos;s <strong>Do Not Track</strong> preference.
+          When it reports that preference, this site sends no analytics beacon,
+          even if an analytics endpoint is active.
+        </p>
+        <p className="text-sm text-muted-foreground leading-relaxed mt-3">
           When active, we use{" "}
           <a
             href="https://www.goatcounter.com/"

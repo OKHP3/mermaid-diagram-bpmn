@@ -13,6 +13,8 @@
  *   of analytics provider (see VITE_ANALYTICS_ENDPOINT below).
  * - All tracking is opt-in for operators: if VITE_ANALYTICS_ENDPOINT is not
  *   set, every call is a no-op and nothing leaves the browser.
+ * - Browser Do Not Track preferences are honoured: `navigator.doNotTrack === '1'`
+ *   disables analytics even when an operator has configured an endpoint.
  * - Never throws — analytics must never crash the application.
  *
  * Configuration
@@ -73,6 +75,7 @@ export type EventName =
  * - `VITE_ANALYTICS_ENDPOINT` is not set (the default in local dev and in
  *   deployments that have not configured analytics).
  * - `navigator.sendBeacon` is not available (server-side render, old browser).
+ * - The browser reports a Do Not Track preference (`navigator.doNotTrack === '1'`).
  * - Any unexpected error (e.g. Content-Security-Policy blocking the beacon).
  *
  * @param name - One of the `EventName` values defined above.
@@ -83,6 +86,7 @@ export function trackEvent(name: EventName): void {
 
   try {
     if (typeof navigator === 'undefined' || typeof navigator.sendBeacon !== 'function') return;
+    if (navigator.doNotTrack === '1') return;
 
     const path =
       typeof window !== 'undefined' ? window.location.pathname : '/';

@@ -125,6 +125,14 @@ describe('trackEvent — fires beacon when VITE_ANALYTICS_ENDPOINT is set', () =
     const keys = Object.keys(payload).sort();
     expect(keys).toEqual(['e', 'p']);
   });
+
+  it('does not call sendBeacon when the browser requests Do Not Track', () => {
+    vi.stubGlobal('navigator', { sendBeacon: sendBeaconSpy, doNotTrack: '1' });
+
+    trackEvent('playground-export-svg');
+
+    expect(sendBeaconSpy).not.toHaveBeenCalled();
+  });
 });
 
 // ── Robustness ────────────────────────────────────────────────────────────────
