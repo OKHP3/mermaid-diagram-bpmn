@@ -108,7 +108,7 @@ const SYNTAXES = [
       "Would be MIT-licensed core Mermaid if accepted",
     ],
     tradeoffs: [
-        "No public implementation or pull request is linked from the issue",
+        "Issue links a community prototype by @derari; the DFKI author has not linked a public implementation or PR",
         "The tiered syntax and its normalization rules are still proposed, not specified",
         "The original detailed form remains attribute-heavy for advanced elements",
         "Issue is open and marked Status: Approved (reviewed 2026-08-20)",
@@ -457,7 +457,7 @@ export default function SyntaxComparison() {
           Mermaid flowchart examples are hand-written for the same notional process and verified to
           be syntactically valid in their respective parsers. The DFKI #7699 column reproduces one
           complete, later author-authored fenced example from the issue exactly — no elements were
-          added, combined, or paraphrased. It remains a proposal, not an implemented Mermaid parser.
+          added, combined, or paraphrased. It remains proposed Mermaid syntax, not a released Mermaid parser.
         </p>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-3xl">
           <div className="p-4 rounded-lg border border-border bg-card">

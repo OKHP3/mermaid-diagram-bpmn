@@ -44,7 +44,7 @@
 | **GitHub/GitLab native rendering** | Renders Mermaid (since Feb 2022) and PlantUML (GitLab) | Whatever the embedded DSL supports | n/a | Frictionless dev-doc rendering of Mermaid | Inherits Mermaid's lack of BPMN |
 | **`benjamen/mermaid-bpmn-plugin`** (existing community plugin) | Yes (Mermaid plugin) | Partial | MIT (GitHub) | Demonstrates feasibility — there is already a community attempt | Low activity; not a maintained, fleshed-out DSL |
 | **`signavio/bpmn2constraints`** | No — BPMN XML/JSON in, Mermaid flowchart out (one-way) | Renders to flowchart, not BPMN-native | Open source | Useful for ETL of existing BPMN | One-way export; flowchart-style output, not BPMN-shaped |
-| **DFKI proposal — Mermaid issue #7699** | Yes — proposed | Targets full BPMN 2.0 element set | Would be MIT (Mermaid core) | Later author update proposes a concise default layer with detailed syntax for advanced semantics | Syntax direction is still evolving; no public implementation or PR is linked from the issue (see §1.3 below) |
+| **DFKI proposal — Mermaid issue #7699** | Yes — proposed | Targets full BPMN 2.0 element set | Would be MIT (Mermaid core) | Later author update proposes a concise default layer with detailed syntax for advanced semantics | Syntax direction is still evolving; the issue links a community prototype, but not one from the DFKI author (see §1.3 below) |
 
 ### 1.3 The DFKI competing proposal (Mermaid issue #7699) — what it actually proposes
 
@@ -64,9 +64,9 @@ Key facts about the proposal:
 - **Backing paper:** Emrich, A., Hollax, J. (2025), "Domain-Specific Languages for Business Process Modeling: Mermaid Diagrams for BPMN", DFKI — **still described in the issue as in preparation. No DOI, arXiv ID, or preprint URL was found in the primary issue or an exact-title/author search, reviewed 2026-08-20.**
 - **Maintainer engagement:** The issue is open and labelled **Status: Approved**. On 2026-05-28, Mermaid collaborator @knsv suggested merging it with #2623; the issue contains subsequent community discussion.
 - **Element ambition:** start/end events with all subtypes, tasks (send/receive/user/manual/service/script/business rule), all gateways (exclusive/parallel/inclusive/event-based/complex), intermediate events, sequence/message flows, subprocesses (expanded/collapsed), call activities, pools, lanes, boundary events
-- **Implementation status:** The later author update describes local detector, parser, renderer, and shape work, but no public implementation or pull request is linked from #7699.
+- **Implementation status:** The later author update describes local detector, parser, renderer, and shape work, but the DFKI author has not linked a public implementation or pull request. The issue does link a separate community prototype by [@derari](https://derari.github.io/mermaid-bpmn/editor.html), posted on 2026-07-25.
 
-**Honest comparative read:** The original detailed form is close to an attribute dictionary (`type:event,subtype:none,behaviour:start,label:,lane:,pool:`), but the later simple/default layer is intentionally Mermaid-like. The proposal does not yet publish a grammar, normalization rules, or runnable implementation, so its syntax should not be treated as settled. bpmn-beta's differentiation must rest on a working, documented implementation and clear scope rather than on claiming that the competing proposal is inherently verbose.
+**Honest comparative read:** The original detailed form is close to an attribute dictionary (`type:event,subtype:none,behaviour:start,label:,lane:,pool:`), but the later simple/default layer is intentionally Mermaid-like. The DFKI author does not yet publish a grammar, normalization rules, or a public implementation, so that proposed syntax should not be treated as settled. bpmn-beta's differentiation must rest on a working, documented implementation and clear scope rather than on claiming that the competing proposal is inherently verbose.
 
 ### 1.4 Implications for bpmn-beta
 
@@ -215,7 +215,7 @@ Honest assessment:
 
 - #7699 is open and marked **Status: Approved**. Mermaid collaborator @knsv suggested merging it with #2623 on 2026-05-28, so it should not be characterized as unreviewed or still in Triage.
 - Two competing proposals for the same diagram type *can* be merged or chosen between by maintainers. The DFKI author has since proposed a Mermaid-like simple layer as well as a detailed layer, so syntax is an evolving comparison rather than a fixed contrast.
-- The DFKI author describes local prototype work in the issue, but #7699 does not link a public implementation or pull request.
+- The DFKI author describes local prototype work in the issue but does not link a public implementation or pull request. #7699 does link a separate [@derari community prototype](https://derari.github.io/mermaid-bpmn/editor.html).
 - The cited Emrich & Hollax 2025 paper remains unavailable publicly as of the 2026-08-20 review and cannot be cited as peer-reviewed support today.
 - A community contributor who arrives with (a) a working prototype rendering BPMN SVG in-browser, (b) no bpmn-js dependency, (c) a syntax that is demonstrably more concise and Mermaid-idiomatic than #7699, and (d) the explicit `bpmn-beta` naming aligned with Mermaid's existing convention, has a credible path. The realistic outcomes are:
   - (i) bpmn-beta lands as the external plugin and is referenced from #7699 as prior art;
