@@ -579,6 +579,22 @@ describe('AgentSkills page — PNS section rows', () => {
 
     expect(sectionNumbers).toEqual([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13]);
   });
+
+  it('PNS section titles are unique (pure data, no render)', () => {
+    const titleCounts = new Map<string, number>();
+    for (const section of PNS_SECTIONS) {
+      titleCounts.set(section.title, (titleCounts.get(section.title) ?? 0) + 1);
+    }
+
+    const duplicateTitles = [...titleCounts.entries()]
+      .filter(([, count]) => count > 1)
+      .map(([title]) => title);
+
+    expect(
+      duplicateTitles,
+      `Duplicate PNS section titles: ${duplicateTitles.join(', ')}`,
+    ).toHaveLength(0);
+  });
 });
 
 // ─────────────────────────────────────────────────────────────────────────────
