@@ -76,7 +76,7 @@ The full lifecycle pipeline designed, documented, and surfaced in the app.
 - [x] `bp_skill_version: "0.3.0"` in all 15 source SKILL.md files
 - [x] okhp3-* skills marked deprecated in frontmatter
 - [x] This version checklist published at `docs/version-checklist.md`
-- [x] All tests passing (373/373 as of v0.1.0 tag; run: `pnpm --filter @workspace/mermaid-diagram-bpmn run test`)
+- [x] All tests passing (717/717 across 36 test files; run: `pnpm --filter @workspace/mermaid-diagram-bpmn run test`)
 - [x] `pnpm run typecheck` passes clean
 
 **Tag:** `v0.1.0` — 2026-08-04. All V0.3 criteria are met. This tag is the V0.3 baseline commit.
