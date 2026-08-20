@@ -89,6 +89,7 @@ interface DiagnosticWarning {
   code: string;
   message: string;
   nodeId?: string;
+  sourceLine?: number;
 }
 
 /**
@@ -128,6 +129,7 @@ export default function Playground() {
   const [activeExample, setActiveExample] = useState<string | null>(() => computeInitialState().activeExample);
   const [editorScrollTop, setEditorScrollTop] = useState(0);
   const sourceEditorRef = useRef<HTMLTextAreaElement>(null);
+  const [activeLintWarningLine, setActiveLintWarningLine] = useState<number | null>(null);
 
   // copy state: 'idle' | 'copied' | 'error'
   const [copyState, setCopyState] = useState<"idle" | "copied" | "error">("idle");
@@ -157,6 +159,20 @@ export default function Playground() {
   );
   const activeExampleDef = BPMN_EXAMPLES.find(e => e.id === activeExample);
 
+  const scrollEditorToLine = useCallback((line: number, focusEditor = false) => {
+    const editor = sourceEditorRef.current;
+    if (!editor) return;
+
+    const lineTop = (line - 1) * EDITOR_LINE_HEIGHT_PX;
+    const targetScrollTop = Math.max(
+      0,
+      lineTop - (editor.clientHeight - EDITOR_LINE_HEIGHT_PX) / 2,
+    );
+    editor.scrollTop = targetScrollTop;
+    setEditorScrollTop(targetScrollTop);
+    if (focusEditor) editor.focus();
+  }, []);
+
   // Hydrate arbitrary ?src= links after the Compression Streams API decodes
   // them. A user edit or example selection always wins over a late decode.
   useEffect(() => {
@@ -174,22 +190,18 @@ export default function Playground() {
     };
   }, []);
 
+  // A changed source invalidates any selected lint coordinate from the previous
+  // diagram. Parser errors derive their own coordinate and need no local state.
+  useEffect(() => {
+    setActiveLintWarningLine(null);
+  }, [source]);
+
   // Position the editor at a parser-reported line without moving keyboard focus.
   // The stripe itself is rendered in a sibling layer and follows textarea scrolling.
   useEffect(() => {
     if (parseError?.line == null) return;
-
-    const editor = sourceEditorRef.current;
-    if (!editor) return;
-
-    const lineTop = (parseError.line - 1) * EDITOR_LINE_HEIGHT_PX;
-    const targetScrollTop = Math.max(
-      0,
-      lineTop - (editor.clientHeight - EDITOR_LINE_HEIGHT_PX) / 2,
-    );
-    editor.scrollTop = targetScrollTop;
-    setEditorScrollTop(targetScrollTop);
-  }, [parseError?.line]);
+    scrollEditorToLine(parseError.line);
+  }, [parseError?.line, scrollEditorToLine]);
 
   // ── Pan / zoom state ────────────────────────────────────────────────────────
   const [viewState, setViewState] = useState({ scale: 1, tx: 0, ty: 0 });
@@ -449,6 +461,7 @@ export default function Playground() {
       cancelPendingSourceUrlSync();
       setSource(ex.source);
       setActiveExample(ex.id);
+      setActiveLintWarningLine(null);
       resetView();
       // Keep the address bar shareable: canonical examples use the lightweight
       // ?example=<id> form so the URL remains human-readable.
@@ -463,6 +476,7 @@ export default function Playground() {
     userChangedSourceRef.current = true;
     setSource(val);
     setActiveExample(null);
+    setActiveLintWarningLine(null);
     cancelPendingSourceUrlSync();
     const version = sourceUrlSyncVersionRef.current;
 
@@ -806,12 +820,27 @@ export default function Playground() {
                   <li
                     key={w.code + (w.nodeId ?? '') + i}
                     data-testid={`lint-warning-${w.code}-${w.nodeId ?? i}`}
+                    {...(w.sourceLine != null ? { "data-lint-warning-line": w.sourceLine } : {})}
                     className="px-3 py-1 text-xs text-amber-800 dark:text-amber-200 flex items-start gap-2"
                   >
                     <span className="shrink-0 mt-0.5 text-amber-500 dark:text-amber-400 font-mono text-[10px] leading-4 select-none">
                       ▸
                     </span>
-                    {w.message}
+                    <span className="min-w-0 flex-1">{w.message}</span>
+                    {w.sourceLine != null && (
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setActiveLintWarningLine(w.sourceLine!);
+                          scrollEditorToLine(w.sourceLine!, true);
+                        }}
+                        className="shrink-0 rounded px-1 py-0.5 font-mono text-[10px] font-semibold text-amber-700 underline decoration-amber-500/70 underline-offset-2 hover:bg-amber-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-500 dark:text-amber-300 dark:hover:bg-amber-900/40"
+                        aria-label={`Go to line ${w.sourceLine} for ${w.code}`}
+                        data-testid={`button-lint-warning-line-${w.code}-${w.nodeId ?? i}`}
+                      >
+                        Line {w.sourceLine}
+                      </button>
+                    )}
                   </li>
                 ))}
               </ul>
@@ -847,6 +876,19 @@ export default function Playground() {
                 data-error-line={parseError.line}
                 style={{
                   top: `${EDITOR_PADDING_PX + (parseError.line - 1) * EDITOR_LINE_HEIGHT_PX}px`,
+                  height: `${EDITOR_LINE_HEIGHT_PX}px`,
+                  transform: `translateY(-${editorScrollTop}px)`,
+                }}
+              />
+            )}
+            {!parseError && activeLintWarningLine != null && (
+              <div
+                aria-hidden="true"
+                className="forge-editor-warning-line absolute left-0 right-0 pointer-events-none"
+                data-testid="editor-lint-warning-line-highlight"
+                data-lint-warning-line={activeLintWarningLine}
+                style={{
+                  top: `${EDITOR_PADDING_PX + (activeLintWarningLine - 1) * EDITOR_LINE_HEIGHT_PX}px`,
                   height: `${EDITOR_LINE_HEIGHT_PX}px`,
                   transform: `translateY(-${editorScrollTop}px)`,
                 }}

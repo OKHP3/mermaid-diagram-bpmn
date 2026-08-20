@@ -71,6 +71,11 @@ export interface LintWarning {
    * Absent for process-level warnings (e.g. NO_START_EVENT).
    */
   readonly nodeId?: string;
+  /**
+   * 1-based physical source line of the related pool or node, when available.
+   * Absent for process-level warnings and programmatically constructed diagrams.
+   */
+  readonly sourceLine?: number;
 }
 
 // ── Internal rule type ────────────────────────────────────────────────────────
@@ -94,6 +99,7 @@ const rulePoolNoLanes: LintRule = (db) =>
       code: 'POOL_NO_LANES' as const,
       message: `Pool "${pool.label}" has no lane declarations. Add at least one lane block to structure tasks into swimlanes, or remove the pool block.`,
       nodeId: pool.id,
+      sourceLine: pool.sourceLine,
     }));
 
 /**
@@ -117,6 +123,7 @@ const ruleGatewaySingleOutflow: LintRule = (db) => {
           `Gateway "${gw.label || gw.id}" has ${outCount === 0 ? 'no' : 'only one'} outgoing flow. ` +
           `Add a second branch to create a meaningful route, or replace the gateway with a task.`,
         nodeId: gw.id,
+        sourceLine: gw.sourceLine,
       }];
     });
 };

@@ -182,6 +182,35 @@ describe("Playground lint warnings — multiple warnings displayed", () => {
   });
 });
 
+// ── Source line metadata ──────────────────────────────────────────────────────
+
+describe("Playground lint warnings — source line metadata", () => {
+  it("shows a line action that focuses and highlights the flagged gateway line", () => {
+    render(<Playground />);
+    setSource(SOURCE_GW_SINGLE_OUTFLOW);
+
+    const warning = screen.getByTestId("lint-warning-GATEWAY_SINGLE_OUTFLOW-g1");
+    expect(warning.getAttribute("data-lint-warning-line")).toBe("3");
+
+    const lineButton = screen.getByTestId("button-lint-warning-line-GATEWAY_SINGLE_OUTFLOW-g1");
+    expect(lineButton.textContent).toBe("Line 3");
+    fireEvent.click(lineButton);
+
+    const highlight = screen.getByTestId("editor-lint-warning-line-highlight");
+    expect(highlight.getAttribute("data-lint-warning-line")).toBe("3");
+    expect(document.activeElement).toBe(screen.getByTestId("textarea-bpmn-source"));
+  });
+
+  it("does not add a source-line action to process-level warnings", () => {
+    render(<Playground />);
+    setSource(SOURCE_NO_START);
+
+    const warning = screen.getByTestId("lint-warning-NO_START_EVENT-0");
+    expect(warning.getAttribute("data-lint-warning-line")).toBeNull();
+    expect(screen.queryByTestId("button-lint-warning-line-NO_START_EVENT-0")).toBeNull();
+  });
+});
+
 // ── Accessibility ─────────────────────────────────────────────────────────────
 
 describe("Playground lint warnings — accessibility attributes", () => {

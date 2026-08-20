@@ -63,7 +63,7 @@ export function parse(source: string): BpmnDb {
       }
       const poolId = poolMatch[1];
       const poolLabel = poolMatch[2];
-      db.addPool({ id: poolId, label: poolLabel, laneIds: [] });
+      db.addPool({ id: poolId, label: poolLabel, laneIds: [], sourceLine });
       currentPoolRef = { type: 'pool', id: poolId };
       contextStack.push(currentPoolRef);
       continue;
@@ -110,6 +110,7 @@ export function parse(source: string): BpmnDb {
       db.addNode({
         id: nodeId, kind, subtype, position, label,
         laneId: lane?.id, poolId: pool?.id,
+        sourceLine,
       });
       continue;
     }

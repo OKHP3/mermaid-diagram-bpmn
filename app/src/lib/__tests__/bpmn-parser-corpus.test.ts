@@ -12,6 +12,14 @@ function loadExample(filename: string): string {
   return readFileSync(join(EXAMPLES_DIR, filename), 'utf-8');
 }
 
+/**
+ * Corpus snapshots cover semantic diagram state used by rendering. Source
+ * coordinates are editor diagnostics and have their own focused parser tests.
+ */
+function omitSourceLines<T extends { sourceLine?: number }>(records: T[]) {
+  return records.map(({ sourceLine: _sourceLine, ...record }) => record);
+}
+
 // ---------------------------------------------------------------------------
 // Snapshot tests — auto-discover every .mmd in examples/.
 // To add a new corpus fixture: drop a .mmd into examples/ and run:
@@ -28,9 +36,9 @@ for (const file of mmdFiles) {
     it('parses to a stable DB state', () => {
       const db = parse(loadExample(file));
       expect({
-        nodes: db.getNodes(),
+        nodes: omitSourceLines(db.getNodes()),
         flows: db.getFlows(),
-        pools: db.getPools(),
+        pools: omitSourceLines(db.getPools()),
         lanes: db.getLanes(),
         accTitle: db.getAccTitle(),
         accDescription: db.getAccDescription(),

@@ -6,6 +6,8 @@ export interface BpmnNode {
   label?: string;
   laneId?: string;
   poolId?: string;
+  /** 1-based physical source line where the node was declared, when parsed from DSL. */
+  sourceLine?: number;
 }
 
 export interface BpmnFlow {
@@ -20,6 +22,8 @@ export interface BpmnPool {
   id: string;
   label: string;
   laneIds: string[];
+  /** 1-based physical source line where the pool was declared, when parsed from DSL. */
+  sourceLine?: number;
 }
 
 export interface BpmnLane {

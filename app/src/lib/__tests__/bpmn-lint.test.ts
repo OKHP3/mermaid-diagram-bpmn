@@ -80,6 +80,12 @@ pool p2 "Pool B" {
     expect(w?.nodeId).toBe('p1');
   });
 
+  it('warning carries the source line of the laneless pool', () => {
+    const warnings = lintSource(POOL_WITH_NO_LANES);
+    const w = warnings.find((w) => w.code === 'POOL_NO_LANES');
+    expect(w?.sourceLine).toBe(2);
+  });
+
   it('no POOL_NO_LANES warning when pool has at least one lane', () => {
     expect(warningCodes(POOL_WITH_ONE_LANE)).not.toContain('POOL_NO_LANES');
   });
@@ -157,6 +163,12 @@ g2 --> e1`;
     const warnings = lintSource(GW_ONE_OUTFLOW);
     const w = warnings.find((w) => w.code === 'GATEWAY_SINGLE_OUTFLOW');
     expect(w?.nodeId).toBe('g1');
+  });
+
+  it('warning carries the source line of the single-outflow gateway', () => {
+    const warnings = lintSource(GW_ONE_OUTFLOW);
+    const w = warnings.find((w) => w.code === 'GATEWAY_SINGLE_OUTFLOW');
+    expect(w?.sourceLine).toBe(3);
   });
 
   it('no GATEWAY_SINGLE_OUTFLOW when gateway has 2 outgoing flows', () => {

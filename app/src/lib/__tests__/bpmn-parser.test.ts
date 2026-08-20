@@ -21,6 +21,21 @@ describe('parse — header and directives', () => {
     const db = parse('bpmn-beta\n%% this is a comment\nstart s1 "Start"');
     expect(db.getNodes()).toHaveLength(1);
   });
+
+  it('retains physical source lines for parsed pools and nodes', () => {
+    const db = parse(`bpmn-beta
+%% Document the participant
+
+pool p1 "Buyer" {
+  task t1 "Review"
+}
+
+xor g1 "Approved?"`);
+
+    expect(db.getPools()[0].sourceLine).toBe(4);
+    expect(db.getNodes().find((node) => node.id === 't1')?.sourceLine).toBe(5);
+    expect(db.getNodes().find((node) => node.id === 'g1')?.sourceLine).toBe(8);
+  });
 });
 
 describe('parse — node types', () => {
