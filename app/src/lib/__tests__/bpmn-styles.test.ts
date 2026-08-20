@@ -220,3 +220,27 @@ describe('getStyles — .bpmn-text-muted uses lineColor, not textColor', () => {
     expect(mutedRule).toContain('opacity: 0.7');
   });
 });
+
+// ── Text hierarchy — muted annotations remain monospace ───────────────────────
+
+describe('getStyles — muted and primary text use distinct font families', () => {
+  const css = getStyles(CONCRETE_THEME);
+  const mutedRule = css.match(/\.bpmn-text-muted\s*\{[^}]+\}/)?.[0] ?? '';
+  const primaryRule = css.match(/\.bpmn-text\s*\{[^}]+\}/)?.[0] ?? '';
+  const fontFamilyFor = (rule: string) =>
+    rule.match(/font-family:\s*([^;]+);/)?.[1].trim() ?? '';
+
+  it('.bpmn-text-muted uses the monospace font token', () => {
+    expect(mutedRule).toContain('--app-font-mono');
+  });
+
+  it('.bpmn-text uses the sans-serif font token', () => {
+    expect(primaryRule).toContain('--app-font-sans');
+  });
+
+  it('uses different font-family values for muted and primary text', () => {
+    expect(fontFamilyFor(mutedRule)).not.toBe('');
+    expect(fontFamilyFor(primaryRule)).not.toBe('');
+    expect(fontFamilyFor(mutedRule)).not.toBe(fontFamilyFor(primaryRule));
+  });
+});
