@@ -218,7 +218,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 flex items-center justify-between h-14">
 
           {/* Logo — links to Home */}
-          <Link href="/" className="flex items-center gap-2.5 shrink-0" data-testid="link-home-logo">
+          <Link href="/" className="forge-home-logo flex items-center gap-2.5 shrink-0" data-testid="link-home-logo">
             <img
               src={`${import.meta.env.BASE_URL}icon.png`}
               alt="BPMN for Mermaid icon"

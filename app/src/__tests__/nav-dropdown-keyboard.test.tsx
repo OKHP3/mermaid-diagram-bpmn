@@ -57,6 +57,28 @@ describe('NavDropdown — keyboard navigation', () => {
     mockRoute.location = '/';
   });
 
+  describe('Home logo keyboard access', () => {
+    it('is a focusable Home link with a visible-focus style hook', () => {
+      const { container } = renderLayout();
+      const logo = container.querySelector('[data-testid="link-home-logo"]') as HTMLAnchorElement;
+
+      expect(logo.getAttribute('href')).toBe('/');
+      expect(logo.tabIndex).toBeGreaterThanOrEqual(0);
+      expect(logo.classList.contains('forge-home-logo')).toBe(true);
+
+      act(() => { logo.focus(); });
+      expect(document.activeElement).toBe(logo);
+    });
+
+    it('appears before the Playground link in the header tab order', () => {
+      const { container } = renderLayout();
+      const logo = container.querySelector('[data-testid="link-home-logo"]') as HTMLAnchorElement;
+      const playground = container.querySelector('[data-testid="nav-playground"]') as HTMLAnchorElement;
+
+      expect(logo.compareDocumentPosition(playground) & Node.DOCUMENT_POSITION_FOLLOWING).not.toBe(0);
+    });
+  });
+
   describe('Plugin ▾ dropdown', () => {
 
     it.each([
