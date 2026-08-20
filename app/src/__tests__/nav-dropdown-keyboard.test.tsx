@@ -11,6 +11,8 @@ import { Layout } from '@/components/Layout';
 
 // ── Mocks ─────────────────────────────────────────────────────────────────────
 
+const mockRoute = vi.hoisted(() => ({ location: '/' }));
+
 vi.mock('wouter', () => ({
   Link: ({
     href,
@@ -22,7 +24,7 @@ vi.mock('wouter', () => ({
       {children}
     </a>
   ),
-  useLocation: () => ['/', vi.fn()],
+  useLocation: () => [mockRoute.location, vi.fn()],
 }));
 
 vi.mock('@/hooks/usePageTracking', () => ({ usePageTracking: () => {} }));
@@ -51,8 +53,24 @@ function getDropdownItems(container: HTMLElement) {
 // ── Tests ─────────────────────────────────────────────────────────────────────
 
 describe('NavDropdown — keyboard navigation', () => {
+  beforeEach(() => {
+    mockRoute.location = '/';
+  });
 
   describe('Plugin ▾ dropdown', () => {
+
+    it.each([
+      '/plugin',
+      '/mermaid-host-demo',
+      '/comparison',
+    ])('shows Plugin as active on %s', (route) => {
+      mockRoute.location = route;
+
+      const { container } = renderLayout();
+      const trigger = getDropdownTrigger(container, 'nav-plugin-dropdown');
+
+      expect(trigger.classList.contains('forge-nav-link--active')).toBe(true);
+    });
 
     it('opens the panel and moves focus to the first item on click', () => {
       const { container } = renderLayout();
@@ -161,6 +179,23 @@ describe('NavDropdown — keyboard navigation', () => {
   });
 
   describe('Learn ▾ dropdown', () => {
+
+    it.each([
+      '/walkthrough',
+      '/walkthrough/purchase-approval',
+      '/walkthrough/employee-offboarding',
+      '/dsl',
+      '/architecture',
+      '/roadmap',
+      '/about',
+    ])('shows Learn as active on %s', (route) => {
+      mockRoute.location = route;
+
+      const { container } = renderLayout();
+      const trigger = getDropdownTrigger(container, 'nav-learn-dropdown');
+
+      expect(trigger.classList.contains('forge-nav-link--active')).toBe(true);
+    });
 
     it('opens the panel and moves focus to the first item', () => {
       const { container } = renderLayout();

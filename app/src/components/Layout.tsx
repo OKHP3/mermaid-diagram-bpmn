@@ -34,9 +34,11 @@ const GITHUB_REPO = "https://github.com/OKHP3/mermaid-diagram-bpmn";
 // ── Helpers ──────────────────────────────────────────────────────────────────
 
 function isLinkActive(href: string, location: string) {
-  return href === "/skills"
-    ? location === "/skills" || location.startsWith("/skills/")
-    : location === href;
+  if (href === "/skills" || href === "/walkthrough") {
+    return location === href || location.startsWith(`${href}/`);
+  }
+
+  return location === href;
 }
 
 // ── Dropdown component ────────────────────────────────────────────────────────
