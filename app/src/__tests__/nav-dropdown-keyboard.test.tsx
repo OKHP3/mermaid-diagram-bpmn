@@ -87,6 +87,7 @@ describe('NavDropdown — keyboard navigation', () => {
     it.each([
       '/plugin',
       '/mermaid-host-demo',
+      '/release',
       '/comparison',
     ])('shows Plugin as active on %s', (route) => {
       mockRoute.location = route;
@@ -202,6 +203,44 @@ describe('NavDropdown — keyboard navigation', () => {
       expect(container.querySelector('[role="menu"]')).toBeNull();
     });
 
+    it('lists Release Manifest after Plugin Setup and Host Demo with native keyboard link semantics', () => {
+      const { container } = renderLayout();
+      const trigger = getDropdownTrigger(container, 'nav-plugin-dropdown');
+
+      act(() => { fireEvent.click(trigger); });
+      const items = getDropdownItems(container);
+      const hrefs = items.map(item => item.getAttribute('href'));
+
+      expect(hrefs).toEqual([
+        '/plugin',
+        '/mermaid-host-demo',
+        '/release',
+        '/comparison',
+      ]);
+
+      const releaseManifest = items[2];
+      expect(releaseManifest.textContent).toBe('Release Manifest');
+      expect(releaseManifest.classList.contains('forge-nav-dropdown-item')).toBe(true);
+
+      // Native anchors receive visible focus styling and Enter activates their href.
+      act(() => { releaseManifest.focus(); });
+      expect(document.activeElement).toBe(releaseManifest);
+      expect(releaseManifest.getAttribute('href')).toBe('/release');
+
+      const enterEvent = new KeyboardEvent('keydown', {
+        key: 'Enter',
+        bubbles: true,
+        cancelable: true,
+      });
+      act(() => { releaseManifest.dispatchEvent(enterEvent); });
+      expect(enterEvent.defaultPrevented).toBe(false);
+
+      // Click models the browser's native anchor activation after Enter for the
+      // mocked Wouter link, which closes the panel through the real handler.
+      act(() => { fireEvent.click(releaseManifest); });
+      expect(container.querySelector('[role="menu"]')).toBeNull();
+    });
+
     it('prefetches the Host Demo chunk when its link is hovered or focused', () => {
       const { container } = renderLayout();
       const trigger = getDropdownTrigger(container, 'nav-plugin-dropdown');
@@ -288,6 +327,20 @@ describe('NavDropdown — keyboard navigation', () => {
   });
 
   describe('Mobile menu keyboard dismissal', () => {
+    it('includes Release Manifest in the Plugin section after Host Demo', () => {
+      const { container } = renderLayout();
+      const toggle = container.querySelector('[data-testid="button-toggle-menu"]') as HTMLButtonElement;
+
+      act(() => { fireEvent.click(toggle); });
+      const pluginLinks = Array.from(
+        container.querySelectorAll('#mobile-nav a[href^="/"]'),
+      ) as HTMLAnchorElement[];
+      const hrefs = pluginLinks.map(link => link.getAttribute('href'));
+
+      expect(hrefs).toContain('/release');
+      expect(hrefs.indexOf('/mermaid-host-demo')).toBeLessThan(hrefs.indexOf('/release'));
+    });
+
     it('prefetches the Host Demo chunk when its mobile menu item is tapped', () => {
       const { container } = renderLayout();
       const toggle = container.querySelector('[data-testid="button-toggle-menu"]') as HTMLButtonElement;

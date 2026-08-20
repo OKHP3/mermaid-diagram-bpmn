@@ -8,7 +8,7 @@ import { loadMermaidHostDemo } from "@/lib/route-loaders";
 //
 // Logo → Home (always)
 // Flat: Playground · Agent Skills
-// Plugin ▾: Plugin Setup · Host Demo · Syntax Comparison   (Use with Mermaid)
+// Plugin ▾: Plugin Setup · Host Demo · Release Manifest · Syntax Comparison
 // Learn  ▾: Walkthrough · DSL Reference · Architecture · Roadmap · About
 
 const PRODUCT_NAV = [
@@ -19,6 +19,7 @@ const PRODUCT_NAV = [
 const PLUGIN_LINKS = [
   { href: "/plugin",            label: "Plugin Setup"      },
   { href: "/mermaid-host-demo", label: "Host Demo"         },
+  { href: "/release",           label: "Release Manifest"  },
   { href: "/comparison",        label: "Syntax Comparison" },
 ] as const;
 
