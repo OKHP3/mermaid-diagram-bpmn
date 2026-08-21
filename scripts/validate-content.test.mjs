@@ -35,6 +35,8 @@ const REAL_CHECKLIST   = resolve(ROOT, 'app/docs/release-checklist.md');
 const REAL_CANON       = resolve(ROOT, 'scripts/content-canon.json');
 const REAL_VERSION_DOC = resolve(ROOT, 'docs/version-checklist.md');
 const REAL_LEDGER      = resolve(ROOT, 'docs/capability-ledger.md');
+const REAL_HOME        = resolve(ROOT, 'app/src/pages/Home.tsx');
+const REAL_AGENT_SKILLS = resolve(ROOT, 'app/src/pages/AgentSkills.tsx');
 
 /** Write content to a unique temp file and return its path. */
 function writeTmp(content, ext = '.md') {
@@ -204,5 +206,105 @@ test('validate-content exits 1 when the capability ledger is missing', () => {
     output.toLowerCase().includes('missing') ||
     output.toLowerCase().includes('fail'),
     `output should mention missing/not found; got:\n${output}`,
+  );
+});
+
+// ─── Check 4: Banned claims ───────────────────────────────────────────────────
+
+test('validate-content exits 1 when Home.tsx contains the retired "Zero implement" phrase', () => {
+  // Inject the retired BABOK uniqueness claim into a copy of Home.tsx.
+  const realContent = readFileSync(REAL_HOME, 'utf-8');
+  const staleContent = realContent +
+    '\n// INJECTED FOR TEST: Zero implement a BABOK knowledge area\n';
+  const stalePath = writeTmp(staleContent, '.tsx');
+
+  const { exitCode, output } = runValidator({ CONTENT_HOME_OVERRIDE: stalePath });
+
+  assert.equal(exitCode, 1, `expected exit 1 for banned phrase "Zero implement"; output:\n${output}`);
+  assert.ok(
+    output.includes('Zero implement') || output.toLowerCase().includes('fail'),
+    `output should mention the banned phrase; got:\n${output}`,
+  );
+});
+
+test('validate-content exits 1 when Home.tsx contains the stale "89,000+" ecosystem figure', () => {
+  const realContent = readFileSync(REAL_HOME, 'utf-8');
+  const staleContent = realContent +
+    '\n// INJECTED FOR TEST: 89,000+ skills on agentskills.io\n';
+  const stalePath = writeTmp(staleContent, '.tsx');
+
+  const { exitCode, output } = runValidator({ CONTENT_HOME_OVERRIDE: stalePath });
+
+  assert.equal(exitCode, 1, `expected exit 1 for stale figure "89,000+"; output:\n${output}`);
+  assert.ok(
+    output.includes('89,000+') || output.toLowerCase().includes('fail'),
+    `output should mention the banned phrase; got:\n${output}`,
+  );
+});
+
+test('validate-content exits 1 when AgentSkills.tsx contains the retired "Zero implement" phrase', () => {
+  const realContent = readFileSync(REAL_AGENT_SKILLS, 'utf-8');
+  const staleContent = realContent +
+    '\n// INJECTED FOR TEST: Zero implement a BABOK knowledge area\n';
+  const stalePath = writeTmp(staleContent, '.tsx');
+
+  const { exitCode, output } = runValidator({ CONTENT_AGENT_SKILLS_OVERRIDE: stalePath });
+
+  assert.equal(exitCode, 1, `expected exit 1 for banned phrase in AgentSkills.tsx; output:\n${output}`);
+  assert.ok(
+    output.includes('Zero implement') || output.toLowerCase().includes('fail'),
+    `output should mention the banned phrase; got:\n${output}`,
+  );
+});
+
+test('validate-content exits 1 when Home.tsx source file is missing from banned-claims scan', () => {
+  const { exitCode, output } = runValidator({
+    CONTENT_HOME_OVERRIDE: nonExistentPath(),
+  });
+
+  assert.equal(exitCode, 1, `expected exit 1 for missing Home.tsx; output:\n${output}`);
+  assert.ok(
+    output.toLowerCase().includes('not found') ||
+    output.toLowerCase().includes('missing') ||
+    output.toLowerCase().includes('fail'),
+    `output should mention missing/not found; got:\n${output}`,
+  );
+});
+
+test('validate-content exits 1 when Home.tsx contains the retired "first standards-conformant" uniqueness claim', () => {
+  // Checks both the exact casing used in docs/promotion-strategy.md and a
+  // capitalised variant to confirm the comparison is case-insensitive.
+  const realContent = readFileSync(REAL_HOME, 'utf-8');
+
+  // Lowercase variant (as it appears in the promotion-strategy retirement note)
+  const staleContentLower = realContent +
+    '\n// INJECTED FOR TEST: BP-SKILL is the first standards-conformant skill suite\n';
+  const stalePathLower = writeTmp(staleContentLower, '.tsx');
+
+  const { exitCode: exitLower, output: outputLower } =
+    runValidator({ CONTENT_HOME_OVERRIDE: stalePathLower });
+
+  assert.equal(exitLower, 1,
+    `expected exit 1 for "first standards-conformant" (lowercase); output:\n${outputLower}`);
+  assert.ok(
+    outputLower.toLowerCase().includes('first standards-conformant') ||
+    outputLower.toLowerCase().includes('fail'),
+    `output should mention the banned phrase; got:\n${outputLower}`,
+  );
+
+  // Capitalised variant — confirms case-insensitive matching
+  const staleContentCaps = realContent +
+    '\n// INJECTED FOR TEST: BP-SKILL is the First Standards-Conformant skill suite\n';
+  const stalePathCaps = writeTmp(staleContentCaps, '.tsx');
+
+  const { exitCode: exitCaps, output: outputCaps } =
+    runValidator({ CONTENT_HOME_OVERRIDE: stalePathCaps });
+
+  assert.equal(exitCaps, 1,
+    `expected exit 1 for "First Standards-Conformant" (caps); output:\n${outputCaps}`);
+  assert.ok(
+    outputCaps.toLowerCase().includes('first standards-conformant') ||
+    outputCaps.toLowerCase().includes('fail'),
+    `output should mention the banned phrase; got:\n${outputCaps}`,
   );
 });

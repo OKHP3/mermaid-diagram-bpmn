@@ -36,6 +36,8 @@
  *   CONTENT_CHECKLIST_OVERRIDE    — alternative path for release-checklist.md
  *   CONTENT_VERSION_DOC_OVERRIDE  — alternative path for docs/version-checklist.md
  *   CONTENT_LEDGER_OVERRIDE       — alternative path for docs/capability-ledger.md
+ *   CONTENT_HOME_OVERRIDE         — alternative path for app/src/pages/Home.tsx
+ *   CONTENT_AGENT_SKILLS_OVERRIDE — alternative path for app/src/pages/AgentSkills.tsx
  *
  * HOW TO FIX FAILURES
  * ───────────────────
@@ -45,6 +47,10 @@
  *                  MERMAID_VERSION_TARGET in app/src/lib/bpmn-plugin.ts.
  *   Plugin ver:    update the citation in the flagged doc to match
  *                  the version in lib/bpmn-plugin/package.json.
+ *   Banned claim:  remove the flagged phrase from the source file and replace it
+ *                  with approved differentiation copy (see docs/strategy.md
+ *                  §BP-SKILL positioning). Do NOT add new entries to BANNED_CLAIMS
+ *                  without also adding a matching test case in validate-content.test.mjs.
  */
 
 import { readFileSync, existsSync } from 'node:fs';
@@ -104,6 +110,10 @@ const VERSION_DOC_PATH  = process.env.CONTENT_VERSION_DOC_OVERRIDE
   ?? resolve(ROOT, 'docs/version-checklist.md');
 const LEDGER_PATH       = process.env.CONTENT_LEDGER_OVERRIDE
   ?? resolve(ROOT, 'docs/capability-ledger.md');
+const HOME_PATH         = process.env.CONTENT_HOME_OVERRIDE
+  ?? resolve(ROOT, 'app/src/pages/Home.tsx');
+const AGENT_SKILLS_PATH = process.env.CONTENT_AGENT_SKILLS_OVERRIDE
+  ?? resolve(ROOT, 'app/src/pages/AgentSkills.tsx');
 const README_PATH       = resolve(ROOT, 'README.md');
 const ROADMAP_PATH      = resolve(ROOT, 'app/docs/roadmap.md');
 const PLUGIN_SRC_PATH   = resolve(ROOT, 'app/src/lib/bpmn-plugin.ts');
@@ -114,9 +124,11 @@ function label(envKey, defaultPath) {
   return process.env[envKey] ? `${defaultPath} (override)` : defaultPath;
 }
 
-const CHECKLIST_LABEL   = label('CONTENT_CHECKLIST_OVERRIDE',   'app/docs/release-checklist.md');
-const VERSION_DOC_LABEL = label('CONTENT_VERSION_DOC_OVERRIDE', 'docs/version-checklist.md');
-const LEDGER_LABEL      = label('CONTENT_LEDGER_OVERRIDE',      'docs/capability-ledger.md');
+const CHECKLIST_LABEL      = label('CONTENT_CHECKLIST_OVERRIDE',    'app/docs/release-checklist.md');
+const VERSION_DOC_LABEL    = label('CONTENT_VERSION_DOC_OVERRIDE',  'docs/version-checklist.md');
+const LEDGER_LABEL         = label('CONTENT_LEDGER_OVERRIDE',       'docs/capability-ledger.md');
+const HOME_LABEL           = label('CONTENT_HOME_OVERRIDE',         'app/src/pages/Home.tsx');
+const AGENT_SKILLS_LABEL   = label('CONTENT_AGENT_SKILLS_OVERRIDE', 'app/src/pages/AgentSkills.tsx');
 
 // ── Load canonical sources ────────────────────────────────────────────────────
 
@@ -256,6 +268,72 @@ for (const [filePath, fileLabel, required] of PLUGIN_CITATION_SOURCES) {
   }
 }
 
+// ── Check 4: Banned claims ────────────────────────────────────────────────────
+//
+// Retired positioning phrases that must not re-appear in public-facing source
+// files. These were removed per the strategy record (docs/strategy.md §BP-SKILL
+// positioning, updated 2026-08-07) and docs/promotion-strategy.md.
+//
+// To add a new banned phrase: append an entry to BANNED_CLAIMS and add a
+// matching test case in validate-content.test.mjs.
+//
+// Required files — a missing file is a failure (same policy as other checks).
+
+const BANNED_CLAIMS = [
+  {
+    phrase: 'Zero implement',
+    reason:
+      'Retired 2026-08-07 — "Zero implement a BABOK knowledge area" is factually ' +
+      'incorrect; at least two BABOK-implementing packages exist. ' +
+      'Use "lifecycle-complete, BPMN-integrated" positioning instead ' +
+      '(docs/strategy.md §BP-SKILL positioning).',
+  },
+  {
+    phrase: '89,000+',
+    reason:
+      'Stale ecosystem figure — superseded by the 93,000–164,000+ range ' +
+      'sourced from GuildSkills/OpenAgentSkill as of 2026-08-07. ' +
+      'Update to the current range or remove the numeric claim.',
+  },
+  {
+    phrase: 'first standards-conformant',
+    reason:
+      'Retired 2026-08-07 — "first standards-conformant" is a uniqueness claim ' +
+      'that cannot be substantiated. Do not reuse "first standards-conformant" in ' +
+      'any external post or public-facing copy (docs/promotion-strategy.md). ' +
+      'Use "lifecycle-complete, BPMN-integrated" positioning instead.',
+  },
+];
+
+const BANNED_CLAIMS_SOURCES = [
+  [HOME_PATH,         HOME_LABEL],
+  [AGENT_SKILLS_PATH, AGENT_SKILLS_LABEL],
+];
+
+for (const [filePath, fileLabel] of BANNED_CLAIMS_SOURCES) {
+  if (!existsSync(filePath)) {
+    failures.push(
+      `  ${fileLabel} — required file not found (path: ${filePath}). ` +
+      `If intentionally removed, update BANNED_CLAIMS_SOURCES in validate-content.mjs.`,
+    );
+    continue;
+  }
+  const text  = readRequired(filePath, fileLabel);
+  const lines = text.split('\n');
+  for (const { phrase, reason } of BANNED_CLAIMS) {
+    const phraseLower = phrase.toLowerCase();
+    for (let i = 0; i < lines.length; i++) {
+      if (lines[i].toLowerCase().includes(phraseLower)) {
+        fail(
+          fileLabel,
+          i + 1,
+          `retired claim phrase "${phrase}" must not appear in public-facing source. ${reason}`,
+        );
+      }
+    }
+  }
+}
+
 // ── Report ────────────────────────────────────────────────────────────────────
 
 if (failures.length > 0) {
@@ -268,7 +346,8 @@ if (failures.length > 0) {
 } else {
   console.log(
     `[validate-content] OK — all content claims match canonical sources ` +
-    `(testCount=${canon.testCount}, mermaid@${MERMAID_VERSION_TARGET}, plugin@${PLUGIN_VERSION})`,
+    `(testCount=${canon.testCount}, mermaid@${MERMAID_VERSION_TARGET}, plugin@${PLUGIN_VERSION}, ` +
+    `banned-claims clean in Home.tsx + AgentSkills.tsx)`,
   );
   process.exit(0);
 }
