@@ -595,6 +595,30 @@ describe('AgentSkills page — PNS section rows', () => {
       `Duplicate PNS section titles: ${duplicateTitles.join(', ')}`,
     ).toHaveLength(0);
   });
+
+  it('every PNS section has a non-empty title (pure data, no render)', () => {
+    const missing = PNS_SECTIONS.filter(s => !s.title || s.title.trim() === '');
+    expect(
+      missing.map(s => `Section ${s.number}: title is empty`),
+      'PNS sections with an empty title would leave the schema viewer without a heading',
+    ).toHaveLength(0);
+  });
+
+  it('every PNS section has a non-empty documents field (pure data, no render)', () => {
+    const missing = PNS_SECTIONS.filter(s => !s.documents || s.documents.trim() === '');
+    expect(
+      missing.map(s => `Section ${s.number} "${s.title}": documents field is empty`),
+      'PNS sections with an empty documents field give practitioners no guidance on what to record',
+    ).toHaveLength(0);
+  });
+
+  it('every PNS section has a non-empty standard field (pure data, no render)', () => {
+    const missing = PNS_SECTIONS.filter(s => !s.standard || s.standard.trim() === '');
+    expect(
+      missing.map(s => `Section ${s.number} "${s.title}": standard field is empty`),
+      'PNS sections with an empty standard field leave the schema viewer without a normative reference',
+    ).toHaveLength(0);
+  });
 });
 
 // ─────────────────────────────────────────────────────────────────────────────
