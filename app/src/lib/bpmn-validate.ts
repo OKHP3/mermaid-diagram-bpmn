@@ -70,6 +70,20 @@ const SEQUENCE_KINDS: ReadonlySet<BpmnFlow['kind']> = new Set([
   'sequence', 'conditional', 'default',
 ]);
 
+/**
+ * The flow kinds that establish connectivity for orphan detection.
+ *
+ * Includes `'association'` in addition to the sequence-family because
+ * association flows are used for annotations and data objects — a node
+ * connected only via an association is correctly wired, not disconnected.
+ *
+ * `'message'` is intentionally excluded: message flows cross pool boundaries
+ * and do not establish intra-process connectivity.
+ */
+const CONNECTIVITY_KINDS: ReadonlySet<BpmnFlow['kind']> = new Set([
+  'sequence', 'conditional', 'default', 'association',
+]);
+
 // ── Validation rules ──────────────────────────────────────────────────────────
 
 type ValidationRule = (db: BpmnDb) => ValidationError[];
@@ -123,9 +137,9 @@ const ruleUndefinedNodeRef: ValidationRule = (db) => {
  * node is flagged only when BOTH incoming and outgoing counts are zero.
  */
 const ruleOrphanNode: ValidationRule = (db) => {
-  const processFlows = db.getFlows().filter(f => SEQUENCE_KINDS.has(f.kind));
-  const hasInflow = new Set(processFlows.map(f => f.target));
-  const hasOutflow = new Set(processFlows.map(f => f.source));
+  const connectingFlows = db.getFlows().filter(f => CONNECTIVITY_KINDS.has(f.kind));
+  const hasInflow = new Set(connectingFlows.map(f => f.target));
+  const hasOutflow = new Set(connectingFlows.map(f => f.source));
 
   return db.getNodes()
     .filter(n => !hasInflow.has(n.id) && !hasOutflow.has(n.id))

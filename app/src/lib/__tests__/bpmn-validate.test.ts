@@ -18,6 +18,7 @@ import { describe, it, expect } from 'vitest';
 import { readFileSync, readdirSync } from 'fs';
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
+import { BpmnDb } from '../bpmn-db';
 import { parse } from '../bpmn-parser';
 import { validate } from '../bpmn-validate';
 import type { ValidationError, ValidationErrorCode } from '../bpmn-validate';
@@ -228,6 +229,55 @@ t1 ~~> t3`;
     const errs = errorsWithCode(ORPHANED_TASK, 'ORPHAN_NODE');
     const t2Err = errs.find(e => e.nodeId === 't2');
     expect(t2Err?.line).toBe(4);
+  });
+
+  it('no ORPHAN_NODE for an intermediate event wired to a task via an association flow', () => {
+    // Intermediate events attached to a task (e.g. boundary error events) use
+    // association flows in the DB.  They have no sequence inflow/outflow of their
+    // own and were wrongly flagged as orphans before CONNECTIVITY_KINDS was
+    // introduced.  Build the DB directly since the parser has no association
+    // flow token yet.
+    const db = new BpmnDb();
+    db.addNode({ id: 's1', kind: 'event', position: 'start', label: 'Start' });
+    db.addNode({ id: 't1', kind: 'task', label: 'Review' });
+    db.addNode({ id: 'e1', kind: 'event', position: 'end', label: 'End' });
+    db.addNode({ id: 'ie1', kind: 'event', position: 'intermediate', label: 'Error caught' });
+    db.addFlow({ id: 'f1', source: 's1', target: 't1', kind: 'sequence' });
+    db.addFlow({ id: 'f2', source: 't1', target: 'e1', kind: 'sequence' });
+    db.addFlow({ id: 'f3', source: 't1', target: 'ie1', kind: 'association' });
+    const orphans = validate(db).filter(e => e.code === 'ORPHAN_NODE');
+    expect(orphans.some(e => e.nodeId === 'ie1')).toBe(false);
+  });
+
+  it('no ORPHAN_NODE for a note annotation attached to a task via association', () => {
+    // Annotation / data-object notes connected only via association should
+    // never be considered orphaned.
+    const db = new BpmnDb();
+    db.addNode({ id: 's1', kind: 'event', position: 'start', label: 'Start' });
+    db.addNode({ id: 't1', kind: 'task', label: 'Task' });
+    db.addNode({ id: 'e1', kind: 'event', position: 'end', label: 'End' });
+    db.addNode({ id: 'n1', kind: 'note', label: 'See SLA policy' });
+    db.addFlow({ id: 'f1', source: 's1', target: 't1', kind: 'sequence' });
+    db.addFlow({ id: 'f2', source: 't1', target: 'e1', kind: 'sequence' });
+    db.addFlow({ id: 'f3', source: 't1', target: 'n1', kind: 'association' });
+    const orphans = validate(db).filter(e => e.code === 'ORPHAN_NODE');
+    expect(orphans.some(e => e.nodeId === 'n1')).toBe(false);
+  });
+
+  it('a node connected only via message flow (not association) is still an orphan', () => {
+    // Regression guard: message flows still do not count for orphan connectivity.
+    // Only association flows were promoted by CONNECTIVITY_KINDS.
+    const db = new BpmnDb();
+    db.addNode({ id: 's1', kind: 'event', position: 'start', label: 'Start' });
+    db.addNode({ id: 't1', kind: 'task', label: 'Task' });
+    db.addNode({ id: 'e1', kind: 'event', position: 'end', label: 'End' });
+    db.addNode({ id: 'iso', kind: 'task', label: 'Isolated' });
+    db.addFlow({ id: 'f1', source: 's1', target: 't1', kind: 'sequence' });
+    db.addFlow({ id: 'f2', source: 't1', target: 'e1', kind: 'sequence' });
+    db.addFlow({ id: 'f3', source: 't1', target: 'iso', kind: 'message' });
+    const orphans = validate(db).filter(e => e.code === 'ORPHAN_NODE');
+    // 'iso' has only a message inflow — still counted as an orphan
+    expect(orphans.some(e => e.nodeId === 'iso')).toBe(true);
   });
 });
 
