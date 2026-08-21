@@ -363,6 +363,22 @@ No new maintainer replies to @OKHP3 on any issue since 2026-08-05. The last main
 
 **Revised recommended next action:** Continue to wait. The engagement window remains: when @derari opens a PR, engage as a reviewer with the syntax-comparison angle and the bpmn-beta corpus as a reference test suite. **Priority monitoring signal: watch `derari/mermaid-bpmn` for a new fork of `mermaid-js/mermaid` appearing in @derari's repos — that is the clearest pre-signal of an imminent PR.** Next scheduled check: 2026-09-07 (per task #259 re-check target).
 
+**Phase D scheduled re-check — 2026-08-21 (ahead of 2026-09-07 target):**
+
+Formal 30-day re-check ran 16 days early. GitHub API queried for new comments on #7699, #2623, and #660 since 2026-08-07. Results:
+
+| Issue | New comments since 2026-08-07 | Maintainer reply to OKHP3? | @derari activity |
+|---|---|---|---|
+| **#7699** | 0 | No | — |
+| **#2623** | 0 | No | — |
+| **#660** | 0 | No | — |
+
+**@derari status as of 2026-08-21:** No PR opened against mermaid-js/mermaid. No fork of the repo in @derari's public repositories. Last push to `derari/mermaid-bpmn` was 2026-08-09 (BPMN import feature). See Phase D @derari PR check above for full detail.
+
+**Overall read:** The competitive field is stable — no new entrants, no maintainer movement, no DFKI PR. The 2026-08-05 outreach comments remain unanswered by any maintainer at 16 days. Silence at this stage is normal for Mermaid (the team is small and the queue is long). The recommended action remains: wait for @derari's PR or a maintainer signal before posting a second comment.
+
+**Next scheduled check:** When @derari opens a Mermaid PR (watch `derari/mermaid-bpmn` for a fork of `mermaid-js/mermaid`), or 2026-10-05 (60 days from outreach), whichever comes first.
+
 **Phase E — Wider distribution push — sequenced 2026-08-07:**
 
 **Prerequisite check:** npm publication confirmed live: `@okhp3/mermaid-diagram-bpmn@0.1.1` published 2026-08-06, `npm view @okhp3/mermaid-diagram-bpmn` returns `0.1.1`. Install path (`npm install @okhp3/mermaid-diagram-bpmn`) and smoke test (12/12) CI-gated in `publish-npm.yml`. Prerequisite is met.
