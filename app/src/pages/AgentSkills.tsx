@@ -151,18 +151,18 @@ export default function AgentSkills() {
           The Agent Skills open standard (<ExternalLinkAnchor href="https://agentskills.io" className="text-primary underline-offset-2 hover:underline">agentskills.io</ExternalLinkAnchor>) defines a SKILL.md file format for packaging
           reusable AI agent capabilities as modular, portable, filesystem-resident instruction sets. As of
           May 2026, the format is adopted by Claude Code, OpenAI Codex, GitHub Copilot, Gemini CLI, Cursor,
-          VS Code, and 30+ other platforms. The business process analysis domain has been absent from that
-          ecosystem — until now.
+          VS Code, and 30+ other platforms. A lifecycle-complete, BPMN-integrated business process skill
+          suite has been absent from that ecosystem — until now.
         </p>
 
         {/* Gap callout */}
         <blockquote className="forge-callout mb-8 max-w-2xl">
           <p className="text-sm font-semibold text-foreground mb-1">
-            The public Agent Skills ecosystem contains 89,000+ skills.
+            The SKILL.md ecosystem spans 93,000–164,000+ files across public registries.
           </p>
           <p className="text-sm text-muted-foreground leading-relaxed">
-            Zero implement a BABOK knowledge area. BP-SKILL is the first standards-conformant,
-            lifecycle-complete business process agent skill suite.
+            No lifecycle-complete, BPMN-integrated business process skill suite has been
+            identified in those registries. BP-SKILL fills that gap.
           </p>
         </blockquote>
 

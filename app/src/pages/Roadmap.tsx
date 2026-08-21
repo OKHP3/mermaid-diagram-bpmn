@@ -125,7 +125,7 @@ const VERSION_LADDER: VersionStep[] = [
         <ExternalLinkAnchor href="https://github.com/mermaid-js/mermaid/issues/660" className="underline hover:text-foreground transition-colors">#660</ExternalLinkAnchor>
         {" engaged with prototype link"}
       </>,
-      "BP-SKILL suite listed in agentskills.io directory",
+      "BP-SKILL suite listed in public Agent Skills registries",
       "Comparison matrix: bpmn-beta vs. PlantUML, bpmn.io, Visio, Mermaid flowchart",
     ],
   },

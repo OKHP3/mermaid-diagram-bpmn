@@ -365,13 +365,13 @@ export default function Home() {
               </h2>
               <p className="text-sm text-muted-foreground leading-relaxed mb-4">
                 The Agent Skills open standard defines SKILL.md files as portable, filesystem-resident
-                instruction sets for AI agents. BP-SKILL brings standards-conformant business process
-                methodology — BABOK v3, BPM CBOK v4.0, APQC PCF v7.4, BPMN 2.0.2, DMN 1.4, ISO 9001 — into
-                that ecosystem for the first time.
+                instruction sets for AI agents. BP-SKILL packages the full business process documentation
+                lifecycle — BABOK v3, BPM CBOK v4.0, APQC PCF v7.4, BPMN 2.0.2, DMN 1.4, ISO 9001 — as a
+                coherent, lifecycle-complete, BPMN-integrated skill suite.
               </p>
               <blockquote className="forge-callout mb-5">
-                <p className="text-xs font-semibold text-foreground mb-0.5">89,000+ skills in the public ecosystem.</p>
-                <p className="text-xs text-muted-foreground">Zero implement a BABOK knowledge area. BP-SKILL is first.</p>
+                <p className="text-xs font-semibold text-foreground mb-0.5">The SKILL.md ecosystem spans 93,000–164,000+ files across public registries.</p>
+                <p className="text-xs text-muted-foreground">No lifecycle-complete, BPMN-integrated business process skill suite has been identified. BP-SKILL fills that gap.</p>
               </blockquote>
               <div className="flex flex-wrap gap-3">
                 <Link href="/skills" className="forge-btn-primary inline-flex items-center gap-2">
