@@ -36,6 +36,19 @@ xor g1 "Approved?"`);
     expect(db.getNodes().find((node) => node.id === 't1')?.sourceLine).toBe(5);
     expect(db.getNodes().find((node) => node.id === 'g1')?.sourceLine).toBe(8);
   });
+
+  it('retains physical source lines for parsed flows', () => {
+    const db = parse(`bpmn-beta
+start s1 "Start"
+task t1 "Task"
+end e1 "End"
+s1 --> t1
+t1 --> e1`);
+    // s1 --> t1 is on physical line 5; t1 --> e1 is on physical line 6
+    const flows = db.getFlows();
+    expect(flows.find(f => f.source === 's1' && f.target === 't1')?.sourceLine).toBe(5);
+    expect(flows.find(f => f.source === 't1' && f.target === 'e1')?.sourceLine).toBe(6);
+  });
 });
 
 describe('parse — node types', () => {

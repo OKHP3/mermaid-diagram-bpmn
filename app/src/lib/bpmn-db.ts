@@ -16,6 +16,8 @@ export interface BpmnFlow {
   target: string;
   kind: 'sequence' | 'conditional' | 'default' | 'message' | 'association';
   label?: string;
+  /** 1-based physical source line where the flow was declared, when parsed from DSL. */
+  sourceLine?: number;
 }
 
 export interface BpmnPool {

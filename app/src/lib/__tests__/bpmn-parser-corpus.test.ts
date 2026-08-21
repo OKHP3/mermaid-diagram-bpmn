@@ -37,7 +37,7 @@ for (const file of mmdFiles) {
       const db = parse(loadExample(file));
       expect({
         nodes: omitSourceLines(db.getNodes()),
-        flows: db.getFlows(),
+        flows: omitSourceLines(db.getFlows()),
         pools: omitSourceLines(db.getPools()),
         lanes: db.getLanes(),
         accTitle: db.getAccTitle(),

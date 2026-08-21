@@ -73,7 +73,7 @@ function getSourceDiagnostics(source: string): SourceDiagnostics {
       parseError: null,
       allWarnings: [
         ...lintWarns,
-        ...validationErrs.map(e => ({ code: e.code, message: e.message, nodeId: e.nodeId })),
+        ...validationErrs.map(e => ({ code: e.code, message: e.message, nodeId: e.nodeId, sourceLine: e.line })),
       ],
     };
   } catch (e) {

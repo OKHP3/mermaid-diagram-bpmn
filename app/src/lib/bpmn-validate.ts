@@ -52,6 +52,14 @@ export interface ValidationError {
   readonly nodeId?: string;
   /** ID of the offending flow, when the error is flow-scoped. */
   readonly flowId?: string;
+  /**
+   * 1-based physical source line where the offending node or flow was declared.
+   * Populated whenever the underlying `BpmnNode` or `BpmnFlow` carries a
+   * `sourceLine` (i.e. the diagram was parsed from DSL text).  Absent when the
+   * db was constructed programmatically.  Used by the Playground to render a
+   * "Line N" navigation button alongside the error message.
+   */
+  readonly line?: number;
 }
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
@@ -84,6 +92,7 @@ const ruleUndefinedNodeRef: ValidationRule = (db) => {
         code: 'UNDEFINED_NODE_REF',
         message: `Flow references undefined source node "${flow.source}". Check that every node ID in a flow line is declared before use.`,
         flowId: flow.id,
+        line: flow.sourceLine,
       });
     }
     if (!nodeIds.has(flow.target)) {
@@ -91,6 +100,7 @@ const ruleUndefinedNodeRef: ValidationRule = (db) => {
         code: 'UNDEFINED_NODE_REF',
         message: `Flow references undefined target node "${flow.target}". Check that every node ID in a flow line is declared before use.`,
         flowId: flow.id,
+        line: flow.sourceLine,
       });
     }
   }
@@ -123,6 +133,7 @@ const ruleOrphanNode: ValidationRule = (db) => {
       code: 'ORPHAN_NODE' as const,
       message: `Node "${n.label || n.id}" (${n.kind}) has no incoming or outgoing flows and is disconnected from the process. Connect it to the flow or remove it.`,
       nodeId: n.id,
+      line: n.sourceLine,
     }));
 };
 
@@ -154,6 +165,7 @@ const ruleCrossPoolSequenceFlow: ValidationRule = (db) => {
       code: 'CROSS_POOL_SEQUENCE_FLOW',
       message: `Sequence flow from "${src.label || src.id}" (pool "${src.poolId}") to "${tgt.label || tgt.id}" (pool "${tgt.poolId}") crosses pool boundaries. Use a message flow (~~>) for cross-pool communication.`,
       flowId: flow.id,
+      line: flow.sourceLine,
     });
   }
 
@@ -188,6 +200,7 @@ const ruleUnbalancedGateway: ValidationRule = (db) => {
         code: 'UNBALANCED_GATEWAY',
         message: `Gateway "${node.label || node.id}" has ${inCount} incoming and ${outCount} outgoing flows, acting as both a join and a split. Separate this into a join gateway followed by a distinct split gateway.`,
         nodeId: node.id,
+        line: node.sourceLine,
       });
     }
   }

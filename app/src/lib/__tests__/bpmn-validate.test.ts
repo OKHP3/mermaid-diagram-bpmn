@@ -90,6 +90,13 @@ end e1 "End"`;
     // No flows means no undefined refs (and two orphans — separate rule)
     expect(errorsWithCode(src, 'UNDEFINED_NODE_REF')).toHaveLength(0);
   });
+
+  it('error line matches the physical source line of the offending flow', () => {
+    // GHOST_TARGET: t1 --> ghost is on physical line 6
+    const errs = errorsWithCode(GHOST_TARGET, 'UNDEFINED_NODE_REF');
+    const targetErr = errs.find(e => e.message.includes('"ghost"') && e.message.includes('target'));
+    expect(targetErr?.line).toBe(6);
+  });
 });
 
 // ── ORPHAN_NODE ───────────────────────────────────────────────────────────────
@@ -215,6 +222,13 @@ t1 ~~> t3`;
     const errs = errorsWithCode(src, 'ORPHAN_NODE');
     expect(errs.some(e => e.nodeId === 't2')).toBe(true);
   });
+
+  it('error line matches the physical source line of the orphaned node', () => {
+    // ORPHANED_TASK: t2 "Orphaned Task" is declared on physical line 4
+    const errs = errorsWithCode(ORPHANED_TASK, 'ORPHAN_NODE');
+    const t2Err = errs.find(e => e.nodeId === 't2');
+    expect(t2Err?.line).toBe(4);
+  });
 });
 
 // ── CROSS_POOL_SEQUENCE_FLOW ──────────────────────────────────────────────────
@@ -326,6 +340,13 @@ t1 --> e1`;
     const errs = errorsWithCode(CROSS_POOL_SEQ, 'CROSS_POOL_SEQUENCE_FLOW');
     expect(errs).toHaveLength(1);
   });
+
+  it('error line matches the physical source line of the cross-pool flow', () => {
+    // CROSS_POOL_SEQ: t1 --> t2 (the cross-pool flow) is on physical line 11
+    const errs = errorsWithCode(CROSS_POOL_SEQ, 'CROSS_POOL_SEQUENCE_FLOW');
+    expect(errs).toHaveLength(1);
+    expect(errs[0].line).toBe(11);
+  });
 });
 
 // ── UNBALANCED_GATEWAY ────────────────────────────────────────────────────────
@@ -435,6 +456,13 @@ end e1 "End"
 s1 --> g1
 g1 --> e1`;
     expect(errorCodes(src)).not.toContain('UNBALANCED_GATEWAY');
+  });
+
+  it('error line matches the physical source line of the unbalanced gateway node', () => {
+    // MIXED_XOR: xor g1 "Mixed Decision" is declared on physical line 4
+    const errs = errorsWithCode(MIXED_XOR, 'UNBALANCED_GATEWAY');
+    expect(errs).toHaveLength(1);
+    expect(errs[0].line).toBe(4);
   });
 });
 

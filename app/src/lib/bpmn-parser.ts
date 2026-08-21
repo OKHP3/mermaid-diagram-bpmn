@@ -117,19 +117,19 @@ export function parse(source: string): BpmnDb {
 
     const condMatch = line.match(COND_FLOW_PATTERN);
     if (condMatch) {
-      db.addFlow({ id: `f${++flowCounter}`, source: condMatch[1], target: condMatch[2], kind: 'conditional', label: condMatch[3] });
+      db.addFlow({ id: `f${++flowCounter}`, source: condMatch[1], target: condMatch[2], kind: 'conditional', label: condMatch[3], sourceLine });
       continue;
     }
 
     const seqMatch = line.match(SEQ_FLOW_PATTERN);
     if (seqMatch) {
-      db.addFlow({ id: `f${++flowCounter}`, source: seqMatch[1], target: seqMatch[2], kind: 'sequence' });
+      db.addFlow({ id: `f${++flowCounter}`, source: seqMatch[1], target: seqMatch[2], kind: 'sequence', sourceLine });
       continue;
     }
 
     const defMatch = line.match(DEF_FLOW_PATTERN);
     if (defMatch) {
-      db.addFlow({ id: `f${++flowCounter}`, source: defMatch[1], target: defMatch[2], kind: 'default' });
+      db.addFlow({ id: `f${++flowCounter}`, source: defMatch[1], target: defMatch[2], kind: 'default', sourceLine });
       continue;
     }
 
@@ -138,7 +138,7 @@ export function parse(source: string): BpmnDb {
       if (contextStack.length > 0) {
         throw new ParseError(`Line ${sourceLine}: message flows (~~>) must be declared at the top level, not inside a pool or lane block`, sourceLine, 'MESSAGE_FLOW_INSIDE_BLOCK');
       }
-      db.addFlow({ id: `f${++flowCounter}`, source: msgMatch[1], target: msgMatch[2], kind: 'message' });
+      db.addFlow({ id: `f${++flowCounter}`, source: msgMatch[1], target: msgMatch[2], kind: 'message', sourceLine });
       continue;
     }
   }
