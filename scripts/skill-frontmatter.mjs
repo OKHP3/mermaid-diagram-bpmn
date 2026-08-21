@@ -52,14 +52,14 @@ export function parseSkillFrontmatter(content) {
       continue;
     }
 
-    if (rawValue === '>' || rawValue === '|') {
+    if (/^[>|][+-]?$/.test(rawValue)) {
       const continuation = [];
       let cursor = index + 1;
       while (cursor < lines.length && (/^\s+/.test(lines[cursor]) || !lines[cursor].trim())) {
         continuation.push(lines[cursor].trim());
         cursor += 1;
       }
-      fields[key] = continuation.join(rawValue === '>' ? ' ' : '\n').trim();
+      fields[key] = continuation.join(rawValue[0] === '>' ? ' ' : '\n').trim();
       index = cursor - 1;
     } else {
       fields[key] = cleanScalar(rawValue);

@@ -191,3 +191,117 @@ test('validate-agent-skills exits 1 when description is shorter than 50 chars', 
     `failure output should mention description; got:\n${output}`,
   );
 });
+
+// ── Folded-block description regression tests (Task #266) ─────────────────────
+// Skills in .agents/skills often use YAML folded-strip form (>-) for
+// multi-line descriptions. The parser must handle >, >-, >+, |, |-, |+
+// and measure the joined content — not the 2-char indicator literal.
+
+const FOLDED_STRIP_FRONTMATTER = `---
+name: my-test-skill
+description: >-
+  Build, audit, and improve OpenAI Custom GPTs with production-grade methodology.
+  Use this skill when the user asks to create, configure, test, evaluate, audit,
+  improve, troubleshoot, compare, document, or package a Custom GPT or reusable
+  ChatGPT workflow.
+license: MIT
+metadata:
+  version: "1.0.0"
+  author: "Test Author"
+---
+
+# My Test Skill
+
+Body content here.
+`;
+
+const LITERAL_STRIP_FRONTMATTER = `---
+name: my-test-skill
+description: |-
+  Build, audit, and improve OpenAI Custom GPTs with production-grade methodology.
+  Use this skill when the user asks to create, configure, test, or package a
+  Custom GPT or reusable ChatGPT workflow. Also use it for GPT Builder instructions.
+license: MIT
+metadata:
+  version: "1.0.0"
+  author: "Test Author"
+---
+
+# My Test Skill
+
+Body content here.
+`;
+
+const FOLDED_KEEP_FRONTMATTER = `---
+name: my-test-skill
+description: >+
+  Build, audit, and improve OpenAI Custom GPTs with production-grade methodology.
+  Use this skill when the user asks to create, configure, test, or package a
+  Custom GPT or reusable ChatGPT workflow. Also use for GPT Builder instructions.
+license: MIT
+metadata:
+  version: "1.0.0"
+  author: "Test Author"
+---
+
+# My Test Skill
+
+Body content here.
+`;
+
+test('validate-agent-skills exits 0 for a skill with folded-strip (>-) description', () => {
+  // Regression for Task #266: >- was previously parsed as the 2-char literal ">-"
+  // instead of the joined multi-line content, causing a spurious description-length failure.
+  const dir = makeSkillsDir('my-test-skill', FOLDED_STRIP_FRONTMATTER);
+  const { exitCode, output } = runValidateAgentSkills(dir);
+  assert.equal(
+    exitCode, 0,
+    `>- folded-strip description should pass length check; got:\n${output}`,
+  );
+});
+
+test('validate-agent-skills exits 0 for a skill with literal-strip (|-) description', () => {
+  const dir = makeSkillsDir('my-test-skill', LITERAL_STRIP_FRONTMATTER);
+  const { exitCode, output } = runValidateAgentSkills(dir);
+  assert.equal(
+    exitCode, 0,
+    `|- literal-strip description should pass length check; got:\n${output}`,
+  );
+});
+
+test('validate-agent-skills exits 0 for a skill with folded-keep (>+) description', () => {
+  const dir = makeSkillsDir('my-test-skill', FOLDED_KEEP_FRONTMATTER);
+  const { exitCode, output } = runValidateAgentSkills(dir);
+  assert.equal(
+    exitCode, 0,
+    `>+ folded-keep description should pass length check; got:\n${output}`,
+  );
+});
+
+test('validate-agent-skills exits 1 when a folded-strip (>-) description is too short', () => {
+  // The parser must measure the joined content length, not skip the check for folded forms.
+  const shortFolded = `---
+name: my-test-skill
+description: >-
+  Too short.
+license: MIT
+metadata:
+  version: "1.0.0"
+  author: "Test Author"
+---
+
+# My Test Skill
+
+Body content here.
+`;
+  const dir = makeSkillsDir('my-test-skill', shortFolded);
+  const { exitCode, output } = runValidateAgentSkills(dir);
+  assert.equal(
+    exitCode, 1,
+    `>- description shorter than 50 chars should still fail; got:\n${output}`,
+  );
+  assert.ok(
+    output.toLowerCase().includes('description'),
+    `failure output should mention description; got:\n${output}`,
+  );
+});
