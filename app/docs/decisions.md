@@ -150,3 +150,39 @@ version scheme in roadmap, changelog, or UI copy.
 **Status:** Accepted
 
 The `BpmnExample` interface carries an optional `experimental?: boolean` field. Examples marked experimental display a flask badge in the Playground tab selector and a warning callout explaining known layout limitations. This lets pool/lane examples live in the live selector without misleading users about rendering quality.
+
+---
+
+## DEC-022: Privacy-respecting analytics — keep dormant
+
+**Status:** Accepted (2026-08-21)
+
+The production analytics endpoint (`VITE_ANALYTICS_ENDPOINT`) is intentionally left unset. Analytics infrastructure remains in the codebase but is fully dormant: every tracking call is a no-op until an operator supplies the build variable.
+
+**What GoatCounter would measure (if activated):**
+- Count of successful SVG exports from the Playground (`playground-export-svg`)
+- Count of plugin install-command copies (`plugin-copy`)
+- Count of successful BP-SKILL suite ZIP downloads (`suite-download`)
+- Count of successful context-layer starter-pack ZIP downloads (`starter-pack-download`)
+
+These four counts would answer: "Are exports and downloads being used at all, and which one is most popular?" They would inform feature investment priority between the playground, plugin, and downloadable packs.
+
+**What GoatCounter would NOT measure:**
+- Unique visitors, sessions, or retention
+- Page views, navigation paths, or time-on-site
+- Search terms, referrers, or any external-site behaviour
+- Any personal identifiers, IP addresses, or device fingerprints
+- Anything beyond the four named actions above
+
+**Why dormant is the right call now:**
+The four events are narrow enough that, before the project has an audience, the counts would be statistically meaningless and would not change any decision. Activating analytics before there is a baseline question — "are people using X enough to justify Y investment?" — adds operational overhead (account maintenance, privacy-notice accuracy checks) for no return. The infrastructure should be activated only when a specific, named product question cannot be answered any other way.
+
+**How to activate later:**
+1. Create a free GoatCounter account at https://www.goatcounter.com/.
+2. Add the `/count` endpoint as the GitHub Actions repository secret `VITE_ANALYTICS_ENDPOINT`.
+3. Verify the four event names appear in GoatCounter within one production deploy cycle.
+4. Update this entry's status to Accepted (activated) and record the activation date.
+
+**Alternatives considered:**
+- Enable now: rejected — no baseline question, cost not justified.
+- Remove the infrastructure: not chosen — the implementation is already written, tested, and documented; removal would lose zero-PII tracking capability that may become useful. Revisit if the infrastructure becomes a maintenance burden.
