@@ -283,6 +283,8 @@ A pure open-source plugin is unlikely to be a revenue product on its own. The pl
 
 ## Recommendations
 
+**Element coverage vs @knsv's MVP scope — see [`app/docs/conformance.md`](./conformance.md)** (checked 2026-08-21). Summary: bpmn-beta covers 6 of @knsv's 9 Level 1 categories fully; three gaps remain — intermediate events (highest priority), annotations/notes (covered by task #282), and collapsed subprocesses.
+
 **Stage 1 — Ship now (next 0–60 days):**
 - Publish the external Mermaid plugin at npm with the `bpmn-beta` keyword, MIT license, working prototype, ≥10 representative diagrams in the README, and a `mermaid-bpmn-plugin` comparison note.
 - Publish a side-by-side syntax comparison blog post (bpmn-beta vs. DFKI #7699 vs. PlantUML BPMN vs. Mermaid flowchart approximation). This is the single highest-leverage piece of collateral.
