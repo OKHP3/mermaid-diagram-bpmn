@@ -317,6 +317,50 @@ Reply state for #7699, #2623, and #660 checked via GitHub API on 2026-08-07. Sum
 
 **Recommended next action:** Wait. Do not post a second comment on any issue until @derari's PR materializes and maintainer review reveals what syntax/approach is being favored. A second comment before a PR exists would add noise without leverage. The strategic options at that point are: (a) engage constructively on the open PR as a reviewer, (b) offer bpmn-beta's test suite and corpus as a contribution to whichever PR is moving, or (c) post a second comment with the syntax-comparison angle if the PR adopts a verbose/XML-flavored approach. Re-check reply state on or after 2026-09-07 (30 days).
 
+**Phase D @derari PR check — 2026-08-21:**
+
+Checked via GitHub API (mermaid-js/mermaid PR search + @derari repo scan). Today is 2026-08-21 — three weeks after @derari expressed PR intent on 2026-07-31.
+
+**Result: No PR exists.** @derari has not opened a pull request against mermaid-js/mermaid. There is also no fork of mermaid-js/mermaid in @derari's public repo list.
+
+**@derari's `mermaid-bpmn` repo status (as of 2026-08-21):**
+
+| Property | Value |
+|---|---|
+| Repo | `derari/mermaid-bpmn` (TypeScript, not a fork) |
+| Created | 2026-07-24 |
+| Last push | 2026-08-09 |
+| Stars | 5 |
+| Live demo | https://derari.github.io/mermaid-bpmn/editor |
+
+Recent commits (most recent first):
+
+| Date | Commit |
+|---|---|
+| 2026-08-08 | feat: bpmn import |
+| 2026-08-02 | feat: add auto layout |
+| 2026-08-01 | feat: allow ports on every entity; settle auto port sides from the real layout |
+| 2026-07-30 | feat: improved line routing; release 1.1.0 |
+
+**Intelligence from @derari's 2026-07-31 comment on issue #2623** (the PR-intent comment, confirmed verbatim):
+
+> *"@knsv I have started using mermaid bpmn at my job and, in the process, I think I have ironed out most issues. I would be interested in contributing this as a PR. Some questions before I start: 1) question for everyone: thoughts/comments on the syntax? 2) the parser is just a bunch of regexes. is it important that I use langium? 3) I build a rather complex system for routing lines to nested objects which change layout direction. It is disabled by default, but can be enabled if needed."*
+
+**What this reveals about @derari's technical approach:**
+
+- **Regex-based parser**: Same pattern as bpmn-beta. @derari is unsure whether Langium is required — this is the same strategic question bpmn-beta faces. If maintainers say Langium is required, both prototypes have an equivalent migration cost.
+- **BPMN XML import** (added 2026-08-08): @derari is adding round-trip import from BPMN 2.0 XML — a meaningful differentiator bpmn-beta explicitly defers (see §5.3). This could be a significant advantage in the PR review.
+- **Complex auto-layout** (added 2026-08-02): Graph layout with nested objects and configurable direction — more complex than bpmn-beta's current flat/pool layout.
+- **Ports on entities** (2026-08-01): Suggests fine-grained control over connection attachment points, consistent with a more complete BPMN connector model.
+
+**Reply state update — issues #7699, #2623, #660 as of 2026-08-21:**
+
+No new maintainer replies to @OKHP3 on any issue since 2026-08-05. The last maintainer comment on #2623 was @pbrolin47 (COLLABORATOR) on 2026-06-12. @knsv's last substantive engagement on #2623 was 2026-05-28.
+
+**Interpretation:** @derari is still in pre-PR preparation — solving complex layout, adding BPMN import, and polishing the 1.x release. The 2026-08-09 last push suggests they are still active but not yet PR-ready. The BPMN import feature specifically is a non-trivial addition that signals @derari's PR may target import/export interoperability that bpmn-beta's scope explicitly excludes.
+
+**Revised recommended next action:** Continue to wait. The engagement window remains: when @derari opens a PR, engage as a reviewer with the syntax-comparison angle and the bpmn-beta corpus as a reference test suite. **Priority monitoring signal: watch `derari/mermaid-bpmn` for a new fork of `mermaid-js/mermaid` appearing in @derari's repos — that is the clearest pre-signal of an imminent PR.** Next scheduled check: 2026-09-07 (per task #259 re-check target).
+
 **Phase E — Wider distribution push — sequenced 2026-08-07:**
 
 **Prerequisite check:** npm publication confirmed live: `@okhp3/mermaid-diagram-bpmn@0.1.1` published 2026-08-06, `npm view @okhp3/mermaid-diagram-bpmn` returns `0.1.1`. Install path (`npm install @okhp3/mermaid-diagram-bpmn`) and smoke test (12/12) CI-gated in `publish-npm.yml`. Prerequisite is met.
