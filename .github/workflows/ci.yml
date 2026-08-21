@@ -162,7 +162,10 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Install Playwright Chromium browser
-        run: pnpm --filter @workspace/mermaid-diagram-bpmn exec playwright install chromium
+        # Visual checks need Chromium's native shared libraries just as much as
+        # the cross-browser E2E matrix. `--with-deps` keeps fresh runners from
+        # failing before the focus-ring and screenshot assertions can run.
+        run: pnpm --filter @workspace/mermaid-diagram-bpmn exec playwright install --with-deps chromium
 
       - name: Build app (required before vite preview)
         env:

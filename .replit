@@ -37,4 +37,6 @@ externalPort = 80
 
 [nix]
 channel = "stable-25_05"
+# Chromium's shared libraries for local Playwright E2E and visual accessibility
+# checks. Keep these available so the cached browser can launch on fresh Repls.
 packages = ["glib", "nspr", "nss", "atk", "xorg.libX11", "xorg.libXcomposite", "xorg.libXdamage", "xorg.libXext", "xorg.libXfixes", "xorg.libXrandr", "libgbm", "libxkbcommon", "alsa-lib"]
