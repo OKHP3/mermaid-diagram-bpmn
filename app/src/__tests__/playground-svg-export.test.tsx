@@ -193,6 +193,17 @@ describe("Playground — SVG export download", () => {
     expect(text).not.toContain("var(--");
   });
 
+  it("Blob content uses portable system font stacks instead of app fonts", async () => {
+    render(<Playground />);
+    fireEvent.click(screen.getByTestId("button-export-svg"));
+    const text = await capturedBlob!.text();
+
+    expect(text).toContain(`font-family: ${EXPORT_THEME.fontFamily}`);
+    expect(text).toContain(`font-family: ${EXPORT_THEME.monoFontFamily}`);
+    expect(text).not.toContain("DM Sans");
+    expect(text).not.toContain("JetBrains Mono");
+  });
+
   it("download filename ends with .svg", () => {
     render(<Playground />);
     fireEvent.click(screen.getByTestId("button-export-svg"));

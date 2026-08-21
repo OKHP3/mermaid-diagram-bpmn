@@ -62,8 +62,12 @@ export const EXPORT_THEME: BpmnThemeOptions = {
   clusterBkg: '#e9e4dd',
   textColor: '#0f172a',
   primaryColor: '#c46a2c',
-  fontFamily: "'DM Sans', system-ui, sans-serif",
-  monoFontFamily: "'JetBrains Mono', 'Menlo', monospace",
+  // Exports must not depend on the app's bundled DM Sans / JetBrains Mono
+  // fonts. Broad system stacks are available to browser previews and common
+  // vector editors without adding font files, licensing obligations, or large
+  // base64 payloads to every downloaded SVG.
+  fontFamily: "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif",
+  monoFontFamily: "ui-monospace, 'SFMono-Regular', Consolas, 'Liberation Mono', 'Courier New', monospace",
 };
 
 // Fallback theme with concrete values for Mermaid's SVG context where CSS
