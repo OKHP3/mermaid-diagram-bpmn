@@ -76,30 +76,64 @@ interface NodeInteraction {
   isHovered?: boolean;
 }
 
+/** A concise, stable label for the accessible representation of a BPMN node. */
+function getNodeAccessibleName(node: BpmnNode): string {
+  const label = node.label?.trim() || 'Unnamed';
+
+  if (node.kind === 'event') {
+    return `${node.position === 'start' ? 'Start' : 'End'} event: ${label}`;
+  }
+
+  if (node.kind === 'task') {
+    const taskKind = node.subtype
+      ? `${node.subtype.charAt(0).toUpperCase()}${node.subtype.slice(1)} task`
+      : 'Task';
+    return `${taskKind}: ${label}`;
+  }
+
+  if (node.kind === 'gateway') {
+    const gatewayKind = node.subtype === 'xor'
+      ? 'Exclusive'
+      : node.subtype === 'and'
+        ? 'Parallel'
+        : node.subtype === 'or'
+          ? 'Inclusive'
+          : 'Gateway';
+    return `${gatewayKind} gateway: ${label}`;
+  }
+
+  return `Process node: ${label}`;
+}
+
 function renderNode(node: BpmnNode, lnode: BpmnLayoutNode, interaction?: NodeInteraction, isDotted?: boolean) {
   const { x, y, width, height } = lnode;
   const hasClick = !!interaction?.onClick;
+  const accessibleName = getNodeAccessibleName(node);
 
   if (node.kind === 'event' && node.position === 'start') {
     return (
-      <g key={node.id}>
-        <circle cx={x} cy={y} r={EVENT_RADIUS} className="bpmn-event" />
-        <circle cx={x} cy={y} r={EVENT_START_INNER_RADIUS} className="bpmn-event-start-inner" />
-        <text x={x} y={y + 30} textAnchor="middle" fontSize={LABEL_FONT_SIZE} className="bpmn-text">
-          {node.label}
-        </text>
+      <g key={node.id} role="group" aria-label={accessibleName}>
+        <g aria-hidden="true">
+          <circle cx={x} cy={y} r={EVENT_RADIUS} className="bpmn-event" />
+          <circle cx={x} cy={y} r={EVENT_START_INNER_RADIUS} className="bpmn-event-start-inner" />
+          <text x={x} y={y + 30} textAnchor="middle" fontSize={LABEL_FONT_SIZE} className="bpmn-text">
+            {node.label}
+          </text>
+        </g>
       </g>
     );
   }
 
   if (node.kind === 'event' && node.position === 'end') {
     return (
-      <g key={node.id}>
-        <circle cx={x} cy={y} r={EVENT_RADIUS} className="bpmn-event-end" />
-        <circle cx={x} cy={y} r={EVENT_END_INNER_RADIUS} className="bpmn-event-end" />
-        <text x={x} y={y + 30} textAnchor="middle" fontSize={LABEL_FONT_SIZE} className="bpmn-text">
-          {node.label}
-        </text>
+      <g key={node.id} role="group" aria-label={accessibleName}>
+        <g aria-hidden="true">
+          <circle cx={x} cy={y} r={EVENT_RADIUS} className="bpmn-event-end" />
+          <circle cx={x} cy={y} r={EVENT_END_INNER_RADIUS} className="bpmn-event-end" />
+          <text x={x} y={y + 30} textAnchor="middle" fontSize={LABEL_FONT_SIZE} className="bpmn-text">
+            {node.label}
+          </text>
+        </g>
       </g>
     );
   }
@@ -112,8 +146,8 @@ function renderNode(node: BpmnNode, lnode: BpmnLayoutNode, interaction?: NodeInt
     return (
       <g
         key={node.id}
-        role={hasClick ? 'button' : undefined}
-        aria-label={hasClick ? `Open ${node.label || 'task'}` : undefined}
+        role={hasClick ? 'button' : 'group'}
+        aria-label={hasClick ? `Open ${accessibleName}` : accessibleName}
         tabIndex={hasClick ? 0 : undefined}
         style={hasClick ? { cursor: 'pointer' } : undefined}
         onClick={interaction?.onClick}
@@ -121,21 +155,23 @@ function renderNode(node: BpmnNode, lnode: BpmnLayoutNode, interaction?: NodeInt
         onMouseEnter={interaction?.onEnter}
         onMouseLeave={interaction?.onLeave}
       >
-        <rect x={x - hw} y={y - hh} width={width} height={height} rx={TASK_RX} className="bpmn-task" />
-        {interaction?.isHovered && (
-          <rect x={x - hw} y={y - hh} width={width} height={height} rx={TASK_RX} className="bpmn-task-hover" />
-        )}
-        {isDotted && (
-          <rect x={x - hw} y={y - hh} width={width} height={height} rx={TASK_RX} className="bpmn-task-ext" />
-        )}
-        {node.subtype === 'user' && <UserTaskIcon x={iconX} y={iconY} />}
-        {node.subtype === 'service' && <ServiceTaskIcon x={iconX} y={iconY} />}
-        {node.subtype === 'script' && <ScriptTaskIcon x={iconX} y={iconY} />}
-        {node.subtype === 'receive' && <ReceiveTaskIcon x={iconX} y={iconY} />}
-        {node.subtype === 'send' && <SendTaskIcon x={iconX} y={iconY} />}
-        <text x={x} y={y} textAnchor="middle" dominantBaseline="middle" fontSize={LABEL_FONT_SIZE} className="bpmn-text">
-          {truncateLabel(node.label)}
-        </text>
+        <g aria-hidden="true">
+          <rect x={x - hw} y={y - hh} width={width} height={height} rx={TASK_RX} className="bpmn-task" />
+          {interaction?.isHovered && (
+            <rect x={x - hw} y={y - hh} width={width} height={height} rx={TASK_RX} className="bpmn-task-hover" />
+          )}
+          {isDotted && (
+            <rect x={x - hw} y={y - hh} width={width} height={height} rx={TASK_RX} className="bpmn-task-ext" />
+          )}
+          {node.subtype === 'user' && <UserTaskIcon x={iconX} y={iconY} />}
+          {node.subtype === 'service' && <ServiceTaskIcon x={iconX} y={iconY} />}
+          {node.subtype === 'script' && <ScriptTaskIcon x={iconX} y={iconY} />}
+          {node.subtype === 'receive' && <ReceiveTaskIcon x={iconX} y={iconY} />}
+          {node.subtype === 'send' && <SendTaskIcon x={iconX} y={iconY} />}
+          <text x={x} y={y} textAnchor="middle" dominantBaseline="middle" fontSize={LABEL_FONT_SIZE} className="bpmn-text">
+            {truncateLabel(node.label)}
+          </text>
+        </g>
       </g>
     );
   }
@@ -143,33 +179,35 @@ function renderNode(node: BpmnNode, lnode: BpmnLayoutNode, interaction?: NodeInt
   if (node.kind === 'gateway') {
     const half = GATEWAY_HALF;
     return (
-      <g key={node.id}>
-        <polygon
-          points={`${x},${y - half} ${x + half},${y} ${x},${y + half} ${x - half},${y}`}
-          className="bpmn-gateway"
-        />
-        {node.subtype === 'xor' && (
-          <>
-            <line x1={x - 8} y1={y - 8} x2={x + 8} y2={y + 8} className="bpmn-gateway-marker" strokeLinecap="round" />
-            <line x1={x + 8} y1={y - 8} x2={x - 8} y2={y + 8} className="bpmn-gateway-marker" strokeLinecap="round" />
-          </>
-        )}
-        {node.subtype === 'and' && (
-          <>
-            <line x1={x} y1={y - 10} x2={x} y2={y + 10} className="bpmn-gateway-marker" strokeLinecap="round" />
-            <line x1={x - 10} y1={y} x2={x + 10} y2={y} className="bpmn-gateway-marker" strokeLinecap="round" />
-          </>
-        )}
-        {node.subtype === 'or' && (
-          <>
-            <circle cx={x} cy={y} r={8} className="bpmn-gateway-or-marker" />
-            <line x1={x} y1={y - 5} x2={x} y2={y + 5} className="bpmn-gateway-or-marker" strokeLinecap="round" />
-            <line x1={x - 5} y1={y} x2={x + 5} y2={y} className="bpmn-gateway-or-marker" strokeLinecap="round" />
-          </>
-        )}
-        <text x={x} y={y + half + 14} textAnchor="middle" fontSize={LABEL_FONT_SIZE} className="bpmn-text">
-          {node.label}
-        </text>
+      <g key={node.id} role="group" aria-label={accessibleName}>
+        <g aria-hidden="true">
+          <polygon
+            points={`${x},${y - half} ${x + half},${y} ${x},${y + half} ${x - half},${y}`}
+            className="bpmn-gateway"
+          />
+          {node.subtype === 'xor' && (
+            <>
+              <line x1={x - 8} y1={y - 8} x2={x + 8} y2={y + 8} className="bpmn-gateway-marker" strokeLinecap="round" />
+              <line x1={x + 8} y1={y - 8} x2={x - 8} y2={y + 8} className="bpmn-gateway-marker" strokeLinecap="round" />
+            </>
+          )}
+          {node.subtype === 'and' && (
+            <>
+              <line x1={x} y1={y - 10} x2={x} y2={y + 10} className="bpmn-gateway-marker" strokeLinecap="round" />
+              <line x1={x - 10} y1={y} x2={x + 10} y2={y} className="bpmn-gateway-marker" strokeLinecap="round" />
+            </>
+          )}
+          {node.subtype === 'or' && (
+            <>
+              <circle cx={x} cy={y} r={8} className="bpmn-gateway-or-marker" />
+              <line x1={x} y1={y - 5} x2={x} y2={y + 5} className="bpmn-gateway-or-marker" strokeLinecap="round" />
+              <line x1={x - 5} y1={y} x2={x + 5} y2={y} className="bpmn-gateway-or-marker" strokeLinecap="round" />
+            </>
+          )}
+          <text x={x} y={y + half + 14} textAnchor="middle" fontSize={LABEL_FONT_SIZE} className="bpmn-text">
+            {node.label}
+          </text>
+        </g>
       </g>
     );
   }
@@ -306,7 +344,7 @@ export function BpmnRenderer({ source, nodeLinks, nodeTooltips, interactivityHin
           className="w-full h-full"
           viewBox={`${vbX} ${vbY} ${vbW} ${vbH}`}
           preserveAspectRatio="xMidYMid meet"
-          role="img"
+          role="group"
           aria-labelledby="bpmn-title bpmn-desc"
         >
           <title id="bpmn-title">{db.getAccTitle() ?? 'BPMN Diagram'}</title>

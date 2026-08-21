@@ -28,6 +28,19 @@ s1 --> t1
 t1 --> t2
 t2 --> e1`;
 
+const SEMANTIC_NODE_SOURCE = `bpmn-beta
+accTitle: Request decision
+accDescr: A request is reviewed before it is approved or rejected.
+start s1 "Request received"
+task:user t1 "Review request"
+xor g1 "Approved?"
+task:service t2 "Record decision"
+end e1 "Request complete"
+s1 --> t1
+t1 --> g1
+g1 --> t2
+t2 --> e1`;
+
 describe('BpmnRenderer — interactive behaviour', () => {
   beforeEach(() => {
     mockNavigate.mockReset();
@@ -163,9 +176,9 @@ describe('BpmnRenderer — interactive behaviour', () => {
 // ── SVG accessibility semantics ───────────────────────────────────────────────
 
 describe('BpmnRenderer — SVG accessibility semantics', () => {
-  it('identifies the root SVG as an image', () => {
+  it('identifies the root SVG as a labelled group so individual nodes remain exposed', () => {
     const { container } = render(<BpmnRenderer source={ACCESSIBLE_SOURCE} />);
-    expect(container.querySelector('svg')?.getAttribute('role')).toBe('img');
+    expect(container.querySelector('svg')?.getAttribute('role')).toBe('group');
   });
 
   it('labels the SVG with its accessibility title', () => {
@@ -198,6 +211,64 @@ describe('BpmnRenderer — SVG accessibility semantics', () => {
     expect(linkedTasks).toHaveLength(2);
     linkedTasks.forEach(task => {
       expect(task.getAttribute('aria-label')?.trim()).toBeTruthy();
+    });
+  });
+
+  it('gives every unlinked task, event, and gateway a named group', () => {
+    const { container } = render(<BpmnRenderer source={SEMANTIC_NODE_SOURCE} />);
+    const expectedLabels = [
+      'Start event: Request received',
+      'User task: Review request',
+      'Exclusive gateway: Approved?',
+      'Service task: Record decision',
+      'End event: Request complete',
+    ];
+
+    expectedLabels.forEach((label) => {
+      const node = container.querySelector(`svg g[aria-label="${label}"]`);
+      expect(node, `expected accessible node "${label}"`).not.toBeNull();
+      expect(node?.getAttribute('role')).toBe('group');
+    });
+  });
+
+  it('keeps a linked task as one labelled button and hides its visual children', () => {
+    const { container } = render(
+      <BpmnRenderer
+        source={SEMANTIC_NODE_SOURCE}
+        nodeLinks={{ t1: '/skills/review-request' }}
+      />,
+    );
+    const taskButton = container.querySelector(
+      'svg g[role="button"][aria-label="Open User task: Review request"]',
+    );
+
+    expect(taskButton).not.toBeNull();
+    expect(taskButton?.getAttribute('tabindex')).toBe('0');
+    expect(taskButton?.querySelector(':scope > g[aria-hidden="true"]')).not.toBeNull();
+    expect(
+      container.querySelector('svg g[role="group"][aria-label="User task: Review request"]'),
+      'linked task must not also be announced as a separate group',
+    ).toBeNull();
+  });
+
+  it('keeps events and gateways named when a nodeLinks map is supplied', () => {
+    const { container } = render(
+      <BpmnRenderer
+        source={SEMANTIC_NODE_SOURCE}
+        nodeLinks={{
+          s1: '/skills/intake',
+          g1: '/skills/gap-analysis',
+          e1: '/skills/handoff',
+        }}
+      />,
+    );
+
+    [
+      'Start event: Request received',
+      'Exclusive gateway: Approved?',
+      'End event: Request complete',
+    ].forEach((label) => {
+      expect(container.querySelector(`svg g[aria-label="${label}"]`)).not.toBeNull();
     });
   });
 });
