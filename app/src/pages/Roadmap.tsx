@@ -41,7 +41,7 @@ const VERSION_LADDER: VersionStep[] = [
   {
     version: "V0.3",
     title: "BP-SKILL suite — 15-skill pipeline",
-    status: "current",
+    status: "done",
     deliverables: [
       "15-skill full lifecycle pipeline with complete SKILL.md content",
       "Agent Skills browser (/skills) — standard, pipeline diagram, skill browser, variable layer, PNS schema",
@@ -58,7 +58,7 @@ const VERSION_LADDER: VersionStep[] = [
   {
     version: "V0.4",
     title: "Content and interactivity",
-    status: "planned",
+    status: "current",
     deliverables: [
       "Interactive pipeline diagram — click any skill to navigate to its detail page",
       "PNS.md lifecycle advancement shown per skill in Walkthrough table",
@@ -80,11 +80,13 @@ const VERSION_LADDER: VersionStep[] = [
   {
     version: "V0.6",
     title: "Mermaid plugin packaging",
-    status: "planned",
+    status: "done",
     deliverables: [
-      "registerExternalDiagrams() integration — detector, parser, DB, renderer all registered",
-      "Theme variable binding — getStyles() reads live Mermaid theme vars at render time",
-      "Plugin entry point exported from package, loadable via <script> against Mermaid CDN",
+      "registerExternalDiagrams() integration — detector, parser, DB, renderer all registered (mermaid@11.4.1 verified)",
+      "Theme variable binding — getStyles() reads live Mermaid themeVariables at render time (FR-018)",
+      "Plugin entry point exported from @okhp3/mermaid-diagram-bpmn package (npm publication tracked in V0.9)",
+      "Host demo page (/mermaid-host-demo) — live Mermaid-rendered bpmn-beta output, no securityLevel:loose",
+      "Deferred to V0.9: <script> tag CDN load path (blocked on CDN distribution)",
     ],
   },
   {
@@ -295,16 +297,16 @@ const READINESS_STEPS: ReadinessStep[] = [
   {
     icon: Puzzle,
     title: "Mermaid External Diagram API",
-    current: "Prototype renders standalone in a Vite app. Not wired to Mermaid's registerExternalDiagrams() yet.",
-    target: "Full registerExternalDiagrams() integration — detector, parser, DB accessor, renderer all registered.",
-    status: "planned",
+    current: "registerExternalDiagrams() integration complete (V0.6) — all 4 modules registered and exercised against real mermaid@11.4.1 in bpmn-plugin-integration.test.ts. Plugin published as @okhp3/mermaid-diagram-bpmn@0.1.1.",
+    target: "Upstream core inclusion — formal PR to mermaid-js/mermaid proposing bpmn-beta as a native diagram type (V1.0 target).",
+    status: "done",
   },
   {
     icon: Palette,
     title: "Theme integration via getStyles()",
-    current: "getStyles(BpmnThemeOptions) emits a CSS block. Uses a fixed LIGHT_THEME constant, not live Mermaid theme vars.",
-    target: "Read Mermaid's primaryColor, lineColor, nodeBorder, etc. at render time. Respect user theme config.",
-    status: "experimental",
+    current: "Theme variable binding complete (V0.6) — getStyles() reads live Mermaid themeVariables at render time, not a static fallback. Verified via bpmn-plugin-integration.test.ts FR-018 describe block.",
+    target: "Full upstream theme contract — align token names with Mermaid's documented themeVariables API before upstream PR.",
+    status: "done",
   },
   {
     icon: Shield,
@@ -378,6 +380,7 @@ export default function Roadmap() {
               return (
                 <div
                   key={step.version}
+                  data-testid={`roadmap-step-${step.version.toLowerCase().replace(/\./g, '-')}`}
                   className={`relative flex gap-4 sm:gap-5 items-start ${!isLast ? "pb-6" : ""}`}
                 >
                   {/* Dot */}
@@ -395,6 +398,7 @@ export default function Roadmap() {
                       </span>
                       <span
                         className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full border text-[10px] font-semibold ${cfg.pill}`}
+                        data-testid={`roadmap-status-${step.version.toLowerCase().replace(/\./g, '-')}`}
                       >
                         {step.status === "current" && (
                           <CircleDot size={9} className="shrink-0" />
@@ -542,10 +546,13 @@ export default function Roadmap() {
       <div className="mt-12 p-4 rounded-lg border border-border bg-muted/30 flex items-start gap-3">
         <Wrench size={14} className="text-muted-foreground shrink-0 mt-0.5" />
         <p className="text-xs text-muted-foreground leading-relaxed">
-          This roadmap is the working state of the prototype, not a formal commitment. The canonical
-          strategy document is{" "}
-          <code className="font-mono text-xs bg-muted px-1 rounded">docs/strategy.md</code>
-          {" "}in this repository. If they disagree, that file wins.
+          This roadmap is the working state of the prototype, not a formal commitment.{" "}
+          <strong className="font-semibold text-foreground/80">Version completion criteria and release status</strong>
+          {" "}are governed by{" "}
+          <code className="font-mono text-xs bg-muted px-1 rounded">docs/version-checklist.md</code>
+          {" "}— that file is the authoritative source and wins if it disagrees with this page.
+          For strategic direction and engagement decisions, see{" "}
+          <code className="font-mono text-xs bg-muted px-1 rounded">docs/strategy.md</code>.
         </p>
       </div>
 
