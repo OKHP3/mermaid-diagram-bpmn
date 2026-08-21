@@ -34,6 +34,14 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
+      - name: Cache Playwright Chromium browser
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: ${{ runner.os }}-playwright-chromium-${{ hashFiles('pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-playwright-chromium-
+
       - name: Type-check
         run: pnpm run typecheck
 
@@ -77,6 +85,12 @@ jobs:
           BASE_PATH: /mermaid-diagram-bpmn/
           VITE_COMMIT_SHA: ${{ github.sha }}
           VITE_ANALYTICS_ENDPOINT: ${{ secrets.VITE_ANALYTICS_ENDPOINT }}
+
+      - name: Install Playwright Chromium browser
+        run: pnpm --filter @workspace/mermaid-diagram-bpmn exec playwright install --with-deps chromium
+
+      - name: Run browser E2E tests
+        run: pnpm --filter @workspace/mermaid-diagram-bpmn run test:e2e --project=chromium
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v5
