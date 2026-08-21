@@ -406,6 +406,156 @@ describe('PNS transition data — RACI & SIPOC governance skills', () => {
 // skill in SKILLS. A typo or stale skill id produces a 404 that would otherwise
 // ship silently — these tests catch it at the data level.
 
+// ─────────────────────────────────────────────────────────────────────────────
+// PnsLifecycleTracker — linked button click scrolls to matching skill row
+// ─────────────────────────────────────────────────────────────────────────────
+// Verifies that clicking a linked stage button calls scrollIntoView on the
+// matching skill-row DOM element (id="row-{skillId}-lg" or id="row-{skillId}-sm")
+// with { block: 'start' }.
+//
+// This is distinct from the mount-time scroll tested above, which targets
+// activeMobileRef with { block: 'nearest' }.  The block value is the
+// discriminating signal: 'start' for button clicks, 'nearest' for mount scroll.
+//
+// scrollToSkillRow prefers the lg element when offsetParent is non-null, and
+// falls back to `lg ?? sm` when both are null (which is always the case in
+// happy-dom, since layout is not computed).  Tests create lightweight row stubs
+// (via document.createElement + appendChild) to verify element-level targeting.
+
+describe('PnsLifecycleTracker — linked button click scrolls to matching skill row', () => {
+
+  // Pick the first PNS stage that has a matching skill (setBy is a real skill id).
+  // This guarantees withAnchors=true renders a clickable linked button for it.
+  const linkedStage = PNS_LIFECYCLE.find((s) => SKILLS.some((sk) => sk.id === s.setBy))!;
+  const linkedSkill  = SKILLS.find((sk) => sk.id === linkedStage.setBy)!;
+
+  // Prototype-level mock catches every scrollIntoView call before element spies
+  // shadow it.  Used to clear the mount-time scroll before asserting click effects.
+  let scrollIntoViewMock: ReturnType<typeof vi.fn>;
+  let originalScrollIntoView: typeof HTMLElement.prototype.scrollIntoView;
+
+  beforeEach(() => {
+    originalScrollIntoView = HTMLElement.prototype.scrollIntoView;
+    scrollIntoViewMock = vi.fn();
+    HTMLElement.prototype.scrollIntoView =
+      scrollIntoViewMock as unknown as typeof HTMLElement.prototype.scrollIntoView;
+    // The preceding describe block's reduced-motion test sets window.matchMedia to
+    // { matches: true } and does not restore it.  Reset before every test here so
+    // each case starts from a known non-reduced-motion baseline.
+    Object.defineProperty(window, 'matchMedia', {
+      writable:     true,
+      configurable: true,
+      value: vi.fn().mockReturnValue({ matches: false }),
+    });
+  });
+
+  afterEach(() => {
+    HTMLElement.prototype.scrollIntoView = originalScrollIntoView;
+    // Remove row stubs created by individual tests
+    document
+      .querySelectorAll('[data-testid^="test-skill-row-"]')
+      .forEach((el) => el.remove());
+    vi.restoreAllMocks();
+  });
+
+  /**
+   * Create a skill row element in the DOM (simulating what the Walkthrough /
+   * Agent Skills table renders) and attach an instance-level spy so we can
+   * confirm this specific element — not just any HTMLElement — received the call.
+   *
+   * The spy is set at the instance level so it shadows the prototype mock;
+   * the prototype mock is therefore NOT called when this element scrolls.
+   */
+  function createRowStub(skillId: string, variant: 'lg' | 'sm') {
+    const el = document.createElement('div');
+    el.id = `row-${skillId}-${variant}`;
+    el.setAttribute('data-testid', `test-skill-row-${skillId}-${variant}`);
+    document.body.appendChild(el);
+    const spy = vi.spyOn(el, 'scrollIntoView').mockImplementation(() => {});
+    return { el, spy };
+  }
+
+  it('clicking a linked stage button calls scrollIntoView on the lg skill row with block:"start"', () => {
+    const { spy: lgSpy } = createRowStub(linkedSkill.id, 'lg');
+
+    const { getAllByRole } = render(
+      <PnsLifecycleTracker withAnchors activeStatus={linkedStage.status} compact />,
+    );
+    // The mount-time useEffect fires scrollIntoView({ block:'nearest' }) on the
+    // mobile ref — clear it so subsequent assertions only capture the click.
+    scrollIntoViewMock.mockClear();
+
+    // Both desktop and mobile render a linked button when withAnchors=true.
+    // Click the first one returned by the query.
+    const [firstButton] = getAllByRole('button', {
+      name: `Jump to ${linkedSkill.displayName} in the table`,
+    });
+    fireEvent.click(firstButton);
+
+    // The specific lg row element must have received the call — not just any element
+    expect(lgSpy, 'expected lg row element to receive scrollIntoView on button click').toHaveBeenCalledOnce();
+    // block:'start' is the discriminating value that proves scrollToSkillRow fired
+    // (not the mount-time scroll, which uses block:'nearest')
+    expect(lgSpy).toHaveBeenCalledWith({ behavior: 'smooth', block: 'start' });
+  });
+
+  it('uses instant scroll when reduced-motion preference is set', () => {
+    Object.defineProperty(window, 'matchMedia', {
+      writable:     true,
+      configurable: true,
+      value: vi.fn().mockReturnValue({ matches: true }),
+    });
+
+    const { spy: lgSpy } = createRowStub(linkedSkill.id, 'lg');
+
+    const { getAllByRole } = render(
+      <PnsLifecycleTracker withAnchors activeStatus={linkedStage.status} compact />,
+    );
+    scrollIntoViewMock.mockClear();
+
+    const [firstButton] = getAllByRole('button', {
+      name: `Jump to ${linkedSkill.displayName} in the table`,
+    });
+    fireEvent.click(firstButton);
+
+    expect(lgSpy).toHaveBeenCalledWith({ behavior: 'instant', block: 'start' });
+  });
+
+  it('targets the sm row when only the sm stub exists in the DOM', () => {
+    // When the lg element is absent, scrollToSkillRow falls back to `lg ?? sm = sm`.
+    const { spy: smSpy } = createRowStub(linkedSkill.id, 'sm');
+
+    const { getAllByRole } = render(
+      <PnsLifecycleTracker withAnchors activeStatus={linkedStage.status} compact />,
+    );
+    scrollIntoViewMock.mockClear();
+
+    const [firstButton] = getAllByRole('button', {
+      name: `Jump to ${linkedSkill.displayName} in the table`,
+    });
+    fireEvent.click(firstButton);
+
+    expect(smSpy).toHaveBeenCalledOnce();
+    expect(smSpy).toHaveBeenCalledWith({ behavior: 'smooth', block: 'start' });
+  });
+
+  it('does not call scrollIntoView when no matching row element exists in the DOM', () => {
+    // No stubs created — document.getElementById returns null for both ids.
+    // target resolves to null ?? null = null, so target?.scrollIntoView is a no-op.
+    const { getAllByRole } = render(
+      <PnsLifecycleTracker withAnchors activeStatus={linkedStage.status} compact />,
+    );
+    scrollIntoViewMock.mockClear(); // clear mount scroll
+
+    const [firstButton] = getAllByRole('button', {
+      name: `Jump to ${linkedSkill.displayName} in the table`,
+    });
+    fireEvent.click(firstButton);
+
+    expect(scrollIntoViewMock).not.toHaveBeenCalled();
+  });
+});
+
 describe('PURCHASE_APPROVAL_NODE_LINKS — all paths point to real skill pages', () => {
   const skillIds = new Set(SKILLS.map(s => s.id));
 
