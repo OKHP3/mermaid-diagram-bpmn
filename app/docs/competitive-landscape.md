@@ -61,7 +61,7 @@ Key facts about the proposal:
 
 - **Title:** "Add Native BPMN 2.0 Support to Mermaid.js"
 - **Filed by:** GitHub user `andreas-emrich` (DFKI IWi group, Saarland Informatics Campus)
-- **Backing paper:** Emrich, A., Hollax, J. (2025), "Domain-Specific Languages for Business Process Modeling: Mermaid Diagrams for BPMN", DFKI — **still described in the issue as in preparation. No DOI, arXiv ID, or preprint URL was found in the primary issue or an exact-title/author search, reviewed 2026-08-20.**
+- **Backing paper:** Emrich, A., Hollax, J. (2025), "Domain-Specific Languages for Business Process Modeling: Mermaid Diagrams for BPMN", DFKI — **still described in the issue as in preparation. The repeatable source check records the issue's current evidence but cannot prove that the paper has no DOI or preprint; reviewed 2026-08-22.**
 - **Maintainer engagement:** The issue is open and labelled **Status: Approved**. On 2026-05-28, Mermaid collaborator @knsv suggested merging it with #2623; the issue contains subsequent community discussion.
 - **Element ambition:** start/end events with all subtypes, tasks (send/receive/user/manual/service/script/business rule), all gateways (exclusive/parallel/inclusive/event-based/complex), intermediate events, sequence/message flows, subprocesses (expanded/collapsed), call activities, pools, lanes, boundary events
 - **Implementation status:** The later author update describes local detector, parser, renderer, and shape work, but the DFKI author has not linked a public implementation or pull request. The issue does link a separate community prototype by [@derari](https://derari.github.io/mermaid-bpmn/editor.html), posted on 2026-07-25.
@@ -157,7 +157,7 @@ This claim is **well-supported**. Multiple independent sources frame BPMN as the
 
 Per the mermaid-js DeepWiki (indexed 16 May 2026) and the mermaid.js.org diagram-syntax reference, the native diagram types are: **flowchart, sequenceDiagram, classDiagram, stateDiagram(-v2), erDiagram, gantt, journey, pie, requirementDiagram, gitGraph, C4 (C4Context et al.), mindmap, timeline, sankey, xychart-beta, block, quadrantChart, packet, kanban, architecture-beta, treemap, radar, and Ishikawa (added 2024–2025)**.
 
-**BPMN is absent from this list.** Issue #2623 (BPMN support, opened in the issue tracker because "Mermaid is now supported in Notion") and issue #660 (the earlier 2018 BPMN attempt) confirm that BPMN has been requested multiple times over many years and never landed. The competing proposal #7699 (May 2026) is open and marked Status: Approved, reviewed 2026-08-20.
+**BPMN is absent from this list.** Issue #2623 (BPMN support, opened in the issue tracker because "Mermaid is now supported in Notion") and issue #660 (the earlier 2018 BPMN attempt) confirm that BPMN has been requested multiple times over many years and never landed. The competing proposal #7699 (May 2026) is open and marked Status: Approved, reviewed 2026-08-22.
 
 ### 3.4 Mermaid adoption claims
 
@@ -487,7 +487,7 @@ Post this as body text; add the link (https://okhp3.github.io/mermaid-diagram-bp
 
 - **All market-research figures are vendor-funded.** Research Nester, Fortune Business Insights, Precedence Research, Grand View Research, MarketsandMarkets, and Straits Research are commercial firms whose primary product is selling reports to vendors in the markets they size. Treat all dollar figures as directional ranges, not as authoritative.
 - **Mermaid Chart's "8 million users" claim** is a company press-release figure (TechCrunch, 20 March 2024) with no independent verification; treat as a vendor claim.
-- **The Emrich & Hollax 2025 DFKI paper is not publicly available** as of the 2026-08-20 review — it is explicitly described in issue #7699 as in preparation. No DOI or preprint URL was found in the primary issue or an exact-title/author search. Do not cite it as published peer-reviewed work.
+- **The Emrich & Hollax 2025 DFKI paper is not publicly available** as of the 2026-08-22 review — it is explicitly described in issue #7699 as in preparation. The source check cannot prove that the paper has no DOI or preprint, so do not cite it as published peer-reviewed work without independently verifying that.
 - **Maintainer engagement on #7699: the issue was approved by 2026-06-12** (per @pbrolin47/COLLABORATOR on #2623) and a contributor (@derari) has volunteered to submit a PR. The prior "zero engagement" note is superseded. See Phase D reply-state check above for the current competitive picture.
 - **Mermaid star/user counts** vary across sources (~65k–78k stars; 8M users) and reflect different snapshot dates between 2024 and 2026.
 - **The BPMN "de facto standard" framing is consensus in academic and industry literature** but BPMN is not without critics; some communities (DEMO, Petri-net formalism, ArchiMate at enterprise-architecture level) treat BPMN as one notation among several.

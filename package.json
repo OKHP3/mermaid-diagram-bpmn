@@ -25,6 +25,8 @@
     "plugin:smoke": "node scripts/run-plugin-smoke.mjs",
     "check:content": "node scripts/validate-content.mjs",
     "check:content:test": "node --test scripts/validate-content.test.mjs",
+    "check:dfki-7699": "node scripts/check-dfki-7699.mjs",
+    "check:dfki-7699:test": "node --test scripts/check-dfki-7699.test.mjs",
     "check:version-status": "node scripts/check-version-status.mjs",
     "check:version-status:test": "node --test scripts/check-version-status.test.mjs",
     "check:bundle-size": "node scripts/check-bundle-size.mjs",

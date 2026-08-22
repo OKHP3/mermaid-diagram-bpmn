@@ -111,7 +111,7 @@ const SYNTAXES = [
         "Issue links a community prototype by @derari; the DFKI author has not linked a public implementation or PR",
         "The tiered syntax and its normalization rules are still proposed, not specified",
         "The original detailed form remains attribute-heavy for advanced elements",
-        "Issue is open and marked Status: Approved (reviewed 2026-08-20)",
+        "Issue is open and marked Status: Approved (reviewed 2026-08-22)",
     ],
   },
   {
@@ -470,8 +470,8 @@ export default function SyntaxComparison() {
               — the later 2026-05-24 author update by Andreas Emrich. It is reproduced exactly, with
               nothing added, combined, or paraphrased. The issue also includes earlier detailed and
               pool examples. The cited Emrich &amp; Hollax 2025 paper remains described there as in
-              preparation; a DOI or preprint was not found in the primary issue or an exact-title and
-              author search, reviewed 2026-08-20.
+              preparation. The source check records what the issue says, but cannot prove that the paper
+              has no DOI or preprint; reviewed 2026-08-22.
             </p>
           </div>
           <div className="p-4 rounded-lg border border-border bg-card">

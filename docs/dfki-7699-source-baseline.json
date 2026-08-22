@@ -1,0 +1,43 @@
+{
+  "schemaVersion": 1,
+  "source": "https://github.com/mermaid-js/mermaid/issues/7699",
+  "issue": {
+    "number": 7699,
+    "title": "Add Native BPMN 2.0 Support to Mermaid.js",
+    "state": "open",
+    "stateReason": null,
+    "updatedAt": "2026-08-05T19:07:08Z",
+    "author": "andreas-emrich",
+    "labels": [
+      "Contributor needed",
+      "Required Grooming",
+      "Status: Approved",
+      "Type: Enhancement",
+      "Type: New Diagram"
+    ]
+  },
+  "authorExamples": {
+    "count": 2,
+    "fingerprint": "d1cbd7f6fc8b12152fdd7851c9a456491d56a1929df04416522b5b2a7e7a1b7c",
+    "items": [
+      {
+        "commentId": 4529747839,
+        "commentCreatedAt": "2026-05-24T19:30:39Z",
+        "commentUpdatedAt": "2026-05-24T19:31:28Z",
+        "index": 0,
+        "language": "mermaid",
+        "sha256": "81ad42e0bf8c783c8d28c1d0983bb65bae275032fba02b77833e1408727ab99a"
+      },
+      {
+        "commentId": 4529747839,
+        "commentCreatedAt": "2026-05-24T19:30:39Z",
+        "commentUpdatedAt": "2026-05-24T19:31:28Z",
+        "index": 1,
+        "language": "mermaid",
+        "sha256": "e4e01606bc24ebc2f9066cf520fb57147c2906c8a928786f89436705d8ca920d"
+      }
+    ]
+  },
+  "reviewedAt": "2026-08-22",
+  "limitation": "This source check cannot prove that the cited DFKI paper has no DOI or preprint."
+}
