@@ -46,72 +46,72 @@ const mermaidVersionTarget = (() => {
 })();
 
 // ── Evidence tiers ───────────────────────────────────────────────────────────
-// Sourced from docs/capability-ledger.md (baseline 2026-08-06) and CI config.
-// Tiers: confirmed | source-verified | ci-gated | browser-verified | not-complete
+// Sourced from the dated maturity evidence baseline and CI config.
+// Tiers: supported | provisional | disputed | blocked
 
 const EVIDENCE_TIERS = [
   {
     id: 'playground-renders',
     claim: 'React Playground renders supported DSL syntax',
     evidence:
-      'Application tests — bpmn-parser-corpus.test.ts, bpmn-renderer.test.tsx; 600+ assertions in CI',
+      'Application test suite — 839/839 tests across 46 files on 2026-08-22',
     tier: 'confirmed',
   },
   {
     id: 'mermaid-integration',
     claim: 'Mermaid source adapter tested via real mermaid.render()',
     evidence:
-      'bpmn-plugin-integration.test.ts — imports real mermaid@11.4.1, calls registerExternalDiagrams(), asserts bpmn-* CSS classes present on output SVG',
-    tier: 'source-verified',
+      'bpmn-plugin-integration.test.ts plus packed plugin smoke (12/12) on 2026-08-22; real mermaid@11.4.1',
+    tier: 'supported',
   },
   {
     id: 'e2e-browser',
     claim: 'Plugin renders correctly in a real Chromium browser',
     evidence:
-      'Playwright suite (app/e2e/host-demo.spec.ts) — CI-gated on every push and PR; covers flat flow, gateway, pool/lane, cross-pool, and error case',
-    tier: 'ci-gated',
+      'Chromium host-demo checks pass; full Chromium run is blocked at 49/57 by 8 worked-example node-navigation timeouts on 2026-08-22',
+    tier: 'blocked',
   },
   {
     id: 'accessibility',
     claim: 'WCAG 2.2 AA accessibility gate',
     evidence:
-      'axe-core 4.13.0 via @testing-library/react in happy-dom; rules: wcag2a, wcag2aa, wcag21a, wcag21aa, wcag22aa, best-practice; covers Home, Playground, AgentSkills pages',
-    tier: 'source-verified',
+      'axe-core checks and Playwright visual/mobile assertions pass; contrast, touch, and complete keyboard work-surface behavior remain unproven (2026-08-22)',
+    tier: 'provisional',
   },
   {
     id: 'theme-binding',
     claim: 'Live theme-variable binding (FR-018)',
     evidence:
-      'bpmn-plugin-integration.test.ts — styles() provider supplies resolved themeVariables at render time; "FR-018" describe block CI-gated',
-    tier: 'source-verified',
+      'bpmn-plugin-integration.test.ts FR-018 block supplies resolved themeVariables at render time; reviewed 2026-08-22',
+    tier: 'supported',
   },
   {
     id: 'bundle-size',
     claim: 'Plugin bundle size < 200 kB gzip NFR',
     evidence:
-      'ESM: 20.01 kB / 5.88 kB gzip; CJS: 16.74 kB / 5.40 kB gzip — verified via pnpm run plugin:build in CI gate',
-    tier: 'ci-gated',
+      'ESM: 20.08 kB / 5.94 kB gzip; CJS: 16.78 kB / 5.44 kB gzip — plugin build on 2026-08-22',
+    tier: 'supported',
   },
   {
     id: 'npm-published',
     claim: 'Package published to npm registry',
     evidence:
-      'npm view @okhp3/mermaid-diagram-bpmn returns 0.1.1; smoke test (12/12 assertions) CI-gated via publish-npm.yml; confirmed live 2026-08-06',
-    tier: 'confirmed',
+      'npm registry version endpoint returned HTTP 200 for 0.1.1 and packed install smoke passed 12/12 on 2026-08-22',
+    tier: 'supported',
   },
   {
     id: 'visual-regression',
     claim: 'Pixel-diff visual regression blocks PRs on unexpected layout change',
     evidence:
-      'Playwright visual spec (app/e2e/visual-regression.spec.ts); maxDiffPixelRatio 2–3%; 6 Linux/Chromium baseline PNGs CI-committed; active on PRs',
-    tier: 'ci-gated',
+      'Playwright visual spec with 17 Linux/Chromium baselines and 2–3% thresholds; source/CI configuration reviewed 2026-08-22',
+    tier: 'supported',
   },
   {
     id: 'bp-skill-validator',
     claim: 'BP-SKILL validator passes 15 core + 3 supplemental packages',
     evidence:
-      'pnpm run skill:validate — 235/235 checks, 0 failures across 18 packages and 9 context files; CI-gated',
-    tier: 'confirmed',
+      'pnpm run skill:test 196/196, skill:validate 235/235, eval:run 14/14 on 2026-08-22',
+    tier: 'supported',
   },
 ];
 

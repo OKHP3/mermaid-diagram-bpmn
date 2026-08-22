@@ -1,7 +1,8 @@
 # Mermaid Compatibility Reference
 ## `mermaid-diagram-bpmn` / `bpmn-beta`
 
-**Last updated:** 2026-08-04
+**Last updated:** 2026-08-22
+**Current evidence baseline:** [Maturity Evidence Baseline — 2026-08-22](../../docs/maturity-evidence-baseline-2026-08-22.md)
 **Target repos:** `mermaid-js/mermaid` (≥ 10), `mermaid-js/mermaid-live-editor`
 
 ---
@@ -243,7 +244,7 @@ The test:
 
 | Item | Status | Notes |
 |---|---|---|
-| `bpmn-plugin.ts` published to npm | Not done | Required before end-to-end test |
+| `bpmn-plugin.ts` published to npm | **Done — 0.1.1** | Registry and packed-install smoke verified 2026-08-22 |
 | Integration test against `mermaid.render()` | **Done** — `app/src/lib/__tests__/bpmn-plugin-integration.test.ts` |
 | Langium grammar | Not done | Required for upstream Mermaid core PR |
 | `%%{init}%%` directive support | Not done | Allows per-diagram theme override |
@@ -259,7 +260,7 @@ The test:
 | CQ-002 | What Mermaid version should be pinned as `peerDependencies`? | **Answered** — `^11.4.1` (`MERMAID_VERSION_TARGET`). | Resolved |
 | CQ-003 | Does Mermaid pass themeVariables as the `options` arg to `styles()`? | **Answered** — Yes. `styles(themeVars)` receives resolved theme variables; `_cachedThemeVars` captures them for `draw()`. | Resolved |
 | CQ-004 | Does `draw()` receive the SVG element `id` and must find it via `getElementById`? | **Answered** — Yes; Mermaid creates `<div id="d{id}"><svg id="{id}">` before calling `draw()`. | Resolved |
-| CQ-005 | Does the live editor sandbox allow external diagram registration? | Open — not yet tested end-to-end. | Live editor compatibility |
+| CQ-005 | Does the live editor sandbox allow external diagram registration? | Open — not yet tested end-to-end; CDN/live-editor adoption remains blocked. | Live editor compatibility |
 
 ---
 

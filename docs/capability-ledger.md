@@ -1,11 +1,36 @@
 # Capability Ledger
 
-**Baseline date:** 2026-08-04  
+**Current baseline:** 2026-08-22 — see [Maturity Evidence Baseline](maturity-evidence-baseline-2026-08-22.md)
+**Historical baselines:** 2026-08-04, 2026-08-06, 2026-08-07, and 2026-08-20 remain below for dated context.
 **Verified by:** PRD-04 Phase 0 baseline run (Task #178)  
 **Environment:** Linux (Replit), pnpm 10.26.1, Node.js 24
 
 All commands were run from a clean `pnpm install` on the current checkout.
 No results were assumed from prior session notes.
+
+---
+
+
+## Current maturity verdict — 2026-08-22
+
+**Approve with limits:** the technical prototype and static distribution experience are supported within the documented descriptive subset. Mature, adoption-ready positioning is **not supported**. See the dated [claim and evidence ledger](maturity-evidence-baseline-2026-08-22.md#claim-and-evidence-ledger) for the fresh results, analytical review, blockers, and public checks.
+
+Status vocabulary for this baseline: **supported**, **provisional**, **disputed**, and **blocked**. The older sections below use their original terminology and dates; they are historical evidence, not silently refreshed results.
+
+| Capability area | Current status | Evidence tier / boundary |
+|---|---|---|
+| DSL pipeline | supported | 839/839 application tests on 2026-08-22 |
+| Mermaid integration and published plugin | supported | real Mermaid integration, packed smoke 12/12, npm 0.1.1 HTTP 200 |
+| BP-SKILL suite | supported | 196/196 tests, 235/235 validation checks, 14/14 eval fixtures |
+| Public UX and accessibility | provisional | automated gates pass; first-time outcome, contrast, touch, and complete keyboard behavior remain unproven |
+| Release reproducibility | supported | frozen install, generated, content, version, manifest, build, and bundle checks pass |
+| Performance | supported | 72.74 kB initial gzip against 150 kB ceiling; plugin gzip below 6 kB per format |
+| Browser interaction portability | blocked | 49/57 Chromium E2E passed; 8 worked-example node-navigation tests timed out |
+| CDN/live-editor adoption path | blocked | checklist remains incomplete and live-editor E2E is open |
+| Upstream/community readiness | provisional | issue #7699 is externally controlled and changed since its 2026-08-21 source baseline; no project maintainer reply is recorded |
+| External adoption | blocked | no independent usage, third-party integration, or moderated outcome evidence |
+
+Fresh command results and exact public checks are recorded in the dated review record above.
 
 ---
 
@@ -25,25 +50,18 @@ No results were assumed from prior session notes.
 
 ---
 
-## Capability claims
+### Capability claims
 
-| Claim | Evidence | Status | Required next test |
-|---|---|---|---|
-| React playground renders supported DSL syntax | Application tests (`bpmn-parser-corpus.test.ts`, `bpmn-renderer.test.tsx`, 390 total passing) | **confirmed** | Maintain regression coverage |
-| Mermaid source adapter tested via real `mermaid.render()` | `bpmn-plugin-integration.test.ts` — imports real `mermaid@11.4.1`, calls `registerExternalDiagrams`, renders both flat and pool/lane corpus examples, asserts `bpmn-*` classes present | **source-verified + E2E pending** | Playwright suite (`app/e2e/host-demo.spec.ts`) is CI-gated in the `e2e` job; covers flat flow, gateway, pool/lane, cross-pool, and error case with default securityLevel ('strict'). Status upgrades to **browser-verified** on first green CI E2E run. |
-| WCAG 2.2 AA accessibility gate | axe-core 4.13.0 via `@testing-library/react` in happy-dom; rules: wcag2a, wcag2aa, wcag21a, wcag21aa, wcag22aa, best-practice; color-contrast disabled (no computed CSS in happy-dom); covers Home, Playground, AgentSkills, SkillDetail, and About pages; expanded 2026-08-20 | **source-verified** | Color-contrast and visual focus ring verification deferred to visual regression task (#213). Per-node SVG aria-label covered by task #191. |
-| Plugin is externally consumable as an installable package | No package boundary exists — `app/package.json` is `"private": true`, no `exports` map, no `files` allowlist, no clean-install fixture | **not complete** | Phase 2: package smoke fixture |
-| FR-018: Live theme-variable binding | `bpmn-plugin-integration.test.ts` — "FR-018: live theme-variable binding" describe block passes, `styles()` provider supplies resolved `themeVariables` at render time | **source-verified** | Verify in production browser (no `securityLevel: loose`) in Phase 3 |
-| TD-004: Parser errors show diagnostic, not blank preview | `bpmn-plugin-integration.test.ts` — "TD-004" describe block passes (bad source throws or returns non-empty SVG) | **source-verified** | Visual confirmation in browser; inline error display in React playground may need a separate check |
-| BP-SKILL validator passes the 15 core packages plus three supplemental/meta packages | `pnpm run skill:validate` — 235/235 checks, 0 failures across 18 packages and 9 context files | **confirmed** | Preserve as release gate |
-| Root skill test suite passes | `pnpm run skill:test` — 196/196 tests, all 15 skills + pipeline integration | **confirmed** | Preserve as release gate |
-| Evaluation suite passes | `pnpm run eval:run` — 14/14 fixtures, 100/100 score | **confirmed** | Confirm cross-platform (Windows) behavior in Phase 1 |
-| Generated files are in sync with sources | `pnpm run check:generated` — both `pns-transitions-auto.ts` and `skill-deps-auto.ts` reported up to date | **confirmed** | Re-check after any changes to `skills-registry.ts` or skill `depends_on` fields |
-| TypeScript compilation clean across all packages | `pnpm run typecheck` — root libs, `app/`, and `scripts/` all pass without errors | **confirmed** | Run before every merge |
-| Production build succeeds | `pnpm run build` — Vite 8 bundle built in ~2s; `dist/public/index.html` + JS/CSS output present | **confirmed** | Run before every deploy |
-| `docs/mermaid-compatibility.md` exists and cites the integration test | File does not exist | **not complete** | Phase 1: create this file citing `bpmn-plugin-integration.test.ts` as proof |
-| Plugin demo route in the public app | No such route exists | **not complete** | Phase 3: Mermaid Host Demo route |
-| Public support matrix driven by capability registry | Support matrix is driven by inline data, not a capability registry; some labels may be stale relative to current evidence | **not complete** | Phase 4: create capability registry, reconcile all public claims |
+| Claim | Status | Notes |
+|---|---|---|
+| No horizontal overflow on Home, Playground, Skills, Walkthrough hub, and all worked examples at mobile (375 px) | **confirmed** | Programmatic assertion; CI-blocking |
+| Walkthrough hub shows its heading, 15-skill BPMN pipeline, and full handoff reference | **confirmed** | Programmatic assertion at desktop and mobile; CI-blocking |
+| All three worked examples show their heading and complete 15-step process timeline | **confirmed** | Programmatic assertion at desktop and mobile; CI-blocking |
+| Mermaid Host Demo has a settled desktop visual guard after all diagram panels reach terminal state | **confirmed** | Four SVG and intentional error-panel assertions precede its committed baseline |
+| Home and Agent Skills dark palettes are protected from visual regressions | **confirmed** | Browser dark-media emulation and persisted app preference activate class-based dark variants before desktop snapshots |
+| Primary interactive controls meet minimum tap-target height | **confirmed** | ≥ 36 px; CI-blocking |
+| Visual baselines capture 8 pages across 17 viewport surfaces | **confirmed** | 17 Linux/Chromium PNG baselines are committed and compared by the PR gate |
+| Pixel-diff comparison blocks PRs on unexpected visual regression | **confirmed** | `maxDiffPixelRatio` 2–3 %; CI gate active on PRs |
 
 ---
 

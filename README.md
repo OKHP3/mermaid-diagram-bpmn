@@ -14,7 +14,7 @@ This repository contains three related assets:
 
 ## Current status
 
-**Prototype shipped. v0.1 hardening and plugin path are in progress.**
+**Technical prototype shipped. Plugin package published; maturity and adoption gates remain in progress.**
 
 | Area | Status |
 |---|---|
@@ -23,12 +23,14 @@ This repository contains three related assets:
 | Direct SVG renderer, no `bpmn-js` runtime dependency | Working |
 | Pool and lane containment | Experimental |
 | Message flows | Experimental |
-| Mermaid External Diagram adapter | **`@okhp3/mermaid-diagram-bpmn@0.1.1`** — published to npm, source-verified against `mermaid@11.4.1` |
+| Mermaid External Diagram adapter | **`@okhp3/mermaid-diagram-bpmn@0.1.1`** — published to npm, source- and browser-tested against `mermaid@11.4.1` |
 | Langium grammar | Roadmap |
-| Full Mermaid `getStyles` / theme-variable integration | Roadmap |
+| Full Mermaid `getStyles` / theme-variable integration | Source-verified for the supported adapter path |
 | Upstream Mermaid core PR | Future, after v1.0 stabilizes |
 
 `bpmn-beta` is not yet a production Mermaid plugin, not a full BPMN 2.0 implementation, not an executable BPMN engine, and not a BPMN XML round-trip tool.
+
+The current maturity evidence baseline (2026-08-22) records the distinction between supported local capabilities, provisional user/accessibility and upstream claims, and blocked adoption paths.
 
 ---
 

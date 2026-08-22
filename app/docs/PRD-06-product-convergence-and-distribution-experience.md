@@ -1,12 +1,12 @@
 # PRD-06: Product Convergence and Distribution Experience
 
-**Status:** Proposed build directive based on a product and implementation review completed 2026-08-06.
+**Status:** Historical build directive based on a product and implementation review completed 2026-08-06. Superseded for current evidence by `docs/maturity-evidence-baseline-2026-08-22.md`.
 
 **Decision:** Continue productization, but do not treat the current release as a complete functional hub. The project is a credible prototype and distribution site. The next release should make its existing capabilities easier to enter, finish, export, and adopt.
 
 ## 1. Evidence and review boundary
 
-This document is a product decision artifact, not a replacement for the DSL standard, parser source, capability ledger, or Mermaid compatibility evidence. It reflects a review of the product brief, product and technical PRDs, roadmap, capability ledger, architecture, technical-debt register, application source, and the live GitHub Pages application.
+This document is a product decision artifact, not a replacement for the DSL standard, parser source, capability ledger, or Mermaid compatibility evidence. It reflects a review completed on 2026-08-06. For current test results, evidence tiers, and blockers, use the dated 2026-08-22 maturity baseline; the observations below are retained as historical product evidence.
 
 The review also ran the available local validation commands. Skill tests, skill validation, and generated-file checks passed. Application typecheck and application test runs were blocked by an incomplete local dependency tree: the declared `mermaid` package was absent, and test-local storage was unavailable. The plugin package build was also blocked because that package's local executable dependencies were absent. These findings do not prove application defects. They do prove that a clean, frozen installation must be part of the next release gate.
 

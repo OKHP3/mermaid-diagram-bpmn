@@ -13,6 +13,10 @@ import ReleasePage from "@/pages/ReleasePage";
 import releaseManifest from "../../public/release-manifest.json";
 
 const TIER_LABELS: Record<string, string> = {
+  supported: "Supported",
+  provisional: "Provisional",
+  disputed: "Disputed",
+  blocked: "Blocked",
   confirmed: "Confirmed",
   "source-verified": "Source-verified",
   "ci-gated": "CI-gated",

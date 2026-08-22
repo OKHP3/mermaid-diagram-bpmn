@@ -2,6 +2,8 @@
 
 This document is the authoritative definition of what constitutes a complete, releasable version of this project. It covers both the `bpmn-beta` DSL workstream and the BP-SKILL agent skill suite workstream. When the two disagree on version numbering, this file wins.
 
+**Current evidence baseline:** 2026-08-22 — [Maturity Evidence Baseline](maturity-evidence-baseline-2026-08-22.md). This record distinguishes supported, provisional, disputed, and blocked claims; passing a version checklist does not establish external adoption.
+
 **Authority scope.** This file supersedes all per-PRD release-state claims. The PRD lineage is:
 PRD-03 (audit directive, archived) → PRD-04 (plugin convergence, archived) → PRD-05 (Phase A executed; Phases B–E remain as forward guidance) → **PRD-06 (product convergence, current active cycle)**.
 When `app/docs/roadmap.md`, `app/src/pages/About.tsx`, `README.md`, or any PRD states that a version is complete, planned, or current, this file is the ground truth. Update this file first; everything else is a derived view.
@@ -165,7 +167,7 @@ Prepare for external contribution and Mermaid engagement.
 - [x] Package published to npm at `@okhp3/mermaid-diagram-bpmn`
   _Published 2026-08-06: `@okhp3/mermaid-diagram-bpmn@0.1.1` — exports map (ESM + CJS + types), `files` allowlist, `sideEffects: false`. Smoke test (12/12) CI-gated in `publish-npm.yml`. Confirmed live: `npm view @okhp3/mermaid-diagram-bpmn` returns `0.1.1`._
 - [ ] Works when loaded via `<script>` tag against Mermaid CDN build
-  _(deferred from V0.6 — blocked on npm publish above)_
+  _(deferred from V0.6 — npm package publication is complete, but CDN/live-editor behavior remains unverified as of 2026-08-22)_
 - [ ] At least 3 real-world process examples contributed (not purchase-approval)
 - [x] Mermaid issue **#7699** engaged with prototype link — comment posted 2026-08-05: https://github.com/mermaid-js/mermaid/issues/7699#issuecomment-5196155299
 - [x] Repeatable DFKI #7699 source check — `pnpm run check:dfki-7699` compares the live issue state, updated timestamp, labels, and a deterministic fingerprint of all author-authored fenced examples against `docs/dfki-7699-source-baseline.json`; drift fails with review/update instructions. The check cannot prove that the cited paper has no DOI or preprint. Baseline reviewed 2026-08-22.

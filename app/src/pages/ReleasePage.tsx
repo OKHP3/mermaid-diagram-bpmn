@@ -5,6 +5,42 @@ import releaseManifest from "../../public/release-manifest.json";
 // ── Tier metadata ─────────────────────────────────────────────────────────────
 
 const TIER_META = {
+  supported: {
+    label: "Supported",
+    Icon: CheckCircle2,
+    badge:
+      "bg-emerald-100 text-emerald-800 dark:bg-emerald-900/30 dark:text-emerald-400 border-emerald-300/60",
+    dot: "bg-emerald-500",
+    iconColor: "text-emerald-600 dark:text-emerald-400",
+    description: "Directly supported by current tests, artifacts, or source evidence.",
+  },
+  provisional: {
+    label: "Provisional",
+    Icon: FlaskConical,
+    badge:
+      "bg-amber-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-400 border-amber-300/60",
+    dot: "bg-amber-400",
+    iconColor: "text-amber-600 dark:text-amber-400",
+    description: "Evidence exists, but an important boundary or uncertainty remains.",
+  },
+  disputed: {
+    label: "Disputed",
+    Icon: AlertCircle,
+    badge:
+      "bg-orange-100 text-orange-800 dark:bg-orange-900/30 dark:text-orange-400 border-orange-300/60",
+    dot: "bg-orange-500",
+    iconColor: "text-orange-600 dark:text-orange-400",
+    description: "Material evidence conflicts or the claim is not currently settled.",
+  },
+  blocked: {
+    label: "Blocked",
+    Icon: AlertCircle,
+    badge:
+      "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400 border-red-300/60",
+    dot: "bg-red-500",
+    iconColor: "text-red-600 dark:text-red-400",
+    description: "A required check or evidence source is currently failing or missing.",
+  },
   confirmed: {
     label: "Confirmed",
     Icon: CheckCircle2,
