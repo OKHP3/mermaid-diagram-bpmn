@@ -45,8 +45,16 @@ jobs:
       - name: Test bundle-size failure detection (exits 1 on oversized chunk)
         run: pnpm run check:bundle-size:test
 
-      - name: Unit tests
-        run: pnpm --filter @workspace/mermaid-diagram-bpmn run test
+      - name: Unit tests (write machine-readable result)
+        run: pnpm --filter @workspace/mermaid-diagram-bpmn exec vitest run --config vitest.config.ts --reporter=default --reporter=json --outputFile=/tmp/bpmn-vitest-results.json
+
+      - name: Verify published test count matches Vitest
+        env:
+          TEST_COUNT_RESULT_FILE: /tmp/bpmn-vitest-results.json
+        run: pnpm run check:test-count
+
+      - name: Test test-count failure detection
+        run: pnpm run check:test-count:test
 
       - name: Skill tests
         run: pnpm run skill:test

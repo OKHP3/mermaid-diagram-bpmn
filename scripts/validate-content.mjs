@@ -2,7 +2,7 @@
 /**
  * validate-content.mjs
  *
- * Content-drift validator for BPMN for Mermaid (Task #211).
+ * Content-drift validator for BPMN for Mermaid.
  *
  * Detects divergence between public-facing documentation claims and the
  * canonical values that live in checked source files, emitting a clear
@@ -11,7 +11,9 @@
  * Checks
  * ──────
  *   1. TEST COUNT       — "N as of YYYY-MM-DD" in release-checklist.md must
- *                         match scripts/content-canon.json testCount.
+ *                         match scripts/content-canon.json testCount. The
+ *                         separate check-test-count.mjs step compares that
+ *                         canonical value with the latest Vitest result.
  *   2. MERMAID VERSION  — every "mermaid@X.Y.Z" citation in public doc files
  *                         must equal MERMAID_VERSION_TARGET in bpmn-plugin.ts.
  *   3. PLUGIN VERSION   — every "@okhp3/mermaid-diagram-bpmn@X.Y.Z" citation
