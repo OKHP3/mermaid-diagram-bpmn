@@ -120,10 +120,12 @@ export function compareSnapshots(expected, observed) {
 }
 
 async function fetchJson(url) {
+  const token = process.env.GITHUB_TOKEN ?? process.env.GH_TOKEN;
   const response = await fetch(url, {
     headers: {
       Accept: 'application/vnd.github+json',
       'User-Agent': 'bpmn-for-mermaid-source-check',
+      ...(token ? { Authorization: `Bearer ${token}` } : {}),
     },
   });
   if (!response.ok) {

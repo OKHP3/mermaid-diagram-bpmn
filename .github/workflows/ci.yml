@@ -85,6 +85,8 @@ jobs:
         run: pnpm run check:content:test
 
       - name: Check Mermaid DFKI #7699 source drift
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: pnpm run check:dfki-7699
 
       - name: Release manifest check (version + compat range must match canonical sources)

@@ -34,6 +34,7 @@
 import { defineConfig, devices } from '@playwright/test';
 
 const PREVIEW_PORT = 4174; // avoid clashing with dev server on 3000
+const BASE_PATH = process.env.BASE_PATH || '/';
 
 export default defineConfig({
   testDir: './e2e',
@@ -51,7 +52,7 @@ export default defineConfig({
   snapshotPathTemplate: '{snapshotDir}/{arg}-{platform}{ext}',
 
   use: {
-    baseURL: `http://localhost:${PREVIEW_PORT}`,
+    baseURL: `http://localhost:${PREVIEW_PORT}${BASE_PATH}`,
     headless: true,
     actionTimeout: 30_000,
     screenshot: 'only-on-failure',
@@ -76,7 +77,8 @@ export default defineConfig({
   webServer: {
     // Serves the production build from app/dist/public/.
     // Build must run before test:e2e (handled by CI job ordering).
-    command: `PORT=${PREVIEW_PORT} pnpm --filter @workspace/mermaid-diagram-bpmn run serve`,
+    command: 'pnpm --filter @workspace/mermaid-diagram-bpmn run serve',
+    env: { PORT: String(PREVIEW_PORT), BASE_PATH },
     url: `http://localhost:${PREVIEW_PORT}`,
     reuseExistingServer: !process.env.CI,
     timeout: 120_000,

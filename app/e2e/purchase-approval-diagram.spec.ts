@@ -20,7 +20,7 @@ import { test, expect, type Page } from '@playwright/test';
 // ── Constants ─────────────────────────────────────────────────────────────────
 
 /** SPA route under test. */
-const ROUTE = '/walkthrough/purchase-approval';
+const ROUTE = 'walkthrough/purchase-approval';
 
 /**
  * Step 06 hosts the BPMN diagram (hasDiagram: true).

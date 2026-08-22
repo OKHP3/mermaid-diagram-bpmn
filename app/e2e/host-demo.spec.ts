@@ -21,7 +21,7 @@ import { test, expect, type Page } from '@playwright/test';
 
 /** Navigate to the demo page and wait until the render phase is complete. */
 async function loadDemoPage(page: Page) {
-  await page.goto('/mermaid-host-demo');
+  await page.goto('mermaid-host-demo');
   // The version-metadata panel is always rendered, regardless of diagram state.
   await expect(page.locator('[data-testid="version-metadata"]')).toBeVisible({ timeout: 15_000 });
 }
