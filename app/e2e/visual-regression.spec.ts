@@ -14,7 +14,7 @@
  * 2. VISUAL SNAPSHOTS (pixel comparison against committed baselines)
  *    - Home, Playground, AgentSkills, Walkthrough hub, and worked examples at
  *      1280×800 (desktop) and 375×812 (mobile); Mermaid Host Demo at desktop;
- *      Home and AgentSkills at desktop in dark mode
+ *      Home and AgentSkills at desktop and 375×812 mobile in dark mode
  *    - maxDiffPixelRatio: 0.02 (2 %) for content pages; 0.03 for the Playground
  *      (diagram rendering has minor sub-pixel variance)
  *    - Baselines are Linux/Chromium PNGs stored in app/e2e/__snapshots__/.
@@ -145,6 +145,17 @@ test.describe('Home — dark-mode desktop 1280×800', () => {
   test('visual snapshot', async ({ page }) => {
     await loadDarkPage(page, '/', '[data-testid="heading-hero"]');
     await expect(page).toHaveScreenshot('home-desktop-dark.png', { maxDiffPixelRatio: 0.02 });
+  });
+});
+
+// ── Home — dark-mode mobile ─────────────────────────────────────────────────────
+
+test.describe('Home — dark-mode mobile 375×812', () => {
+  test.use({ viewport: MOBILE });
+
+  test('visual snapshot', async ({ page }) => {
+    await loadDarkPage(page, '/', '[data-testid="heading-hero"]');
+    await expect(page).toHaveScreenshot('home-mobile-dark.png', { maxDiffPixelRatio: 0.02 });
   });
 });
 
@@ -327,6 +338,15 @@ test.describe('AgentSkills — dark-mode desktop 1280×800', () => {
   test('visual snapshot', async ({ page }) => {
     await loadDarkPage(page, '/skills', '[aria-label="Search skills"]');
     await expect(page).toHaveScreenshot('skills-desktop-dark.png', { maxDiffPixelRatio: 0.02 });
+  });
+});
+
+test.describe('AgentSkills — dark-mode mobile 375×812', () => {
+  test.use({ viewport: MOBILE });
+
+  test('visual snapshot', async ({ page }) => {
+    await loadDarkPage(page, '/skills', '[aria-label="Search skills"]');
+    await expect(page).toHaveScreenshot('skills-mobile-dark.png', { maxDiffPixelRatio: 0.02 });
   });
 });
 

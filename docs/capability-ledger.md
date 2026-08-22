@@ -216,7 +216,7 @@ The published plugin package (`@okhp3/mermaid-diagram-bpmn`) is well within the 
 | Vendor Onboarding walkthrough (`/walkthrough/vendor-onboarding`) | 1280×800 | 375×812 |
 | Mermaid Host Demo (`/mermaid-host-demo`) | 1280×800 | — |
 
-### Dark-mode desktop coverage
+### Dark-mode coverage
 
 Playwright emulates `prefers-color-scheme: dark` before navigation and seeds the
 application's persisted dark-theme preference, ensuring the class-based `dark:`
@@ -226,6 +226,14 @@ variants are visible in the snapshots.
 |---|---|---|
 | Home (`/`) | 1280×800 | `home-desktop-dark-linux.png` |
 | Agent Skills (`/skills`) | 1280×800 | `skills-desktop-dark-linux.png` |
+
+The same preference emulation and persisted theme seed are used for the
+375×812 mobile snapshots:
+
+| Page | Mobile | Baseline |
+|---|---|---|
+| Home (`/`) | 375×812 | `home-mobile-dark-linux.png` |
+| Agent Skills (`/skills`) | 375×812 | `skills-mobile-dark-linux.png` |
 
 ### Two-layer check design
 
@@ -249,18 +257,20 @@ These run on every push and pull request. No image baseline is required.
 | Heading, four rendered SVG panels, and intentional error panel present | Mermaid Host Demo | Desktop |
 
 **Layer 2 — Visual snapshot comparison (pixel diff)**  
-17 baseline PNGs are generated and committed automatically by CI on every push to `main` (`[skip ci]` commit). Pull requests compare against the committed baselines and fail if pixel diff exceeds the threshold.
+19 baseline PNGs are generated and committed automatically by CI on every push to `main` (`[skip ci]` commit). Pull requests compare against the committed baselines and fail if pixel diff exceeds the threshold.
 
 | Snapshot | Threshold |
 |---|---|
 | `home-desktop-linux.png` | 2 % |
 | `home-desktop-dark-linux.png` | 2 % |
 | `home-mobile-linux.png` | 2 % |
+| `home-mobile-dark-linux.png` | 2 % |
 | `playground-desktop-linux.png` | 3 % (diagram rendering variance) |
 | `playground-mobile-linux.png` | 3 % |
 | `skills-desktop-linux.png` | 2 % |
 | `skills-desktop-dark-linux.png` | 2 % |
 | `skills-mobile-linux.png` | 2 % |
+| `skills-mobile-dark-linux.png` | 2 % |
 | `walkthrough-desktop-linux.png` | 3 % (wide BPMN pipeline) |
 | `walkthrough-mobile-linux.png` | 3 % (wide BPMN pipeline) |
 | `purchase-approval-desktop-linux.png` | 2 % |
