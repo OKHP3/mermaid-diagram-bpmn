@@ -239,7 +239,7 @@ describe('BpmnRenderer — SVG accessibility semantics', () => {
       />,
     );
     const taskButton = container.querySelector(
-      'svg g[role="button"][aria-label="Open User task: Review request"]',
+      'svg g[role="button"][aria-label="Open Review request"]',
     );
 
     expect(taskButton).not.toBeNull();

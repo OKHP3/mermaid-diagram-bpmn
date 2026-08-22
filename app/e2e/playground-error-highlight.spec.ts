@@ -45,14 +45,14 @@ function encodeCompressedSource(source: string): string {
 }
 
 test('loads a versioned compressed shared source in a real browser', async ({ page }) => {
-  await page.goto(`/playground?src=${encodeCompressedSource(COMPRESSED_SHARED_SOURCE)}`);
+  await page.goto(`playground?src=${encodeCompressedSource(COMPRESSED_SHARED_SOURCE)}`);
 
   const textarea = page.locator('[data-testid="textarea-bpmn-source"]');
   await expect(textarea).toHaveValue(COMPRESSED_SHARED_SOURCE);
 });
 
 test('falls back safely when a compressed shared source exceeds the limit', async ({ page }) => {
-  await page.goto(`/playground?src=${encodeCompressedSource(OVERSIZED_COMPRESSED_SOURCE)}`);
+  await page.goto(`playground?src=${encodeCompressedSource(OVERSIZED_COMPRESSED_SOURCE)}`);
 
   const textarea = page.locator('[data-testid="textarea-bpmn-source"]');
   await page.waitForTimeout(250);
@@ -62,7 +62,7 @@ test('falls back safely when a compressed shared source exceeds the limit', asyn
 
 test('highlights and scrolls to the physical error line without painting outside the editor', async ({ page }) => {
   const encodedSource = Buffer.from(INVALID_SOURCE).toString('base64url');
-  await page.goto(`/playground?src=${encodedSource}`);
+  await page.goto(`playground?src=${encodedSource}`);
 
   const textarea = page.locator('[data-testid="textarea-bpmn-source"]');
   const highlight = page.locator('[data-testid="editor-error-line-highlight"]');

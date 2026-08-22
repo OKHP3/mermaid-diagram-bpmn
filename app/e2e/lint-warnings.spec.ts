@@ -31,7 +31,7 @@ const SOURCE_WITH_DISTANT_GATEWAY_WARNING = [
 const GATEWAY_WARNING_LINE = 43;
 
 test('shows an amber in-viewport warning panel while the diagram still renders', async ({ page }) => {
-  await page.goto('/playground');
+  await page.goto('playground');
 
   await page.locator('[data-testid="textarea-bpmn-source"]').fill(SOURCE_WITH_WARNING);
 
@@ -55,7 +55,7 @@ test('shows an amber in-viewport warning panel while the diagram still renders',
 });
 
 test('shows a lint warning line and takes the author to the flagged source row', async ({ page }) => {
-  await page.goto('/playground');
+  await page.goto('playground');
 
   const textarea = page.locator('[data-testid="textarea-bpmn-source"]');
   await textarea.fill(SOURCE_WITH_DISTANT_GATEWAY_WARNING);

@@ -56,17 +56,17 @@ async function expectExample(
 }
 
 test('loads the linear example from its canonical shared URL', async ({ page }) => {
-  await page.goto('/playground?example=01-linear');
+  await page.goto('playground?example=01-linear');
   await expectExample(page, '01-linear', LINEAR_SOURCE, 'Simple Linear Process', 'Submit Request');
 });
 
 test('loads the gateway example from its canonical shared URL', async ({ page }) => {
-  await page.goto('/playground?example=02-gateway');
+  await page.goto('playground?example=02-gateway');
   await expectExample(page, '02-gateway', GATEWAY_SOURCE, 'Purchase Request Approval', 'Review Request');
 });
 
 test('loads a versioned compressed custom source without selecting an example', async ({ page }) => {
-  await page.goto(`/playground?src=${encodeCompressedSource(CUSTOM_SOURCE)}`);
+  await page.goto(`playground?src=${encodeCompressedSource(CUSTOM_SOURCE)}`);
 
   await expect(sourceEditor(page)).toHaveValue(CUSTOM_SOURCE);
   await expect(page.locator('[data-testid^="button-example-"].forge-tab-active')).toHaveCount(0);
@@ -74,12 +74,12 @@ test('loads a versioned compressed custom source without selecting an example', 
 });
 
 test('falls back to the default diagram for malformed shared source data', async ({ page }) => {
-  await page.goto('/playground?src=INVALID_BASE64!!!');
+  await page.goto('playground?src=INVALID_BASE64!!!');
 
   await expectExample(page, '02-gateway', GATEWAY_SOURCE, 'Purchase Request Approval', 'Review Request');
 });
 
 test('loads the gateway example by default without URL parameters', async ({ page }) => {
-  await page.goto('/playground');
+  await page.goto('playground');
   await expectExample(page, '02-gateway', GATEWAY_SOURCE, 'Purchase Request Approval', 'Review Request');
 });

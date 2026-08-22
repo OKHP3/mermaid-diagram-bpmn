@@ -147,7 +147,7 @@ function renderNode(node: BpmnNode, lnode: BpmnLayoutNode, interaction?: NodeInt
       <g
         key={node.id}
         role={hasClick ? 'button' : 'group'}
-        aria-label={hasClick ? `Open ${accessibleName}` : accessibleName}
+        aria-label={hasClick ? `Open ${node.label?.trim() || 'Unnamed'}` : accessibleName}
         tabIndex={hasClick ? 0 : undefined}
         style={hasClick ? { cursor: 'pointer' } : undefined}
         onClick={interaction?.onClick}

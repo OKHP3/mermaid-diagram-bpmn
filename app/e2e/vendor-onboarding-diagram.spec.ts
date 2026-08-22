@@ -19,7 +19,7 @@ import { test, expect, type Page } from '@playwright/test';
 // ── Constants ─────────────────────────────────────────────────────────────────
 
 /** Route under test. */
-const ROUTE = '/walkthrough/vendor-onboarding';
+const ROUTE = 'walkthrough/vendor-onboarding';
 
 /**
  * Step 06 hosts the BPMN diagram (hasDiagram: true) in the timeline.

@@ -91,6 +91,8 @@ jobs:
 
       - name: Run browser E2E tests
         run: pnpm --filter @workspace/mermaid-diagram-bpmn run test:e2e --project=chromium
+        env:
+          BASE_PATH: /mermaid-diagram-bpmn/
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v5

@@ -34,13 +34,18 @@ const MOBILE  = { width: 375,  height: 812 };
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
 
+/** Resolve SPA routes relative to the configured Vite base path. */
+function routePath(path: string) {
+  return path.replace(/^\/+/, '');
+}
+
 /**
  * Navigate to a route and wait for the page and its lazy-loaded chunk to settle.
  * The `networkidle` state covers the chunk download; `visibleSelector` confirms
  * the Suspense boundary has resolved and content is actually painted.
  */
 async function loadPage(page: Page, path: string, visibleSelector: string) {
-  await page.goto(path);
+  await page.goto(routePath(path));
   await page.waitForLoadState('networkidle');
   await expect(page.locator(visibleSelector).first()).toBeVisible({ timeout: 20_000 });
 }
@@ -79,7 +84,7 @@ async function loadWalkthroughExample(page: Page, path: string, heading: string)
 
 /** Load the Walkthrough hub and wait for its pipeline and handoff table. */
 async function loadWalkthroughHub(page: Page) {
-  await loadPage(page, '/walkthrough', '[data-testid="walkthrough-pipeline-diagram"]');
+  await loadPage(page, 'walkthrough', '[data-testid="walkthrough-pipeline-diagram"]');
   await expect(page.getByRole('heading', { level: 1, name: 'BP-SKILL Suite Walkthrough' })).toBeVisible();
   await expect(page.locator('[data-testid="walkthrough-pipeline-diagram"] svg')).toBeVisible();
   await expect(page.locator('[data-testid="walkthrough-table"]')).toBeVisible();
@@ -89,7 +94,7 @@ async function loadWalkthroughHub(page: Page) {
 
 /** Load the lazy Mermaid demo and wait for every documented terminal panel state. */
 async function loadMermaidHostDemo(page: Page) {
-  await loadPage(page, '/mermaid-host-demo', '[data-testid="version-metadata"]');
+  await loadPage(page, 'mermaid-host-demo', '[data-testid="version-metadata"]');
   await expect(page.getByRole('heading', { level: 1, name: 'Mermaid Host Demo' })).toBeVisible();
   await Promise.all(
     ['demo-linear', 'demo-gateway', 'demo-purchase-order', 'demo-cross-pool'].map((diagramId) =>

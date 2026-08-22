@@ -86,7 +86,7 @@ const SOURCE_VALID = [
 
 /** Navigate to the Playground and replace the source editor content. */
 async function openPlaygroundWith(page: Parameters<typeof test>[1] extends (args: { page: infer P }) => unknown ? P : never, source: string) {
-  await page.goto('/playground');
+  await page.goto('playground');
   await page.locator('[data-testid="textarea-bpmn-source"]').fill(source);
 }
 
