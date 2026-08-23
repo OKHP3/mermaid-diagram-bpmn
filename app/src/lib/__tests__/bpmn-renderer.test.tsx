@@ -277,7 +277,7 @@ describe('BpmnRenderer — SVG accessibility semantics', () => {
     ).toBeNull();
   });
 
-  it('makes linked events interactive while keeping gateways named', () => {
+  it('makes linked events and gateways interactive with named controls', () => {
     const { container } = render(
       <BpmnRenderer
         source={SEMANTIC_NODE_SOURCE}
@@ -291,7 +291,7 @@ describe('BpmnRenderer — SVG accessibility semantics', () => {
 
     expect(container.querySelector('svg g[role="button"][aria-label="Open Start event: Request received"]')).not.toBeNull();
     expect(container.querySelector('svg g[role="button"][aria-label="Open End event: Request complete"]')).not.toBeNull();
-    expect(container.querySelector('svg g[role="group"][aria-label="Exclusive gateway: Approved?"]')).not.toBeNull();
+    expect(container.querySelector('svg g[role="button"][aria-label="Open Approved?"]')).not.toBeNull();
   });
 });
 
