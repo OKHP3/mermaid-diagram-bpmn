@@ -67,11 +67,11 @@ async function scrollToDiagramStep(page: Page) {
 
 /**
  * Locate a linked BPMN node by its label.
- * BpmnRenderer renders linked nodes with role="button" and
- * aria-label="Open <node.label>" when a nodeLinks entry is present.
+ * BpmnRenderer renders linked nodes with role="button" and an aria-label that
+ * ends in ": <node.label>" (for example, "Open User task: Review Request").
  */
 function nodeButton(stepCard: ReturnType<Page['locator']>, label: string) {
-  return stepCard.locator(`[role="button"][aria-label="Open ${label}"]`);
+  return stepCard.locator(`[role="button"][aria-label$=": ${label}"]`);
 }
 
 // ── Page load ─────────────────────────────────────────────────────────────────
