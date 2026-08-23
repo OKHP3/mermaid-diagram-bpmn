@@ -28,9 +28,8 @@ const ROUTE = 'walkthrough/purchase-approval';
  */
 const DIAGRAM_STEP_ID = 'step-okhp3-visual-process-modeling';
 
-// Linked task nodes — the renderer only adds role="button" to kind='task' nodes
-// when a nodeLinks entry is present.  Gateways and events are in nodeLinks but
-// are currently rendered without interactivity (plain <g> elements).
+// Linked task and gateway nodes receive role="button" when a nodeLinks entry is
+// present. Events are also in nodeLinks but are covered by separate task work.
 // t1 = user task, t2 = service task, t3 = user task (different subtype from t1)
 const NODE_T1_LABEL = 'Review Request';
 const NODE_T1_ROUTE = '/skills/okhp3-as-is-process-capture';
@@ -40,6 +39,9 @@ const NODE_T2_ROUTE = '/skills/okhp3-visual-process-modeling';
 
 const NODE_T3_LABEL = 'Notify Rejection';
 const NODE_T3_ROUTE = '/skills/okhp3-process-gap-exception-analysis';
+
+const NODE_G1_LABEL = 'Approved?';
+const NODE_G1_ROUTE = '/skills/okhp3-process-gap-exception-analysis';
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
 
@@ -133,14 +135,13 @@ test.describe('Purchase Approval — Step 06 BPMN diagram renders', () => {
 // ── Node interactivity ────────────────────────────────────────────────────────
 
 test.describe('Purchase Approval — diagram node click navigation', () => {
-  test('linked task nodes carry role="button" — interactive in the DOM', async ({ page }) => {
+  test('linked task and gateway nodes carry role="button" — interactive in the DOM', async ({ page }) => {
     await loadPage(page);
     const stepCard = await scrollToDiagramStep(page);
     const buttons = stepCard.locator('[role="button"]');
     const count = await buttons.count();
-    // Three task nodes (t1, t2, t3) have nodeLinks entries and receive role="button".
-    // Gateways and events are in nodeLinks but rendered without interactivity.
-    expect(count, 'Expected exactly 3 interactive task nodes').toBe(3);
+    // Three task nodes and the linked gateway (g1) receive role="button".
+    expect(count, 'Expected exactly 4 interactive linked nodes').toBe(4);
   });
 
   test('clicking t1 (Review Request) navigates to As-Is Process Capture skill', async ({ page }) => {
@@ -197,6 +198,21 @@ test.describe('Purchase Approval — diagram node click navigation', () => {
     ]);
 
     expect(page.url()).toContain(NODE_T3_ROUTE);
+  });
+
+  test('clicking g1 (Approved?) navigates to Gap & Exception Analysis skill', async ({ page }) => {
+    await loadPage(page);
+    const stepCard = await scrollToDiagramStep(page);
+
+    const btn = nodeButton(stepCard, NODE_G1_LABEL);
+    await expect(btn).toBeVisible({ timeout: 15_000 });
+
+    await Promise.all([
+      page.waitForURL(`**${NODE_G1_ROUTE}`, { timeout: 15_000 }),
+      btn.click(),
+    ]);
+
+    expect(page.url()).toContain(NODE_G1_ROUTE);
   });
 
   test('after clicking t1, navigating back still shows the diagram', async ({ page }) => {
