@@ -118,7 +118,17 @@ function renderNode(node: BpmnNode, lnode: BpmnLayoutNode, interaction?: NodeInt
 
   if (node.kind === 'event' && node.position === 'start') {
     return (
-      <g key={node.id} role="group" aria-label={accessibleName}>
+      <g
+        key={node.id}
+        role={hasClick ? 'button' : 'group'}
+        aria-label={hasClick ? `Open ${accessibleName}` : accessibleName}
+        tabIndex={hasClick ? 0 : undefined}
+        style={hasClick ? { cursor: 'pointer' } : undefined}
+        onClick={interaction?.onClick}
+        onKeyDown={hasClick ? (e) => { if (e.key === 'Enter' || e.key === ' ') interaction?.onClick?.(); } : undefined}
+        onMouseEnter={interaction?.onEnter}
+        onMouseLeave={interaction?.onLeave}
+      >
         <g aria-hidden="true">
           <circle cx={x} cy={y} r={EVENT_RADIUS} className="bpmn-event" />
           <circle cx={x} cy={y} r={EVENT_START_INNER_RADIUS} className="bpmn-event-start-inner" />
@@ -132,7 +142,17 @@ function renderNode(node: BpmnNode, lnode: BpmnLayoutNode, interaction?: NodeInt
 
   if (node.kind === 'event' && node.position === 'end') {
     return (
-      <g key={node.id} role="group" aria-label={accessibleName}>
+      <g
+        key={node.id}
+        role={hasClick ? 'button' : 'group'}
+        aria-label={hasClick ? `Open ${accessibleName}` : accessibleName}
+        tabIndex={hasClick ? 0 : undefined}
+        style={hasClick ? { cursor: 'pointer' } : undefined}
+        onClick={interaction?.onClick}
+        onKeyDown={hasClick ? (e) => { if (e.key === 'Enter' || e.key === ' ') interaction?.onClick?.(); } : undefined}
+        onMouseEnter={interaction?.onEnter}
+        onMouseLeave={interaction?.onLeave}
+      >
         <g aria-hidden="true">
           <circle cx={x} cy={y} r={EVENT_RADIUS} className="bpmn-event-end" />
           <circle cx={x} cy={y} r={EVENT_END_INNER_RADIUS} className="bpmn-event-end" />

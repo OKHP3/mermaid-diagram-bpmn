@@ -268,7 +268,7 @@ describe('BpmnRenderer — SVG accessibility semantics', () => {
     ).toBeNull();
   });
 
-  it('keeps events and gateways named when a nodeLinks map is supplied', () => {
+  it('makes linked events interactive while keeping gateways named', () => {
     const { container } = render(
       <BpmnRenderer
         source={SEMANTIC_NODE_SOURCE}
@@ -280,13 +280,9 @@ describe('BpmnRenderer — SVG accessibility semantics', () => {
       />,
     );
 
-    [
-      'Start event: Request received',
-      'Exclusive gateway: Approved?',
-      'End event: Request complete',
-    ].forEach((label) => {
-      expect(container.querySelector(`svg g[aria-label="${label}"]`)).not.toBeNull();
-    });
+    expect(container.querySelector('svg g[role="button"][aria-label="Open Start event: Request received"]')).not.toBeNull();
+    expect(container.querySelector('svg g[role="button"][aria-label="Open End event: Request complete"]')).not.toBeNull();
+    expect(container.querySelector('svg g[role="group"][aria-label="Exclusive gateway: Approved?"]')).not.toBeNull();
   });
 });
 

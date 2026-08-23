@@ -61,12 +61,11 @@ async function scrollToDiagramStep(page: Page) {
 }
 
 /**
- * Find the first task node button whose aria-label contains `label`.
- * BpmnRenderer renders task nodes with role="button" and
- * aria-label="Open <node.label>" when a nodeLinks entry is present.
+ * Find a linked node button by its label. BpmnRenderer prefixes the accessible
+ * label with the node type, e.g. "Open User task: Capture Requirements".
  */
 function taskButton(stepCard: ReturnType<Page['locator']>, label: string) {
-  return stepCard.locator(`[role="button"][aria-label="Open ${label}"]`);
+  return stepCard.locator(`[role="button"][aria-label$=": ${label}"]`);
 }
 
 // ── Page load ─────────────────────────────────────────────────────────────────
@@ -146,8 +145,9 @@ test.describe('Vendor Onboarding — diagram node click navigation', () => {
     const stepCard = await scrollToDiagramStep(page);
     const buttons = stepCard.locator('[role="button"]');
     const count = await buttons.count();
-    // The Vendor Onboarding diagram has 9 task nodes (t1–t9), all with nodeLinks.
-    expect(count, 'Expected at least 9 interactive task nodes').toBeGreaterThanOrEqual(9);
+    // The Vendor Onboarding diagram has 9 linked task nodes plus linked start
+    // and end events.
+    expect(count, 'Expected at least 11 interactive nodes').toBeGreaterThanOrEqual(11);
   });
 
   test('clicking t1 (Capture Requirements) navigates to Intake & Scope skill', async ({ page }) => {
@@ -179,6 +179,21 @@ test.describe('Vendor Onboarding — diagram node click navigation', () => {
     ]);
 
     expect(page.url()).toContain(NODE_T2_ROUTE);
+  });
+
+  test('clicking s1 (Vendor Nominated) navigates to Intake & Scope skill', async ({ page }) => {
+    await loadVendorOnboardingPage(page);
+    const stepCard = await scrollToDiagramStep(page);
+
+    const btn = taskButton(stepCard, 'Vendor Nominated');
+    await expect(btn).toBeVisible({ timeout: 15_000 });
+
+    await Promise.all([
+      page.waitForURL('**/skills/okhp3-process-intake-and-scope', { timeout: 15_000 }),
+      btn.click(),
+    ]);
+
+    expect(page.url()).toContain('/skills/okhp3-process-intake-and-scope');
   });
 
   test('after clicking t1, navigating back still shows the diagram', async ({ page }) => {
