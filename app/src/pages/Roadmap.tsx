@@ -10,6 +10,7 @@ interface VersionStep {
   version: string;
   title: string;
   status: VersionStatus;
+  shippedDate?: string;
   deliverables: React.ReactNode[];
 }
 
@@ -42,6 +43,7 @@ const VERSION_LADDER: VersionStep[] = [
     version: "V0.3",
     title: "BP-SKILL suite — 15-skill pipeline",
     status: "done",
+    shippedDate: "2026-08-04",
     deliverables: [
       "15-skill full lifecycle pipeline with complete SKILL.md content",
       "Agent Skills browser (/skills) — standard, pipeline diagram, skill browser, variable layer, PNS schema",
@@ -81,6 +83,7 @@ const VERSION_LADDER: VersionStep[] = [
     version: "V0.6",
     title: "Mermaid plugin packaging",
     status: "done",
+    shippedDate: "2026-08-04",
     deliverables: [
       "registerExternalDiagrams() integration — detector, parser, DB, renderer all registered (mermaid@11.4.1 verified)",
       "Theme variable binding — getStyles() reads live Mermaid themeVariables at render time (FR-018)",
@@ -405,6 +408,15 @@ export default function Roadmap() {
                         )}
                         {cfg.label}
                       </span>
+                      {step.shippedDate && (
+                        <span
+                          className="text-[10px] font-mono text-muted-foreground"
+                          data-testid={`roadmap-shipped-${step.version.toLowerCase().replace(/\./g, '-')}`}
+                          aria-label={`Shipped ${step.shippedDate}`}
+                        >
+                          · {step.shippedDate}
+                        </span>
+                      )}
                       <span className="text-xs font-medium text-foreground">
                         {step.title}
                       </span>

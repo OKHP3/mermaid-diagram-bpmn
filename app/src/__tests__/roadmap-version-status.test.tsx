@@ -165,6 +165,18 @@ describe("Roadmap — version status labels derived from docs/version-checklist.
     expect(getPillText(container, "V0.6")).toBe(expected);
   });
 
+  it("V0.3 exposes its verified shipped date", () => {
+    const { container } = render(<Roadmap />);
+    expect(container.querySelector("[data-testid='roadmap-shipped-v0-3']")?.textContent?.trim())
+      .toBe("· 2026-08-04");
+  });
+
+  it("V0.6 exposes its verified shipped date", () => {
+    const { container } = render(<Roadmap />);
+    expect(container.querySelector("[data-testid='roadmap-shipped-v0-6']")?.textContent?.trim())
+      .toBe("· 2026-08-04");
+  });
+
   // ── Structural invariants ───────────────────────────────────────────────────
 
   it("exactly one version shows Current — only one active milestone at a time", () => {
