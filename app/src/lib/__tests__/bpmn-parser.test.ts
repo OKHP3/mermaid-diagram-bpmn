@@ -139,6 +139,21 @@ describe('parse — flow types', () => {
     expect(db.getFlows()[0].kind).toBe('default');
   });
 
+  it('parses note declarations', () => {
+    const db = parse('bpmn-beta\nnote n1 "See SLA policy"');
+    expect(db.getNodes()[0]).toMatchObject({ id: 'n1', kind: 'note', label: 'See SLA policy' });
+  });
+
+  it('parses association flow', () => {
+    const db = parse(base + 's1 --- e1');
+    expect(db.getFlows()[0]).toMatchObject({
+      source: 's1',
+      target: 'e1',
+      kind: 'association',
+      sourceLine: 4,
+    });
+  });
+
   it('parses message flow at top level', () => {
     const src = `bpmn-beta
 pool p1 "Pool 1" {

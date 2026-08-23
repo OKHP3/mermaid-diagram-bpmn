@@ -55,14 +55,14 @@ Note: @knsv mentioned swimlanes as a prerequisite and pointed to issue #2028 for
 | Conditional sequence flow | ✅ Supported | `src --> tgt: "condition"` | Solid arrow with label |
 | Default flow | ✅ Supported | `src ==> tgt` | Slash marker at source, solid arrow |
 | Message flow | ✅ Supported | `src ~~> tgt` | Dashed line with open arrowhead; top-level only (error inside pool/lane block) |
-| Association flow | ❌ Not yet | — | `BpmnFlow.kind` has `'association'` in the DB but no parser syntax; task #282 proposed |
+| Association flow | ⚠️ Partial | `---` | Parser and DB support the association operator; dashed rendering remains a follow-up |
 | **SWIMLANES** | | | |
 | Pool | ✅ Supported | `pool id "label" { … }` | Header sidebar with rotated label |
 | Lane (one level) | ✅ Supported | `lane id "label" { … }` | Inside a pool block |
 | Nested lanes (>1 level) | 🚫 Out of scope | — | Parser throws `NESTED_LANE` error; PRD non-goal |
 | **BASIC ARTIFACTS** | | | |
 | Data objects | 🚫 Out of scope | — | Explicitly in PRD v1 non-goals; no plans for v1 |
-| Annotations / Notes | ❌ Not yet | — | `BpmnDb` kind `'note'` defined; no parser keyword or renderer; task #282 proposed |
+| Annotations / Notes | ⚠️ Partial | `note <id> "<label>"` | Parser accepts note declarations; renderer shape remains a follow-up |
 | Groups | 🚫 Out of scope | — | Explicitly in PRD v1 non-goals |
 
 **Legend:**
@@ -82,8 +82,8 @@ These gaps fall inside @knsv's MVP Level 1 list, have partial infrastructure in 
 | Gap | Effort estimate | Existing infrastructure | Recommended priority |
 |---|---|---|---|
 | **Intermediate event** | Medium | `BpmnNode.position = 'intermediate'` already in `BpmnDb`; needs parser keyword (`intermediate id "label"`) and renderer shape (double circle, no inner ring) | High — @knsv listed it as a Level 1 element; omitting it from a PR would be a notable gap |
-| **Annotation / Note** | Medium | `BpmnNode.kind = 'note'` already in `BpmnDb`; task #282 proposes adding the DSL syntax | Medium — @knsv listed annotations in Level 1; task #282 already targets this |
-| **Association flow** | Low–Medium | `BpmnFlow.kind = 'association'` already in `BpmnDb`; task #282 proposes DSL syntax; only renderer needs dashed-line-no-arrowhead treatment | Medium — needed to connect annotations to process elements; task #282 already targets this |
+| **Annotation / Note** | Medium | `BpmnNode.kind = 'note'`; parser accepts `note` declarations, but no renderer shape yet | Medium — @knsv listed annotations in Level 1 |
+| **Association flow** | Low–Medium | `BpmnFlow.kind = 'association'`; parser accepts `---`; renderer still needs dashed-line-no-arrowhead treatment | Medium — needed to connect annotations to process elements |
 | **Subprocess (collapsed)** | High | Only DB type exists; needs parser keyword, renderer (rounded rectangle + `+` marker at bottom-center), and layout treatment | Low for MVP — @knsv listed it, but collapsed subprocesses are often used as a summary shape and the lack doesn't block core flow authoring |
 
 ### Gaps that are deliberately out of scope
@@ -110,7 +110,7 @@ bpmn-beta's `task:user`, `task:service`, `task:script`, `task:send`, `task:recei
 bpmn-beta covers **6 of @knsv's 9 major Level 1 element categories** fully (start event, end event, all three gateways, sequence/message flows, pools and lanes) plus five task subtypes that are technically Level 2. The three meaningful gaps against the MVP definition are:
 
 1. **Intermediate events** — needs a parser keyword and a distinct renderer shape (simple intermediate circle, no inner ring decoration for plain intermediate).
-2. **Annotations / Notes with association flows** — DB types exist; task #282 covers the DSL syntax.
+2. **Annotations / Notes with association flows** — parser and DB syntax now exist; rendering remains.
 3. **Collapsed subprocesses** — DB type exists; parser and renderer not yet written.
 
 Of these, intermediate events are the highest-priority gap: @knsv listed them explicitly in Level 1, they are the most visibly missing standard shape, and the DB infrastructure (`position: 'intermediate'`) already exists.

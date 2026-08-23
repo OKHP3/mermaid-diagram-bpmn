@@ -39,6 +39,17 @@ const SOURCE_ORPHAN_NODE_WITH_DISTANT_LINE = [
 ].join('\n');
 const ORPHAN_WARNING_LINE = 44;
 
+const SOURCE_NOTE_ASSOCIATION = [
+  'bpmn-beta',
+  'start s1 "Start"',
+  'task t1 "Review request"',
+  'end e1 "Complete"',
+  'note n1 "See SLA policy"',
+  's1 --> t1',
+  't1 --> e1',
+  't1 --- n1',
+].join('\n');
+
 /**
  * Triggers CROSS_POOL_SEQUENCE_FLOW: t1 → e1 is a sequence flow crossing pool
  * boundaries. Pools without lanes also trigger POOL_NO_LANES advisory warnings;
@@ -138,6 +149,14 @@ test('ORPHAN_NODE — Line button focuses and scrolls to the flagged source row'
   await expect(highlight).toHaveAttribute('data-lint-warning-line', String(ORPHAN_WARNING_LINE));
   await expect(textarea).toBeFocused();
   await expect.poll(() => textarea.evaluate((editor) => editor.scrollTop)).toBeGreaterThan(0);
+});
+
+test('association — an attached note is not flagged as an orphan', async ({ page }) => {
+  await openPlaygroundWith(page, SOURCE_NOTE_ASSOCIATION);
+
+  await expect(page.locator('[data-testid="div-lint-warnings"]')).toHaveCount(0);
+  await expect(page.locator('[data-testid="div-diagram-preview"] svg')).toBeVisible();
+  await expect(page.locator('[data-testid="text-parse-error"]')).toHaveCount(0);
 });
 
 test('CROSS_POOL_SEQUENCE_FLOW — warning panel names the cross-boundary flow', async ({ page }) => {

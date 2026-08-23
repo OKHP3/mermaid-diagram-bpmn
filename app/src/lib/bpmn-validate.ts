@@ -129,8 +129,9 @@ const ruleUndefinedNodeRef: ValidationRule = (db) => {
  * from the diagram — unreachable and leading nowhere. It renders as a
  * floating element that misleads readers into thinking it is part of the flow.
  *
- * Only sequence/conditional/default flows count for connectivity. Message flows
- * cross pool boundaries and are not part of a pool's internal process path.
+ * Sequence/conditional/default and association flows count for connectivity.
+ * Message flows cross pool boundaries and are not part of a pool's internal
+ * process path.
  *
  * Note: a start event with no incoming flows is normal (start events have no
  * predecessors). Likewise, an end event with no outgoing flows is normal. A

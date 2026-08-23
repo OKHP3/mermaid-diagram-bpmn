@@ -7,13 +7,14 @@ export type { BpmnNode, BpmnFlow, BpmnPool, BpmnLane } from './bpmn-db';
 
 type ContextEntry = { type: 'pool'; id: string } | { type: 'lane'; id: string };
 
-const NODE_PATTERN = /^(start|end|task(?::[a-zA-Z]+)?|xor|or|and)\s+([a-zA-Z0-9_]+)\s+"([^"]*)"$/;
+const NODE_PATTERN = /^(start|end|task(?::[a-zA-Z]+)?|xor|or|and|note)\s+([a-zA-Z0-9_]+)\s+"([^"]*)"$/;
 const POOL_PATTERN = /^pool\s+([a-zA-Z0-9_]+)\s+"([^"]*)"\s*\{?$/;
 const LANE_PATTERN = /^lane\s+([a-zA-Z0-9_]+)\s+"([^"]*)"\s*\{?$/;
 const COND_FLOW_PATTERN = /^([a-zA-Z0-9_]+)\s+-->\s+([a-zA-Z0-9_]+):\s+"([^"]*)"$/;
 const SEQ_FLOW_PATTERN = /^([a-zA-Z0-9_]+)\s+-->\s+([a-zA-Z0-9_]+)$/;
 const DEF_FLOW_PATTERN = /^([a-zA-Z0-9_]+)\s+==>\s+([a-zA-Z0-9_]+)$/;
 const MSG_FLOW_PATTERN = /^([a-zA-Z0-9_]+)\s+~~>\s+([a-zA-Z0-9_]+)$/;
+const ASSOCIATION_FLOW_PATTERN = /^([a-zA-Z0-9_]+)\s+---\s+([a-zA-Z0-9_]+)$/;
 
 export function parse(source: string): BpmnDb {
   const db = new BpmnDb();
@@ -103,6 +104,8 @@ export function parse(source: string): BpmnDb {
       } else if (typeStr.startsWith('task')) {
         kind = 'task';
         subtype = typeStr.includes(':') ? typeStr.split(':')[1] : undefined;
+      } else if (typeStr === 'note') {
+        kind = 'note';
       } else {
         kind = 'gateway'; subtype = typeStr;
       }
@@ -139,6 +142,12 @@ export function parse(source: string): BpmnDb {
         throw new ParseError(`Line ${sourceLine}: message flows (~~>) must be declared at the top level, not inside a pool or lane block`, sourceLine, 'MESSAGE_FLOW_INSIDE_BLOCK');
       }
       db.addFlow({ id: `f${++flowCounter}`, source: msgMatch[1], target: msgMatch[2], kind: 'message', sourceLine });
+      continue;
+    }
+
+    const associationMatch = line.match(ASSOCIATION_FLOW_PATTERN);
+    if (associationMatch) {
+      db.addFlow({ id: `f${++flowCounter}`, source: associationMatch[1], target: associationMatch[2], kind: 'association', sourceLine });
       continue;
     }
   }

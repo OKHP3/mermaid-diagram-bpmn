@@ -250,17 +250,15 @@ t1 ~~> t3`;
   });
 
   it('no ORPHAN_NODE for a note annotation attached to a task via association', () => {
-    // Annotation / data-object notes connected only via association should
-    // never be considered orphaned.
-    const db = new BpmnDb();
-    db.addNode({ id: 's1', kind: 'event', position: 'start', label: 'Start' });
-    db.addNode({ id: 't1', kind: 'task', label: 'Task' });
-    db.addNode({ id: 'e1', kind: 'event', position: 'end', label: 'End' });
-    db.addNode({ id: 'n1', kind: 'note', label: 'See SLA policy' });
-    db.addFlow({ id: 'f1', source: 's1', target: 't1', kind: 'sequence' });
-    db.addFlow({ id: 'f2', source: 't1', target: 'e1', kind: 'sequence' });
-    db.addFlow({ id: 'f3', source: 't1', target: 'n1', kind: 'association' });
-    const orphans = validate(db).filter(e => e.code === 'ORPHAN_NODE');
+    const src = `bpmn-beta
+start s1 "Start"
+task t1 "Task"
+end e1 "End"
+note n1 "See SLA policy"
+s1 --> t1
+t1 --> e1
+t1 --- n1`;
+    const orphans = errorsWithCode(src, 'ORPHAN_NODE');
     expect(orphans.some(e => e.nodeId === 'n1')).toBe(false);
   });
 

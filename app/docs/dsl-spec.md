@@ -62,7 +62,7 @@
 | `--> : "condition"` | Conditional sequence flow | Label rendered mid-edge |
 | `==>` | Default sequence flow | Slash marker at source |
 | `~~>` | Message flow | Dashed open-arrow; cross-pool only |
-| `---` | Association | Planned — not yet rendered |
+| `---` | Association | Connects annotations and data objects; dashed rendering is planned |
 
 ---
 
