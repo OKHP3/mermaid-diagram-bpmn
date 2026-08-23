@@ -210,3 +210,21 @@ describe("Roadmap — version status labels derived from docs/version-checklist.
     expect(container.textContent).toMatch(/version-checklist\.md/);
   });
 });
+
+describe("Roadmap — contribution path progress", () => {
+  it("keeps all nine contribution steps visible", () => {
+    const { container } = render(<Roadmap />);
+    expect(container.querySelectorAll("[data-testid^='step-contribution-'][data-status]").length).toBe(9);
+  });
+
+  it("marks only steps 01, 03, and 04 as completed", () => {
+    const { container } = render(<Roadmap />);
+    const rows = [...container.querySelectorAll<HTMLElement>("[data-testid^='step-contribution-'][data-status]")];
+    const completed = rows
+      .filter((row) => row.dataset.status === "done")
+      .map((row) => row.dataset.testid?.replace("step-contribution-", ""));
+
+    expect(completed).toEqual(["01", "03", "04"]);
+    expect(container.querySelectorAll("[data-testid^='step-contribution-status-']")).toHaveLength(3);
+  });
+});

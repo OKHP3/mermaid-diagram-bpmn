@@ -218,10 +218,13 @@ const DEFERRED = [
 
 const GITHUB_ISSUE_BASE = "https://github.com/mermaid-js/mermaid/issues/";
 
-const CONTRIBUTION_STEPS: { n: string; title: string; body: React.ReactNode }[] = [
+type ContributionStatus = "done" | "pending";
+
+const CONTRIBUTION_STEPS: { n: string; title: string; body: React.ReactNode; status: ContributionStatus }[] = [
   {
     n: "01",
     title: "Engage on existing issues",
+    status: "done",
     body: (
       <>
         Read and comment on Mermaid GitHub issues{" "}
@@ -235,41 +238,49 @@ const CONTRIBUTION_STEPS: { n: string; title: string; body: React.ReactNode }[] 
   {
     n: "02",
     title: "Publish DSL proposal",
+    status: "pending",
     body: "Share a scoped bpmn-beta DSL proposal as a GitHub Discussions post or issue comment. Gather early syntax feedback.",
   },
   {
     n: "03",
     title: "Build the external plugin",
+    status: "done",
     body: "Implement mermaid-diagram-bpmn as a registerExternalDiagrams() plugin. Add detector, loader, and plugin entry point. Parser, renderer, layout, shape library, styles, accessibility.",
   },
   {
     n: "04",
     title: "Document supported elements",
+    status: "done",
     body: "Publish a clear supported element matrix. Name deferred features explicitly. Avoid overclaiming compliance. Add CONTRIBUTING, SECURITY, and CODE_OF_CONDUCT files.",
   },
   {
     n: "05",
     title: "Convert parser to Langium",
+    status: "pending",
     body: "Replace hand-written line parser with a formal Langium grammar. Add error recovery, better diagnostics, LSP support, and upstream Mermaid compatibility. Establish Langium parity branch before replacing the prototype parser.",
   },
   {
     n: "06",
     title: "Collect examples and feedback",
+    status: "pending",
     body: "Publish real process examples. Add LLM benchmark prompts — give identical process prompts to ChatGPT, Claude, and Gemini and compare whether they produce valid bpmn-beta. Gather usage patterns and identify the 20% of features covering 80% of use cases.",
   },
   {
     n: "07",
     title: "Harden quality gates",
+    status: "pending",
     body: "Add parser tests, renderer snapshots, visual regression tests, invalid syntax fixtures, and accessibility checks. Formalize pool/lane/message-flow validation. Document bundle size and dependency posture. Pass all Mermaid quality standards.",
   },
   {
     n: "08",
     title: "Polish commercial readiness",
+    status: "pending",
     body: "Add a demo GIF or screenshots. Add export-to-SVG/PNG download. Improve layout determinism. Add comparison matrix against PlantUML, bpmn.io, flowchart, and Visio. Engage Mermaid community on issue #7699 with prototype link.",
   },
   {
     n: "09",
     title: "Propose upstream inclusion",
+    status: "pending",
     body: "Once syntax is stable and tests are solid, open a formal Mermaid PR proposing bpmn as a core diagram type.",
   },
 ];
@@ -540,12 +551,39 @@ export default function Roadmap() {
           <div className="absolute left-6 top-0 bottom-0 w-px bg-border hidden md:block" />
           <div className="flex flex-col gap-4">
             {CONTRIBUTION_STEPS.map(step => (
-              <div key={step.n} className="flex gap-4 items-start" data-testid={`step-contribution-${step.n}`}>
-                <div className="w-12 h-12 rounded-full border-2 border-primary bg-card flex items-center justify-center flex-shrink-0 z-10">
-                  <span className="text-xs font-mono font-bold text-primary">{step.n}</span>
+              <div
+                key={step.n}
+                className="flex gap-4 items-start"
+                data-testid={`step-contribution-${step.n}`}
+                data-status={step.status}
+              >
+                <div
+                  className={`w-12 h-12 rounded-full border-2 flex items-center justify-center flex-shrink-0 z-10 ${
+                    step.status === "done"
+                      ? "border-emerald-500/60 bg-emerald-50 dark:bg-emerald-950/30"
+                      : "border-primary bg-card"
+                  }`}
+                >
+                  {step.status === "done" ? (
+                    <CheckCheck size={18} className="text-emerald-600 dark:text-emerald-400" aria-label="Completed" />
+                  ) : (
+                    <span className="text-xs font-mono font-bold text-primary">{step.n}</span>
+                  )}
                 </div>
                 <div className="flex-1 pb-2">
-                  <p className="text-sm font-semibold text-foreground">{step.title}</p>
+                  <div className="flex flex-wrap items-center gap-2">
+                    <p className={`text-sm font-semibold ${step.status === "done" ? "text-muted-foreground" : "text-foreground"}`}>
+                      {step.title}
+                    </p>
+                    {step.status === "done" && (
+                      <span
+                        className="text-[9px] font-mono uppercase tracking-wider text-emerald-700 dark:text-emerald-400"
+                        data-testid={`step-contribution-status-${step.n}`}
+                      >
+                        Completed
+                      </span>
+                    )}
+                  </div>
                   <p className="text-xs text-muted-foreground mt-1 leading-relaxed">{step.body}</p>
                 </div>
               </div>
