@@ -27,6 +27,18 @@ const SOURCE_ORPHAN_NODE = [
   't1 --> e1',
 ].join('\n');
 
+const SOURCE_ORPHAN_NODE_WITH_DISTANT_LINE = [
+  'bpmn-beta',
+  ...Array.from({ length: 40 }, (_, index) => `%% Context note ${index + 1}`),
+  'start s1 "Start"',
+  'task t1 "Connected Task"',
+  'task t2 "Orphaned Task"',
+  'end e1 "End"',
+  's1 --> t1',
+  't1 --> e1',
+].join('\n');
+const ORPHAN_WARNING_LINE = 44;
+
 /**
  * Triggers CROSS_POOL_SEQUENCE_FLOW: t1 → e1 is a sequence flow crossing pool
  * boundaries. Pools without lanes also trigger POOL_NO_LANES advisory warnings;
@@ -106,6 +118,26 @@ test('ORPHAN_NODE — warning panel is visible and names the disconnected node',
   await expect(page.locator('[data-testid="div-diagram-preview"] svg')).toBeVisible();
   // No hard parse error panel
   await expect(page.locator('[data-testid="text-parse-error"]')).toHaveCount(0);
+});
+
+test('ORPHAN_NODE — Line button focuses and scrolls to the flagged source row', async ({ page }) => {
+  await openPlaygroundWith(page, SOURCE_ORPHAN_NODE_WITH_DISTANT_LINE);
+
+  const textarea = page.locator('[data-testid="textarea-bpmn-source"]');
+  const lineButton = page.getByRole('button', {
+    name: `Go to line ${ORPHAN_WARNING_LINE} for ORPHAN_NODE`,
+  });
+  await expect(lineButton).toHaveText(`Line ${ORPHAN_WARNING_LINE}`);
+  await textarea.evaluate((editor) => {
+    editor.scrollTop = 0;
+    editor.dispatchEvent(new Event('scroll', { bubbles: true }));
+  });
+  await lineButton.click();
+
+  const highlight = page.locator('[data-testid="editor-lint-warning-line-highlight"]');
+  await expect(highlight).toHaveAttribute('data-lint-warning-line', String(ORPHAN_WARNING_LINE));
+  await expect(textarea).toBeFocused();
+  await expect.poll(() => textarea.evaluate((editor) => editor.scrollTop)).toBeGreaterThan(0);
 });
 
 test('CROSS_POOL_SEQUENCE_FLOW — warning panel names the cross-boundary flow', async ({ page }) => {
