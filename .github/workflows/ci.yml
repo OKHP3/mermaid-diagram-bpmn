@@ -86,10 +86,15 @@ jobs:
       - name: Plugin smoke test (clean-install fixture)
         run: node scripts/run-plugin-smoke.mjs
 
-      - name: Content-drift check (test count, Mermaid version, plugin version citations)
+      # Pull-request gate for public claims: catches retired phrases such as
+      # "Zero implement" and stale figures such as "89,000+" before merge.
+      # Fix failures by replacing the flagged claim, then rerun these two
+      # commands locally: `pnpm run check:content` and
+      # `pnpm run check:content:test`.
+      - name: Content claims gate (test count, versions, retired claims)
         run: pnpm run check:content
 
-      - name: Test content-drift detection (exits 1 on injected stale claim)
+      - name: Test content claims gate failure detection
         run: pnpm run check:content:test
 
       - name: Check Mermaid DFKI #7699 source drift
