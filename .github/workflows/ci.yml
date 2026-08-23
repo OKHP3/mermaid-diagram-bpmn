@@ -100,6 +100,9 @@ jobs:
       - name: Test content claims gate failure detection
         run: pnpm run check:content:test
 
+      - name: Validate release-state labels
+        run: pnpm run check:version-status
+
       - name: Check Mermaid DFKI #7699 source drift
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
