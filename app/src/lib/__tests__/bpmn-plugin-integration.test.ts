@@ -36,6 +36,15 @@ const PURCHASE_ORDER = readFileSync(
   'utf-8',
 );
 
+const ANNOTATION = `bpmn-beta
+start s1 "Start"
+task t1 "Review request"
+note n1 "See SLA policy"
+end e1 "Done"
+s1 --> t1
+t1 --> e1
+t1 --- n1`;
+
 // ---------------------------------------------------------------------------
 // Setup: initialise mermaid once for all tests in this file
 //
@@ -141,6 +150,13 @@ describe('mermaid.render() — 08-purchase-order-approval.mmd', () => {
   it('SVG contains bpmn-gateway class', async () => {
     const { svg } = await mermaid.render('test-po-gateway', PURCHASE_ORDER);
     expect(svg).toContain('bpmn-gateway');
+  });
+
+  it('SVG contains the visible annotation shape and folded corner', async () => {
+    const { svg } = await mermaid.render('test-annotation', ANNOTATION);
+    expect(svg).toContain('class="bpmn-annotation"');
+    expect(svg).toContain('class="bpmn-annotation-fold"');
+    expect(svg).toContain('See SLA policy');
   });
 });
 

@@ -26,6 +26,8 @@ export function getStyles(options: BpmnThemeOptions): string {
     .bpmn-gateway { fill: ${options.mainBkg}; stroke: ${options.lineColor}; stroke-width: 1.8; }
     .bpmn-gateway-marker { stroke: ${options.lineColor}; fill: none; stroke-width: 2; stroke-linecap: round; }
     .bpmn-gateway-or-marker { stroke: ${options.lineColor}; fill: none; stroke-width: 1.5; }
+    .bpmn-annotation { fill: ${options.mainBkg}; stroke: ${options.nodeBorder}; stroke-width: 1.5; }
+    .bpmn-annotation-fold { fill: none; stroke: ${options.nodeBorder}; stroke-width: 1.5; }
     .bpmn-pool { fill: none; stroke: ${options.nodeBorder}; stroke-width: 1.5; }
     .bpmn-pool-header { fill: ${options.clusterBkg}; stroke: ${options.nodeBorder}; stroke-width: 1.5; opacity: 0.7; }
     .bpmn-lane { fill: none; stroke: ${options.nodeBorder}; stroke-width: 1; }

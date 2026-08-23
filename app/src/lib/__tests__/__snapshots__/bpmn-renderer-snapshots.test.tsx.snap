@@ -14,6 +14,8 @@ exports[`BpmnRenderer snapshots > 01-linear-process: SVG matches snapshot 1`] = 
     .bpmn-gateway { fill: hsl(var(--card)); stroke: hsl(var(--foreground)); stroke-width: 1.8; }
     .bpmn-gateway-marker { stroke: hsl(var(--foreground)); fill: none; stroke-width: 2; stroke-linecap: round; }
     .bpmn-gateway-or-marker { stroke: hsl(var(--foreground)); fill: none; stroke-width: 1.5; }
+    .bpmn-annotation { fill: hsl(var(--card)); stroke: hsl(var(--border)); stroke-width: 1.5; }
+    .bpmn-annotation-fold { fill: none; stroke: hsl(var(--border)); stroke-width: 1.5; }
     .bpmn-pool { fill: none; stroke: hsl(var(--border)); stroke-width: 1.5; }
     .bpmn-pool-header { fill: hsl(var(--muted)); stroke: hsl(var(--border)); stroke-width: 1.5; opacity: 0.7; }
     .bpmn-lane { fill: none; stroke: hsl(var(--border)); stroke-width: 1; }
@@ -47,6 +49,8 @@ exports[`BpmnRenderer snapshots > 02-gateway-decision: SVG matches snapshot (gat
     .bpmn-gateway { fill: hsl(var(--card)); stroke: hsl(var(--foreground)); stroke-width: 1.8; }
     .bpmn-gateway-marker { stroke: hsl(var(--foreground)); fill: none; stroke-width: 2; stroke-linecap: round; }
     .bpmn-gateway-or-marker { stroke: hsl(var(--foreground)); fill: none; stroke-width: 1.5; }
+    .bpmn-annotation { fill: hsl(var(--card)); stroke: hsl(var(--border)); stroke-width: 1.5; }
+    .bpmn-annotation-fold { fill: none; stroke: hsl(var(--border)); stroke-width: 1.5; }
     .bpmn-pool { fill: none; stroke: hsl(var(--border)); stroke-width: 1.5; }
     .bpmn-pool-header { fill: hsl(var(--muted)); stroke: hsl(var(--border)); stroke-width: 1.5; opacity: 0.7; }
     .bpmn-lane { fill: none; stroke: hsl(var(--border)); stroke-width: 1; }
@@ -80,6 +84,8 @@ exports[`BpmnRenderer snapshots > 04-multi-event: SVG matches snapshot (multiple
     .bpmn-gateway { fill: hsl(var(--card)); stroke: hsl(var(--foreground)); stroke-width: 1.8; }
     .bpmn-gateway-marker { stroke: hsl(var(--foreground)); fill: none; stroke-width: 2; stroke-linecap: round; }
     .bpmn-gateway-or-marker { stroke: hsl(var(--foreground)); fill: none; stroke-width: 1.5; }
+    .bpmn-annotation { fill: hsl(var(--card)); stroke: hsl(var(--border)); stroke-width: 1.5; }
+    .bpmn-annotation-fold { fill: none; stroke: hsl(var(--border)); stroke-width: 1.5; }
     .bpmn-pool { fill: none; stroke: hsl(var(--border)); stroke-width: 1.5; }
     .bpmn-pool-header { fill: hsl(var(--muted)); stroke: hsl(var(--border)); stroke-width: 1.5; opacity: 0.7; }
     .bpmn-lane { fill: none; stroke: hsl(var(--border)); stroke-width: 1; }
@@ -113,6 +119,8 @@ exports[`BpmnRenderer snapshots > 05-parallel-split: SVG matches snapshot (paral
     .bpmn-gateway { fill: hsl(var(--card)); stroke: hsl(var(--foreground)); stroke-width: 1.8; }
     .bpmn-gateway-marker { stroke: hsl(var(--foreground)); fill: none; stroke-width: 2; stroke-linecap: round; }
     .bpmn-gateway-or-marker { stroke: hsl(var(--foreground)); fill: none; stroke-width: 1.5; }
+    .bpmn-annotation { fill: hsl(var(--card)); stroke: hsl(var(--border)); stroke-width: 1.5; }
+    .bpmn-annotation-fold { fill: none; stroke: hsl(var(--border)); stroke-width: 1.5; }
     .bpmn-pool { fill: none; stroke: hsl(var(--border)); stroke-width: 1.5; }
     .bpmn-pool-header { fill: hsl(var(--muted)); stroke: hsl(var(--border)); stroke-width: 1.5; opacity: 0.7; }
     .bpmn-lane { fill: none; stroke: hsl(var(--border)); stroke-width: 1; }
@@ -146,6 +154,8 @@ exports[`BpmnRenderer snapshots > 08-purchase-order-approval: SVG matches snapsh
     .bpmn-gateway { fill: hsl(var(--card)); stroke: hsl(var(--foreground)); stroke-width: 1.8; }
     .bpmn-gateway-marker { stroke: hsl(var(--foreground)); fill: none; stroke-width: 2; stroke-linecap: round; }
     .bpmn-gateway-or-marker { stroke: hsl(var(--foreground)); fill: none; stroke-width: 1.5; }
+    .bpmn-annotation { fill: hsl(var(--card)); stroke: hsl(var(--border)); stroke-width: 1.5; }
+    .bpmn-annotation-fold { fill: none; stroke: hsl(var(--border)); stroke-width: 1.5; }
     .bpmn-pool { fill: none; stroke: hsl(var(--border)); stroke-width: 1.5; }
     .bpmn-pool-header { fill: hsl(var(--muted)); stroke: hsl(var(--border)); stroke-width: 1.5; opacity: 0.7; }
     .bpmn-lane { fill: none; stroke: hsl(var(--border)); stroke-width: 1; }
@@ -165,6 +175,41 @@ exports[`BpmnRenderer snapshots > 08-purchase-order-approval: SVG matches snapsh
   </style><marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto"><polygon points="0 0, 10 3.5, 0 7" class="bpmn-arrow"></polygon></marker><marker id="arrowhead-msg" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto"><polygon points="0 0, 10 3.5, 0 7" class="bpmn-arrow-open" stroke-width="1"></polygon></marker><marker id="slash-marker" markerWidth="8" markerHeight="10" refX="4" refY="5" orient="auto"><line x1="6" y1="1" x2="2" y2="9" class="bpmn-slash"></line></marker></defs><g><rect x="0" y="0" width="678" height="390" class="bpmn-pool"></rect><rect x="0" y="0" width="30" height="390" class="bpmn-pool-header"></rect><text x="15" y="195" text-anchor="middle" dominant-baseline="middle" font-size="12" font-weight="600" class="bpmn-text-label" transform="rotate(-90, 15, 195)">Purchase Order Process</text></g><g><rect x="30" y="0" width="448" height="190" class="bpmn-lane"></rect><rect x="30" y="0" width="80" height="190" class="bpmn-lane-header"></rect><text x="70" y="95" text-anchor="middle" dominant-baseline="middle" font-size="11" class="bpmn-text">Requester</text></g><g><rect x="30" y="190" width="648" height="100" class="bpmn-lane"></rect><rect x="30" y="190" width="80" height="100" class="bpmn-lane-header"></rect><text x="70" y="240" text-anchor="middle" dominant-baseline="middle" font-size="11" class="bpmn-text">Manager</text></g><g><rect x="30" y="290" width="408" height="100" class="bpmn-lane"></rect><rect x="30" y="290" width="80" height="100" class="bpmn-lane-header"></rect><text x="70" y="340" text-anchor="middle" dominant-baseline="middle" font-size="11" class="bpmn-text">Procurement</text></g><g><line x1="213.97504677755688" y1="40.99875233887784" x2="334.0748596673293" y2="47.003742983366465" class="bpmn-flow-sequence" stroke-width="1.8" marker-end="url(#arrowhead)"></line></g><g><line x1="350.5000339843352" y1="91.32496771488158" x2="237.49996601566482" y2="198.67503228511842" class="bpmn-flow-sequence" stroke-width="1.8" marker-end="url(#arrowhead)"></line></g><g><line x1="253.98125878448735" y1="238.50046853038782" x2="369.00780883979695" y2="235.62480477900507" class="bpmn-flow-sequence" stroke-width="1.8" marker-end="url(#arrowhead)"></line></g><g><line x1="371.8650524290514" y1="246.62084747474802" x2="247.12387417027662" y2="312.1099660606048" class="bpmn-flow-conditional" stroke-width="1.8" marker-end="url(#arrowhead)"></line><text x="309.494463299664" y="271.3654067676764" text-anchor="middle" font-size="10" class="bpmn-text-muted">yes</text></g><g><line x1="418.99219116020305" y1="235.62480477900507" x2="534.0187412155126" y2="238.50046853038782" class="bpmn-flow-conditional" stroke-width="1.8" marker-end="url(#arrowhead)"></line><text x="476.5054661878578" y="229.06263665469646" text-anchor="middle" font-size="10" class="bpmn-text-muted">no</text></g><g><line x1="253.92514033267068" y1="337.00374298336646" x2="374.0249532224431" y2="330.99875233887786" class="bpmn-flow-sequence" stroke-width="1.8" marker-end="url(#arrowhead)"></line></g><g><line x1="535.4634146341464" y1="226.82926829268294" x2="213.5121951219512" y2="154.390243902439" class="bpmn-flow-sequence" stroke-width="1.8" marker-end="url(#arrowhead)"></line></g><g role="group" aria-label="Start event: PO Request Submitted"><g aria-hidden="true"><circle cx="194" cy="40" r="18" class="bpmn-event"></circle><circle cx="194" cy="40" r="10" class="bpmn-event-start-inner"></circle><text x="194" y="70" text-anchor="middle" font-size="11" class="bpmn-text">PO Request Submitted</text></g></g><g role="group" aria-label="User task: Submit PO Request"><g aria-hidden="true"><rect x="334" y="20" width="120" height="60" rx="6" class="bpmn-task"></rect><g transform="translate(348, 32)"><circle cx="0" cy="-4" r="4" class="bpmn-task-marker"></circle><path d="M-6 8 C-6 2 6 2 6 8" class="bpmn-task-marker" stroke-linecap="round" fill="none"></path></g><text x="394" y="50" text-anchor="middle" dominant-baseline="middle" font-size="11" class="bpmn-text">Submit PO Request</text></g></g><g role="group" aria-label="End event: Request Rejected"><g aria-hidden="true"><circle cx="194" cy="150" r="18" class="bpmn-event-end"></circle><circle cx="194" cy="150" r="11" class="bpmn-event-end"></circle><text x="194" y="180" text-anchor="middle" font-size="11" class="bpmn-text">Request Rejected</text></g></g><g role="group" aria-label="User task: Review PO Request"><g aria-hidden="true"><rect x="134" y="210" width="120" height="60" rx="6" class="bpmn-task"></rect><g transform="translate(148, 222)"><circle cx="0" cy="-4" r="4" class="bpmn-task-marker"></circle><path d="M-6 8 C-6 2 6 2 6 8" class="bpmn-task-marker" stroke-linecap="round" fill="none"></path></g><text x="194" y="240" text-anchor="middle" dominant-baseline="middle" font-size="11" class="bpmn-text">Review PO Request</text></g></g><g role="group" aria-label="Exclusive gateway: Approved?"><g aria-hidden="true"><polygon points="394,211 418,235 394,259 370,235" class="bpmn-gateway"></polygon><line x1="386" y1="227" x2="402" y2="243" class="bpmn-gateway-marker" stroke-linecap="round"></line><line x1="402" y1="227" x2="386" y2="243" class="bpmn-gateway-marker" stroke-linecap="round"></line><text x="394" y="273" text-anchor="middle" font-size="11" class="bpmn-text">Approved?</text></g></g><g role="group" aria-label="Service task: Send Rejection Notice"><g aria-hidden="true"><rect x="534" y="210" width="120" height="60" rx="6" class="bpmn-task"></rect><g transform="translate(548, 222)"><circle cx="0" cy="0" r="5" class="bpmn-task-marker"></circle><circle cx="0" cy="0" r="2" class="bpmn-task-marker"></circle><line x1="0" y1="-5" x2="0" y2="-7" class="bpmn-task-marker"></line><line x1="0" y1="5" x2="0" y2="7" class="bpmn-task-marker"></line><line x1="-5" y1="0" x2="-7" y2="0" class="bpmn-task-marker"></line><line x1="5" y1="0" x2="7" y2="0" class="bpmn-task-marker"></line></g><text x="594" y="240" text-anchor="middle" dominant-baseline="middle" font-size="11" class="bpmn-text">Send Rejection N…</text></g></g><g role="group" aria-label="Service task: Issue Purchase Order"><g aria-hidden="true"><rect x="134" y="310" width="120" height="60" rx="6" class="bpmn-task"></rect><g transform="translate(148, 322)"><circle cx="0" cy="0" r="5" class="bpmn-task-marker"></circle><circle cx="0" cy="0" r="2" class="bpmn-task-marker"></circle><line x1="0" y1="-5" x2="0" y2="-7" class="bpmn-task-marker"></line><line x1="0" y1="5" x2="0" y2="7" class="bpmn-task-marker"></line><line x1="-5" y1="0" x2="-7" y2="0" class="bpmn-task-marker"></line><line x1="5" y1="0" x2="7" y2="0" class="bpmn-task-marker"></line></g><text x="194" y="340" text-anchor="middle" dominant-baseline="middle" font-size="11" class="bpmn-text">Issue Purchase O…</text></g></g><g role="group" aria-label="End event: PO Issued"><g aria-hidden="true"><circle cx="394" cy="330" r="18" class="bpmn-event-end"></circle><circle cx="394" cy="330" r="11" class="bpmn-event-end"></circle><text x="394" y="360" text-anchor="middle" font-size="11" class="bpmn-text">PO Issued</text></g></g></svg>"
 `;
 
+exports[`BpmnRenderer snapshots > annotation note: SVG matches snapshot 1`] = `
+"<svg class="w-full h-full" viewBox="0 -360 760 720" preserveAspectRatio="xMidYMid meet" role="group" aria-labelledby="bpmn-title bpmn-desc"><title id="bpmn-title">BPMN Diagram</title><desc id="bpmn-desc">A bpmn-beta diagram</desc><defs><style>
+    .bpmn-event { fill: hsl(var(--card)); stroke: hsl(var(--border)); stroke-width: 2; }
+    .bpmn-event-end { fill: hsl(var(--primary)); stroke: hsl(var(--primary)); stroke-width: 3; }
+    .bpmn-event-start-inner { fill: hsl(var(--primary)); opacity: 0.25; }
+    .bpmn-task { fill: hsl(var(--card)); stroke: hsl(var(--border)); stroke-width: 1.5; }
+    .bpmn-task-hover { fill: hsl(var(--primary)); fill-opacity: 0.12; stroke: hsl(var(--primary)); stroke-width: 2; pointer-events: none; }
+    .bpmn-task-ext { fill: none; stroke: hsl(var(--border)); stroke-width: 2; stroke-dasharray: 5 3; pointer-events: none; }
+    .bpmn-task-marker { stroke: hsl(var(--foreground)); fill: none; stroke-width: 1.5; }
+    .bpmn-subprocess-marker { stroke: hsl(var(--foreground)); stroke-width: 1.5; stroke-linecap: round; }
+    .bpmn-task-text { fill: hsl(var(--foreground)); }
+    .bpmn-gateway { fill: hsl(var(--card)); stroke: hsl(var(--foreground)); stroke-width: 1.8; }
+    .bpmn-gateway-marker { stroke: hsl(var(--foreground)); fill: none; stroke-width: 2; stroke-linecap: round; }
+    .bpmn-gateway-or-marker { stroke: hsl(var(--foreground)); fill: none; stroke-width: 1.5; }
+    .bpmn-annotation { fill: hsl(var(--card)); stroke: hsl(var(--border)); stroke-width: 1.5; }
+    .bpmn-annotation-fold { fill: none; stroke: hsl(var(--border)); stroke-width: 1.5; }
+    .bpmn-pool { fill: none; stroke: hsl(var(--border)); stroke-width: 1.5; }
+    .bpmn-pool-header { fill: hsl(var(--muted)); stroke: hsl(var(--border)); stroke-width: 1.5; opacity: 0.7; }
+    .bpmn-lane { fill: none; stroke: hsl(var(--border)); stroke-width: 1; }
+    .bpmn-lane-header { fill: hsl(var(--muted)); stroke: hsl(var(--border)); stroke-width: 1; opacity: 0.4; }
+    .bpmn-flow-sequence { stroke: hsl(var(--foreground)); opacity: 0.85; }
+    .bpmn-flow-conditional { stroke: hsl(var(--foreground)); opacity: 0.85; }
+    .bpmn-flow-default { stroke: hsl(var(--foreground)); opacity: 0.85; }
+    .bpmn-flow-message { stroke: hsl(var(--foreground)); opacity: 0.85; stroke-dasharray: 6 4; }
+    .bpmn-flow-association { stroke: hsl(var(--border)); opacity: 0.7; stroke-dasharray: 2 3; }
+    .bpmn-flow--association { stroke: hsl(var(--border)); opacity: 0.7; stroke-dasharray: 2 3; }
+    .bpmn-arrow { fill: hsl(var(--foreground)); }
+    .bpmn-arrow-open { fill: none; stroke: hsl(var(--foreground)); stroke-width: 1; }
+    .bpmn-slash { stroke: hsl(var(--foreground)); stroke-width: 1.5; }
+    .bpmn-text { fill: hsl(var(--foreground)); font-family: var(--app-font-sans, 'DM Sans', system-ui, sans-serif); }
+    .bpmn-text-muted { fill: hsl(var(--foreground)); opacity: 0.7; font-family: var(--app-font-mono, 'JetBrains Mono', monospace); }
+    .bpmn-text-label { fill: hsl(var(--foreground)); font-family: var(--app-font-sans, 'DM Sans', system-ui, sans-serif); font-weight: 600; }
+  </style><marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto"><polygon points="0 0, 10 3.5, 0 7" class="bpmn-arrow"></polygon></marker><marker id="arrowhead-msg" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto"><polygon points="0 0, 10 3.5, 0 7" class="bpmn-arrow-open" stroke-width="1"></polygon></marker><marker id="slash-marker" markerWidth="8" markerHeight="10" refX="4" refY="5" orient="auto"><line x1="6" y1="1" x2="2" y2="9" class="bpmn-slash"></line></marker></defs><g><line x1="130" y1="0" x2="250" y2="0" class="bpmn-flow-sequence" stroke-width="1.8" marker-end="url(#arrowhead)"></line></g><g><line x1="367.8523235682274" y1="15.909388981262541" x2="490.7158921439242" y2="49.69687033957915" class="bpmn-flow-sequence" stroke-width="1.8" marker-end="url(#arrowhead)"></line></g><g><line x1="367.8523235682274" y1="-15.909388981262541" x2="461.7897303598105" y2="-41.74217584894788" class="bpmn-flow--association" stroke-width="1.8" stroke-dasharray="2 3"></line></g><g role="group" aria-label="Start event: Start"><g aria-hidden="true"><circle cx="110" cy="0" r="18" class="bpmn-event"></circle><circle cx="110" cy="0" r="10" class="bpmn-event-start-inner"></circle><text x="110" y="30" text-anchor="middle" font-size="11" class="bpmn-text">Start</text></g></g><g role="group" aria-label="Task: Review request"><g aria-hidden="true"><rect x="250" y="-30" width="120" height="60" rx="6" class="bpmn-task"></rect><text x="310" y="0" text-anchor="middle" dominant-baseline="middle" font-size="11" class="bpmn-text">Review request</text></g></g><g role="group" aria-label="Annotation: See SLA policy"><g aria-hidden="true"><path d="M 460 -85 H 548 L 560 -73 V -25 H 460 Z" class="bpmn-annotation"></path><path d="M 548 -85 V -73 H 560" class="bpmn-annotation-fold"></path><text x="510" y="-55" text-anchor="middle" dominant-baseline="middle" font-size="11" class="bpmn-text">See SLA policy</text></g></g><g role="group" aria-label="End event: Done"><g aria-hidden="true"><circle cx="510" cy="55" r="18" class="bpmn-event-end"></circle><circle cx="510" cy="55" r="11" class="bpmn-event-end"></circle><text x="510" y="85" text-anchor="middle" font-size="11" class="bpmn-text">Done</text></g></g></svg>"
+`;
+
 exports[`BpmnRenderer snapshots > collapsed subprocess: SVG matches snapshot 1`] = `
 "<svg class="w-full h-full" viewBox="0 -360 760 720" preserveAspectRatio="xMidYMid meet" role="group" aria-labelledby="bpmn-title bpmn-desc"><title id="bpmn-title">BPMN Diagram</title><desc id="bpmn-desc">A bpmn-beta diagram</desc><defs><style>
     .bpmn-event { fill: hsl(var(--card)); stroke: hsl(var(--border)); stroke-width: 2; }
@@ -179,6 +224,8 @@ exports[`BpmnRenderer snapshots > collapsed subprocess: SVG matches snapshot 1`]
     .bpmn-gateway { fill: hsl(var(--card)); stroke: hsl(var(--foreground)); stroke-width: 1.8; }
     .bpmn-gateway-marker { stroke: hsl(var(--foreground)); fill: none; stroke-width: 2; stroke-linecap: round; }
     .bpmn-gateway-or-marker { stroke: hsl(var(--foreground)); fill: none; stroke-width: 1.5; }
+    .bpmn-annotation { fill: hsl(var(--card)); stroke: hsl(var(--border)); stroke-width: 1.5; }
+    .bpmn-annotation-fold { fill: none; stroke: hsl(var(--border)); stroke-width: 1.5; }
     .bpmn-pool { fill: none; stroke: hsl(var(--border)); stroke-width: 1.5; }
     .bpmn-pool-header { fill: hsl(var(--muted)); stroke: hsl(var(--border)); stroke-width: 1.5; opacity: 0.7; }
     .bpmn-lane { fill: none; stroke: hsl(var(--border)); stroke-width: 1; }
@@ -212,6 +259,8 @@ exports[`BpmnRenderer snapshots > intermediate event: SVG matches snapshot 1`] =
     .bpmn-gateway { fill: hsl(var(--card)); stroke: hsl(var(--foreground)); stroke-width: 1.8; }
     .bpmn-gateway-marker { stroke: hsl(var(--foreground)); fill: none; stroke-width: 2; stroke-linecap: round; }
     .bpmn-gateway-or-marker { stroke: hsl(var(--foreground)); fill: none; stroke-width: 1.5; }
+    .bpmn-annotation { fill: hsl(var(--card)); stroke: hsl(var(--border)); stroke-width: 1.5; }
+    .bpmn-annotation-fold { fill: none; stroke: hsl(var(--border)); stroke-width: 1.5; }
     .bpmn-pool { fill: none; stroke: hsl(var(--border)); stroke-width: 1.5; }
     .bpmn-pool-header { fill: hsl(var(--muted)); stroke: hsl(var(--border)); stroke-width: 1.5; opacity: 0.7; }
     .bpmn-lane { fill: none; stroke: hsl(var(--border)); stroke-width: 1; }

@@ -64,6 +64,7 @@ const POOL_GAP = 24;
 function nodeDimensions(node: BpmnNode): { w: number; h: number } {
   if (node.kind === 'event') return { w: 40, h: 40 };
   if (node.kind === 'gateway') return { w: 50, h: 50 };
+  if (node.kind === 'note') return { w: 100, h: 60 };
   return { w: NODE_W, h: NODE_H };
 }
 

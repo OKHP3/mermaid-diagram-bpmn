@@ -90,6 +90,18 @@ s1 --> review
 review --> e1`);
     expect(svg).toMatchSnapshot();
   });
+
+  it('annotation note: SVG matches snapshot', () => {
+    const svg = renderSvg(`bpmn-beta
+start s1 "Start"
+task t1 "Review request"
+note n1 "See SLA policy"
+end e1 "Done"
+s1 --> t1
+t1 --> e1
+t1 --- n1`);
+    expect(svg).toMatchSnapshot();
+  });
 });
 
 // ---------------------------------------------------------------------------
@@ -115,5 +127,12 @@ describe('BpmnRenderer structural class presence', () => {
     expect(container.querySelector('.bpmn-lane-header')).not.toBeNull();
     expect(container.querySelector('.bpmn-gateway')).not.toBeNull();
     expect(container.querySelector('.bpmn-flow-conditional')).not.toBeNull();
+  });
+
+  it('annotation diagram has expected CSS classes', () => {
+    const { container } = render(<BpmnRenderer source={`bpmn-beta
+note n1 "See SLA policy"`} />);
+    expect(container.querySelector('.bpmn-annotation')).not.toBeNull();
+    expect(container.querySelector('.bpmn-annotation-fold')).not.toBeNull();
   });
 });

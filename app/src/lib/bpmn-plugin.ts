@@ -159,6 +159,16 @@ function renderNodeSvg(node: BpmnNode, lnode: BpmnLayoutNode): string {
       <text x="${x}" y="${y+h+14}" text-anchor="middle" font-size="${LABEL_FONT_SIZE}" class="bpmn-text">${escapeXml(node.label)}</text>
     </g>`;
   }
+
+  if (node.kind === 'note') {
+    const hw = width / 2, hh = height / 2, fold = 12;
+    return `<g>
+      <path d="M ${x-hw} ${y-hh} H ${x+hw-fold} L ${x+hw} ${y-hh+fold} V ${y+hh} H ${x-hw} Z" class="bpmn-annotation"/>
+      <path d="M ${x+hw-fold} ${y-hh} V ${y-hh+fold} H ${x+hw}" class="bpmn-annotation-fold"/>
+      <text x="${x}" y="${y}" text-anchor="middle" dominant-baseline="middle" font-size="${LABEL_FONT_SIZE}" class="bpmn-text">${escapeXml(truncateLabel(node.label))}</text>
+    </g>`;
+  }
+
   return '';
 }
 

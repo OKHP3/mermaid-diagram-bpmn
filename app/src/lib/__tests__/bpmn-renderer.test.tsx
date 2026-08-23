@@ -128,6 +128,15 @@ describe('BpmnRenderer — interactive behaviour', () => {
     expect(queryByText(/when the task is ready to start/)).toBeNull();
   });
 
+  it('renders parsed notes as visible folded-corner annotations', () => {
+    const { container, getByText } = render(<BpmnRenderer source={ASSOCIATION_SOURCE} />);
+
+    expect(container.querySelector('.bpmn-annotation')).not.toBeNull();
+    expect(container.querySelector('.bpmn-annotation-fold')).not.toBeNull();
+    expect(getByText('See SLA policy')).toBeTruthy();
+    expect(container.querySelector('[aria-label="Annotation: See SLA policy"]')).not.toBeNull();
+  });
+
   it('calls navigate when Enter is pressed on a linked node', () => {
     const { container } = render(
       <BpmnRenderer source={MINIMAL_SOURCE} nodeLinks={{ t1: '/skills/my-task' }} />,

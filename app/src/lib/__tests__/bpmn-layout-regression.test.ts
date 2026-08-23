@@ -103,6 +103,20 @@ describe('layoutGraph — flat: 01-linear-process', () => {
   });
 });
 
+describe('layoutGraph — annotation nodes', () => {
+  it('allocates compact dimensions for note shapes', () => {
+    const db = parse(`bpmn-beta
+start s1 "Start"
+note n1 "See SLA policy"
+end e1 "Done"
+s1 --> e1
+s1 --- n1`);
+    const note = layoutGraph(db).nodes.find(n => n.id === 'n1');
+
+    expect(note).toMatchObject({ width: 100, height: 60 });
+  });
+});
+
 // ---------------------------------------------------------------------------
 // Flat layout: 02-gateway-decision.mmd
 // ---------------------------------------------------------------------------

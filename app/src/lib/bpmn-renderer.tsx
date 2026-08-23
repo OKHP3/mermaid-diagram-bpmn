@@ -108,6 +108,10 @@ function getNodeAccessibleName(node: BpmnNode): string {
     return `${gatewayKind} gateway: ${label}`;
   }
 
+  if (node.kind === 'note') {
+    return `Annotation: ${label}`;
+  }
+
   return `Process node: ${label}`;
 }
 
@@ -277,6 +281,29 @@ function renderNode(node: BpmnNode, lnode: BpmnLayoutNode, interaction?: NodeInt
           )}
           <text x={x} y={y + half + 14} textAnchor="middle" fontSize={LABEL_FONT_SIZE} className="bpmn-text">
             {node.label}
+          </text>
+        </g>
+      </g>
+    );
+  }
+
+  if (node.kind === 'note') {
+    const hw = width / 2;
+    const hh = height / 2;
+    const fold = 12;
+    return (
+      <g key={node.id} role="group" aria-label={accessibleName}>
+        <g aria-hidden="true">
+          <path
+            d={`M ${x - hw} ${y - hh} H ${x + hw - fold} L ${x + hw} ${y - hh + fold} V ${y + hh} H ${x - hw} Z`}
+            className="bpmn-annotation"
+          />
+          <path
+            d={`M ${x + hw - fold} ${y - hh} V ${y - hh + fold} H ${x + hw}`}
+            className="bpmn-annotation-fold"
+          />
+          <text x={x} y={y} textAnchor="middle" dominantBaseline="middle" fontSize={LABEL_FONT_SIZE} className="bpmn-text">
+            {truncateLabel(node.label)}
           </text>
         </g>
       </g>
