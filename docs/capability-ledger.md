@@ -5,6 +5,10 @@
 **Verified by:** PRD-04 Phase 0 baseline run (Task #178)  
 **Environment:** Linux (Replit), pnpm 10.26.1, Node.js 24
 
+**Current application test total:** 846 passing tests as of 2026-08-23. This is the
+maintained live total; dated counts in the evidence records below describe the
+run that produced each historical baseline.
+
 All commands were run from a clean `pnpm install` on the current checkout.
 No results were assumed from prior session notes.
 

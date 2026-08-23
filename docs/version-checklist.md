@@ -4,6 +4,9 @@ This document is the authoritative definition of what constitutes a complete, re
 
 **Current evidence baseline:** 2026-08-22 — [Maturity Evidence Baseline](maturity-evidence-baseline-2026-08-22.md). This record distinguishes supported, provisional, disputed, and blocked claims; passing a version checklist does not establish external adoption.
 
+**Current application test total:** 846 passing tests as of 2026-08-23. This
+maintained live total is separate from dated release baselines below.
+
 **Authority scope.** This file supersedes all per-PRD release-state claims. The PRD lineage is:
 PRD-03 (audit directive, archived) → PRD-04 (plugin convergence, archived) → PRD-05 (Phase A executed; Phases B–E remain as forward guidance) → **PRD-06 (product convergence, current active cycle)**.
 When `app/docs/roadmap.md`, `app/src/pages/About.tsx`, `README.md`, or any PRD states that a version is complete, planned, or current, this file is the ground truth. Update this file first; everything else is a derived view.
@@ -78,7 +81,7 @@ The full lifecycle pipeline designed, documented, and surfaced in the app.
 - [x] `bp_skill_version: "0.3.0"` in all 15 source SKILL.md files
 - [x] okhp3-* skills marked deprecated in frontmatter
 - [x] This version checklist published at `docs/version-checklist.md`
-- [x] All tests passing (717/717 across 36 test files; run: `pnpm --filter @workspace/mermaid-diagram-bpmn run test`)
+- [x] All tests passing — **historical V0.3 baseline: 717/717 across 36 test files** (run: `pnpm --filter @workspace/mermaid-diagram-bpmn run test`; see the current total above)
 - [x] `pnpm run typecheck` passes clean
 
 **Tag:** `v0.1.0` — 2026-08-04. All V0.3 criteria are met. This tag is the V0.3 baseline commit.
