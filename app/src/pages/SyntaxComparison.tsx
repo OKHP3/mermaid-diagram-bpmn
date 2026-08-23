@@ -34,6 +34,36 @@ const DFKI_7699 = `bpmn
   approved -- Yes --> accepted[Approved]
   approved -- No --> rejected[Rejected]`;
 
+// Representative syntax transcribed from @derari's live editor example.
+// The editor supports indentation and optional IDs, so each block keeps the
+// explicit IDs here to make the four comparisons easy to read side by side.
+const DERARI_SYNTAX = `# linear flow
+bpmn LR
+start s1 "Request Raised"
+user task t1 "Submit Request"
+end e1 "Complete"
+s1 --> t1
+t1 --> e1
+
+# gateway split
+exclusive gate g1 "Approved?"
+task accepted "Approved"
+task rejected "Rejected"
+g1 --> accepted "Yes"
+g1 --> rejected "No"
+
+# pool / lane structure
+pool Buyer
+  lane Requester
+    start s2 "Request"
+    user task t2 "Submit"
+
+# message flow
+pool Supplier
+  lane Operations
+    message start s3 "Order Received"
+Buyer --> s3 "Message Flow"`;
+
 const PLANTUML = `@startuml
 !theme plain
 |Requester|
@@ -115,6 +145,26 @@ const SYNTAXES = [
     ],
   },
   {
+    id: "derari",
+    label: "@derari mermaid-bpmn",
+    tag: "Live prototype — checked 2026-08-21",
+    tagClass: "bg-sky-500/10 text-sky-700 dark:text-sky-400 border-sky-500/20",
+    code: DERARI_SYNTAX,
+    lineCount: DERARI_SYNTAX.trim().split("\n").length,
+    charCount: DERARI_SYNTAX.trim().length,
+    strengths: [
+      "Live Mermaid external-diagram prototype with a broad BPMN vocabulary",
+      "Entity-first declarations with optional IDs and readable indentation",
+      "Supports pool/lane blocks, message events, data objects, and associations",
+      "BPMN XML import and SVG/PNG/BPMN download paths in the editor",
+    ],
+    tradeoffs: [
+      "Regex-based parser and prototype implementation",
+      "Uses auto layout (ELK by default) rather than bpmn-beta's deterministic handwritten layout",
+      "PR intent was signalled on 2026-07-31; no Mermaid PR existed as of 2026-08-21",
+    ],
+  },
+  {
     id: "plantuml",
     label: "PlantUML activity-beta",
     tag: "Mature — different ecosystem",
@@ -164,6 +214,7 @@ const CAPABILITY_MATRIX = [
     notes: {
       "bpmn-beta": "via external plugin",
       "dfki-7699": "no implementation yet",
+      "derari": "via live external prototype",
       "plantuml": "GitLab / Confluence (not GitHub/Notion)",
       "mermaid-flowchart": "✓ native",
     },
@@ -173,6 +224,7 @@ const CAPABILITY_MATRIX = [
     notes: {
       "bpmn-beta": "✓ start, end (more planned)",
       "dfki-7699": "proposed — original issue targets all subtypes",
+      "derari": "✓ broad event vocabulary",
       "plantuml": "approximate via activity shapes",
       "mermaid-flowchart": "round node only (([…]))",
     },
@@ -182,6 +234,7 @@ const CAPABILITY_MATRIX = [
     notes: {
       "bpmn-beta": "✓ xor, and, or",
       "dfki-7699": "proposed",
+      "derari": "✓ exclusive / parallel gates",
       "plantuml": "if/else branching only",
       "mermaid-flowchart": "generic {diamond} — no markers",
     },
@@ -191,6 +244,7 @@ const CAPABILITY_MATRIX = [
     notes: {
       "bpmn-beta": "✓ task:user, task:service, task:script, task:send, task:receive",
       "dfki-7699": "proposed via optional detailed syntax",
+      "derari": "✓ user, service, send, receive, and more",
       "plantuml": "not natively differentiated",
       "mermaid-flowchart": "label convention only",
     },
@@ -200,6 +254,7 @@ const CAPABILITY_MATRIX = [
     notes: {
       "bpmn-beta": "✓ pool { lane { } } blocks",
       "dfki-7699": "proposed via detailed syntax; original issue shows pool attributes",
+      "derari": "✓ indented pool / lane blocks",
       "plantuml": "| Swimlane | partitions",
       "mermaid-flowchart": "subgraph only — not BPMN pools",
     },
@@ -209,6 +264,7 @@ const CAPABILITY_MATRIX = [
     notes: {
       "bpmn-beta": "✓ ~~> operator (experimental)",
       "dfki-7699": "proposed",
+      "derari": "✓ pool-to-event links",
       "plantuml": "not native BPMN message flow",
       "mermaid-flowchart": "not representable",
     },
@@ -218,6 +274,7 @@ const CAPABILITY_MATRIX = [
     notes: {
       "bpmn-beta": "✓",
       "dfki-7699": "✓ (proposed text DSL)",
+      "derari": "✓ (XML import/export available)",
       "plantuml": "✓",
       "mermaid-flowchart": "✓",
     },
@@ -227,6 +284,7 @@ const CAPABILITY_MATRIX = [
     notes: {
       "bpmn-beta": "✓ pure-JS SVG renderer",
       "dfki-7699": "✓ (proposed)",
+      "derari": "✓ client-side Mermaid plugin",
       "plantuml": "✗ requires PlantUML server or JAR",
       "mermaid-flowchart": "✓ client-side Mermaid only",
     },
@@ -236,6 +294,7 @@ const CAPABILITY_MATRIX = [
     notes: {
       "bpmn-beta": "✓ prototype — try in Playground",
       "dfki-7699": "community prototype linked; DFKI author’s work not public",
+      "derari": "✓ live editor",
       "plantuml": "✓ mature",
       "mermaid-flowchart": "✓ native Mermaid",
     },
@@ -245,6 +304,7 @@ const CAPABILITY_MATRIX = [
     notes: {
       "bpmn-beta": "high — keyword + id + label per element",
       "dfki-7699": "not settled — concise default layer; detailed tier is more verbose",
+      "derari": "high — entity-first, IDs optional",
       "plantuml": "medium — @startuml wrapper + swimlane syntax",
       "mermaid-flowchart": "high — but loses BPMN semantics",
     },
@@ -297,7 +357,7 @@ export default function SyntaxComparison() {
           Syntax Comparison
         </h1>
         <p className="mt-2 text-sm text-muted-foreground leading-relaxed max-w-2xl">
-          A purchase-request approval process written in three notations —{" "}
+           A purchase-request approval process compared across five syntax approaches —{" "}
           <strong className="text-foreground">bpmn-beta</strong> (this project),{" "}
           <strong className="text-foreground">PlantUML activity-beta</strong>, and{" "}
           <strong className="text-foreground">Mermaid flowchart</strong> — plus the{" "}
@@ -306,7 +366,9 @@ export default function SyntaxComparison() {
             DFKI issue #7699
           </a>{" "}
           (the author's later proposed simple/default layer; five elements, not the full process).
-          Each notation has genuine strengths — this page is a factual reference, not a sales pitch.
+           The live @derari prototype is shown separately because its editor uses a broader,
+           entity-first syntax than the compact shared example. Each notation has genuine
+           strengths — this page is a factual reference, not a sales pitch.
         </p>
         <div className="mt-4 flex flex-wrap gap-3 text-xs text-muted-foreground">
           <a
@@ -344,13 +406,14 @@ export default function SyntaxComparison() {
           The process
         </h2>
         <p className="text-xs text-muted-foreground mb-6 max-w-2xl leading-relaxed">
-          A requester raises a purchase request; a manager reviews it and either approves (creating
+           A requester raises a purchase request; a manager reviews it and either approves (creating
           a purchase order) or rejects it (notifying the requester). The bpmn-beta, PlantUML, and
           Mermaid flowchart columns each render this full process: one start event, two end events,
           four tasks, one exclusive gateway, and seven sequence flows. The DFKI #7699 column shows
           the author's later, verbatim simple/default snippet from the issue — five elements covering
-          a simplified approval/rejection branch. The issue also contains earlier detailed and
-          pool-oriented examples; this page does not combine or rewrite them.
+           a simplified approval/rejection branch. The @derari column is a representative
+           transcription from the live editor and covers the four syntax categories independently:
+           linear flow, gateway split, pool/lane structure, and message flow.
         </p>
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
           {SYNTAXES.map(s => (
@@ -427,6 +490,7 @@ export default function SyntaxComparison() {
                   <th className="text-left px-4 py-3 font-semibold text-muted-foreground uppercase tracking-wide min-w-[180px]">Capability</th>
                   <th className="text-left px-4 py-3 font-semibold text-muted-foreground uppercase tracking-wide min-w-[140px]">bpmn-beta</th>
                   <th className="text-left px-4 py-3 font-semibold text-muted-foreground uppercase tracking-wide min-w-[140px]">DFKI #7699</th>
+                  <th className="text-left px-4 py-3 font-semibold text-muted-foreground uppercase tracking-wide min-w-[140px]">@derari</th>
                   <th className="text-left px-4 py-3 font-semibold text-muted-foreground uppercase tracking-wide min-w-[140px]">PlantUML</th>
                   <th className="text-left px-4 py-3 font-semibold text-muted-foreground uppercase tracking-wide min-w-[140px]">Mermaid flowchart</th>
                 </tr>
@@ -437,6 +501,7 @@ export default function SyntaxComparison() {
                     <td className="px-4 py-3 font-semibold text-foreground align-top leading-relaxed">{row.capability}</td>
                     <td className="px-4 py-3 text-muted-foreground align-top leading-relaxed">{row.notes["bpmn-beta"]}</td>
                     <td className="px-4 py-3 text-muted-foreground align-top leading-relaxed">{row.notes["dfki-7699"]}</td>
+                    <td className="px-4 py-3 text-muted-foreground align-top leading-relaxed">{row.notes["derari"]}</td>
                     <td className="px-4 py-3 text-muted-foreground align-top leading-relaxed">{row.notes["plantuml"]}</td>
                     <td className="px-4 py-3 text-muted-foreground align-top leading-relaxed">{row.notes["mermaid-flowchart"]}</td>
                   </tr>
@@ -457,7 +522,11 @@ export default function SyntaxComparison() {
           Mermaid flowchart examples are hand-written for the same notional process and verified to
           be syntactically valid in their respective parsers. The DFKI #7699 column reproduces one
           complete, later author-authored fenced example from the issue exactly — no elements were
-          added, combined, or paraphrased. It remains proposed Mermaid syntax, not a released Mermaid parser.
+           added, combined, or paraphrased. The @derari examples are representative snippets
+           transcribed from the live editor's bundled example, not a single shared process. The
+           prototype uses a regex parser, supports BPMN XML import, and defaults to ELK auto layout.
+           @derari signalled PR intent on 2026-07-31; no PR existed as of 2026-08-21. This remains
+           a live external prototype, not a released Mermaid core parser.
         </p>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-3xl">
           <div className="p-4 rounded-lg border border-border bg-card">
@@ -472,6 +541,18 @@ export default function SyntaxComparison() {
               pool examples. The cited Emrich &amp; Hollax 2025 paper remains described there as in
               preparation. The source check records what the issue says, but cannot prove that the paper
               has no DOI or preprint; reviewed 2026-08-22.
+            </p>
+          </div>
+          <div className="p-4 rounded-lg border border-border bg-card">
+            <p className="text-xs font-semibold text-foreground mb-1.5">@derari live prototype</p>
+            <p className="text-xs text-muted-foreground leading-relaxed">
+              The @derari syntax column is based on the{" "}
+              <a href="https://derari.github.io/mermaid-bpmn/editor.html" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline inline-flex items-center gap-1">
+                live editor <ExternalLink size={10} />
+              </a>
+              {" "}checked 2026-08-21. Its technical approach is a regex parser with BPMN XML import
+              and ELK-based auto layout. The author signalled PR intent on 2026-07-31; no PR against
+              Mermaid existed at the review date.
             </p>
           </div>
           <div className="p-4 rounded-lg border border-border bg-card">
