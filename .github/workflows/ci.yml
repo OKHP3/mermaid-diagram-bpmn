@@ -71,6 +71,9 @@ jobs:
       - name: Test skill:validate failure-mode detection (exits 1 on bad frontmatter)
         run: pnpm run skill:validate:test
 
+      - name: Validate agent skill frontmatter
+        run: pnpm run skill:validate:agents
+
       - name: Check Forge brand tokens match profile (no drift)
         run: pnpm run brand:check
 
