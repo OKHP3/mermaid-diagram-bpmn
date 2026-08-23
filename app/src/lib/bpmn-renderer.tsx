@@ -196,6 +196,27 @@ function renderNode(node: BpmnNode, lnode: BpmnLayoutNode, interaction?: NodeInt
     );
   }
 
+  if (node.kind === 'subprocess') {
+    const hw = width / 2;
+    const hh = height / 2;
+    const markerY = y + hh - 9;
+    return (
+      <g key={node.id} role="group" aria-label={accessibleName}>
+        <g aria-hidden="true">
+          <rect x={x - hw} y={y - hh} width={width} height={height} rx={TASK_RX} className="bpmn-task" />
+          {isDotted && (
+            <rect x={x - hw} y={y - hh} width={width} height={height} rx={TASK_RX} className="bpmn-task-ext" />
+          )}
+          <line x1={x - 5} y1={markerY} x2={x + 5} y2={markerY} className="bpmn-subprocess-marker" />
+          <line x1={x} y1={markerY - 5} x2={x} y2={markerY + 5} className="bpmn-subprocess-marker" />
+          <text x={x} y={y - 3} textAnchor="middle" dominantBaseline="middle" fontSize={LABEL_FONT_SIZE} className="bpmn-text">
+            {truncateLabel(node.label)}
+          </text>
+        </g>
+      </g>
+    );
+  }
+
   if (node.kind === 'gateway') {
     const half = GATEWAY_HALF;
     return (

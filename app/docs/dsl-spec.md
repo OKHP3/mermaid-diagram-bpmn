@@ -40,6 +40,15 @@
 | `task:receive` | Receive task | Envelope icon |
 | `task:send` | Send task | Filled envelope icon |
 
+### Subprocess keywords
+
+| Keyword | BPMN shape | Marker |
+|---|---|---|
+| `subprocess` | Collapsed subprocess (rounded rect) | `+` marker at the bottom edge |
+
+Collapsed subprocesses use the same footprint as tasks and represent a nested process
+without expanding its child nodes. Expanded subprocess block syntax is not supported yet.
+
 ### Gateway keywords
 
 | Keyword | BPMN shape | Marker |

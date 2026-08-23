@@ -140,6 +140,17 @@ function renderNodeSvg(node: BpmnNode, lnode: BpmnLayoutNode): string {
     </g>`;
   }
 
+  if (node.kind === 'subprocess') {
+    const hw = width / 2, hh = height / 2;
+    const markerY = y + hh - 9;
+    return `<g>
+      <rect x="${x-hw}" y="${y-hh}" width="${width}" height="${height}" rx="${TASK_RX}" class="bpmn-task"/>
+      <line x1="${x-5}" y1="${markerY}" x2="${x+5}" y2="${markerY}" class="bpmn-subprocess-marker"/>
+      <line x1="${x}" y1="${markerY-5}" x2="${x}" y2="${markerY+5}" class="bpmn-subprocess-marker"/>
+      <text x="${x}" y="${y-3}" text-anchor="middle" dominant-baseline="middle" font-size="${LABEL_FONT_SIZE}" class="bpmn-text">${escapeXml(truncateLabel(node.label))}</text>
+    </g>`;
+  }
+
   if (node.kind === 'gateway') {
     const h = 24;
     return `<g>

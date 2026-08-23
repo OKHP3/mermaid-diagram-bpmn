@@ -80,6 +80,16 @@ s1 --> wait1
 wait1 --> e1`);
     expect(svg).toMatchSnapshot();
   });
+
+  it('collapsed subprocess: SVG matches snapshot', () => {
+    const svg = renderSvg(`bpmn-beta
+start s1 "Start"
+subprocess review "Review subprocess"
+end e1 "Done"
+s1 --> review
+review --> e1`);
+    expect(svg).toMatchSnapshot();
+  });
 });
 
 // ---------------------------------------------------------------------------

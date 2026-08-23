@@ -75,6 +75,16 @@ describe('parse — node types', () => {
     expect(node.label).toBe('Waiting for approval');
   });
 
+  it('parses collapsed subprocess', () => {
+    const db = parse('bpmn-beta\nsubprocess review "Review subprocess"');
+    const node = db.getNodes()[0];
+    expect(node).toMatchObject({
+      id: 'review',
+      kind: 'subprocess',
+      label: 'Review subprocess',
+    });
+  });
+
   it('parses generic task (no subtype)', () => {
     const db = parse('bpmn-beta\ntask t1 "Do something"');
     const node = db.getNodes()[0];
