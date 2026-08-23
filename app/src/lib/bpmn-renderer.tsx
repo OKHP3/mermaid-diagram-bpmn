@@ -237,14 +237,16 @@ function renderFlow(flow: BpmnFlow, layout: BpmnLayout) {
 
   const isMessage = flow.kind === 'message';
   const isDefault = flow.kind === 'default';
+  const isAssociation = flow.kind === 'association';
 
   return (
     <g key={`flow-${flow.id}`}>
       <line
         x1={p1.x} y1={p1.y} x2={p2.x} y2={p2.y}
-        className={`bpmn-flow-${flow.kind}`}
+        className={isAssociation ? 'bpmn-flow--association' : `bpmn-flow-${flow.kind}`}
         strokeWidth={1.8}
-        markerEnd={isMessage ? 'url(#arrowhead-msg)' : 'url(#arrowhead)'}
+        strokeDasharray={isAssociation ? '2 3' : undefined}
+        markerEnd={isAssociation ? undefined : (isMessage ? 'url(#arrowhead-msg)' : 'url(#arrowhead)')}
         markerStart={isDefault ? 'url(#slash-marker)' : undefined}
       />
       {flow.label && (

@@ -34,6 +34,7 @@ export function getStyles(options: BpmnThemeOptions): string {
     .bpmn-flow-default { stroke: ${options.lineColor}; opacity: 0.85; }
     .bpmn-flow-message { stroke: ${options.lineColor}; opacity: 0.85; stroke-dasharray: 6 4; }
     .bpmn-flow-association { stroke: ${options.nodeBorder}; opacity: 0.7; stroke-dasharray: 2 3; }
+    .bpmn-flow--association { stroke: ${options.nodeBorder}; opacity: 0.7; stroke-dasharray: 2 3; }
     .bpmn-arrow { fill: ${options.lineColor}; }
     .bpmn-arrow-open { fill: none; stroke: ${options.lineColor}; stroke-width: 1; }
     .bpmn-slash { stroke: ${options.lineColor}; stroke-width: 1.5; }

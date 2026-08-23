@@ -161,17 +161,21 @@ function renderFlowSvg(flow: BpmnFlow, layout: BpmnLayout, diagramId: string): s
   const p2x = e2.x - dx * (tr / dist), p2y = e2.y - dy * (tr / dist);
   const mx = (p1x + p2x) / 2, my = (p1y + p2y) / 2;
 
-  const arrowEnd = flow.kind === 'message'
-    ? `url(#${diagramId}-arrow-msg)`
-    : `url(#${diagramId}-arrow)`;
+  const isAssociation = flow.kind === 'association';
+  const arrowEnd = isAssociation
+    ? ''
+    : flow.kind === 'message'
+      ? `url(#${diagramId}-arrow-msg)`
+      : `url(#${diagramId}-arrow)`;
   const slashStart = flow.kind === 'default'
     ? `marker-start="url(#${diagramId}-slash)"`
     : '';
+  const dash = isAssociation ? 'stroke-dasharray="2 3"' : '';
 
   return `<g>
     <line x1="${p1x}" y1="${p1y}" x2="${p2x}" y2="${p2y}"
-      class="bpmn-flow-${flow.kind}" stroke-width="1.8"
-      marker-end="${arrowEnd}" ${slashStart}/>
+      class="${isAssociation ? 'bpmn-flow--association' : `bpmn-flow-${flow.kind}`}" stroke-width="1.8"
+      ${dash} ${arrowEnd ? `marker-end="${arrowEnd}"` : ''} ${slashStart}/>
     ${flow.label ? `<text x="${mx}" y="${my-8}" text-anchor="middle" font-size="10" class="bpmn-text-muted">${escapeXml(flow.label)}</text>` : ''}
   </g>`;
 }

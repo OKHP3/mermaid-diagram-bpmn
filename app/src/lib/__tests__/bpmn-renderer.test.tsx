@@ -41,6 +41,15 @@ t1 --> g1
 g1 --> t2
 t2 --> e1`;
 
+const ASSOCIATION_SOURCE = `bpmn-beta
+start s1 "Start"
+task t1 "Review request"
+end e1 "Complete"
+note n1 "See SLA policy"
+s1 --> t1
+t1 --> e1
+t1 --- n1`;
+
 describe('BpmnRenderer — interactive behaviour', () => {
   beforeEach(() => {
     mockNavigate.mockReset();
@@ -170,6 +179,14 @@ describe('BpmnRenderer — interactive behaviour', () => {
   it('renders an error message for invalid source', () => {
     const { getByText } = render(<BpmnRenderer source="not-valid-bpmn" />);
     expect(getByText(/No nodes parsed/)).toBeTruthy();
+  });
+
+  it('renders association flows as dashed, marker-free connectors', () => {
+    const { container } = render(<BpmnRenderer source={ASSOCIATION_SOURCE} />);
+    const association = container.querySelector('.bpmn-flow--association');
+    expect(association).not.toBeNull();
+    expect(association?.getAttribute('stroke-dasharray')).toBe('2 3');
+    expect(association?.getAttribute('marker-end')).toBeNull();
   });
 });
 

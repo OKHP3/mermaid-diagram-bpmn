@@ -155,7 +155,12 @@ test('association — an attached note is not flagged as an orphan', async ({ pa
   await openPlaygroundWith(page, SOURCE_NOTE_ASSOCIATION);
 
   await expect(page.locator('[data-testid="div-lint-warnings"]')).toHaveCount(0);
-  await expect(page.locator('[data-testid="div-diagram-preview"] svg')).toBeVisible();
+  const diagram = page.locator('[data-testid="div-diagram-preview"] svg');
+  await expect(diagram).toBeVisible();
+  const association = diagram.locator('.bpmn-flow--association');
+  await expect(association).toHaveCount(1);
+  await expect(association).toHaveAttribute('stroke-dasharray', '2 3');
+  await expect(association).not.toHaveAttribute('marker-end', /.+/);
   await expect(page.locator('[data-testid="text-parse-error"]')).toHaveCount(0);
 });
 

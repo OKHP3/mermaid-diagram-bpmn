@@ -22,6 +22,7 @@ exports[`BpmnRenderer snapshots > 01-linear-process: SVG matches snapshot 1`] = 
     .bpmn-flow-default { stroke: hsl(var(--foreground)); opacity: 0.85; }
     .bpmn-flow-message { stroke: hsl(var(--foreground)); opacity: 0.85; stroke-dasharray: 6 4; }
     .bpmn-flow-association { stroke: hsl(var(--border)); opacity: 0.7; stroke-dasharray: 2 3; }
+    .bpmn-flow--association { stroke: hsl(var(--border)); opacity: 0.7; stroke-dasharray: 2 3; }
     .bpmn-arrow { fill: hsl(var(--foreground)); }
     .bpmn-arrow-open { fill: none; stroke: hsl(var(--foreground)); stroke-width: 1; }
     .bpmn-slash { stroke: hsl(var(--foreground)); stroke-width: 1.5; }
@@ -53,6 +54,7 @@ exports[`BpmnRenderer snapshots > 02-gateway-decision: SVG matches snapshot (gat
     .bpmn-flow-default { stroke: hsl(var(--foreground)); opacity: 0.85; }
     .bpmn-flow-message { stroke: hsl(var(--foreground)); opacity: 0.85; stroke-dasharray: 6 4; }
     .bpmn-flow-association { stroke: hsl(var(--border)); opacity: 0.7; stroke-dasharray: 2 3; }
+    .bpmn-flow--association { stroke: hsl(var(--border)); opacity: 0.7; stroke-dasharray: 2 3; }
     .bpmn-arrow { fill: hsl(var(--foreground)); }
     .bpmn-arrow-open { fill: none; stroke: hsl(var(--foreground)); stroke-width: 1; }
     .bpmn-slash { stroke: hsl(var(--foreground)); stroke-width: 1.5; }
@@ -84,6 +86,7 @@ exports[`BpmnRenderer snapshots > 04-multi-event: SVG matches snapshot (multiple
     .bpmn-flow-default { stroke: hsl(var(--foreground)); opacity: 0.85; }
     .bpmn-flow-message { stroke: hsl(var(--foreground)); opacity: 0.85; stroke-dasharray: 6 4; }
     .bpmn-flow-association { stroke: hsl(var(--border)); opacity: 0.7; stroke-dasharray: 2 3; }
+    .bpmn-flow--association { stroke: hsl(var(--border)); opacity: 0.7; stroke-dasharray: 2 3; }
     .bpmn-arrow { fill: hsl(var(--foreground)); }
     .bpmn-arrow-open { fill: none; stroke: hsl(var(--foreground)); stroke-width: 1; }
     .bpmn-slash { stroke: hsl(var(--foreground)); stroke-width: 1.5; }
@@ -115,6 +118,7 @@ exports[`BpmnRenderer snapshots > 05-parallel-split: SVG matches snapshot (paral
     .bpmn-flow-default { stroke: hsl(var(--foreground)); opacity: 0.85; }
     .bpmn-flow-message { stroke: hsl(var(--foreground)); opacity: 0.85; stroke-dasharray: 6 4; }
     .bpmn-flow-association { stroke: hsl(var(--border)); opacity: 0.7; stroke-dasharray: 2 3; }
+    .bpmn-flow--association { stroke: hsl(var(--border)); opacity: 0.7; stroke-dasharray: 2 3; }
     .bpmn-arrow { fill: hsl(var(--foreground)); }
     .bpmn-arrow-open { fill: none; stroke: hsl(var(--foreground)); stroke-width: 1; }
     .bpmn-slash { stroke: hsl(var(--foreground)); stroke-width: 1.5; }
@@ -146,6 +150,7 @@ exports[`BpmnRenderer snapshots > 08-purchase-order-approval: SVG matches snapsh
     .bpmn-flow-default { stroke: hsl(var(--foreground)); opacity: 0.85; }
     .bpmn-flow-message { stroke: hsl(var(--foreground)); opacity: 0.85; stroke-dasharray: 6 4; }
     .bpmn-flow-association { stroke: hsl(var(--border)); opacity: 0.7; stroke-dasharray: 2 3; }
+    .bpmn-flow--association { stroke: hsl(var(--border)); opacity: 0.7; stroke-dasharray: 2 3; }
     .bpmn-arrow { fill: hsl(var(--foreground)); }
     .bpmn-arrow-open { fill: none; stroke: hsl(var(--foreground)); stroke-width: 1; }
     .bpmn-slash { stroke: hsl(var(--foreground)); stroke-width: 1.5; }
