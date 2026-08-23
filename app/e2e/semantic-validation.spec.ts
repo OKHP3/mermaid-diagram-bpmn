@@ -68,6 +68,21 @@ const SOURCE_CROSS_POOL = [
   't1 --> e1',
 ].join('\n');
 
+const SOURCE_CROSS_POOL_WITH_DISTANT_LINE = [
+  'bpmn-beta',
+  ...Array.from({ length: 40 }, (_, index) => `%% Context note ${index + 1}`),
+  'pool p1 "Pool A" {',
+  '  start s1 "Start"',
+  '  task t1 "Task A"',
+  '}',
+  'pool p2 "Pool B" {',
+  '  end e1 "End"',
+  '}',
+  's1 --> t1',
+  't1 --> e1',
+].join('\n');
+const CROSS_POOL_WARNING_LINE = 50;
+
 /**
  * Triggers UNBALANCED_GATEWAY: g1 has 2 incoming and 2 outgoing flows,
  * acting simultaneously as a join and a split.
@@ -85,6 +100,21 @@ const SOURCE_UNBALANCED_GATEWAY = [
   'g1 --> e2',
 ].join('\n');
 
+const SOURCE_UNBALANCED_GATEWAY_WITH_DISTANT_LINE = [
+  'bpmn-beta',
+  ...Array.from({ length: 40 }, (_, index) => `%% Context note ${index + 1}`),
+  'start s1 "Start A"',
+  'start s2 "Start B"',
+  'xor g1 "Mixed Decision"',
+  'end e1 "End A"',
+  'end e2 "End B"',
+  's1 --> g1',
+  's2 --> g1',
+  'g1 --> e1',
+  'g1 --> e2',
+].join('\n');
+const UNBALANCED_GATEWAY_WARNING_LINE = 44;
+
 /** Triggers UNDEFINED_NODE_REF: "ghost" is never declared as a node. */
 const SOURCE_UNDEFINED_NODE_REF = [
   'bpmn-beta',
@@ -94,6 +124,17 @@ const SOURCE_UNDEFINED_NODE_REF = [
   's1 --> t1',
   't1 --> ghost',
 ].join('\n');
+
+const SOURCE_UNDEFINED_NODE_REF_WITH_DISTANT_LINE = [
+  'bpmn-beta',
+  ...Array.from({ length: 40 }, (_, index) => `%% Context note ${index + 1}`),
+  'start s1 "Start"',
+  'task t1 "Task"',
+  'end e1 "End"',
+  's1 --> t1',
+  't1 --> ghost',
+].join('\n');
+const UNDEFINED_NODE_REF_WARNING_LINE = 46;
 
 /** A fully valid minimal diagram — no warnings expected. */
 const SOURCE_VALID = [
@@ -111,6 +152,31 @@ const SOURCE_VALID = [
 async function openPlaygroundWith(page: Parameters<typeof test>[1] extends (args: { page: infer P }) => unknown ? P : never, source: string) {
   await page.goto('playground');
   await page.locator('[data-testid="textarea-bpmn-source"]').fill(source);
+}
+
+async function assertLintWarningLineNavigation(
+  page: Parameters<typeof test>[1] extends (args: { page: infer P }) => unknown ? P : never,
+  source: string,
+  code: string,
+  expectedLine: number,
+) {
+  await openPlaygroundWith(page, source);
+
+  const textarea = page.locator('[data-testid="textarea-bpmn-source"]');
+  const lineButton = page.getByRole('button', {
+    name: `Go to line ${expectedLine} for ${code}`,
+  });
+  await expect(lineButton).toHaveText(`Line ${expectedLine}`);
+  await textarea.evaluate((editor) => {
+    editor.scrollTop = 0;
+    editor.dispatchEvent(new Event('scroll', { bubbles: true }));
+  });
+  await lineButton.click();
+
+  const highlight = page.locator('[data-testid="editor-lint-warning-line-highlight"]');
+  await expect(highlight).toHaveAttribute('data-lint-warning-line', String(expectedLine));
+  await expect(textarea).toBeFocused();
+  await expect.poll(() => textarea.evaluate((editor) => editor.scrollTop)).toBeGreaterThan(0);
 }
 
 // ── Tests ─────────────────────────────────────────────────────────────────────
@@ -177,6 +243,15 @@ test('CROSS_POOL_SEQUENCE_FLOW — warning panel names the cross-boundary flow',
   await expect(page.locator('[data-testid="text-parse-error"]')).toHaveCount(0);
 });
 
+test('CROSS_POOL_SEQUENCE_FLOW — Line button highlights the offending flow row', async ({ page }) => {
+  await assertLintWarningLineNavigation(
+    page,
+    SOURCE_CROSS_POOL_WITH_DISTANT_LINE,
+    'CROSS_POOL_SEQUENCE_FLOW',
+    CROSS_POOL_WARNING_LINE,
+  );
+});
+
 test('UNBALANCED_GATEWAY — warning panel identifies the mixed join/split gateway', async ({ page }) => {
   await openPlaygroundWith(page, SOURCE_UNBALANCED_GATEWAY);
 
@@ -192,6 +267,15 @@ test('UNBALANCED_GATEWAY — warning panel identifies the mixed join/split gatew
   await expect(page.locator('[data-testid="text-parse-error"]')).toHaveCount(0);
 });
 
+test('UNBALANCED_GATEWAY — Line button highlights the gateway declaration row', async ({ page }) => {
+  await assertLintWarningLineNavigation(
+    page,
+    SOURCE_UNBALANCED_GATEWAY_WITH_DISTANT_LINE,
+    'UNBALANCED_GATEWAY',
+    UNBALANCED_GATEWAY_WARNING_LINE,
+  );
+});
+
 test('UNDEFINED_NODE_REF — warning panel names the missing node ID', async ({ page }) => {
   await openPlaygroundWith(page, SOURCE_UNDEFINED_NODE_REF);
 
@@ -201,6 +285,15 @@ test('UNDEFINED_NODE_REF — warning panel names the missing node ID', async ({ 
   await expect(panel).toContainText('"ghost"');
   await expect(panel).toContainText('undefined');
   await expect(page.locator('[data-testid="text-parse-error"]')).toHaveCount(0);
+});
+
+test('UNDEFINED_NODE_REF — Line button highlights the offending flow row', async ({ page }) => {
+  await assertLintWarningLineNavigation(
+    page,
+    SOURCE_UNDEFINED_NODE_REF_WITH_DISTANT_LINE,
+    'UNDEFINED_NODE_REF',
+    UNDEFINED_NODE_REF_WARNING_LINE,
+  );
 });
 
 test('valid diagram — no warning panel appears and the diagram renders', async ({ page }) => {
