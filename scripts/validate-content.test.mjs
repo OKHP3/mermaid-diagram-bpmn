@@ -37,6 +37,7 @@ const REAL_VERSION_DOC = resolve(ROOT, 'docs/version-checklist.md');
 const REAL_LEDGER      = resolve(ROOT, 'docs/capability-ledger.md');
 const REAL_HOME        = resolve(ROOT, 'app/src/pages/Home.tsx');
 const REAL_AGENT_SKILLS = resolve(ROOT, 'app/src/pages/AgentSkills.tsx');
+const REAL_README      = resolve(ROOT, 'README.md');
 
 /** Write content to a unique temp file and return its path. */
 function writeTmp(content, ext = '.md') {
@@ -251,6 +252,21 @@ test('validate-content exits 1 when AgentSkills.tsx contains the retired "Zero i
   const { exitCode, output } = runValidator({ CONTENT_AGENT_SKILLS_OVERRIDE: stalePath });
 
   assert.equal(exitCode, 1, `expected exit 1 for banned phrase in AgentSkills.tsx; output:\n${output}`);
+  assert.ok(
+    output.includes('Zero implement') || output.toLowerCase().includes('fail'),
+    `output should mention the banned phrase; got:\n${output}`,
+  );
+});
+
+test('validate-content exits 1 when README.md contains a retired claim', () => {
+  const realContent = readFileSync(REAL_README, 'utf-8');
+  const staleContent = realContent +
+    '\n<!-- INJECTED FOR TEST: Zero implement a BABOK knowledge area -->\n';
+  const stalePath = writeTmp(staleContent, '.md');
+
+  const { exitCode, output } = runValidator({ CONTENT_README_OVERRIDE: stalePath });
+
+  assert.equal(exitCode, 1, `expected exit 1 for banned phrase in README.md; output:\n${output}`);
   assert.ok(
     output.includes('Zero implement') || output.toLowerCase().includes('fail'),
     `output should mention the banned phrase; got:\n${output}`,

@@ -43,7 +43,7 @@ Not bpmn-js (GUI toolkit, different category) or draw.io/PlantUML (already scope
 |---|---|
 | Emrich's proposal gets a maintainer green light before further engagement | Check #7699 for replies now. A second comment once npm + demo hold up is fair game; no need to wait for v1.0 grammar hardening |
 | LinkedIn posts read as self-promotion to an enterprise-architecture professional network | Build-in-public narrative, not launch announcement. Link in a comment, not the opening line. Space posts out and mix with non-project content |
-| ~~BP-SKILL differentiation claim ("zero of 89,000+ agentskills.io skills implement a BABOK knowledge area")~~ — **retired 2026-08-07**: at least two BABOK-implementing skill packages were found; claim has been removed from all user-visible app copy; defensible claim is "lifecycle-complete, BPMN-integrated" | Do not reuse "zero" or "first standards-conformant" in any external post; use the corrected positioning in `docs/strategy.md` §BP-SKILL positioning |
+| ~~BP-SKILL differentiation claim (an unsupported zero-coverage and ecosystem-size assertion)~~ — **retired 2026-08-07**: at least two BABOK-implementing skill packages were found; claim has been removed from all user-visible app copy; defensible claim is "lifecycle-complete, BPMN-integrated" | Do not reuse the retired uniqueness or ecosystem-size assertions in any external post; use the corrected positioning in `docs/strategy.md` §BP-SKILL positioning |
 | npm 404 undermines trust with Mermaid maintainers and technical reviewers, the exact audience deciding between two proposals | Publish to npm before any further promotion push |
 | Personal brand posting bleeds into BFS/enterprise-architecture day-job identity on LinkedIn | Keep examples generic, no BFS references, consistent with existing personal/work separation practice |
 
@@ -51,7 +51,7 @@ Not bpmn-js (GUI toolkit, different category) or draw.io/PlantUML (already scope
 
 - [ ] Fire `publish-npm.yml` via `workflow_dispatch` (dry_run: false) or cut a GitHub Release to close the npm 404. Highest-leverage item; already blocking a live, public link.
 - [ ] Check #7699, #2623, #660 for maintainer replies since 2026-08-05.
-- [x] ~~Re-verify the "zero of 89k+ skills implement BABOK" figure~~ — claim retired 2026-08-07; corrected positioning ("lifecycle-complete, BPMN-integrated") in place across all user-visible app copy.
+- [x] ~~Re-verify the retired BABOK coverage figure~~ — claim retired 2026-08-07; corrected positioning ("lifecycle-complete, BPMN-integrated") in place across all user-visible app copy.
 - [ ] Once npm is live, run `okhp3-linkedin-angles` against the repo plus the #7699 engagement to seed candidate post angles.
 - [ ] Sequence the wider push: LinkedIn build-in-public post first (lower risk), then one public-distribution channel (HN, Reddit, or Product Hunt — pick one), only after a stranger's first click actually works end to end.
 - [ ] Add 1-2 real-world example diagrams beyond purchase-approval (already flagged as a V0.9 gap). This is what a reviewer pastes their own use case against in the first five minutes.

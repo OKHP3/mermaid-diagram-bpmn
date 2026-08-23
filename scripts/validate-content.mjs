@@ -40,6 +40,9 @@
  *   CONTENT_LEDGER_OVERRIDE       — alternative path for docs/capability-ledger.md
  *   CONTENT_HOME_OVERRIDE         — alternative path for app/src/pages/Home.tsx
  *   CONTENT_AGENT_SKILLS_OVERRIDE — alternative path for app/src/pages/AgentSkills.tsx
+ *   CONTENT_README_OVERRIDE       — alternative path for README.md
+ *   CONTENT_PROMOTION_OVERRIDE    — alternative path for docs/promotion-strategy.md
+ *   CONTENT_ROADMAP_OVERRIDE      — alternative path for app/docs/roadmap.md
  *
  * HOW TO FIX FAILURES
  * ───────────────────
@@ -116,8 +119,12 @@ const HOME_PATH         = process.env.CONTENT_HOME_OVERRIDE
   ?? resolve(ROOT, 'app/src/pages/Home.tsx');
 const AGENT_SKILLS_PATH = process.env.CONTENT_AGENT_SKILLS_OVERRIDE
   ?? resolve(ROOT, 'app/src/pages/AgentSkills.tsx');
-const README_PATH       = resolve(ROOT, 'README.md');
-const ROADMAP_PATH      = resolve(ROOT, 'app/docs/roadmap.md');
+const README_PATH       = process.env.CONTENT_README_OVERRIDE
+  ?? resolve(ROOT, 'README.md');
+const PROMOTION_PATH    = process.env.CONTENT_PROMOTION_OVERRIDE
+  ?? resolve(ROOT, 'docs/promotion-strategy.md');
+const ROADMAP_PATH      = process.env.CONTENT_ROADMAP_OVERRIDE
+  ?? resolve(ROOT, 'app/docs/roadmap.md');
 const PLUGIN_SRC_PATH   = resolve(ROOT, 'app/src/lib/bpmn-plugin.ts');
 const PLUGIN_PKG_PATH   = resolve(ROOT, 'lib/bpmn-plugin/package.json');
 
@@ -131,6 +138,9 @@ const VERSION_DOC_LABEL    = label('CONTENT_VERSION_DOC_OVERRIDE',  'docs/versio
 const LEDGER_LABEL         = label('CONTENT_LEDGER_OVERRIDE',       'docs/capability-ledger.md');
 const HOME_LABEL           = label('CONTENT_HOME_OVERRIDE',         'app/src/pages/Home.tsx');
 const AGENT_SKILLS_LABEL   = label('CONTENT_AGENT_SKILLS_OVERRIDE', 'app/src/pages/AgentSkills.tsx');
+const README_LABEL         = label('CONTENT_README_OVERRIDE',       'README.md');
+const PROMOTION_LABEL      = label('CONTENT_PROMOTION_OVERRIDE',    'docs/promotion-strategy.md');
+const ROADMAP_LABEL        = label('CONTENT_ROADMAP_OVERRIDE',       'app/docs/roadmap.md');
 
 // ── Load canonical sources ────────────────────────────────────────────────────
 
@@ -310,6 +320,9 @@ const BANNED_CLAIMS = [
 const BANNED_CLAIMS_SOURCES = [
   [HOME_PATH,         HOME_LABEL],
   [AGENT_SKILLS_PATH, AGENT_SKILLS_LABEL],
+  [README_PATH,       README_LABEL],
+  [PROMOTION_PATH,    PROMOTION_LABEL],
+  [ROADMAP_PATH,      ROADMAP_LABEL],
 ];
 
 for (const [filePath, fileLabel] of BANNED_CLAIMS_SOURCES) {
@@ -349,7 +362,7 @@ if (failures.length > 0) {
   console.log(
     `[validate-content] OK — all content claims match canonical sources ` +
     `(testCount=${canon.testCount}, mermaid@${MERMAID_VERSION_TARGET}, plugin@${PLUGIN_VERSION}, ` +
-    `banned-claims clean in Home.tsx + AgentSkills.tsx)`,
+    `banned-claims clean in public app and Markdown sources)`,
   );
   process.exit(0);
 }
