@@ -36,7 +36,7 @@ async function scrollToDiagramStep(page: Page) {
 }
 
 function taskButton(stepCard: ReturnType<Page['locator']>, label: string) {
-  return stepCard.locator(`[role="button"][aria-label$=": ${label}"]`);
+  return stepCard.locator(`[role="button"][aria-label="Open ${label}"]`);
 }
 
 test.describe('Employee Offboarding — Step 06 BPMN diagram', () => {
@@ -48,11 +48,11 @@ test.describe('Employee Offboarding — Step 06 BPMN diagram', () => {
     await expect(svg).toHaveAttribute('viewBox', /.+/);
   });
 
-  test('linked task nodes carry role="button"', async ({ page }) => {
+  test('linked nodes carry role="button"', async ({ page }) => {
     await loadPage(page);
     const stepCard = await scrollToDiagramStep(page);
     const buttons = stepCard.locator('[role="button"]');
-    await expect(buttons).toHaveCount(9);
+    await expect(buttons).toHaveCount(11);
   });
 });
 

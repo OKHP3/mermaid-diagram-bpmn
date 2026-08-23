@@ -62,10 +62,13 @@ async function scrollToDiagramStep(page: Page) {
 
 /**
  * Find a linked node button by its label. BpmnRenderer prefixes the accessible
- * label with the node type, e.g. "Open User task: Capture Requirements".
+ * label, e.g. "Open Capture Requirements".
  */
 function taskButton(stepCard: ReturnType<Page['locator']>, label: string) {
-  return stepCard.locator(`[role="button"][aria-label$=": ${label}"]`);
+  return stepCard.locator(
+    `[role="button"][aria-label="Open ${label}"], ` +
+    `[role="button"][aria-label="Open Start event: ${label}"]`,
+  );
 }
 
 // ── Page load ─────────────────────────────────────────────────────────────────

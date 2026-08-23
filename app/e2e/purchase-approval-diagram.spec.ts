@@ -69,11 +69,11 @@ async function scrollToDiagramStep(page: Page) {
 
 /**
  * Locate a linked BPMN node by its label.
- * BpmnRenderer renders linked nodes with role="button" and an aria-label that
- * ends in ": <node.label>" (for example, "Open User task: Review Request").
+ * BpmnRenderer renders linked nodes with role="button" and an aria-label of
+ * "Open <node.label>" (for example, "Open Review Request").
  */
 function nodeButton(stepCard: ReturnType<Page['locator']>, label: string) {
-  return stepCard.locator(`[role="button"][aria-label$=": ${label}"]`);
+  return stepCard.locator(`[role="button"][aria-label="Open ${label}"]`);
 }
 
 // ── Page load ─────────────────────────────────────────────────────────────────
@@ -140,8 +140,9 @@ test.describe('Purchase Approval — diagram node click navigation', () => {
     const stepCard = await scrollToDiagramStep(page);
     const buttons = stepCard.locator('[role="button"]');
     const count = await buttons.count();
-    // Three task nodes and the linked gateway (g1) receive role="button".
-    expect(count, 'Expected exactly 4 interactive linked nodes').toBe(4);
+    // Three task nodes, one gateway, one start event, and two end events
+    // receive role="button".
+    expect(count, 'Expected exactly 7 interactive linked nodes').toBe(7);
   });
 
   test('clicking t1 (Review Request) navigates to As-Is Process Capture skill', async ({ page }) => {
