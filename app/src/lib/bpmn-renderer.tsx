@@ -9,6 +9,7 @@ import {
   EVENT_RADIUS,
   EVENT_START_INNER_RADIUS,
   EVENT_END_INNER_RADIUS,
+  EVENT_INTERMEDIATE_INNER_RADIUS,
   GATEWAY_HALF,
   TASK_RX,
   TASK_MARKER_OFFSET_X,
@@ -81,7 +82,12 @@ function getNodeAccessibleName(node: BpmnNode): string {
   const label = node.label?.trim() || 'Unnamed';
 
   if (node.kind === 'event') {
-    return `${node.position === 'start' ? 'Start' : 'End'} event: ${label}`;
+    const eventKind = node.position === 'start'
+      ? 'Start'
+      : node.position === 'end'
+        ? 'End'
+        : 'Intermediate';
+    return `${eventKind} event: ${label}`;
   }
 
   if (node.kind === 'task') {
@@ -130,6 +136,20 @@ function renderNode(node: BpmnNode, lnode: BpmnLayoutNode, interaction?: NodeInt
         <g aria-hidden="true">
           <circle cx={x} cy={y} r={EVENT_RADIUS} className="bpmn-event-end" />
           <circle cx={x} cy={y} r={EVENT_END_INNER_RADIUS} className="bpmn-event-end" />
+          <text x={x} y={y + 30} textAnchor="middle" fontSize={LABEL_FONT_SIZE} className="bpmn-text">
+            {node.label}
+          </text>
+        </g>
+      </g>
+    );
+  }
+
+  if (node.kind === 'event' && node.position === 'intermediate') {
+    return (
+      <g key={node.id} role="group" aria-label={accessibleName}>
+        <g aria-hidden="true">
+          <circle cx={x} cy={y} r={EVENT_RADIUS} className="bpmn-event" />
+          <circle cx={x} cy={y} r={EVENT_INTERMEDIATE_INNER_RADIUS} className="bpmn-event" />
           <text x={x} y={y + 30} textAnchor="middle" fontSize={LABEL_FONT_SIZE} className="bpmn-text">
             {node.label}
           </text>

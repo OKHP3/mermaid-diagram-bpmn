@@ -26,6 +26,7 @@
 | Keyword | BPMN shape | Notes |
 |---|---|---|
 | `start` | Start event (thin ring) | Filled inner circle |
+| `intermediate` | Intermediate event (double thin ring) | Plain catching/throwing point; event subtype decoration is not yet supported |
 | `end` | End event (thick ring) | Filled shape |
 
 ### Task keywords

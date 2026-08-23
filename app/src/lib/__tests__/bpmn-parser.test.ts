@@ -67,6 +67,14 @@ describe('parse — node types', () => {
     expect(node.position).toBe('end');
   });
 
+  it('parses intermediate event', () => {
+    const db = parse('bpmn-beta\nintermediate wait1 "Waiting for approval"');
+    const node = db.getNodes()[0];
+    expect(node.kind).toBe('event');
+    expect(node.position).toBe('intermediate');
+    expect(node.label).toBe('Waiting for approval');
+  });
+
   it('parses generic task (no subtype)', () => {
     const db = parse('bpmn-beta\ntask t1 "Do something"');
     const node = db.getNodes()[0];

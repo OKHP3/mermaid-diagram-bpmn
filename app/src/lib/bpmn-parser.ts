@@ -7,7 +7,7 @@ export type { BpmnNode, BpmnFlow, BpmnPool, BpmnLane } from './bpmn-db';
 
 type ContextEntry = { type: 'pool'; id: string } | { type: 'lane'; id: string };
 
-const NODE_PATTERN = /^(start|end|task(?::[a-zA-Z]+)?|xor|or|and|note)\s+([a-zA-Z0-9_]+)\s+"([^"]*)"$/;
+const NODE_PATTERN = /^(start|end|intermediate|task(?::[a-zA-Z]+)?|xor|or|and|note)\s+([a-zA-Z0-9_]+)\s+"([^"]*)"$/;
 const POOL_PATTERN = /^pool\s+([a-zA-Z0-9_]+)\s+"([^"]*)"\s*\{?$/;
 const LANE_PATTERN = /^lane\s+([a-zA-Z0-9_]+)\s+"([^"]*)"\s*\{?$/;
 const COND_FLOW_PATTERN = /^([a-zA-Z0-9_]+)\s+-->\s+([a-zA-Z0-9_]+):\s+"([^"]*)"$/;
@@ -101,6 +101,8 @@ export function parse(source: string): BpmnDb {
         kind = 'event'; position = 'start';
       } else if (typeStr === 'end') {
         kind = 'event'; position = 'end';
+      } else if (typeStr === 'intermediate') {
+        kind = 'event'; position = 'intermediate';
       } else if (typeStr.startsWith('task')) {
         kind = 'task';
         subtype = typeStr.includes(':') ? typeStr.split(':')[1] : undefined;

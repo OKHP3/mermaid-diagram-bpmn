@@ -38,6 +38,7 @@ import {
   EVENT_RADIUS,
   EVENT_START_INNER_RADIUS,
   EVENT_END_INNER_RADIUS,
+  EVENT_INTERMEDIATE_INNER_RADIUS,
   GATEWAY_HALF,
   TASK_RX,
   TASK_MARKER_OFFSET_X,
@@ -121,6 +122,12 @@ function renderNodeSvg(node: BpmnNode, lnode: BpmnLayoutNode): string {
   if (node.kind === 'event' && node.position === 'end') return `<g>
     <circle cx="${x}" cy="${y}" r="${EVENT_RADIUS}" class="bpmn-event-end"/>
     <circle cx="${x}" cy="${y}" r="${EVENT_END_INNER_RADIUS}" class="bpmn-event-end"/>
+    <text x="${x}" y="${y+30}" text-anchor="middle" font-size="${LABEL_FONT_SIZE}" class="bpmn-text">${escapeXml(node.label)}</text>
+  </g>`;
+
+  if (node.kind === 'event' && node.position === 'intermediate') return `<g>
+    <circle cx="${x}" cy="${y}" r="${EVENT_RADIUS}" class="bpmn-event"/>
+    <circle cx="${x}" cy="${y}" r="${EVENT_INTERMEDIATE_INNER_RADIUS}" class="bpmn-event"/>
     <text x="${x}" y="${y+30}" text-anchor="middle" font-size="${LABEL_FONT_SIZE}" class="bpmn-text">${escapeXml(node.label)}</text>
   </g>`;
 

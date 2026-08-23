@@ -12,7 +12,7 @@
     "  app/src/lib/bpmn-plugin.ts and lib/bpmn-plugin/package.json respectively.",
     "  They do not live here — do not add them."
   ],
-  "testCount": 839,
-  "testCountUpdated": "2026-08-22",
+  "testCount": 844,
+  "testCountUpdated": "2026-08-23",
   "bundleSizeCeilingKbGzip": 150
 }

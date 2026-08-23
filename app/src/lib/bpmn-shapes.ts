@@ -24,6 +24,9 @@ export const EVENT_START_INNER_RADIUS = 10;
 /** Inner ring radius on end events (bold-stroke double ring). */
 export const EVENT_END_INNER_RADIUS = 11;
 
+/** Inner ring radius on intermediate events (plain double ring). */
+export const EVENT_INTERMEDIATE_INNER_RADIUS = 13;
+
 /** Half-size of the gateway diamond (from centre to each cardinal point). */
 export const GATEWAY_HALF = 24;
 

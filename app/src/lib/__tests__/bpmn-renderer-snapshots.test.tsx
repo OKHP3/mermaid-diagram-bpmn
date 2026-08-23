@@ -70,6 +70,16 @@ describe('BpmnRenderer snapshots', () => {
     const svg = renderSvg(fixture('05-parallel-split.mmd'));
     expect(svg).toMatchSnapshot();
   });
+
+  it('intermediate event: SVG matches snapshot', () => {
+    const svg = renderSvg(`bpmn-beta
+start s1 "Start"
+intermediate wait1 "Waiting"
+end e1 "Done"
+s1 --> wait1
+wait1 --> e1`);
+    expect(svg).toMatchSnapshot();
+  });
 });
 
 // ---------------------------------------------------------------------------
