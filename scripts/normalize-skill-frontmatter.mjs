@@ -6,6 +6,7 @@
  * skill name and body intact, moves repository-specific fields into the
  * spec-supported metadata map, and converts list values to readable strings.
  * Run with --check in CI or --write when a source update is intentional.
+ * Tests may set SKILL_NORMALIZE_TARGET_OVERRIDE to a temporary skills directory.
  */
 
 import { readFileSync, writeFileSync, readdirSync, statSync } from 'node:fs';
@@ -14,10 +15,12 @@ import { fileURLToPath } from 'node:url';
 import { parseSkillFrontmatter } from './skill-frontmatter.mjs';
 
 const root = resolve(fileURLToPath(new URL('..', import.meta.url)));
-const targets = [
-  join(root, 'skills'),
-  join(root, '.agents', 'skills'),
-];
+const targets = process.env.SKILL_NORMALIZE_TARGET_OVERRIDE
+  ? [resolve(process.env.SKILL_NORMALIZE_TARGET_OVERRIDE)]
+  : [
+      join(root, 'skills'),
+      join(root, '.agents', 'skills'),
+    ];
 const write = process.argv.includes('--write');
 const processSkillNames = new Set([
   'okhp3-as-is-process-capture',

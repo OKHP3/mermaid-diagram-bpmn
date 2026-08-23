@@ -17,14 +17,16 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { spawnSync } from 'node:child_process';
-import { mkdirSync, writeFileSync, mkdtempSync } from 'node:fs';
+import { mkdirSync, writeFileSync, readFileSync, mkdtempSync } from 'node:fs';
 import { resolve, dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { tmpdir } from 'node:os';
+import { parseSkillFrontmatter } from './skill-frontmatter.mjs';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const SKILLS_SCRIPT       = resolve(__dirname, 'validate-skills.mjs');
 const AGENT_SKILLS_SCRIPT = resolve(__dirname, 'validate-agent-skills.mjs');
+const NORMALIZE_SCRIPT    = resolve(__dirname, 'normalize-skill-frontmatter.mjs');
 
 // ── Fixtures ──────────────────────────────────────────────────────────────────
 
@@ -124,6 +126,18 @@ function runValidateAgentSkills(agentSkillsDir) {
   const result = spawnSync(process.execPath, [AGENT_SKILLS_SCRIPT], {
     encoding: 'utf-8',
     env: { ...process.env, AGENT_SKILLS_DIR_OVERRIDE: agentSkillsDir },
+    timeout: 20_000,
+  });
+  return {
+    exitCode: result.status ?? 1,
+    output:   (result.stdout ?? '') + (result.stderr ?? ''),
+  };
+}
+
+function runNormalize(targetDir) {
+  const result = spawnSync(process.execPath, [NORMALIZE_SCRIPT, '--write'], {
+    encoding: 'utf-8',
+    env: { ...process.env, SKILL_NORMALIZE_TARGET_OVERRIDE: targetDir },
     timeout: 20_000,
   });
   return {
@@ -303,5 +317,39 @@ Body content here.
   assert.ok(
     output.toLowerCase().includes('description'),
     `failure output should mention description; got:\n${output}`,
+  );
+});
+
+test('normalize-skill-frontmatter round-trips a folded-strip (>-) description', () => {
+  const originalDescription =
+    'Build, audit, and improve OpenAI Custom GPTs with production-grade methodology. ' +
+    'Use this skill when the user asks to create, configure, test, or package a Custom GPT.';
+  const folded = `---
+name: my-test-skill
+description: >-
+  Build, audit, and improve OpenAI Custom GPTs with production-grade methodology.
+  Use this skill when the user asks to create, configure, test, or package a Custom GPT.
+license: MIT
+---
+
+# Preserve this body
+
+The body must remain intact after normalization.
+`;
+  const dir = makeSkillsDir('my-test-skill', folded);
+  const { exitCode, output } = runNormalize(dir);
+  assert.equal(exitCode, 0, `normalization should succeed; got:\n${output}`);
+
+  const normalized = readFileSync(join(dir, 'my-test-skill', 'SKILL.md'), 'utf-8');
+  assert.match(normalized, /^description: "/m, 'description should be serialized as a quoted scalar');
+  assert.equal(
+    parseSkillFrontmatter(normalized)?.fields.description,
+    originalDescription,
+    'normalization must preserve the joined folded description',
+  );
+  assert.match(
+    normalized,
+    /# Preserve this body\n\nThe body must remain intact after normalization\./,
+    'normalization must preserve the skill body',
   );
 });
