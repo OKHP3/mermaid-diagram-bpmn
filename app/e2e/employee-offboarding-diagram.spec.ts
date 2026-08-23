@@ -10,7 +10,9 @@
 
 import { test, expect, type Page } from '@playwright/test';
 
-const ROUTE = '/walkthrough/employee-offboarding';
+// Keep this relative to Playwright's baseURL so the GitHub Pages deployment
+// prefix (/mermaid-diagram-bpmn/) is preserved in CI.
+const ROUTE = 'walkthrough/employee-offboarding';
 const DIAGRAM_STEP_ID = 'step-okhp3-visual-process-modeling';
 
 const NODE_T1_LABEL = 'Open Offboarding Case';
