@@ -45,6 +45,13 @@ s1 --> t1
 t1 --> e1
 t1 --- n1`;
 
+const INTERMEDIATE_EVENT = `bpmn-beta
+start s1 "Start"
+intermediate i1 "Validated"
+end e1 "Done"
+s1 --> i1
+i1 --> e1`;
+
 // ---------------------------------------------------------------------------
 // Setup: initialise mermaid once for all tests in this file
 //
@@ -168,6 +175,21 @@ describe('mermaid.render() — 08-purchase-order-approval.mmd', () => {
     expect(svg).not.toMatch(
       /class="bpmn-flow--association"[^>]*marker-(?:start|end)=/,
     );
+  });
+});
+
+// ---------------------------------------------------------------------------
+// Intermediate event — plain double-ring rendering through Mermaid's plugin
+// path, independent of the React renderer snapshots.
+// ---------------------------------------------------------------------------
+describe("mermaid.render() — intermediate event", () => {
+  it("emits the plain double-ring SVG for an intermediate event", async () => {
+    const { svg } = await mermaid.render("test-intermediate-event", INTERMEDIATE_EVENT);
+
+    expect(svg).toContain('class="bpmn-event"');
+    expect(svg.match(/r="18" class="bpmn-event"/g)).toHaveLength(2);
+    expect(svg).toContain('r="13" class="bpmn-event"');
+    expect(svg).toContain("Validated");
   });
 });
 
