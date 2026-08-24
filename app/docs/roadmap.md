@@ -60,7 +60,7 @@ the full evidence record and `docs/capability-ledger.md` for the baseline.
   evidence-tier table; every claim backed by a named test or corpus file
 
 Not completed in this phase (still deferred):
-- `<script>` tag CDN load path (requires npm publish and CDN distribution; tracked in V0.9)
+- Native-ESM CDN proof for the pinned Mermaid/plugin pair (V0.9); legacy `<script>` loading and arbitrary versions remain unsupported
 
 Resolved after initial V0.6 scope (now closed):
 - Parser errors shown inline in the playground (TD-004) — `Playground.tsx` has been confirmed to

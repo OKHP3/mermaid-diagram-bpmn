@@ -127,8 +127,8 @@ Completed 2026-08-04 via PRD-04. See `docs/mermaid-compatibility.md` for the ful
 - [x] Demo page shows live Mermaid-rendered `bpmn-beta` output
   _(verified: `/mermaid-host-demo` route in public app; `mermaid-host-demo.test.tsx` component tests)_
 
-**Deferred from V0.6** (requires npm publish and CDN distribution; tracked in V0.9):
-- Works when loaded via `<script>` tag against Mermaid CDN build
+**Deferred from V0.6** (resolved narrowly in V0.9):
+- Native-ESM browser CDN proof is covered for the pinned version pair; legacy `<script>` loading remains unsupported
 
 ---
 
@@ -169,8 +169,8 @@ Prepare for external contribution and Mermaid engagement.
 
 - [x] Package published to npm at `@okhp3/mermaid-diagram-bpmn`
   _Published 2026-08-06: `@okhp3/mermaid-diagram-bpmn@0.1.1` — exports map (ESM + CJS + types), `files` allowlist, `sideEffects: false`. Smoke test (12/12) CI-gated in `publish-npm.yml`. Confirmed live: `npm view @okhp3/mermaid-diagram-bpmn` returns `0.1.1`._
-- [ ] Works when loaded via `<script>` tag against Mermaid CDN build
-  _(deferred from V0.6 — npm package publication is complete, but CDN/live-editor behavior remains unverified as of 2026-08-22)_
+- [x] Works when loaded from a browser CDN via native ESM against the tested Mermaid build
+  _Exact pair `mermaid@11.4.1` + `@okhp3/mermaid-diagram-bpmn@0.1.1` is covered by `app/public/browser-cdn-example.html`, Chromium E2E, and `pnpm run check:browser-cdn` (2026-08-24). Legacy `<script>` tags and arbitrary versions remain unsupported._
 - [x] At least 3 illustrative real-world process examples contributed (not purchase-approval)
   _Employee onboarding, Quote to Order, and Support Ticket Triage are browser-verified corpus fixtures; see `docs/capability-ledger.md` for supported/deferred semantics and evidence boundaries._
 - [x] Mermaid issue **#7699** engaged with prototype link — comment posted 2026-08-05: https://github.com/mermaid-js/mermaid/issues/7699#issuecomment-5196155299

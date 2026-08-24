@@ -1,7 +1,7 @@
 # Mermaid Compatibility Reference
 ## `mermaid-diagram-bpmn` / `bpmn-beta`
 
-**Last updated:** 2026-08-22
+**Last updated:** 2026-08-24
 **Current evidence baseline:** [Maturity Evidence Baseline — 2026-08-22](../../docs/maturity-evidence-baseline-2026-08-22.md)
 **Target repos:** `mermaid-js/mermaid` (≥ 10), `mermaid-js/mermaid-live-editor`
 
@@ -17,6 +17,27 @@ import { bpmnPlugin } from 'mermaid-diagram-bpmn';
 
 await mermaid.registerExternalDiagrams([bpmnPlugin]);
 ```
+
+## Browser CDN contract
+
+The no-bundler adoption path is supported only for the exact native-ESM pair
+below:
+
+- Mermaid: `https://cdn.jsdelivr.net/npm/mermaid@11.4.1/+esm`
+- Plugin: `https://cdn.jsdelivr.net/npm/@okhp3/mermaid-diagram-bpmn@0.1.1/dist/index.mjs`
+
+The standalone proof at
+`app/public/browser-cdn-example.html` imports both assets, initializes Mermaid
+with `securityLevel: "strict"`, registers `bpmnPlugin`, renders a representative
+diagram, and exposes import/render failures in a visible status element. The
+same URLs are checked by `pnpm run check:browser-cdn` and the Chromium E2E
+browser check.
+
+This is not a claim for arbitrary Mermaid versions, legacy browsers, CommonJS
+`<script>` tags, or arbitrary script loaders. npm remains the recommended
+bundler-based path. The example's loading order is intentional: Mermaid and
+the plugin are imported first, Mermaid is initialized, then the external
+diagram is registered before `mermaid.render()`.
 
 `bpmnPlugin` satisfies the `ExternalDiagramDefinition` interface from
 `mermaid/src/diagram-api/types.ts`:
@@ -213,8 +234,9 @@ The live editor's `render(config, code, id)` function then calls
 `mermaid.render(id, code)`, which triggers the lazy loader, parser, and
 draw function in sequence.
 
-**Not yet tested end-to-end** against a live editor instance. This is the next
-validation milestone — see Open Questions below.
+**Not yet tested end-to-end** against a live editor instance. This remains
+outside the supported CDN contract; the standalone native-ESM browser proof is
+the supported no-bundler path. See Open Questions below.
 
 ---
 
@@ -260,7 +282,7 @@ The test:
 | CQ-002 | What Mermaid version should be pinned as `peerDependencies`? | **Answered** — `^11.4.1` (`MERMAID_VERSION_TARGET`). | Resolved |
 | CQ-003 | Does Mermaid pass themeVariables as the `options` arg to `styles()`? | **Answered** — Yes. `styles(themeVars)` receives resolved theme variables; `_cachedThemeVars` captures them for `draw()`. | Resolved |
 | CQ-004 | Does `draw()` receive the SVG element `id` and must find it via `getElementById`? | **Answered** — Yes; Mermaid creates `<div id="d{id}"><svg id="{id}">` before calling `draw()`. | Resolved |
-| CQ-005 | Does the live editor sandbox allow external diagram registration? | Open — not yet tested end-to-end; CDN/live-editor adoption remains blocked. | Live editor compatibility |
+| CQ-005 | Does the live editor sandbox allow external diagram registration? | Open — not tested end-to-end; live-editor integration remains outside the supported CDN contract. | Live editor compatibility |
 
 ---
 
@@ -277,7 +299,7 @@ pnpm --filter @workspace/mermaid-diagram-bpmn run typecheck
 pnpm --filter @workspace/mermaid-diagram-bpmn exec vitest run \
   src/lib/__tests__/bpmn-plugin-integration.test.ts
 
-# Live editor fork test (manual — still pending)
+# Live editor fork test (manual — optional, outside the supported contract)
 # Clone mermaid-live-editor, add bpmnPlugin to registerExternalDiagrams call,
 # type a bpmn-beta diagram, verify SVG renders.
 ```

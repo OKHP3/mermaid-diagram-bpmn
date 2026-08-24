@@ -42,6 +42,12 @@ const KNOWN_LIMITS = [
     detail:
       "jsdom and happy-dom drop SVG children after a <defs> block. Initialise Mermaid with securityLevel: 'loose' in those environments. Real browsers do not need this — the default ('strict') works correctly.",
   },
+  {
+    id: "cdn-contract",
+    label: "Browser CDN path is narrowly supported",
+    detail:
+      "The tested no-bundler path uses native ESM with mermaid@11.4.1 and @okhp3/mermaid-diagram-bpmn@0.1.1 from jsDelivr. Legacy script tags, CommonJS loading, other Mermaid versions, and arbitrary loaders are outside the contract.",
+  },
 ] as const;
 
 // ── CodeBlock ─────────────────────────────────────────────────────────────────

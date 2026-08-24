@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>BPMN for Mermaid — browser CDN example</title>
+    <style>
+      :root { color-scheme: light dark; font: 16px/1.5 system-ui, sans-serif; }
+      body { max-width: 900px; margin: 2rem auto; padding: 0 1rem; }
+      #status { padding: .75rem 1rem; border: 1px solid; border-radius: .4rem; }
+      #status[data-state="ok"] { color: #166534; background: #f0fdf4; }
+      #status[data-state="error"] { color: #991b1b; background: #fef2f2; }
+      @media (prefers-color-scheme: dark) {
+        #status[data-state="ok"] { color: #bbf7d0; background: #052e16; }
+        #status[data-state="error"] { color: #fecaca; background: #450a0a; }
+      }
+      #output { margin-top: 1rem; overflow: auto; }
+      #output svg { max-width: 100%; height: auto; }
+    </style>
+  </head>
+  <body>
+    <h1>Browser CDN example</h1>
+    <p>This standalone page uses native browser ESM imports—no bundler and no repository-local imports.</p>
+    <div id="status" data-state="loading" role="status" aria-live="polite">Loading Mermaid and bpmn-beta…</div>
+    <div id="output" aria-label="Rendered BPMN diagram"></div>
+    <script type="module">
+      const MERMAID_URL = "https://cdn.jsdelivr.net/npm/mermaid@11.4.1/+esm";
+      const PLUGIN_URL = "https://cdn.jsdelivr.net/npm/@okhp3/mermaid-diagram-bpmn@0.1.1/dist/index.mjs";
+      const SOURCE = `bpmn-beta
+accTitle: Browser CDN proof
+accDescr: A request is reviewed and either accepted or rejected.
+start s1 "Request received"
+task:user t1 "Review request"
+xor g1 "Accepted?"
+end e1 "Accepted"
+end e2 "Rejected"
+s1 --> t1
+t1 --> g1
+g1 --> e1: "yes"
+g1 --> e2: "no"`;
+
+      const status = document.querySelector("#status");
+      const output = document.querySelector("#output");
+      try {
+        const [{ default: mermaid }, { bpmnPlugin }] = await Promise.all([
+          import(MERMAID_URL),
+          import(PLUGIN_URL),
+        ]);
+        mermaid.initialize({ startOnLoad: false, securityLevel: "strict" });
+        await mermaid.registerExternalDiagrams([bpmnPlugin]);
+        const { svg } = await mermaid.render("browser-cdn-bpmn", SOURCE);
+        output.innerHTML = svg;
+        status.dataset.state = "ok";
+        status.textContent = "Rendered successfully · mermaid@11.4.1 · plugin@0.1.1 · strict security";
+      } catch (error) {
+        status.dataset.state = "error";
+        status.textContent = `CDN render failed: ${error instanceof Error ? error.message : String(error)}`;
+      }
+    </script>
+  </body>
+</html>

@@ -111,6 +111,9 @@ jobs:
       - name: Release manifest check (version + compat range must match canonical sources)
         run: pnpm run manifest:check
 
+      - name: Browser CDN contract check
+        run: pnpm run check:browser-cdn
+
   e2e:
     name: Real-browser E2E — Mermaid host demo (${{ matrix.browser }})
     needs: checks

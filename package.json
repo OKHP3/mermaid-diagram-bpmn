@@ -30,6 +30,7 @@
     "check:dfki-7699": "node scripts/check-dfki-7699.mjs",
     "check:dfki-7699:test": "node --test scripts/check-dfki-7699.test.mjs",
     "check:version-status": "node scripts/check-version-status.mjs",
+    "check:browser-cdn": "node scripts/check-browser-cdn.mjs",
     "check:version-status:test": "node --test scripts/check-version-status.test.mjs",
     "check:bundle-size": "node scripts/check-bundle-size.mjs",
     "check:bundle-size:test": "node --test scripts/check-bundle-size.test.mjs",

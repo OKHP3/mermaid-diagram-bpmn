@@ -54,6 +54,37 @@ g1 --> e2 : "no"
 document.getElementById('output').innerHTML = svg;
 ```
 
+### Browser CDN (native ESM)
+
+For a no-bundler proof, use the exact tested pair below in a modern browser:
+
+```html
+<script type="module">
+  const [{ default: mermaid }, { bpmnPlugin }] = await Promise.all([
+    import('https://cdn.jsdelivr.net/npm/mermaid@11.4.1/+esm'),
+    import('https://cdn.jsdelivr.net/npm/@okhp3/mermaid-diagram-bpmn@0.1.1/dist/index.mjs'),
+  ]);
+  mermaid.initialize({ startOnLoad: false, securityLevel: 'strict' });
+  await mermaid.registerExternalDiagrams([bpmnPlugin]);
+  const { svg } = await mermaid.render('my-diagram', 'bpmn-beta\nstart s1 "Begin"\nend e1 "Done"\ns1 --> e1');
+  document.getElementById('output').innerHTML = svg;
+</script>
+```
+
+This is a supported proof for `mermaid@11.4.1` with
+`@okhp3/mermaid-diagram-bpmn@0.1.1`, using native browser ESM and the default
+strict Mermaid security boundary. The plugin must load after Mermaid
+registration is available; the example registers it explicitly before
+rendering. Other Mermaid releases, CommonJS `<script>` tags, legacy browsers,
+and arbitrary script-loader environments are outside this contract. A failed
+network import or render should be surfaced to the page as an error rather than
+silently treated as a successful diagram.
+
+The repository contains the standalone proof at
+`app/public/browser-cdn-example.html`. The repeatable
+`pnpm run check:browser-cdn` gate verifies the exact URLs and their HTTP
+responses.
+
 ---
 
 ## bpmn-beta syntax quick reference

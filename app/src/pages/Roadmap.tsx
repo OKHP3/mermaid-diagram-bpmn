@@ -89,7 +89,7 @@ const VERSION_LADDER: VersionStep[] = [
       "Theme variable binding — getStyles() reads live Mermaid themeVariables at render time (FR-018)",
       "Plugin entry point exported from @okhp3/mermaid-diagram-bpmn package (npm publication tracked in V0.9)",
       "Host demo page (/mermaid-host-demo) — live Mermaid-rendered bpmn-beta output, no securityLevel:loose",
-      "Deferred to V0.9: <script> tag CDN load path (blocked on CDN distribution)",
+      "Deferred from V0.6; completed narrowly in V0.9 via native-ESM CDN proof for the pinned Mermaid/plugin pair. Legacy <script> loading and arbitrary versions remain unsupported",
     ],
   },
   {
