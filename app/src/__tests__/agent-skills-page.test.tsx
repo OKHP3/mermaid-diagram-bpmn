@@ -619,6 +619,16 @@ describe('AgentSkills page — PNS section rows', () => {
       'PNS sections with an empty standard field leave the schema viewer without a normative reference',
     ).toHaveLength(0);
   });
+
+  it('every non-null PNS naCondition is non-empty (pure data, no render)', () => {
+    const missing = PNS_SECTIONS.filter(
+      s => s.naCondition !== null && s.naCondition.trim() === '',
+    );
+    expect(
+      missing.map(s => `Section ${s.number} "${s.title}": naCondition is empty`),
+      'PNS sections with an empty naCondition would show blank conditional guidance',
+    ).toHaveLength(0);
+  });
 });
 
 // ─────────────────────────────────────────────────────────────────────────────
