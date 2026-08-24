@@ -42,6 +42,17 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
+      - name: Safety and portability release gate
+        run: pnpm run check:release-gates -- --output release-gate-report.json
+
+      - name: Upload release gate report on failure
+        if: failure()
+        uses: actions/upload-artifact@v7
+        with:
+          name: release-gate-report-npm
+          path: release-gate-report.json
+          retention-days: 14
+
       - name: Type-check
         run: pnpm run typecheck
 

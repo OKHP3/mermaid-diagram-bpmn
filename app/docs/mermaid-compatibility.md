@@ -39,6 +39,12 @@ bundler-based path. The example's loading order is intentional: Mermaid and
 the plugin are imported first, Mermaid is initialized, then the external
 diagram is registered before `mermaid.render()`.
 
+The exact Mermaid target is also part of the safety boundary. The release-gate
+audit currently reports advisories against `mermaid@11.4.1`; this project does
+not claim that dependency is vulnerability-free. Upgrading Mermaid requires
+rerunning the real integration, browser, and CDN checks together because the
+plugin contract and CDN pair are version-pinned.
+
 `bpmnPlugin` satisfies the `ExternalDiagramDefinition` interface from
 `mermaid/src/diagram-api/types.ts`:
 

@@ -31,6 +31,7 @@ Status vocabulary for this baseline: **supported**, **provisional**, **disputed*
 | Performance | supported | 72.74 kB initial gzip against 150 kB ceiling; plugin gzip below 6 kB per format |
 | Browser interaction portability | blocked | 49/57 Chromium E2E passed; 8 worked-example node-navigation tests timed out |
 | CDN/live-editor adoption path | provisional | native ESM CDN proof supported for Mermaid 11.4.1 + plugin 0.1.1; live-editor integration and legacy script tags remain out of contract |
+| Safety and portability release gate | provisional | automated report covers dependency, license, source/SVG safety, accessibility, browser scope, and reproducibility; Mermaid 11.4.1 advisories and unknown license metadata remain release blockers |
 | Upstream/community readiness | provisional | issue #7699 is externally controlled and changed since its 2026-08-21 source baseline; no project maintainer reply is recorded |
 | External adoption | blocked | no independent usage, third-party integration, or moderated outcome evidence |
 

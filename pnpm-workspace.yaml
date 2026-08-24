@@ -111,6 +111,10 @@ overrides:
   picomatch@<2.3.2: '>=2.3.2'
   picomatch@>=4.0.0 <4.0.4: '>=4.0.4'
   postcss@<8.5.10: '>=8.5.10'
+  brace-expansion: 5.0.9
+  dompurify: 3.4.13
+  lodash-es: 4.18.1
+  uuid: 11.1.1
   rollup>@rollup/rollup-android-arm-eabi: '-'
   rollup>@rollup/rollup-android-arm64: '-'
   rollup>@rollup/rollup-darwin-arm64: '-'

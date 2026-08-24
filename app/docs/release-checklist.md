@@ -57,6 +57,7 @@ Use this checklist before tagging and deploying any release.
 - [ ] `package.json` declares only packages actually imported in `src/` (TD-001)
 - [ ] No known critical/high CVEs in direct or transitive deps
 - [ ] `pnpm-workspace.yaml` overrides are current and documented
+- [ ] `pnpm run check:release-gates` — safety, license, SVG, accessibility, browser-scope, and reproducibility report is not `NO-GO`
 
 ---
 
