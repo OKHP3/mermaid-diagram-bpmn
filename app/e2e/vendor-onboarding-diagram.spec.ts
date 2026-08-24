@@ -36,6 +36,11 @@ const NODE_T1_ROUTE  = '/skills/okhp3-process-intake-and-scope';
 const NODE_T2_LABEL  = 'Send RFI to Vendor';
 const NODE_T2_ROUTE  = '/skills/okhp3-elicitation-interviews';
 
+const NODE_START_LABEL = 'Vendor Nominated';
+const NODE_START_ROUTE = '/skills/okhp3-process-intake-and-scope';
+const NODE_END_LABEL = 'Vendor Active';
+const NODE_END_ROUTE = '/skills/okhp3-publication-handoff-packaging';
+
 // ── Helpers ───────────────────────────────────────────────────────────────────
 
 /** Navigate to the Vendor Onboarding page and wait for the h1 to settle. */
@@ -215,6 +220,44 @@ test.describe('Vendor Onboarding — diagram node click navigation', () => {
     const stepCard2 = await scrollToDiagramStep(page);
     const svg2 = stepCard2.locator('svg').first();
     await expect(svg2).toBeVisible({ timeout: 15_000 });
+  });
+});
+
+test.describe('Vendor Onboarding — event node keyboard navigation', () => {
+  test('pressing Enter on Vendor Nominated navigates to Intake & Scope', async ({ page, browserName }) => {
+    test.skip(browserName !== 'chromium', 'Keyboard worked-example coverage runs in Chromium.');
+    await loadVendorOnboardingPage(page);
+    const stepCard = await scrollToDiagramStep(page);
+    const button = taskButton(stepCard, NODE_START_LABEL);
+    await expect(button).toBeVisible({ timeout: 15_000 });
+
+    await button.focus();
+    await expect(button).toBeFocused();
+    await Promise.all([
+      page.waitForURL(`**${NODE_START_ROUTE}`, { timeout: 15_000 }),
+      button.press('Enter'),
+    ]);
+
+    expect(page.url()).toContain(NODE_START_ROUTE);
+  });
+
+  test('pressing Space on Vendor Active navigates to Publication & Handoff', async ({ page, browserName }) => {
+    test.skip(browserName !== 'chromium', 'Keyboard worked-example coverage runs in Chromium.');
+    await loadVendorOnboardingPage(page);
+    const stepCard = await scrollToDiagramStep(page);
+    const button = stepCard.locator(
+      `[role="button"][aria-label="Open End event: ${NODE_END_LABEL}"]`,
+    );
+    await expect(button).toBeVisible({ timeout: 15_000 });
+
+    await button.focus();
+    await expect(button).toBeFocused();
+    await Promise.all([
+      page.waitForURL(`**${NODE_END_ROUTE}`, { timeout: 15_000 }),
+      button.press('Space'),
+    ]);
+
+    expect(page.url()).toContain(NODE_END_ROUTE);
   });
 });
 
