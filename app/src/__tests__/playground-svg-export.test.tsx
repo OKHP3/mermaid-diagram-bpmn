@@ -17,7 +17,8 @@
  * Test strategy:
  *   BpmnRenderer is mocked to return a real SVG element so that querySelector('svg')
  *   finds it and XMLSerializer can serialize it. The mock SVG carries a <title> and
- *   <desc> so the metadata-preservation contract can be asserted.
+ *   <desc> and an association connector so metadata and connector-preservation
+ *   contracts can be asserted.
  *
  *   URL.createObjectURL / revokeObjectURL are stubbed. Anchor click is intercepted.
  *
@@ -42,6 +43,14 @@ vi.mock("@/lib/bpmn-renderer", () => ({
         <title>Mock BPMN Diagram</title>
         <desc>A mock bpmn-beta diagram for test</desc>
         <circle cx="50" cy="50" r="18" className="bpmn-event" />
+        <line
+          x1="68"
+          y1="50"
+          x2="120"
+          y2="50"
+          className="bpmn-flow--association"
+          strokeDasharray="2 3"
+        />
         <style>{".bpmn-event { fill: hsl(var(--card)); }"}</style>
       </svg>
     );
@@ -182,6 +191,15 @@ describe("Playground — SVG export download", () => {
     fireEvent.click(screen.getByTestId("button-export-svg"));
     const text = await capturedBlob!.text();
     expect(text).toContain("mock bpmn-beta diagram");
+  });
+
+  it("Blob content preserves association connector class and dash pattern", async () => {
+    render(<Playground />);
+    fireEvent.click(screen.getByTestId("button-export-svg"));
+    const text = await capturedBlob!.text();
+
+    expect(text).toContain('class="bpmn-flow--association"');
+    expect(text).toContain('stroke-dasharray="2 3"');
   });
 
   it("Blob content embeds resolved styles without CSS custom properties", async () => {

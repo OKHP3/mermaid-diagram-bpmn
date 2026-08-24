@@ -158,6 +158,17 @@ describe('mermaid.render() — 08-purchase-order-approval.mmd', () => {
     expect(svg).toContain('class="bpmn-annotation-fold"');
     expect(svg).toContain('See SLA policy');
   });
+
+  it('SVG preserves association connector class and dash pattern without an arrow marker', async () => {
+    const { svg } = await mermaid.render('test-association', ANNOTATION);
+
+    expect(svg).toMatch(
+      /class="bpmn-flow--association"[^>]*stroke-dasharray="2 3"/,
+    );
+    expect(svg).not.toMatch(
+      /class="bpmn-flow--association"[^>]*marker-(?:start|end)=/,
+    );
+  });
 });
 
 // ---------------------------------------------------------------------------
