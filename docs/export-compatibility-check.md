@@ -1,6 +1,6 @@
 # SVG export compatibility check
 
-**Validation date:** 2026-08-23 (America/Los_Angeles)  
+**Validation date:** 2026-08-24 (America/Los_Angeles)
 **Scope:** Playground SVG export with a task label and an annotation
 
 ## Representative export
@@ -57,3 +57,18 @@ verified here. The repository has browser and serialization evidence that text
 nodes and portable font declarations survive export, but a future validation
 run with those editors should still confirm that imported text remains
 selectable/editable and that each editor applies the documented fallback.
+
+## 2026-08-24 availability rerun
+
+The vector-editor availability check was repeated in the current validation
+environment before attempting an import:
+
+- `inkscape`, `illustrator`, and other local editor executables were not found.
+- No Figma import target or Figma connection was available.
+- The session has no supported editor workflow through which `diagram.svg`
+  could be opened.
+
+Therefore no editor import was performed, and there is no new observation to
+report for text selection/editability or editor-specific font fallback. The
+claims above remain limited to the captured SVG structure and Linux font
+fallback evidence; they must not be treated as an external-editor result.
