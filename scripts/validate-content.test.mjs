@@ -228,6 +228,26 @@ test('validate-content exits 1 when Home.tsx contains the retired "Zero implemen
   );
 });
 
+test('validate-content emits a GitHub annotation with file and line when enabled', () => {
+  const realContent = readFileSync(REAL_HOME, 'utf-8');
+  const stalePath = writeTmp(
+    `${realContent}\n// INJECTED FOR TEST: Zero implement a BABOK knowledge area\n`,
+    '.tsx',
+  );
+
+  const { exitCode, output } = runValidator({
+    CONTENT_HOME_OVERRIDE: stalePath,
+    VALIDATE_CONTENT_GITHUB_ANNOTATIONS: 'true',
+  });
+
+  assert.equal(exitCode, 1, `expected exit 1 for banned phrase; output:\n${output}`);
+  assert.match(
+    output,
+    /::error file=app\/src\/pages\/Home\.tsx \(override\),line=\d+::.*Zero implement/,
+  );
+  assert.match(output, /retired claim phrase "Zero implement"/);
+});
+
 test('validate-content exits 1 when Home.tsx contains the stale "89,000+" ecosystem figure', () => {
   const realContent = readFileSync(REAL_HOME, 'utf-8');
   const staleContent = realContent +

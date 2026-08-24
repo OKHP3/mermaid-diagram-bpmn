@@ -164,7 +164,34 @@ const PLUGIN_VERSION = pluginPkg.version;
 const failures = [];
 
 function fail(fileLabel, line, message) {
-  failures.push(`  ${fileLabel}:${line} — ${message}`);
+  failures.push({ fileLabel, line, message });
+}
+
+function recordFailure(fileLabel, message) {
+  failures.push({ fileLabel, line: undefined, message });
+}
+
+function formatFailure({ fileLabel, line, message }) {
+  return `  ${fileLabel}${line ? `:${line}` : ''} — ${message}`;
+}
+
+function emitGitHubAnnotations() {
+  if (
+    process.env.GITHUB_ACTIONS !== 'true' &&
+    process.env.VALIDATE_CONTENT_GITHUB_ANNOTATIONS !== 'true'
+  ) {
+    return;
+  }
+
+  for (const { fileLabel, line, message } of failures) {
+    const properties = [`file=${fileLabel}`];
+    if (line) properties.push(`line=${line}`);
+    const escapedMessage = message
+      .replaceAll('%', '%25')
+      .replaceAll('\r', '%0D')
+      .replaceAll('\n', '%0A');
+    console.error(`::error ${properties.join(',')}::${escapedMessage}`);
+  }
 }
 
 // ── Check 1: Test count ───────────────────────────────────────────────────────
@@ -177,8 +204,9 @@ function fail(fileLabel, line, message) {
   const hits = findAll(text, /(\d{3,4})\s+as of \d{4}-\d{2}-\d{2}/);
 
   if (hits.length === 0) {
-    failures.push(
-      `  ${CHECKLIST_LABEL} — no "N as of YYYY-MM-DD" test-count claim found; ` +
+    recordFailure(
+      CHECKLIST_LABEL,
+      `no "N as of YYYY-MM-DD" test-count claim found; ` +
       `expected one citing ${canon.testCount}`,
     );
   } else {
@@ -217,8 +245,9 @@ const MERMAID_CITATION_SOURCES = [
 for (const [filePath, fileLabel, required] of MERMAID_CITATION_SOURCES) {
   if (!existsSync(filePath)) {
     if (required) {
-      failures.push(
-        `  ${fileLabel} — required file not found (path: ${filePath}). ` +
+      recordFailure(
+        fileLabel,
+        `required file not found (path: ${filePath}). ` +
         `If intentionally removed, update the source list in validate-content.mjs.`,
       );
     }
@@ -259,8 +288,9 @@ const PLUGIN_CITATION_SOURCES = [
 for (const [filePath, fileLabel, required] of PLUGIN_CITATION_SOURCES) {
   if (!existsSync(filePath)) {
     if (required) {
-      failures.push(
-        `  ${fileLabel} — required file not found (path: ${filePath}). ` +
+      recordFailure(
+        fileLabel,
+        `required file not found (path: ${filePath}). ` +
         `If intentionally removed, update the source list in validate-content.mjs.`,
       );
     }
@@ -327,8 +357,9 @@ const BANNED_CLAIMS_SOURCES = [
 
 for (const [filePath, fileLabel] of BANNED_CLAIMS_SOURCES) {
   if (!existsSync(filePath)) {
-    failures.push(
-      `  ${fileLabel} — required file not found (path: ${filePath}). ` +
+    recordFailure(
+      fileLabel,
+      `required file not found (path: ${filePath}). ` +
       `If intentionally removed, update BANNED_CLAIMS_SOURCES in validate-content.mjs.`,
     );
     continue;
@@ -352,9 +383,10 @@ for (const [filePath, fileLabel] of BANNED_CLAIMS_SOURCES) {
 // ── Report ────────────────────────────────────────────────────────────────────
 
 if (failures.length > 0) {
+  emitGitHubAnnotations();
   console.error(
     `\n[validate-content] FAIL — ${failures.length} content-drift violation${failures.length !== 1 ? 's' : ''} found:\n` +
-    failures.join('\n') +
+    failures.map(formatFailure).join('\n') +
     '\n\nSee scripts/validate-content.mjs header for fix instructions.\n',
   );
   process.exit(1);

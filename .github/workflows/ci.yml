@@ -106,6 +106,8 @@ jobs:
       # commands locally: `pnpm run check:content` and
       # `pnpm run check:content:test`.
       - name: Content claims gate (test count, versions, retired claims)
+        env:
+          VALIDATE_CONTENT_GITHUB_ANNOTATIONS: "true"
         run: pnpm run check:content
 
       - name: Test content claims gate failure detection
