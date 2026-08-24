@@ -230,3 +230,21 @@ test.describe('Vendor Onboarding — interactivity hint', () => {
     await expect(hint).toBeVisible({ timeout: 10_000 });
   });
 });
+
+// ── Packaged process marker ───────────────────────────────────────────────────
+
+test.describe('Vendor Onboarding — packaged process marker', () => {
+  test('final timeline marker shows the process ID and packaged lifecycle state', async ({ page }) => {
+    await loadVendorOnboardingPage(page);
+
+    const markerLabel = page.getByText('PROC-2025-211 packaged', { exact: true });
+    await expect(markerLabel).toBeAttached({ timeout: 15_000 });
+    await markerLabel.scrollIntoViewIfNeeded();
+    await expect(markerLabel).toBeVisible();
+
+    const marker = markerLabel.locator('..');
+    await expect(marker).toContainText('All 15 skills complete.');
+    await expect(marker).toContainText('PNS.md status:');
+    await expect(marker.locator('code')).toHaveText('packaged');
+  });
+});
