@@ -52,6 +52,13 @@ end e1 "Done"
 s1 --> i1
 i1 --> e1`;
 
+const COLLAPSED_SUBPROCESS = `bpmn-beta
+start s1 "Start"
+subprocess sp1 "Process Order"
+end e1 "Done"
+s1 --> sp1
+sp1 --> e1`;
+
 // ---------------------------------------------------------------------------
 // Setup: initialise mermaid once for all tests in this file
 //
@@ -190,6 +197,33 @@ describe("mermaid.render() — intermediate event", () => {
     expect(svg.match(/r="18" class="bpmn-event"/g)).toHaveLength(2);
     expect(svg).toContain('r="13" class="bpmn-event"');
     expect(svg).toContain("Validated");
+  });
+});
+
+// ---------------------------------------------------------------------------
+// Collapsed subprocess — task footprint and centered plus marker through
+// Mermaid's plugin path, independent of the React renderer snapshots.
+// ---------------------------------------------------------------------------
+describe("mermaid.render() — collapsed subprocess", () => {
+  it("emits a task-sized rounded rectangle with a centered plus marker", async () => {
+    const { svg } = await mermaid.render("test-collapsed-subprocess", COLLAPSED_SUBPROCESS);
+    const rect = /<rect x="(-?\d+(?:\.\d+)?)" y="(-?\d+(?:\.\d+)?)" width="120" height="60" rx="6" class="bpmn-task">/.exec(svg);
+
+    expect(rect).not.toBeNull();
+    expect(svg.match(/class="bpmn-subprocess-marker"/g)).toHaveLength(2);
+    expect(svg).toContain("Process Order");
+
+    const left = Number(rect![1]);
+    const top = Number(rect![2]);
+    const centerX = left + 60;
+    const markerY = top + 51;
+
+    expect(svg).toContain(
+      `x1="${centerX - 5}" y1="${markerY}" x2="${centerX + 5}" y2="${markerY}" class="bpmn-subprocess-marker"`,
+    );
+    expect(svg).toContain(
+      `x1="${centerX}" y1="${markerY - 5}" x2="${centerX}" y2="${markerY + 5}" class="bpmn-subprocess-marker"`,
+    );
   });
 });
 
