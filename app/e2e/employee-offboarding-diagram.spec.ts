@@ -87,3 +87,22 @@ test.describe('Employee Offboarding — diagram node click navigation', () => {
     expect(page.url()).toContain(NODE_T2_ROUTE);
   });
 });
+
+test.describe('Employee Offboarding — diagram node keyboard navigation', () => {
+  test('pressing Enter on Open Offboarding Case navigates to Intake & Scope', async ({ page, browserName }) => {
+    test.skip(browserName !== 'chromium', 'Keyboard worked-example coverage runs in Chromium.');
+    await loadPage(page);
+    const stepCard = await scrollToDiagramStep(page);
+    const button = taskButton(stepCard, NODE_T1_LABEL);
+    await expect(button).toBeVisible({ timeout: 15_000 });
+
+    await button.focus();
+    await expect(button).toBeFocused();
+    await Promise.all([
+      page.waitForURL(`**${NODE_T1_ROUTE}`, { timeout: 15_000 }),
+      button.press('Enter'),
+    ]);
+
+    expect(page.url()).toContain(NODE_T1_ROUTE);
+  });
+});

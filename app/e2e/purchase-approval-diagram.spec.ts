@@ -231,3 +231,22 @@ test.describe('Purchase Approval — diagram node click navigation', () => {
     await expect(stepCard2.locator('svg').first()).toBeVisible({ timeout: 15_000 });
   });
 });
+
+test.describe('Purchase Approval — diagram node keyboard navigation', () => {
+  test('pressing Space on Review Request navigates to As-Is Process Capture', async ({ page, browserName }) => {
+    test.skip(browserName !== 'chromium', 'Keyboard worked-example coverage runs in Chromium.');
+    await loadPage(page);
+    const stepCard = await scrollToDiagramStep(page);
+    const button = nodeButton(stepCard, NODE_T1_LABEL);
+    await expect(button).toBeVisible({ timeout: 15_000 });
+
+    await button.focus();
+    await expect(button).toBeFocused();
+    await Promise.all([
+      page.waitForURL(`**${NODE_T1_ROUTE}`, { timeout: 15_000 }),
+      button.press('Space'),
+    ]);
+
+    expect(page.url()).toContain(NODE_T1_ROUTE);
+  });
+});
