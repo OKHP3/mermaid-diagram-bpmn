@@ -20,6 +20,30 @@ Both should pass before submitting a PR. Both CI (pull requests) and the
 deploy workflow enforce these checks as a gate. Run them locally before
 opening a PR to catch issues early.
 
+## Optional pre-commit public-claims check
+
+Before committing changes to public-facing copy, contributors can opt in to
+the same content check that CI runs:
+
+```bash
+pnpm run check:content
+```
+
+This checks the canonical source list in `scripts/validate-content.mjs` for
+stale test-count and Mermaid/plugin-version citations, missing required sources,
+and retired public claims. It is intentionally documented rather than
+installed as a mandatory Git hook, so contributors who are editing unrelated
+files are not given a repository-wide hook automatically.
+
+When changing the validator itself, also run its failure-mode tests:
+
+```bash
+pnpm run check:content:test
+```
+
+Fix any flagged claim before committing. The output includes the source file
+and line plus the local remediation guidance used by CI.
+
 ## Where things live
 
 ```text
