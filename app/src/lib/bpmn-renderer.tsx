@@ -470,9 +470,7 @@ export function BpmnRenderer({ source, nodeLinks, nodeTooltips, interactivityHin
           {nodes.map(node => {
             const lnode = layout.nodes.find(n => n.id === node.id);
             if (!lnode) return null;
-            // Gateways describe a decision rather than a destination. Keep them
-            // exposed as named groups even when a caller supplies a link map.
-            const link = node.kind === 'gateway' ? undefined : nodeLinks?.[node.id];
+            const link = nodeLinks?.[node.id];
             const interaction: NodeInteraction | undefined = hasInteractions
               ? {
                   onClick: link ? () => navigate(link) : undefined,
