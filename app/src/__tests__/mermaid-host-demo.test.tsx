@@ -188,16 +188,19 @@ describe('MermaidHostDemo — diagram rendering', () => {
     setupHappyMocks();
   });
 
-  it('calls mermaid.render() for all five diagram entries', async () => {
+  it('calls mermaid.render() for all eight diagram entries', async () => {
     render(<MermaidHostDemo />);
-    // Five entries: flat flow, gateway, pool/lane, cross-pool, error-case
-    await waitFor(() => expect(mockRender).toHaveBeenCalledTimes(5));
+    // Four original entries, three non-purchase examples, and the error case.
+    await waitFor(() => expect(mockRender).toHaveBeenCalledTimes(8));
 
     const renderIds = mockRender.mock.calls.map(([id]: [string]) => id);
     expect(renderIds).toContain('demo-linear');
     expect(renderIds).toContain('demo-gateway');
     expect(renderIds).toContain('demo-purchase-order');
     expect(renderIds).toContain('demo-cross-pool');
+    expect(renderIds).toContain('demo-employee-onboarding');
+    expect(renderIds).toContain('demo-quote-to-order');
+    expect(renderIds).toContain('demo-support-ticket');
     expect(renderIds).toContain('demo-error-case');
   });
 

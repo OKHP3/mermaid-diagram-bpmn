@@ -36,6 +36,26 @@ Status vocabulary for this baseline: **supported**, **provisional**, **disputed*
 
 Fresh command results and exact public checks are recorded in the dated review record above.
 
+### Illustrative process corpus — 2026-08-24
+
+The public Playground gallery and Mermaid Host Demo now include three
+non-purchase process fixtures selected for materially different shapes:
+
+| Example | Shape exercised | Evidence boundary |
+|---|---|---|
+| Employee onboarding | Failed-check exception plus parallel HR/IT setup across lanes | Does not demonstrate boundary/timer events or executable onboarding automation |
+| Vendor collaboration | Procurement/vendor pools exchange message flows and route acceptance or rejection | Does not demonstrate choreography, message correlation, or runtime integration |
+| Quote to order | Cross-role discount approval, credit exception, and customer acceptance branches | Does not demonstrate data objects, boundary events, or ERP/CRM execution |
+| Support ticket triage | Priority routing plus parallel escalation notifications and a receive task | Does not demonstrate SLA timers, interrupting events, or runtime queue behavior |
+
+Parser corpus invariants, React rendering, and real-browser Mermaid rendering
+pass for all three fixtures in Chromium. The host-demo run was blocked before
+Firefox and WebKit could launch because this Linux environment is missing their
+native browser libraries; that environment limitation is not evidence of a
+fixture rendering failure. This is authored, illustrative evidence of the
+documented descriptive subset—not independent industry validation, full BPMN
+conformance, or universal process coverage.
+
 ---
 
 ## O1 command results

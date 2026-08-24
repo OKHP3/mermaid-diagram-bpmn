@@ -167,3 +167,28 @@ describe('corpus: 05-parallel-split.mmd', () => {
     expect(db.getLanes()).toHaveLength(0);
   });
 });
+
+describe('corpus: non-purchase real-world examples', () => {
+  it.each([
+    ['06-cross-pool-collaboration.mmd', 'Cross-Pool Vendor Collaboration', 2],
+    ['07-employee-onboarding.mmd', 'Employee Onboarding', 2],
+    ['09-quote-to-order.mmd', 'Quote to Order', 3],
+    ['10-support-ticket-triage.mmd', 'Support Ticket Triage', 2],
+  ])('%s has an accessibility title and multiple lanes', (file, title, laneCount) => {
+    const db = parse(loadExample(file));
+    expect(db.getAccTitle()).toBe(title);
+    expect(db.getLanes().length).toBeGreaterThanOrEqual(laneCount);
+    expect(db.getNodes().length).toBeGreaterThan(5);
+    expect(db.getFlows().length).toBeGreaterThan(5);
+  });
+
+  it('covers distinct exception and collaboration patterns', () => {
+    const onboarding = parse(loadExample('07-employee-onboarding.mmd'));
+    const quoteToOrder = parse(loadExample('09-quote-to-order.mmd'));
+    const support = parse(loadExample('10-support-ticket-triage.mmd'));
+
+    expect(onboarding.getFlows().some(flow => flow.label === 'fail')).toBe(true);
+    expect(quoteToOrder.getFlows().some(flow => flow.label?.includes('above threshold'))).toBe(true);
+    expect(support.getNodes().filter(node => node.subtype === 'and')).toHaveLength(2);
+  });
+});

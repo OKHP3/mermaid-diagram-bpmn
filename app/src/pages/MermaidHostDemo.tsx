@@ -25,6 +25,9 @@ import example01 from '../../examples/01-linear-process.mmd?raw';
 import example02 from '../../examples/02-gateway-decision.mmd?raw';
 import example06 from '../../examples/06-cross-pool-collaboration.mmd?raw';
 import example08 from '../../examples/08-purchase-order-approval.mmd?raw';
+import example07 from '../../examples/07-employee-onboarding.mmd?raw';
+import example09 from '../../examples/09-quote-to-order.mmd?raw';
+import example10 from '../../examples/10-support-ticket-triage.mmd?raw';
 
 // ── Error-case fixture ────────────────────────────────────────────────────────
 // Intentionally invalid bpmn-beta source used to exercise the error render path.
@@ -241,6 +244,9 @@ export default function MermaidHostDemo() {
           { id: 'demo-gateway',        title: '02 — Gateway decision',         source: example02 },
           { id: 'demo-purchase-order', title: '08 — Pool / lane collaboration', source: example08 },
           { id: 'demo-cross-pool',     title: '06 — Cross-pool message flow',  source: example06 },
+          { id: 'demo-employee-onboarding', title: '07 — Employee onboarding', source: example07 },
+          { id: 'demo-quote-to-order', title: '09 — Quote to order', source: example09 },
+          { id: 'demo-support-ticket', title: '10 — Support ticket triage', source: example10 },
           { id: 'demo-error-case',     title: 'Error case — invalid source',   source: INVALID_SOURCE },
         ];
 
@@ -347,6 +353,9 @@ export default function MermaidHostDemo() {
             : [
                 { id: 'demo-linear',         title: '01-linear-process.mmd — flat diagram',       source: example01 },
                 { id: 'demo-purchase-order', title: '08-purchase-order-approval.mmd — pool/lanes', source: example08 },
+                { id: 'demo-employee-onboarding', title: '07-employee-onboarding.mmd — pool/lanes', source: example07 },
+                { id: 'demo-quote-to-order', title: '09-quote-to-order.mmd — pool/lanes', source: example09 },
+                { id: 'demo-support-ticket', title: '10-support-ticket-triage.mmd — pool/lanes', source: example10 },
               ].map(d => (
                 <DiagramPanel
                   key={d.id}

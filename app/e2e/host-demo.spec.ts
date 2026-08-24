@@ -156,6 +156,25 @@ test.describe('Host demo — cross-pool message flow (06-cross-pool-collaboratio
   });
 });
 
+test.describe('Host demo — non-purchase process corpus', () => {
+  test.beforeEach(async ({ page }) => { await loadDemoPage(page); });
+
+  for (const [diagramId, title] of [
+    ['demo-employee-onboarding', 'Employee onboarding'],
+    ['demo-quote-to-order', 'Quote to order'],
+    ['demo-support-ticket', 'Support ticket triage'],
+  ]) {
+    test(`${title} renders as a non-empty Mermaid SVG`, async ({ page }) => {
+      await expectSvgRendered(page, diagramId);
+      await expect(page.locator(`[data-testid="error-${diagramId}"]`)).not.toBeVisible();
+      const shapeCount = await page
+        .locator(`[data-testid="svg-output-${diagramId}"] svg [class*="bpmn-"]`)
+        .count();
+      expect(shapeCount, `${title} SVG should contain BPMN shapes`).toBeGreaterThan(0);
+    });
+  }
+});
+
 // ── Error case — invalid source ───────────────────────────────────────────────
 
 test.describe('Host demo — error case (invalid bpmn-beta source)', () => {

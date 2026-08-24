@@ -62,7 +62,7 @@ test.describe('First-visit outcome evaluation — desktop', () => {
         timeout: 30_000,
       });
       await expect(page.getByTestId('version-metadata')).toContainText(
-        '4 rendered · 1 expected error',
+        '7 rendered · 1 expected error',
       );
     });
   });

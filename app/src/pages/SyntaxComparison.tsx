@@ -370,6 +370,12 @@ export default function SyntaxComparison() {
            entity-first syntax than the compact shared example. Each notation has genuine
            strengths — this page is a factual reference, not a sales pitch.
         </p>
+        <p className="mt-3 max-w-2xl rounded-md border border-amber-300/60 bg-amber-50/60 px-3 py-2 text-xs text-amber-900 dark:border-amber-700/50 dark:bg-amber-950/20 dark:text-amber-200">
+          The Playground gallery includes four additional illustrative process
+          examples beyond purchase approval. They exercise this documented
+          descriptive subset; authored examples are not evidence of full BPMN
+          conformance or universal process coverage.
+        </p>
         <div className="mt-4 flex flex-wrap gap-3 text-xs text-muted-foreground">
           <a
             href="https://github.com/mermaid-js/mermaid/issues/7699"

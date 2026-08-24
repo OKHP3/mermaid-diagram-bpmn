@@ -171,7 +171,8 @@ Prepare for external contribution and Mermaid engagement.
   _Published 2026-08-06: `@okhp3/mermaid-diagram-bpmn@0.1.1` — exports map (ESM + CJS + types), `files` allowlist, `sideEffects: false`. Smoke test (12/12) CI-gated in `publish-npm.yml`. Confirmed live: `npm view @okhp3/mermaid-diagram-bpmn` returns `0.1.1`._
 - [ ] Works when loaded via `<script>` tag against Mermaid CDN build
   _(deferred from V0.6 — npm package publication is complete, but CDN/live-editor behavior remains unverified as of 2026-08-22)_
-- [ ] At least 3 real-world process examples contributed (not purchase-approval)
+- [x] At least 3 illustrative real-world process examples contributed (not purchase-approval)
+  _Employee onboarding, Quote to Order, and Support Ticket Triage are browser-verified corpus fixtures; see `docs/capability-ledger.md` for supported/deferred semantics and evidence boundaries._
 - [x] Mermaid issue **#7699** engaged with prototype link — comment posted 2026-08-05: https://github.com/mermaid-js/mermaid/issues/7699#issuecomment-5196155299
 - [x] Repeatable DFKI #7699 source check — `pnpm run check:dfki-7699` compares the live issue state, updated timestamp, labels, and a deterministic fingerprint of all author-authored fenced examples against `docs/dfki-7699-source-baseline.json`; drift fails with review/update instructions. The check cannot prove that the cited paper has no DOI or preprint. Baseline reviewed 2026-08-22.
 - [x] Mermaid issues **#2623** and **#660** engaged with prototype link — comments posted 2026-08-05: https://github.com/mermaid-js/mermaid/issues/2623#issuecomment-5198000488 and https://github.com/mermaid-js/mermaid/issues/660#issuecomment-5198000626

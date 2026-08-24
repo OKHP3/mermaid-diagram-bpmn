@@ -1044,6 +1044,13 @@ export default function Playground() {
                 <span className="ml-2 text-amber-600 font-medium">· Experimental support — layout approximations apply.</span>
               )}
             </p>
+            {(activeExampleDef.supportedSemantics || activeExampleDef.deferredSemantics) && (
+              <p className="mt-1 text-[11px] text-muted-foreground/70">
+                <span className="font-semibold text-foreground/80">Illustrative evidence:</span>{" "}
+                supports {activeExampleDef.supportedSemantics?.join(", ")}.
+                {" "}Deferred here: {activeExampleDef.deferredSemantics?.join(", ")}.
+              </p>
+            )}
           </div>
         </div>
       )}
