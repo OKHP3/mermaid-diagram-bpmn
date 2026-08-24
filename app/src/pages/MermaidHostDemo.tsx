@@ -303,7 +303,11 @@ export default function MermaidHostDemo() {
         {state.phase === 'ready' && (
           <Badge
             label="render status"
-            value={state.diagrams.every(d => !d.error) ? 'all diagrams rendered' : 'some errors'}
+            value={
+              state.diagrams.every(d => !d.error)
+                ? 'all diagrams rendered'
+                : `${state.diagrams.filter(d => !d.error).length} rendered · ${state.diagrams.filter(d => d.error).length} expected error`
+            }
             ok={state.diagrams.every(d => !d.error)}
           />
         )}
