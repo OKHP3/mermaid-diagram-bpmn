@@ -136,6 +136,28 @@ const SOURCE_UNDEFINED_NODE_REF_WITH_DISTANT_LINE = [
 ].join('\n');
 const UNDEFINED_NODE_REF_WARNING_LINE = 46;
 
+/**
+ * Triggers two positional warnings at once: the orphan declaration is on line
+ * 44 and the flow to the undeclared node is on line 48. Keeping both warnings
+ * in one fixture verifies that selecting a later item replaces the earlier
+ * editor highlight rather than leaving stale navigation state behind.
+ */
+const SOURCE_MULTIPLE_WARNINGS = [
+  'bpmn-beta',
+  ...Array.from({ length: 40 }, (_, index) => `%% Context note ${index + 1}`),
+  'start s1 "Start"',
+  'task t1 "Connected Task"',
+  'task t2 "Orphaned Task"',
+  'end e1 "End"',
+  's1 --> t1',
+  't1 --> e1',
+  't1 --> ghost',
+].join('\n');
+const MULTIPLE_WARNINGS = {
+  orphan: { code: 'ORPHAN_NODE', line: 44, nodeId: 't2' },
+  undefinedRef: { code: 'UNDEFINED_NODE_REF', line: 48, nodeId: 'ghost' },
+};
+
 /** A fully valid minimal diagram — no warnings expected. */
 const SOURCE_VALID = [
   'bpmn-beta',
@@ -294,6 +316,50 @@ test('UNDEFINED_NODE_REF — Line button highlights the offending flow row', asy
     'UNDEFINED_NODE_REF',
     UNDEFINED_NODE_REF_WARNING_LINE,
   );
+});
+
+test('multiple warnings — each Line button selects its own source row and keeps focus', async ({ page }) => {
+  await openPlaygroundWith(page, SOURCE_MULTIPLE_WARNINGS);
+
+  const panel = page.locator('[data-testid="div-lint-warnings"]');
+  await expect(panel).toBeVisible();
+  await expect(panel).toContainText('2 Warnings');
+
+  const textarea = page.locator('[data-testid="textarea-bpmn-source"]');
+  const highlight = page.locator('[data-testid="editor-lint-warning-line-highlight"]');
+  const orphanLineButton = page.getByRole('button', {
+    name: `Go to line ${MULTIPLE_WARNINGS.orphan.line} for ${MULTIPLE_WARNINGS.orphan.code}`,
+  });
+  const undefinedRefLineButton = page.getByRole('button', {
+    name: `Go to line ${MULTIPLE_WARNINGS.undefinedRef.line} for ${MULTIPLE_WARNINGS.undefinedRef.code}`,
+  });
+
+  await expect(orphanLineButton).toHaveText(`Line ${MULTIPLE_WARNINGS.orphan.line}`);
+  await expect(undefinedRefLineButton).toHaveText(`Line ${MULTIPLE_WARNINGS.undefinedRef.line}`);
+
+  await textarea.evaluate((editor) => {
+    editor.scrollTop = 0;
+    editor.dispatchEvent(new Event('scroll', { bubbles: true }));
+  });
+  await orphanLineButton.click();
+  await expect(highlight).toHaveAttribute(
+    'data-lint-warning-line',
+    String(MULTIPLE_WARNINGS.orphan.line),
+  );
+  await expect(textarea).toBeFocused();
+  await expect.poll(() => textarea.evaluate((editor) => editor.scrollTop)).toBeGreaterThan(0);
+
+  await textarea.evaluate((editor) => {
+    editor.scrollTop = 0;
+    editor.dispatchEvent(new Event('scroll', { bubbles: true }));
+  });
+  await undefinedRefLineButton.click();
+  await expect(highlight).toHaveAttribute(
+    'data-lint-warning-line',
+    String(MULTIPLE_WARNINGS.undefinedRef.line),
+  );
+  await expect(textarea).toBeFocused();
+  await expect.poll(() => textarea.evaluate((editor) => editor.scrollTop)).toBeGreaterThan(0);
 });
 
 test('valid diagram — no warning panel appears and the diagram renders', async ({ page }) => {
