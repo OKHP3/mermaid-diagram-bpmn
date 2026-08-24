@@ -82,6 +82,8 @@ function main() {
       runVitest(result.path);
     }
     const observed = readVitestTestCount(result.path);
+    console.log(`[check-test-count] Observed Vitest tests: ${observed.total}`);
+    console.log(`[check-test-count] Canonical published tests: ${expected}`);
     if (observed.failed > 0) {
       throw new Error(`Vitest report contains ${observed.failed} failed tests`);
     }
