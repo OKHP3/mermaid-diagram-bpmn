@@ -227,4 +227,19 @@ describe("Roadmap — contribution path progress", () => {
     expect(completed).toEqual(["01", "03", "04"]);
     expect(container.querySelectorAll("[data-testid^='step-contribution-status-']")).toHaveLength(3);
   });
+
+  it("links completed contribution steps to their evidence", () => {
+    const { container } = render(<Roadmap />);
+    const completedRows = ["01", "03", "04"].map((step) =>
+      container.querySelector(`[data-testid='step-contribution-${step}']`),
+    );
+
+    expect(completedRows.every(Boolean)).toBe(true);
+    expect(completedRows[0]!.querySelector("a[href*='mermaid-js/mermaid/issues/7699']")).not.toBeNull();
+    expect(completedRows[0]!.querySelector("a[href*='mermaid-js/mermaid/issues/2623']")).not.toBeNull();
+    expect(completedRows[0]!.querySelector("a[href*='mermaid-js/mermaid/issues/660']")).not.toBeNull();
+    expect(completedRows[1]!.querySelector("a[href='/mermaid-host-demo']")).not.toBeNull();
+    expect(completedRows[1]!.querySelector("a[href*='npmjs.com/package/@okhp3/mermaid-diagram-bpmn']")).not.toBeNull();
+    expect(completedRows[2]!.querySelector("a[href='/dsl']")).not.toBeNull();
+  });
 });

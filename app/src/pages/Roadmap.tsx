@@ -231,7 +231,10 @@ const CONTRIBUTION_STEPS: { n: string; title: string; body: React.ReactNode; sta
         <ExternalLinkAnchor href={`${GITHUB_ISSUE_BASE}7699`} className="text-primary hover:underline underline-offset-2 font-medium">#7699</ExternalLinkAnchor>,{" "}
         <ExternalLinkAnchor href={`${GITHUB_ISSUE_BASE}2623`} className="text-primary hover:underline underline-offset-2 font-medium">#2623</ExternalLinkAnchor>, and{" "}
         <ExternalLinkAnchor href={`${GITHUB_ISSUE_BASE}660`} className="text-primary hover:underline underline-offset-2 font-medium">#660</ExternalLinkAnchor>.{" "}
-        Signal intent without prematurely locking syntax.
+        Signal intent without prematurely locking syntax.{" "}
+        <span className="text-muted-foreground">
+          Evidence: the linked Mermaid issue discussions.
+        </span>
       </>
     ),
   },
@@ -245,13 +248,43 @@ const CONTRIBUTION_STEPS: { n: string; title: string; body: React.ReactNode; sta
     n: "03",
     title: "Build the external plugin",
     status: "done",
-    body: "Implement mermaid-diagram-bpmn as a registerExternalDiagrams() plugin. Add detector, loader, and plugin entry point. Parser, renderer, layout, shape library, styles, accessibility.",
+    body: (
+      <>
+        Implement mermaid-diagram-bpmn as a registerExternalDiagrams() plugin. Add detector, loader,
+        and plugin entry point. Parser, renderer, layout, shape library, styles, accessibility.{" "}
+        <span className="text-muted-foreground">
+          Evidence:{" "}
+          <a href="/mermaid-host-demo" className="text-primary hover:underline underline-offset-2">
+            live Mermaid plugin demo
+          </a>{" "}
+          and{" "}
+          <ExternalLinkAnchor
+            href="https://www.npmjs.com/package/@okhp3/mermaid-diagram-bpmn"
+            className="text-primary hover:underline underline-offset-2"
+          >
+            published package
+          </ExternalLinkAnchor>.
+        </span>
+      </>
+    ),
   },
   {
     n: "04",
     title: "Document supported elements",
     status: "done",
-    body: "Publish a clear supported element matrix. Name deferred features explicitly. Avoid overclaiming compliance. Add CONTRIBUTING, SECURITY, and CODE_OF_CONDUCT files.",
+    body: (
+      <>
+        Publish a clear supported element matrix. Name deferred features explicitly. Avoid overclaiming
+        compliance. Add CONTRIBUTING, SECURITY, and CODE_OF_CONDUCT files.{" "}
+        <span className="text-muted-foreground">
+          Evidence:{" "}
+          <a href="/dsl" className="text-primary hover:underline underline-offset-2">
+            DSL Reference and supported element matrix
+          </a>
+          .
+        </span>
+      </>
+    ),
   },
   {
     n: "05",
