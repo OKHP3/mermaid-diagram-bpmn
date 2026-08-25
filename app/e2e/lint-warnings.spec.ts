@@ -6,6 +6,7 @@
  */
 
 import { expect, test } from '@playwright/test';
+import { readFileSync } from 'node:fs';
 
 const SOURCE_WITH_WARNING = [
   'bpmn-beta',
@@ -29,6 +30,17 @@ const SOURCE_WITH_DISTANT_GATEWAY_WARNING = [
   'g1 --> e1',
 ].join('\n');
 const GATEWAY_WARNING_LINE = 43;
+
+const SOURCE_WITH_ASSOCIATION = [
+  'bpmn-beta',
+  'start s1 "Start"',
+  'task t1 "Review request"',
+  'end e1 "Complete"',
+  'note n1 "See SLA policy"',
+  's1 --> t1',
+  't1 --> e1',
+  't1 --- n1',
+].join('\n');
 
 test('shows an amber in-viewport warning panel while the diagram still renders', async ({ page }) => {
   await page.goto('playground');
@@ -74,4 +86,30 @@ test('shows a lint warning line and takes the author to the flagged source row',
   await expect(highlight).toHaveAttribute('data-lint-warning-line', String(GATEWAY_WARNING_LINE));
   await expect(textarea).toBeFocused();
   await expect.poll(() => textarea.evaluate((editor) => editor.scrollTop)).toBeGreaterThan(0);
+});
+
+test('downloads association styling without flow markers in exported SVG', async ({ page }) => {
+  await page.goto('playground');
+  await page.locator('[data-testid="textarea-bpmn-source"]').fill(SOURCE_WITH_ASSOCIATION);
+
+  const diagram = page.locator('[data-testid="div-diagram-preview"] svg');
+  await expect(diagram).toBeVisible();
+  const association = diagram.locator('.bpmn-flow--association');
+  await expect(association).toHaveCount(1);
+  await expect(association).toHaveAttribute('stroke-dasharray', '2 3');
+  await expect(association).not.toHaveAttribute('marker-start', /.+/);
+  await expect(association).not.toHaveAttribute('marker-end', /.+/);
+
+  const downloadPromise = page.waitForEvent('download');
+  await page.getByTestId('button-export-svg').click();
+  const download = await downloadPromise;
+  expect(download.suggestedFilename()).toMatch(/\.svg$/);
+
+  const exportedPath = await download.path();
+  expect(exportedPath, 'SVG download should have a readable temporary path').toBeTruthy();
+  const exportedSvg = readFileSync(exportedPath!, 'utf8');
+  expect(exportedSvg).toContain('bpmn-flow--association');
+  expect(exportedSvg).toContain('stroke-dasharray="2 3"');
+  expect(exportedSvg).not.toMatch(/class="[^"]*bpmn-flow--association[^"]*"[^>]*marker-start="/);
+  expect(exportedSvg).not.toMatch(/class="[^"]*bpmn-flow--association[^"]*"[^>]*marker-end="/);
 });
