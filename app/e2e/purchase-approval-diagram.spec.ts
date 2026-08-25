@@ -285,3 +285,19 @@ test.describe('Purchase Approval — diagram node keyboard navigation', () => {
     expect(page.url()).toContain(NODE_G1_ROUTE);
   });
 });
+
+test.describe('Purchase Approval — published process marker', () => {
+  test('final timeline marker shows the process ID and published lifecycle state', async ({ page }) => {
+    await loadPage(page);
+
+    const markerLabel = page.getByText('PROC-2024-042 published', { exact: true });
+    await expect(markerLabel).toBeAttached({ timeout: 15_000 });
+    await markerLabel.scrollIntoViewIfNeeded();
+    await expect(markerLabel).toBeVisible();
+
+    const marker = markerLabel.locator('..');
+    await expect(marker).toContainText('All 15 skills complete.');
+    await expect(marker).toContainText('PNS.md status:');
+    await expect(marker.locator('code')).toHaveText('published');
+  });
+});

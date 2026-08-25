@@ -106,3 +106,19 @@ test.describe('Employee Offboarding — diagram node keyboard navigation', () =>
     expect(page.url()).toContain(NODE_T1_ROUTE);
   });
 });
+
+test.describe('Employee Offboarding — packaged process marker', () => {
+  test('final timeline marker shows the process ID and packaged lifecycle state', async ({ page }) => {
+    await loadPage(page);
+
+    const markerLabel = page.getByText('PROC-2025-108 packaged', { exact: true });
+    await expect(markerLabel).toBeAttached({ timeout: 15_000 });
+    await markerLabel.scrollIntoViewIfNeeded();
+    await expect(markerLabel).toBeVisible();
+
+    const marker = markerLabel.locator('..');
+    await expect(marker).toContainText('All 15 skills complete.');
+    await expect(marker).toContainText('PNS.md status:');
+    await expect(marker.locator('code')).toHaveText('packaged');
+  });
+});
