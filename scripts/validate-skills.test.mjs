@@ -375,3 +375,82 @@ The body must remain intact after normalization.
     'normalization must preserve the skill body',
   );
 });
+
+test('normalize-skill-frontmatter round-trips a literal-strip (|-) description', () => {
+  const originalDescription =
+    'Build, audit, and improve OpenAI Custom GPTs with production-grade methodology. ' +
+    'Use this skill when the user asks to create, configure, test, or package a Custom GPT or reusable ' +
+    'ChatGPT workflow. Also use it for GPT Builder instructions.';
+  const dir = makeSkillsDir('my-test-skill', LITERAL_STRIP_FRONTMATTER);
+  const { exitCode, output } = runNormalize(dir);
+  assert.equal(exitCode, 0, `normalization should succeed; got:\n${output}`);
+
+  const normalized = readFileSync(join(dir, 'my-test-skill', 'SKILL.md'), 'utf-8');
+  assert.equal(
+    parseSkillFrontmatter(normalized)?.fields.description,
+    originalDescription,
+    'normalization must preserve literal line breaks in the description',
+  );
+  assert.match(
+    normalized,
+    /# My Test Skill\n\nBody content here\./,
+    'normalization must preserve the skill body',
+  );
+});
+
+test('normalize-skill-frontmatter round-trips a folded-keep (>+) description', () => {
+  const originalDescription =
+    'Build, audit, and improve OpenAI Custom GPTs with production-grade methodology. ' +
+    'Use this skill when the user asks to create, configure, test, or package a Custom GPT or reusable ' +
+    'ChatGPT workflow. Also use for GPT Builder instructions.';
+  const dir = makeSkillsDir('my-test-skill', FOLDED_KEEP_FRONTMATTER);
+  const { exitCode, output } = runNormalize(dir);
+  assert.equal(exitCode, 0, `normalization should succeed; got:\n${output}`);
+
+  const normalized = readFileSync(join(dir, 'my-test-skill', 'SKILL.md'), 'utf-8');
+  assert.equal(
+    parseSkillFrontmatter(normalized)?.fields.description,
+    originalDescription,
+    'normalization must preserve the joined folded-keep description',
+  );
+  assert.match(
+    normalized,
+    /# My Test Skill\n\nBody content here\./,
+    'normalization must preserve the skill body',
+  );
+});
+
+test('normalize-skill-frontmatter preserves metadata-bearing frontmatter', () => {
+  const metadataBearing = `---
+name: my-test-skill
+description: >-
+  Build, audit, and improve OpenAI Custom GPTs with production-grade methodology.
+  Use this skill when the user asks to create, configure, test, or package a Custom GPT.
+license: MIT
+metadata:
+  version: "1.0.0"
+  author: "Test Author"
+---
+
+# Metadata body
+
+Metadata and body must both remain intact.
+`;
+  const dir = makeSkillsDir('my-test-skill', metadataBearing);
+  const { exitCode, output } = runNormalize(dir);
+  assert.equal(exitCode, 0, `normalization should succeed; got:\n${output}`);
+
+  const normalized = readFileSync(join(dir, 'my-test-skill', 'SKILL.md'), 'utf-8');
+  const parsed = parseSkillFrontmatter(normalized);
+  assert.deepEqual(
+    parsed?.metadata,
+    { version: '1.0.0', author: 'Test Author' },
+    'normalization must preserve metadata keys and values',
+  );
+  assert.equal(parsed?.fields.license, 'MIT', 'normalization must preserve license');
+  assert.match(
+    normalized,
+    /# Metadata body\n\nMetadata and body must both remain intact\./,
+    'normalization must preserve the skill body',
+  );
+});
