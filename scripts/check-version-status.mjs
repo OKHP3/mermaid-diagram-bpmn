@@ -26,6 +26,33 @@ const checklistLabel = process.env.VERSION_CHECKLIST_OVERRIDE
   ? `VERSION_CHECKLIST_OVERRIDE (${basename(checklistPath)})`
   : 'docs/version-checklist.md';
 
+function escapeWorkflowMessage(message) {
+  return message
+    .replaceAll('%', '%25')
+    .replaceAll('\r', '%0D')
+    .replaceAll('\n', '%0A');
+}
+
+function emitGitHubAnnotations(failures) {
+  if (
+    process.env.GITHUB_ACTIONS !== 'true' &&
+    process.env.VERSION_STATUS_GITHUB_ANNOTATIONS !== 'true'
+  ) {
+    return;
+  }
+
+  for (const failure of failures) {
+    const version = failure.match(/\bV\d+\.\d+\b/);
+    const line = failure.match(/\bline (\d+)\b/);
+    const properties = [`file=${checklistLabel}`];
+    if (line) properties.push(`line=${line[1]}`);
+    const context = version ? `${version[0]}: ` : 'Release state: ';
+    console.error(
+      `::error ${properties.join(',')}::${escapeWorkflowMessage(context + failure)}`,
+    );
+  }
+}
+
 if (!existsSync(checklistPath)) {
   console.error(`[check:version-status] FAIL: ${checklistLabel} was not found.`);
   process.exitCode = 1;
@@ -34,6 +61,7 @@ if (!existsSync(checklistPath)) {
   const failures = validateStatuses(versions);
 
   if (failures.length) {
+    emitGitHubAnnotations(failures);
     console.error(`[check:version-status] FAIL: ${failures.length} release-state rule violation(s) in ${checklistLabel}.`);
     for (const failure of failures) console.error(`✖ ${failure}`);
     process.exitCode = 1;

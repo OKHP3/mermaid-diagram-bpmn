@@ -114,6 +114,8 @@ jobs:
         run: pnpm run check:content:test
 
       - name: Validate release-state labels
+        env:
+          VERSION_STATUS_GITHUB_ANNOTATIONS: "true"
         run: pnpm run check:version-status
 
       - name: Check Mermaid DFKI #7699 source drift

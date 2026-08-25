@@ -26,12 +26,13 @@ function writeFixture(content) {
   return path;
 }
 
-function runValidator(checklistPath) {
+function runValidator(checklistPath, extraEnv = {}) {
   const result = spawnSync(process.execPath, [VALIDATOR], {
     encoding: 'utf8',
     env: {
       ...process.env,
       ...(checklistPath ? { VERSION_CHECKLIST_OVERRIDE: checklistPath } : {}),
+      ...extraEnv,
     },
     timeout: 15_000,
   });
@@ -62,6 +63,27 @@ test('fails when a [DONE] section contains an unchecked criterion', () => {
   const { exitCode, output } = runValidator(writeFixture(fixture));
   assert.equal(exitCode, 1, `expected exit 1; output:\n${output}`);
   assert.match(output, /V0\.3 is marked \[DONE\].*unchecked criterion/s);
+});
+
+test('annotates the affected version and checklist line when enabled', () => {
+  const fixture = realChecklist().replace(
+    '- [x] 15-skill pipeline designed and documented (`skills/*/SKILL.md`)',
+    '- [ ] 15-skill pipeline designed and documented (`skills/*/SKILL.md`)',
+  );
+  const { exitCode, output } = runValidator(writeFixture(fixture), {
+    VERSION_STATUS_GITHUB_ANNOTATIONS: 'true',
+  });
+
+  assert.equal(exitCode, 1, `expected exit 1; output:\n${output}`);
+  assert.match(
+    output,
+    /::error file=VERSION_CHECKLIST_OVERRIDE \(bpmn-version-status-[^)]+\.md\),line=\d+::V0\.3: V0\.3 is marked \[DONE\]/,
+  );
+  assert.match(
+    output,
+    /✖ V0\.3 is marked \[DONE\].*unchecked criterion/s,
+    'local remediation output must remain available',
+  );
 });
 
 test('fails when completed criteria are left marked [CURRENT]', () => {
