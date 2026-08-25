@@ -7,7 +7,8 @@
  *   - The bpmn-beta diagram in Step 06 (Visual Process Modeling) renders to a
  *     real SVG in Chromium.
  *   - Linked nodes carry role="button" and are therefore interactive.
- *   - Clicking a linked task node or gateway navigates the SPA to the correct
+ *   - Clicking or keyboard-activating a linked task node or gateway navigates
+ *     the SPA to the correct
  *     /skills/<skill-id> page, confirming the onClick → wouter.navigate()
  *     wiring is live end-to-end.
  *   - Back navigation from a skill page still shows a renderable diagram.
@@ -248,5 +249,39 @@ test.describe('Purchase Approval — diagram node keyboard navigation', () => {
     ]);
 
     expect(page.url()).toContain(NODE_T1_ROUTE);
+  });
+
+  test('pressing Enter on Approved? navigates to Gap & Exception Analysis', async ({ page, browserName }) => {
+    test.skip(browserName !== 'chromium', 'Keyboard worked-example coverage runs in Chromium.');
+    await loadPage(page);
+    const stepCard = await scrollToDiagramStep(page);
+    const button = nodeButton(stepCard, NODE_G1_LABEL);
+    await expect(button).toBeVisible({ timeout: 15_000 });
+
+    await button.focus();
+    await expect(button).toBeFocused();
+    await Promise.all([
+      page.waitForURL(`**${NODE_G1_ROUTE}`, { timeout: 15_000 }),
+      button.press('Enter'),
+    ]);
+
+    expect(page.url()).toContain(NODE_G1_ROUTE);
+  });
+
+  test('pressing Space on Approved? navigates to Gap & Exception Analysis', async ({ page, browserName }) => {
+    test.skip(browserName !== 'chromium', 'Keyboard worked-example coverage runs in Chromium.');
+    await loadPage(page);
+    const stepCard = await scrollToDiagramStep(page);
+    const button = nodeButton(stepCard, NODE_G1_LABEL);
+    await expect(button).toBeVisible({ timeout: 15_000 });
+
+    await button.focus();
+    await expect(button).toBeFocused();
+    await Promise.all([
+      page.waitForURL(`**${NODE_G1_ROUTE}`, { timeout: 15_000 }),
+      button.press('Space'),
+    ]);
+
+    expect(page.url()).toContain(NODE_G1_ROUTE);
   });
 });
