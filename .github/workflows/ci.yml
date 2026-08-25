@@ -159,6 +159,9 @@ jobs:
         # browser-specific SVG/DOMPurify differences as separate CI jobs.
         run: pnpm --filter @workspace/mermaid-diagram-bpmn exec playwright install --with-deps ${{ matrix.browser }}
 
+      - name: Browser launch preflight
+        run: pnpm --filter @workspace/mermaid-diagram-bpmn run check:browser
+
       - name: Build app (required before vite preview)
         env:
           VITE_COMMIT_SHA: ${{ github.sha }}
