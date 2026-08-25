@@ -324,6 +324,33 @@ test.describe('AgentSkills — mobile 375×812', () => {
     expect(box!.height, 'Search input height ≥ 28 px on mobile').toBeGreaterThanOrEqual(28);
   });
 
+  test('conditional N/A guidance remains readable when a PNS section is opened', async ({ page }) => {
+    await loadPage(page, '/skills', 'h1');
+
+    await page.getByRole('button', {
+      name: /The Process Narrative Specification — The Handoff Artifact/i,
+    }).click();
+
+    const section = page.getByRole('button', { name: /Evidence & Sources/i });
+    await section.scrollIntoViewIfNeeded();
+    await section.click();
+
+    const guidance = page.getByText(
+      'May be marked N/A only for processes documented entirely from pre-existing formal SOPs with no elicitation required.',
+      { exact: true },
+    );
+    await expect(guidance).toBeVisible();
+
+    const box = await guidance.boundingBox();
+    expect(box, 'Conditional N/A guidance must have a rendered bounding box').toBeTruthy();
+    expect(box!.width, 'Conditional N/A guidance must have readable width').toBeGreaterThan(0);
+    expect(box!.height, 'Conditional N/A guidance must have readable height').toBeGreaterThan(0);
+    expect(
+      box!.x + box!.width,
+      'Conditional N/A guidance must remain within the mobile viewport',
+    ).toBeLessThanOrEqual(375);
+  });
+
   test('visual snapshot', async ({ page }) => {
     await loadPage(page, '/skills', '[aria-label="Search skills"]');
     await expect(page).toHaveScreenshot('skills-mobile.png', { maxDiffPixelRatio: 0.02 });
