@@ -201,8 +201,30 @@ test('validate-agent-skills exits 1 when description is shorter than 50 chars', 
   const { exitCode, output } = runValidateAgentSkills(dir);
   assert.equal(exitCode, 1, 'should exit 1 when agent skill description is too short');
   assert.ok(
-    output.toLowerCase().includes('description'),
-    `failure output should mention description; got:\n${output}`,
+    output.includes('.agents/skills/my-test-skill/SKILL.md — frontmatter.description'),
+    `failure output should identify the skill path and rule; got:\n${output}`,
+  );
+});
+
+test('validate-agent-skills identifies each invalid skill package and failed frontmatter rule', () => {
+  const base = mkdtempSync(join(tmpdir(), 'bpmn-multi-skill-test-'));
+  const shortDir = join(base, 'short-skill');
+  const mismatchDir = join(base, 'mismatch-skill');
+  mkdirSync(shortDir, { recursive: true });
+  mkdirSync(mismatchDir, { recursive: true });
+  writeFileSync(join(shortDir, 'SKILL.md'), SHORT_DESC_FRONTMATTER, 'utf-8');
+  writeFileSync(join(mismatchDir, 'SKILL.md'), NAME_MISMATCH_FRONTMATTER, 'utf-8');
+
+  const { exitCode, output } = runValidateAgentSkills(base);
+
+  assert.equal(exitCode, 1, 'should fail when multiple agent skill packages are invalid');
+  assert.match(
+    output,
+    /✖ \.agents\/skills\/short-skill\/SKILL\.md — frontmatter\.description: description must be 50-1024 characters/,
+  );
+  assert.match(
+    output,
+    /✖ \.agents\/skills\/mismatch-skill\/SKILL\.md — frontmatter\.name: name must match directory/,
   );
 });
 
