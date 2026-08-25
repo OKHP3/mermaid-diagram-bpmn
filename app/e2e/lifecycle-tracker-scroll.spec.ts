@@ -3,6 +3,11 @@
  * displayed by responsive CSS. Both desktop and mobile rows exist in the DOM,
  * so this must run in a real browser rather than relying on happy-dom's
  * offsetParent behavior.
+ *
+ * Browser-matrix verification (2026-08-25): Chromium passes both viewport
+ * cases. Firefox and WebKit were attempted but could not launch in this
+ * environment (Firefox lacks libgtk-3.so.0; WebKit lacks host dependencies),
+ * so no offsetParent or smooth-scroll engine difference was observed.
  */
 
 import { expect, test, type Page } from '@playwright/test';
