@@ -34,7 +34,7 @@
     "fflate": "catalog:",
     "happy-dom": "^20.10.6",
     "lucide-react": "catalog:",
-    "mermaid": "11.4.1",
+    "mermaid": "11.17.0",
     "react": "catalog:",
     "react-dom": "catalog:",
     "tailwind-merge": "catalog:",
