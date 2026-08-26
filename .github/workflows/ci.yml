@@ -123,6 +123,12 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: pnpm run check:dfki-7699
 
+      - name: Check public comparison evidence
+        run: pnpm run check:comparison-evidence
+
+      - name: Test comparison evidence failure detection
+        run: pnpm run check:comparison-evidence:test
+
       - name: Release manifest check (version + compat range must match canonical sources)
         run: pnpm run manifest:check
 

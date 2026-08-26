@@ -1,6 +1,7 @@
 import { execFileSync } from "node:child_process";
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname, isAbsolute, join } from "node:path";
+import { checkComparisonEvidence } from "./check-comparison-evidence.mjs";
 
 const root = process.cwd();
 const output = process.argv.includes("--output")
@@ -43,6 +44,7 @@ const mermaidFindings = Object.values(audit.advisories ?? {})
   }));
 const source = read("app/src/lib/bpmn-plugin.ts");
 const renderer = read("app/src/lib/bpmn-renderer.tsx");
+const comparisonEvidence = checkComparisonEvidence(read("app/src/pages/SyntaxComparison.tsx"));
 const browserEvidence = process.env.RELEASE_BROWSER_EVIDENCE ?? "linux/chromium";
 const browserStatus = browserEvidence.includes("firefox") && browserEvidence.includes("webkit")
   ? "pass"
@@ -104,6 +106,15 @@ const gates = [
     escalation: "Run the Firefox/WebKit matrix with native dependencies or narrow the public compatibility claim.",
     evidence: { requested: browserEvidence, engines: browserEvidence.split(",").map((item) => item.trim()) },
     limitation: browserStatus === "pass" ? null : "This report records Linux/Chromium evidence only; Firefox, WebKit, Windows, and assistive technology are not inferred.",
+  },
+  {
+    id: "comparison-evidence",
+    owner: "Documentation maintainers",
+    status: comparisonEvidence.ok ? "pass" : "fail",
+    command: "pnpm run check:comparison-evidence",
+    interpretation: "Every external notation and research claim on the public comparison page must retain an inspectable source link.",
+    escalation: "Restore the missing source link or remove the unsupported comparison claim before release.",
+    evidence: comparisonEvidence,
   },
   {
     id: "reproducibility",

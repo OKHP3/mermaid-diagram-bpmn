@@ -29,6 +29,8 @@
     "check:test-count:test": "node --test scripts/check-test-count.test.mjs",
     "check:dfki-7699": "node scripts/check-dfki-7699.mjs",
     "check:dfki-7699:test": "node --test scripts/check-dfki-7699.test.mjs",
+    "check:comparison-evidence": "node scripts/check-comparison-evidence.mjs",
+    "check:comparison-evidence:test": "node --test scripts/check-comparison-evidence.test.mjs",
     "check:version-status": "node scripts/check-version-status.mjs",
     "check:browser-cdn": "node scripts/check-browser-cdn.mjs",
     "check:release-gates": "node scripts/check-release-gates.mjs",

@@ -564,7 +564,16 @@ export default function SyntaxComparison() {
           <div className="p-4 rounded-lg border border-border bg-card">
             <p className="text-xs font-semibold text-foreground mb-1.5">LLM-friendliness research</p>
             <p className="text-xs text-muted-foreground leading-relaxed">
-              Brissard, Cuppens, and Zouaq (Polytechnique Montréal, arXiv 2507.11356) empirically
+                Brissard, Cuppens, and Zouaq (Polytechnique Montréal,{" "}
+                <a
+                  href="https://arxiv.org/abs/2507.11356"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-primary hover:underline"
+                >
+                  arXiv 2507.11356
+                </a>
+                ) empirically
               compared nine Process Model Representations for LLM-based process modeling. Mermaid
               scored highest across six criteria (token compactness, expressivity, human readability,
               visualization, usability, extensibility). bpmn-beta is designed to preserve that
