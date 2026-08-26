@@ -46,7 +46,7 @@ jobs:
           retention-days: 14
 
       - name: Cache Playwright Chromium browser
-        uses: actions/cache@v4
+        uses: actions/cache@v6
         with:
           path: ~/.cache/ms-playwright
           key: ${{ runner.os }}-playwright-chromium-${{ hashFiles('pnpm-lock.yaml') }}
