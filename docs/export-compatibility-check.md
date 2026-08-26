@@ -72,3 +72,18 @@ Therefore no editor import was performed, and there is no new observation to
 report for text selection/editability or editor-specific font fallback. The
 claims above remain limited to the captured SVG structure and Linux font
 fallback evidence; they must not be treated as an external-editor result.
+
+## 2026-08-25 availability rerun
+
+The vector-editor availability check was repeated again before attempting the
+representative import:
+
+- No `inkscape`, `illustrator`, Krita, or other supported local vector-editor
+  executable was found.
+- No Figma import target or Figma connection was available.
+- No supported editor workflow was available for opening `diagram.svg`.
+
+Therefore the representative export could not be imported, and task-label or
+annotation selection/editability remains unverified. Sans and monospace
+fallback remain visually distinct only under the documented Linux
+font-resolution evidence; no editor-specific fallback result is claimed.
