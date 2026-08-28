@@ -17,7 +17,7 @@ const allowedLicenses = new Set([
   "ISC",
   "MIT",
   "MPL-2.0",
-  "MPL-2.0 OR Apache-2.0",
+  "(MPL-2.0 OR Apache-2.0)",
   "Unlicense",
 ]);
 
@@ -32,7 +32,8 @@ const command = (name, args) => {
 
 const audit = JSON.parse(command("pnpm", ["audit", "--json"]) || "{}");
 const vulnerabilities = audit.metadata?.vulnerabilities ?? {};
-const licensesJson = JSON.parse(command("pnpm", ["licenses", "list", "--json"]) || "{}");
+// Release licensing applies to shipped dependencies, not build-time tooling.
+const licensesJson = JSON.parse(command("pnpm", ["licenses", "list", "--prod", "--json"]) || "{}");
 const licenseNames = Object.keys(licensesJson).filter((name) => name !== "error");
 const unknownLicenses = licenseNames.filter((name) => !allowedLicenses.has(name));
 const mermaidFindings = Object.values(audit.advisories ?? {})
