@@ -26,7 +26,7 @@ Use this checklist before tagging and deploying any release.
 ## Pre-release: tests and typecheck
 
 - [ ] `pnpm --filter @workspace/mermaid-diagram-bpmn run check:browser` — confirm Chromium can launch before local E2E work; if native libraries are missing, check `.replit` `[nix]` and run `playwright install --with-deps chromium`
-- [ ] `pnpm --filter @workspace/mermaid-diagram-bpmn run test` — all tests pass (see `docs/version-checklist.md` for current count; 856 as of 2026-08-23)
+- [ ] `pnpm --filter @workspace/mermaid-diagram-bpmn run test` — all tests pass (see `docs/version-checklist.md` for current count; 867 as of 2026-08-28)
 - [ ] `pnpm --filter @workspace/mermaid-diagram-bpmn run typecheck` — zero errors
 - [ ] No `console.log` in any lib module (test files excepted)
 
