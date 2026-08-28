@@ -166,7 +166,7 @@ jobs:
         run: pnpm --filter @workspace/mermaid-diagram-bpmn exec playwright install --with-deps ${{ matrix.browser }}
 
       - name: Browser launch preflight
-        run: pnpm --filter @workspace/mermaid-diagram-bpmn run check:browser
+        run: pnpm --filter @workspace/mermaid-diagram-bpmn run check:browser -- ${{ matrix.browser }}
 
       - name: Build app (required before vite preview)
         env:
