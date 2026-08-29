@@ -1,0 +1,55 @@
+{
+  "review_type": "skill-name-remaster-equilibrium",
+  "date": "2026-08-29",
+  "scope": "repository-local skills/ packages",
+  "decision": "approve-local-remaster-defer-public-promotion",
+  "retained_skill_count": 19,
+  "naming_contract": {
+    "prefix": "okhp3-",
+    "directory_max_length": 36,
+    "portable_max_length": 64,
+    "all_current_names_pass": true
+  },
+  "canonical_extension_family": [
+    "okhp3-bpmn-to-process-narrative",
+    "okhp3-bpmn-recoverability-audit"
+  ],
+  "consolidations": [
+    {
+      "retired": "okhp3-handoff-packaging",
+      "canonical": "okhp3-publication-handoff-packaging",
+      "reason": "duplicate terminal handoff purpose"
+    },
+    {
+      "retired": "okhp3-process-capture",
+      "canonical": "okhp3-recurring-task-capture",
+      "reason": "meta skill name did not identify recurring-task capture"
+    },
+    {
+      "retired": "okhp3-diagram-narrative-reversal",
+      "canonical": "okhp3-bpmn-to-process-narrative",
+      "reason": "literal input-to-output name improves discovery"
+    },
+    {
+      "retired": "okhp3-diagram-fidelity-audit",
+      "canonical": "okhp3-bpmn-recoverability-audit",
+      "reason": "semantic recoverability is the actual audit boundary"
+    }
+  ],
+  "verification": {
+    "skill_validate": "267/267",
+    "skill_validate_test": "16/16",
+    "skill_test": "248/248",
+    "eval_suite": "14/14, 100/100",
+    "generated_check": "pass",
+    "package_dry_run": "19 archives, no writes",
+    "promotion_tests": "5/5",
+    "catalog_check": "pass"
+  },
+  "release_boundary": {
+    "application_catalog_remains": 15,
+    "extension_status": "recommended-extension",
+    "holdout_benchmark": "external-required",
+    "github_publication_performed": false
+  }
+}

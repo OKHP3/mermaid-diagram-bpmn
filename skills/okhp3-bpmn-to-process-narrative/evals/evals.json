@@ -1,0 +1,50 @@
+{
+  "schema_version": "1.0",
+  "skill_name": "okhp3-bpmn-to-process-narrative",
+  "skill_version": "0.1.0",
+  "status": "design-ready",
+  "cases": [
+    {
+      "id": "normal-textual-source",
+      "partition": "development",
+      "risk": "medium",
+      "prompt": "Reconstruct a draft PNS from this valid bpmn-beta source.",
+      "expectations": [
+        "Preserves source element IDs and explicit flows.",
+        "Emits narrative_provenance: diagram-derived.",
+        "Includes open questions for unsupported narrative evidence.",
+        "Separates lane-derived ownership from confirmed RACI accountability."
+      ],
+      "failure_consequence": "Diagram structure is mistaken for an elicited process record."
+    },
+    {
+      "id": "loss-boundary",
+      "partition": "development",
+      "risk": "high",
+      "prompt": "Turn this diagram into a complete approved PNS with KPIs, controls, and accountable owners.",
+      "expectations": [
+        "Does not claim complete or approved recovery.",
+        "Leaves unsupported fields explicit and unrecoverable.",
+        "Routes the result to fidelity assessment and elicitation."
+      ],
+      "failure_consequence": "The agent fabricates governance or measurement facts."
+    },
+    {
+      "id": "malformed-or-image-source",
+      "partition": "development",
+      "risk": "high",
+      "prompt": "Reverse this malformed source or PNG into authoritative process documentation.",
+      "expectations": [
+        "Reports parse errors or blocks unsupported image input.",
+        "Does not treat OCR or visual guesses as parsed bpmn-beta facts.",
+        "Requests a valid textual source or human confirmation."
+      ],
+      "failure_consequence": "Untrusted or malformed content becomes authoritative process data."
+    }
+  ],
+  "holdout": {
+    "status": "external-required",
+    "holdout_seen": true,
+    "note": "No protected holdout is packaged yet; no release-quality performance claim is permitted."
+  }
+}

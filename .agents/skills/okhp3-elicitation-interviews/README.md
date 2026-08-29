@@ -1,4 +1,4 @@
-# elicitation-and-interview-facilitation
+# okhp3-elicitation-interviews
 
 SKILL.md-compatible agent skill for planning and facilitating structured process elicitation sessions.
 

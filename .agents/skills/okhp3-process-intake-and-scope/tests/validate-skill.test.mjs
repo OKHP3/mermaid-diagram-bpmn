@@ -1,12 +1,12 @@
 /**
- * validate-skill.test.mjs — process-intake-and-scope
- * Run: node --test skills/process-intake-and-scope/tests/validate-skill.test.mjs
+ * validate-skill.test.mjs — okhp3-process-intake-and-scope
+ * Run: node --test skills/okhp3-process-intake-and-scope/tests/validate-skill.test.mjs
  */
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync, existsSync } from 'node:fs';
 import { join, dirname } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 
 const __dir = dirname(fileURLToPath(import.meta.url));
 const SKILL_ROOT = join(__dir, '..');
@@ -15,7 +15,7 @@ function read(rel) { return readFileSync(join(SKILL_ROOT, rel), 'utf-8'); }
 function exists(rel) { return existsSync(join(SKILL_ROOT, rel)); }
 
 function parseFrontmatter(content) {
-  const match = content.match(/^---\n([\s\S]*?)\n---/);
+  const match = content.match(/^---\r?\n([\s\S]*?)\r?\n---/);
   if (!match) return null;
   const fm = {};
   for (const line of match[1].split('\n')) {
@@ -37,7 +37,7 @@ test('SKILL.md has valid frontmatter', () => {
 
 test('name matches directory', () => {
   const fm = parseFrontmatter(read('SKILL.md'));
-  assert.equal(fm.name, 'process-intake-and-scope');
+  assert.equal(fm.name, 'okhp3-process-intake-and-scope');
 });
 
 test('bp_skill_version is present', () => {
@@ -79,12 +79,12 @@ test('scripts have no React/DOM imports', () => {
 });
 
 test('generatePir exports named function', async () => {
-  const mod = await import(join(SKILL_ROOT, 'scripts/generate-pir.mjs'));
+  const mod = await import(pathToFileURL(join(SKILL_ROOT, 'scripts/generate-pir.mjs')).href);
   assert.equal(typeof mod.generatePir, 'function');
 });
 
 test('generatePir returns { valid, errors, warnings, pir }', async () => {
-  const { generatePir } = await import(join(SKILL_ROOT, 'scripts/generate-pir.mjs'));
+  const { generatePir } = await import(pathToFileURL(join(SKILL_ROOT, 'scripts/generate-pir.mjs')).href);
   const result = generatePir({ processName: 'Test Process' });
   assert.equal(typeof result.valid, 'boolean');
   assert.ok(Array.isArray(result.errors));

@@ -12,7 +12,7 @@ Agent Skills are the AI analogue of standard operating procedures. They are SKIL
 
 ## What BP-SKILL does
 
-BP-SKILL packages the full business process documentation lifecycle as 15 SKILL.md files. The architecture has three layers:
+BP-SKILL packages the full business process documentation lifecycle as 15 core SKILL.md files. The repository also carries support/meta skills and two recommended reverse-direction extensions that are not yet in the public application catalog. The architecture has three layers:
 
 **Skills** — 15 executable instruction sets, one per stage of the process documentation lifecycle. Each skill declares what it consumes, what it produces, and which BABOK/BPM CBOK/APQC standards it satisfies. Skills are portable across any Agent Skills-compatible platform: Claude Code, OpenAI Codex CLI, GitHub Copilot, Gemini CLI, Cursor, VS Code extensions.
 
@@ -71,6 +71,16 @@ Practitioners who encounter this repository through the [live playground](https:
 ### Layer 6 — Publication
 
 **15 okhp3-publication-handoff-packaging** [core] — Packages all outputs for stakeholder review: PNS.md, BPMN diagram, SIPOC, RACI, SOPs, and a publication checklist.
+
+---
+
+## Recommended reverse-direction extensions
+
+**okhp3-bpmn-to-process-narrative** [recommended extension] — Reconstructs a traceable draft PNS from bpmn-beta source text, preserving IDs and explicitly marking fields that the diagram cannot encode.
+
+**okhp3-bpmn-recoverability-audit** [recommended extension] — Audits that draft against the bpmn-beta recoverability boundary, identifies unsupported or suspiciously populated fields, and routes the gaps to targeted elicitation before normal validation.
+
+These extensions complete the text-to-diagram-to-text interchange concept without claiming that a diagram contains elicitation-only facts. They remain outside the 15-skill public application catalog until independent holdout evidence and a catalog decision are complete.
 
 ---
 

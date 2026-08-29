@@ -31,7 +31,7 @@ const NORMALIZE_SCRIPT    = resolve(__dirname, 'normalize-skill-frontmatter.mjs'
 // ── Fixtures ──────────────────────────────────────────────────────────────────
 
 const VALID_FRONTMATTER = `---
-name: my-test-skill
+name: okhp3-my-test-skill
 description: This description is long enough to meet the minimum fifty character requirement here.
 produces: A validated output artifact
 bp_skill_version: "0.3"
@@ -67,6 +67,18 @@ Body content here.
 
 const NAME_MISMATCH_FRONTMATTER = `---
 name: wrong-name
+description: This description is long enough to meet the minimum fifty character requirement here.
+produces: A validated output artifact
+bp_skill_version: "0.3"
+---
+
+# My Test Skill
+
+Body content here.
+`;
+
+const VALID_LONG_NAME_FRONTMATTER = `---
+name: okhp3-this-name-is-way-too-long-for-brand
 description: This description is long enough to meet the minimum fifty character requirement here.
 produces: A validated output artifact
 bp_skill_version: "0.3"
@@ -149,7 +161,7 @@ function runNormalize(targetDir) {
 // ── validate-skills.mjs tests ─────────────────────────────────────────────────
 
 test('validate-skills exits 0 for a valid SKILL.md', () => {
-  const skillsDir  = makeSkillsDir('my-test-skill', VALID_FRONTMATTER);
+  const skillsDir  = makeSkillsDir('okhp3-my-test-skill', VALID_FRONTMATTER);
   const contextDir = makeEmptyContextDir();
   const { exitCode } = runValidateSkills(skillsDir, contextDir);
   assert.equal(exitCode, 0, 'should exit 0 for a fully valid skill');
@@ -188,10 +200,23 @@ test('validate-skills exits 1 when skill name does not match directory', () => {
   );
 });
 
+test('validate-skills enforces the okhp3 prefix and directory length contract', () => {
+  const prefixDir = makeSkillsDir('my-test-skill', VALID_FRONTMATTER);
+  const contextDir = makeEmptyContextDir();
+  const prefixResult = runValidateSkills(prefixDir, contextDir);
+  assert.equal(prefixResult.exitCode, 1, 'should reject a skill without the okhp3 prefix');
+  assert.ok(prefixResult.output.includes('C0'), `failure output should mention C0; got:\n${prefixResult.output}`);
+
+  const longDir = makeSkillsDir('okhp3-this-name-is-way-too-long-for-brand', VALID_LONG_NAME_FRONTMATTER);
+  const longResult = runValidateSkills(longDir, contextDir);
+  assert.equal(longResult.exitCode, 1, 'should reject a skill directory over the repository length limit');
+  assert.ok(longResult.output.includes('C0'), `failure output should mention C0; got:\n${longResult.output}`);
+});
+
 // ── validate-agent-skills.mjs tests ──────────────────────────────────────────
 
 test('validate-agent-skills exits 0 for a valid agent skill', () => {
-  const dir = makeSkillsDir('my-test-skill', VALID_FRONTMATTER);
+  const dir = makeSkillsDir('okhp3-my-test-skill', VALID_FRONTMATTER);
   const { exitCode } = runValidateAgentSkills(dir);
   assert.equal(exitCode, 0, 'should exit 0 for a fully valid agent skill');
 });

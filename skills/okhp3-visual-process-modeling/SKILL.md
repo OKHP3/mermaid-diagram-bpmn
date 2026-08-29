@@ -59,6 +59,22 @@ Generate a Mermaid-native `bpmn-beta` diagram from a validated PNS. The diagram 
 | `process_box.outputs[]` consumer | End event or message flow |
 | Multiple departments | Pool blocks |
 
+## Representation trace convention
+
+When this skill generates a diagram from a PNS, place a comment immediately
+before each traceable task, event, or gateway node:
+
+```text
+# pns:act-001
+task:user t1 "Submit purchase request"
+```
+
+Use the stable PNS activity, event, or gateway identifier after `pns:`. These
+comments support reverse observation and alignment checks; they are not proof
+that the referenced business fact is still current, complete, or approved.
+If no trusted PNS identifier exists, leave the mapping unresolved rather than
+inventing one.
+
 ---
 
 ## DMN Trigger Rule

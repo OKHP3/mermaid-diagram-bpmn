@@ -1,0 +1,223 @@
+pns_version: 0.1
+process_id: proc-purchase-order-approval
+process_name: "Purchase Order Approval"
+process_owner: null
+department: null
+status: draft
+created_date: 2026-08-29
+last_modified_date: 2026-08-29
+pir_ref: null
+apqc_pcf_mapping: null
+narrative_provenance: diagram-derived
+source_diagram:
+  file: "app/examples/08-purchase-order-approval.mmd"
+  parsed_date: 2026-08-29
+  element_count: 8
+  flow_count: 7
+  pool_count: 1
+  lane_count: 3
+  parse_errors: []
+process_box:
+  trigger: "PO Request Submitted"
+  inputs: []
+  outputs:
+    - name: "PO Issued"
+      consumer: null
+      unrecoverable_from_diagram:
+        - consumer
+    - name: "Request Rejected"
+      consumer: null
+      unrecoverable_from_diagram:
+        - consumer
+  criteria: null
+  resources: null
+  responsibilities: null
+  risks: null
+  unrecoverable_from_diagram:
+    - inputs
+    - criteria
+    - resources
+    - responsibilities
+    - risks
+activity_sequence:
+  activities:
+    - id: t1
+      description: "Submit PO Request"
+      actor_role_id: role-requester
+      inputs: []
+      outputs: []
+      systems:
+        - "(diagram hint only, not a resolved system: task type \"user\")"
+      preconditions: null
+      postconditions: null
+      unrecoverable_from_diagram:
+        - inputs
+        - outputs
+        - preconditions
+        - postconditions
+      source_element_id: t1
+    - id: t2
+      description: "Review PO Request"
+      actor_role_id: role-manager
+      inputs: []
+      outputs: []
+      systems:
+        - "(diagram hint only, not a resolved system: task type \"user\")"
+      preconditions: null
+      postconditions: null
+      unrecoverable_from_diagram:
+        - inputs
+        - outputs
+        - preconditions
+        - postconditions
+      source_element_id: t2
+    - id: t3
+      description: "Issue Purchase Order"
+      actor_role_id: role-procurement
+      inputs: []
+      outputs: []
+      systems:
+        - "(diagram hint only, not a resolved system: task type \"service\")"
+      preconditions: null
+      postconditions: null
+      unrecoverable_from_diagram:
+        - inputs
+        - outputs
+        - preconditions
+        - postconditions
+      source_element_id: t3
+    - id: t4
+      description: "Send Rejection Notice"
+      actor_role_id: role-manager
+      inputs: []
+      outputs: []
+      systems:
+        - "(diagram hint only, not a resolved system: task type \"service\")"
+      preconditions: null
+      postconditions: null
+      unrecoverable_from_diagram:
+        - inputs
+        - outputs
+        - preconditions
+        - postconditions
+      source_element_id: t4
+roles_and_raci:
+  roles:
+    - role_id: role-requester
+      role_name: Requester
+    - role_id: role-manager
+      role_name: Manager
+    - role_id: role-procurement
+      role_name: Procurement
+  raci_matrix:
+    - activity_id: t1
+      responsible:
+        - role-requester
+      accountable: role-requester
+      accountable_confidence: inferred_from_lane_placeholder
+      consulted: []
+      informed: []
+      unrecoverable_from_diagram:
+        - consulted
+        - informed
+        - "accountable (confirmed)"
+    - activity_id: t2
+      responsible:
+        - role-manager
+      accountable: role-manager
+      accountable_confidence: inferred_from_lane_placeholder
+      consulted: []
+      informed: []
+      unrecoverable_from_diagram:
+        - consulted
+        - informed
+        - "accountable (confirmed)"
+    - activity_id: t3
+      responsible:
+        - role-procurement
+      accountable: role-procurement
+      accountable_confidence: inferred_from_lane_placeholder
+      consulted: []
+      informed: []
+      unrecoverable_from_diagram:
+        - consulted
+        - informed
+        - "accountable (confirmed)"
+    - activity_id: t4
+      responsible:
+        - role-manager
+      accountable: role-manager
+      accountable_confidence: inferred_from_lane_placeholder
+      consulted: []
+      informed: []
+      unrecoverable_from_diagram:
+        - consulted
+        - informed
+        - "accountable (confirmed)"
+business_rules: []
+business_rules_unrecoverable_from_diagram: true
+decision_points:
+  - id: g1
+    description: "Approved?"
+    activity_id: t2
+    criteria: null
+    outcomes:
+      - label: yes
+        next_activity: t3
+      - label: no
+        next_activity: t4
+    gateway_type: exclusive
+    unrecoverable_from_diagram:
+      - criteria
+exception_paths: []
+kpis: []
+kpis_unrecoverable_from_diagram: true
+systems_and_integrations: []
+systems_and_integrations_unrecoverable_from_diagram: true
+controls_and_compliance: []
+controls_and_compliance_unrecoverable_from_diagram: true
+open_questions:
+  - id: oq-diagram-001
+    question: "What is the business rationale, policy source, and approval authority behind each business rule implied by this process? None is encoded in bpmn-beta source."
+    owner_role_id: null
+    target_resolution_date: null
+  - id: oq-diagram-002
+    question: "What are the true RACI accountable/consulted/informed assignments for each activity? The diagram only encodes lane-based task ownership (used here as a placeholder \"responsible\"/\"accountable\"), not full governance RACI."
+    owner_role_id: null
+    target_resolution_date: null
+  - id: oq-diagram-003
+    question: "What KPIs, formulas, data sources, and targets apply to this process? None is encoded in bpmn-beta source."
+    owner_role_id: null
+    target_resolution_date: null
+  - id: oq-diagram-004
+    question: "What controls, compliance standards, and systems/integrations govern this process? None is encoded in bpmn-beta source beyond an optional, unresolved task-type hint (e.g. \"task:service\")."
+    owner_role_id: null
+    target_resolution_date: null
+  - id: oq-diagram-005
+    question: "What is the business criteria behind each decision point's branches? The diagram only encodes the outcome labels (\"Approved?\"), not the underlying rule."
+    owner_role_id: null
+    target_resolution_date: null
+babok_core_concepts:
+  change: null
+  need: null
+  solution: null
+  stakeholders: null
+  value: null
+  context: null
+  unrecoverable_from_diagram:
+    - change
+    - need
+    - solution
+    - stakeholders
+    - value
+    - context
+revision_history:
+  - version: 0.1
+    date: 2026-08-29
+    author_role: "okhp3-bpmn-to-process-narrative (automated)"
+    summary: "Reconstructed from bpmn-beta source (app/examples/08-purchase-order-approval.mmd) by parsing the diagram's own DSL text. Not human-authored; not elicited. Treat as a first-draft skeleton requiring SME review before narrative-authored status."
+validation:
+  pns_quality_score: null
+  ready_for_publication: false
+  ready_for_bpmn_modeling: false
+  note: "diagram-derived: not eligible for the standard okhp3-process-validation-scoring V8 gate (no pir.yaml exists). Route to okhp3-bpmn-recoverability-audit for a diagram-appropriate completeness assessment instead."

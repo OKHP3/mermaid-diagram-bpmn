@@ -82,6 +82,6 @@ validation:
 
 ## Handoff Readiness Threshold
 
-Score ≥ 70 → `ready_for_narrative: true` → proceed to `stakeholder-and-role-mapping` and `process-narrative-authoring`.
+Score ≥ 70 → `ready_for_narrative: true` → proceed to `okhp3-stakeholder-and-role-mapping` and `okhp3-process-narrative-authoring`.
 
 Score < 70 → record which sections are missing and ask targeted follow-up questions.

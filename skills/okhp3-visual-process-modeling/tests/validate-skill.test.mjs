@@ -14,7 +14,7 @@ function read(rel) { return readFileSync(join(SKILL_ROOT, rel), 'utf-8'); }
 function exists(rel) { return existsSync(join(SKILL_ROOT, rel)); }
 
 function parseFrontmatter(content) {
-  const match = content.match(/^---\n([\s\S]*?)\n---/);
+  const match = content.match(/^---\r?\n([\s\S]*?)\r?\n---/);
   if (!match) return null;
   const fm = {};
   for (const line of match[1].split('\n')) {
@@ -50,6 +50,13 @@ for (const f of FILES) test(`exists: ${f}`, () => assert.ok(exists(f)));
 
 test('SKILL.md documents DMN trigger rule (≥3 gateways)', () => {
   assert.ok(read('SKILL.md').includes('≥3') || read('SKILL.md').includes('>= 3') || read('SKILL.md').includes('three or more'));
+});
+
+test('SKILL.md documents the PNS representation trace convention', () => {
+  const content = read('SKILL.md');
+  assert.ok(content.includes('# pns:act-001'));
+  assert.ok(content.includes('reverse observation'));
+  assert.ok(content.includes('not proof'));
 });
 
 test('validateBpmnBeta exports named function', async () => {

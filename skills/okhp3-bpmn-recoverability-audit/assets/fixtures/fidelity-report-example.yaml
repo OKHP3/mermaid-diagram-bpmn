@@ -1,0 +1,165 @@
+# fidelity-report.yaml — worked example
+#
+# Audited PNS: a pns.yaml reconstructed by okhp3-bpmn-to-process-narrative
+# from examples/08-purchase-order-approval.mmd (bpmn-beta). No pir.yaml
+# exists for this process_id — nobody has run elicitation on it. Compare
+# against skills/okhp3-process-narrative-authoring/assets/fixtures/pns-example.yaml,
+# the real elicited PNS for the same underlying process, to see what this
+# reconstruction is missing.
+
+fidelity_report_version: "0.1"
+audit_date: "2026-08-29"
+audited_by_role: Business Analyst
+
+source_pns:
+  process_id: proc-purchase-approval-diagram-derived
+  title: Purchase Order Approval (diagram-derived reconstruction)
+  narrative_provenance: diagram-derived
+
+recoverable_from_diagram:
+  - section: process_box
+    field: trigger
+    diagram_signal: Start event node and its label
+    caveat: "Confirms a trigger exists and names it; the business-context sentence behind it is not diagram-native."
+    populated_in_this_pns: true
+
+  - section: process_box
+    field: "outputs[].name / .consumer"
+    diagram_signal: "End event node label; message-flow target when present"
+    caveat: ".consumer is only recoverable when an explicit message flow names an external pool/lane."
+    populated_in_this_pns: true
+
+  - section: activity_sequence
+    field: activities[].description
+    diagram_signal: Task node label
+    caveat: null
+    populated_in_this_pns: true
+
+  - section: activity_sequence
+    field: activity order / sequence
+    diagram_signal: "Sequence flow arrows (-->) between nodes"
+    caveat: null
+    populated_in_this_pns: true
+
+  - section: activity_sequence
+    field: activities[].actor_role_id
+    diagram_signal: Lane assignment of the task node
+    caveat: "Names an owning lane; mapping it to a validated actor_role_id from role-dictionary.md is an inference."
+    populated_in_this_pns: true
+
+  - section: roles_and_raci
+    field: "roles[] (role list)"
+    diagram_signal: Pool and lane names
+    caveat: "A candidate role list, not confirmation the names match role-dictionary.md or are still current."
+    populated_in_this_pns: true
+
+  - section: business_rules
+    field: description
+    diagram_signal: Gateway condition label
+    caveat: 'Only recovered when the label states the rule rather than asking a bare question (e.g. "Approved?" gives no rule text).'
+    populated_in_this_pns: false
+
+  - section: decision_points
+    field: description
+    diagram_signal: Gateway node label
+    caveat: null
+    populated_in_this_pns: true
+
+  - section: decision_points
+    field: outcomes[]
+    diagram_signal: Labeled branch flows leaving the gateway
+    caveat: null
+    populated_in_this_pns: true
+
+  - section: exception_paths
+    field: existence of an exception path
+    diagram_signal: Error / intermediate-error event and its attachment point
+    caveat: "Confirms an exception path exists and roughly where it attaches; weaker than a fully elicited exception register entry."
+    populated_in_this_pns: true
+
+unrecoverable_from_diagram:
+  - section: process_box
+    field: "inputs[], criteria, resources, responsibilities, risks"
+    reason: "No bpmn-beta element carries input-artifact provenance, success-criteria prose, named resources, accountability prose, or risk narrative."
+    populated_in_this_pns: false
+
+  - section: activity_sequence
+    field: "activities[].inputs, outputs, systems, preconditions, postconditions"
+    reason: "Task node grammar carries only a label and a lane; per-activity artifact/system/pre-post detail has no dedicated element."
+    populated_in_this_pns: false
+
+  - section: roles_and_raci
+    field: "raci_matrix[] (accountable/responsible/consulted/informed)"
+    reason: "bpmn-beta has no grammar for the four RACI categories. Lane ownership implies at best \"whoever performs tasks here,\" closer to Responsible than a validated A/C/I split."
+    populated_in_this_pns: false
+
+  - section: business_rules
+    field: "source, rationale"
+    reason: "Policy citation and rationale prose have no bpmn-beta grammar element."
+    populated_in_this_pns: false
+
+  - section: decision_points
+    field: "criteria, authority"
+    reason: "Precise decision criteria and the deciding role/authority are narrative fields with no gateway-label equivalent."
+    populated_in_this_pns: false
+
+  - section: exception_paths
+    field: "handling, escalation_path"
+    reason: "The handling procedure and escalation chain are prose fields with no dedicated bpmn-beta grammar."
+    populated_in_this_pns: false
+
+  - section: systems_and_integrations
+    field: "system_name, integration_type, activities_supported"
+    reason: "bpmn-beta has no system/tool node type; an occasional system name inside a task label is unreliable inference, not structural encoding."
+    populated_in_this_pns: false
+
+  - section: kpis
+    field: "name, formula, data_source, target, frequency"
+    reason: "There is no measurement or metric concept anywhere in bpmn-beta grammar."
+    populated_in_this_pns: false
+
+  - section: controls_and_compliance
+    field: "type, description, standard_ref, activities_covered, waiver"
+    reason: "Controls and compliance mappings are governance narrative with no diagram-grammar channel."
+    populated_in_this_pns: false
+
+  - section: open_questions
+    field: "open_questions[]"
+    reason: "This is a meta-narrative field about elicitation gaps; a diagram cannot state what wasn't asked about it."
+    populated_in_this_pns: false
+
+  - section: babok_core_concepts
+    field: "change, need, solution, stakeholders, value, context"
+    reason: "These are BABOK rationale fields describing why the process exists; a diagram encodes what happens, not why."
+    populated_in_this_pns: false
+
+  - section: revision_history
+    field: "revision_history[]"
+    reason: "Authorship and versioning metadata is document-management information, not process content a diagram can carry."
+    populated_in_this_pns: false
+
+  - section: validation
+    field: "pns_quality_score, ready_for_publication, ready_for_bpmn_modeling"
+    reason: "These are computed by okhp3-process-validation-scoring / okhp3-process-narrative-authoring, not derived from the diagram. A diagram-derived PNS must never self-assign these values."
+    populated_in_this_pns: false
+
+completeness_verdict: partial-diagram-derived
+
+recommended_next_action: >
+  Route to okhp3-elicitation-interviews for a targeted follow-up pass covering:
+  process_box.inputs[], criteria, resources, responsibilities, risks;
+  activity_sequence.activities[].inputs, outputs, systems, preconditions, postconditions;
+  roles_and_raci.raci_matrix[] (accountable/responsible/consulted/informed);
+  business_rules.source, rationale; decision_points.criteria, authority;
+  exception_paths.handling, escalation_path; systems_and_integrations;
+  kpis; controls_and_compliance; open_questions; babok_core_concepts;
+  revision_history; validation. Do not run okhp3-process-validation-scoring's
+  full V1-V9 suite against this PNS as-is: its V8 rule hard-gates on pir.yaml
+  completeness_score >= 70, which a diagram-only reconstruction was never
+  meant to satisfy. Only after the listed gaps are filled by elicitation
+  should validation-scoring be run for real publication-readiness scoring.
+
+validation_boundary_notice: >
+  This report is not a substitute for okhp3-process-validation-scoring's
+  V1-V9 suite. A diagram-derived PNS must never be marked
+  ready_for_publication: true by this skill alone.

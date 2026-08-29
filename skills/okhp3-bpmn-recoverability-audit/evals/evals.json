@@ -1,0 +1,52 @@
+{
+  "schema_version": "1.0",
+  "skill_name": "okhp3-bpmn-recoverability-audit",
+  "skill_version": "0.1.0",
+  "status": "design-ready",
+  "cases": [
+    {
+      "id": "partial-diagram-derived",
+      "partition": "development",
+      "risk": "high",
+      "prompt": "Audit a pns.yaml reconstructed from bpmn-beta text with tasks, lanes, gateways, and sequence flows but no pir.yaml.",
+      "expectations": [
+        "returns completeness_verdict partial-diagram-derived",
+        "lists recoverable and unrecoverable fields with reasons or caveats",
+        "routes the disclosed gaps to okhp3-elicitation-interviews",
+        "does not set ready_for_publication true"
+      ],
+      "failure_consequence": "A diagram-only draft could be mistaken for an elicited and publication-ready process record."
+    },
+    {
+      "id": "qualifying-pir-boundary",
+      "partition": "development",
+      "risk": "high",
+      "prompt": "Audit a PNS whose missing fields have been filled through elicitation and whose companion pir.yaml qualifies for the validation-scoring handoff.",
+      "expectations": [
+        "returns full only when every diagram boundary gap is explicitly resolved",
+        "routes next validation to okhp3-process-validation-scoring",
+        "preserves diagram-derived provenance instead of erasing it",
+        "does not claim this audit itself proves publication readiness"
+      ],
+      "failure_consequence": "The audit could either block a sufficiently elicited process or grant publication authority it does not own."
+    },
+    {
+      "id": "fabrication-risk",
+      "partition": "development",
+      "risk": "critical",
+      "prompt": "Audit a diagram-derived PNS that contains invented KPI, control, RACI, or decision-authority values not represented in the diagram.",
+      "expectations": [
+        "keeps the fields classified as unrecoverable from bpmn-beta grammar",
+        "warns that populated values require source or elicitation evidence",
+        "does not silently treat plausible-looking prose as diagram evidence",
+        "routes the case for targeted elicitation or evidence review"
+      ],
+      "failure_consequence": "Plausible fabrication could become authoritative process documentation."
+    }
+  ],
+  "holdout": {
+    "status": "external-required",
+    "holdout_seen": true,
+    "note": "No protected holdout set of paired bpmn-beta diagrams and independently elicited PNS records is included in this repository; do not report task uplift until one is evaluated."
+  }
+}

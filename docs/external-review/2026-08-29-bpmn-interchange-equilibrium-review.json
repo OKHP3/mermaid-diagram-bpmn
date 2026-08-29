@@ -1,0 +1,50 @@
+{
+  "review_type": "equilibrium-review",
+  "review_date": "2026-08-29",
+  "artifact": {
+    "path": "skills/okhp3-bpmn-to-process-narrative",
+    "decision_scope": "Whether to add one or more skills to complete the text-to-diagram-to-text vision",
+    "repository_head_at_review": "d79d512068966ec47f2116447b995b2d5a2bb601"
+  },
+  "decision": "approve-with-limits",
+  "confidence": "medium",
+  "summary": "Create one pilot-grade reverse reconstruction skill for textual bpmn-beta source. Defer a separate reconciliation or fidelity-gate skill until a paired conflicting-source pilot proves a distinct repeatable job.",
+  "initial_reviews": [
+    {
+      "role": "evidence-reviewer",
+      "decision": "defer-for-evidence",
+      "finding": "The current suite is forward-oriented, but PNS and bpmn-beta contracts are not yet sufficiently stable to claim lossless interchange."
+    },
+    {
+      "role": "outcome-reviewer",
+      "decision": "approve-with-limits",
+      "finding": "Reverse reconstruction and reconciliation are conceptually distinct, but reconciliation should wait for a real conflicting-source pilot."
+    },
+    {
+      "role": "safety-portability-reviewer",
+      "decision": "approve-with-limits",
+      "finding": "Textual bpmn-beta is a portable input boundary; arbitrary image OCR must remain provisional and must not silently create authoritative process facts."
+    }
+  ],
+  "disagreement": {
+    "material": true,
+    "question": "Whether a second reconciliation skill is necessary immediately",
+    "resolution_role": "negotiator",
+    "resolution": "Defer the second skill and require a paired conflicting-source pilot before adding it."
+  },
+  "required_limits": [
+    "Use encoded, inferred, not-encoded, unknown, and conflict evidence statuses.",
+    "Preserve source locations and stable IDs where present.",
+    "Produce a reconstruction report and optional PNS draft, never an implicitly approved PNS.",
+    "Treat image-only observations as provisional and route ambiguity to human elicitation.",
+    "Use trace comments in visual modeling as alignment aids, not proof of completeness or approval."
+  ],
+  "release_conditions_for_expansion": [
+    "Canonical PNS interchange representation is resolved.",
+    "Normal, partial/lossy, malformed, and untrusted fixtures pass deterministic checks.",
+    "A protected holdout or live evaluation demonstrates that reconciliation is a distinct repeatable release gate.",
+    "No release claim says that a bare diagram and a rich process narrative are literally lossless equivalents."
+  ],
+  "evidence_status": "analytical-review-only",
+  "evaluation_status": "not-run"
+}

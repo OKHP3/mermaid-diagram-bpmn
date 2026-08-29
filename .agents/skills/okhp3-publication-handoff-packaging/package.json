@@ -1,0 +1,9 @@
+{
+  "name": "@bp-skill/okhp3-publication-handoff-packaging",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node --test tests/*.test.mjs"
+  }
+}

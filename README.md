@@ -178,7 +178,7 @@ mermaid-diagram-bpmn/
 
 Skills are the AI analogue of SOPs: executable, version-controlled, portable instruction sets that auto-activate on semantic match.
 
-BP-SKILL packages the business process documentation lifecycle as 15 SKILL.md files conforming to the Agent Skills open standard. The central handoff artifact is `PNS.md`, a Process Narrative Specification that every skill either reads or enriches.
+BP-SKILL packages the business process documentation lifecycle as 15 core SKILL.md files conforming to the Agent Skills open standard. The central handoff artifact is `PNS.md`, a Process Narrative Specification that every process skill either reads or enriches.
 
 ### The pipeline
 
@@ -212,6 +212,8 @@ LAYER 6 — PUBLICATION
 ```
 
 See [docs/agent-skills-install.md](./docs/agent-skills-install.md) for platform-specific install instructions and full suite download.
+
+The repository also contains support/meta skills and two recommended, not-yet-core extensions for the reverse direction: `okhp3-bpmn-to-process-narrative` reconstructs a draft PNS from bpmn-beta text, and `okhp3-bpmn-recoverability-audit` reports which narrative fields the diagram can and cannot support. They remain outside the 15-skill public application catalog until independent holdout evidence and a catalog decision are complete.
 
 ---
 

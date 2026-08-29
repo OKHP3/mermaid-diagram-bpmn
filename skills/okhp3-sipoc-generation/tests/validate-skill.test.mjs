@@ -14,7 +14,7 @@ function read(rel) { return readFileSync(join(SKILL_ROOT, rel), 'utf-8'); }
 function exists(rel) { return existsSync(join(SKILL_ROOT, rel)); }
 
 function parseFrontmatter(content) {
-  const match = content.match(/^---\n([\s\S]*?)\n---/);
+  const match = content.match(/^---\r?\n([\s\S]*?)\r?\n---/);
   if (!match) return null;
   const fm = {};
   for (const line of match[1].split('\n')) {

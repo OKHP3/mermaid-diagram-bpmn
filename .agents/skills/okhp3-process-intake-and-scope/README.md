@@ -1,14 +1,14 @@
-# process-intake-and-scope
+# okhp3-process-intake-and-scope
 
 SKILL.md-compatible agent skill for structured business process intake and scope definition.
 
 Part of the **BP-SKILL v0.2 Business Process Agent Skill Suite** — skill 01 in the 15-skill pipeline.
 
 ```
-process-intake-and-scope  →  stakeholder-and-role-mapping  →  elicitation-and-interview-facilitation
+okhp3-process-intake-and-scope  →  okhp3-stakeholder-and-role-mapping  →  okhp3-elicitation-interviews
       (PIR)                        (stakeholder register)              (question plan)
                                                ↓
-                                    process-narrative-authoring  →  visual-process-modeling  →  …
+                                    okhp3-process-narrative-authoring  →  okhp3-visual-process-modeling  →  …
 ```
 
 ## What this skill does

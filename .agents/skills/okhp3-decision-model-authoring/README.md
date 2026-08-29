@@ -1,4 +1,4 @@
-# decision-model-authoring
+# okhp3-decision-model-authoring
 
 SKILL.md-compatible agent skill for authoring and validating DMN-aligned decision models.
 
@@ -6,7 +6,7 @@ Part of the **BP-SKILL v0.2 Business Process Agent Skill Suite** — skill 09 (r
 
 ## What this skill does
 
-Authors structured decision tables from PNS decision points using OMG DMN hit policies. Triggered automatically when `visual-process-modeling` detects ≥3 gateways. Produces:
+Authors structured decision tables from PNS decision points using OMG DMN hit policies. Triggered automatically when `okhp3-visual-process-modeling` detects ≥3 gateways. Produces:
 
 - **`decision-model.yaml`** — machine-readable decision model with traceability to PNS
 - **DMN table** — human-readable rule table in Markdown

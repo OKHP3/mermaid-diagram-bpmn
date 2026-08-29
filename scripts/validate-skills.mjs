@@ -45,6 +45,13 @@ const OVERCLAIM_PHRASES = [
 ];
 const NEGATION_WORDS = ['not', 'never', 'do not', 'must not', 'cannot', 'should not', 'no ', 'excludes', 'avoid', 'claim'];
 
+// Repository-local naming contract for distributable BP-SKILL directories.
+// The portable Agent Skills limit is 64 characters; the shorter directory
+// limit keeps names usable in the repository's public navigation surfaces.
+const SKILL_NAME_PREFIX = 'okhp3-';
+const MAX_SKILL_DIRECTORY_LENGTH = 36;
+const MAX_PORTABLE_SKILL_NAME_LENGTH = 64;
+
 function isNegationContext(content, phraseIndex, windowSize = 60) {
   const snippet = content.slice(Math.max(0, phraseIndex - windowSize), phraseIndex).toLowerCase();
   return NEGATION_WORDS.some(neg => snippet.includes(neg));
@@ -91,6 +98,17 @@ function findJsonFiles(dir) {
 function validateSkill(skillDir) {
   const skillName = basename(skillDir);
   const p = `[${skillName}]`;
+
+  // C0: repository naming contract
+  if (!skillName.startsWith(SKILL_NAME_PREFIX)) {
+    fail(`${p} C0: skill name prefix`, `Directory name must start with "${SKILL_NAME_PREFIX}"`);
+  } else if (skillName.length > MAX_SKILL_DIRECTORY_LENGTH) {
+    fail(`${p} C0: skill directory length`, `Directory name is ${skillName.length} characters; maximum is ${MAX_SKILL_DIRECTORY_LENGTH}`);
+  } else if (skillName.length > MAX_PORTABLE_SKILL_NAME_LENGTH) {
+    fail(`${p} C0: portable skill name length`, `Skill name is ${skillName.length} characters; maximum is ${MAX_PORTABLE_SKILL_NAME_LENGTH}`);
+  } else {
+    pass(`${p} C0: naming contract`);
+  }
 
   // C1: SKILL.md exists
   const skillMdPath = join(skillDir, 'SKILL.md');

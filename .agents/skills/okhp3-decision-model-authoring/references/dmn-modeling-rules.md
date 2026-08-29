@@ -58,4 +58,4 @@ Hit policy: **<U|F|A|C>** — <one-line description>
 
 ## Mandatory Trigger Condition
 
-This skill is invoked **automatically** when `visual-process-modeling` detects ≥3 gateway nodes in the generated bpmn-beta diagram. The gateway labels become `decision_name` values in the decision model.
+This skill is invoked **automatically** when `okhp3-visual-process-modeling` detects ≥3 gateway nodes in the generated bpmn-beta diagram. The gateway labels become `decision_name` values in the decision model.

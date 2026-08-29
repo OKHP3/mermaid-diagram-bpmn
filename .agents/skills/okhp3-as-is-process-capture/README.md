@@ -1,4 +1,4 @@
-# as-is-process-capture
+# okhp3-as-is-process-capture
 
 SKILL.md-compatible agent skill for capturing and normalising current-state process descriptions.
 
