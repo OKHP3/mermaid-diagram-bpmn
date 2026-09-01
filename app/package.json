@@ -11,7 +11,7 @@
     "check:browser": "node scripts/check-browser.mjs",
     "typecheck": "tsc -p tsconfig.json --noEmit",
     "test": "vitest run --config vitest.config.ts",
-    "test:e2e": "playwright test e2e/host-demo.spec.ts e2e/browser-cdn.spec.ts e2e/playground-error-highlight.spec.ts e2e/url-sharing.spec.ts e2e/lint-warnings.spec.ts e2e/semantic-validation.spec.ts e2e/vendor-onboarding-diagram.spec.ts e2e/purchase-approval-diagram.spec.ts e2e/employee-offboarding-diagram.spec.ts e2e/lifecycle-tracker-scroll.spec.ts",
+    "test:e2e": "playwright test e2e/host-demo.spec.ts e2e/browser-cdn.spec.ts e2e/playground-error-highlight.spec.ts e2e/url-sharing.spec.ts e2e/lint-warnings.spec.ts e2e/semantic-validation.spec.ts e2e/vendor-onboarding-diagram.spec.ts e2e/purchase-approval-diagram.spec.ts e2e/employee-offboarding-diagram.spec.ts e2e/lifecycle-tracker-scroll.spec.ts e2e/syntax-comparison.spec.ts",
     "test:e2e:sharing": "playwright test e2e/url-sharing.spec.ts --project=chromium",
     "test:e2e:visual": "playwright test e2e/visual-regression.spec.ts --project=chromium",
     "test:e2e:update-snapshots": "playwright test e2e/visual-regression.spec.ts --project=chromium --update-snapshots"

@@ -9,6 +9,7 @@
  *   - e2e/url-sharing.spec.ts             — canonical and custom Playground shared URLs
  *   - e2e/lint-warnings.spec.ts           — Playground advisory-warning rendering
  *   - e2e/semantic-validation.spec.ts     — Playground semantic validation error panel (ORPHAN_NODE etc.)
+ *   - e2e/syntax-comparison.spec.ts       — public comparison evidence visibility
  *   - e2e/visual-regression.spec.ts       — mobile layout and visual snapshot checks
  *
  * Prerequisites: the app must be built before this suite runs.

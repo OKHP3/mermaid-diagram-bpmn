@@ -4,7 +4,7 @@ import { render } from "@testing-library/react";
 import SyntaxComparison from "@/pages/SyntaxComparison";
 
 describe("SyntaxComparison — reviewed competitive surface", () => {
-  it("publishes all reviewed syntax options and the four @derari categories", () => {
+  it("publishes all reviewed syntax options, @derari categories, and source dates", () => {
     const { container } = render(<SyntaxComparison />);
     const pageText = container.textContent ?? "";
 
@@ -31,6 +31,7 @@ describe("SyntaxComparison — reviewed competitive surface", () => {
       expect(derariCode?.textContent).toContain(heading);
     }
 
+    expect(pageText).toContain("reviewed 2026-08-22");
     expect(pageText).toContain("checked 2026-08-21");
   });
 });
