@@ -96,6 +96,15 @@ function makePurchaseOrderSvgStub(id: string): string {
   ].join('\n');
 }
 
+function makeIntermediateEventSvgStub(id: string): string {
+  return [
+    `<svg id="${id}" role="img" xmlns="http://www.w3.org/2000/svg">`,
+    `  <g><circle r="18" class="bpmn-event"/><circle r="13" class="bpmn-event"/></g>`,
+    `  <text>Validated</text>`,
+    `</svg>`,
+  ].join('\n');
+}
+
 // ── Test helpers ──────────────────────────────────────────────────────────────
 
 function setupHappyMocks() {
@@ -106,7 +115,9 @@ function setupHappyMocks() {
       return Promise.reject(new Error('Line 2: pools cannot be nested'));
     }
     return Promise.resolve({
-      svg: id === 'demo-linear' || id === 'demo-gateway'
+      svg: id === 'demo-intermediate-event'
+        ? makeIntermediateEventSvgStub(id)
+        : id === 'demo-linear' || id === 'demo-gateway'
         ? makeSvgStub(id)
         : makePurchaseOrderSvgStub(id),
     });
@@ -188,13 +199,14 @@ describe('MermaidHostDemo — diagram rendering', () => {
     setupHappyMocks();
   });
 
-  it('calls mermaid.render() for all eight diagram entries', async () => {
+  it('calls mermaid.render() for all nine diagram entries', async () => {
     render(<MermaidHostDemo />);
-    // Four original entries, three non-purchase examples, and the error case.
-    await waitFor(() => expect(mockRender).toHaveBeenCalledTimes(8));
+    // Five original entries, three non-purchase examples, and the error case.
+    await waitFor(() => expect(mockRender).toHaveBeenCalledTimes(9));
 
     const renderIds = mockRender.mock.calls.map(([id]: [string]) => id);
     expect(renderIds).toContain('demo-linear');
+    expect(renderIds).toContain('demo-intermediate-event');
     expect(renderIds).toContain('demo-gateway');
     expect(renderIds).toContain('demo-purchase-order');
     expect(renderIds).toContain('demo-cross-pool');
@@ -217,6 +229,15 @@ describe('MermaidHostDemo — diagram rendering', () => {
     await waitFor(() => {
       const el = document.querySelector('[data-testid="svg-output-demo-linear"] .bpmn-event');
       expect(el).not.toBeNull();
+    });
+  });
+
+  it('injects the intermediate event double-ring SVG and label into the DOM', async () => {
+    render(<MermaidHostDemo />);
+    await waitFor(() => {
+      const panel = document.querySelector('[data-testid="svg-output-demo-intermediate-event"]');
+      expect(panel?.querySelectorAll('circle')).toHaveLength(2);
+      expect(panel?.textContent).toContain('Validated');
     });
   });
 

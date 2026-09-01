@@ -18,7 +18,7 @@
  */
 
 import { useState, useEffect } from 'react';
-import { Check, Copy, ExternalLink } from 'lucide-react';
+import { Check, Copy, Download, ExternalLink } from 'lucide-react';
 import mermaid from 'mermaid';
 import { bpmnPlugin, MERMAID_VERSION_TARGET } from '@/lib/bpmn-plugin';
 import example01 from '../../examples/01-linear-process.mmd?raw';
@@ -38,6 +38,12 @@ pool p1 "Outer" {
   }
 }
 `;
+const INTERMEDIATE_EVENT_SOURCE = `bpmn-beta
+start s1 "Start"
+intermediate i1 "Validated"
+end e1 "Done"
+s1 --> i1
+i1 --> e1`;
 const INSTALL_COMMAND = 'npm install @okhp3/mermaid-diagram-bpmn mermaid';
 
 // ── Types ─────────────────────────────────────────────────────────────────────
@@ -144,6 +150,21 @@ function InstallSnippet() {
   );
 }
 
+function downloadSvg(result: DiagramResult) {
+  if (!result.svg) return;
+
+  const filename = `${result.id.replace(/^demo-/, '')}.svg`;
+  const blob = new Blob([result.svg], { type: 'image/svg+xml' });
+  const url = URL.createObjectURL(blob);
+  const anchor = document.createElement('a');
+  anchor.href = url;
+  anchor.download = filename;
+  document.body.appendChild(anchor);
+  anchor.click();
+  document.body.removeChild(anchor);
+  URL.revokeObjectURL(url);
+}
+
 function DiagramPanel({ result }: { result: DiagramResult }) {
   const [showSource, setShowSource] = useState(false);
 
@@ -155,12 +176,26 @@ function DiagramPanel({ result }: { result: DiagramResult }) {
       {/* Header */}
       <div className="flex items-center justify-between px-4 py-2.5 bg-muted/40 border-b border-border">
         <span className="text-sm font-medium text-foreground">{result.title}</span>
-        <button
-          onClick={() => setShowSource(s => !s)}
-          className="text-[10px] font-mono text-muted-foreground/60 hover:text-foreground transition-colors"
-        >
-          {showSource ? 'hide source' : 'show source'}
-        </button>
+        <div className="flex items-center gap-3">
+          <button
+            type="button"
+            onClick={() => downloadSvg(result)}
+            disabled={!result.svg}
+            className="inline-flex items-center gap-1 text-[10px] font-mono text-muted-foreground/60 hover:text-foreground disabled:cursor-not-allowed disabled:opacity-40 transition-colors"
+            aria-label={`Download ${result.title} as SVG`}
+            data-testid={`button-export-svg-${result.id}`}
+          >
+            <Download size={11} aria-hidden="true" />
+            download SVG
+          </button>
+          <button
+            type="button"
+            onClick={() => setShowSource(s => !s)}
+            className="text-[10px] font-mono text-muted-foreground/60 hover:text-foreground transition-colors"
+          >
+            {showSource ? 'hide source' : 'show source'}
+          </button>
+        </div>
       </div>
 
       {/* Source (collapsible) */}
@@ -241,6 +276,7 @@ export default function MermaidHostDemo() {
         // Flat flow, gateway, pool/lane, cross-pool message flow, error case.
         const DIAGRAMS = [
           { id: 'demo-linear',         title: '01 — Flat flow',                source: example01 },
+          { id: 'demo-intermediate-event', title: 'Intermediate event',          source: INTERMEDIATE_EVENT_SOURCE },
           { id: 'demo-gateway',        title: '02 — Gateway decision',         source: example02 },
           { id: 'demo-purchase-order', title: '08 — Pool / lane collaboration', source: example08 },
           { id: 'demo-cross-pool',     title: '06 — Cross-pool message flow',  source: example06 },
@@ -352,6 +388,7 @@ export default function MermaidHostDemo() {
               ))
             : [
                 { id: 'demo-linear',         title: '01-linear-process.mmd — flat diagram',       source: example01 },
+                { id: 'demo-intermediate-event', title: 'intermediate-event — plain double-ring event', source: INTERMEDIATE_EVENT_SOURCE },
                 { id: 'demo-purchase-order', title: '08-purchase-order-approval.mmd — pool/lanes', source: example08 },
                 { id: 'demo-employee-onboarding', title: '07-employee-onboarding.mmd — pool/lanes', source: example07 },
                 { id: 'demo-quote-to-order', title: '09-quote-to-order.mmd — pool/lanes', source: example09 },

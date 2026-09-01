@@ -16,6 +16,7 @@
  */
 
 import { test, expect, type Page } from '@playwright/test';
+import { readFileSync } from 'node:fs';
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
 
@@ -93,6 +94,37 @@ test.describe('Host demo — flat flow diagram (01-linear-process.mmd)', () => {
       el.querySelector('[class*="bpmn-"]') !== null,
     );
     expect(hasBpmnClass, 'SVG should contain elements with bpmn-* CSS classes').toBe(true);
+  });
+});
+
+// ── Intermediate event export ─────────────────────────────────────────────────
+
+test.describe('Host demo — intermediate event SVG export', () => {
+  test.beforeEach(async ({ page }) => { await loadDemoPage(page); });
+
+  test('downloaded SVG retains the plain double-ring circles and label', async ({ page }) => {
+    const panel = page.locator('[data-testid="diagram-panel-demo-intermediate-event"]');
+    const svg = panel.locator('[data-testid="svg-output-demo-intermediate-event"] svg');
+    await expect(svg).toBeVisible({ timeout: 30_000 });
+
+    const intermediateGroup = svg.locator('g').filter({ hasText: 'Validated' }).first();
+    await expect(intermediateGroup.locator('circle')).toHaveCount(2);
+    await expect(intermediateGroup.locator('circle').nth(0)).toHaveAttribute('r', '18');
+    await expect(intermediateGroup.locator('circle').nth(1)).toHaveAttribute('r', '13');
+    await expect(intermediateGroup).toContainText('Validated');
+
+    const downloadPromise = page.waitForEvent('download');
+    await panel.getByTestId('button-export-svg-demo-intermediate-event').click();
+    const download = await downloadPromise;
+    expect(download.suggestedFilename()).toBe('intermediate-event.svg');
+
+    const exportedPath = await download.path();
+    expect(exportedPath, 'intermediate-event SVG download should be readable').toBeTruthy();
+    const exportedSvg = readFileSync(exportedPath!, 'utf8');
+
+    expect(exportedSvg).toContain('Validated');
+    expect(exportedSvg.match(/r="18" class="bpmn-event"/g)).toHaveLength(2);
+    expect(exportedSvg).toContain('r="13" class="bpmn-event"');
   });
 });
 
