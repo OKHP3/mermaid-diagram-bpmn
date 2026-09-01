@@ -14,10 +14,12 @@ compatibility: >
 metadata:
   author: Jamie Hill (OverKill Hill P³)
   version: "0.1.0"
+  bp_skill_version: "0.3.0"
   category: universal
   origin: okhp3/skillz
   homepage: https://overkillhill.com
   author-github: https://github.com/OKHP3
+  produces: "reviewable promotion package and synchronization evidence"
   in_scope: "Skill-source selection, local publication mirrors, provenance, safe synchronization, validation handoff, and promotion preparation."
   out_of_scope: "Blind overwrites, deletion of unreviewed work, secret removal by guesswork, autonomous commits, pushes, pull requests, or publication."
 ---
