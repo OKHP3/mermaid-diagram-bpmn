@@ -547,7 +547,7 @@ test.describe('Mermaid Host Demo — desktop 1280×800', () => {
 
   test('heading and rendered diagram panels are present', async ({ page }) => {
     await loadMermaidHostDemo(page);
-    await expect(page.locator('[data-testid^="diagram-panel-"]')).toHaveCount(8);
+    await expect(page.locator('[data-testid^="diagram-panel-"]')).toHaveCount(10);
   });
 
   test('visual snapshot', async ({ page }) => {
