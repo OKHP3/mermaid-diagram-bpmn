@@ -199,10 +199,10 @@ describe('MermaidHostDemo — diagram rendering', () => {
     setupHappyMocks();
   });
 
-  it('calls mermaid.render() for all nine diagram entries', async () => {
+  it('calls mermaid.render() for all ten diagram entries', async () => {
     render(<MermaidHostDemo />);
     // Five original entries, three non-purchase examples, and the error case.
-    await waitFor(() => expect(mockRender).toHaveBeenCalledTimes(9));
+    await waitFor(() => expect(mockRender).toHaveBeenCalledTimes(10));
 
     const renderIds = mockRender.mock.calls.map(([id]: [string]) => id);
     expect(renderIds).toContain('demo-linear');
