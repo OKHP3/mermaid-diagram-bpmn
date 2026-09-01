@@ -248,6 +248,60 @@ test('validate-content emits a GitHub annotation with file and line when enabled
   assert.match(output, /retired claim phrase "Zero implement"/);
 });
 
+test('validate-content annotates stale Mermaid citations with the logical source line', () => {
+  const realContent = readFileSync(REAL_VERSION_DOC, 'utf-8');
+  const injectedLine = 'mermaid@0.0.0-stale cited here for annotation testing';
+  const staleContent = `${realContent.trimEnd()}\n${injectedLine}\n`;
+  const expectedLine = staleContent.split('\n').length - 1;
+  const stalePath = writeTmp(staleContent, '.md');
+
+  const { exitCode, output } = runValidator({
+    CONTENT_VERSION_DOC_OVERRIDE: stalePath,
+    VALIDATE_CONTENT_GITHUB_ANNOTATIONS: 'true',
+  });
+
+  assert.equal(exitCode, 1, `expected exit 1 for stale mermaid version; output:\n${output}`);
+  assert.match(
+    output,
+    new RegExp(
+      `::error file=docs/version-checklist\\.md \\(override\\),line=${expectedLine}::.*mermaid@0\\.0\\.0`,
+    ),
+  );
+  assert.match(
+    output,
+    /Update the citation or the target constant\./,
+    'local Mermaid remediation guidance must remain available',
+  );
+});
+
+test('validate-content annotates stale plugin citations with the logical source line', () => {
+  const realContent = readFileSync(REAL_VERSION_DOC, 'utf-8');
+  const injectedLine =
+    '@okhp3/mermaid-diagram-bpmn@0.0.0-stale cited here for annotation testing';
+  const staleContent = `${realContent.trimEnd()}\n${injectedLine}\n`;
+  const expectedLine = staleContent.split('\n').length - 1;
+  const stalePath = writeTmp(staleContent, '.md');
+
+  const { exitCode, output } = runValidator({
+    CONTENT_VERSION_DOC_OVERRIDE: stalePath,
+    VALIDATE_CONTENT_GITHUB_ANNOTATIONS: 'true',
+  });
+
+  assert.equal(exitCode, 1, `expected exit 1 for stale plugin version; output:\n${output}`);
+  assert.match(
+    output,
+    new RegExp(
+      `::error file=docs/version-checklist\\.md \\(override\\),line=${expectedLine}::.*` +
+        `@okhp3/mermaid-diagram-bpmn@0\\.0\\.0`,
+    ),
+  );
+  assert.match(
+    output,
+    /Update the citation or bump the package version\./,
+    'local plugin remediation guidance must remain available',
+  );
+});
+
 test('validate-content exits 1 when Home.tsx contains the stale "89,000+" ecosystem figure', () => {
   const realContent = readFileSync(REAL_HOME, 'utf-8');
   const staleContent = realContent +
