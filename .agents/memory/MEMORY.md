@@ -3,3 +3,4 @@
 - [Playwright system libraries](playwright-system-libraries.md) — a cached Chromium can still fail to launch when the environment lacks shared libraries.
 - [Source-coordinate diagnostics](source-coordinate-diagnostics.md) — parser errors and editor highlights use physical lines; comments, blanks, and wrapping must not move the target.
 - [GitHub shell authentication](github-shell-auth.md) — Replit GitHub OAuth and shell HTTPS Git credentials are separate; keep remotes token-free and use a secret-backed helper.
+- [Published test-count drift](published-test-count-drift.md) — verify count evidence against current HEAD; concurrent test merges can make an older verified total stale.
