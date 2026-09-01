@@ -201,19 +201,23 @@ describe('MermaidHostDemo — diagram rendering', () => {
 
   it('calls mermaid.render() for all ten diagram entries', async () => {
     render(<MermaidHostDemo />);
-    // Five original entries, three non-purchase examples, and the error case.
+    // The rendered demo catalog includes the collapsed subprocess regression
+    // case in addition to the original examples and the error case.
     await waitFor(() => expect(mockRender).toHaveBeenCalledTimes(10));
 
     const renderIds = mockRender.mock.calls.map(([id]: [string]) => id);
-    expect(renderIds).toContain('demo-linear');
-    expect(renderIds).toContain('demo-intermediate-event');
-    expect(renderIds).toContain('demo-gateway');
-    expect(renderIds).toContain('demo-purchase-order');
-    expect(renderIds).toContain('demo-cross-pool');
-    expect(renderIds).toContain('demo-employee-onboarding');
-    expect(renderIds).toContain('demo-quote-to-order');
-    expect(renderIds).toContain('demo-support-ticket');
-    expect(renderIds).toContain('demo-error-case');
+    expect(new Set(renderIds)).toEqual(new Set([
+      'demo-linear',
+      'demo-intermediate-event',
+      'demo-gateway',
+      'demo-purchase-order',
+      'demo-cross-pool',
+      'demo-employee-onboarding',
+      'demo-quote-to-order',
+      'demo-support-ticket',
+      'demo-collapsed-subprocess',
+      'demo-error-case',
+    ]));
   });
 
   it('injects bpmn-task class from linear diagram SVG into DOM', async () => {
