@@ -44,6 +44,12 @@ intermediate i1 "Validated"
 end e1 "Done"
 s1 --> i1
 i1 --> e1`;
+const COLLAPSED_SUBPROCESS_SOURCE = `bpmn-beta
+start s1 "Start"
+subprocess sp1 "Process Order"
+end e1 "Done"
+s1 --> sp1
+sp1 --> e1`;
 const INSTALL_COMMAND = 'npm install @okhp3/mermaid-diagram-bpmn mermaid';
 
 // ── Types ─────────────────────────────────────────────────────────────────────
@@ -273,10 +279,12 @@ export default function MermaidHostDemo() {
         const mermaidVersion = MERMAID_VERSION_TARGET;
 
         // ── Render corpus examples covering all required E2E types ──────────
-        // Flat flow, gateway, pool/lane, cross-pool message flow, error case.
+        // Flat flow, subprocess, gateway, pool/lane, cross-pool message flow,
+        // and error case.
         const DIAGRAMS = [
           { id: 'demo-linear',         title: '01 — Flat flow',                source: example01 },
           { id: 'demo-intermediate-event', title: 'Intermediate event',          source: INTERMEDIATE_EVENT_SOURCE },
+          { id: 'demo-collapsed-subprocess', title: 'Collapsed subprocess',      source: COLLAPSED_SUBPROCESS_SOURCE },
           { id: 'demo-gateway',        title: '02 — Gateway decision',         source: example02 },
           { id: 'demo-purchase-order', title: '08 — Pool / lane collaboration', source: example08 },
           { id: 'demo-cross-pool',     title: '06 — Cross-pool message flow',  source: example06 },
@@ -389,6 +397,7 @@ export default function MermaidHostDemo() {
             : [
                 { id: 'demo-linear',         title: '01-linear-process.mmd — flat diagram',       source: example01 },
                 { id: 'demo-intermediate-event', title: 'intermediate-event — plain double-ring event', source: INTERMEDIATE_EVENT_SOURCE },
+                 { id: 'demo-collapsed-subprocess', title: 'collapsed-subprocess — task-sized subprocess', source: COLLAPSED_SUBPROCESS_SOURCE },
                 { id: 'demo-purchase-order', title: '08-purchase-order-approval.mmd — pool/lanes', source: example08 },
                 { id: 'demo-employee-onboarding', title: '07-employee-onboarding.mmd — pool/lanes', source: example07 },
                 { id: 'demo-quote-to-order', title: '09-quote-to-order.mmd — pool/lanes', source: example09 },

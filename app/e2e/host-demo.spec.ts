@@ -128,6 +128,44 @@ test.describe('Host demo — intermediate event SVG export', () => {
   });
 });
 
+// ── Collapsed subprocess export ───────────────────────────────────────────────
+
+test.describe('Host demo — collapsed subprocess SVG export', () => {
+  test.beforeEach(async ({ page }) => { await loadDemoPage(page); });
+
+  test('downloaded SVG retains the task-sized box, centered plus marker, and label', async ({ page }) => {
+    const panel = page.locator('[data-testid="diagram-panel-demo-collapsed-subprocess"]');
+    const svg = panel.locator('[data-testid="svg-output-demo-collapsed-subprocess"] svg');
+    await expect(svg).toBeVisible({ timeout: 30_000 });
+    await expect(svg).toContainText('Process Order');
+
+    const downloadPromise = page.waitForEvent('download');
+    await panel.getByTestId('button-export-svg-demo-collapsed-subprocess').click();
+    const download = await downloadPromise;
+    expect(download.suggestedFilename()).toBe('collapsed-subprocess.svg');
+
+    const exportedPath = await download.path();
+    expect(exportedPath, 'collapsed-subprocess SVG download should be readable').toBeTruthy();
+    const exportedSvg = readFileSync(exportedPath!, 'utf8');
+    const rect = /<rect x="(-?\d+(?:\.\d+)?)" y="(-?\d+(?:\.\d+)?)" width="120" height="60" rx="6" class="bpmn-task"/.exec(exportedSvg);
+
+    expect(rect, 'exported subprocess should retain its task-sized rounded rectangle').not.toBeNull();
+    expect(exportedSvg).toContain('Process Order');
+    expect(exportedSvg.match(/class="bpmn-subprocess-marker"/g)).toHaveLength(2);
+
+    const left = Number(rect![1]);
+    const top = Number(rect![2]);
+    const centerX = left + 60;
+    const markerY = top + 51;
+    expect(exportedSvg).toContain(
+      `x1="${centerX - 5}" y1="${markerY}" x2="${centerX + 5}" y2="${markerY}" class="bpmn-subprocess-marker"`,
+    );
+    expect(exportedSvg).toContain(
+      `x1="${centerX}" y1="${markerY - 5}" x2="${centerX}" y2="${markerY + 5}" class="bpmn-subprocess-marker"`,
+    );
+  });
+});
+
 // ── Gateway decision (02-gateway-decision) ────────────────────────────────────
 
 test.describe('Host demo — gateway diagram (02-gateway-decision.mmd)', () => {
