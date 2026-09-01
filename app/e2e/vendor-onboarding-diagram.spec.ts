@@ -261,6 +261,25 @@ test.describe('Vendor Onboarding — event node keyboard navigation', () => {
   });
 });
 
+test.describe('Vendor Onboarding — task node keyboard navigation', () => {
+  test('pressing Space on Send RFI to Vendor navigates to Elicitation Interviews', async ({ page, browserName }) => {
+    test.skip(browserName !== 'chromium', 'Keyboard worked-example coverage runs in Chromium.');
+    await loadVendorOnboardingPage(page);
+    const stepCard = await scrollToDiagramStep(page);
+    const button = taskButton(stepCard, NODE_T2_LABEL);
+    await expect(button).toBeVisible({ timeout: 15_000 });
+
+    await button.focus();
+    await expect(button).toBeFocused();
+    await Promise.all([
+      page.waitForURL(`**${NODE_T2_ROUTE}`, { timeout: 15_000 }),
+      button.press('Space'),
+    ]);
+
+    expect(page.url()).toContain(NODE_T2_ROUTE);
+  });
+});
+
 // ── Interactivity hint ────────────────────────────────────────────────────────
 
 test.describe('Vendor Onboarding — interactivity hint', () => {
