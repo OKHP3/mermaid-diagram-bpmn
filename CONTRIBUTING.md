@@ -23,7 +23,7 @@ opening a PR to catch issues early.
 ## Optional pre-commit public-claims check
 
 Before committing changes to public-facing copy, contributors can opt in to
-the same content check that CI runs:
+the same content check that CI runs manually:
 
 ```bash
 pnpm run check:content
@@ -31,9 +31,31 @@ pnpm run check:content
 
 This checks the canonical source list in `scripts/validate-content.mjs` for
 stale test-count and Mermaid/plugin-version citations, missing required sources,
-and retired public claims. It is intentionally documented rather than
-installed as a mandatory Git hook, so contributors who are editing unrelated
-files are not given a repository-wide hook automatically.
+and retired public claims. The check remains available as a manual command, and
+the required CI gate remains unchanged.
+
+Contributors who want the check to run automatically before every commit can
+explicitly install the local Git hook:
+
+```bash
+pnpm run content:hook:install
+```
+
+Installation is opt-in and only affects this checkout; it is not run by
+`pnpm install` and is never installed for other contributors. A failed check
+blocks the commit and prints the same remediation guidance as CI. The installer
+will not overwrite an existing pre-commit hook. If this checkout already has
+one, combine the checks manually or remove that hook first.
+
+To undo the opt-in hook:
+
+```bash
+pnpm run content:hook:remove
+```
+
+Removal only deletes the unchanged hook created by the installer. It leaves an
+unrelated hook alone and refuses to delete a managed hook that has been
+modified, so custom hook changes are not silently lost.
 
 When changing the validator itself, also run its failure-mode tests:
 

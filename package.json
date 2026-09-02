@@ -38,7 +38,10 @@
     "check:bundle-size": "node scripts/check-bundle-size.mjs",
     "check:bundle-size:test": "node --test scripts/check-bundle-size.test.mjs",
     "manifest:generate": "node scripts/generate-manifest.mjs",
-    "manifest:check": "node scripts/generate-manifest.mjs --check"
+    "manifest:check": "node scripts/generate-manifest.mjs --check",
+    "content:hook:install": "node scripts/install-content-hook.mjs",
+    "content:hook:remove": "node scripts/install-content-hook.mjs --remove",
+    "content:hook:test": "node --test scripts/install-content-hook.test.mjs"
   },
   "private": true,
   "packageManager": "pnpm@10.26.1",
