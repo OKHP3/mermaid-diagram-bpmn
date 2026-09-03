@@ -52,6 +52,23 @@ Use this checklist before tagging and deploying any release.
 
 ---
 
+## Pre-release: Roadmap evidence review
+
+Run `pnpm run check:roadmap-evidence` to confirm that
+`app/src/pages/Roadmap.tsx` still links all six evidence sources:
+
+- [ ] Mermaid issues [#7699](https://github.com/mermaid-js/mermaid/issues/7699),
+  [#2623](https://github.com/mermaid-js/mermaid/issues/2623), and
+  [#660](https://github.com/mermaid-js/mermaid/issues/660)
+- [ ] Live plugin demo route: `/mermaid-host-demo`
+- [ ] Published npm package:
+  `https://www.npmjs.com/package/@okhp3/mermaid-diagram-bpmn`
+- [ ] DSL Reference route: `/dsl`
+- [ ] Maintainer reviewed that each source still supports the nearby evidence claim;
+  this review is separate from contribution-readiness status decisions
+
+---
+
 ## Pre-release: dependencies
 
 - [ ] `package.json` declares only packages actually imported in `src/` (TD-001)
