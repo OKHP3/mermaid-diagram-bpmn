@@ -158,6 +158,18 @@ const MULTIPLE_WARNINGS = {
   undefinedRef: { code: 'UNDEFINED_NODE_REF', line: 48, nodeId: 'ghost' },
 };
 
+const SOURCE_MULTIPLE_WARNINGS_WITH_SHIFTED_LINES = [
+  'bpmn-beta',
+  ...Array.from({ length: 42 }, (_, index) => `%% Context note ${index + 1}`),
+  'start s1 "Start"',
+  'task t1 "Connected Task"',
+  'task t2 "Orphaned Task"',
+  'end e1 "End"',
+  's1 --> t1',
+  't1 --> e1',
+  't1 --> ghost',
+].join('\n');
+
 /** A fully valid minimal diagram — no warnings expected. */
 const SOURCE_VALID = [
   'bpmn-beta',
@@ -360,6 +372,33 @@ test('multiple warnings — each Line button selects its own source row and keep
   );
   await expect(textarea).toBeFocused();
   await expect.poll(() => textarea.evaluate((editor) => editor.scrollTop)).toBeGreaterThan(0);
+});
+
+test('warning navigation resets after source edits and follows updated line numbers', async ({ page }) => {
+  await openPlaygroundWith(page, SOURCE_MULTIPLE_WARNINGS);
+
+  const textarea = page.locator('[data-testid="textarea-bpmn-source"]');
+  const highlight = page.locator('[data-testid="editor-lint-warning-line-highlight"]');
+  const originalLineButton = page.getByRole('button', {
+    name: `Go to line ${MULTIPLE_WARNINGS.orphan.line} for ${MULTIPLE_WARNINGS.orphan.code}`,
+  });
+
+  await originalLineButton.click();
+  await expect(highlight).toHaveAttribute(
+    'data-lint-warning-line',
+    String(MULTIPLE_WARNINGS.orphan.line),
+  );
+
+  await textarea.fill(SOURCE_MULTIPLE_WARNINGS_WITH_SHIFTED_LINES);
+  await expect(highlight).toHaveCount(0);
+
+  const updatedLineButton = page.getByRole('button', {
+    name: 'Go to line 46 for ORPHAN_NODE',
+  });
+  await expect(updatedLineButton).toHaveText('Line 46');
+  await updatedLineButton.click();
+  await expect(highlight).toHaveAttribute('data-lint-warning-line', '46');
+  await expect(textarea).toBeFocused();
 });
 
 test('valid diagram — no warning panel appears and the diagram renders', async ({ page }) => {
