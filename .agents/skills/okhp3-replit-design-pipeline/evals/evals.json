@@ -1,0 +1,39 @@
+{
+  "skill_name": "okhp3-replit-design-pipeline",
+  "skill_version": "1.0.0",
+  "evals": [
+    {
+      "id": 1,
+      "name": "extract-first-rule",
+      "prompt": "I want to redesign the Header component in my React app. The Header.tsx file already exists in src/components/Header.tsx. Should I rebuild it from scratch in the mockup sandbox, or is there a better approach?",
+      "expectations": [
+        { "id": 1, "text": "Response states the golden rule: if the component exists in the codebase, extract it — never rebuild from memory." },
+        { "id": 2, "text": "Response warns that rebuilding from scratch produces wrong values: specifically dimensions, colours, spacing, opacity values, and font sizes." },
+        { "id": 3, "text": "Response mentions creating Current.tsx in the group folder as the extracted baseline, imported alongside _group.css with the app's :root CSS variables." },
+        { "id": 4, "text": "Response directs the user to read the mockup-extract skill for the full extraction process (import chain tracing, dependency classification as inline/copy/stub)." }
+      ]
+    },
+    {
+      "id": 2,
+      "name": "design-subagent-brief-anatomy",
+      "prompt": "I'm generating two variant designs of my dashboard card in the mockup sandbox using DESIGN subagents. What must my subagent brief include, and what must I leave out?",
+      "expectations": [
+        { "id": 1, "text": "Response lists the required DESIGN subagent brief anatomy fields: Product/brand identity, Goal, Vibe, Target location, and Variant hypothesis." },
+        { "id": 2, "text": "Response explicitly states NOT to include specific CSS values, colours, font names, pixel spacing, layout prescriptions, section names, or design style names." },
+        { "id": 3, "text": "Response says each subagent must get a distinct brief — a different variant hypothesis — so they produce genuinely distinct output rather than three nearly identical variants." },
+        { "id": 4, "text": "Response describes the variant labelling convention: label by design hypothesis not letter alone — e.g. 'A — Minimal' / 'B — Editorial' / 'C — Bold' — so the user can say 'I prefer B' precisely." }
+      ]
+    },
+    {
+      "id": 3,
+      "name": "graduation-gate-and-subagent-choice",
+      "prompt": "The user approved variant B of my redesigned checkout form mockup. Before I graduate it to the main app, what questions must I answer, and which type of subagent handles graduation?",
+      "expectations": [
+        { "id": 1, "text": "Response specifies a GENERAL subagent (not a DESIGN subagent) for graduation — explicitly stating DESIGN subagents do not wire APIs or understand routing." },
+        { "id": 2, "text": "Response lists the three graduation decision gate questions: which variant exactly, whether the main app's component library differs from shadcn/ui, and whether the mockup has real or mock data." },
+        { "id": 3, "text": "Response states to graduate exactly what was approved — do not improve the design during graduation — preserving colours, gradients, shadows, border radius, spacing, typography, layout structure, animations, hover states, and icons." },
+        { "id": 4, "text": "Response describes what to transform during graduation: mock data → real API calls, no-op navigation handlers → real router links, local constants → app state, stubbed auth → real auth context." }
+      ]
+    }
+  ]
+}

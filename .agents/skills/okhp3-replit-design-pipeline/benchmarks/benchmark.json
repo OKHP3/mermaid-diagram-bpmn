@@ -1,0 +1,120 @@
+{
+  "metadata": {
+    "skill_name": "okhp3-replit-design-pipeline",
+    "skill_path": ".agents/skills/okhp3-replit-design-pipeline",
+    "skill_version": "1.0.0",
+    "executor_model": "delegation-subagent",
+    "analyzer_model": "main-agent-grader",
+    "timestamp": "2026-08-11T00:00:00Z",
+    "evals_run": [1, 2, 3],
+    "runs_per_configuration": 1,
+    "note": "All 3 evals: LIVE delegation subagent runs. No analytical stubs."
+  },
+
+  "runs": [
+    {
+      "eval_id": 1,
+      "eval_name": "extract-first-rule",
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": { "pass_rate": 1.0, "passed": 4, "failed": 0, "total": 4, "time_seconds": null, "tokens": null, "tool_calls": null, "errors": 0 },
+      "expectations": [
+        { "text": "Response states the golden rule: if component exists, extract it — never rebuild from memory.", "passed": true, "evidence": "Quotes skill: 'The golden rule: if the component exists in the codebase, extract it. Never rebuild from memory.'" },
+        { "text": "Response warns rebuilding produces wrong dimensions, colours, spacing, opacity values, and font sizes.", "passed": true, "evidence": "'You will get dimensions, colours, spacing, opacity values, and font sizes wrong'" },
+        { "text": "Response mentions creating Current.tsx in the group folder alongside _group.css.", "passed": true, "evidence": "Describes creating _group.css with :root CSS variables and Current.tsx with import './_group.css'" },
+        { "text": "Response directs to read mockup-extract skill (import chain tracing, inline/copy/stub classification).", "passed": true, "evidence": "'Read .local/skills/mockup-extract/SKILL.md' and lists Inline/Copy/Stub classification" }
+      ]
+    },
+    {
+      "eval_id": 1,
+      "eval_name": "extract-first-rule",
+      "configuration": "without_skill",
+      "run_number": 1,
+      "result": { "pass_rate": 0.0, "passed": 0, "failed": 4, "total": 4, "time_seconds": null, "tokens": null, "tool_calls": null, "errors": 0 },
+      "expectations": [
+        { "text": "Response states the golden rule: if component exists, extract it — never rebuild from memory.", "passed": false, "evidence": "Recommends HeaderV2.tsx in-repo draft — opposite approach, no extract-first rule" },
+        { "text": "Response warns rebuilding produces wrong dimensions, colours, spacing, opacity values, and font sizes.", "passed": false, "evidence": "Warns about 'no real data, sync burden' — different framing" },
+        { "text": "Response mentions creating Current.tsx in the group folder alongside _group.css.", "passed": false, "evidence": "Not mentioned" },
+        { "text": "Response directs to read mockup-extract skill.", "passed": false, "evidence": "Not mentioned — response is entirely about in-repo file management" }
+      ]
+    },
+    {
+      "eval_id": 2,
+      "eval_name": "design-subagent-brief-anatomy",
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": { "pass_rate": 1.0, "passed": 4, "failed": 0, "total": 4, "time_seconds": null, "tokens": null, "tool_calls": null, "errors": 0 },
+      "expectations": [
+        { "text": "Response lists the five required brief anatomy fields: Product/brand identity, Goal, Vibe, Target location, Variant hypothesis.", "passed": true, "evidence": "All five explicitly listed and described with examples" },
+        { "text": "Response says NOT to include CSS values, colours, font names, layout prescriptions, design style names.", "passed": true, "evidence": "Full 'Must Omit' table with all categories and reasons" },
+        { "text": "Response says each subagent gets a distinct brief — different vibe/variant hypothesis.", "passed": true, "evidence": "'Each subagent gets a different vibe. Giving both subagents the same vibe produces nearly identical variants — a documented mistake'" },
+        { "text": "Response describes variant labelling by design hypothesis, not letter alone.", "passed": true, "evidence": "'Never label variants by letter alone — the design hypothesis name makes approval conversations precise'" }
+      ]
+    },
+    {
+      "eval_id": 2,
+      "eval_name": "design-subagent-brief-anatomy",
+      "configuration": "without_skill",
+      "run_number": 1,
+      "result": { "pass_rate": 0.0, "passed": 0, "failed": 4, "total": 4, "time_seconds": null, "tokens": null, "tool_calls": null, "errors": 0 },
+      "expectations": [
+        { "text": "Response lists the five required brief anatomy fields.", "passed": false, "evidence": "Lists different categories — Vibe absent; 'Product/brand identity' and 'Variant hypothesis' not named" },
+        { "text": "Response says NOT to include CSS values, colours, font names.", "passed": false, "evidence": "CRITICAL INVERSION: says to INCLUDE 'Color palette: specific hex codes', 'Typography: font family, size scale, weight'" },
+        { "text": "Response says each subagent gets a distinct brief with different vibe/hypothesis.", "passed": false, "evidence": "No Vibe concept; no mention of nearly-identical-variant risk" },
+        { "text": "Response describes variant labelling by design hypothesis.", "passed": false, "evidence": "Uses 'CardVariant_A', 'CardVariant_B' labels — letter-based with no hypothesis" }
+      ]
+    },
+    {
+      "eval_id": 3,
+      "eval_name": "graduation-gate-and-subagent-choice",
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": { "pass_rate": 1.0, "passed": 4, "failed": 0, "total": 4, "time_seconds": null, "tokens": null, "tool_calls": null, "errors": 0 },
+      "expectations": [
+        { "text": "Response specifies GENERAL subagent (not DESIGN) for graduation.", "passed": true, "evidence": "'A GENERAL subagent handles graduation — not a DESIGN subagent. DESIGN subagent — never for graduation. They don't wire APIs or understand routing.'" },
+        { "text": "Response lists three graduation gate questions: which variant, component library vs shadcn/ui, real vs mock data.", "passed": true, "evidence": "All three explicitly listed" },
+        { "text": "Response states: graduate exactly what was approved, do not improve during graduation.", "passed": true, "evidence": "'Graduate exactly what was approved. Do not improve the design during graduation.'" },
+        { "text": "Response describes what to preserve and what to transform.", "passed": true, "evidence": "Lists preserve (colours, gradients, shadows, etc.) and transform (mock data → real API calls, no-op → router links, etc.)" }
+      ]
+    },
+    {
+      "eval_id": 3,
+      "eval_name": "graduation-gate-and-subagent-choice",
+      "configuration": "without_skill",
+      "run_number": 1,
+      "result": { "pass_rate": 0.0, "passed": 0, "failed": 4, "total": 4, "time_seconds": null, "tokens": null, "tool_calls": null, "errors": 0 },
+      "expectations": [
+        { "text": "Response specifies GENERAL subagent for graduation.", "passed": false, "evidence": "Says 'graduation or promotion subagent' — no GENERAL vs DESIGN distinction" },
+        { "text": "Response lists three graduation gate questions.", "passed": false, "evidence": "Lists 7 different question categories — none of the three skill-specific gate questions present" },
+        { "text": "Response states: graduate exactly what was approved.", "passed": false, "evidence": "Not stated — discusses QA acceptance criteria instead" },
+        { "text": "Response describes preserve/transform lists.", "passed": false, "evidence": "The specific lists are absent — only general mention of 'wiring up form logic'" }
+      ]
+    }
+  ],
+
+  "run_summary": {
+    "with_skill": {
+      "pass_rate": { "mean": 1.0, "stddev": 0.0, "min": 1.0, "max": 1.0 },
+      "time_seconds": { "mean": null, "stddev": null, "min": null, "max": null },
+      "tokens": { "mean": null, "stddev": null, "min": null, "max": null }
+    },
+    "without_skill": {
+      "pass_rate": { "mean": 0.0, "stddev": 0.0, "min": 0.0, "max": 0.0 },
+      "time_seconds": { "mean": null, "stddev": null, "min": null, "max": null },
+      "tokens": { "mean": null, "stddev": null, "min": null, "max": null }
+    },
+    "delta": {
+      "pass_rate": "+1.0",
+      "time_seconds": "N/A",
+      "tokens": "N/A"
+    }
+  },
+
+  "notes": [
+    "All 3 evals: LIVE delegation subagent runs — no analytical stubs",
+    "with_skill: 4/4 on all three evals — executor reliably reproduced extract-first golden rule, five-field brief anatomy, GENERAL vs DESIGN subagent distinction, graduation gate questions",
+    "without_skill: 0/4 on all three evals — eval-2 produced a critical inversion: without-skill instructed developers to INCLUDE hex codes and font names in DESIGN subagent briefs",
+    "delta of +1.0 — maximum possible gap, well above the 0.5 acceptance bar",
+    "workspace: .agents/skills/okhp3-replit-design-pipeline-workspace/iteration-1/"
+  ]
+}

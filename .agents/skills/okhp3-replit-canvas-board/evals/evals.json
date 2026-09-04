@@ -1,0 +1,39 @@
+{
+  "skill_name": "okhp3-replit-canvas-board",
+  "skill_version": "1.0.0",
+  "evals": [
+    {
+      "id": 1,
+      "name": "canvas-state-before-move",
+      "prompt": "I want to reorganize my Replit canvas — I have about 12 frames scattered around. What's the first thing I should do before issuing any move commands? I want to avoid a multi-turn correction cycle.",
+      "expectations": [
+        { "id": 1, "text": "Response calls getCanvasState with a wide focusArea (covering a large coordinate range such as x: -5000, y: -5000, w: 20000, h: 20000) as the first step before moving any frames." },
+        { "id": 2, "text": "Response recommends writing a coordinate table — computing each frame's x and y before touching the canvas — to turn reorganisation into a single applyCanvasActions batch." },
+        { "id": 3, "text": "Response warns to abort and investigate if an expected shape ID is missing from the getCanvasState result before issuing move commands." },
+        { "id": 4, "text": "Response specifies using recommended gutter values: 80 px sibling gutter (between frames in the same zone) and 160 px zone gutter (between zones)." }
+      ]
+    },
+    {
+      "id": 2,
+      "name": "iframe-building-to-live",
+      "prompt": "I finished building all my components and I'm about to demo my canvas to judges. Several iframes still show the 'building' indicator. How do I flip them to live? What URL format do I use?",
+      "expectations": [
+        { "id": 1, "text": "Response provides an applyCanvasActions update action with shapeType: 'iframe', state: 'live', and a url field to flip a building iframe to live." },
+        { "id": 2, "text": "Response specifies the mockup-sandbox URL pattern without a port number: https://${REPLIT_DOMAINS}/__mockup/preview/{folder}/{ComponentName}" },
+        { "id": 3, "text": "Response states that all frames must be 'live' before calling focusCanvasShapes — a mix of building and live states signals an incomplete build." },
+        { "id": 4, "text": "Response mentions obtaining REPLIT_DOMAINS at runtime (e.g. via 'echo $REPLIT_DOMAINS') to construct the full https:// URL." }
+      ]
+    },
+    {
+      "id": 3,
+      "name": "focusCanvasShapes-presentation-close",
+      "prompt": "What is the correct final step to close a canvas layout session for a designathon submission? I want judges to see the complete organised layout the moment they open the canvas. Walk me through the conventions.",
+      "expectations": [
+        { "id": 1, "text": "Response calls focusCanvasShapes as the last action of a canvas layout session, passing all frame and label shape IDs with animateMs: 500." },
+        { "id": 2, "text": "Response explains animateMs: 500 specifically — noting that instant jumps feel like a glitch and 500 ms is the recommended polished animated pan." },
+        { "id": 3, "text": "Response describes the hero row convention: y = 100 for frames, with a section label text shape placed above at y = 20." },
+        { "id": 4, "text": "Response describes the section label convention: text shape, color: 'grey', h: 60, placed 40 canvas units above the zone's frame baseline, with label text pattern '01 — ZONE NAME' for numbered zones." }
+      ]
+    }
+  ]
+}

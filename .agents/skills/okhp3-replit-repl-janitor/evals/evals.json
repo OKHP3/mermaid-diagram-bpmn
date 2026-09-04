@@ -1,0 +1,75 @@
+{
+  "skill_name": "okhp3-replit-repl-janitor",
+  "skill_version": "1.0.1",
+  "evals": [
+    {
+      "id": 1,
+      "name": "branch-pr-classification",
+      "prompt": "My Repl has a pile of old branches — a couple of subrepl-* ones, an agent/fix-login, and some human-named feature branches. I want to auto-nuke anything that looks Replit-generated and is old. Walk me through how you'd decide what's safe to delete vs keep.",
+      "expectations": [
+        {
+          "id": 1,
+          "text": "Response classifies every non-current, non-main branch into exactly one of the four buckets named keep, merge, delete, review (not merge/delete only, not custom bucket names)."
+        },
+        {
+          "id": 2,
+          "text": "Response states that a Replit-generated name (subrepl-*, replit-agent, agent/*) is a HINT only, not proof it is safe to delete, and refuses to auto-delete by pattern alone."
+        },
+        {
+          "id": 3,
+          "text": "Response distinguishes three separate facts before deletion: 'merged into origin/main', 'closed pull request', and 'abandoned with no PR' — treating them as distinct, not interchangeable."
+        },
+        {
+          "id": 4,
+          "text": "Response checks actual PR state via the git-remote skill or `gh pr view` / `gh pr list --head <branch>` before recommending any deletion, and excludes the current/active checked-out branch from deletion candidates."
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "name": "naming-detritus-audit",
+      "prompt": "I've got files like SiteTokens.css, useDebounce.ts, ChatPane.tsx, a 'My Document.md', a README.md, robots.txt, and an attached_assets/ folder. Which of these are naming violations I should rename, and how would you audit the repo for this?",
+      "expectations": [
+        {
+          "id": 1,
+          "text": "Response flags SiteTokens.css as a violation (rename to site-tokens.css) but explicitly exempts ChatPane.tsx (PascalCase React component) and useDebounce.ts (camelCase useFoo hook) as structural exceptions, NOT violations."
+        },
+        {
+          "id": 2,
+          "text": "Response exempts README.md (ALL-CAPS root governance file) and robots.txt (web-standard filename) from renaming, and flags 'My Document.md' as a violation for containing spaces."
+        },
+        {
+          "id": 3,
+          "text": "Response names attached_assets as a known detritus folder (alongside variants like _unused, tmp, temp, _drafts, _scratch, _old, attached-assets, unused) to triage-then-delete or gitignore-and-untrack."
+        },
+        {
+          "id": 4,
+          "text": "Response runs the read-only audit via `python3 .agents/skills/okhp3-replit-repl-janitor/scripts/audit-repo.py --root . --base origin/main` (or references audit-repo.py) and states it never mutates the repo / prints a JSON report."
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "name": "safe-execution-verification",
+      "prompt": "You've handed me the plan and I said 'go' on merging PR #42 for the branch feat/checkout and deleting a couple of merged branches. What's the exact order of operations you follow to execute safely, and how do you verify afterward?",
+      "expectations": [
+        {
+          "id": 1,
+          "text": "Response deletes the remote branch FIRST, then the local tracking branch (remote-first ordering), and only after re-verifying the exact expected head — never local-first or both at once."
+        },
+        {
+          "id": 2,
+          "text": "Response squash-merges via the pull request, and for approved file/folder actions uses `git rm` / `git mv` rather than raw `rm` (unless the target was never tracked, e.g. a gitignored working file, where plain `rm` is acceptable)."
+        },
+        {
+          "id": 3,
+          "text": "Response refuses to pass `git fetch --all --prune` (or `--prune`) until every stale remote branch has been classified, and refuses to rewrite main, force-push, or delete stashes/archive refs."
+        },
+        {
+          "id": 4,
+          "text": "Response's post-execution verification re-runs the audit script AND runs `git status --short` AND confirms the workflow/app still starts cleanly if any tracked source file moved or was renamed."
+        }
+      ]
+    }
+  ]
+}

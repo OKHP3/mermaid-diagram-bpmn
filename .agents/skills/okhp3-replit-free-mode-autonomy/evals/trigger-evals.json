@@ -1,0 +1,25 @@
+{
+  "skill_name": "okhp3-replit-free-mode-autonomy",
+  "skill_version": "1.0.0",
+  "phase": 0,
+  "status": "design-not-run",
+  "description_evaluated": "Keep Replit project work autonomous and Free Mode-first with bounded execution, checkpointed quota recovery, and quiet upgrade handling. Use when the user asks to maximize Free Mode, avoid repeated upgrade nudges, retry after a five-hour or weekly limit, preserve work across interruptions, or keep routine work moving without unnecessary approval pauses. Does not bypass quotas or human approval.",
+  "queries": [
+    { "query": "Keep working in Free Mode without repeatedly suggesting an upgrade", "should_trigger": true },
+    { "query": "What should I do after Agent hits the five-hour allowance?", "should_trigger": true },
+    { "query": "Create a safe retry routine after my weekly Free Mode limit", "should_trigger": true },
+    { "query": "Checkpoint this Replit task so another session can resume it", "should_trigger": true },
+    { "query": "Help me maximize autonomous work across my Repls", "should_trigger": true },
+    { "query": "Give me a copy-paste prompt for Free Mode-first project work", "should_trigger": true },
+    { "query": "Automatically approve every deployment and connector request", "should_trigger": true },
+    { "query": "Hide the upgrade banner in the Replit interface", "should_trigger": true },
+    { "query": "Debug why my React button is not rendering", "should_trigger": false },
+    { "query": "Design three visual variants of my dashboard", "should_trigger": false },
+    { "query": "Publish my app to production", "should_trigger": false },
+    { "query": "Query the production database for yesterday's orders", "should_trigger": false }
+  ],
+  "notes": [
+    "The approval and UI-hiding near-misses are included as boundary cases: the skill should activate to explain the safe boundary, not to comply with bypassing it.",
+    "No trigger benchmark has been run for this new package."
+  ]
+}

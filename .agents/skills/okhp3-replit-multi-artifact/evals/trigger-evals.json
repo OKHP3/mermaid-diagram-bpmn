@@ -1,0 +1,144 @@
+{
+  "skill_name": "okhp3-replit-multi-artifact",
+  "skill_version": "1.0.0",
+  "phase": 8,
+  "description_evaluated": "Navigate and build in a Replit pnpm multi-artifact monorepo without silent failures. Covers the non-obvious rules that cause blank previews, port conflicts, workflow naming errors, and broken cross-artifact imports: BASE_URL prefix discipline, PORT env var reading, managed workflow naming, pnpm catalog drift, and workspace:* shared library wiring. Activate for \"add an artifact\", \"create a new app\", \"preview path\", \"port conflict\", \"blank preview\", \"shared package\", \"workflow naming\", \"pnpm catalog\", \"cross-artifact\", or any time a second artifact is being added to an existing Replit project.",
+  "evaluator": "independent trigger subagent",
+  "queries": [
+    {
+      "query": "Add a second web artifact to this existing Replit project",
+      "should_trigger": true,
+      "triggered": true,
+      "rationale": "Directly matches 'add an artifact' and 'a second artifact being added to an existing Replit project'."
+    },
+    {
+      "query": "The preview went blank after I added another artifact",
+      "should_trigger": true,
+      "triggered": true,
+      "rationale": "Matches 'blank preview' plus adding another artifact to an existing project."
+    },
+    {
+      "query": "Two artifact workflows are fighting over a hard-coded port",
+      "should_trigger": true,
+      "triggered": true,
+      "rationale": "Matches 'port conflict' between multiple artifacts, a stated PORT/multi-artifact concern."
+    },
+    {
+      "query": "My artifact API calls lose the BASE_URL preview-path prefix",
+      "should_trigger": true,
+      "triggered": true,
+      "rationale": "Matches BASE_URL prefix discipline and 'preview path' in a multi-artifact context."
+    },
+    {
+      "query": "I created a replacement workflow and now the artifact route is broken",
+      "should_trigger": true,
+      "triggered": true,
+      "rationale": "Matches managed workflow naming errors breaking artifact routes ('workflow naming')."
+    },
+    {
+      "query": "Share one API client package across the web and slides artifacts",
+      "should_trigger": true,
+      "triggered": true,
+      "rationale": "Matches 'shared package'/cross-artifact and workspace:* shared library wiring."
+    },
+    {
+      "query": "The pnpm catalog resolves two incompatible Vite versions",
+      "should_trigger": true,
+      "triggered": true,
+      "rationale": "Matches 'pnpm catalog' drift explicitly."
+    },
+    {
+      "query": "Wire a workspace:* library into another artifact",
+      "should_trigger": true,
+      "triggered": true,
+      "rationale": "Matches workspace:* shared library wiring and cross-artifact imports."
+    },
+    {
+      "query": "Add a slides artifact beside the existing app",
+      "should_trigger": true,
+      "triggered": true,
+      "rationale": "Matches 'add an artifact' / second artifact added to an existing Replit project."
+    },
+    {
+      "query": "Requests work at root but 404 under the artifact preview subpath",
+      "should_trigger": true,
+      "triggered": true,
+      "rationale": "Matches 'preview path' and BASE_URL prefix discipline symptom in a multi-artifact setup."
+    },
+    {
+      "query": "Create my first standalone React app in an empty Repl",
+      "should_trigger": false,
+      "triggered": false,
+      "rationale": "Single standalone first app; not a monorepo nor adding a second artifact. 'Create a new app' keyword is present but intent is a lone app, outside the multi-artifact scope."
+    },
+    {
+      "query": "A single Vite app has a generic white screen",
+      "should_trigger": false,
+      "triggered": false,
+      "rationale": "Single app blank screen without artifacts/BASE_URL context; not the multi-artifact blank-preview scenario."
+    },
+    {
+      "query": "Install lodash with pnpm in this one-package project",
+      "should_trigger": false,
+      "triggered": false,
+      "rationale": "Shares 'pnpm' keyword but is single-package dependency install, not catalog drift or multi-artifact wiring."
+    },
+    {
+      "query": "Add a secret environment variable to my app",
+      "should_trigger": false,
+      "triggered": false,
+      "rationale": "Env var here means secrets, not PORT/BASE_URL discipline; no multi-artifact intent."
+    },
+    {
+      "query": "Restart the existing API workflow",
+      "should_trigger": false,
+      "triggered": false,
+      "rationale": "Shares 'workflow' keyword but is a restart operation, not workflow naming errors or adding an artifact."
+    },
+    {
+      "query": "Add one route inside the existing web artifact",
+      "should_trigger": false,
+      "triggered": false,
+      "rationale": "Adding a route within one existing artifact; not adding a new artifact or cross-artifact/preview-path concerns."
+    },
+    {
+      "query": "Set up a pnpm monorepo outside Replit",
+      "should_trigger": false,
+      "triggered": false,
+      "rationale": "Description is Replit-specific; 'outside Replit' falls outside scope despite pnpm monorepo keywords."
+    },
+    {
+      "query": "Deploy this one web app to production",
+      "should_trigger": false,
+      "triggered": false,
+      "rationale": "Deployment of a single app; not covered by build/navigate multi-artifact monorepo concerns."
+    },
+    {
+      "query": "Create a Docker Compose project with three services",
+      "should_trigger": false,
+      "triggered": false,
+      "rationale": "Docker Compose multi-service, not Replit pnpm multi-artifact monorepo; different platform/mechanism."
+    },
+    {
+      "query": "Publish my utility package to npm",
+      "should_trigger": false,
+      "triggered": false,
+      "rationale": "Publishing to npm is unrelated to workspace:* internal wiring or artifacts; only loose 'package' keyword overlap."
+    }
+  ],
+  "summary": {
+    "true_positives": 10,
+    "false_negatives": 0,
+    "true_negatives": 10,
+    "false_positives": 0,
+    "recall": 1.0,
+    "precision": 1.0
+  },
+  "threshold": {
+    "recall": 0.85,
+    "precision": 0.80
+  },
+  "passed": true,
+  "description_changed": false,
+  "method": "Each query was evaluated strictly against the skill description only, without reference to the skill body or outside assumptions. A query was judged to trigger only when its intent fell within the description's stated scope (Replit pnpm multi-artifact monorepo concerns: BASE_URL prefix, PORT reading, workflow naming, pnpm catalog drift, workspace:* wiring, or adding a second artifact), not merely for sharing a keyword. Results were tallied into a confusion matrix and compared against the recall/precision thresholds."
+}

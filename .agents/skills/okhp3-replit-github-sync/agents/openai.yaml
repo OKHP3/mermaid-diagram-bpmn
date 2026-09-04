@@ -1,0 +1,4 @@
+interface:
+  display_name: "Replit GitHub Sync"
+  short_description: "Recover safe Replit-to-GitHub synchronization"
+  default_prompt: "Use $okhp3-replit-github-sync to diagnose this Replit checkout, safely reconcile it with GitHub, and verify the requested branch is synchronized."

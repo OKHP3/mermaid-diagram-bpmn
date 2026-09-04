@@ -1,0 +1,144 @@
+{
+  "skill_name": "okhp3-replit-build-in-public",
+  "skill_version": "1.0.1",
+  "phase": 8,
+  "description_evaluated": "Full playbook for a Replit Designathon competition submission — canvas organisation for judges, artifact selection, dual deployment (Replit Publish + GitHub Pages), session-to-session narrative continuity, and building-in-public commit discipline. Activate for \"designathon\", \"competition\", \"building in public\", \"judges\", \"showcase\", \"submission\", \"dual deploy\", \"GitHub Pages + Replit\", or any request to prepare a Replit project for public or competitive review.",
+  "evaluator": "independent trigger subagent",
+  "queries": [
+    {
+      "query": "Prepare this Replit project for a Designathon submission",
+      "should_trigger": true,
+      "triggered": true,
+      "rationale": "Names 'Replit', 'Designathon', and 'submission' explicitly — a direct match to the description's core purpose and trigger keywords."
+    },
+    {
+      "query": "Organize the canvas so competition judges can review the work",
+      "should_trigger": true,
+      "triggered": true,
+      "rationale": "Combines 'competition', 'judges', and canvas organisation for judge review — squarely within the described canvas-for-judges scope."
+    },
+    {
+      "query": "Which app, deck, and video artifacts should judges see first?",
+      "should_trigger": true,
+      "triggered": true,
+      "rationale": "Artifact selection for what judges see is explicitly named in the description ('artifact selection', 'judges')."
+    },
+    {
+      "query": "Set up dual deployment on Replit Publish and GitHub Pages",
+      "should_trigger": true,
+      "triggered": true,
+      "rationale": "Matches 'dual deployment (Replit Publish + GitHub Pages)' verbatim, plus 'dual deploy' and 'GitHub Pages + Replit' trigger phrases."
+    },
+    {
+      "query": "Make the commit history tell a clear building-in-public story",
+      "should_trigger": true,
+      "triggered": true,
+      "rationale": "Directly invokes 'building-in-public commit discipline' and the 'building in public' trigger keyword."
+    },
+    {
+      "query": "Create a short handoff so the next Designathon session keeps the narrative",
+      "should_trigger": true,
+      "triggered": true,
+      "rationale": "Maps to 'session-to-session narrative continuity' plus the 'Designathon' keyword — clear match."
+    },
+    {
+      "query": "Run a pre-submission showcase check for public review",
+      "should_trigger": true,
+      "triggered": true,
+      "rationale": "Contains 'submission', 'showcase', and 'public review' — three signals aligned with the description's activation clause."
+    },
+    {
+      "query": "Switch the Replit canvas from building mode to judging mode",
+      "should_trigger": true,
+      "triggered": true,
+      "rationale": "The building-vs-judging canvas distinction and canvas organisation for judges are central to the description; Replit context reinforces it."
+    },
+    {
+      "query": "Keep both public URLs visible to competition reviewers",
+      "should_trigger": true,
+      "triggered": true,
+      "rationale": "Two public URLs is the dual-deployment outcome, and 'competition reviewers' matches 'competitive review' and 'judges'."
+    },
+    {
+      "query": "Audit the submission checklist and provenance before judges arrive",
+      "should_trigger": true,
+      "triggered": true,
+      "rationale": "'Submission' and 'judges' are explicit triggers; provenance/checklist is part of the described pre-submission playbook."
+    },
+    {
+      "query": "Deploy a regular Vite app to GitHub Pages only",
+      "should_trigger": false,
+      "triggered": false,
+      "rationale": "GitHub Pages appears, but the request is single-surface deployment with no competition/judging/Replit-Publish context. Description scopes GitHub Pages only as the dual-deploy half; mechanics belong to the vite-github-pages skill."
+    },
+    {
+      "query": "Publish this internal app on Replit",
+      "should_trigger": false,
+      "triggered": false,
+      "rationale": "Replit Publish is mentioned, but 'internal' signals no public/competitive review. Description activates for public or competitive review, not routine internal publishing."
+    },
+    {
+      "query": "Organize canvas frames for an internal engineering meeting",
+      "should_trigger": false,
+      "triggered": false,
+      "rationale": "Canvas organisation overlaps, but the audience is an internal meeting, not judges or competitive review — outside the description's activation context."
+    },
+    {
+      "query": "Write a social-media launch post about building in public",
+      "should_trigger": false,
+      "triggered": false,
+      "rationale": "'Building in public' keyword appears, but the task is marketing copy, not commit discipline or Replit submission prep. Keyword overlap alone is insufficient."
+    },
+    {
+      "query": "Suggest conventional commit messages for a normal private repository",
+      "should_trigger": false,
+      "triggered": false,
+      "rationale": "Commit messages overlap with commit discipline, but 'normal private repository' contradicts the visible, building-in-public, judge-facing framing of the description."
+    },
+    {
+      "query": "Create a pitch deck for an investor meeting unrelated to a competition",
+      "should_trigger": false,
+      "triggered": false,
+      "rationale": "Pitch deck overlaps with an artifact type, but the query explicitly disclaims competition context — the description activates for Designathon/competition, not investor decks."
+    },
+    {
+      "query": "Produce a marketing video for an existing product launch",
+      "should_trigger": false,
+      "triggered": false,
+      "rationale": "Video overlaps as an artifact, but a product-launch marketing video has no judge/submission/Replit context that the description requires."
+    },
+    {
+      "query": "Write a session handoff for routine backend maintenance",
+      "should_trigger": false,
+      "triggered": false,
+      "rationale": "Session handoff overlaps, but 'routine backend maintenance' lacks the Designathon narrative-continuity context; the description's handoffs are for multi-day competition builds."
+    },
+    {
+      "query": "Set up dual deployment for a non-Replit project",
+      "should_trigger": false,
+      "triggered": false,
+      "rationale": "'Dual deploy' keyword matches, but 'non-Replit' removes the Replit Publish half that defines this skill's dual deployment. Not applicable."
+    },
+    {
+      "query": "Prepare this pull request for an internal code review",
+      "should_trigger": false,
+      "triggered": false,
+      "rationale": "'Review' appears, but internal code review is unrelated to public/competitive submission review; no canvas, artifacts, dual-deploy, or judging signals."
+    }
+  ],
+  "summary": {
+    "true_positives": 10,
+    "false_negatives": 0,
+    "true_negatives": 10,
+    "false_positives": 0,
+    "recall": 1.0,
+    "precision": 1.0
+  },
+  "threshold": {
+    "recall": 0.85,
+    "precision": 0.80
+  },
+  "passed": true,
+  "description_changed": true,
+  "method": "Each query was judged solely against the supplied description text, not the skill body. Triggering required alignment with the description's stated purpose (Replit Designathon/competition submission prep) or its activation context (public or competitive review), beyond mere keyword overlap. Positive negatives were retained where a keyword appeared but the surrounding context (internal, private, non-Replit, non-competition, marketing) placed the request outside the described activation scope. true_positive = should_trigger true and triggered true; false_negative = should_trigger true and triggered false; true_negative = should_trigger false and triggered false; false_positive = should_trigger false and triggered true. recall = TP/(TP+FN); precision = TP/(TP+FP). passed = recall >= 0.85 AND precision >= 0.80."
+}
