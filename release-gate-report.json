@@ -1,0 +1,147 @@
+{
+  "schema": "bpmn-for-mermaid/release-gate-report@1",
+  "generatedAt": "2026-09-04T13:01:36.644Z",
+  "revision": "b00c74624f0087651061474ed6c80a770d82a683",
+  "runtime": {
+    "node": "v24.13.0",
+    "pnpm": "10.26.1"
+  },
+  "decision": "GO-WITH-LIMITS",
+  "gates": [
+    {
+      "id": "dependencies",
+      "owner": "Release engineering",
+      "status": "pass",
+      "command": "pnpm audit --json",
+      "interpretation": "Critical or high advisories block publication; moderate and low advisories remain visible.",
+      "escalation": "Upgrade or replace the affected dependency, then rerun the report.",
+      "evidence": {
+        "info": 0,
+        "low": 1,
+        "moderate": 8,
+        "high": 0,
+        "critical": 0
+      },
+      "limitation": "Mermaid remains pinned at 11.4.1 with 9 advisory findings; review before changing the tested compatibility pair."
+    },
+    {
+      "id": "licenses",
+      "owner": "Release engineering",
+      "status": "pass",
+      "command": "pnpm licenses list --json",
+      "interpretation": "Every distributed dependency must use an approved permissive or weak-copyleft license.",
+      "escalation": "Identify an SPDX license or replace the dependency; do not publish an unknown license.",
+      "evidence": {
+        "observed": [
+          "MIT",
+          "Apache-2.0",
+          "BSD-3-Clause",
+          "ISC",
+          "BlueOak-1.0.0"
+        ],
+        "unknown": []
+      }
+    },
+    {
+      "id": "source-safety",
+      "owner": "Maintainers",
+      "status": "pass",
+      "command": "pnpm run check:release-gates",
+      "interpretation": "No dynamic code execution or document.write is permitted in rendering paths.",
+      "escalation": "Treat a finding as a security issue and add a regression test before release.",
+      "evidence": {
+        "checked": [
+          "app/src/lib/bpmn-plugin.ts",
+          "app/src/lib/bpmn-renderer.tsx"
+        ]
+      }
+    },
+    {
+      "id": "svg-safety",
+      "owner": "Renderer maintainers",
+      "status": "pass",
+      "command": "pnpm run test",
+      "interpretation": "SVG is parsed in the SVG namespace and interpolated labels are XML-escaped.",
+      "escalation": "Block release and add a browser regression for any unsafe injection path.",
+      "evidence": {
+        "namespaceParser": true,
+        "xmlEscaping": true
+      }
+    },
+    {
+      "id": "accessibility",
+      "owner": "UI maintainers",
+      "status": "pass",
+      "command": "pnpm --filter @workspace/mermaid-diagram-bpmn run test",
+      "interpretation": "Automated SVG semantics and control-name assertions must pass; manual AT review remains separate.",
+      "escalation": "Block the accessibility claim and record missing browser/assistive-technology evidence.",
+      "evidence": {
+        "automatedSuitePresent": true,
+        "assistiveTechnology": "not tested in this environment"
+      }
+    },
+    {
+      "id": "browser-portability",
+      "owner": "Release engineering",
+      "status": "limited",
+      "command": "pnpm --filter @workspace/mermaid-diagram-bpmn run test:e2e --project=chromium",
+      "interpretation": "Browser claims are limited to engines actually run; Linux/Chromium is not cross-platform proof.",
+      "escalation": "Run the Firefox/WebKit matrix with native dependencies or narrow the public compatibility claim.",
+      "evidence": {
+        "requested": "linux/chromium",
+        "engines": [
+          "linux/chromium"
+        ]
+      },
+      "limitation": "This report records Linux/Chromium evidence only; Firefox, WebKit, Windows, and assistive technology are not inferred."
+    },
+    {
+      "id": "comparison-evidence",
+      "owner": "Documentation maintainers",
+      "status": "pass",
+      "command": "pnpm run check:comparison-evidence",
+      "interpretation": "Every external notation and research claim on the public comparison page must retain an inspectable source link.",
+      "escalation": "Restore the missing source link or remove the unsupported comparison claim before release.",
+      "evidence": {
+        "ok": true,
+        "source": "app/src/pages/SyntaxComparison.tsx",
+        "checked": [
+          {
+            "id": "dfki-7699",
+            "label": "DFKI #7699 proposal"
+          },
+          {
+            "id": "derari",
+            "label": "@derari live prototype"
+          },
+          {
+            "id": "plantuml",
+            "label": "PlantUML activity-beta"
+          },
+          {
+            "id": "mermaid-flowchart",
+            "label": "Mermaid flowchart"
+          },
+          {
+            "id": "llm-research",
+            "label": "LLM-friendliness research"
+          }
+        ],
+        "missing": []
+      }
+    },
+    {
+      "id": "reproducibility",
+      "owner": "Release engineering",
+      "status": "pass",
+      "command": "pnpm install --frozen-lockfile && pnpm run build",
+      "interpretation": "The lockfile, declared package manager, generated assets, and build must reproduce from a clean checkout.",
+      "escalation": "Regenerate and commit the lockfile/generated assets or stop publication.",
+      "evidence": {
+        "lockfile": "present",
+        "packageManager": "pnpm@10.26.1"
+      }
+    }
+  ],
+  "releaseBoundary": "Static browser-first descriptive BPMN subset; no backend, accounts, telemetry, or executable BPMN semantics."
+}
