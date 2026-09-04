@@ -1,0 +1,39 @@
+{
+  "skill_name": "okhp3-replit-build-in-public",
+  "skill_version": "1.0.1",
+  "evals": [
+    {
+      "id": 1,
+      "name": "judge-canvas-organisation",
+      "prompt": "I'm submitting my Replit Designathon project tomorrow. What do I need to do to the canvas so judges can evaluate it quickly? Walk me through the full setup.",
+      "expectations": [
+        { "id": 1, "text": "Response distinguishes between building mode (frames scattered, some building, labels missing) and judging mode (all iframes live, zones labeled and numbered, focusCanvasShapes called), and says to switch to judging mode before any public review." },
+        { "id": 2, "text": "Response describes the hero row with the three primary deliverables: the interactive app, the pitch deck (slides), and the showcase video — placed at y = 100 with a section label above at y = 20." },
+        { "id": 3, "text": "Response specifies the zone label convention: text shape, color: 'grey', h: 60, placed 40 units above the zone's frame baseline, numbered with pattern '01 — ZONE NAME'." },
+        { "id": 4, "text": "Response specifies standard gutters: 80 px between sibling frames (within the same zone) and 160 px between zones." }
+      ]
+    },
+    {
+      "id": 2,
+      "name": "dual-deployment-setup",
+      "prompt": "I want my Designathon project live on two public URLs — one Replit-hosted and one GitHub Pages. Walk me through setting up both and what goes in the README.",
+      "expectations": [
+        { "id": 1, "text": "Response says to set base in vite.config.ts to /<repo-name>/ for GitHub Pages subdirectory routing." },
+        { "id": 2, "text": "Response says to get the exact published Replit URL from the deployment skill rather than constructing or guessing it from the project name." },
+        { "id": 3, "text": "Response gives the exact three-step sync discipline after a feature is merged: verify the GitHub Actions deployment completed successfully, publish on Replit when the change is significant, and update README.md when measured figures such as RTP, test count, or decision count changed." },
+        { "id": 4, "text": "Response explains the GitHub Actions deploy workflow triggers on every push to main, and references the okhp3-vite-github-pages skill for the full runbook." }
+      ]
+    },
+    {
+      "id": 3,
+      "name": "session-handoff-conventions",
+      "prompt": "My Designathon build spans multiple days with different AI agents each session. What should a session handoff document contain, how long should it be, and how should it be named?",
+      "expectations": [
+        { "id": 1, "text": "Response says keep handoffs short — no longer than one page — because a handoff longer than one page will not be read, with the full history in git." },
+        { "id": 2, "text": "Response lists the four handoff sections: What was accomplished, Current state, Open items, and Next action (the single most important thing the next session should do first)." },
+        { "id": 3, "text": "Response specifies the naming convention: <DATE>-HANDOFF.md, or appended to an existing HANDOFF.md." },
+        { "id": 4, "text": "Response describes provenance discipline: every measurement, figure, or claim in the README, pitch deck, or project page must be traceable to a source — citing the script, seed range, spin count, test command, or DECISION-LOG.md row range." }
+      ]
+    }
+  ]
+}

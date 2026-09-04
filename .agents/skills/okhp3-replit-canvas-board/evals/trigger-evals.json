@@ -1,0 +1,144 @@
+{
+  "skill_name": "okhp3-replit-canvas-board",
+  "skill_version": "1.0.0",
+  "phase": 8,
+  "description_evaluated": "Plan and build a structured multi-frame Replit canvas presentation board — hero rows, labeled zones, iframe lifecycle (building→live), coordinate layouts, and focusCanvasShapes for audience navigation. Use when organising the canvas for a designathon, showcase, or any multi-frame review. Also activate for \"arrange the frames\", \"set up the board\", \"label the zones\", \"focus the viewport\", or any canvas layout that needs deliberate spatial planning rather than ad-hoc placement.",
+  "evaluator": "independent trigger subagent",
+  "queries": [
+    {
+      "query": "Arrange the existing canvas frames into labeled zones for a reviewer",
+      "should_trigger": true,
+      "triggered": true,
+      "rationale": "Matches 'arrange the frames' and 'label the zones' for a multi-frame review — squarely within described intent."
+    },
+    {
+      "query": "Turn this Replit canvas into a presentation board for judges",
+      "should_trigger": true,
+      "triggered": true,
+      "rationale": "Building a Replit canvas presentation board for judges is the core showcase/review use case described."
+    },
+    {
+      "query": "Calculate coordinates and consistent gutters for twelve canvas frames",
+      "should_trigger": true,
+      "triggered": true,
+      "rationale": "Coordinate layouts for multiple canvas frames is explicitly named ('coordinate layouts', deliberate spatial planning)."
+    },
+    {
+      "query": "Move the app, deck, and video into a hero row and focus the viewport",
+      "should_trigger": true,
+      "triggered": true,
+      "rationale": "Explicitly mentions 'hero rows' and 'focus the viewport', both listed trigger phrases/features."
+    },
+    {
+      "query": "Make every mockup iframe live before the demo and present the finished board",
+      "should_trigger": true,
+      "triggered": true,
+      "rationale": "Covers 'iframe lifecycle (building→live)' and presenting the board for a showcase/demo."
+    },
+    {
+      "query": "Organize these scattered mockups into a multi-frame review layout",
+      "should_trigger": true,
+      "triggered": true,
+      "rationale": "Multi-frame review layout with deliberate organization vs ad-hoc placement — directly in scope."
+    },
+    {
+      "query": "Create numbered section labels above each canvas zone",
+      "should_trigger": true,
+      "triggered": true,
+      "rationale": "Matches 'label the zones' / labeled zones for the canvas board."
+    },
+    {
+      "query": "Clean up this ad-hoc canvas layout so collaborators can scan it quickly",
+      "should_trigger": true,
+      "triggered": true,
+      "rationale": "Converting ad-hoc placement into deliberate spatial canvas layout is explicitly the described trigger."
+    },
+    {
+      "query": "Plan the reading order for a Replit showcase canvas",
+      "should_trigger": true,
+      "triggered": true,
+      "rationale": "Planning spatial/reading order for a showcase canvas is deliberate layout planning within scope."
+    },
+    {
+      "query": "After arranging all frames, focus the audience on the complete board",
+      "should_trigger": true,
+      "triggered": true,
+      "rationale": "Arranging frames plus focusCanvasShapes for audience navigation — both explicitly described."
+    },
+    {
+      "query": "Build a single React pricing card and preview it on canvas",
+      "should_trigger": false,
+      "triggered": false,
+      "rationale": "Building one component/artifact, not planning a multi-frame board layout. Single-frame, no spatial planning intent."
+    },
+    {
+      "query": "Redesign my existing navigation component and show three alternatives",
+      "should_trigger": false,
+      "triggered": false,
+      "rationale": "Design/redesign of a component with alternatives; not about arranging a canvas board or spatial layout."
+    },
+    {
+      "query": "Change one canvas text shape from grey to blue",
+      "should_trigger": false,
+      "triggered": false,
+      "rationale": "Editing a single shape's color — not multi-frame layout planning. Shares 'canvas' keyword only."
+    },
+    {
+      "query": "Graduate the approved mockup into the production app",
+      "should_trigger": false,
+      "triggered": false,
+      "rationale": "Promoting a mockup to production is a different workflow than canvas presentation-board layout."
+    },
+    {
+      "query": "Create a ten-slide investor pitch deck",
+      "should_trigger": false,
+      "triggered": false,
+      "rationale": "Building a slide deck, not a canvas frame layout. No canvas board or spatial planning intent."
+    },
+    {
+      "query": "Arrange the cards in my web page with a CSS grid",
+      "should_trigger": false,
+      "triggered": false,
+      "rationale": "Web page CSS layout, not Replit canvas frame arrangement. 'Arrange' keyword but wrong domain."
+    },
+    {
+      "query": "Put one screenshot in an empty spot on the canvas",
+      "should_trigger": false,
+      "triggered": false,
+      "rationale": "Single ad-hoc placement of one item — the opposite of the described deliberate multi-frame planning."
+    },
+    {
+      "query": "Create an architecture diagram with canvas shapes",
+      "should_trigger": false,
+      "triggered": false,
+      "rationale": "Diagramming with shapes, not building a multi-frame presentation board with hero rows/zones."
+    },
+    {
+      "query": "Resize an artifact frame using the canvas API",
+      "should_trigger": false,
+      "triggered": false,
+      "rationale": "Single frame resize via API; not a coordinated layout/board planning task."
+    },
+    {
+      "query": "Extract the current checkout form onto the canvas",
+      "should_trigger": false,
+      "triggered": false,
+      "rationale": "Extracting a single artifact onto canvas; no multi-frame board or spatial layout planning."
+    }
+  ],
+  "summary": {
+    "true_positives": 10,
+    "false_negatives": 0,
+    "true_negatives": 10,
+    "false_positives": 0,
+    "recall": 1.0,
+    "precision": 1.0
+  },
+  "threshold": {
+    "recall": 0.85,
+    "precision": 0.80
+  },
+  "passed": true,
+  "description_changed": false,
+  "method": "Each query was evaluated strictly against the skill description only, without reference to the skill body or outside assumptions. A query was marked triggered only when its intent fell within the description's stated scope (multi-frame canvas presentation-board planning, hero rows, labeled zones, iframe building→live lifecycle, coordinate layouts, focusCanvasShapes/viewport focus, and its explicit trigger phrases), not merely for sharing a keyword such as 'canvas', 'frame', or 'arrange'. Confusion-matrix counts were tallied and recall/precision computed, then compared against the release thresholds to determine pass/fail."
+}

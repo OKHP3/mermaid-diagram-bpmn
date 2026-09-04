@@ -1,0 +1,144 @@
+{
+  "skill_name": "okhp3-replit-design-pipeline",
+  "skill_version": "1.0.0",
+  "phase": 8,
+  "description_evaluated": "The complete Replit design iteration loop as a single coherent workflow — extract → sandbox → variant → graduate. Use when redesigning, improving, or creating variants of any UI component or page. Covers the \"extract first, never approximate\" rule, DESIGN subagent brief anatomy, variant labelling conventions on canvas, and the graduation decision gate. Activate for \"redesign\", \"improve this component\", \"show me options\", \"create variants\", \"put on canvas\", \"graduate this mockup\", \"design alternatives\", or any request that implies iterating on UI — whether the component exists already or is being built from scratch.",
+  "evaluator": "independent trigger subagent",
+  "queries": [
+    {
+      "query": "Redesign the existing checkout card and show me three options",
+      "should_trigger": true,
+      "triggered": true,
+      "rationale": "Explicit 'redesign' + 'show me options' — core trigger phrases; iterating on existing UI. In scope."
+    },
+    {
+      "query": "Create distinct variants of a new onboarding page on the canvas",
+      "should_trigger": true,
+      "triggered": true,
+      "rationale": "'create variants' + 'on the canvas' + net-new page — description explicitly covers 'built from scratch'. In scope."
+    },
+    {
+      "query": "Put the current header on canvas as a baseline before improving it",
+      "should_trigger": true,
+      "triggered": true,
+      "rationale": "'put on canvas' + 'improving' — matches extract/sandbox stage and improve trigger. In scope."
+    },
+    {
+      "query": "I like variant B; integrate that mockup into the app",
+      "should_trigger": true,
+      "triggered": true,
+      "rationale": "Integrating an approved mockup is the graduation decision gate. In scope."
+    },
+    {
+      "query": "Show me alternative design directions for this dashboard",
+      "should_trigger": true,
+      "triggered": true,
+      "rationale": "'design alternatives' / 'show me options' equivalent — iterating on UI. In scope."
+    },
+    {
+      "query": "Improve this existing component without approximating its current styles",
+      "should_trigger": true,
+      "triggered": true,
+      "rationale": "'improve this component' + invokes 'extract first, never approximate' rule. In scope."
+    },
+    {
+      "query": "Explore two big-swing UI concepts for a net-new settings panel",
+      "should_trigger": true,
+      "triggered": true,
+      "rationale": "Multiple UI concept variants = create variants/design alternatives; from-scratch covered. In scope."
+    },
+    {
+      "query": "Graduate the approved editorial mockup",
+      "should_trigger": true,
+      "triggered": true,
+      "rationale": "'graduate this mockup' — explicit graduation gate trigger. In scope."
+    },
+    {
+      "query": "The graduated component needs another major redesign—iterate again",
+      "should_trigger": true,
+      "triggered": true,
+      "rationale": "'redesign' + re-entering the loop. In scope."
+    },
+    {
+      "query": "Should this UI be extracted first or built from scratch in the sandbox?",
+      "should_trigger": true,
+      "triggered": true,
+      "rationale": "Directly asks about extract-first rule and sandbox — core decision. In scope."
+    },
+    {
+      "query": "Change the button text color from grey to black",
+      "should_trigger": false,
+      "triggered": false,
+      "rationale": "Trivial direct edit, not redesign/variants. Keyword overlap only. Out of scope."
+    },
+    {
+      "query": "Audit this page for accessibility problems",
+      "should_trigger": false,
+      "triggered": false,
+      "rationale": "Analysis, not design iteration/variants/graduation. Out of scope."
+    },
+    {
+      "query": "Build one React profile page directly in the app; no mockups or variants",
+      "should_trigger": false,
+      "triggered": false,
+      "rationale": "Explicitly single implementation, negates the iteration loop. Out of scope."
+    },
+    {
+      "query": "Arrange the existing canvas frames into labeled presentation zones",
+      "should_trigger": false,
+      "triggered": false,
+      "rationale": "Layout arrangement, not extract→variant→graduate. 'canvas' keyword only. Out of scope."
+    },
+    {
+      "query": "Fix the blank preview for my second artifact",
+      "should_trigger": false,
+      "triggered": false,
+      "rationale": "Preview debugging, not redesign/iteration. Out of scope."
+    },
+    {
+      "query": "Generate a shared design-system token file",
+      "should_trigger": false,
+      "triggered": false,
+      "rationale": "Asset generation, not variant/graduation loop. Out of scope."
+    },
+    {
+      "query": "Debug the users API returning 500",
+      "should_trigger": false,
+      "triggered": false,
+      "rationale": "Backend debugging — unrelated to UI iteration. Out of scope."
+    },
+    {
+      "query": "Generate a logo image for the product",
+      "should_trigger": false,
+      "triggered": false,
+      "rationale": "Image generation, not UI redesign/variants. Out of scope."
+    },
+    {
+      "query": "Reproduce this screenshot exactly as a single implementation",
+      "should_trigger": false,
+      "triggered": false,
+      "rationale": "Exact single reproduction is opposite of variants/iteration. Out of scope."
+    },
+    {
+      "query": "Refactor this React component to reduce re-renders",
+      "should_trigger": false,
+      "triggered": false,
+      "rationale": "Performance refactor, not visual redesign. 'component' keyword only. Out of scope."
+    }
+  ],
+  "summary": {
+    "true_positives": 10,
+    "false_negatives": 0,
+    "true_negatives": 10,
+    "false_positives": 0,
+    "recall": 1.0,
+    "precision": 1.0
+  },
+  "threshold": {
+    "recall": 0.85,
+    "precision": 0.80
+  },
+  "passed": true,
+  "description_changed": false,
+  "method": "Each query was evaluated strictly against the skill description only, without reference to the skill body or outside assumptions. A query was judged to trigger only when its intent fell within the described extract→sandbox→variant→graduate workflow (redesigning, improving, creating variants, putting on canvas, or graduating mockups of UI), not merely because it shared a keyword. Confusion-matrix counts were computed by comparing should_trigger against triggered, then recall and precision were derived."
+}

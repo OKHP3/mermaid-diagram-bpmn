@@ -1,0 +1,120 @@
+{
+  "metadata": {
+    "skill_name": "okhp3-replit-multi-artifact",
+    "skill_path": ".agents/skills/okhp3-replit-multi-artifact",
+    "skill_version": "1.0.0",
+    "executor_model": "delegation-subagent",
+    "analyzer_model": "main-agent-grader",
+    "timestamp": "2026-08-11T00:00:00Z",
+    "evals_run": [1, 2, 3],
+    "runs_per_configuration": 1,
+    "note": "All 3 evals: LIVE delegation subagent runs. No analytical stubs."
+  },
+
+  "runs": [
+    {
+      "eval_id": 1,
+      "eval_name": "base-url-silent-failure",
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": { "pass_rate": 1.0, "passed": 4, "failed": 0, "total": 4, "time_seconds": null, "tokens": null, "tool_calls": null, "errors": 0 },
+      "expectations": [
+        { "text": "Response identifies root cause as missing import.meta.env.BASE_URL prefix — Replit path-based routing.", "passed": true, "evidence": "'Root Cause: Violation of the BASE_URL Prefix Rule. Replit uses path-based routing... root-relative URL escapes your artifact's /my-app mount prefix'" },
+        { "text": "Response shows fix: const BASE = import.meta.env.BASE_URL; fetch(`${BASE}api/users`)", "passed": true, "evidence": "Shows exact pattern with trailing slash note" },
+        { "text": "Response describes this as a silent failure.", "passed": true, "evidence": "'The failure is silent in the sense that the code looks completely correct and the app loads normally; only the API call breaks'" },
+        { "text": "Response states BASE_URL includes trailing slash — path segment must not start with /.", "passed": true, "evidence": "'It includes a trailing slash (e.g. /my-app/), so omit the leading slash: use ${BASE}api/users, not ${BASE}/api/users'" }
+      ]
+    },
+    {
+      "eval_id": 1,
+      "eval_name": "base-url-silent-failure",
+      "configuration": "without_skill",
+      "run_number": 1,
+      "result": { "pass_rate": 0.0, "passed": 0, "failed": 4, "total": 4, "time_seconds": null, "tokens": null, "tool_calls": null, "errors": 0 },
+      "expectations": [
+        { "text": "Response identifies root cause as missing import.meta.env.BASE_URL prefix.", "passed": false, "evidence": "Identifies root cause as 'Missing Vite Dev Server Proxy' — different diagnosis" },
+        { "text": "Response shows fix: const BASE = import.meta.env.BASE_URL; fetch(`${BASE}api/users`)", "passed": false, "evidence": "Recommends VITE_API_BASE_URL env var and absolute URLs — not the import.meta.env.BASE_URL pattern" },
+        { "text": "Response describes this as a silent failure.", "passed": false, "evidence": "Silent failure concept not mentioned" },
+        { "text": "Response states BASE_URL includes trailing slash.", "passed": false, "evidence": "Not mentioned" }
+      ]
+    },
+    {
+      "eval_id": 2,
+      "eval_name": "vite-port-and-allowedhosts",
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": { "pass_rate": 1.0, "passed": 4, "failed": 0, "total": 4, "time_seconds": null, "tokens": null, "tool_calls": null, "errors": 0 },
+      "expectations": [
+        { "text": "Response shows Vite config reading PORT from env: port: parseInt(process.env.PORT || '5000', 10).", "passed": true, "evidence": "Shows exact config with parseInt(process.env.PORT || '5000', 10)" },
+        { "text": "Response specifies allowedHosts: true — required because preview is a proxied iframe.", "passed": true, "evidence": "'Without allowedHosts: true, Vite rejects requests with 403 and preview is blank' with proxied iframe explanation" },
+        { "text": "Response references blank-preview debug checklist covering workflow state, openPorts, allowedHosts, PORT env var.", "passed": true, "evidence": "7-item checklist including getWorkflowStatus/openPorts, allowedHosts, PORT env var reading" },
+        { "text": "Response explains hard-coded port produces blank preview with no error.", "passed": true, "evidence": "'either collide with another artifact or simply be the wrong port' and 'no useful error message'" }
+      ]
+    },
+    {
+      "eval_id": 2,
+      "eval_name": "vite-port-and-allowedhosts",
+      "configuration": "without_skill",
+      "run_number": 1,
+      "result": { "pass_rate": 0.0, "passed": 0, "failed": 4, "total": 4, "time_seconds": null, "tokens": null, "tool_calls": null, "errors": 0 },
+      "expectations": [
+        { "text": "Response shows Vite config reading PORT from env.", "passed": false, "evidence": "Shows hard-coded ports: 5173, 5174, 5175 — recommends static unique ports per artifact" },
+        { "text": "Response specifies allowedHosts: true — required because preview is proxied iframe.", "passed": false, "evidence": "Mentions allowedHosts: 'all' conditionally ('If needed') — not declared required, no proxied-iframe explanation" },
+        { "text": "Response references blank-preview debug checklist with workflow state, openPorts, PORT env var.", "passed": false, "evidence": "Checklist covers ss/lsof port checking — no getWorkflowStatus, openPorts, or PORT env var check" },
+        { "text": "Response explains hard-coded port produces blank preview with no error.", "passed": false, "evidence": "Recommends hard-coded unique ports as the solution — opposite of skill's approach" }
+      ]
+    },
+    {
+      "eval_id": 3,
+      "eval_name": "managed-workflow-naming",
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": { "pass_rate": 1.0, "passed": 4, "failed": 0, "total": 4, "time_seconds": null, "tokens": null, "tool_calls": null, "errors": 0 },
+      "expectations": [
+        { "text": "Response prohibits configureWorkflow for artifact service — creates conflicting preview path, omits managed config.", "passed": true, "evidence": "'Never call configureWorkflow... Creates a conflicting preview path — your artifact's preview will break'" },
+        { "text": "Response provides managed workflow naming pattern: artifacts/<slug>: <service-name>.", "passed": true, "evidence": "Shows 'artifacts/<slug>: <service-name>' pattern and 'artifacts/chai-chasers: web' concrete example" },
+        { "text": "Response says to use WorkflowsRestart tool or restartWorkflow with exact managed name.", "passed": true, "evidence": "Shows both restartWorkflow({ workflowName: 'artifacts/chai-chasers: web' }) and WorkflowsRestart tool" },
+        { "text": "Response explains managed workflows inject PORT, BASE_PATH, proxy routing.", "passed": true, "evidence": "'inject service configuration... PORT env var, BASE_PATH for proxy routing, correct preview path mapping'" }
+      ]
+    },
+    {
+      "eval_id": 3,
+      "eval_name": "managed-workflow-naming",
+      "configuration": "without_skill",
+      "run_number": 1,
+      "result": { "pass_rate": 0.0, "passed": 0, "failed": 4, "total": 4, "time_seconds": null, "tokens": null, "tool_calls": null, "errors": 0 },
+      "expectations": [
+        { "text": "Response prohibits configureWorkflow for artifact service.", "passed": false, "evidence": "Advises against it but gives wrong reason ('does not perform a restart') — no conflicting preview path or managed config injection mentioned" },
+        { "text": "Response provides managed workflow naming pattern.", "passed": false, "evidence": "Shows `restartWorkflow({ workflow: 'chai-chasers' })` — wrong parameter name and missing 'artifacts/' prefix and ': web' suffix" },
+        { "text": "Response says to use WorkflowsRestart or restartWorkflow with exact managed name.", "passed": false, "evidence": "Shows wrong parameter format — WorkflowsRestart tool not mentioned" },
+        { "text": "Response explains managed workflows inject PORT, BASE_PATH, proxy routing.", "passed": false, "evidence": "PORT, BASE_PATH, proxy routing injection not mentioned" }
+      ]
+    }
+  ],
+
+  "run_summary": {
+    "with_skill": {
+      "pass_rate": { "mean": 1.0, "stddev": 0.0, "min": 1.0, "max": 1.0 },
+      "time_seconds": { "mean": null, "stddev": null, "min": null, "max": null },
+      "tokens": { "mean": null, "stddev": null, "min": null, "max": null }
+    },
+    "without_skill": {
+      "pass_rate": { "mean": 0.0, "stddev": 0.0, "min": 0.0, "max": 0.0 },
+      "time_seconds": { "mean": null, "stddev": null, "min": null, "max": null },
+      "tokens": { "mean": null, "stddev": null, "min": null, "max": null }
+    },
+    "delta": {
+      "pass_rate": "+1.0",
+      "time_seconds": "N/A",
+      "tokens": "N/A"
+    }
+  },
+
+  "notes": [
+    "All 3 evals: LIVE delegation subagent runs — no analytical stubs",
+    "with_skill: 4/4 on all three evals — executor reliably reproduced BASE_URL trailing slash rule, allowedHosts: true proxied-iframe reason, managed workflow naming pattern, managed config injection details",
+    "without_skill: 0/4 on all three evals — eval-2 produced an inversion (hard-coded ports recommended as solution); eval-3 showed wrong restartWorkflow parameter format",
+    "delta of +1.0 — maximum possible gap, well above the 0.5 acceptance bar",
+    "workspace: .agents/skills/okhp3-replit-multi-artifact-workspace/iteration-1/"
+  ]
+}

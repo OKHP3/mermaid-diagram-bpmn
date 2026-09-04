@@ -1,0 +1,26 @@
+{
+  "skill_name": "okhp3-replit-github-sync",
+  "skill_version": "1.0.0",
+  "description_evaluated": "Recover and maintain safe GitHub synchronization for a Replit project.",
+  "queries": [
+    {"query": "Replit says PUSH_REJECTED when I commit", "should_trigger": true, "triggered": true},
+    {"query": "Sync this Replit project with origin/main", "should_trigger": true, "triggered": true},
+    {"query": "The Replit Git UI will not commit my changes", "should_trigger": true, "triggered": true},
+    {"query": "Pull the latest GitHub commits into this Repl safely", "should_trigger": true, "triggered": true},
+    {"query": "Create a PR from my Replit branch and squash merge it", "should_trigger": true, "triggered": true},
+    {"query": "Force push this Replit branch over whatever is on GitHub", "should_trigger": false, "triggered": false},
+    {"query": "Clean stale branches and old files from a Repl", "should_trigger": false, "triggered": false},
+    {"query": "Deploy my Vite app from Replit", "should_trigger": false, "triggered": false},
+    {"query": "Review this GitHub pull request's code quality", "should_trigger": false, "triggered": false},
+    {"query": "Organize a Replit canvas for a designathon", "should_trigger": false, "triggered": false}
+  ],
+  "summary": {
+    "true_positives": 5,
+    "false_negatives": 0,
+    "true_negatives": 5,
+    "false_positives": 0,
+    "recall": 1.0,
+    "precision": 1.0
+  },
+  "method": "Design-time semantic trigger review; not a live host-selection measurement."
+}

@@ -1,0 +1,304 @@
+{
+  "metadata": {
+    "skill_name": "okhp3-replit-repl-janitor",
+    "skill_path": ".agents/skills/okhp3-replit-repl-janitor",
+    "skill_version": "1.0.1",
+    "executor_model": "delegation-subagent",
+    "analyzer_model": "main-agent-grader",
+    "timestamp": "2026-08-11T00:00:00Z",
+    "evals_run": [
+      1,
+      2,
+      3
+    ],
+    "runs_per_configuration": 1,
+    "note": "All 3 evals: LIVE delegation subagent runs. No analytical stubs."
+  },
+  "runs": [
+    {
+      "eval_id": 1,
+      "eval_name": "branch-pr-classification",
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 1.0,
+        "passed": 4,
+        "failed": 0,
+        "total": 4,
+        "time_seconds": null,
+        "tokens": null,
+        "tool_calls": 4,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "Response classifies every non-current, non-main branch into exactly one of the four buckets named keep, merge, delete, review (not merge/delete only, not custom bucket names).",
+          "passed": true,
+          "evidence": "Response uses exactly keep, merge, delete, and review."
+        },
+        {
+          "text": "Response states that a Replit-generated name (subrepl-*, replit-agent, agent/*) is a HINT only, not proof it is safe to delete, and refuses to auto-delete by pattern alone.",
+          "passed": true,
+          "evidence": "Response says names are hints, not verdicts."
+        },
+        {
+          "text": "Response distinguishes three separate facts before deletion: 'merged into origin/main', 'closed pull request', and 'abandoned with no PR' — treating them as distinct, not interchangeable.",
+          "passed": true,
+          "evidence": "Response enumerates and separates all three facts."
+        },
+        {
+          "text": "Response checks actual PR state via the git-remote skill or `gh pr view` / `gh pr list --head <branch>` before recommending any deletion, and excludes the current/active checked-out branch from deletion candidates.",
+          "passed": true,
+          "evidence": "Response gives both gh commands and excludes the current branch."
+        }
+      ]
+    },
+    {
+      "eval_id": 1,
+      "eval_name": "branch-pr-classification",
+      "configuration": "without_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 0.25,
+        "passed": 1,
+        "failed": 3,
+        "total": 4,
+        "time_seconds": null,
+        "tokens": null,
+        "tool_calls": 2,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "Response classifies every non-current, non-main branch into exactly one of the four buckets named keep, merge, delete, review (not merge/delete only, not custom bucket names).",
+          "passed": false,
+          "evidence": "No exact four-bucket classification."
+        },
+        {
+          "text": "Response states that a Replit-generated name (subrepl-*, replit-agent, agent/*) is a HINT only, not proof it is safe to delete, and refuses to auto-delete by pattern alone.",
+          "passed": true,
+          "evidence": "Response calls naming a hint, not a verdict."
+        },
+        {
+          "text": "Response distinguishes three separate facts before deletion: 'merged into origin/main', 'closed pull request', and 'abandoned with no PR' — treating them as distinct, not interchangeable.",
+          "passed": false,
+          "evidence": "Closed and merged PR states are conflated; abandonment is absent."
+        },
+        {
+          "text": "Response checks actual PR state via the git-remote skill or `gh pr view` / `gh pr list --head <branch>` before recommending any deletion, and excludes the current/active checked-out branch from deletion candidates.",
+          "passed": false,
+          "evidence": "No git-remote or gh command is supplied."
+        }
+      ]
+    },
+    {
+      "eval_id": 2,
+      "eval_name": "naming-detritus-audit",
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 1.0,
+        "passed": 4,
+        "failed": 0,
+        "total": 4,
+        "time_seconds": null,
+        "tokens": null,
+        "tool_calls": 4,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "Response flags SiteTokens.css as a violation (rename to site-tokens.css) but explicitly exempts ChatPane.tsx (PascalCase React component) and useDebounce.ts (camelCase useFoo hook) as structural exceptions, NOT violations.",
+          "passed": true,
+          "evidence": "All three verdicts match."
+        },
+        {
+          "text": "Response exempts README.md (ALL-CAPS root governance file) and robots.txt (web-standard filename) from renaming, and flags 'My Document.md' as a violation for containing spaces.",
+          "passed": true,
+          "evidence": "All three verdicts match."
+        },
+        {
+          "text": "Response names attached_assets as a known detritus folder (alongside variants like _unused, tmp, temp, _drafts, _scratch, _old, attached-assets, unused) to triage-then-delete or gitignore-and-untrack.",
+          "passed": true,
+          "evidence": "Response gives the detritus set and disposition buckets."
+        },
+        {
+          "text": "Response runs the read-only audit via `python3 .agents/skills/okhp3-replit-repl-janitor/scripts/audit-repo.py --root . --base origin/main` (or references audit-repo.py) and states it never mutates the repo / prints a JSON report.",
+          "passed": true,
+          "evidence": "Response gives the exact command and JSON/read-only behavior."
+        }
+      ]
+    },
+    {
+      "eval_id": 2,
+      "eval_name": "naming-detritus-audit",
+      "configuration": "without_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 0.25,
+        "passed": 1,
+        "failed": 3,
+        "total": 4,
+        "time_seconds": null,
+        "tokens": null,
+        "tool_calls": 2,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "Response flags SiteTokens.css as a violation (rename to site-tokens.css) but explicitly exempts ChatPane.tsx (PascalCase React component) and useDebounce.ts (camelCase useFoo hook) as structural exceptions, NOT violations.",
+          "passed": false,
+          "evidence": "SiteTokens.css is treated as context-dependent."
+        },
+        {
+          "text": "Response exempts README.md (ALL-CAPS root governance file) and robots.txt (web-standard filename) from renaming, and flags 'My Document.md' as a violation for containing spaces.",
+          "passed": true,
+          "evidence": "All three verdicts match."
+        },
+        {
+          "text": "Response names attached_assets as a known detritus folder (alongside variants like _unused, tmp, temp, _drafts, _scratch, _old, attached-assets, unused) to triage-then-delete or gitignore-and-untrack.",
+          "passed": false,
+          "evidence": "No detritus set or required dispositions."
+        },
+        {
+          "text": "Response runs the read-only audit via `python3 .agents/skills/okhp3-replit-repl-janitor/scripts/audit-repo.py --root . --base origin/main` (or references audit-repo.py) and states it never mutates the repo / prints a JSON report.",
+          "passed": false,
+          "evidence": "Bundled audit is absent."
+        }
+      ]
+    },
+    {
+      "eval_id": 3,
+      "eval_name": "safe-execution-verification",
+      "configuration": "with_skill",
+      "run_number": 2,
+      "result": {
+        "pass_rate": 0.75,
+        "passed": 3,
+        "failed": 1,
+        "total": 4,
+        "time_seconds": null,
+        "tokens": null,
+        "tool_calls": 3,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "Response deletes the remote branch FIRST, then the local tracking branch (remote-first ordering), and only after re-verifying the exact expected head — never local-first or both at once.",
+          "passed": true,
+          "evidence": "Response gives the exact remote-first order after SHA verification."
+        },
+        {
+          "text": "Response squash-merges via the pull request, and for approved file/folder actions uses `git rm` / `git mv` rather than raw `rm` (unless the target was never tracked, e.g. a gitignored working file, where plain `rm` is acceptable).",
+          "passed": false,
+          "evidence": "Response covers squash merge but does not restate the file-action rule or its untracked-file carve-out."
+        },
+        {
+          "text": "Response refuses to pass `git fetch --all --prune` (or `--prune`) until every stale remote branch has been classified, and refuses to rewrite main, force-push, or delete stashes/archive refs.",
+          "passed": true,
+          "evidence": "Response says: \"git fetch --all (never --prune)\" and \"No pruning happens until every stale remote branch is classified,\" while protecting main, force-pushes, stashes, and archive refs."
+        },
+        {
+          "text": "Response's post-execution verification re-runs the audit script AND runs `git status --short` AND confirms the workflow/app still starts cleanly if any tracked source file moved or was renamed.",
+          "passed": true,
+          "evidence": "Response includes all three verification requirements."
+        }
+      ]
+    },
+    {
+      "eval_id": 3,
+      "eval_name": "safe-execution-verification",
+      "configuration": "without_skill",
+      "run_number": 2,
+      "result": {
+        "pass_rate": 0.0,
+        "passed": 0,
+        "failed": 4,
+        "total": 4,
+        "time_seconds": null,
+        "tokens": null,
+        "tool_calls": 2,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "Response deletes the remote branch FIRST, then the local tracking branch (remote-first ordering), and only after re-verifying the exact expected head — never local-first or both at once.",
+          "passed": false,
+          "evidence": "Remote delete is listed before local delete, but the exact expected head SHA is not recorded and re-verified."
+        },
+        {
+          "text": "Response squash-merges via the pull request, and for approved file/folder actions uses `git rm` / `git mv` rather than raw `rm` (unless the target was never tracked, e.g. a gitignored working file, where plain `rm` is acceptable).",
+          "passed": false,
+          "evidence": "No fixed squash or file-action policy."
+        },
+        {
+          "text": "Response refuses to pass `git fetch --all --prune` (or `--prune`) until every stale remote branch has been classified, and refuses to rewrite main, force-push, or delete stashes/archive refs.",
+          "passed": false,
+          "evidence": "Response prunes before classification."
+        },
+        {
+          "text": "Response's post-execution verification re-runs the audit script AND runs `git status --short` AND confirms the workflow/app still starts cleanly if any tracked source file moved or was renamed.",
+          "passed": false,
+          "evidence": "Required post-change checks are absent."
+        }
+      ]
+    }
+  ],
+  "run_summary": {
+    "with_skill": {
+      "pass_rate": {
+        "mean": 0.9167,
+        "stddev": 0.1179,
+        "min": 0.75,
+        "max": 1.0
+      },
+      "time_seconds": {
+        "mean": null,
+        "stddev": null,
+        "min": null,
+        "max": null
+      },
+      "tokens": {
+        "mean": null,
+        "stddev": null,
+        "min": null,
+        "max": null
+      }
+    },
+    "without_skill": {
+      "pass_rate": {
+        "mean": 0.1667,
+        "stddev": 0.1179,
+        "min": 0.0,
+        "max": 0.25
+      },
+      "time_seconds": {
+        "mean": null,
+        "stddev": null,
+        "min": null,
+        "max": null
+      },
+      "tokens": {
+        "mean": null,
+        "stddev": null,
+        "min": null,
+        "max": null
+      }
+    },
+    "delta": {
+      "pass_rate": "+0.75",
+      "time_seconds": "N/A",
+      "tokens": "N/A"
+    }
+  },
+  "notes": [
+    "All 3 evals: LIVE delegation subagent runs.",
+    "The skill supplied the exact four-bucket branch model, detritus policy, and verification sequence missing from baselines.",
+    "Baseline eval 1 recommends local-first branch deletion, conflicting with this skill's reviewed remote-first execution order.",
+    "Baseline eval 3 prunes remote-tracking evidence before branch classification.",
+    "Strict grading found an emphasis gap in iteration 1: the with-skill response implied no early pruning but did not state the rule explicitly.",
+    "Version 1.0.1 adds a NON-NEGOTIABLE no-early-pruning callout; only eval 3 was rerun, as prescribed by the Foundry fix loop.",
+    "Foundry acceptance after the targeted live rerun and strict re-grade: with_skill mean 0.9167 and delta +0.75.",
+    "The aggregate retains expectation-level evidence; temporary executor workspaces are not release package content."
+  ]
+}

@@ -1,0 +1,36 @@
+{
+  "skill_name": "okhp3-replit-repl-janitor",
+  "skill_version": "1.0.1",
+  "description_evaluated": "OverKill Hill P³ one-Repl repository cleanup workflow for safely auditing and tidying a single Replit workspace's Git checkout.",
+  "queries": [
+    {"query": "Clean up merged and abandoned branches in this Repl", "should_trigger": true, "triggered": true},
+    {"query": "Purge stale subrepl-* branches safely", "should_trigger": true, "triggered": true},
+    {"query": "Decrapify this Replit repository", "should_trigger": true, "triggered": true},
+    {"query": "Tidy inconsistent filenames and old temp folders in this Repl", "should_trigger": true, "triggered": true},
+    {"query": "Which agent/* branches can I delete?", "should_trigger": true, "triggered": true},
+    {"query": "Audit branches and PRs before pruning this one checkout", "should_trigger": true, "triggered": true},
+    {"query": "Fix spaces and mixed case in repository filenames", "should_trigger": true, "triggered": true},
+    {"query": "Find attached_assets and other repository detritus", "should_trigger": true, "triggered": true},
+    {"query": "Squash-merge approved PRs then delete their branches", "should_trigger": true, "triggered": true},
+    {"query": "Run a one-time Repl repository cleanup", "should_trigger": true, "triggered": true},
+    {"query": "Set up weekly repository maintenance and worktree reconciliation", "should_trigger": false, "triggered": false},
+    {"query": "Compare six local clones against GitHub origin/main", "should_trigger": false, "triggered": false},
+    {"query": "Reorganize this knowledge repository's folder taxonomy", "should_trigger": false, "triggered": false},
+    {"query": "Create a new GitHub repository", "should_trigger": false, "triggered": false},
+    {"query": "Deploy this Vite app to GitHub Pages", "should_trigger": false, "triggered": false},
+    {"query": "Rename a React component inside the app", "should_trigger": false, "triggered": false},
+    {"query": "Review this pull request's code quality", "should_trigger": false, "triggered": false},
+    {"query": "Recover a deleted Git branch from reflog", "should_trigger": false, "triggered": false},
+    {"query": "Update dependencies and fix package vulnerabilities", "should_trigger": false, "triggered": false},
+    {"query": "Design a naming convention for database columns", "should_trigger": false, "triggered": false}
+  ],
+  "summary": {
+    "true_positives": 10,
+    "false_negatives": 0,
+    "true_negatives": 10,
+    "false_positives": 0,
+    "recall": 1.0,
+    "precision": 1.0
+  },
+  "method": "Main-agent semantic evaluation against the final description after the live body benchmark passed."
+}

@@ -1,0 +1,39 @@
+{
+  "skill_name": "okhp3-replit-multi-artifact",
+  "skill_version": "1.0.0",
+  "evals": [
+    {
+      "id": 1,
+      "name": "base-url-silent-failure",
+      "prompt": "My React Vite app is mounted at /my-app on Replit but my fetch('/api/users') call returns a 404. The endpoint exists on the server. What's causing this and how do I fix it?",
+      "expectations": [
+        { "id": 1, "text": "Response identifies the root cause as a missing import.meta.env.BASE_URL prefix — Replit uses path-based routing and root-relative URLs escape the artifact's mount path." },
+        { "id": 2, "text": "Response shows the correct fix: const BASE = import.meta.env.BASE_URL; then fetch(`${BASE}api/users`) — prepending BASE_URL rather than using a root-relative /api/users." },
+        { "id": 3, "text": "Response describes this as a silent failure: the URL looks correct in code, the app loads, but API calls return unexpected responses because the route is mounted at the wrong path." },
+        { "id": 4, "text": "Response states that BASE_URL already includes a trailing slash, so the path segment must NOT start with a forward slash (e.g. use 'api/users' not '/api/users')." }
+      ]
+    },
+    {
+      "id": 2,
+      "name": "vite-port-and-allowedhosts",
+      "prompt": "I added a second artifact to my Replit monorepo and the preview pane is blank. The workflow shows as running. What must be correct in my Vite config and what checklist should I work through?",
+      "expectations": [
+        { "id": 1, "text": "Response shows the correct Vite server config reading PORT from env: port: parseInt(process.env.PORT || '5000', 10) — not a hard-coded port number." },
+        { "id": 2, "text": "Response specifies allowedHosts: true in the Vite server config — distinct from host: '0.0.0.0' — and explains this is required because the preview is a proxied iframe from a different origin." },
+        { "id": 3, "text": "Response references the blank-preview debug checklist, covering at minimum: workflow running state, whether a port was opened (openPorts), allowedHosts setting, and PORT env var reading." },
+        { "id": 4, "text": "Response explains that a hard-coded port in Vite config will either conflict with another artifact or be wrong for the proxy routing, producing a blank preview with no error." }
+      ]
+    },
+    {
+      "id": 3,
+      "name": "managed-workflow-naming",
+      "prompt": "I want to restart my Replit artifact service for the 'chai-chasers' slug. Should I call configureWorkflow to create a new workflow, or is there a different approach?",
+      "expectations": [
+        { "id": 1, "text": "Response explicitly prohibits calling configureWorkflow for an artifact service — stating it creates a conflicting preview path and omits managed service configuration." },
+        { "id": 2, "text": "Response provides the exact managed workflow naming pattern: artifacts/<slug>: <service-name> — for example 'artifacts/chai-chasers: web'." },
+        { "id": 3, "text": "Response says to use the WorkflowsRestart tool (or restartWorkflow in CodeExecution) with the exact managed workflow name." },
+        { "id": 4, "text": "Response explains that managed workflows inject service configuration including PORT, BASE_PATH, and proxy routing — which a replacement configureWorkflow call omits." }
+      ]
+    }
+  ]
+}

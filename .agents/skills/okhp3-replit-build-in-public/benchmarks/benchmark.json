@@ -1,0 +1,123 @@
+{
+  "metadata": {
+    "skill_name": "okhp3-replit-build-in-public",
+    "skill_path": ".agents/skills/okhp3-replit-build-in-public",
+    "skill_version": "1.0.1",
+    "executor_model": "delegation-subagent",
+    "analyzer_model": "main-agent-grader",
+    "timestamp": "2026-08-11T00:00:00Z",
+    "evals_run": [1, 2, 3],
+    "runs_per_configuration": 1,
+    "note": "All 3 evals: LIVE delegation subagent runs. No analytical stubs."
+  },
+
+  "runs": [
+    {
+      "eval_id": 1,
+      "eval_name": "judge-canvas-organisation",
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": { "pass_rate": 1.0, "passed": 4, "failed": 0, "total": 4, "time_seconds": null, "tokens": null, "tool_calls": 4, "errors": 0 },
+      "expectations": [
+        { "text": "Response distinguishes building vs judging mode, says to switch to judging mode before public review.", "passed": true, "evidence": "'The canvas must be switched from building mode to judging mode before submission. In building mode iframes are scattered... In judging mode every iframe is live, zones labeled and numbered'" },
+        { "text": "Response describes hero row with three primary deliverables at y=100, label at y=20.", "passed": true, "evidence": "'hero row sits at y = 100... three primary deliverables: live interactive artifact, portfolio/pitch deck, showcase video'. Label: 'y = 20, h = 60, color = grey'" },
+        { "text": "Response specifies zone label convention: text, grey, h 60, 40 units above, numbered '01 — ZONE NAME'.", "passed": true, "evidence": "'color = grey, h = 60, y = (zone baseline y) - 40, text = 01 — ZONE NAME'" },
+        { "text": "Response specifies gutters: 80 px sibling, 160 px between zones.", "passed": true, "evidence": "'80 px between sibling frames within a zone / 160 px between zones'" }
+      ]
+    },
+    {
+      "eval_id": 1,
+      "eval_name": "judge-canvas-organisation",
+      "configuration": "without_skill",
+      "run_number": 1,
+      "result": { "pass_rate": 0.0, "passed": 0, "failed": 4, "total": 4, "time_seconds": null, "tokens": null, "tool_calls": null, "errors": 0 },
+      "expectations": [
+        { "text": "Response distinguishes building vs judging mode.", "passed": false, "evidence": "Describes generic canvas section organization (header, user flow, key screens) — no building/judging mode distinction, no focusCanvasShapes" },
+        { "text": "Response describes hero row with three deliverables at y=100, label at y=20.", "passed": false, "evidence": "No hero row, no y-coordinates, no three-artifact structure" },
+        { "text": "Response specifies zone label convention.", "passed": false, "evidence": "No zone label convention — says to name frames descriptively (Home, Dashboard)" },
+        { "text": "Response specifies gutters: 80 px sibling, 160 px between zones.", "passed": false, "evidence": "No gutter values — says to 'align and evenly space frames'" }
+      ]
+    },
+    {
+      "eval_id": 2,
+      "eval_name": "dual-deployment-setup",
+      "configuration": "with_skill",
+      "run_number": 2,
+      "result": { "pass_rate": 1.0, "passed": 4, "failed": 0, "total": 4, "time_seconds": null, "tokens": null, "tool_calls": null, "errors": 0 },
+      "expectations": [
+        { "text": "Response says to set base in vite.config.ts to /<repo-name>/ for GitHub Pages.", "passed": true, "evidence": "Says to set `base` in `vite.config.ts` to `/<repo-name>/` so assets resolve from the Pages subdirectory" },
+        { "text": "Response gets the exact published Replit URL from the deployment skill rather than constructing or guessing it.", "passed": true, "evidence": "'Grab the exact URL from the deployment skill / Publishing pane — don't guess the subdomain'" },
+        { "text": "Response gives the exact three-step post-merge sync discipline.", "passed": true, "evidence": "Lists: verify GitHub Actions green check, Publish on Replit for significant changes, update README.md when RTP/test count/decision count changes" },
+        { "text": "Response explains GitHub Actions triggers on every push to main, references okhp3-vite-github-pages skill.", "passed": true, "evidence": "Says the workflow triggers on every push to `main` and names `okhp3-vite-github-pages` as the full runbook/source of truth" }
+      ]
+    },
+    {
+      "eval_id": 2,
+      "eval_name": "dual-deployment-setup",
+      "configuration": "without_skill",
+      "run_number": 2,
+      "result": { "pass_rate": 0.25, "passed": 1, "failed": 3, "total": 4, "time_seconds": null, "tokens": null, "tool_calls": 3, "errors": 0 },
+      "expectations": [
+        { "text": "Response says to set base in vite.config.ts to /<repo-name>/.", "passed": true, "evidence": "Says: `Vite: set base: '/<repo>/' in vite.config.js`" },
+        { "text": "Response gets the exact published Replit URL from the deployment skill rather than constructing or guessing it.", "passed": false, "evidence": "Uses an example `your-app-name.replit.app`; never routes exact URL retrieval through the deployment skill or warns against guessing" },
+        { "text": "Response gives the exact three-step post-merge sync discipline.", "passed": false, "evidence": "No after-merge sequence and no README measured-figure update for RTP, test count, or decision count" },
+        { "text": "Response explains GitHub Actions triggers on every push to main, references okhp3-vite-github-pages skill.", "passed": false, "evidence": "Shows a push-to-main Actions trigger but does not reference `okhp3-vite-github-pages`; conjunctive expectation fails" }
+      ]
+    },
+    {
+      "eval_id": 3,
+      "eval_name": "session-handoff-conventions",
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": { "pass_rate": 1.0, "passed": 4, "failed": 0, "total": 4, "time_seconds": null, "tokens": null, "tool_calls": null, "errors": 0 },
+      "expectations": [
+        { "text": "Response says keep handoffs to one page maximum.", "passed": true, "evidence": "'Required Length: One page maximum. A handoff longer than one page will not be read.'" },
+        { "text": "Response lists four sections: What was accomplished, Current state, Open items, Next action.", "passed": true, "evidence": "Exactly four sections listed: Accomplished, Current State, Open Items, Next Action (one sentence)" },
+        { "text": "Response specifies naming: <DATE>-HANDOFF.md or HANDOFF.md.", "passed": true, "evidence": "Shows '<DATE>-HANDOFF.md' and 'HANDOFF.md (append)' as the two naming patterns" },
+        { "text": "Response describes provenance discipline: traceable to script, seed range, spin count, DECISION-LOG.md row range.", "passed": true, "evidence": "Full provenance table: RTP/fleet/player model, test counts/exact command, simulation/script/seed/spins, DECISION-LOG.md row range" }
+      ]
+    },
+    {
+      "eval_id": 3,
+      "eval_name": "session-handoff-conventions",
+      "configuration": "without_skill",
+      "run_number": 1,
+      "result": { "pass_rate": 0.0, "passed": 0, "failed": 4, "total": 4, "time_seconds": null, "tokens": null, "tool_calls": null, "errors": 0 },
+      "expectations": [
+        { "text": "Response says keep handoffs to one page maximum.", "passed": false, "evidence": "'Target: 300-600 words / 1-2 pages' — up to two pages, contradicts skill's one-page-maximum rule" },
+        { "text": "Response lists four sections: Accomplished, Current State, Open Items, Next Action.", "passed": false, "evidence": "Lists 8 sections — none match the skill's four-section structure" },
+        { "text": "Response specifies naming: <DATE>-HANDOFF.md or HANDOFF.md.", "passed": false, "evidence": "Uses 'HANDOFF_YYYY-MM-DD_session-N.md' in /handoffs/ directory — different convention" },
+        { "text": "Response describes provenance discipline.", "passed": false, "evidence": "Provenance discipline not mentioned — focuses on 'not hiding bugs' and tech stack decisions" }
+      ]
+    }
+  ],
+
+  "run_summary": {
+    "with_skill": {
+      "pass_rate": { "mean": 1.0, "stddev": 0.0, "min": 1.0, "max": 1.0 },
+      "time_seconds": { "mean": null, "stddev": null, "min": null, "max": null },
+      "tokens": { "mean": null, "stddev": null, "min": null, "max": null }
+    },
+    "without_skill": {
+      "pass_rate": { "mean": 0.0833, "stddev": 0.1179, "min": 0.0, "max": 0.25 },
+      "time_seconds": { "mean": null, "stddev": null, "min": null, "max": null },
+      "tokens": { "mean": null, "stddev": null, "min": null, "max": null }
+    },
+    "delta": {
+      "pass_rate": "+0.9167",
+      "time_seconds": "N/A",
+      "tokens": "N/A"
+    }
+  },
+
+  "notes": [
+    "All 3 evals: LIVE delegation subagent runs — no analytical stubs",
+    "with_skill: 4/4 on all three evals — executor reliably reproduced judging-mode switch, hero row y=100/label y=20, zone label convention, gutter values, provenance discipline with DECISION-LOG.md row ranges",
+    "Eval 2 expectations were tightened after the original baseline passed two general-knowledge checks: the generic Pages URL and README-link checks were replaced with the deployment-skill exact-URL rule and the three-step post-merge sync discipline.",
+    "Targeted live eval-2 rerun against v1.0.1: with_skill 4/4; without_skill 1/4. The baseline retained only the Vite base-path check and missed both new anchors plus the okhp3-vite-github-pages conjunct.",
+    "without_skill: evals 1 and 3 scored 0/4 — canvas API (focusCanvasShapes, iframe state) and session handoff conventions (one-page limit, four-section structure, provenance discipline) are entirely skill-specific",
+    "Strict recomputation after replacing eval-2: without_skill mean 0.0833 and delta +0.9167.",
+    "Phase 7 body fix not required: with_skill mean remains 1.0; this was an expectation-discrimination repair.",
+    "workspaces: iteration-1 for evals 1 and 3; iteration-2/eval-2-dual-deployment-setup for the accepted eval-2 rerun"
+  ]
+}

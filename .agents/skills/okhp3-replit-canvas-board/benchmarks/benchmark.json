@@ -1,0 +1,120 @@
+{
+  "metadata": {
+    "skill_name": "okhp3-replit-canvas-board",
+    "skill_path": ".agents/skills/okhp3-replit-canvas-board",
+    "skill_version": "1.0.0",
+    "executor_model": "delegation-subagent",
+    "analyzer_model": "main-agent-grader",
+    "timestamp": "2026-08-11T00:00:00Z",
+    "evals_run": [1, 2, 3],
+    "runs_per_configuration": 1,
+    "note": "All 3 evals: LIVE delegation subagent runs. No analytical stubs."
+  },
+
+  "runs": [
+    {
+      "eval_id": 1,
+      "eval_name": "canvas-state-before-move",
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": { "pass_rate": 1.0, "passed": 4, "failed": 0, "total": 4, "time_seconds": null, "tokens": null, "tool_calls": null, "errors": 0 },
+      "expectations": [
+        { "text": "Response calls getCanvasState with a wide focusArea (x: -5000, y: -5000, w: 20000, h: 20000) as the first step before moving any frames.", "passed": true, "evidence": "Shows exact call with focusArea: { x: -5000, y: -5000, w: 20000, h: 20000 }" },
+        { "text": "Response recommends writing a coordinate table to turn reorganisation into a single applyCanvasActions batch.", "passed": true, "evidence": "Explicitly describes coordinate table + single applyCanvasActions batch pattern" },
+        { "text": "Response warns to abort and investigate if an expected shape ID is missing.", "passed": true, "evidence": "Quotes skill directly: 'Abort and investigate if an expected shape ID is missing before issuing any move commands'" },
+        { "text": "Response specifies 80 px sibling gutter and 160 px zone gutter.", "passed": true, "evidence": "States: 'Recommended defaults: 80 px sibling gutter, 160 px zone gutter'" }
+      ]
+    },
+    {
+      "eval_id": 1,
+      "eval_name": "canvas-state-before-move",
+      "configuration": "without_skill",
+      "run_number": 1,
+      "result": { "pass_rate": 0.0, "passed": 0, "failed": 4, "total": 4, "time_seconds": null, "tokens": null, "tool_calls": null, "errors": 0 },
+      "expectations": [
+        { "text": "Response calls getCanvasState with a wide focusArea (x: -5000, y: -5000, w: 20000, h: 20000) as the first step before moving any frames.", "passed": false, "evidence": "Says 'list all frames' generically — no getCanvasState, no focusArea parameters" },
+        { "text": "Response recommends writing a coordinate table to turn reorganisation into a single applyCanvasActions batch.", "passed": false, "evidence": "No coordinate table, no applyCanvasActions mentioned" },
+        { "text": "Response warns to abort and investigate if an expected shape ID is missing.", "passed": false, "evidence": "Not mentioned" },
+        { "text": "Response specifies 80 px sibling gutter and 160 px zone gutter.", "passed": false, "evidence": "Says 'consistent spacing e.g. 100-200 px' — generic, not the skill's canonical values" }
+      ]
+    },
+    {
+      "eval_id": 2,
+      "eval_name": "iframe-building-to-live",
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": { "pass_rate": 1.0, "passed": 4, "failed": 0, "total": 4, "time_seconds": null, "tokens": null, "tool_calls": null, "errors": 0 },
+      "expectations": [
+        { "text": "Response provides applyCanvasActions update action with shapeType: 'iframe', state: 'live', and url field.", "passed": true, "evidence": "Shows exact update action with shapeType, state: 'live', url field" },
+        { "text": "Response specifies URL pattern: https://${REPLIT_DOMAINS}/__mockup/preview/{folder}/{ComponentName}", "passed": true, "evidence": "Explicitly shows `https://${REPLIT_DOMAINS}/__mockup/preview/{folder}/{ComponentName}`" },
+        { "text": "Response states all frames must be 'live' before calling focusCanvasShapes.", "passed": true, "evidence": "'Every frame must be live before you call focusCanvasShapes'" },
+        { "text": "Response mentions obtaining REPLIT_DOMAINS via 'echo $REPLIT_DOMAINS'.", "passed": true, "evidence": "Shows `echo $REPLIT_DOMAINS` as a distinct step" }
+      ]
+    },
+    {
+      "eval_id": 2,
+      "eval_name": "iframe-building-to-live",
+      "configuration": "without_skill",
+      "run_number": 1,
+      "result": { "pass_rate": 0.0, "passed": 0, "failed": 4, "total": 4, "time_seconds": null, "tokens": null, "tool_calls": null, "errors": 0 },
+      "expectations": [
+        { "text": "Response provides applyCanvasActions update action with shapeType: 'iframe', state: 'live', and url field.", "passed": false, "evidence": "Describes clicking settings panel — no applyCanvasActions, no shapeType/state fields" },
+        { "text": "Response specifies URL pattern: https://${REPLIT_DOMAINS}/__mockup/preview/{folder}/{ComponentName}", "passed": false, "evidence": "Shows general artifact preview URLs, not /__mockup/preview/ pattern, no REPLIT_DOMAINS" },
+        { "text": "Response states all frames must be 'live' before calling focusCanvasShapes.", "passed": false, "evidence": "focusCanvasShapes not mentioned" },
+        { "text": "Response mentions obtaining REPLIT_DOMAINS via 'echo $REPLIT_DOMAINS'.", "passed": false, "evidence": "REPLIT_DOMAINS not mentioned" }
+      ]
+    },
+    {
+      "eval_id": 3,
+      "eval_name": "focusCanvasShapes-presentation-close",
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": { "pass_rate": 1.0, "passed": 4, "failed": 0, "total": 4, "time_seconds": null, "tokens": null, "tool_calls": null, "errors": 0 },
+      "expectations": [
+        { "text": "Response calls focusCanvasShapes as the last action with all frame/label IDs, animateMs: 500.", "passed": true, "evidence": "Shows exact call with animateMs: 500 as the final step in the 8-step workflow" },
+        { "text": "Response explains animateMs: 500 — instant jumps feel like a glitch, 500 ms is the sweet spot.", "passed": true, "evidence": "'An instant jump (animateMs: 0) feels like a glitch... 500 ms is the sweet spot'" },
+        { "text": "Response describes hero row convention: y = 100 for frames, label at y = 20.", "passed": true, "evidence": "'The hero row label sits at y: 20, above hero frames which sit at y: 100'" },
+        { "text": "Response describes section label convention: text, color grey, h 60, 40 units above, '01 — ZONE NAME'.", "passed": true, "evidence": "Full table: type text, color grey, h 60, gap 40, pattern '01 — ZONE NAME'" }
+      ]
+    },
+    {
+      "eval_id": 3,
+      "eval_name": "focusCanvasShapes-presentation-close",
+      "configuration": "without_skill",
+      "run_number": 1,
+      "result": { "pass_rate": 0.0, "passed": 0, "failed": 4, "total": 4, "time_seconds": null, "tokens": null, "tool_calls": null, "errors": 0 },
+      "expectations": [
+        { "text": "Response calls focusCanvasShapes with all frame/label IDs, animateMs: 500.", "passed": false, "evidence": "focusCanvasShapes not mentioned — response describes Figma/Miro/Canva workflows" },
+        { "text": "Response explains animateMs: 500.", "passed": false, "evidence": "animateMs not mentioned" },
+        { "text": "Response describes hero row convention: y = 100, label at y = 20.", "passed": false, "evidence": "No hero row described — generic 'cover frame at 0,0' advice" },
+        { "text": "Response describes section label convention: text, color grey, h 60, 40 units above, '01 — ZONE NAME'.", "passed": false, "evidence": "Describes Figma layer naming, not Replit Canvas text shape conventions" }
+      ]
+    }
+  ],
+
+  "run_summary": {
+    "with_skill": {
+      "pass_rate": { "mean": 1.0, "stddev": 0.0, "min": 1.0, "max": 1.0 },
+      "time_seconds": { "mean": null, "stddev": null, "min": null, "max": null },
+      "tokens": { "mean": null, "stddev": null, "min": null, "max": null }
+    },
+    "without_skill": {
+      "pass_rate": { "mean": 0.0, "stddev": 0.0, "min": 0.0, "max": 0.0 },
+      "time_seconds": { "mean": null, "stddev": null, "min": null, "max": null },
+      "tokens": { "mean": null, "stddev": null, "min": null, "max": null }
+    },
+    "delta": {
+      "pass_rate": "+1.0",
+      "time_seconds": "N/A",
+      "tokens": "N/A"
+    }
+  },
+
+  "notes": [
+    "All 3 evals: LIVE delegation subagent runs — no analytical stubs",
+    "with_skill: 4/4 on all three evals — executor reliably reproduced getCanvasState focusArea, REPLIT_DOMAINS URL pattern, animateMs: 500, zone label conventions",
+    "without_skill: 0/4 on all three evals — no skill-specific API names (focusCanvasShapes, getCanvasState, REPLIT_DOMAINS) appeared without skill access; without-skill described Figma/Miro conventions for eval-3",
+    "delta of +1.0 — maximum possible gap, well above the 0.5 acceptance bar",
+    "workspace: .agents/skills/okhp3-replit-canvas-board-workspace/iteration-1/"
+  ]
+}
