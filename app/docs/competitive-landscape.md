@@ -68,6 +68,21 @@ Key facts about the proposal:
 
 **Honest comparative read:** The original detailed form is close to an attribute dictionary (`type:event,subtype:none,behaviour:start,label:,lane:,pool:`), but the later simple/default layer is intentionally Mermaid-like. The DFKI author does not yet publish a grammar, normalization rules, or a public implementation, so that proposed syntax should not be treated as settled. bpmn-beta's differentiation must rest on a working, documented implementation and clear scope rather than on claiming that the competing proposal is inherently verbose.
 
+**Source review, 2026-09-17:** The issue remains open with the same labels and
+the same two author-authored examples. Its updated timestamp changed because
+[@filipsajdak posted on 2026-09-10](https://github.com/mermaid-js/mermaid/issues/7699#issuecomment-5615202671)
+about a separate native BPMN series tracked in
+[#8160](https://github.com/mermaid-js/mermaid/issues/8160). Direct API inspection
+confirmed that the diagram PR [#8166](https://github.com/mermaid-js/mermaid/pull/8166)
+and syntax documentation PR [#8167](https://github.com/mermaid-js/mermaid/pull/8167)
+are open drafts targeting `develop`, not merged work. The contributor explicitly
+acknowledges OKHP3's published plugin and the existing `bpmn-beta` keyword. This
+is contributor recognition, not maintainer endorsement or a decision about core
+integration versus external plugins. The older dated observations below remain
+historical; they do not describe the current number of competing implementations.
+The public comparison now links this series. The DFKI author's examples remain
+unchanged, and this review does not establish a DOI or preprint for the cited paper.
+
 ### 1.4 Implications for bpmn-beta
 
 - The competitive whitespace is real: no tool combines (a) text-first DSL, (b) BPMN-shaped rendering, (c) no XML, (d) no bpmn-js dependency, and (e) Mermaid-idiom readability.

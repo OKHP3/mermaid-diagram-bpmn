@@ -6,7 +6,7 @@
     "title": "Add Native BPMN 2.0 Support to Mermaid.js",
     "state": "open",
     "stateReason": null,
-    "updatedAt": "2026-08-05T19:07:08Z",
+    "updatedAt": "2026-09-10T08:01:42Z",
     "author": "andreas-emrich",
     "labels": [
       "Contributor needed",
@@ -38,6 +38,6 @@
       }
     ]
   },
-  "reviewedAt": "2026-08-22",
+  "reviewedAt": "2026-09-17",
   "limitation": "This source check cannot prove that the cited DFKI paper has no DOI or preprint."
 }
