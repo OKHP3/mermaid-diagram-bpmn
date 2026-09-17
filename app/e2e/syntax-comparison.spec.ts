@@ -7,6 +7,12 @@
  * layout behavior.
  */
 import { expect, test } from '@playwright/test';
+import { readFileSync } from 'node:fs';
+
+const sourceBaseline = JSON.parse(readFileSync(
+  new URL('../../docs/dfki-7699-source-baseline.json', import.meta.url),
+  'utf8',
+));
 
 const PUBLIC_SYNTAX_LABELS = [
   'bpmn-beta',
@@ -44,7 +50,9 @@ test.describe('Syntax comparison public evidence', () => {
 
     await expect(
       page.getByText('DFKI #7699 example source', { exact: true }).locator('..'),
-    ).toContainText('reviewed 2026-08-22');
+    ).toContainText(`reviewed ${sourceBaseline.reviewedAt}`);
+    await expect(page.getByRole('link', { name: 'Mermaid issue #8160' }))
+      .toHaveAttribute('href', 'https://github.com/mermaid-js/mermaid/issues/8160');
     await expect(
       page.getByText('@derari live prototype', { exact: true }).locator('..'),
     ).toContainText('checked 2026-08-21');
