@@ -78,7 +78,11 @@ and syntax documentation PR [#8167](https://github.com/mermaid-js/mermaid/pull/8
 are open drafts targeting `develop`, not merged work. The contributor explicitly
 acknowledges OKHP3's published plugin and the existing `bpmn-beta` keyword. This
 is contributor recognition, not maintainer endorsement or a decision about core
-integration versus external plugins. The older dated observations below remain
+integration versus external plugins. The contributor also flags a potential
+`bpmn-beta` detector collision if native support ships in
+[#2623](https://github.com/mermaid-js/mermaid/issues/2623#issuecomment-5615197016).
+The project's tested Mermaid target remains 11.4.1; this source review does not
+extend that compatibility claim. The older dated observations below remain
 historical; they do not describe the current number of competing implementations.
 The public comparison now links this series. The DFKI author's examples remain
 unchanged, and this review does not establish a DOI or preprint for the cited paper.
