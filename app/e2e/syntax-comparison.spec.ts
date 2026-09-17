@@ -7,7 +7,12 @@
  * layout behavior.
  */
 import { expect, test } from '@playwright/test';
-import sourceBaseline from '../../docs/dfki-7699-source-baseline.json';
+import { readFileSync } from 'node:fs';
+
+const sourceBaseline = JSON.parse(readFileSync(
+  new URL('../../docs/dfki-7699-source-baseline.json', import.meta.url),
+  'utf8',
+));
 
 const PUBLIC_SYNTAX_LABELS = [
   'bpmn-beta',
