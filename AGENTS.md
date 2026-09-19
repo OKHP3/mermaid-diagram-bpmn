@@ -110,9 +110,9 @@ docs/                        repository-level documentation
 ```
 
 The root workspace declares `app`, `lib/*`, `lib/integrations/*`, and
-`scripts` package patterns. Only `app` and `scripts` currently exist as
-workspace packages. Do not assume a `lib` package exists until it is added and
-documented.
+`scripts` package patterns. Current packages are `app`, `scripts`, and
+`lib/bpmn-plugin`. The consumer fixture under `fixtures/plugin-smoke` is
+installed separately and is not a workspace importer.
 
 ## Architecture and data flow
 
@@ -150,15 +150,20 @@ The declared and checked-in stack is:
 - Node.js 24 compatibility line in Replit and GitHub Actions
 - pnpm 10, declared as `pnpm@10.26.1` in the root manifest
 - TypeScript 7.0.2
-- React 19.2.7 and Vite 8.1.4
+- React 19.2.7 and Vite 8.2.2
 - Tailwind CSS 4 through the Vite plugin
 - wouter for client-side routing
 - Vitest 4.1.10 for application tests
 - ESM JavaScript for root validation and packaging scripts
 
-Replit provisions Python 3.11, but the repository has no Python application.
+Replit provisions Python 3.11. Python files support repository and skill
+maintenance; there is no Python web application or pip manifest.
 Older notes mention Express and Drizzle; the current application architecture
 does not use a backend, API, or database.
+
+See `docs/technology-inventory.md` for the dated inventory and maintenance plan,
+and `docs/technology-versions.md` / `.json` for generated package/action evidence.
+Manifests and the lockfile take precedence over dated prose version lists.
 
 ## Commands
 
@@ -177,6 +182,7 @@ pnpm run skill:test
 pnpm run check:generated
 pnpm run eval:run
 pnpm run technology:check
+pnpm run technology:test
 ```
 
 The application build generates `app/public/skills/`,
@@ -186,7 +192,15 @@ canonical sources change, regenerate and review the generated diff, then
 follow the repository's existing policy for whether generated files are
 committed.
 
-`pnpm run technology:check` uses the npm registry and needs network access.
+`pnpm run technology:check` inventories tracked manifests and locked packages,
+then queries npm, Node, Python, and action release sources. It needs network
+access and accepts `--output <markdown-path>`, `--json <json-path>`, and `--ci`.
+Failed lookups fail the audit and remain explicit in its report. The audit uses
+Node built-ins and Git without installing application dependencies. Offline
+regression tests run with `pnpm run technology:test` and in CI. The weekly
+workflow retains reports as artifacts; Dependabot proposes grouped updates.
+Runtime, fixture, CDN, and compatibility migrations follow the maintenance plan.
+The automation does not merge updates or publish new application versions.
 The other commands may also require the installed dependency tree.
 
 The deployment workflow uses this sequence:

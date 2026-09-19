@@ -4,13 +4,15 @@ on:
   pull_request:
     paths:
       - ".github/workflows/**"
+      - ".github/dependabot.yml"
       - ".replit"
       - "package.json"
-      - "app/package.json"
-      - "scripts/package.json"
+      - "**/package.json"
       - "pnpm-workspace.yaml"
       - "pnpm-lock.yaml"
       - "scripts/check-technology-versions.mjs"
+      - "scripts/technology-*.mjs"
+      - "docs/technology-*.md"
   schedule:
     - cron: "30 8 * * 1"
   workflow_dispatch:
@@ -21,21 +23,31 @@ permissions:
 jobs:
   audit:
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     steps:
       - name: Checkout
         uses: actions/checkout@v7
-
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v6
 
       - name: Setup Node.js
         uses: actions/setup-node@v6
         with:
           node-version: "24"
-          cache: "pnpm"
 
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile
+      # The audit uses Node built-ins and committed manifests/lockfiles. It can
+      # report drift even when the application dependency installation is broken.
+      - name: Test audit coverage and failure detection
+        run: node --test scripts/technology-inventory.test.mjs
 
       - name: Audit technology versions
-        run: pnpm run technology:check -- --ci
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: node scripts/check-technology-versions.mjs --ci --output technology-audit/technology-versions.md --json technology-audit/technology-versions.json
+
+      - name: Preserve the report, including incomplete evidence
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: technology-version-audit
+          path: technology-audit/
+          if-no-files-found: warn
+          retention-days: 30

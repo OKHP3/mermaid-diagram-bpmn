@@ -1,229 +1,168 @@
-# Technology inventory
+# Technology inventory and update maintenance
 
-Snapshot date: 2026-07-13
+Reviewed: September 18, 2026 (America/Chicago). Retrieval timestamps use UTC.
+Baseline: `51ef37187fc09582333164ac18b41a8232bff0c0`, verified against GitHub main and Replit.
 
-This inventory covers the checked-in application, workspace packages, build and
-test configuration, Replit configuration, and GitHub Actions workflows. The
-resolved version is the version installed from `pnpm-lock.yaml`. The latest
-version is a stable release reported by the npm registry or the upstream
-project release page on the snapshot date.
+The complete version list is [technology-versions.md](technology-versions.md), with structured evidence in [technology-versions.json](technology-versions.json). It covers all 29 tracked package manifests, 326 npm package names and 346 resolutions in the lockfile, six catalog entries not consumed through `catalog:`, seven GitHub Actions, and 21 Python files. Each package's latest-version claim links to its publisher's npm registry record.
 
-## Executive summary
+**Confirmed:** This solution comprises a static React/TypeScript application, a Mermaid plugin source package, and portable process skills. Node runs builds and maintenance scripts. Python supports repository and skill maintenance, not a web backend. JavaScript, HTML, CSS, SVG, and browser APIs support the application. There is no Python application or pip manifest. Express and Drizzle are not application dependencies; the unused Drizzle catalog declaration does not establish runtime use.
 
-The active solution is a client-side React application written in TypeScript,
-built with Vite and Tailwind CSS, tested with Vitest, and published as a static
-GitHub Pages site. Node.js and pnpm run the workspace and validation scripts.
+## Main technologies and available releases
 
-Python 3.11 is provisioned in `.replit`, but the repository contains no Python
-source or Python package manifest. Express and Drizzle are mentioned in older
-project notes but are not installed or imported by the current solution.
+These are snapshot observations, not upgrades performed by this change. npm comparisons come from the [registry evidence](technology-versions.json). The generated report contains every direct, peer, fixture, transitive, action, and override entry.
 
-The foundational upgrade in this change moves the workspace to TypeScript 7,
-Vite 8, Vitest 4, Tailwind CSS 4.3, and the React 19.2 release line. The
-production build and application test suite pass on the upgraded stack.
+| Technology                  | Repository / locked version | Latest stable found                       | Treatment                                                             |
+| --------------------------- | --------------------------- | ----------------------------------------- | --------------------------------------------------------------------- |
+| TypeScript                  | 7.0.2                       | 7.0.2                                     | Current                                                               |
+| React / React DOM           | 19.2.7 / 19.2.7             | 19.3.0 / 19.3.0                           | Update together with React types                                      |
+| Vite                        | 8.2.2                       | 8.3.0                                     | Validate app and plugin builds                                        |
+| Vite React plugin           | 6.1.0                       | 6.1.1                                     | Validate JSX integration                                              |
+| Tailwind CSS / Vite adapter | 4.3.2 / 4.3.3               | 4.3.3 / 4.3.3                             | Group CSS updates                                                     |
+| Vitest                      | 4.1.10                      | 5.0.1                                     | Separate major migration; 4.1.11 is the current-major option          |
+| Playwright                  | 1.62.1                      | 1.63.0                                    | Install matching browser binaries; test all three engines             |
+| Mermaid                     | 11.4.1                      | 12.0.0                                    | Compatibility migration; latest 11.x is 11.17.2                       |
+| lucide-react                | 0.545.0                     | 1.47.0                                    | Check icon exports and visual behavior                                |
+| wouter                      | 3.10.0                      | 3.11.1                                    | Test routes, base path, and sharing                                   |
+| happy-dom                   | 20.11.12                    | 20.14.5                                   | Coordinate smoke fixture                                              |
+| tsx                         | 4.23.0                      | 4.23.13                                   | Tooling update                                                        |
+| Prettier                    | 3.9.6                       | 3.9.8                                     | Tooling update                                                        |
+| Node.js                     | Major 24 in CI and Replit   | 26.9.0 Current; 24.21.0 LTS               | Follow Node 24 patches; review new LTS major before migration         |
+| pnpm                        | 10.26.1 declared            | Highest stable 12.5.1; default tag 12.4.2 | Start with supported-major 10.34.5; review major migration separately |
+| Python                      | Replit module 3.11          | 3.14.7; 3.11 line 3.11.16                 | Host/tooling maintenance                                              |
 
-## Core technology matrix
+The pnpm highest release and npm default tag differ. The audit records both, filters prereleases and deprecated releases, and computes candidates at least 24 hours old. A new version does not establish compatibility. Runtime sources: [Node release index](https://nodejs.org/dist/index.json), [Python releases](https://www.python.org/downloads/), [pnpm registry](https://registry.npmjs.org/pnpm).
 
-| Technology                 | In use now                                                              | Latest stable reference                     | Evidence and notes                                       |
-| -------------------------- | ----------------------------------------------------------------------- | ------------------------------------------- | -------------------------------------------------------- |
-| JavaScript                 | ESM JavaScript in 13 `.mjs` scripts plus browser output from TypeScript | ECMAScript target is intentionally `ES2022` | `package.json`, `app/package.json`, `tsconfig.base.json` |
-| TypeScript                 | 7.0.2 resolved, `~7.0.2` declared                                       | 7.0.2                                       | Root and workspace TypeScript compilation                |
-| Node.js                    | 24.11.1 on this workstation; Node 24 in Replit and CI                   | 24.18.0 LTS; 26.5.0 current                 | Node 24 is the selected compatibility line               |
-| pnpm                       | 10.26.1 (`pnpm@10.26.1` declared in root `package.json`)                | 11.12.0                                     | Workspace package manager and lockfile producer          |
-| React                      | 19.2.7                                                                  | 19.2.7                                      | Browser UI and SVG renderer                              |
-| React DOM                  | 19.2.7                                                                  | 19.2.7                                      | Browser mount in `app/src/main.tsx`                      |
-| Vite                       | 8.1.4                                                                   | 8.1.4                                       | Dev server and production bundler                        |
-| Vite React plugin          | 6.0.3                                                                   | 6.0.3                                       | TypeScript JSX transform and React integration           |
-| Tailwind CSS               | 4.3.2                                                                   | 4.3.2                                       | CSS utility framework via the Vite plugin                |
-| Tailwind Vite plugin       | 4.3.2                                                                   | 4.3.2                                       | `app/vite.config.ts`                                     |
-| Tailwind Typography        | 0.5.20                                                                  | 0.5.20                                      | Tailwind plugin dependency                               |
-| Routing                    | wouter 3.10.0                                                           | 3.10.0                                      | Client-side routes in `app/src/app.tsx`                  |
-| Icons                      | lucide-react 0.545.0                                                    | 1.24.0                                      | UI icon components                                       |
-| CSS class composition      | clsx 2.1.1 and tailwind-merge 3.6.0                                     | 2.1.1 and 3.6.0                             | `app/src/lib/utils.ts`                                   |
-| ZIP packaging              | fflate 0.8.3 in the browser; archiver 8.0.0 in scripts                  | 0.8.3 and 8.0.0                             | Browser downloads and skill package creation             |
-| Unit testing               | Vitest 4.1.10                                                           | 4.1.10                                      | TypeScript and TSX tests                                 |
-| React testing              | Testing Library React 16.3.2 and DOM 10.4.1                             | 16.3.2 and 10.4.1                           | Renderer tests                                           |
-| Test DOM support           | happy-dom 20.10.6                                                       | 20.10.6                                     | Installed test dependency                                |
-| TypeScript script runner   | tsx 4.23.0                                                              | 4.23.1                                      | 4.23.1 is within the 24-hour maturity window             |
-| Static hosting             | GitHub Pages                                                            | Current platform service                    | `.github/workflows/deploy-gh-pages.yml`                  |
-| CI automation              | GitHub Actions                                                          | Current action releases listed below        | Deployment and audit workflows                           |
-| Replit development plugins | cartographer 0.5.5, dev-banner 0.1.2, runtime-error-modal 0.0.6         | 0.6.0, 0.1.2, 0.0.6                         | Development-only Vite integration                        |
-| Python                     | 3.11 provisioned by Replit only                                         | 3.14.6                                      | No `.py` files or Python dependency manifest found       |
+## Actual host observations
 
-### Current GitHub Actions versions
+| Surface                      | Node                      | pnpm                           | Python         | Other observed tooling                                                           |
+| ---------------------------- | ------------------------- | ------------------------------ | -------------- | -------------------------------------------------------------------------------- |
+| Windows, this session        | 24.11.1                   | Active command returns 11.19.0 | 3.14.0rc1      | Git 2.55.0.windows.5; npm 11.6.2; GitHub CLI 2.96.0                              |
+| Replit shell                 | 24.13.0                   | 10.26.1                        | 3.11.14        | Git 2.50.1; Bash 5.2.37; Nix 2.31.1 (Determinate Nix 3.11.2); Ubuntu 24.04.4 LTS |
+| GitHub Actions configuration | 24, floating within major | Root packageManager            | Not configured | ubuntu-latest; action references in generated report                             |
 
-| Action                          | Workflow reference | Latest stable release |
-| ------------------------------- | ------------------ | --------------------- |
-| `actions/checkout`              | `v7`               | `v7.0.0`              |
-| `pnpm/action-setup`             | `v6`               | `v6.0.8`              |
-| `actions/setup-node`            | `v6`               | `v6.4.0`              |
-| `actions/upload-pages-artifact` | `v5`               | `v5.0.0`              |
-| `actions/deploy-pages`          | `v5`               | `v5.0.0`              |
+**Confirmed:** Replit reported commit `51ef371` and a clean working tree. The GitHub connector reported the same full main SHA. Windows was clean before this audit work. **Unknown:** exact runtime/runner-image versions of a new hosted CI run; this change has not run in hosted CI.
 
-Dependabot is configured to propose GitHub Actions updates for review.
+The local pnpm command differs from the declaration. Use the repository's exact pnpm before regenerating its lockfile. Windows Python is a release candidate, not stable. This change does not alter globally installed tools. npm and GitHub CLI are workstation utilities, not application dependencies. Git upstream is [2.55.0](https://git-scm.com/install/), and Windows matches the [current Windows release](https://github.com/git-for-windows/git/releases/latest).
 
-## Direct npm package inventory
+Workstation release references are [npm 12.0.2](https://registry.npmjs.org/npm/12.0.2) and [GitHub CLI 2.101.0](https://github.com/cli/cli/releases/tag/v2.101.0). npm 12 requires Node 24.15.0 or later within Node 24, so the observed hosts need a Node patch upgrade first. Replit's Determinate Nix 3.11.2 is behind [3.22.5, based on upstream Nix 2.35.2](https://github.com/DeterminateSystems/nix-src/releases/tag/v3.22.5); availability in the Replit environment remains provider-controlled. These utilities should be reviewed with monthly host maintenance.
 
-These are all direct packages declared in the root, `app`, or `scripts`
-workspace manifests. Packages below are development dependencies unless noted.
-The list includes the current UI starter packages even where a source import
-was not found. Keeping them visible makes cleanup or future use an explicit
-decision.
+## Languages, standards, services, and platform dependencies
 
-### Root workspace
+| Technology                     | In-place contract                                              | Current reference / version treatment                                                                                                                                                      |
+| ------------------------------ | -------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| JavaScript / ECMAScript        | ESM scripts; TypeScript target and library ES2022              | [ECMAScript 2026, edition 17](https://ecma-international.org/publications-and-standards/standards/ecma-262/). Raising the target changes browser requirements; it is not a package update. |
+| HTML and browser APIs          | HTML doctype; DOM, clipboard, download, URL, storage, SVG APIs | [HTML Living Standard](https://html.spec.whatwg.org/); browser-managed, no pinned application version                                                                                      |
+| CSS                            | Native CSS, custom properties, Tailwind v4 directives          | [CSS Snapshot 2026](https://www.w3.org/TR/css/); modules have separate maturity levels                                                                                                     |
+| SVG                            | Native React and imperative SVG paths                          | [SVG 1.1 Recommendation](https://www.w3.org/TR/SVG11/); [SVG 2 is a Candidate Recommendation](https://www.w3.org/TR/SVG2/), not a package upgrade                                          |
+| JSON                           | Manifests, evidence, application data                          | [RFC 8259](https://www.rfc-editor.org/rfc/rfc8259)                                                                                                                                         |
+| YAML                           | Workflows, workspace, fixtures; limited custom parser          | [YAML 1.2.2](https://yaml.org/spec/1.2.2/); no repository-wide schema pin; custom parser is not a full implementation                                                                      |
+| TOML                           | Replit runtime and artifact registration                       | [TOML 1.1.0](https://toml.io/en/); Replit parser support is host-controlled                                                                                                                |
+| Markdown                       | Documentation and skills                                       | [GitHub Flavored Markdown 0.29-gfm](https://github.github.com/gfm/); files do not pin a parser edition                                                                                     |
+| BPMN                           | Descriptive subset; project bpmn-beta DSL                      | [OMG BPMN 2.0.2](https://www.omg.org/spec/BPMN); no executable/full-conformance claim                                                                                                      |
+| Agent Skills / BP-SKILL / PNS  | Repository-owned Markdown, YAML, metadata, generators          | [Agent Skills](https://agentskills.io/specification) is a living format; local package versions are in the generated inventory                                                             |
+| Actions / Pages / Dependabot   | Hosted CI, deployment, dependency PRs                          | Vendor-managed services; action references inventoried separately                                                                                                                          |
+| Replit                         | Development environment, modules, artifact registration        | Vendor-managed; verify runtime changes on the actual host                                                                                                                                  |
+| Google Fonts                   | CSS2 API: Alfa Slab One, DM Sans, JetBrains Mono               | [API v2](https://developers.google.com/fonts/docs/css2); remote font bytes are service-managed and not pinned                                                                              |
+| Google Analytics               | Existing gtag.js script in app/index.html                      | [Google tag](https://developers.google.com/tag-platform/gtagjs); no version pin. Existing exception to the stated production-CDN policy, requiring a separate decision.                    |
+| Optional analytics beacon      | VITE_ANALYTICS_ENDPOINT and analytics.ts                       | Operator-selected endpoint; GoatCounter/Plausible examples do not prove an active provider                                                                                                 |
+| jsDelivr                       | Example pins Mermaid 11.4.1 and project plugin 0.1.1           | Hosted CDN; coordinate package pins with integration/CDN tests                                                                                                                             |
+| Notion development integration | Direct REST; Notion-Version 2022-06-28; no SDK                 | Current API [2026-03-11](https://developers.notion.com/reference/versioning); migration needs integration review. No Notion request was sent.                                              |
+| Bash                           | Replit 5.2.37; shell helpers and Linux CI                      | [5.3 stable line](https://www.gnu.org/s/bash/manual/html_node/index.html); patch/backport selection belongs to host maintenance                                                            |
+| Nix                            | Replit Nix 2.31.1; stable-25_05 channel                        | Host-managed; upstream release availability does not prove Replit channel support                                                                                                          |
+| Ubuntu                         | Replit 24.04.4 LTS; CI ubuntu-latest alias                     | [26.04 LTS](https://documentation.ubuntu.com/release-notes/26.04/) exists; Replit base-image upgrades are provider-controlled                                                              |
 
-| Package                                                | Resolved | Latest stable |
-| ------------------------------------------------------ | -------: | ------------: |
-| [prettier](https://www.npmjs.com/package/prettier)     |    3.9.5 |         3.9.5 |
-| [typescript](https://www.npmjs.com/package/typescript) |    7.0.2 |         7.0.2 |
+Replit declares these browser-test system packages: `glib`, `nspr`, `nss`, `atk`, `xorg.libX11`, `xorg.libXcomposite`, `xorg.libXdamage`, `xorg.libXext`, `xorg.libXfixes`, `xorg.libXrandr`, `libgbm`, `libxkbcommon`, and `alsa-lib`. **Unknown:** exact active versions and latest compatible releases available in Replit's selected channel. No individual versions are pinned, and pkg-config was unavailable. Maintain these together through the host channel and Playwright system-dependency installation. This inventory covers declared identities, not a full operating-system SBOM or exact builds of unversioned services.
 
-### Application workspace
+The installed Playwright 1.62.1 browser manifest selects Chromium 151.0.7922.34 (revision 1234), Firefox 153.0 (1538), WebKit 26.5 (2336, with OS overrides), and FFmpeg revision 1011. This is manifest evidence, not proof every binary was launched. Track the revisions delivered by the selected Playwright release instead of independently replacing its test browsers.
 
-| Package                                                                                                          | Resolved | Latest stable |
-| ---------------------------------------------------------------------------------------------------------------- | -------: | ------------: |
-| [@hookform/resolvers](https://www.npmjs.com/package/@hookform/resolvers)                                         |   3.10.0 |         5.4.0 |
-| [@radix-ui/react-accordion](https://www.npmjs.com/package/@radix-ui/react-accordion)                             |   1.2.12 |        1.2.16 |
-| [@radix-ui/react-alert-dialog](https://www.npmjs.com/package/@radix-ui/react-alert-dialog)                       |   1.1.15 |        1.1.19 |
-| [@radix-ui/react-aspect-ratio](https://www.npmjs.com/package/@radix-ui/react-aspect-ratio)                       |    1.1.8 |        1.1.11 |
-| [@radix-ui/react-avatar](https://www.npmjs.com/package/@radix-ui/react-avatar)                                   |   1.1.11 |         1.2.2 |
-| [@radix-ui/react-checkbox](https://www.npmjs.com/package/@radix-ui/react-checkbox)                               |    1.3.3 |         1.3.7 |
-| [@radix-ui/react-collapsible](https://www.npmjs.com/package/@radix-ui/react-collapsible)                         |   1.1.12 |        1.1.16 |
-| [@radix-ui/react-context-menu](https://www.npmjs.com/package/@radix-ui/react-context-menu)                       |    2.3.1 |         2.3.3 |
-| [@radix-ui/react-dialog](https://www.npmjs.com/package/@radix-ui/react-dialog)                                   |   1.1.15 |        1.1.19 |
-| [@radix-ui/react-dropdown-menu](https://www.npmjs.com/package/@radix-ui/react-dropdown-menu)                     |   2.1.16 |        2.1.20 |
-| [@radix-ui/react-hover-card](https://www.npmjs.com/package/@radix-ui/react-hover-card)                           |   1.1.15 |        1.1.19 |
-| [@radix-ui/react-label](https://www.npmjs.com/package/@radix-ui/react-label)                                     |    2.1.8 |        2.1.11 |
-| [@radix-ui/react-menubar](https://www.npmjs.com/package/@radix-ui/react-menubar)                                 |   1.1.16 |        1.1.20 |
-| [@radix-ui/react-navigation-menu](https://www.npmjs.com/package/@radix-ui/react-navigation-menu)                 |   1.2.14 |        1.2.18 |
-| [@radix-ui/react-popover](https://www.npmjs.com/package/@radix-ui/react-popover)                                 |   1.1.15 |        1.1.19 |
-| [@radix-ui/react-progress](https://www.npmjs.com/package/@radix-ui/react-progress)                               |    1.1.8 |        1.1.12 |
-| [@radix-ui/react-radio-group](https://www.npmjs.com/package/@radix-ui/react-radio-group)                         |    1.3.8 |         1.4.3 |
-| [@radix-ui/react-scroll-area](https://www.npmjs.com/package/@radix-ui/react-scroll-area)                         |   1.2.10 |        1.2.14 |
-| [@radix-ui/react-select](https://www.npmjs.com/package/@radix-ui/react-select)                                   |    2.2.6 |         2.3.3 |
-| [@radix-ui/react-separator](https://www.npmjs.com/package/@radix-ui/react-separator)                             |    1.1.8 |        1.1.11 |
-| [@radix-ui/react-slider](https://www.npmjs.com/package/@radix-ui/react-slider)                                   |    1.3.6 |         1.4.3 |
-| [@radix-ui/react-slot](https://www.npmjs.com/package/@radix-ui/react-slot)                                       |    1.2.4 |         1.3.0 |
-| [@radix-ui/react-switch](https://www.npmjs.com/package/@radix-ui/react-switch)                                   |    1.2.6 |         1.3.3 |
-| [@radix-ui/react-tabs](https://www.npmjs.com/package/@radix-ui/react-tabs)                                       |   1.1.13 |        1.1.17 |
-| [@radix-ui/react-toast](https://www.npmjs.com/package/@radix-ui/react-toast)                                     |   1.2.15 |        1.2.19 |
-| [@radix-ui/react-toggle](https://www.npmjs.com/package/@radix-ui/react-toggle)                                   |   1.1.10 |        1.1.14 |
-| [@radix-ui/react-toggle-group](https://www.npmjs.com/package/@radix-ui/react-toggle-group)                       |   1.1.11 |        1.1.15 |
-| [@radix-ui/react-tooltip](https://www.npmjs.com/package/@radix-ui/react-tooltip)                                 |    1.2.8 |        1.2.12 |
-| [@replit/vite-plugin-cartographer](https://www.npmjs.com/package/@replit/vite-plugin-cartographer)               |    0.5.5 |         0.6.0 |
-| [@replit/vite-plugin-dev-banner](https://www.npmjs.com/package/@replit/vite-plugin-dev-banner)                   |    0.1.2 |         0.1.2 |
-| [@replit/vite-plugin-runtime-error-modal](https://www.npmjs.com/package/@replit/vite-plugin-runtime-error-modal) |    0.0.6 |         0.0.6 |
-| [@tailwindcss/typography](https://www.npmjs.com/package/@tailwindcss/typography)                                 |   0.5.19 |        0.5.20 |
-| [@tailwindcss/vite](https://www.npmjs.com/package/@tailwindcss/vite)                                             |    4.3.2 |         4.3.2 |
-| [@tanstack/react-query](https://www.npmjs.com/package/@tanstack/react-query)                                     |  5.90.21 |       5.101.2 |
-| [@testing-library/dom](https://www.npmjs.com/package/@testing-library/dom)                                       |   10.4.1 |        10.4.1 |
-| [@testing-library/react](https://www.npmjs.com/package/@testing-library/react)                                   |   16.3.2 |        16.3.2 |
-| [@types/node](https://www.npmjs.com/package/@types/node)                                                         |   26.1.1 |        26.1.1 |
-| [@types/react](https://www.npmjs.com/package/@types/react)                                                       |  19.2.17 |       19.2.17 |
-| [@types/react-dom](https://www.npmjs.com/package/@types/react-dom)                                               |   19.2.3 |        19.2.3 |
-| [@vitejs/plugin-react](https://www.npmjs.com/package/@vitejs/plugin-react)                                       |    6.0.3 |         6.0.3 |
-| [class-variance-authority](https://www.npmjs.com/package/class-variance-authority)                               |    0.7.1 |         0.7.1 |
-| [clsx](https://www.npmjs.com/package/clsx)                                                                       |    2.1.1 |         2.1.1 |
-| [cmdk](https://www.npmjs.com/package/cmdk)                                                                       |    1.1.1 |         1.1.1 |
-| [date-fns](https://www.npmjs.com/package/date-fns)                                                               |    3.6.0 |         4.4.0 |
-| [embla-carousel-react](https://www.npmjs.com/package/embla-carousel-react)                                       |    8.6.0 |         8.6.0 |
-| [fflate](https://www.npmjs.com/package/fflate)                                                                   |    0.8.3 |         0.8.3 |
-| [framer-motion](https://www.npmjs.com/package/framer-motion)                                                     |  12.40.0 |       12.42.2 |
-| [happy-dom](https://www.npmjs.com/package/happy-dom)                                                             |  20.10.6 |       20.10.6 |
-| [input-otp](https://www.npmjs.com/package/input-otp)                                                             |    1.4.2 |         1.4.2 |
-| [lucide-react](https://www.npmjs.com/package/lucide-react)                                                       |  0.545.0 |        1.24.0 |
-| [next-themes](https://www.npmjs.com/package/next-themes)                                                         |    0.4.6 |         0.4.6 |
-| [react](https://www.npmjs.com/package/react)                                                                     |   19.2.7 |        19.2.7 |
-| [react-day-picker](https://www.npmjs.com/package/react-day-picker)                                               |   9.14.0 |        10.0.1 |
-| [react-dom](https://www.npmjs.com/package/react-dom)                                                             |   19.2.7 |        19.2.7 |
-| [react-hook-form](https://www.npmjs.com/package/react-hook-form)                                                 |   7.77.0 |        7.81.0 |
-| [react-icons](https://www.npmjs.com/package/react-icons)                                                         |    5.6.0 |         5.7.0 |
-| [react-resizable-panels](https://www.npmjs.com/package/react-resizable-panels)                                   |    2.1.9 |        4.12.2 |
-| [recharts](https://www.npmjs.com/package/recharts)                                                               |   2.15.4 |         3.9.2 |
-| [sonner](https://www.npmjs.com/package/sonner)                                                                   |    2.0.7 |         2.0.7 |
-| [tailwind-merge](https://www.npmjs.com/package/tailwind-merge)                                                   |    3.6.0 |         3.6.0 |
-| [tailwindcss](https://www.npmjs.com/package/tailwindcss)                                                         |    4.3.2 |         4.3.2 |
-| [tw-animate-css](https://www.npmjs.com/package/tw-animate-css)                                                   |    1.4.0 |         1.4.0 |
-| [vaul](https://www.npmjs.com/package/vaul)                                                                       |    1.1.2 |         1.1.2 |
-| [vite](https://www.npmjs.com/package/vite)                                                                       |    8.1.4 |         8.1.4 |
-| [vitest](https://www.npmjs.com/package/vitest)                                                                   |   4.1.10 |        4.1.10 |
-| [wouter](https://www.npmjs.com/package/wouter)                                                                   |   3.10.0 |        3.10.0 |
-| [zod](https://www.npmjs.com/package/zod)                                                                         |    4.4.3 |         4.4.3 |
+## Implemented maintenance mechanism
 
-### Scripts workspace
+1. **Update proposals:** Dependabot checks workspace npm daily with a one-day cooldown. React and Tailwind are grouped with related packages. Other compatible minor/patch tooling updates share a group; Mermaid and lucide stay separate. Major upgrades need separate review. Actions are checked weekly and grouped. The existing Mermaid-major exclusion remains, with a manual migration path below.
+2. **Independent audit:** technology:check discovers tracked manifests, lockfile identities, catalog entries, overrides, and actions. Live release comparisons include a snapshot-specific update plan. It uses Node built-ins and Git without an application install or new dependencies.
+3. **Scheduled evidence:** technology-version-audit.yml runs Mondays at 08:30 UTC, relevant PRs, and manual dispatch. It tests the audit, writes a summary, and uploads Markdown/JSON for 30 days. Its read-only GitHub token goes only to GitHub release queries. Lookup failures fail the job and preserve incomplete evidence.
+4. **Validation:** audit regression tests also run in normal CI. Existing application, skill, plugin, browser, content, and deployment gates remain. Nothing auto-merges or changes the live app merely because a version exists.
 
-| Package                                                  | Resolved | Latest stable |
-| -------------------------------------------------------- | -------: | ------------: |
-| [archiver](https://www.npmjs.com/package/archiver)       |    8.0.0 |         8.0.0 |
-| [@types/node](https://www.npmjs.com/package/@types/node) |   26.1.1 |        26.1.1 |
-| [tsx](https://www.npmjs.com/package/tsx)                 |   4.23.0 |        4.23.1 |
+The revised files must reach the default branch before the new schedule behavior/grouping is active. Local validation does not prove hosted execution. Dependabot was already configured in the baseline; this change improves grouping and audit coverage.
 
-## Other technologies and standards in the solution
+GitHub documents [pnpm catalogs](https://github.blog/changelog/2025-02-04-dependabot-now-supports-pnpm-workspace-catalogs-ga/) and currently lists [pnpm through v10](https://docs.github.com/en/code-security/reference/supply-chain-security/supported-ecosystems-and-repositories). Validate updater support before jumping to pnpm 12. The [options reference](https://docs.github.com/en/code-security/reference/supply-chain-security/dependabot-options-reference) governs grouping, cooldown, and ignores.
 
-| Technology or standard          | Version or status                                            | Use                                                  |
-| ------------------------------- | ------------------------------------------------------------ | ---------------------------------------------------- |
-| HTML                            | HTML5 document structure                                     | Vite entry point and static assets                   |
-| CSS                             | Native CSS with Tailwind v4 directives and custom properties | Forge theme tokens and application styles            |
-| SVG                             | SVG 1.1 style output                                         | Hand-written BPMN renderer output                    |
-| YAML                            | YAML configuration and fixture files                         | Workflows, workspace config, skills, and evaluations |
-| TOML                            | Replit artifact and runtime configuration                    | `.replit` and Replit artifact registration           |
-| Markdown                        | GitHub-flavored Markdown                                     | Documentation, skills, context, and examples         |
-| Mermaid external diagram API    | API target, not installed as a runtime dependency            | `registerExternalDiagrams()` integration path        |
-| BPMN 2.0.2 descriptive notation | Standards reference                                          | Shapes, markers, flows, pools, and lanes             |
-| Google Fonts                    | Alfa Slab One, DM Sans, JetBrains Mono                       | Font resources linked from `app/index.html`          |
-| Git                             | Repository version control                                   | Source history and lockfile review                   |
+## Gaps outside Dependabot and required follow-through
 
-## Version maintenance plan
+Owner: repository maintainer. Review the weekly report and use one maintenance PR per compatibility boundary. Every exception should record current/candidate versions, reason for holding, required checks, and next review date. Detection and supported dependency PRs are automated; approval, runtime migrations, and rollout are deliberate steps.
 
-The repository now uses three layers of maintenance:
+| Surface                                | Follow-through                                                                                                                                                                                                                                         |
+| -------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| pnpm                                   | Evaluate same-major 10.34.5 first. Update packageManager, use that exact pnpm, regenerate/commit its lockfile, and test Linux plus Windows. Major migrations must confirm updater and build-script/lockfile support.                                   |
+| Node                                   | CI's 24 selector tracks that line. Update local Node and supported Replit runtime, then verify node --version. New LTS majors need all workflow selectors and .replit updated together after tests; Current is not an automatic LTS migration trigger. |
+| Python                                 | Evaluate 3.11.16 for Replit and stable 3.14.7 locally. Verify Replit module availability and run skill Python tests before a line change. No pip manifest is needed for standard-library tooling.                                                      |
+| Mermaid                                | Update app pin, standalone smoke fixture, CDN example, integration assertions, compatibility record, release manifest, and peer claims together. Require real host, packed-plugin, strict CDN, and visual checks for either 11.x or 12.x.              |
+| Standalone smoke fixture               | It contains a generated local tarball reference and is outside the workspace. Coordinate happy-dom/Mermaid declarations in the app PR and run plugin:smoke; do not ask Dependabot to install a missing tarball.                                        |
+| Transitives / overrides                | Update responsible parents and regenerate with pnpm. Review security purpose, licenses, and native exclusions. Do not force every transitive package to its latest major independently.                                                                |
+| Node types                             | Version 26 types accompany Node 24. Review alignment to avoid accepting APIs absent from the runtime. Types do not update Node.                                                                                                                        |
+| Host packages / browsers               | Reinstall browsers for the chosen Playwright version; verify Linux libraries and Windows behavior. Replit controls base-image/channel availability. Record actual versions after changes.                                                              |
+| Notion / standards / external services | Review release/deprecation notices monthly and after behavior changes. API migrations need targeted checks. Living standards and hosted services are not semver package updates.                                                                       |
 
-1. `.github/dependabot.yml` checks npm dependencies and GitHub Actions weekly
-   and opens reviewable pull requests. The existing major-version exception for
-   the Mermaid contract remains in place.
-2. `scripts/check-technology-versions.mjs` runs `pnpm outdated`, checks the
-   current Node and pnpm releases, and writes a GitHub Actions job summary when
-   run with `--ci`. It does not modify source or dependency files.
-3. `.github/workflows/technology-version-audit.yml` runs the audit every Monday,
-   on relevant pull requests, and on demand. This makes drift visible even when
-   a dependency is not covered by a package manifest, such as a runtime major
-   version in `.replit` or an action tag.
+## Commands and acceptance
 
-The root `package.json` declares `packageManager: pnpm@10.26.1`. The deploy
-workflow no longer hardcodes a separate pnpm major, so the workflow and local
-workspace use the same package-manager declaration.
+Refresh evidence without updating dependencies:
 
-### Review sequence for an update pull request
+```sh
+pnpm run technology:test
+pnpm run technology:check -- --output docs/technology-versions.md --json docs/technology-versions.json
+```
 
-1. Let Dependabot create the version update pull request.
-2. Inspect the audit summary and the dependency changelog.
-3. Run `pnpm run typecheck`, the application test command, skill validation,
-   skill tests, and `pnpm build`.
-4. For Vite, TypeScript, React, Vitest, Tailwind, or Mermaid compatibility
-   changes, review the associated migration guide and plugin contract before
-   merging.
-5. Regenerate `pnpm-lock.yaml` only through pnpm and commit it with the manifest
-   change.
+GitHub API rate limits may require a locally supplied GITHUB_TOKEN; never commit it. CI supplies a built-in read token. Resolve failed queries and rerun instead of replacing UNKNOWN with a guess.
 
-Major upgrades remain deliberate review points. Patch and minor updates can be
-handled by the scheduled Dependabot cycle when the validation suite stays green.
+The audit also works directly with Node, even when local pnpm and the installed dependency tree disagree:
 
-## Sources
+```sh
+node --test scripts/technology-inventory.test.mjs
+node scripts/check-technology-versions.mjs --output docs/technology-versions.md --json docs/technology-versions.json
+```
 
-- [Node.js release status and release lines](https://nodejs.org/en/about/previous-releases)
-- [Node.js release index](https://nodejs.org/dist/index.json)
-- [pnpm releases](https://github.com/pnpm/pnpm/releases)
-- [React 19.2 release](https://react.dev/blog/2025/10/01/react-19-2)
-- [Vite 8 release](https://vite.dev/blog/announcing-vite8)
-- [Vite supported releases](https://vite.dev/releases)
-- [Tailwind CSS v4.3 announcement](https://tailwindcss.com/blog)
-- [Python 3.14.6 release](https://www.python.org/downloads/release/python-3146/)
-- [GitHub Dependabot version updates](https://docs.github.com/en/code-security/concepts/supply-chain-security/dependabot-version-updates)
-- [GitHub Actions updates with Dependabot](https://docs.github.com/en/code-security/how-tos/secure-your-supply-chain/secure-your-dependencies/auto-update-actions)
-- [actions/checkout releases](https://github.com/actions/checkout/releases)
-- [actions/setup-node releases](https://github.com/actions/setup-node/releases)
-- [pnpm/action-setup releases](https://github.com/pnpm/action-setup/releases)
-- [actions/upload-pages-artifact releases](https://github.com/actions/upload-pages-artifact/releases)
-- [actions/deploy-pages releases](https://github.com/actions/deploy-pages/releases)
+During this review, local pnpm 11 attempted an automatic dependency reinstall before running a formatting command and stopped with `ERR_PNPM_ABORTED_REMOVE_MODULES_DIR_NO_TTY`. The operation was not forced. Validation and formatting used Node directly, and dependency manifests and lockfile versions were not upgraded.
 
-Package-level latest versions are linked to each package's npm page in the
-inventory tables. Re-run `pnpm run technology:check` before relying on this
-dated snapshot for a new release decision.
+For actual update PRs, use the declared pnpm and run the existing gates:
+
+```sh
+pnpm install --frozen-lockfile
+pnpm run technology:test
+pnpm run typecheck
+pnpm --filter @workspace/mermaid-diagram-bpmn run test
+pnpm run skill:test
+pnpm run skill:validate
+pnpm run skill:validate:agents
+pnpm run check:generated
+pnpm run eval:run
+pnpm run check:release-gates -- --output .local/release-gate-report.json
+pnpm run check:content
+pnpm run check:version-status
+pnpm run manifest:check
+pnpm run check:browser-cdn
+pnpm run plugin:smoke
+pnpm run build
+pnpm --filter @workspace/mermaid-diagram-bpmn run test:e2e
+pnpm --filter @workspace/mermaid-diagram-bpmn run test:e2e:visual
+```
+
+Require CI for the exact PR commit, including Linux browser/visual jobs. After an approved merge, verify Pages and the live source SHA, then bring local and Replit copies forward while preserving uncommitted work. Failing upgrades stay open for remediation; retain the last passing lockfile and use a normal revert PR for released regressions.
+
+## Local validation of this maintenance change
+
+- Audit regression suite: 9 passed, covering lockfile extraction, catalog resolution, fixture boundaries, release selection, and explicit lookup failures.
+- Live audit at 2026-09-19T02:05:16Z: 332 npm registry lookups plus seven action release queries and Node/Python release checks; zero lookup failures.
+- Content validation, formatting checks for the new audit and configuration files, and `git diff --check`: passed. Git reported only its normal Windows line-ending conversion notices.
+- Application dependencies, application source, and the lockfile were not upgraded. Full application/browser suites and hosted CI were not run for this maintenance-only change.
+- Replit inspection was read-only; its shell was returned to an idle prompt. No Replit runtime or system package was installed or changed.
+
+## Evidence boundary
+
+| Claim                               | Tier                              | Evidence                                     | Remaining check                    |
+| ----------------------------------- | --------------------------------- | -------------------------------------------- | ---------------------------------- |
+| Version identities and ranges       | Confirmed                         | Manifests, lockfile, configuration scan      | Refresh after changes              |
+| Latest releases                     | Confirmed at retrieval            | Publisher URLs/timestamps in generated files | Refresh before choosing candidates |
+| Candidates work with this app       | Proposal                          | Version comparison only                      | Per-upgrade validation             |
+| Exact service/native-library builds | Unknown where unpinned/unobserved | Platform boundaries above                    | Provider/live-host inventory       |
+| Revised automation active           | Not yet verified                  | Local implementation                         | Merge and run once on GitHub       |
+
+Next action: land the maintenance files, run the hosted audit once, and process candidates through CI and deployment checks.

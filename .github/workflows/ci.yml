@@ -47,6 +47,9 @@ jobs:
       - name: Type-check
         run: pnpm run typecheck
 
+      - name: Test technology inventory and release lookup failure detection
+        run: pnpm run technology:test
+
       - name: Build app (produces the manifest for the bundle-size gate)
         run: pnpm --filter @workspace/mermaid-diagram-bpmn run build
 
