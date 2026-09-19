@@ -1,0 +1,110 @@
+{
+  "skill_name": "okhp3-replit-task-executor",
+  "skill_version": "1.2.0",
+  "evaluation_status": "analytical",
+  "host_activation_benchmark": "not-run",
+  "holdout_seen": true,
+  "criteria": "Classify explicit and implicit external task handoff/return separately from adjacent design, Git cleanup, publishing, and general coding tasks. Wrong inclusion must not execute anything.",
+  "queries": [
+    {
+      "id": "route-1",
+      "query": "Use okhp3-replit-task-executor for this approved plan.",
+      "expected_route": "use"
+    },
+    {
+      "id": "route-2",
+      "query": "Replit planned this; have Codex implement it.",
+      "expected_route": "use"
+    },
+    {
+      "id": "route-3",
+      "query": "Keep Replit as PM and designer while Claude Code handles architecture.",
+      "expected_route": "use"
+    },
+    {
+      "id": "route-4",
+      "query": "Return this completed GitHub fix to the Replit board.",
+      "expected_route": "use"
+    },
+    {
+      "id": "route-5",
+      "query": "Can a Shell receipt tell Replit a task is done?",
+      "expected_route": "use"
+    },
+    {
+      "id": "route-6",
+      "query": "Review .agents/skills/okhp3-replit-task-executor for this handoff.",
+      "expected_route": "use"
+    },
+    {
+      "id": "route-7",
+      "query": "Take the current Replit backlog externally without duplicate coding.",
+      "expected_route": "use"
+    },
+    {
+      "id": "route-8",
+      "query": "Copilot should implement these Replit acceptance criteria.",
+      "expected_route": "use"
+    },
+    {
+      "id": "route-9",
+      "query": "Resume the external Replit task using its saved packet.",
+      "expected_route": "use"
+    },
+    {
+      "id": "route-10",
+      "query": "Replit UI/UX review requested a correction to our merged task.",
+      "expected_route": "use"
+    },
+    {
+      "id": "route-11",
+      "query": "Handle a Replit task handof after its quota ran out.",
+      "expected_route": "use"
+    },
+    {
+      "id": "route-12",
+      "query": "Recover already completed Replit task commits before executing the next plan.",
+      "expected_route": "use"
+    },
+    {
+      "id": "route-13",
+      "query": "Design a standalone homepage in Replit; no external execution.",
+      "expected_route": "do-not-use"
+    },
+    {
+      "id": "route-14",
+      "query": "Explain how Python decorators work.",
+      "expected_route": "do-not-use"
+    },
+    {
+      "id": "route-15",
+      "query": "Audit all repositories for stale branches.",
+      "expected_route": "do-not-use"
+    },
+    {
+      "id": "route-16",
+      "query": "Publish a Replit app without a task handoff.",
+      "expected_route": "do-not-use"
+    },
+    {
+      "id": "route-17",
+      "query": "Translate this article into French.",
+      "expected_route": "do-not-use"
+    },
+    {
+      "id": "route-18",
+      "query": "List my Replit apps only.",
+      "expected_route": "do-not-use"
+    },
+    {
+      "id": "route-19",
+      "query": "Plan a new feature in Replit only; no execution handoff.",
+      "expected_route": "do-not-use"
+    },
+    {
+      "id": "route-20",
+      "query": "Update a Mermaid diagram theme.",
+      "expected_route": "do-not-use"
+    }
+  ]
+}

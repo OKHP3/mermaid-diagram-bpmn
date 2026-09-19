@@ -1,0 +1,82 @@
+{
+  "schema_version": "1.0",
+  "review_protocol": "equilibrium-v1",
+  "pass": 1,
+  "evaluation_status": "analytical",
+  "evaluated_skill_version": "0.1.0",
+  "resulting_candidate_version": "0.2.0",
+  "artifact_sha256": "e515475c89fab07efab4112620d0bbea93303c70b76473f714b60234080184c0",
+  "hash_scope": "Frozen baseline raw bytes; case-insensitive relative-path order; exact path + NUL + lowercase SHA256 + LF. Ordering clarified after pass 2; historical digest unchanged.",
+  "hypothesis": "A role-preserving handoff and bounded return will close knowledge/contract gaps exposed by the partial pilot.",
+  "source_evidence": [
+    "Owner role clarification, 2026-09-19",
+    "Historical partial v0.1.0 exercise",
+    "Sanitized native completion and Shell observations in references/replit-semantics.md"
+  ],
+  "independence": {
+    "reviewer_contexts_separated": true,
+    "shared_model_or_source_limits": [
+      "Same model family",
+      "Shared frozen artifact and source packet",
+      "Analytical review, not live host behavior"
+    ]
+  },
+  "initial_reviews": [
+    {
+      "role": "evidence",
+      "decision": "approve-with-limits",
+      "finding_summary": "Localized role, native-completion distinction, and bounded-return changes required; existing ownership/authority safeguards retained."
+    },
+    {
+      "role": "outcome",
+      "decision": "reject",
+      "finding_summary": "Localized role, native-completion distinction, and bounded-return changes required; existing ownership/authority safeguards retained."
+    },
+    {
+      "role": "safety",
+      "decision": "reject",
+      "finding_summary": "Localized role, native-completion distinction, and bounded-return changes required; existing ownership/authority safeguards retained."
+    }
+  ],
+  "concordance": "material-agreement-on-required-revisions",
+  "disruptor": {
+    "triggered": true,
+    "hypotheses": [
+      "Queue changes after administrative preflight",
+      "Design acceptance uses a stale rendered build despite source parity"
+    ],
+    "test_results": [
+      "Analytical pending decision with expected-state/serialized handoff requirement",
+      "Analytical invalidation of design acceptance until rendered revision is established"
+    ]
+  },
+  "negotiator": {
+    "triggered": true,
+    "decision": "approve-with-limits",
+    "scope": "Advance corrected candidate to pass 2, not final release"
+  },
+  "retained_changes": [
+    "Explicit PM/design vs external architecture/code responsibilities",
+    "Context/config/provenance/native-board distinction",
+    "Completion receipt and bounded administrative-return procedure",
+    "Finite batch, design acceptance, source recovery and historical evidence cases",
+    "Submission-race and stale-preview guards"
+  ],
+  "rejected_alternatives": [
+    "Blanket task cancellation",
+    "Internal state editing or private action replay",
+    "Treating source synchronization as native Done",
+    "Measured cost or portability claims without data"
+  ],
+  "regression_risks": [
+    "Administrative effects may be unavailable or unenforceable",
+    "Design review could use stale evidence",
+    "Instructions may be mistaken for locks"
+  ],
+  "decision": "retain-and-advance",
+  "applicability_limits": [
+    "Draftable supervised contract only",
+    "No successful live external-to-native completion pilot",
+    "No unseen holdout or matched cost/cross-host benchmark"
+  ]
+}

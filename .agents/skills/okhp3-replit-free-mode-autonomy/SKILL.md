@@ -13,7 +13,7 @@ compatibility: >
   optional host support for scheduled retry opportunities and are conversation-bound.
 metadata:
   author: Jamie Hill (OverKill Hill P³)
-  version: "1.0.0"
+  version: "1.1.0"
   category: developer-tooling
   origin: okhp3/skillz
   homepage: https://overkillhill.com
@@ -60,18 +60,22 @@ permissions, quota, or platform interface.
    but a timer is only an opportunity to try again. Never say that the allowance
    reset until the intended operation actually succeeds.
 
-4. **Keep the checkpoint useful.** When work is interrupted, record the completed
-   work, the exact blocked operation, changed files or artifacts, validation
-   already run, and the next safe action. Prefer the project's existing task,
-   handoff, or checkpoint mechanism. Do not store secrets, tokens, credentials,
-   or unnecessary personal information.
+4. **Keep the checkpoint and report useful.** When work is interrupted by a
+   quota, record and report each of these separately: completed work, changed
+   files or artifacts, the exact blocked operation, validations already run
+   (including their result), and exactly one next safe action. Do not replace
+   those details with a vague “resume later” message. Prefer the project's
+   existing task, handoff, or checkpoint mechanism. Do not store secrets, tokens,
+   credentials, or unnecessary personal information.
 
 5. **Respect approval boundaries.** Never fake, intercept, click, or
    automatically accept an approval request. For an external, destructive, paid,
    privileged, secret-related, or outbound-network action, show what would
    happen and stop at the platform's approval boundary. If the host offers an
-   “Always allow” setting, the user may select it for a trusted low-risk action;
-   the agent must not select it on the user's behalf.
+   “Always allow” setting, the user—not the agent—may select it for a trusted,
+   low-risk action. This is a user choice for that approval boundary; the agent
+   must not select it, configure it, or treat it as blanket permission on the
+   user's behalf.
 
 6. **Do not simulate success.** A scheduled retry, checkpoint, or permission
    request is not evidence that the work completed. Verify the actual result and
@@ -93,9 +97,11 @@ Mode allowance has been reached:
    inside the conversation that owns the work; do not imply it is a global
    scheduler for other Repls.
 6. On one routine run, read the checkpoint, attempt the exact blocked operation
-   at most once if it is safe and has not already succeeded, verify the outcome,
-   update the checkpoint, and stop. If the limit remains active, leave the
-   checkpoint intact and do not loop.
+   at most once if it is safe and has not already succeeded, then verify the
+   intended result. Report success only when that verification passes. Update
+   the checkpoint and stop. If the limit remains active, explicitly report that
+   it is still active, leave the checkpoint intact, and stop without a second
+   attempt or loop.
 7. If the retry reaches an approval card, stop and report that human approval is
    required. Do not schedule another attempt merely to bypass that boundary.
 
@@ -104,8 +110,9 @@ Use this routine message when appropriate:
 > Read the current project checkpoint and determine whether the last operation
 > was blocked by a Replit Free Mode usage limit. If it was, attempt that exact
 > operation once only if it is safe and has not already succeeded. Verify the
-> result, update the checkpoint, and report a concise outcome. If the limit is
-> still active, do not retry again in this run. Do not upgrade the plan, bypass
+> intended result before reporting success, update the checkpoint, and report a
+> concise outcome. If the limit is still active, state that it is still active,
+> stop, and do not retry again in this run. Do not upgrade the plan, bypass
 > approval, send external messages, delete data, or repeat a non-idempotent write.
 
 If the host does not support routines, provide the same message as a
@@ -128,12 +135,22 @@ policy across all Repls.
 
 ## Output contract
 
-At every interruption, return exactly this compact structure:
+At every interruption, return exactly this compact structure. For a quota
+interruption, fill every field with the concrete checkpoint contents rather
+than omitting or merging them. In `Next retry`, state at most one
+conversation-scoped routine opportunity no more frequently than every six
+hours when the host supports routines; otherwise state that no timer was
+created. The retry must verify the intended result before reporting success. If
+the limit is still active, report that fact, stop, and make no second attempt.
 
 ```text
 Status: <completed | checkpointed | waiting for approval | quota blocked>
-Completed: <files, artifacts, or validations finished>
+Completed: <work finished before the interruption>
+Changed files/artifacts: <paths or artifacts changed, or none>
+Blocked operation: <the exact operation that could not run or finish>
+Validations: <checks already run and their results, or none>
 Next retry: <one safe operation, or none>
+Retry rule: <verify the intended result before success; if still active, report it, stop, and make no second attempt>
 User action: <only if approval, missing input, or a platform limitation genuinely requires it>
 ```
 

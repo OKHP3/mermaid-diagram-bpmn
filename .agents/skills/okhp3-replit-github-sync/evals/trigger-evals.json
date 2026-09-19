@@ -8,6 +8,7 @@
     {"query": "The Replit Git UI will not commit my changes", "should_trigger": true, "triggered": true},
     {"query": "Pull the latest GitHub commits into this Repl safely", "should_trigger": true, "triggered": true},
     {"query": "Create a PR from my Replit branch and squash merge it", "should_trigger": true, "triggered": true},
+    {"query": "Local main and origin/main both advanced; reconcile them without rewriting shared history", "should_trigger": true, "triggered": true},
     {"query": "Force push this Replit branch over whatever is on GitHub", "should_trigger": false, "triggered": false},
     {"query": "Clean stale branches and old files from a Repl", "should_trigger": false, "triggered": false},
     {"query": "Deploy my Vite app from Replit", "should_trigger": false, "triggered": false},
@@ -15,7 +16,7 @@
     {"query": "Organize a Replit canvas for a designathon", "should_trigger": false, "triggered": false}
   ],
   "summary": {
-    "true_positives": 5,
+    "true_positives": 6,
     "false_negatives": 0,
     "true_negatives": 5,
     "false_positives": 0,

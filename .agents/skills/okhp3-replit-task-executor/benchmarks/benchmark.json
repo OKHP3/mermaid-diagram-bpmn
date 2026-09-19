@@ -1,0 +1,32 @@
+{
+  "metadata": {
+    "evaluated_skill_version": "1.2.0",
+    "evaluated_at": "2026-09-19",
+    "evaluation_status": "analytical",
+    "review_decision": "approve-with-limits",
+    "artifact_core_sha256": "8ea4162f12105d79bdea1f56d75d2cc20e182bbf6fb5b36e218d64eb97c0240a",
+    "blockers": [
+      "A current-version external implementation-to-native completion pilot remains pending.",
+      "Measured savings, live executor quality, cross-host behavior and an unseen holdout remain unverified."
+    ]
+  },
+  "runs": [],
+  "reviews": [
+    "pass-1-review.json",
+    "pass-2-review.json",
+    "pass-3-review.json"
+  ],
+  "development_evidence": "pass-3-development-review.json",
+  "live_benchmark_status": "not-run",
+  "holdout": {
+    "status": "external-required",
+    "holdout_seen": true
+  },
+  "notes": "Three analytical Foundry/Equilibrium passes; supervised draftable contract. The isolated local Git counterexample tests a merge failure mode, not native host execution.",
+  "limits": [
+    "Analytical contract and visible routing review, not an executor or host-activation benchmark.",
+    "Shared model family and source packet; all development expectations were visible.",
+    "Pass-3 safety context reused the prior-pass adjudicator after fresh-thread capacity was unavailable. It did not read sibling pass-3 reviews.",
+    "No unseen holdout, matched cost comparison, cross-host run, or successful current-version native-return pilot."
+  ]
+}

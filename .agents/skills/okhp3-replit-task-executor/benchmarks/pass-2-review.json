@@ -1,0 +1,112 @@
+{
+  "schema_version": "1.0",
+  "review_protocol": "equilibrium-v1",
+  "pass": 2,
+  "evaluation_status": "analytical",
+  "evaluated_skill_version": "0.2.0",
+  "artifact_core_sha256": "25a1d99c752a291798de8aaf5e0de511b584d50e4d15b2629219d12a1dc0d14f",
+  "hash_scope": "Frozen pass-2 core; LF-normalized bytes and case-insensitive relative-path ordering. This historical ordering ambiguity is corrected explicitly in pass 3.",
+  "hypothesis": "Role, receipt and concurrency corrections cover the known development decisions without false native-completion claims.",
+  "initial_reviews": [
+    {
+      "role": "evidence",
+      "decision": "approve-with-limits"
+    },
+    {
+      "role": "outcome",
+      "decision": "approve-with-limits"
+    },
+    {
+      "role": "safety",
+      "decision": "approve-with-limits"
+    }
+  ],
+  "initial_case_evidence": "development-review.json: 21 cases and 63 expectations traced manually against the frozen pass-2 contract.",
+  "concordance": "Material agreement; conditional disruption required.",
+  "disruptor": {
+    "triggered": true,
+    "counterexamples": [
+      {
+        "id": "target-base-advance-with-unchanged-pr-head",
+        "result": "survived initial candidate",
+        "test": "Isolated local Git fixture: unchanged candidate head, clean textual merge, focused test passed on old base and failed on combined advanced base."
+      },
+      {
+        "id": "private-receipt-in-public-pr",
+        "result": "rejected",
+        "test": "Existing privacy/access rules require an authorized private transfer or public-safe summary; inaccessible evidence is not publication authority."
+      }
+    ]
+  },
+  "retained_changes": [
+    "Add target-base-race development case before instruction revision.",
+    "Require validated integration result and supported head/current-base protection or verified serialization; otherwise defer integration.",
+    "Add tested-base, combined-result and submission-protection receipt fields.",
+    "Clarify portable hash ordering and analytical evidence metadata without claiming live runs."
+  ],
+  "negotiator": {
+    "decision": "approve-with-limits",
+    "scope": "advance-to-pass3",
+    "counterexample_retests": [
+      {
+        "id": "target-base-advance-with-unchanged-pr-head",
+        "original_disposition": "survives-on-frozen-candidate",
+        "current_disposition": "blocked-by-corrected-contract",
+        "evidence_status": "analytical-retest-with-reported-local-synthetic-fixture",
+        "decisive_trace": [
+          "At A, reviewed head H passes its relevant checks. U then advances the target base and changes the helper contract while H remains unchanged.",
+          "The unchanged H and clean textual merge do not establish validity of U+H. The supplied local fixture records a passing pre-change test and failing combined-result test.",
+          "Current Section 5 requires recording the tested base and validated integration result, invalidates affected evidence on relevant base movement, and explicitly states that unchanged head protection is insufficient.",
+          "The scenario supplies neither current-base integration protection nor a merge queue, equivalent supported condition, or verified serialization. Therefore submission must be deferred, even though merge authority already exists.",
+          "Before any later authorized submission, reconcile the helper/caller mismatch, refresh affected integration-result validation, and establish supported protection covering the reviewed head and relevant target-base movement. Another read or post-merge receipt check is insufficient.",
+          "Preserve independent authorized work. In this decision-only case, merge, native completion, and deployment remain not-run; the proposed integration is blocked pending the missing protection and valid combined result."
+        ],
+        "instruction_evidence": [
+          "current SKILL.md:191-207",
+          "current assets/task-packet.md:60-62",
+          "current assets/completion-receipt.md:22-24",
+          "current evals/evals.json: target-base-race expectations 1 through 3"
+        ],
+        "fixture_evidence": {
+          "path": "base-race-fixture.json",
+          "head_unchanged": true,
+          "textual_merge": "clean",
+          "test_before_base_change_exit_code": 0,
+          "test_on_combined_result_exit_code": 1,
+          "reviewer_reexecuted_fixture": false,
+          "boundary": "The integrator's isolated local Git result corroborates the synthetic semantic risk. It does not test a live host merge guard, supported platform control, Replit task cycle, or agent compliance."
+        },
+        "remaining_limit": "This retest establishes a prescribed safe decision, not that every executor will follow it or that a particular host supplies the required protection."
+      },
+      {
+        "id": "private-receipt-in-public-pr",
+        "original_disposition": "rejected",
+        "current_disposition": "rejected",
+        "evidence_status": "analytical",
+        "decisive_trace": [
+          "Implementation and public-PR authority do not authorize publication of the private board plan or full private receipt.",
+          "Full criteria must remain preserved in the access-appropriate private coordination location. The receiver's inability to open it leaves transfer/access unresolved.",
+          "Use an already authorized access-appropriate transfer, or a reviewed public summary containing no private material when that summary fits existing authority. Otherwise retain the private receipt and report the specific access need.",
+          "Do not copy the full private receipt into public Git or silently send it. Neither complete criterion mapping nor receipt accessibility overrides privacy or transmission authority."
+        ],
+        "instruction_evidence": [
+          "current SKILL.md:78-86",
+          "current references/completion-return.md:28-32",
+          "current assets/completion-receipt.md:3-5"
+        ],
+        "required_revision": null
+      }
+    ],
+    "rationale": "The frozen pass-2 candidate had a credible target-base integration gap despite concordant initial reviews. Current Section 5 closes that specific contract gap by requiring validated integration-result evidence and supported protection of both the reviewed head and relevant target-base movement, or verified serialization. The original fixture now requires deferral. The private-receipt counterexample remains contrary to explicit instructions. This supports a fresh pass-3 analytical review, not a final release decision or live capability claim."
+  },
+  "decision": "retain-and-advance",
+  "regression_risks": [
+    "A named guard must exist on the current host; a written rule cannot enforce it.",
+    "Current-base protections may be absent; retain a pending integration instead of bypassing protections."
+  ],
+  "limits": [
+    "Shared model family/source packet and visible development expectations.",
+    "Local synthetic Git execution is not a live Replit return or platform merge-guard test.",
+    "Draftable contract only; no unseen holdout, cost comparison or cross-host benchmark."
+  ]
+}

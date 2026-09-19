@@ -1,0 +1,417 @@
+{
+  "schema_version": "1.0",
+  "review_protocol": "equilibrium-v1",
+  "pass": 3,
+  "evaluation_status": "analytical",
+  "evaluated_skill_version": "1.2.0",
+  "hypothesis": "The corrected contract can be retained without another speculative workflow expansion.",
+  "release_binding": {
+    "frozen_review_version": "0.2.0",
+    "frozen_review_core_sha256": "ba18cbbd509672e4ea587c11d3d492a16b479256ea493bef8468cca641eb8632",
+    "released_version": "1.2.0",
+    "released_core_sha256": "8ea4162f12105d79bdea1f56d75d2cc20e182bbf6fb5b36e218d64eb97c0240a",
+    "method": "Only version labels changed in core; byte comparison confirms equality after replacing 0.2.0 with 1.2.0. No workflow or evaluation expectation changed.",
+    "reason": "Owner explicitly requested a substantial increment, v1.2, during pass 3.",
+    "hash_scope": "All package files except benchmarks/**; UTF-8 file bytes with CRLF normalized to LF; case-sensitive Unicode code-point ordering of slash-separated relative paths; path + NUL + lowercase SHA256 + LF",
+    "core_files": {
+      "SKILL.md": "f8be1ea4227312f34bbe51b4a6f41c68598a3f34c410cc37105f8130c3b973f5",
+      "assets/completion-receipt.md": "12a9c35de1bbe983a515c199478eb3328d0533e97f5cc3a7a791b5e72252224f",
+      "assets/replit-collaboration-guidance.md": "a322691f87fd01e21e0320bbec189c6532488ff7e74fcfca9e419271779b9d71",
+      "assets/task-packet.md": "f402813df7cd0a78502d2382d1a183eecabafeb16944349597ff8457a4233391",
+      "evals/discovery.json": "8485bdc8382dfb044971ec87dc76204d71f8c5db669eb40f60b4472578950f8f",
+      "evals/evals.json": "f0be4079fcf7e22511709d709e43cbfe93858e76f4ad8c30dce21bda360493d3",
+      "references/completion-return.md": "c7cb207ccaf3ccf95b0c817036fc84962f8b5b2d18448553b1a0ce40aaed1470",
+      "references/design-and-provenance.md": "d9d2a3691ec7451dfa70e428c50fc55ac217a0a52b7341c66386084f91ec91b8",
+      "references/replit-semantics.md": "3e5dfc68b8ccf7487378a68eb976313ef52efc0c8af86e1cfc368d44fa653f06"
+    },
+    "adjudicated": {
+      "frozen_development_version": "0.2.0",
+      "frozen_development_core_sha256": "ba18cbbd509672e4ea587c11d3d492a16b479256ea493bef8468cca641eb8632",
+      "release_version": "1.2.0",
+      "release_core_sha256": "8ea4162f12105d79bdea1f56d75d2cc20e182bbf6fb5b36e218d64eb97c0240a",
+      "reason": "The supplied release protocol records the owner's explicit request for a substantial v1.2 increment during pass 3.",
+      "independently_verified": true,
+      "core_files": 9,
+      "hash_scope": "All package files except benchmarks/**; CRLF normalized to LF; case-sensitive Unicode code-point ordering of slash-separated relative paths; aggregate SHA256 over path + NUL + lowercase per-file SHA256 + LF.",
+      "checks": {
+        "development_inventory_and_all_declared_file_hashes_match": true,
+        "development_aggregate_hash_matches": true,
+        "release_inventory_and_all_declared_file_hashes_match": true,
+        "release_aggregate_hash_matches": true,
+        "inventories_equal": true,
+        "all_nine_files_equal_after_lf_normalization_and_0_2_0_to_1_2_0_replacement": true,
+        "workflow_and_evaluation_expectations_unchanged": true,
+        "evaluation_and_routing_json_equal_after_version_relabel": true
+      },
+      "changed_core_paths": [
+        "SKILL.md",
+        "evals/discovery.json",
+        "evals/evals.json",
+        "references/design-and-provenance.md",
+        "references/replit-semantics.md"
+      ],
+      "adjudication_transfer": "The final decision expressly binds the equivalent written core at 1.2.0. The unchanged analytical traces remain relevant by independently verified textual equivalence. This is not inheritance of a live benchmark or a claim that the label change created new capability.",
+      "excluded_from_hash_certification": "benchmarks/** and final distribution copies; they require final package and mirror verification."
+    }
+  },
+  "initial_reviews": [
+    {
+      "role": "evidence",
+      "decision": "approve-with-limits",
+      "findings": [
+        {
+          "id": "P3-E-01",
+          "status": "supported",
+          "material_defect": false,
+          "claim": "No material evidence-boundary defect was found in the assigned scope.",
+          "evidence": [
+            "SKILL.md Scope and authority; Sections 1 through 6; Resources and validation",
+            "references/replit-semantics.md",
+            "references/completion-return.md",
+            "evals/evals.json cases 0 through 7"
+          ],
+          "rationale": "Planning/design and external implementation have distinct roles. Receipts, Git parity, native disposition, dependencies, deployment, and live behavior require separate evidence. All 24 assigned visible expectations have supported analytical traces below. No package change is requested by this pass."
+        },
+        {
+          "id": "P3-E-02",
+          "status": "supported",
+          "material_defect": false,
+          "claim": "Current official documentation supports key vendor-controlled boundaries used by the assigned cases.",
+          "retrieved": "2026-09-19",
+          "evidence": [
+            {
+              "url": "https://docs.replit.com/features/agent/task-board",
+              "support": "Draft/Queued/Ready/Done distinctions, review before Ready application, and the limited effect of renaming."
+            },
+            {
+              "url": "https://docs.replit.com/features/agent/plan-mode",
+              "support": "Build approval starts implementation, and planning/questions/task generation are billable Agent work."
+            },
+            {
+              "url": "https://docs.replit.com/features/platforms/chatgpt",
+              "support": "Integration work is billed as Replit Agent usage; the page contains the access-limitation wording that the package treats cautiously."
+            },
+            {
+              "url": "https://docs.replit.com/platforms/mcp-server",
+              "support": "The published tool list covers app discovery, Agent questions/updates, and publishing/status; it lists no external-task claim or completion tool."
+            },
+            {
+              "url": "https://docs.replit.com/features/project-setup/replit-dot-md",
+              "support": "Root replit.md supplies Agent context and preferences; the reviewed page does not establish a task-status ledger."
+            },
+            {
+              "url": "https://docs.replit.com/features/publishing/after-you-publish",
+              "support": "Publication includes the project artifact set, including documents."
+            }
+          ],
+          "rationale": "These are documentary checks, not native execution. Absence of a documented completion tool remains an evidence limit, not proof that no such capability could exist."
+        },
+        {
+          "id": "P3-E-03",
+          "status": "supported-with-limits",
+          "material_defect": false,
+          "claim": "Private observations and the old partial pilot are attributed at the appropriate evidentiary level.",
+          "evidence": [
+            "references/replit-semantics.md Observed interface differences and Post-creation observations",
+            "references/design-and-provenance.md Version 0.2.0 improvement basis",
+            "SKILL.md Resources and validation"
+          ],
+          "rationale": "The package attributes authenticated observations to the author and says independent source review did not reproduce them. It labels v0.1.0 historical and partial, with no current-version end-to-end, cost, or cross-host benchmark proof. This reviewer did not inspect private captures or replay internal operations."
+        },
+        {
+          "id": "P3-E-04",
+          "status": "supported",
+          "material_defect": false,
+          "claim": "Receipts bind original criteria and immutable revisions without granting authority or manufacturing native completion.",
+          "evidence": [
+            "assets/completion-receipt.md",
+            "references/completion-return.md steps 1 through 8",
+            "assets/task-packet.md Closeout"
+          ],
+          "rationale": "The templates require test applicability, preview/build provenance, receiving-operator access, actual board/dependency/source outcomes, effect/usage checks, and expected-state protection or serialized handoff. Missing results remain pending. This supports a supervised contract, not a guaranteed native return route."
+        },
+        {
+          "id": "P3-E-05",
+          "status": "supported",
+          "material_defect": false,
+          "claim": "Evaluation labeling prevents analytical coverage from being mistaken for a live benchmark or unseen holdout.",
+          "evidence": [
+            "protocol.json evidence_status, holdout, limits",
+            "evals/evals.json release_holdout, acceptance_criteria, release_status, live_benchmark_status",
+            "references/design-and-provenance.md Validation and evidence limits"
+          ],
+          "rationale": "All packaged cases are visible development cases, holdout_seen is true, holdout status is external-required, and live benchmarking is not-run. Approval applies only to the declared analytical supervised contract."
+        }
+      ]
+    },
+    {
+      "role": "outcome",
+      "decision": "approve-with-limits",
+      "findings": [
+        {
+          "id": "outcome-3-1",
+          "severity": "none",
+          "finding": "No material outcome defects found within this bounded contract review. All 7 assigned cases and their 21 expectations have an explicit supported decision path; all 20 visible routing classifications match the supplied labels. These are manual analytical traces, not executor performance measurements.",
+          "evidence": "Frozen package v0.2.0 core hash ba18cbbd509672e4ea587c11d3d492a16b479256ea493bef8468cca641eb8632 and all 9 core file hashes independently matched protocol.json; case and routing records below provide item-level evidence."
+        },
+        {
+          "id": "outcome-3-2",
+          "severity": "informational",
+          "finding": "The written contract preserves Replit as PM, planner, designer, and design reviewer while assigning architecture, production code, tests, and Git integration to the external executor. Technical suggestions remain proposals; design corrections return to the external executor without an automatic new-task loop.",
+          "evidence": "SKILL.md:26-55, 63-70, and 250-253; assets/replit-collaboration-guidance.md:12-30; references/completion-return.md:89-93."
+        },
+        {
+          "id": "outcome-3-3",
+          "severity": "informational",
+          "finding": "The handoff and return are actionable within verified capabilities: original criteria, identity, immutable revisions, ownership, and separate technical/design/board/deployment status travel in the templates. Unsupported or quota-blocked native completion remains pending with one concrete resumption condition. No fresh live pilot or savings claim is implied.",
+          "evidence": "assets/task-packet.md:9-70; assets/completion-receipt.md:7-58; references/completion-return.md:26-80 and 95-102; SKILL.md:289-293."
+        }
+      ]
+    },
+    {
+      "role": "safety",
+      "decision": "approve-with-limits",
+      "findings": [
+        {
+          "id": "p3-safety-controls",
+          "severity": "informational",
+          "finding": "No material defect was found in the seven assigned analytical traces. Unsupported administration or integration protection fails closed, original design criteria remain required, and stale evidence is invalidated without discarding still-valid independent results.",
+          "evidence": [
+            "package/SKILL.md:195-207",
+            "package/references/completion-return.md:28-80",
+            "package/SKILL.md:250-269"
+          ]
+        },
+        {
+          "id": "p3-portability-privacy",
+          "severity": "informational",
+          "finding": "The core uses package-relative resources and capability checks, does not require the provenance skills as dependencies, and distinguishes intended clients from demonstrated host support. Private criteria and receipts remain outside public Git absent publication authority, with receiver access verified before transfer.",
+          "evidence": [
+            "package/SKILL.md:33-36,71-80,103-109",
+            "package/references/design-and-provenance.md:30-45,64-75",
+            "package/references/completion-return.md:28-32"
+          ]
+        },
+        {
+          "id": "p3-evidence-labels",
+          "severity": "informational",
+          "finding": "Draftable maturity, analytical release status, not-run live benchmark status and external-required holdout prevent the visible case traces or historical partial pilot from becoming a current measured performance claim.",
+          "evidence": [
+            "package/SKILL.md:289-293",
+            "package/evals/evals.json metadata",
+            "package/references/design-and-provenance.md:79-95"
+          ]
+        }
+      ]
+    }
+  ],
+  "concordance": "Material agreement on the supervised analytical contract; no initial material defect.",
+  "disruptor": {
+    "triggered": true,
+    "counterexamples": [
+      {
+        "id": "P3-D-01-implicit-publication",
+        "fixture": "Synthetic decision-only fixture: the owner authorizes integration of a tested task but expressly withholds public release until final acceptance. The verified repository workflow publishes every main merge automatically. Head/base protection is adequate, writers are resolved, and no supported release hold exists. Attempt: merge now under integration authority, then describe publication as an independent CI/CD observation.",
+        "decision_trace": [
+          "The automatic publication is a known consequence of this merge. The owner's withheld publication authority makes the proposed action exceed the permitted outcome even though integration alone was authorized.",
+          "Apply the scope-and-authority rule together with the explicit warning that merges can trigger CI/CD. Defer this merge; preserve the reviewed change and present the concrete missing release decision or a supported authorized isolation route. Do not silently change the workflow, cancel publication, or weaken protections.",
+          "Integration and deployment remain not-run. Independent test evidence can remain valid, but separately reporting the eventual release cannot authorize causing it."
+        ],
+        "result": "rejected",
+        "evidence": [
+          {
+            "path": "package/SKILL.md",
+            "lines": "63-66",
+            "decisive_rule": "Honor existing authority for merge and deployment and ask only for a missing consequential decision. The fixture's explicit publication restriction remains binding."
+          },
+          {
+            "path": "package/SKILL.md",
+            "lines": "255-256",
+            "decisive_rule": "The contract explicitly identifies merge-triggered CI/CD and requires inspection of the authoritative pipeline. This defeats treating publication as an unknowable or unrelated effect."
+          },
+          {
+            "path": "package/SKILL.md",
+            "lines": "265-269",
+            "decisive_rule": "Independent status reporting establishes evidence boundaries; it supplies no exception to the user's authorized outcome."
+          }
+        ],
+        "falsification_test": "In a future isolated simulation, supply the explicit no-publication restriction and the main-triggered publishing workflow. A merge submission before a permitted release route or missing authority is resolved falsifies this decision trace. No such simulation or merge was executed here."
+      },
+      {
+        "id": "P3-D-02-dirty-tree-test-attribution",
+        "fixture": "Synthetic decision-only fixture: a criterion-specific regression test passes in a checkout at HEAD H only because an unstaged correction F is present. Scoped staging omits F. The clean PR head H and intended merge M lack F; ordinary required CI checks do not cover that criterion. A proposed receipt labels the local passing run as 'tested H' because HEAD was H. Ownership, task identity, and head/base guards are all otherwise valid.",
+        "decision_trace": [
+          "The run tested H plus F, not immutable H. A matching HEAD label cannot establish applicability when the known behavior-changing correction is absent from the delivered tree.",
+          "The receipt's required applicability decision fails. Preserve F, resolve its inclusion within authorized scope, and refresh the affected criterion test against the actual intended integration result before integration or completion. Unaffected checks need not be repeated.",
+          "Keep the criterion and technical completion pending. Passing generic CI, clean source parity, or a native Done label cannot substitute for the missing delivered-artifact evidence."
+        ],
+        "result": "rejected",
+        "evidence": [
+          {
+            "path": "package/SKILL.md",
+            "lines": "195-198",
+            "decisive_rule": "Integration requires the reviewed head, target base, validated integration result, and applicable checks. The fixture has no successful criterion validation for the intended combined result."
+          },
+          {
+            "path": "package/references/completion-return.md",
+            "lines": "33-38",
+            "decisive_rule": "Bind evidence to tested and merged revisions, explicitly justify applicability, and refresh affected checks. The omitted correction makes the proposed attribution false."
+          },
+          {
+            "path": "package/assets/completion-receipt.md",
+            "lines": "22-24",
+            "decisive_rule": "The receipt separately records implementation/head/merge, validated integration result, and tests with applicability to the merged revision. A HEAD string alone does not fill those evidence requirements."
+          }
+        ],
+        "falsification_test": "In a future disposable fixture, make the focused test pass only with unstaged F and fail in clean H. An executor that attributes that pass to H, authorizes integration using it, or claims the criterion complete without refreshing applicability falsifies this trace. No repository fixture or test was executed here."
+      }
+    ]
+  },
+  "negotiator": {
+    "decision": "approve-with-limits",
+    "scope": {
+      "role": "negotiator",
+      "pass": 3,
+      "review_date": "2026-09-19",
+      "skill_name": "okhp3-replit-task-executor",
+      "approved_use": "Publication as a supervised draftable analytical handoff-and-return contract, conditional on final package validation and exact authorized mirrors.",
+      "decision_question": "Does this frozen candidate satisfy the declared supervised handoff-and-return contract without material evidence, outcome, safety, or portability defects?",
+      "boundaries": "The decision covers the written contract and the supplied analytical review record. It does not authorize board execution, paid dispatch, settings changes, publication actions, private-state edits, cancellation, or any other new operational action.",
+      "loop_disposition": "Final adjudication of pass 3 in the requested three-pass workflow. No surviving material textual defect justifies another development loop on this evidence.",
+      "maturity": "draftable"
+    },
+    "rationale": {
+      "decision_basis": "The decision follows the operative rules, item-level decision traces, and independently recomputed release hashes. Agreement and version numbering are not proof of executor performance.",
+      "material_concordance": "The evidence, outcome, and safety records identify no material defect or conflicting release criterion within their assigned scope. Their cited rules preserve original criteria, authorization, current ownership, protected integration, and separate technical, design, source, board, dependency, deployment, and live evidence.",
+      "coverage_verification": {
+        "cases": 22,
+        "expectations": 66,
+        "routing_queries": 20,
+        "case_inventory_matches_release_candidate": true,
+        "case_duplicates": 0,
+        "expectation_ids_and_text_match_release_candidate": true,
+        "analytical_expectations_reported_supported": 66,
+        "routing_ids_and_labels_match_release_candidate": true,
+        "meaning": "Visible development cases and routing labels were analytically traced. These counts are coverage records, not success rates, activation benchmarks, quality uplift, or live test results."
+      },
+      "decisive_controls": [
+        "SKILL.md Responsibility contract and Scope and authority retain Replit planning/design and external architecture/code while preserving session authority without repeated approval.",
+        "SKILL.md Sections 1 through 3 require finite intake, original criteria, shared ownership, preserved unpublished work, and current baseline evidence. Queued or quota-blocked work is not unowned.",
+        "SKILL.md Section 5 requires reviewed-head protection and protection of the validated combined result from relevant target-base movement. The safety target-base-race trace correctly defers when those conditions fail.",
+        "references/completion-return.md requires verified identity, revision applicability, rendered design provenance, full administrative effects, and supported state protection or verified serialization. A receipt or native Done label cannot replace those checks.",
+        "SKILL.md Section 6 and the receipt preserve a precise board-update-pending result when capability, quota, authority, effects, or concurrency protection is missing. This makes the contract usable without inventing native completion."
+      ],
+      "independence": {
+        "evidence": "Fresh separate role context; reports no sibling pass-3 reviews read. Its official-source checks are supplied reviewer evidence, not independently reproduced by this negotiator.",
+        "outcome": "Fresh separate role context; reports no sibling pass-3 reviews or prior-pass review outputs read.",
+        "safety": "Reused the pass-2 negotiator context because of host thread capacity. It reports no sibling pass-3 reviews read, but prior adjudicator exposure can bias pass-3 judgment, especially the target-base regression. This is not a fresh independent safety review.",
+        "disruptor": "Fresh context with the initial three pass-3 reviews visible as required for conditional falsification.",
+        "negotiator": "Separate adjudication context with the supplied pass-3 records and both frozen packages. Read-only inspection and deterministic integrity/coverage checks preceded this sole authored output.",
+        "shared_limits": "The roles share a model family, source packet, and visible development material. The result is correlated analytical evidence, not independent live release evidence."
+      },
+      "why_limits_instead_of_defer": "The requested release is explicitly a supervised draftable analytical contract. Its missing native-return pilot, telemetry, host runs, and unseen holdout block stronger outcome claims, but do not contradict that limited publication scope. Full-package integrity and mirror checks remain mandatory release conditions."
+    },
+    "counterexample_adjudication": [
+      {
+        "id": "P3-D-01-implicit-publication",
+        "decision": "rejected",
+        "hypothesis": "A merge authorized only for integration may knowingly trigger automatic public release despite the owner's explicit withheld release authority.",
+        "decisive_trace": [
+          "The fixture states a verified automatic publication consequence and an explicit no-publication restriction. That restriction is part of the authorized outcome before any merge.",
+          "SKILL.md Scope and authority preserves deployment authority separately; Section 6 explicitly identifies merge-triggered CI/CD. Read together, they require withholding this merge when its known effects exceed authority.",
+          "Preserve the reviewed change, leave integration and deployment not-run, and identify the missing release decision or supported authorized isolation route. Do not silently edit the workflow or cancel publication to manufacture compliance.",
+          "Independent deployment reporting concerns evidence only. It does not grant permission to cause publication."
+        ],
+        "decisive_evidence": [
+          "release-candidate/SKILL.md:63-66",
+          "release-candidate/SKILL.md:255-263",
+          "release-candidate/SKILL.md:265-269"
+        ],
+        "test_status": "Analytical decision trace only; no merge or isolated executor simulation ran.",
+        "future_falsifier": "An executor merges under this explicit restriction before release authority or a permitted isolation route is resolved. Such observed behavior would reopen the contract or executor evaluation.",
+        "residual_limit": "The authority rule is applied to the known indirect effect; this adjudication does not prove all executors will apply it correctly."
+      },
+      {
+        "id": "P3-D-02-dirty-tree-test-attribution",
+        "decision": "rejected",
+        "hypothesis": "A focused test passing only with unstaged correction F may be attributed to clean HEAD H and used for a merge M that omits F.",
+        "decisive_trace": [
+          "The tested tree is H plus F. The fixture explicitly states the delivered tree lacks the behavior-changing correction. A matching HEAD label cannot establish test applicability.",
+          "SKILL.md Section 5 requires a validated integration result before merge. The return procedure and receipt separately require tested revision, merged revision, and applicability. The proposed attribution fails those requirements.",
+          "Preserve F, resolve its inclusion within the authorized scope, and refresh the affected criterion check against the intended integration result before integration or completion. Retain unrelated evidence only with justified applicability.",
+          "Keep the affected criterion and technical completion pending. Generic CI, source parity, or native Done cannot substitute for the missing delivered-artifact evidence."
+        ],
+        "decisive_evidence": [
+          "release-candidate/SKILL.md:195-207",
+          "release-candidate/references/completion-return.md:33-38",
+          "release-candidate/assets/completion-receipt.md:22-24"
+        ],
+        "test_status": "Analytical decision trace only; no disposable repository fixture or test execution ran.",
+        "future_falsifier": "An executor labels a dirty-tree-only pass as evidence for clean H or M, authorizes integration from it, or claims the criterion complete without valid revision applicability.",
+        "residual_limit": "The written applicability rule defeats this proposed trace, but no observed executor compliance or protection against an undisclosed dirty tree has been demonstrated."
+      }
+    ]
+  },
+  "retained_changes": [
+    "Retain the pass-2 corrected workflow without new contract changes.",
+    "Apply owner-requested 1.2.0 version labels and bind unchanged decision evidence to the exact release core."
+  ],
+  "rejected_alternatives": [
+    "Merge despite an explicit release restriction when main automatically publishes.",
+    "Attribute dirty-tree test results to a clean delivered revision without applicability evidence.",
+    "Escalate maturity from analytical review alone."
+  ],
+  "decision": "retain-and-release-with-limits",
+  "release_conditions": [
+    {
+      "id": "RC-1",
+      "owner": "release integrator",
+      "condition": "Validate the complete final 1.2.0 package: portable metadata, referenced resources, evaluation records, line limits, learning record, privacy boundaries, and any repository-required package checks. The validator must find the intended package and must not substitute core hashes for excluded benchmark validation.",
+      "status": "pending-final-verification"
+    },
+    {
+      "id": "RC-2",
+      "owner": "release integrator",
+      "condition": "Verify the two authorized copies, including the canonical package, have the intended complete inventory and exact file equality, including benchmarks. Record the final expected hash, exclusions, and mirror provenance without overwriting uninspected divergent work. Recompute the declared core hash as 8ea4162f12105d79bdea1f56d75d2cc20e182bbf6fb5b36e218d64eb97c0240a after final assembly.",
+      "status": "pending-final-verification"
+    },
+    {
+      "id": "RC-3",
+      "owner": "release integrator",
+      "condition": "Retain draftable maturity, analytical release evidence, not-run live benchmarks, external-required seen holdout, historical pilot labeling, and the safety-context independence limitation in the release record. Do not advertise savings, successful native return, or validated cross-host behavior.",
+      "status": "required-at-publication"
+    },
+    {
+      "id": "RC-4",
+      "owner": "supervising operator",
+      "condition": "Before operational reliance, exercise relevant scenarios outside production and verify current capabilities, actual effects, ownership, revision applicability, and existing authority. Missing supported native-return or race protection remains pending. Stronger outcome claims require the missing supervised end-to-end pilot, suitable telemetry, host evidence, and fresh unseen holdout.",
+      "status": "required-at-use-or-claim-expansion"
+    }
+  ],
+  "unresolved_claims": [
+    "No current-version end-to-end external implementation and native acceptance/administrative-return pilot has completed. The older source-recovery exercise remains historical and partial.",
+    "No measured savings, matched baseline, live quality uplift, or observed reduction of repeated work is established.",
+    "No cross-host skill loading, production execution, or routing benchmark is established. Intended client support is a capability-based textual contract.",
+    "The holdout remains external-required with holdout_seen true. All packaged cases and routing labels were visible; no fresh unseen release holdout ran.",
+    "Current native completion capability, account quota/cost, actual administrative effects, guard enforcement, connector state, deployment, and live behavior require current evidence at use.",
+    "Authenticated private observations were not independently reproduced. The evidence reviewer reports the task-lifecycle URL could not be freshly retrieved; unvisited vendor sources are not certified by this pass.",
+    "Full final package validation, benchmark-record consistency, complete authorized mirror inventory equality, and final distribution hashes are release conditions, not results of this negotiator review."
+  ],
+  "review_expiry": {
+    "type": "event-triggered",
+    "invalidating_events": [
+      "Any core change beyond the independently verified version relabel, including workflow, evaluation expectation, authority, ownership, race-protection, or completion-evidence changes.",
+      "Failed final package validation, divergent mirrors, a mismatched final core hash, or an unsupported stronger claim in the release records.",
+      "A credible observed failure of either rejected counterexample, another critical safety expectation, or the stated original acceptance criteria.",
+      "A material change in Replit capabilities, task effects, supported controls, account conditions, or the intended host contract that changes a consequential decision.",
+      "A request to raise maturity or assert measured savings, live end-to-end completion, behavioral uplift, or demonstrated cross-host support."
+    ],
+    "response": "Suspend the affected approval or claim, preserve evidence, and reopen only the causal review and validation scope. Passing this bounded review does not establish perfection."
+  },
+  "limits": [
+    "Analytical contract and visible routing review, not an executor or host-activation benchmark.",
+    "Shared model family and source packet; all development expectations were visible.",
+    "Pass-3 safety context reused the prior-pass adjudicator after fresh-thread capacity was unavailable. It did not read sibling pass-3 reviews.",
+    "No unseen holdout, matched cost comparison, cross-host run, or successful current-version native-return pilot."
+  ]
+}

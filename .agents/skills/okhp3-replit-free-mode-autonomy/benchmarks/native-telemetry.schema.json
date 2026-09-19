@@ -1,0 +1,91 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Free Mode autonomy native telemetry event export",
+  "type": "object",
+  "required": ["schema_version", "source", "host", "events"],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "const": "1.0"
+    },
+    "source": {
+      "const": "host-event-export"
+    },
+    "host": {
+      "type": "string",
+      "minLength": 1
+    },
+    "exported_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "events": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/event"
+      }
+    }
+  },
+  "$defs": {
+    "event": {
+      "type": "object",
+      "required": [
+        "event_id",
+        "timestamp",
+        "run_id",
+        "query_id",
+        "event_type",
+        "source",
+        "evidence_tier",
+        "data"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "event_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "timestamp": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "run_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "query_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "eval_name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "configuration": {
+          "type": "string",
+          "enum": ["with_skill", "without_skill", "native"]
+        },
+        "event_type": {
+          "type": "string",
+          "enum": [
+            "skill_activation",
+            "quota_state",
+            "routine_created",
+            "approval_card_presented",
+            "approval_accepted",
+            "always_allow_selected"
+          ]
+        },
+        "source": {
+          "const": "host-event-export"
+        },
+        "evidence_tier": {
+          "const": "native"
+        },
+        "data": {
+          "type": "object"
+        }
+      }
+    }
+  }
+}

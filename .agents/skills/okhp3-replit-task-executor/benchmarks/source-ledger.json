@@ -1,0 +1,117 @@
+{
+  "schema_version": "1.0",
+  "retrieval_date": "2026-09-19",
+  "sources": [
+    {
+      "id": "SRC-OWNER",
+      "authority": "owner preference",
+      "claim": "Replit remains PM, planner and designer; external agents own architecture and code.",
+      "status": "supported",
+      "acceptance": "Apply as this package responsibility contract.",
+      "limit": "Does not grant spending or platform capabilities."
+    },
+    {
+      "id": "SRC-CONTEXT",
+      "authority": "official vendor documentation",
+      "url": "https://docs.replit.com/features/project-setup/replit-dot-md",
+      "claim": "Root replit.md provides project context to Agent.",
+      "status": "supported",
+      "acceptance": "Use a scoped guidance/receipt reference for future conversations.",
+      "limit": "Reject inference that context is a task database or enforced queue lock."
+    },
+    {
+      "id": "SRC-CUSTOMIZATION",
+      "authority": "official vendor documentation",
+      "url": "https://docs.replit.com/features/agent/agent-customization",
+      "claim": "Instructions guide behavior, without guaranteed strict enforcement.",
+      "status": "supported",
+      "acceptance": "Keep policy guidance distinct from actual coordination controls.",
+      "limit": "No claim that a current Agent reloads a changed instruction immediately."
+    },
+    {
+      "id": "SRC-LIFECYCLE",
+      "authority": "official vendor documentation reviewed earlier in this session",
+      "url": "https://docs.replit.com/features/agent/task-lifecycle",
+      "claim": "Native task lifecycle includes queued, active, ready, applying and Done dispositions.",
+      "status": "supported-with-freshness-limit",
+      "acceptance": "Require actual current-state and effect checks.",
+      "limit": "A later refresh returned a retrieval error; do not claim fresh re-verification of that page in the improvement loop."
+    },
+    {
+      "id": "SRC-MCP",
+      "authority": "official vendor documentation",
+      "url": "https://docs.replit.com/platforms/mcp-server",
+      "claim": "Reviewed external tools cover app operations; no direct external task-completion capability was established.",
+      "status": "supported-bounded-observation",
+      "acceptance": "Discover supported capabilities at the time of action.",
+      "limit": "Absence from this review is not proof such a capability can never exist."
+    },
+    {
+      "id": "SRC-OBS",
+      "authority": "authenticated owner-session observations, private underlying records",
+      "claim": "Sampled native completion appeared in history without replit.md changes; inspected Shell CLI exposed no completion command.",
+      "status": "supported-bounded-observation",
+      "acceptance": "Distinguish native tool history from external invocation.",
+      "limit": "Underlying private transcripts and UI captures are excluded; another operator cannot reproduce them from the package alone."
+    },
+    {
+      "id": "SRC-PILOT",
+      "authority": "historical v0.1.0 exercise in the owner session",
+      "claim": "Source recovery and plan preservation succeeded; unfinished plans did not complete an external-to-native board cycle.",
+      "status": "historical-partial",
+      "acceptance": "Convert gaps into development cases and retain draftable maturity.",
+      "limit": "Not current-version live performance or quantified savings."
+    }
+  ],
+  "claim_ledger": [
+    {
+      "claim_id": "CLM-ROLE",
+      "claim": "The revised contract retains Replit planning/design while routing architecture/code externally.",
+      "claim_type": "design choice",
+      "evidence_ids": [
+        "SRC-OWNER",
+        "SKILL.md#responsibility-contract"
+      ],
+      "status": "supported",
+      "consequence": "Wrong executor or lost design intent.",
+      "next_test": "Review pm-designer and design-revision decisions."
+    },
+    {
+      "claim_id": "CLM-MECHANISM",
+      "claim": "A receipt or context edit alone is not verified native board completion.",
+      "claim_type": "interpretation",
+      "evidence_ids": [
+        "SRC-CONTEXT",
+        "SRC-OBS",
+        "SRC-MCP"
+      ],
+      "status": "supported",
+      "consequence": "False completion and incorrect dependencies.",
+      "next_test": "Recheck declared capability and observed state for one authorized return."
+    },
+    {
+      "claim_id": "CLM-RETURN",
+      "claim": "A bounded native administrative return might close the workflow if supported effects and ownership can be established.",
+      "claim_type": "hypothesis",
+      "evidence_ids": [
+        "SRC-LIFECYCLE",
+        "SRC-OBS",
+        "references/completion-return.md"
+      ],
+      "status": "provisional",
+      "consequence": "Queue wakeup, duplicate apply, or unapproved usage.",
+      "next_test": "One supervised supported trial with observed before/after effects."
+    },
+    {
+      "claim_id": "CLM-PERFORMANCE",
+      "claim": "The revised skill reduces actual spend or achieves validated cross-host execution.",
+      "claim_type": "hypothesis",
+      "evidence_ids": [
+        "SRC-PILOT"
+      ],
+      "status": "blocked",
+      "consequence": "Unsupported maturity or purchasing claims.",
+      "next_test": "Matched comparable runs with telemetry, current-version end-to-end pilot and unseen holdout."
+    }
+  ]
+}

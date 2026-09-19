@@ -182,7 +182,24 @@ line; obtain an exact go/no-go for each merge, delete, and rename.
 
 ### 6. Execute approved items in small batches
 
-Before each branch operation, refresh and verify the expected head SHA.
+Before each branch operation, run the bundled pre-delete check with the exact
+branch and SHA recorded in the approved plan:
+
+```bash
+python3 .agents/skills/okhp3-replit-repl-janitor/scripts/audit-repo.py \
+  --root . \
+  --check-delete \
+  --branch '<branch>' \
+  --reviewed-head '<reviewed SHA>'
+```
+
+The JSON result records both `reviewed_head` and the freshly read
+`current_head`. If the bucket is `review`, stop, record the hold, and run no
+deletion command. Only a `delete` result may be executed, and its
+`deletion_commands` must be run in the emitted order. The sequence is
+remote-first (`git push origin --delete <branch>`) and local second
+(`git branch -d <branch>`). The check is read-only and never executes either
+command.
 
 For an approved merge:
 

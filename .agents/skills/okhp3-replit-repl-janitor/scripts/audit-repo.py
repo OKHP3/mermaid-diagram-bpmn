@@ -3,7 +3,9 @@
 
 Reports local branch facts, naming violations, and nested detritus folders as
 JSON. The script never deletes, renames, prunes, merges, or force-pushes.
-Network fetch is opt-in with --fetch and still never prunes.
+Network fetch is opt-in with --fetch and still never prunes. Its pre-delete
+check only emits deletion commands after the reviewed branch tip matches the
+freshly read tip.
 """
 
 from __future__ import annotations
@@ -69,6 +71,53 @@ def ensure_repository(root: Path) -> None:
 
 def ensure_base(root: Path, base: str) -> None:
     run(["git", "rev-parse", "--verify", f"{base}^{{commit}}"], root)
+
+
+def prepare_branch_deletion(
+    root: Path,
+    branch: str,
+    reviewed_head: str,
+    *,
+    remote: str = "origin",
+) -> dict[str, object]:
+    """Refresh a branch tip and prepare, but never execute, its deletion.
+
+    The reviewed SHA is the approval boundary.  A changed tip produces a
+    review hold with no deletion commands; a missing branch or other Git
+    failure raises visibly.  When the tip matches, the returned commands
+    preserve the required remote-first order.
+    """
+    if not branch:
+        raise AuditError("branch is required for the pre-delete check")
+    if not reviewed_head:
+        raise AuditError("reviewed branch head is required for the pre-delete check")
+
+    current_head = run(
+        ["git", "rev-parse", "--verify", f"refs/heads/{branch}^{{commit}}"],
+        root,
+    )
+    result: dict[str, object] = {
+        "branch": branch,
+        "reviewed_head": reviewed_head,
+        "current_head": current_head,
+    }
+    if current_head != reviewed_head:
+        result.update({
+            "bucket": "review",
+            "reason": "branch tip changed since review",
+            "deletion_commands": [],
+        })
+        return result
+
+    result.update({
+        "bucket": "delete",
+        "reason": "branch tip matches reviewed head",
+        "deletion_commands": [
+            ["git", "push", remote, "--delete", branch],
+            ["git", "branch", "-d", branch],
+        ],
+    })
+    return result
 
 
 def audit_branches(root: Path, base: str) -> tuple[list[dict[str, object]], str]:
@@ -180,6 +229,24 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--root", default=".")
     parser.add_argument("--base", default="origin/main")
     parser.add_argument(
+        "--check-delete",
+        action="store_true",
+        help="refresh one branch tip and emit a safe deletion plan; never deletes",
+    )
+    parser.add_argument(
+        "--branch",
+        help="exact local branch to check with --check-delete",
+    )
+    parser.add_argument(
+        "--reviewed-head",
+        help="branch SHA recorded during review with --check-delete",
+    )
+    parser.add_argument(
+        "--remote",
+        default="origin",
+        help="remote to use in the remote-first deletion plan (default: origin)",
+    )
+    parser.add_argument(
         "--fetch",
         action="store_true",
         help="run `git fetch --all` before auditing; never prunes",
@@ -194,6 +261,21 @@ def main() -> int:
         ensure_repository(root)
         if args.fetch:
             run(["git", "fetch", "--all"], root)
+        if args.check_delete:
+            if not args.branch:
+                raise AuditError("--check-delete requires --branch")
+            if not args.reviewed_head:
+                raise AuditError("--check-delete requires --reviewed-head")
+            print(json.dumps(
+                prepare_branch_deletion(
+                    root,
+                    args.branch,
+                    args.reviewed_head,
+                    remote=args.remote,
+                ),
+                indent=2,
+            ))
+            return 0
         ensure_base(root, args.base)
         branches, current = audit_branches(root, args.base)
         report = {

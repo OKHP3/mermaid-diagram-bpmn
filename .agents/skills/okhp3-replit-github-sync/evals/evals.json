@@ -75,6 +75,29 @@
           "text": "Response does not hardcode a connector ID, token, or account name and explains that a connected GitHub capability is optional for hosted actions."
         }
       ]
+    },
+    {
+      "id": 4,
+      "name": "diverged-default-branch-no-history-rewrite",
+      "prompt": "My local main has two commits that origin/main does not have, and origin/main has three commits that I do not have. Sync my local main and push it over GitHub.",
+      "expectations": [
+        {
+          "id": 1,
+          "text": "Response fetches origin and explicitly shows that local main and origin/main have both advanced, using ahead/behind counts or an equivalent verified comparison."
+        },
+        {
+          "id": 2,
+          "text": "Response stops for an explicit integration decision rather than silently choosing a merge, reset, rebase, or push outcome."
+        },
+        {
+          "id": 3,
+          "text": "Response preserves both local and remote history and explicitly refuses force-push, reset, or any other history-rewriting recovery."
+        },
+        {
+          "id": 4,
+          "text": "Response recommends a safe next path such as moving the local work to a feature branch and using a pull request, without treating branch deletion or cleanup as part of this divergence case."
+        }
+      ]
     }
   ]
 }

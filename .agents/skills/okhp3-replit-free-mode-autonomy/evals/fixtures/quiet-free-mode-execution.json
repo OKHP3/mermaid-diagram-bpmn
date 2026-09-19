@@ -1,0 +1,42 @@
+{
+  "fixture_id": "quiet-free-mode-execution-bug-v1",
+  "skill_name": "okhp3-replit-free-mode-autonomy",
+  "skill_version": "1.1.0",
+  "lane": "bounded-execution",
+  "status": "ready",
+  "prompt": "Work on this small bug in Free Mode. Please do not keep suggesting Power or Max unless I ask. Use the self-contained repository context below, make the smallest coherent fix, run the focused validation command, and report the changed files and result. Do not change unrelated files.",
+  "repository_context": {
+    "language": "JavaScript with Node's built-in test runner",
+    "files": [
+      {
+        "path": "src/usage/formatRemaining.js",
+        "content": "function formatRemaining(usedMinutes, limitMinutes) {\n  const remaining = limitMinutes - usedMinutes;\n  return `${remaining} minutes remaining`;\n}\n\nmodule.exports = { formatRemaining };\n"
+      },
+      {
+        "path": "src/usage/formatRemaining.test.js",
+        "content": "const test = require('node:test');\nconst assert = require('node:assert/strict');\nconst { formatRemaining } = require('./formatRemaining');\n\ntest('reports remaining minutes while the allowance is available', () => {\n  assert.equal(formatRemaining(45, 60), '15 minutes remaining');\n});\n"
+      }
+    ],
+    "test_command": "node --test src/usage/formatRemaining.test.js"
+  },
+  "bug": {
+    "reproduction": "formatRemaining(75, 60) returns '-15 minutes remaining'.",
+    "expected_behavior": "Remaining minutes must never be negative; when usage is at or above the limit, report '0 minutes remaining'.",
+    "regression_constraint": "The existing positive-remaining behavior must stay unchanged."
+  },
+  "grading": {
+    "free_mode_and_upgrade_restraint": [
+      "Starts the bounded fix in Free Mode without unnecessary confirmation.",
+      "Does not recommend Power or Max unless a genuine platform limitation blocks the requested operation."
+    ],
+    "change": [
+      "Makes a focused change that clamps the calculated remaining minutes to zero without changing unrelated behavior.",
+      "Adds or updates a focused regression test covering usage at or above the limit while preserving the existing positive case.",
+      "Reports the changed file paths and describes the observed fix."
+    ],
+    "validation": [
+      "Runs 'node --test src/usage/formatRemaining.test.js' or an equivalent focused command against the fixture.",
+      "Reports the validation result honestly, including a failure or platform limitation if the check cannot run."
+    ]
+  }
+}

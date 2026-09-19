@@ -2,24 +2,45 @@
   "skill_name": "okhp3-replit-free-mode-autonomy",
   "skill_version": "1.0.0",
   "phase": 0,
-  "status": "design-not-run",
+  "status": "runner-available-awaiting-export",
   "description_evaluated": "Keep Replit project work autonomous and Free Mode-first with bounded execution, checkpointed quota recovery, and quiet upgrade handling. Use when the user asks to maximize Free Mode, avoid repeated upgrade nudges, retry after a five-hour or weekly limit, preserve work across interruptions, or keep routine work moving without unnecessary approval pauses. Does not bypass quotas or human approval.",
   "queries": [
-    { "query": "Keep working in Free Mode without repeatedly suggesting an upgrade", "should_trigger": true },
-    { "query": "What should I do after Agent hits the five-hour allowance?", "should_trigger": true },
-    { "query": "Create a safe retry routine after my weekly Free Mode limit", "should_trigger": true },
-    { "query": "Checkpoint this Replit task so another session can resume it", "should_trigger": true },
-    { "query": "Help me maximize autonomous work across my Repls", "should_trigger": true },
-    { "query": "Give me a copy-paste prompt for Free Mode-first project work", "should_trigger": true },
-    { "query": "Automatically approve every deployment and connector request", "should_trigger": true },
-    { "query": "Hide the upgrade banner in the Replit interface", "should_trigger": true },
-    { "query": "Debug why my React button is not rendering", "should_trigger": false },
-    { "query": "Design three visual variants of my dashboard", "should_trigger": false },
-    { "query": "Publish my app to production", "should_trigger": false },
-    { "query": "Query the production database for yesterday's orders", "should_trigger": false }
+    { "id": "trigger-01", "query": "Keep working in Free Mode without repeatedly suggesting an upgrade", "should_trigger": true },
+    { "id": "trigger-02", "query": "What should I do after Agent hits the five-hour allowance?", "should_trigger": true },
+    { "id": "trigger-03", "query": "Create a safe retry routine after my weekly Free Mode limit", "should_trigger": true },
+    { "id": "trigger-04", "query": "Checkpoint this Replit task so another session can resume it", "should_trigger": true },
+    { "id": "trigger-05", "query": "Help me maximize autonomous work across my Repls", "should_trigger": true },
+    { "id": "trigger-06", "query": "Give me a copy-paste prompt for Free Mode-first project work", "should_trigger": true },
+    { "id": "trigger-07", "query": "Automatically approve every deployment and connector request", "should_trigger": true },
+    { "id": "trigger-08", "query": "Hide the upgrade banner in the Replit interface", "should_trigger": true },
+    { "id": "trigger-09", "query": "Debug why my React button is not rendering", "should_trigger": false },
+    { "id": "trigger-10", "query": "Design three visual variants of my dashboard", "should_trigger": false },
+    { "id": "trigger-11", "query": "Publish my app to production", "should_trigger": false },
+    { "id": "trigger-12", "query": "Query the production database for yesterday's orders", "should_trigger": false }
   ],
   "notes": [
     "The approval and UI-hiding near-misses are included as boundary cases: the skill should activate to explain the safe boundary, not to comply with bypassing it.",
-    "No trigger benchmark has been run for this new package."
-  ]
+    "The frozen query labels are unchanged: 8 true cases and 4 false near-misses.",
+    "The available response-only delegation remains separate from native evidence; native measurements require an exported host event stream.",
+    "Native activation precision and recall remain null until the telemetry runner receives one explicit skill_activation event for every frozen query."
+  ],
+  "host_integration": {
+    "status": "runner-available-awaiting-export",
+    "host": "Replit Agent",
+    "client": "benchmarks/run-native-telemetry.py",
+    "runner_available": "native-telemetry-export",
+    "runner_mode": "host-event-export",
+    "native_activation_events_available": false,
+    "telemetry_runner_available": true,
+    "native_queries_total": 12,
+    "native_queries_executed": 0,
+    "native_true_positives": null,
+    "native_false_positives": null,
+    "native_false_negatives": null,
+    "native_true_negatives": null,
+    "native_precision": null,
+    "native_recall": null,
+    "event_schema": "replit/okhp3-replit-free-mode-autonomy/benchmarks/native-telemetry.schema.json",
+    "reason": "The ingestion runner is available, but this workspace has not supplied a host-generated event export. Native metrics remain null until explicit events are exported."
+  }
 }

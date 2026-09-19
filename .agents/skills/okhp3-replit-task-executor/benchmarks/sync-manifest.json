@@ -1,0 +1,28 @@
+{
+  "canonical_source": "OKHP3/OverKill-Hill:.agents/skills/okhp3-replit-task-executor",
+  "distribution_destination": "OKHP3/skillz:replit/okhp3-replit-task-executor",
+  "authority": "Owner requested improvement of the thread-created skill and copies in both repositories; owner selected a substantial v1.2 increment.",
+  "version": "1.2.0",
+  "reviewed_core_sha256": "8ea4162f12105d79bdea1f56d75d2cc20e182bbf6fb5b36e218d64eb97c0240a",
+  "hash_scope": "All package files except benchmarks/**; UTF-8 file bytes with CRLF normalized to LF; case-sensitive Unicode code-point ordering of slash-separated relative paths; path + NUL + lowercase SHA256 + LF",
+  "baseline": [
+    {
+      "repository": "overkill-hill",
+      "head": "fd8f37c09cae5b756eaf8beab393af98544a346f",
+      "status": "",
+      "ahead_behind": "0\t0"
+    },
+    {
+      "repository": "skillz",
+      "head": "c19dd0222de036252460f8d1f29769fd9c2fae17",
+      "status": "",
+      "ahead_behind": "0\t0"
+    }
+  ],
+  "recovery": "Original committed versions and feature branches retained; no unrelated worktree or stash modified.",
+  "verification_contract": "Verify destination still matches the inspected five-file baseline before copying. Verify identical full relative-path inventories and raw bytes afterward, including all review records. Store the full computed inventory outside the package to avoid self-reference.",
+  "excluded": [
+    "Private review workspace, task-board bodies, transcripts, UI captures and machine-specific paths"
+  ],
+  "publication_scope": "Reviewed draftable contract and catalogs; no Replit task or global host configuration changes."
+}
