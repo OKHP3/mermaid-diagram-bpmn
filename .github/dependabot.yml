@@ -6,21 +6,46 @@
 # - The deployment workflow validates the production build on pushes to main.
 # - All PRs require human review and merge.
 # - Mermaid major version upgrades require manual review of the plugin contract
-#   in src/lib/bpmn-plugin.ts and docs/mermaid-compatibility.md before merging.
+#   in app/src/lib/bpmn-plugin.ts and docs/mermaid-compatibility.md before merging.
+# - See docs/technology-inventory.md for runtimes, fixtures, and overrides that
+#   need a coordinated maintenance PR outside Dependabot's coverage.
 
 version: 2
 updates:
   - package-ecosystem: "npm"
     directory: "/"
     schedule:
-      interval: "weekly"
-      day: "monday"
+      interval: "daily"
+    cooldown:
+      default-days: 1
     open-pull-requests-limit: 5
     labels:
       - "dependencies"
       - "npm"
     commit-message:
       prefix: "chore(deps)"
+    groups:
+      react:
+        patterns: ["react", "react-dom", "@types/react", "@types/react-dom"]
+        update-types: ["minor", "patch"]
+      tailwind:
+        patterns: ["tailwindcss", "@tailwindcss/*", "tailwind-merge"]
+        update-types: ["minor", "patch"]
+      tooling-and-utilities:
+        patterns: ["*"]
+        exclude-patterns:
+          [
+            "mermaid",
+            "lucide-react",
+            "react",
+            "react-dom",
+            "@types/react",
+            "@types/react-dom",
+            "tailwindcss",
+            "@tailwindcss/*",
+            "tailwind-merge",
+          ]
+        update-types: ["minor", "patch"]
     ignore:
       # Mermaid major version upgrades require plugin contract review: handle manually.
       - dependency-name: "mermaid"
@@ -32,6 +57,9 @@ updates:
       interval: "weekly"
       day: "monday"
     open-pull-requests-limit: 5
+    groups:
+      github-actions:
+        patterns: ["*"]
     labels:
       - "dependencies"
       - "github-actions"

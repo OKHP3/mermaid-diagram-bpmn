@@ -1,136 +1,63 @@
-import { appendFileSync } from "node:fs";
-import { spawnSync } from "node:child_process";
+import { appendFileSync, mkdirSync, writeFileSync } from "node:fs";
+import { execFileSync } from "node:child_process";
+import { dirname, resolve } from "node:path";
+import {
+  audit,
+  collectInventory,
+  formatReport,
+  read,
+  root,
+} from "./technology-inventory.mjs";
 
-const isCi = process.argv.includes("--ci");
-const pnpmCommand = process.platform === "win32" ? "pnpm.cmd" : "pnpm";
-
-function run(command, args) {
-  const result = spawnSync(command, args, {
+const args = process.argv.slice(2).filter((arg) => arg !== "--");
+function option(flag) {
+  const index = args.indexOf(flag);
+  if (index < 0) return null;
+  if (!args[index + 1] || args[index + 1].startsWith("--"))
+    throw new Error(`Missing value for ${flag}`);
+  return args[index + 1];
+}
+function save(path, text) {
+  mkdirSync(dirname(resolve(path)), { recursive: true });
+  writeFileSync(path, text);
+}
+try {
+  const output = option("--output"),
+    json = option("--json");
+  const files = execFileSync("git", ["ls-files", "-z"], {
+    cwd: root,
     encoding: "utf8",
-    maxBuffer: 10 * 1024 * 1024,
-    shell: process.platform === "win32",
-  });
-
-  if (result.error) {
-    throw result.error;
-  }
-
-  return {
-    status: result.status ?? 1,
-    stdout: result.stdout.trim(),
-    stderr: result.stderr.trim(),
-  };
-}
-
-function parseOutdated(stdout) {
-  if (!stdout) return [];
-
-  try {
-    const data = JSON.parse(stdout);
-    return Object.entries(data)
-      .map(([name, details]) => ({ name, ...details }))
-      .sort((left, right) => left.name.localeCompare(right.name));
-  } catch (error) {
-    throw new Error(`Could not parse pnpm outdated output: ${error.message}`);
-  }
-}
-
-async function getJson(url) {
-  const response = await fetch(url, { signal: AbortSignal.timeout(15_000) });
-  if (!response.ok) {
-    throw new Error(`${response.status} ${response.statusText}`);
-  }
-  return response.json();
-}
-
-async function getRuntimeReleases() {
-  const [nodeReleases, pnpmPackage] = await Promise.all([
-    getJson("https://nodejs.org/dist/index.json"),
-    getJson("https://registry.npmjs.org/pnpm/latest"),
-  ]);
-
-  const latestLts = nodeReleases.find(
-    (release) => release.lts && !release.version.includes("-"),
+  })
+    .split("\0")
+    .filter(Boolean);
+  const report = await audit(collectInventory(files, read));
+  report.sourceCommit = execFileSync("git", ["rev-parse", "HEAD"], {
+    cwd: root,
+    encoding: "utf8",
+  }).trim();
+  report.auditNode = process.version;
+  report.sourceDirty = Boolean(
+    execFileSync(
+      "git",
+      ["status", "--porcelain", "--", ...report.inventory.sources],
+      {
+        cwd: root,
+        encoding: "utf8",
+      },
+    ).trim(),
   );
-  const latestCurrent = nodeReleases.find(
-    (release) => !release.lts && !release.version.includes("-"),
+  const markdown = formatReport(report);
+  if (output) save(output, markdown);
+  else console.log(markdown);
+  if (json) save(json, JSON.stringify(report, null, 2) + "\n");
+  if (args.includes("--ci") && process.env.GITHUB_STEP_SUMMARY)
+    appendFileSync(process.env.GITHUB_STEP_SUMMARY, markdown + "\n");
+  console.log(
+    `Technology audit: ${report.complete ? "PASS" : "INCOMPLETE"}; ${Object.keys(report.npm).length} registry lookups; ${report.errors.length} failures.`,
   );
-
-  return {
-    nodeLts: latestLts?.version ?? "unavailable",
-    nodeCurrent: latestCurrent?.version ?? "unavailable",
-    pnpm: pnpmPackage.version ?? "unavailable",
-  };
-}
-
-function formatReport(outdated, runtime) {
-  const generated = new Date().toISOString().slice(0, 10);
-  const lines = [
-    "# Technology version audit",
-    "",
-    `Generated: ${generated}`,
-    "",
-    "The package list comes from the workspace lockfile and npm registry metadata.",
-    "Dependabot remains responsible for opening update pull requests.",
-    "",
-    "## Runtime",
-    "",
-    "| Technology | Running in audit | Latest stable reference |",
-    "| --- | --- | --- |",
-    `| Node.js | ${process.version} | LTS ${runtime.nodeLts}; current ${runtime.nodeCurrent} |`,
-    `| pnpm | ${run(pnpmCommand, ["--version"]).stdout} | ${runtime.pnpm} |`,
-    "",
-    "## npm packages with available updates",
-    "",
-  ];
-
-  if (outdated.length === 0) {
-    lines.push("No package updates were reported by pnpm.");
-    return lines.join("\n");
-  }
-
-  lines.push(
-    "| Package | Resolved | Wanted | Latest |",
-    "| --- | ---: | ---: | ---: |",
-  );
-  for (const update of outdated) {
-    lines.push(
-      `| \`${update.name}\` | ${update.current} | ${update.wanted} | ${update.latest} |`,
-    );
-  }
-
-  return lines.join("\n");
-}
-
-async function main() {
-  const outdatedResult = run(pnpmCommand, [
-    "outdated",
-    "--recursive",
-    "--format",
-    "json",
-  ]);
-  const outdated = parseOutdated(outdatedResult.stdout);
-
-  let runtime;
-  try {
-    runtime = await getRuntimeReleases();
-  } catch (error) {
-    runtime = {
-      nodeLts: `unavailable: ${error.message}`,
-      nodeCurrent: "unavailable",
-      pnpm: "unavailable",
-    };
-  }
-
-  const report = formatReport(outdated, runtime);
-  console.log(report);
-
-  if (isCi && process.env.GITHUB_STEP_SUMMARY) {
-    appendFileSync(process.env.GITHUB_STEP_SUMMARY, `${report}\n`);
-  }
-}
-
-main().catch((error) => {
+  // Missing evidence must not masquerade as no available updates.
+  if (!report.complete) process.exitCode = 1;
+} catch (error) {
   console.error(error.message);
   process.exitCode = 1;
-});
+}
