@@ -436,6 +436,25 @@ The body must remain intact after normalization.
   );
 });
 
+test('normalize-skill-frontmatter is idempotent on a normalized fixture', () => {
+  const dir = makeSkillsDir('my-test-skill', FOLDED_STRIP_FRONTMATTER);
+  const skillFile = join(dir, 'my-test-skill', 'SKILL.md');
+
+  const firstRun = runNormalize(dir);
+  assert.equal(firstRun.exitCode, 0, `first normalization should succeed; got:\n${firstRun.output}`);
+  assert.match(firstRun.output, /1 skill file\(s\) scanned; 1 would change\./);
+
+  const normalizedBytes = readFileSync(skillFile);
+  const secondRun = runNormalize(dir);
+  assert.equal(secondRun.exitCode, 0, `second normalization should succeed; got:\n${secondRun.output}`);
+  assert.match(secondRun.output, /1 skill file\(s\) scanned; 0 would change\./);
+  assert.deepEqual(
+    readFileSync(skillFile),
+    normalizedBytes,
+    'a second normalization must leave the file byte-for-byte unchanged',
+  );
+});
+
 test('normalize-skill-frontmatter round-trips a literal-strip (|-) description', () => {
   const originalDescription =
     'Build, audit, and improve OpenAI Custom GPTs with production-grade methodology. ' +
