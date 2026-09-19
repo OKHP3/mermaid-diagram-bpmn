@@ -77,6 +77,15 @@ bp_skill_version: "0.3"
 Body content here.
 `;
 
+const INVALID_FRONTMATTER = `---
+name: malformed-skill
+description: This frontmatter never closes with the required delimiter.
+
+# Malformed Skill
+
+Body content here.
+`;
+
 const VALID_LONG_NAME_FRONTMATTER = `---
 name: okhp3-this-name-is-way-too-long-for-brand
 description: This description is long enough to meet the minimum fifty character requirement here.
@@ -250,6 +259,32 @@ test('validate-agent-skills identifies each invalid skill package and failed fro
   assert.match(
     output,
     /✖ \.agents\/skills\/mismatch-skill\/SKILL\.md — frontmatter\.name: name must match directory/,
+  );
+});
+
+test('validate-agent-skills reports the exact path and rule for invalid frontmatter', () => {
+  const dir = makeSkillsDir('invalid-frontmatter', INVALID_FRONTMATTER);
+  const { exitCode, output } = runValidateAgentSkills(dir);
+
+  assert.equal(exitCode, 1, 'should reject a skill with invalid frontmatter');
+  assert.match(
+    output,
+    /✖ \.agents\/skills\/invalid-frontmatter\/SKILL\.md — frontmatter: missing or invalid frontmatter/,
+  );
+});
+
+test('validate-agent-skills reports the exact path and rule for a package missing SKILL.md', () => {
+  const base = mkdtempSync(join(tmpdir(), 'bpmn-missing-skill-test-'));
+  const skillDir = join(base, 'missing-skill');
+  mkdirSync(skillDir, { recursive: true });
+  writeFileSync(join(skillDir, 'README.md'), 'This package intentionally has no SKILL.md.\n', 'utf-8');
+
+  const { exitCode, output } = runValidateAgentSkills(base);
+
+  assert.equal(exitCode, 1, 'should reject a non-empty package without SKILL.md');
+  assert.match(
+    output,
+    /✖ \.agents\/skills\/missing-skill\/SKILL\.md — SKILL\.md: SKILL\.md is required \(lowercase skill\.md is not portable\)/,
   );
 });
 
