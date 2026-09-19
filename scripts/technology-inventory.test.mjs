@@ -7,6 +7,7 @@ import {
   collectInventory,
   compareVersions,
   formatReport,
+  lookupBudgetMs,
   parseLockfile,
   read,
   root,
@@ -185,6 +186,48 @@ test("successful audit checks all sources while excluding local tarballs", async
     false,
   );
 });
+test(
+  "a shared deadline preserves partial evidence and stops queued lookups",
+  { timeout: 2000 },
+  async () => {
+    const i = inventory();
+    for (let n = 0; n < 12; n++) i.locked[`queued-${n}`] = ["1.0.0"];
+    const requested = [],
+      signals = [];
+    const report = await audit(
+      i,
+      async (url, signal) => {
+        requested.push(url);
+        signals.push(signal);
+        if (url.endsWith(encodeURIComponent("@scope/tool"))) return metadata;
+        return new Promise(() => {});
+      },
+      async () => {
+        throw new Error("Later sources must not start after timeout");
+      },
+      { timeoutMs: 30 },
+    );
+    assert.equal(report.complete, false);
+    assert.ok(report.npm["@scope/tool"]);
+    assert.equal(report.node, null);
+    assert.equal(report.python, null);
+    assert.ok(signals.every((signal) => signal.aborted));
+    assert.ok(requested.length < Object.keys(report.npm).length);
+    assert.ok(
+      report.errors.every((error) => error.includes("deadline exceeded")),
+    );
+    assert.match(formatReport(report), /INCOMPLETE/);
+    const jobMinutes = Number(
+      read(".github/workflows/technology-version-audit.yml").match(
+        /timeout-minutes:\s*(\d+)/,
+      )[1],
+    );
+    assert.ok(
+      lookupBudgetMs + 60_000 < jobMinutes * 60_000,
+      "Leave time to write and upload incomplete reports",
+    );
+  },
+);
 test("current repository includes every tracked manifest, lockfile identity, and action", () => {
   const files = execFileSync("git", ["ls-files", "-z"], {
     cwd: root,

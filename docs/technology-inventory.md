@@ -82,6 +82,8 @@ The installed Playwright 1.62.1 browser manifest selects Chromium 151.0.7922.34 
 3. **Scheduled evidence:** technology-version-audit.yml runs Mondays at 08:30 UTC, relevant PRs, and manual dispatch. It tests the audit, writes a summary, and uploads Markdown/JSON for 30 days. Its read-only GitHub token goes only to GitHub release queries. Lookup failures fail the job and preserve incomplete evidence.
 4. **Validation:** audit regression tests also run in normal CI. Existing application, skill, plugin, browser, content, and deployment gates remain. Nothing auto-merges or changes the live app merely because a version exists.
 
+Release lookups share a four-minute deadline. On expiry, in-flight requests are canceled, queued lookups are marked incomplete, and the report is saved with a failure status. The ten-minute workflow timeout leaves time to upload this evidence.
+
 The revised files must reach the default branch before the new schedule behavior/grouping is active. Local validation does not prove hosted execution. Dependabot was already configured in the baseline; this change improves grouping and audit coverage.
 
 GitHub documents [pnpm catalogs](https://github.blog/changelog/2025-02-04-dependabot-now-supports-pnpm-workspace-catalogs-ga/) and currently lists [pnpm through v10](https://docs.github.com/en/code-security/reference/supply-chain-security/supported-ecosystems-and-repositories). Validate updater support before jumping to pnpm 12. The [options reference](https://docs.github.com/en/code-security/reference/supply-chain-security/dependabot-options-reference) governs grouping, cooldown, and ignores.
@@ -149,7 +151,7 @@ Require CI for the exact PR commit, including Linux browser/visual jobs. After a
 
 ## Local validation of this maintenance change
 
-- Audit regression suite: 9 passed, covering lockfile extraction, catalog resolution, fixture boundaries, release selection, and explicit lookup failures.
+- Audit regression suite: 10 passed, covering lockfile extraction, catalog resolution, fixture boundaries, release selection, explicit lookup failures, and a stalled-provider deadline with partial evidence retained.
 - Live audit at 2026-09-19T02:05:16Z: 332 npm registry lookups plus seven action release queries and Node/Python release checks; zero lookup failures.
 - Content validation, formatting checks for the new audit and configuration files, and `git diff --check`: passed. Git reported only its normal Windows line-ending conversion notices.
 - Application dependencies, application source, and the lockfile were not upgraded. Full application/browser suites and hosted CI were not run for this maintenance-only change.

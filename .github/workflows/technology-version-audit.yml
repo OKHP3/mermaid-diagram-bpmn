@@ -23,6 +23,8 @@ permissions:
 jobs:
   audit:
     runs-on: ubuntu-latest
+    # Release lookups have a shared four-minute deadline, leaving time for
+    # setup, report serialization, and uploading incomplete evidence.
     timeout-minutes: 10
     steps:
       - name: Checkout

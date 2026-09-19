@@ -197,7 +197,7 @@ export function selectNpmRelease(data, now = Date.now()) {
     ),
   };
 }
-async function fetchText(url) {
+async function fetchText(url, signal) {
   const headers = {
     "User-Agent": "bpmn-technology-audit",
     Accept: "application/json",
@@ -210,28 +210,61 @@ async function fetchText(url) {
     try {
       const response = await fetch(url, {
         headers,
-        signal: AbortSignal.timeout(20_000),
+        signal: AbortSignal.any([signal, AbortSignal.timeout(20_000)]),
       });
       if (!response.ok) throw new Error(`HTTP ${response.status}`);
       return await response.text();
     } catch (caught) {
+      signal.throwIfAborted();
       error = caught;
     }
   }
   throw new Error(`${url}: ${error.message}`);
 }
-const fetchJson = async (url) => JSON.parse(await fetchText(url));
+const fetchJson = async (url, signal) =>
+  JSON.parse(await fetchText(url, signal));
+export const lookupBudgetMs = 240_000;
 export async function audit(
   inventory,
   getJson = fetchJson,
   getText = fetchText,
+  { timeoutMs = lookupBudgetMs } = {},
 ) {
+  if (!Number.isFinite(timeoutMs) || timeoutMs <= 0)
+    throw new Error("The audit lookup timeout must be positive and finite");
+  const controller = new AbortController();
+  const deadline = new Promise((_, reject) => {
+    controller.signal.addEventListener(
+      "abort",
+      () => reject(controller.signal.reason),
+      { once: true },
+    );
+  });
+  const timer = setTimeout(
+    () =>
+      controller.abort(new Error("Overall release lookup deadline exceeded")),
+    timeoutMs,
+  );
+  try {
+    return await auditSources(
+      inventory,
+      getJson,
+      getText,
+      controller.signal,
+      deadline,
+    );
+  } finally {
+    clearTimeout(timer);
+  }
+}
+async function auditSources(inventory, getJson, getText, signal, deadline) {
   const errors = [],
     npm = {},
     actions = {};
   const capture = async (label, operation) => {
     try {
-      return await operation();
+      signal.throwIfAborted();
+      return await Promise.race([operation(), deadline]);
     } catch (error) {
       errors.push(`${label}: ${error.message}`);
       return null;
@@ -252,7 +285,7 @@ export async function audit(
         const name = names[cursor++],
           source = `https://registry.npmjs.org/${encodeURIComponent(name)}`;
         npm[name] = await capture(name, async () => ({
-          ...selectNpmRelease(await getJson(source)),
+          ...selectNpmRelease(await getJson(source, signal)),
           source,
         }));
       }
@@ -261,7 +294,7 @@ export async function audit(
   for (const name of Object.keys(inventory.actions).sort()) {
     const source = `https://api.github.com/repos/${name.split("/").slice(0, 2).join("/")}/releases/latest`;
     actions[name] = await capture(name, async () => {
-      const data = await getJson(source);
+      const data = await getJson(source, signal);
       if (
         data.draft ||
         data.prerelease ||
@@ -276,7 +309,9 @@ export async function audit(
     });
   }
   const node = await capture("Node.js", async () => {
-    const releases = (await getJson("https://nodejs.org/dist/index.json"))
+    const releases = (
+      await getJson("https://nodejs.org/dist/index.json", signal)
+    )
       .filter((r) => isStable(r.version.replace(/^v/, "")))
       .sort((a, b) => compareVersions(b.version, a.version));
     const selected = releases.find((r) =>
@@ -293,7 +328,7 @@ export async function audit(
   });
   const python = await capture("Python", async () => {
     const source = "https://www.python.org/downloads/";
-    const html = await getText(source);
+    const html = await getText(source, signal);
     const versions = unique(
       [...html.matchAll(/>Python (3\.\d+\.\d+)</g)].map((m) => m[1]),
     ).sort(compareVersions);
