@@ -38,7 +38,7 @@ plugin or BPMN execution platform.
 - `app/src/lib/bpmn-plugin.ts` is an adapter source file. End-to-end validation
   against a live Mermaid `registerExternalDiagrams()` and `mermaid.render()`
   host is verified by `app/src/lib/__tests__/bpmn-plugin-integration.test.ts`,
-  which runs real `mermaid@11.4.1` against two corpus examples and is a
+  which runs real `mermaid@11.17.2` against two corpus examples and is a
   merge-blocking CI check. See `docs/mermaid-compatibility.md` for the full
   evidence record. What remains: a real package boundary and a browser-host
   demo without `securityLevel: "loose"` (Phases 2 and 3 of PRD-04).
@@ -150,7 +150,7 @@ The declared and checked-in stack is:
 - Node.js 24 compatibility line in Replit and GitHub Actions
 - pnpm 10, declared as `pnpm@10.26.1` in the root manifest
 - TypeScript 7.0.2
-- React 19.2.7 and Vite 8.2.2
+- React 19.3.0 and Vite 8.3.0
 - Tailwind CSS 4 through the Vite plugin
 - wouter for client-side routing
 - Vitest 4.1.10 for application tests

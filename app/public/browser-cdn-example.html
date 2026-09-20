@@ -24,7 +24,7 @@
     <div id="status" data-state="loading" role="status" aria-live="polite">Loading Mermaid and bpmn-beta…</div>
     <div id="output" aria-label="Rendered BPMN diagram"></div>
     <script type="module">
-      const MERMAID_URL = "https://cdn.jsdelivr.net/npm/mermaid@11.4.1/+esm";
+      const MERMAID_URL = "https://cdn.jsdelivr.net/npm/mermaid@11.17.2/+esm";
       const PLUGIN_URL = "https://cdn.jsdelivr.net/npm/@okhp3/mermaid-diagram-bpmn@0.1.1/dist/index.mjs";
       const SOURCE = `bpmn-beta
 accTitle: Browser CDN proof
@@ -51,7 +51,7 @@ g1 --> e2: "no"`;
         const { svg } = await mermaid.render("browser-cdn-bpmn", SOURCE);
         output.innerHTML = svg;
         status.dataset.state = "ok";
-        status.textContent = "Rendered successfully · mermaid@11.4.1 · plugin@0.1.1 · strict security";
+        status.textContent = "Rendered successfully · mermaid@11.17.2 · plugin@0.1.1 · strict security";
       } catch (error) {
         status.dataset.state = "error";
         status.textContent = `CDN render failed: ${error instanceof Error ? error.message : String(error)}`;

@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { Link, useLocation } from "wouter";
-import { Moon, Sun, Menu, X, Github, ChevronDown } from "lucide-react";
+import { Moon, Sun, Menu, X, CodeXml, ChevronDown } from "lucide-react";
 import { usePageTracking } from "../hooks/usePageTracking";
 import { loadMermaidHostDemo } from "@/lib/route-loaders";
 
@@ -299,7 +299,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
               aria-label="GitHub repository"
               data-testid="link-github-header"
             >
-              <Github size={15} />
+              <CodeXml size={15} />
             </a>
 
             {/* Theme toggle */}
@@ -395,7 +395,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
                 rel="noopener noreferrer"
                 className="forge-footer-link flex items-center gap-1.5 px-3 py-1.5 rounded text-xs"
               >
-                <Github size={12} />
+                <CodeXml size={12} />
                 GitHub
               </a>
             </div>

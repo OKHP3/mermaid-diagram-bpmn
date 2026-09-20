@@ -23,7 +23,7 @@ This repository contains three related assets:
 | Direct SVG renderer, no `bpmn-js` runtime dependency | Working |
 | Pool and lane containment | Experimental |
 | Message flows | Experimental |
-| Mermaid External Diagram adapter | **`@okhp3/mermaid-diagram-bpmn@0.1.1`** — published to npm, source- and browser-tested against `mermaid@11.4.1` |
+| Mermaid External Diagram adapter | **`@okhp3/mermaid-diagram-bpmn@0.1.1`** — published to npm, source- and browser-tested against `mermaid@11.17.2` |
 | Langium grammar | Roadmap |
 | Full Mermaid `getStyles` / theme-variable integration | Source-verified for the supported adapter path |
 | Upstream Mermaid core PR | Future, after v1.0 stabilizes |

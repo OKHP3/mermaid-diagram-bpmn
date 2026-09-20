@@ -10,28 +10,28 @@ allowBuilds:
 autoInstallPeers: false
 
 catalog:
-  '@replit/vite-plugin-cartographer': ^0.5.5
+  '@replit/vite-plugin-cartographer': ^0.6.1
   '@replit/vite-plugin-dev-banner': ^0.1.1
   '@replit/vite-plugin-runtime-error-modal': ^0.0.6
   '@tailwindcss/vite': ^4.3.3
   '@tanstack/react-query': ^5.90.21
-  '@types/node': ^26.1.2
-  '@types/react': ^19.2.17
-  '@types/react-dom': ^19.2.3
-  '@vitejs/plugin-react': ^6.1.0
+  '@types/node': ^26.6.1
+  '@types/react': ^19.3.0
+  '@types/react-dom': ^19.3.0
+  '@vitejs/plugin-react': ^6.1.1
   class-variance-authority: ^0.7.1
   clsx: ^2.1.1
   drizzle-orm: ^0.45.2
   fflate: ^0.8.3
   framer-motion: ^13.1.1
-  lucide-react: ^0.545.0
-  react: 19.2.7
-  react-dom: 19.2.7
-  tailwind-merge: ^3.6.0
-  tailwindcss: ^4.3.2
-  tsx: ^4.23.0
-  vite: ^8.2.2
-  wouter: ^3.10.0
+  lucide-react: ^1.47.0
+  react: 19.3.0
+  react-dom: 19.3.0
+  tailwind-merge: ^3.7.0
+  tailwindcss: ^4.3.3
+  tsx: ^4.23.13
+  vite: ^8.3.0
+  wouter: ^3.11.0
   zod: ^4.4.3
 
 minimumReleaseAge: 1440
