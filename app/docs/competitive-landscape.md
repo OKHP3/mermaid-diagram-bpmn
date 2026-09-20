@@ -413,13 +413,15 @@ Formal 30-day re-check ran 16 days early. GitHub API queried for new comments on
 
 ---
 
-**LinkedIn post draft (build-in-public, ready to publish):**
+**LinkedIn post draft (build-in-public, ready to publish) — refreshed 2026-09-20:**
+
+Refresh notes: the 2026-08-07 draft had a DSL syntax bug (`gateway` is not a valid keyword; corrected to `xor` per `app/docs/dsl-spec.md`), stale stats (717 tests / 5.68 kB), and named only the DFKI #7699 parallel proposal. This version fixes the syntax, updates stats to the 2026-08-23 capability-ledger baseline (846 tests — the most recent sourced figure available; confirm against a live run before posting if one exists), and extends the competitive acknowledgment to cover Filipsajdak's #8160 PR series (opened 2026-09-10). Em dashes removed throughout per brand voice rules; the closing "happy to answer questions" line is kept deliberately as a soft CTA appropriate to a post (the hard-ending rule applies to articles, not posts).
 
 Post this as body text; add the link (https://okhp3.github.io/mermaid-diagram-bpmn/) as the first comment, not in the post itself.
 
-> Six months ago I needed to document a process workflow in a GitHub PR — and hit the same wall I'd hit a dozen times before. Draw.io produces a binary blob. BPMN XML is machine-readable but not human-writable. Mermaid is ideal for sequence and flowchart diagrams, but it has no BPMN type.
+> Six months ago I needed to document a process workflow in a GitHub PR, and hit the same wall I'd hit a dozen times before. Draw.io produces a binary blob. BPMN XML is machine-readable but not human-writable. Mermaid is ideal for sequence and flowchart diagrams, but it has no BPMN type.
 >
-> So I built a prototype: `bpmn-beta`, an external Mermaid diagram type plugin. Pools, lanes, tasks, gateways, message flows — authored as plain text, rendered to BPMN-shaped SVG in the browser. No bpmn-js dependency, no XML.
+> So I built a prototype: `bpmn-beta`, an external Mermaid diagram type plugin. Pools, lanes, tasks, gateways, message flows, authored as plain text, rendered to BPMN-shaped SVG in the browser. No bpmn-js dependency, no XML.
 >
 > ```
 > bpmn-beta
@@ -428,7 +430,7 @@ Post this as body text; add the link (https://okhp3.github.io/mermaid-diagram-bp
 >   lane buyer "Procurement Officer" {
 >     start s1 "Request Submitted"
 >     task:user t1 "Review Request"
->     gateway g1 "Approved?"
+>     xor g1 "Approved?"
 >     end e1 "Order Placed"
 >     end e2 "Request Rejected"
 >   }
@@ -438,11 +440,11 @@ Post this as body text; add the link (https://okhp3.github.io/mermaid-diagram-bp
 > }
 > ```
 >
-> Worth being upfront: there's a parallel proposal in the Mermaid issues (#7699, from DFKI researchers) targeting the same problem. Its author has proposed both a concise default layer and a more detailed layer, so the design is still evolving. A source-linked side-by-side comparison is on the demo site.
+> Worth being upfront: this isn't the only approach in the Mermaid community right now. There's a parallel proposal in the Mermaid issues (#7699, from DFKI researchers) with both a concise default layer and a more detailed layer, still evolving. A separate contributor has draft PRs exploring native core support (#8160 series). A source-linked comparison of all three lives on the demo site.
 >
-> Alongside the diagram plugin, I've been building a 15-skill agent suite (BP-SKILL) — SKILL.md-format workflows for the full process documentation lifecycle from elicitation through publication. Researchers at Polytechnique Montréal found that Mermaid achieves the highest overall score across six criteria when evaluating nine process model representations for LLM-based process modeling (arXiv 2507.11356). The thesis: a Mermaid-flavoured BPMN DSL is positioned at the intersection of the two representations that perform best.
+> Alongside the diagram plugin, I've been building a 15-skill agent suite (BP-SKILL), SKILL.md-format workflows for the full process documentation lifecycle from elicitation through publication. Researchers at Polytechnique Montréal found that Mermaid achieves the highest overall score across six criteria when evaluating nine process model representations for LLM-based process modeling (arXiv 2507.11356). The thesis: a Mermaid-flavoured BPMN DSL sits at the intersection of the two representations that perform best.
 >
-> Currently at v0.1.1, 717 tests, 5.68 kB gzip. Demo, npm, and GitHub in the comments. Happy to answer questions about the parser or renderer architecture.
+> Currently at v0.1.1, 846 tests, 5.7 kB gzip. Demo, npm, and GitHub in the comments. Happy to answer questions about the parser or renderer architecture.
 >
 > #BPMN #Mermaid #ProcessModeling #DiagramsAsCode #OpenSource #BuildInPublic
 
@@ -475,7 +477,7 @@ Post this as body text; add the link (https://okhp3.github.io/mermaid-diagram-bp
 
 ---
 
-**Post status as of 2026-08-07:** Drafts complete. LinkedIn and HN posts not yet published — posting is a human action. The above drafts are publication-ready. Update this section with post URLs and dates when published, and add an initial response summary after 12 hours of monitoring.
+**Post status as of 2026-09-20:** LinkedIn draft refreshed (syntax bug fixed, stats updated, Filipsajdak #8160 series acknowledged) and passed through `okhp3-linkedin-voice`. Still not yet published — posting is a human action. HN draft has the same staleness issues (717 tests, `gateway` keyword bug, single-competitor framing) and was not refreshed in this pass; refresh it before it's actually queued, per sequencing rule 1 (HN follows LinkedIn by 24-48h). Update this section with post URLs and dates when published, and add an initial response summary after 12 hours of monitoring.
 
 **Reply monitoring checklist (fill in when posts go live):**
 - [ ] LinkedIn post URL: ___
