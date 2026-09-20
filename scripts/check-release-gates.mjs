@@ -60,7 +60,7 @@ const gates = [
     interpretation: "Critical or high advisories block publication; moderate and low advisories remain visible.",
     escalation: "Upgrade or replace the affected dependency, then rerun the report.",
     evidence: vulnerabilities,
-    limitation: mermaidFindings.length ? `Mermaid remains pinned at 11.4.1 with ${mermaidFindings.length} advisory findings; review before changing the tested compatibility pair.` : null,
+    limitation: mermaidFindings.length ? `Mermaid remains pinned at 11.17.2 with ${mermaidFindings.length} advisory findings; review before changing the tested compatibility pair.` : null,
   },
   {
     id: "licenses",

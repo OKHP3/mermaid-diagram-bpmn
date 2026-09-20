@@ -61,7 +61,7 @@ const EVIDENCE_TIERS = [
     id: 'mermaid-integration',
     claim: 'Mermaid source adapter tested via real mermaid.render()',
     evidence:
-      'bpmn-plugin-integration.test.ts plus packed plugin smoke (12/12) on 2026-08-22; real mermaid@11.4.1',
+      'bpmn-plugin-integration.test.ts and packed plugin smoke validate the current Mermaid target; see September 20 compatibility review',
     tier: 'supported',
   },
   {

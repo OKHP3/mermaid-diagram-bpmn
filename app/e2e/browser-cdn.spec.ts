@@ -13,7 +13,7 @@ test.describe('standalone browser CDN proof', () => {
     const status = page.locator('#status');
 
     await expect(status).toHaveAttribute('data-state', 'ok', { timeout: 30_000 });
-    await expect(status).toContainText('mermaid@11.4.1');
+    await expect(status).toContainText('mermaid@11.17.2');
     await expect(status).toContainText('plugin@0.1.1');
     await expect(page.locator('#output svg')).toBeVisible();
     await expect(page.locator('#output svg .bpmn-task')).toBeVisible();

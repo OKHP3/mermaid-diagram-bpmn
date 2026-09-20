@@ -46,7 +46,7 @@ const KNOWN_LIMITS = [
     id: "cdn-contract",
     label: "Browser CDN path is narrowly supported",
     detail:
-      "The tested no-bundler path uses native ESM with mermaid@11.4.1 and @okhp3/mermaid-diagram-bpmn@0.1.1 from jsDelivr. Legacy script tags, CommonJS loading, other Mermaid versions, and arbitrary loaders are outside the contract.",
+      "The tested no-bundler path uses native ESM with mermaid@11.17.2 and @okhp3/mermaid-diagram-bpmn@0.1.1 from jsDelivr. Legacy script tags, CommonJS loading, other Mermaid versions, and arbitrary loaders are outside the contract.",
   },
 ] as const;
 

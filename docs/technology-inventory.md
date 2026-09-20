@@ -168,3 +168,14 @@ Require CI for the exact PR commit, including Linux browser/visual jobs. After a
 | Revised automation active           | Not yet verified                  | Local implementation                         | Merge and run once on GitHub       |
 
 Next action: land the maintenance files, run the hosted audit once, and process candidates through CI and deployment checks.
+
+## September 20 dependency convergence
+
+PRs #64-69 are incorporated together with compatibility repairs. The current
+manifest and regenerated lockfile govern versions: React 19.3, Vite 8.3,
+Lucide 1.47, Mermaid 11.17.2, and the reviewed tooling/CSS updates. The removed
+Lucide GitHub brand export is replaced by a code icon on the same labeled link.
+The Mermaid source target, packed fixture, and pinned CDN example move together
+and retain the complete integration and three-browser checks. Earlier tables
+above remain the dated September 18 inventory. This does not publish a new npm
+plugin version or adopt Mermaid 12.
