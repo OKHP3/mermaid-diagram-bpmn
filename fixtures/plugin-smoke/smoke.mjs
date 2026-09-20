@@ -39,6 +39,7 @@ const safeSet = (key, value) => {
 safeSet('window',       happiWindow);
 safeSet('document',     happiWindow.document);
 safeSet('DOMParser',    happiWindow.DOMParser);
+safeSet('CSSStyleSheet', happiWindow.CSSStyleSheet);
 safeSet('navigator',    happiWindow.navigator);
 safeSet('location',     happiWindow.location);
 safeSet('customElements', happiWindow.customElements);
