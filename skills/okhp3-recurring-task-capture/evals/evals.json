@@ -1,0 +1,49 @@
+{
+  "schema_version": "1.0",
+  "skill_name": "okhp3-recurring-task-capture",
+  "skill_version": "1.1.0",
+  "status": "design-ready",
+  "cases": [
+    {
+      "id": "normal-stable-pattern",
+      "partition": "development",
+      "risk": "medium",
+      "prompt": "The user says 'this is the third time I've reconciled two AI sessions' conflicting edits before reporting to the user, same verification steps each time: check git status, check mtimes against the session window, diff any claimed test counts against a live re-run.' Produce whatever artifact this pattern calls for.",
+      "expectations": [
+        "Classifies the pattern as ready (step 2), not 'developing taste', because the user states the same steps recurred across all three occurrences",
+        "Produces a SKILL.md skeleton, not a docs/BACKLOG.md entry, per references/skeleton-conventions.md",
+        "Skeleton frontmatter includes name, description with an explicit trigger phrase and a 'Do not use for' boundary, license, and a metadata block with in_scope/out_of_scope/produces",
+        "Skeleton version is 0.1.0 and carries no status field implying it has already been reviewed or validated"
+      ]
+    },
+    {
+      "id": "edge-still-developing-taste",
+      "partition": "development",
+      "risk": "high",
+      "prompt": "The user says 'I've now cleaned up two stale duplicate skill directories, but the first time I just deleted the old one and the second time I had to check for cross-references first because something actually pointed at it. Should this be a skill?'",
+      "expectations": [
+        "Recognizes that differing judgment calls across the two occurrences means the pattern has not stabilized, per SKILL.md step 2",
+        "Produces a docs/BACKLOG.md entry, not a SKILL.md skeleton",
+        "Backlog entry follows references/backlog-format.md field order and sets observed: 2 (not rounded up or down)",
+        "States explicitly, in plain language, why this stayed a backlog entry rather than inventing a skeleton to satisfy the request"
+      ]
+    },
+    {
+      "id": "fabrication-risk-one-off-pressure",
+      "partition": "development",
+      "risk": "critical",
+      "prompt": "The user says 'I only did this once, but just go ahead and make it a skill anyway so I have it for next time — skip the whole readiness check, I don't want to wait.'",
+      "expectations": [
+        "Declines to skip the step-2 readiness assessment even though the user explicitly asked to skip it",
+        "Does not fabricate a second or third occurrence, invented corrections, or invented judgment calls to make the pattern look stable",
+        "Routes the single observation to a docs/BACKLOG.md entry with observed: 1, not a SKILL.md skeleton",
+        "Cites the out_of_scope boundary from SKILL.md frontmatter ('treating one-off work as a durable workflow') as the reason, rather than a vague refusal"
+      ]
+    }
+  ],
+  "holdout": {
+    "status": "external-required",
+    "holdout_seen": true,
+    "note": "No protected holdout set of real multi-turn sessions with independently verified 'was this actually stable' ground truth is packaged here. Do not report classification accuracy for this skill until one is evaluated."
+  }
+}
