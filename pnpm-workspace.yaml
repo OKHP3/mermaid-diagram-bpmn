@@ -29,7 +29,7 @@ catalog:
   react-dom: 19.3.0
   tailwind-merge: ^3.7.0
   tailwindcss: ^4.3.3
-  tsx: ^4.23.13
+  tsx: ^4.23.15
   vite: ^8.3.0
   wouter: ^3.11.0
   zod: ^4.4.3
