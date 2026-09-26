@@ -1,9 +1,9 @@
 # Technology inventory and update maintenance
 
-Reviewed: September 18, 2026 (America/Chicago). Retrieval timestamps use UTC.
-Baseline: `51ef37187fc09582333164ac18b41a8232bff0c0`, verified against GitHub main and Replit.
+Reviewed: September 26, 2026 (America/Chicago). Retrieval timestamps use UTC.
+Baseline before this refresh: `bdb952daea855ee13d231ac119da5fe3cc26bdff`, verified against GitHub main and Replit.
 
-The complete version list is [technology-versions.md](technology-versions.md), with structured evidence in [technology-versions.json](technology-versions.json). It covers all 29 tracked package manifests, 326 npm package names and 346 resolutions in the lockfile, six catalog entries not consumed through `catalog:`, seven GitHub Actions, and 21 Python files. Each package's latest-version claim links to its publisher's npm registry record.
+The complete version list is [technology-versions.md](technology-versions.md), with structured evidence in [technology-versions.json](technology-versions.json). The generated report records its manifest, lockfile, runtime, action, and Python coverage along with the retrieval timestamp and lookup result. Each package's latest-version claim links to its publisher's npm registry record.
 
 **Confirmed:** This solution comprises a static React/TypeScript application, a Mermaid plugin source package, and portable process skills. Node runs builds and maintenance scripts. Python supports repository and skill maintenance, not a web backend. JavaScript, HTML, CSS, SVG, and browser APIs support the application. There is no Python application or pip manifest. Express and Drizzle are not application dependencies; the unused Drizzle catalog declaration does not establish runtime use.
 
@@ -14,29 +14,32 @@ These are snapshot observations, not upgrades performed by this change. npm comp
 | Technology                  | Repository / locked version | Latest stable found                       | Treatment                                                             |
 | --------------------------- | --------------------------- | ----------------------------------------- | --------------------------------------------------------------------- |
 | TypeScript                  | 7.0.2                       | 7.0.2                                     | Current                                                               |
-| React / React DOM           | 19.2.7 / 19.2.7             | 19.3.0 / 19.3.0                           | Update together with React types                                      |
-| Vite                        | 8.2.2                       | 8.3.0                                     | Validate app and plugin builds                                        |
-| Vite React plugin           | 6.1.0                       | 6.1.1                                     | Validate JSX integration                                              |
-| Tailwind CSS / Vite adapter | 4.3.2 / 4.3.3               | 4.3.3 / 4.3.3                             | Group CSS updates                                                     |
-| Vitest                      | 4.1.10                      | 5.0.1                                     | Separate major migration; 4.1.11 is the current-major option          |
-| Playwright                  | 1.62.1                      | 1.63.0                                    | Install matching browser binaries; test all three engines             |
-| Mermaid                     | 11.4.1                      | 12.0.0                                    | Compatibility migration; latest 11.x is 11.17.2                       |
-| lucide-react                | 0.545.0                     | 1.47.0                                    | Check icon exports and visual behavior                                |
-| wouter                      | 3.10.0                      | 3.11.1                                    | Test routes, base path, and sharing                                   |
-| happy-dom                   | 20.11.12                    | 20.14.5                                   | Coordinate smoke fixture                                              |
-| tsx                         | 4.23.0                      | 4.23.13                                   | Tooling update                                                        |
-| Prettier                    | 3.9.6                       | 3.9.8                                     | Tooling update                                                        |
-| Node.js                     | Major 24 in CI and Replit   | 26.9.0 Current; 24.21.0 LTS               | Follow Node 24 patches; review new LTS major before migration         |
-| pnpm                        | 10.26.1 declared            | Highest stable 12.5.1; default tag 12.4.2 | Start with supported-major 10.34.5; review major migration separately |
+| React / React DOM           | 19.3.0 / 19.3.0             | 19.3.0 / 19.3.0                           | Current                                                               |
+| Vite                        | 8.3.0                       | 8.3.1                                     | Hold until the 24-hour release-maturity window passes                  |
+| Vite React plugin           | 6.1.1                       | 6.1.1                                     | Current                                                               |
+| Tailwind CSS / Vite adapter | 4.3.3 / 4.3.3               | 4.3.3 / 4.3.3                             | Current                                                               |
+| Vitest                      | 5.0.2                       | 5.0.2                                     | Major update; all required checks passed                              |
+| Playwright                  | 1.63.0                      | 1.63.0                                    | Current; test all three engines                                       |
+| Mermaid                     | 11.17.2                     | 12.0.0                                    | Stay on 11.x until compatibility migration passes                     |
+| lucide-react                | 1.48.0                      | 1.48.0                                    | Current; visual checks passed                                         |
+| wouter                      | 3.11.0                      | 3.11.1                                    | Hold until the 24-hour release-maturity window passes                  |
+| happy-dom                   | 20.14.5                     | 20.14.5                                   | Current                                                               |
+| tsx                         | 4.23.15                     | 4.23.15                                   | Current                                                               |
+| Prettier                    | 3.9.9                       | 3.9.9                                     | Current                                                               |
+| `@types/node`               | 26.6.2                      | 26.6.3                                    | Hold until the 24-hour release-maturity window passes                  |
+| Node.js                     | Major 24 in CI and Replit   | 26.10.0 Current; 24.21.0 LTS              | Follow Node 24 patches; review new LTS major before migration         |
+| pnpm                        | 10.26.1 declared            | Highest stable 12.7.0; supported 10.34.5  | Keep declared major until tested; review major migration separately   |
 | Python                      | Replit module 3.11          | 3.14.7; 3.11 line 3.11.16                 | Host/tooling maintenance                                              |
 
 The pnpm highest release and npm default tag differ. The audit records both, filters prereleases and deprecated releases, and computes candidates at least 24 hours old. A new version does not establish compatibility. Runtime sources: [Node release index](https://nodejs.org/dist/index.json), [Python releases](https://www.python.org/downloads/), [pnpm registry](https://registry.npmjs.org/pnpm).
+
+Patch candidates published inside the 24-hour window remain unpinned until they mature; pnpm enforces this policy during lockfile resolution. Do not bypass `minimumReleaseAge` to consume a newly published release.
 
 ## Actual host observations
 
 | Surface                      | Node                      | pnpm                           | Python         | Other observed tooling                                                           |
 | ---------------------------- | ------------------------- | ------------------------------ | -------------- | -------------------------------------------------------------------------------- |
-| Windows, this session        | 24.11.1                   | Active command returns 11.19.0 | 3.14.0rc1      | Git 2.55.0.windows.5; npm 11.6.2; GitHub CLI 2.96.0                              |
+| Windows, this session        | 24.11.1                   | 11.25.0                        | 3.14.0rc1      | Git 2.55.0.windows.5; npm 11.6.2; GitHub CLI 2.96.0                              |
 | Replit shell                 | 24.13.0                   | 10.26.1                        | 3.11.14        | Git 2.50.1; Bash 5.2.37; Nix 2.31.1 (Determinate Nix 3.11.2); Ubuntu 24.04.4 LTS |
 | GitHub Actions configuration | 24, floating within major | Root packageManager            | Not configured | ubuntu-latest; action references in generated report                             |
 
