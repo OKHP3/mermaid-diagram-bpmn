@@ -153,7 +153,7 @@ The declared and checked-in stack is:
 - React 19.3.0 and Vite 8.3.0
 - Tailwind CSS 4 through the Vite plugin
 - wouter for client-side routing
-- Vitest 4.1.10 for application tests
+- Vitest 5.0.2 for application tests
 - ESM JavaScript for root validation and packaging scripts
 
 Replit provisions Python 3.11. Python files support repository and skill
