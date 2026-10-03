@@ -282,3 +282,5 @@ Known documentation drift remains in some historical `app/docs/` files,
 including references to the former `artifacts/` path and older workflow names.
 Treat current source, manifests, workflow files, and this guide as the source
 of truth until those documents are separately reconciled.
+
+## Imported Claude Cowork project instructions
