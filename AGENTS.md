@@ -183,6 +183,7 @@ pnpm run check:generated
 pnpm run eval:run
 pnpm run technology:check
 pnpm run technology:test
+node scripts/test-delegation-controller.mjs
 ```
 
 The application build generates `app/public/skills/`,
@@ -202,6 +203,12 @@ workflow retains reports as artifacts; Dependabot proposes grouped updates.
 Runtime, fixture, CDN, and compatibility migrations follow the maintenance plan.
 The automation does not merge updates or publish new application versions.
 The other commands may also require the installed dependency tree.
+
+The optional delegation program is documented in `docs/delegation/README.md`.
+Its controller and regression checks use Node built-ins. Runtime registries,
+worker receipts, and logs stay under ignored `.local/`; the committed manifest
+is a reusable template. CI checks its scheduler and receipt rejection gates.
+Candidate task records do not authorize implementation or external publication.
 
 The deployment workflow uses this sequence:
 

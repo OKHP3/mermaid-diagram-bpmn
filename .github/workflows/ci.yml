@@ -50,6 +50,9 @@ jobs:
       - name: Test technology inventory and release lookup failure detection
         run: pnpm run technology:test
 
+      - name: Test delegation scheduler and receipt rejection gates
+        run: node scripts/test-delegation-controller.mjs
+
       - name: Build app (produces the manifest for the bundle-size gate)
         run: pnpm --filter @workspace/mermaid-diagram-bpmn run build
 
