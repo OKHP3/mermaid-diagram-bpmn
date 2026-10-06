@@ -68,20 +68,23 @@ Key facts about the proposal:
 
 **Honest comparative read:** The original detailed form is close to an attribute dictionary (`type:event,subtype:none,behaviour:start,label:,lane:,pool:`), but the later simple/default layer is intentionally Mermaid-like. The DFKI author does not yet publish a grammar, normalization rules, or a public implementation, so that proposed syntax should not be treated as settled. bpmn-beta's differentiation must rest on a working, documented implementation and clear scope rather than on claiming that the competing proposal is inherently verbose.
 
-**Source review, 2026-09-17:** The issue remains open with the same labels and
-the same two author-authored examples. Its updated timestamp changed because
-[@filipsajdak posted on 2026-09-10](https://github.com/mermaid-js/mermaid/issues/7699#issuecomment-5615202671)
-about a separate native BPMN series tracked in
-[#8160](https://github.com/mermaid-js/mermaid/issues/8160). Direct API inspection
+**Source review, 2026-10-06:** The issue remains open with the same labels and
+the same two author-authored examples. Its latest timestamp reflects
+[OKHP3's 2026-09-28 BP-SKILL comment](https://github.com/mermaid-js/mermaid/issues/7699#issuecomment-5876479011),
+which discusses portable process-capture methods and asks for a core-versus-external
+direction. It introduces no new author-authored syntax example or maintainer decision.
+The earlier [2026-09-10 contributor comment](https://github.com/mermaid-js/mermaid/issues/7699#issuecomment-5615202671)
+links the separate native BPMN series tracked in
+[#8160](https://github.com/mermaid-js/mermaid/issues/8160). The 2026-09-17 API inspection
 confirmed that the diagram PR [#8166](https://github.com/mermaid-js/mermaid/pull/8166)
 and syntax documentation PR [#8167](https://github.com/mermaid-js/mermaid/pull/8167)
-are open drafts targeting `develop`, not merged work. The contributor explicitly
+were open drafts targeting `develop`, not merged work. The contributor explicitly
 acknowledges OKHP3's published plugin and the existing `bpmn-beta` keyword. This
 is contributor recognition, not maintainer endorsement or a decision about core
 integration versus external plugins. The contributor also flags a potential
 `bpmn-beta` detector collision if native support ships in
 [#2623](https://github.com/mermaid-js/mermaid/issues/2623#issuecomment-5615197016).
-The project's tested Mermaid target remains 11.4.1; this source review does not
+The project's declared and locked Mermaid target is 11.17.2; this source review does not
 extend that compatibility claim. The older dated observations below remain
 historical; they do not describe the current number of competing implementations.
 The public comparison now links this series. The DFKI author's examples remain

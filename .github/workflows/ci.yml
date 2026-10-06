@@ -36,6 +36,9 @@ jobs:
       - name: Safety and portability release gate
         run: pnpm run check:release-gates -- --output release-gate-report.json
 
+      - name: Test release gate command failure detection
+        run: node --test scripts/check-release-gates.test.mjs
+
       - name: Upload release gate report on failure
         if: failure()
         uses: actions/upload-artifact@v7
@@ -49,6 +52,9 @@ jobs:
 
       - name: Test technology inventory and release lookup failure detection
         run: pnpm run technology:test
+
+      - name: Test delegation scheduler and receipt rejection gates
+        run: node scripts/test-delegation-controller.mjs
 
       - name: Build app (produces the manifest for the bundle-size gate)
         run: pnpm --filter @workspace/mermaid-diagram-bpmn run build

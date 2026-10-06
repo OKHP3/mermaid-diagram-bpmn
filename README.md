@@ -133,6 +133,7 @@ See [docs/strategy.md](./docs/strategy.md#okhp³-visual-language-stack) for the 
 | [Strategy doc](docs/strategy.md) | Positioning, thesis, upstream engagement plan |
 | [Version checklist](docs/version-checklist.md) | Completion criteria for each release |
 | [Technology inventory](docs/technology-inventory.md) | Current and latest stable technology versions |
+| [Delegation program](docs/delegation/README.md) | Bounded agent duties, dependencies, budgets, and executable receipt gates |
 
 ---
 

@@ -1,0 +1,1138 @@
+{
+  "schemaVersion": 1,
+  "runId": "bpmn-delegation-2026-10-05",
+  "revision": "205b565ed0e638d68669a1be3c4e460cec68c7a5",
+  "sourceSelection": {
+    "tier": "ASSUMPTION",
+    "description": "Repository audit findings selected provisionally at the recorded revision. Candidate implementation requires an explicit source and scope decision.",
+    "implementationAuthorized": false
+  },
+  "limits": {
+    "delegates": 30,
+    "perDelegateTokens": 2000000,
+    "superintendentTokens": 20000000,
+    "aggregateTokens": 80000000,
+    "activeDelegates": 3,
+    "enforcement": "Roster, declared exposure, dependency and file ownership gates enforced locally; goal token accounting is soft and not a provider spending guarantee."
+  },
+  "preparationAgents": [],
+  "tasks": [
+    {
+      "id": "T01",
+      "title": "Freeze document authority and current claim conflicts",
+      "phase": "preparation",
+      "status": "ready",
+      "dependencies": [],
+      "model": "gpt-6-luna",
+      "reasoningEffort": "low",
+      "goalBudgetTokens": 150000,
+      "authorizedCeilingTokens": 2000000,
+      "reservedTokens": 2000000,
+      "inputs": [
+        "AGENTS.md",
+        "docs/capability-ledger.md",
+        "docs/mermaid-compatibility.md",
+        "app/docs/PRD-04-plugin-convergence.md",
+        "docs/replit-upstream-readiness-hardening-directive.md"
+      ],
+      "findings": [
+        {
+          "path": "docs/replit-upstream-readiness-hardening-directive.md",
+          "lines": "73-95",
+          "tier": "confirmed-file; dated claims require revalidation"
+        },
+        {
+          "path": "docs/capability-ledger.md",
+          "lines": "18-38,102-112",
+          "tier": "confirmed-file; dated claims require revalidation"
+        }
+      ],
+      "steps": [
+        "Build a source index from the named files only; preserve dates and supersession pointers.",
+        "Compare package/demo/version claims with current manifests and source presence.",
+        "Return conflicting claims and exact next checks; do not alter canonical documentation."
+      ],
+      "acceptance": [
+        "Every selected report is identified with revision and date.",
+        "Old absent-package/demo claims are distinguished from current source presence.",
+        "No dated test/publication claim is promoted to current verification."
+      ],
+      "commands": [],
+      "outputDirectory": ".local/delegation-2026-10-05/tasks/T01",
+      "writePaths": [".local/delegation-2026-10-05/tasks/T01/"],
+      "candidateSourceOwnership": [],
+      "scopeGate": "bounded preparation under current request",
+      "attempt": 0
+    },
+    {
+      "id": "T02",
+      "title": "Record fresh BP-SKILL and generated maintenance baseline",
+      "phase": "preparation",
+      "status": "ready",
+      "dependencies": [],
+      "model": "gpt-5.6-luna",
+      "reasoningEffort": "low",
+      "goalBudgetTokens": 150000,
+      "authorizedCeilingTokens": 2000000,
+      "reservedTokens": 2000000,
+      "inputs": [
+        "package.json",
+        "scripts/validate-skills.mjs",
+        "scripts/validate-agent-skills.mjs",
+        "scripts/extract-pns-transitions.mjs",
+        "scripts/extract-skill-deps.mjs"
+      ],
+      "findings": [
+        {
+          "path": "docs/external-review/2026-08-29-skill-remaster-equilibrium-review.md",
+          "lines": "44-94",
+          "tier": "confirmed-file; dated claims require revalidation"
+        }
+      ],
+      "steps": [
+        "Record Node and pnpm runtime versions and Git revision.",
+        "Run node scripts/validate-skills.mjs, node scripts/validate-agent-skills.mjs, and both generated check scripts with --check.",
+        "Save compact command logs and categorize pre-existing failures without repairs."
+      ],
+      "acceptance": [
+        "Every command has its exit code and log path.",
+        "No generated/canonical source is rewritten.",
+        "Skill/package counts derive from observed validation, with unknowns explicit."
+      ],
+      "commands": [
+        "node scripts/validate-skills.mjs",
+        "node scripts/validate-agent-skills.mjs",
+        "node scripts/extract-pns-transitions.mjs --check",
+        "node scripts/extract-skill-deps.mjs --check"
+      ],
+      "outputDirectory": ".local/delegation-2026-10-05/tasks/T02",
+      "writePaths": [".local/delegation-2026-10-05/tasks/T02/"],
+      "candidateSourceOwnership": [],
+      "scopeGate": "bounded preparation under current request",
+      "attempt": 0
+    },
+    {
+      "id": "T03",
+      "title": "Record current plugin compatibility and focused test baseline",
+      "phase": "preparation",
+      "status": "ready",
+      "dependencies": [],
+      "model": "gpt-6-luna",
+      "reasoningEffort": "low",
+      "goalBudgetTokens": 150000,
+      "authorizedCeilingTokens": 2000000,
+      "reservedTokens": 2000000,
+      "inputs": [
+        "app/package.json",
+        "lib/bpmn-plugin/package.json",
+        "docs/mermaid-compatibility.md",
+        "app/src/lib/__tests__/bpmn-plugin-integration.test.ts",
+        "app/src/lib/__tests__/bpmn-styles.test.ts"
+      ],
+      "findings": [
+        {
+          "path": "app/docs/technical-debt-register.md",
+          "lines": "20",
+          "tier": "confirmed-file; dated claims require revalidation"
+        },
+        {
+          "path": "docs/replit-upstream-readiness-hardening-directive.md",
+          "lines": "136-155,191-205",
+          "tier": "confirmed-file; dated claims require revalidation"
+        }
+      ],
+      "steps": [
+        "Compare app Mermaid target, plugin peer declaration, compatibility record and installed package metadata.",
+        "Run only existing integration and styles tests using the local Vitest executable; do not install or build.",
+        "Return pass/fail evidence, exact unsupported claims and failure classification; do not patch source."
+      ],
+      "acceptance": [
+        "Declared, installed and tested versions remain distinct.",
+        "Test logs and exit codes are retained.",
+        "Failures are classified as product/toolchain/environment or unknown using evidence."
+      ],
+      "commands": [
+        "Use installed Vitest on bpmn-plugin-integration.test.ts and bpmn-styles.test.ts"
+      ],
+      "outputDirectory": ".local/delegation-2026-10-05/tasks/T03",
+      "writePaths": [".local/delegation-2026-10-05/tasks/T03/"],
+      "candidateSourceOwnership": [],
+      "scopeGate": "bounded preparation under current request",
+      "attempt": 0
+    },
+    {
+      "id": "T04",
+      "title": "Independently validate executable task series and worker receipts",
+      "phase": "preparation",
+      "status": "ready",
+      "dependencies": ["T01", "T02", "T03"],
+      "model": "gpt-5.6-luna",
+      "reasoningEffort": "low",
+      "goalBudgetTokens": 150000,
+      "authorizedCeilingTokens": 2000000,
+      "reservedTokens": 2000000,
+      "inputs": [],
+      "findings": [
+        {
+          "path": "scripts/delegation-controller.mjs",
+          "lines": "task, receipt, scheduler contracts",
+          "tier": "confirmed-file; dated claims require revalidation"
+        }
+      ],
+      "steps": [
+        "Read the private program registry, scripts/delegation-controller.mjs, docs/delegation/README.md, and accepted T01-T03 receipts.",
+        "Run controller validation and ready scheduling; exercise rejection paths using a separate sandbox copy.",
+        "Review traceability, DAG, concurrency, ownership, roster/budget accounting, and stale/missing receipts; propose exact corrections."
+      ],
+      "acceptance": [
+        "No cycles/missing dependencies or >30 potential delegates.",
+        "Missing/failing acceptance evidence cannot become accepted.",
+        "Source ambiguity, budget enforcement limits and public-write gates stay explicit."
+      ],
+      "commands": [
+        "node scripts/delegation-controller.mjs validate",
+        "node scripts/delegation-controller.mjs ready",
+        "node scripts/test-delegation-controller.mjs"
+      ],
+      "outputDirectory": ".local/delegation-2026-10-05/tasks/T04",
+      "writePaths": [".local/delegation-2026-10-05/tasks/T04/"],
+      "candidateSourceOwnership": [],
+      "scopeGate": "bounded preparation under current request",
+      "attempt": 0
+    },
+    {
+      "id": "T05",
+      "title": "Resolve evidenced Windows toolchain reproducibility defects",
+      "phase": "candidate-execution",
+      "status": "queued",
+      "dependencies": ["T02", "T03", "T04"],
+      "model": "gpt-6-luna",
+      "reasoningEffort": "low",
+      "goalBudgetTokens": 350000,
+      "authorizedCeilingTokens": 2000000,
+      "reservedTokens": 2000000,
+      "inputs": [
+        "package.json",
+        "pnpm-workspace.yaml",
+        "lib/bpmn-plugin/package.json",
+        "scripts/run-plugin-smoke.mjs",
+        "scripts/run-eval-suite.mjs"
+      ],
+      "findings": [
+        {
+          "path": "docs/replit-upstream-readiness-hardening-directive.md",
+          "lines": "206-233,309-323",
+          "tier": "confirmed-file; dated claims require revalidation"
+        }
+      ],
+      "steps": [
+        "Reproduce only failures from baseline logs in a preserved clean checkout.",
+        "Use declared pnpm 10.26.1 without editing global configuration; inspect cp/path/glob portability.",
+        "Repair repository-owned failure narrowly; defer dependency additions and broad refactors for owner decision."
+      ],
+      "acceptance": [
+        "Focused failed command passes on Windows with the declared toolchain.",
+        "No user work or recovery history is removed.",
+        "Linux/CI verification remains separately stated."
+      ],
+      "commands": ["Focused failed baseline command", "pnpm run typecheck"],
+      "outputDirectory": ".local/delegation-2026-10-05/tasks/T05",
+      "writePaths": [".local/delegation-2026-10-05/tasks/T05/"],
+      "candidateSourceOwnership": [
+        "package.json",
+        "pnpm-workspace.yaml",
+        "lib/bpmn-plugin/package.json",
+        "scripts/run-plugin-smoke.mjs",
+        "scripts/run-eval-suite.mjs"
+      ],
+      "scopeGate": "fresh finding accepted; implementation scope confirmed; no prohibited expansion",
+      "attempt": 0
+    },
+    {
+      "id": "T06",
+      "title": "Reconcile canonical guidance and label historical records",
+      "phase": "candidate-execution",
+      "status": "queued",
+      "dependencies": ["T01", "T04"],
+      "model": "gpt-6-luna",
+      "reasoningEffort": "low",
+      "goalBudgetTokens": 200000,
+      "authorizedCeilingTokens": 2000000,
+      "reservedTokens": 2000000,
+      "inputs": [
+        "AGENTS.md",
+        "docs/capability-ledger.md",
+        "app/docs/technical-debt-register.md",
+        "app/docs/deployment.md"
+      ],
+      "findings": [
+        {
+          "path": "docs/replit-upstream-readiness-hardening-directive.md",
+          "lines": "73-95,350-375",
+          "tier": "confirmed-file; dated claims require revalidation"
+        }
+      ],
+      "steps": [
+        "Use T01 claim ledger to choose only misleading current-state statements.",
+        "Correct current guidance and explicitly label dated history, keeping original evidence dates.",
+        "Keep CLAUDE.md/copilot instructions as pointers."
+      ],
+      "acceptance": [
+        "No history is silently refreshed.",
+        "Current paths/package/demo facts match inspected source.",
+        "Content validation passes or pre-existing failures are identified."
+      ],
+      "commands": ["pnpm run check:content"],
+      "outputDirectory": ".local/delegation-2026-10-05/tasks/T06",
+      "writePaths": [".local/delegation-2026-10-05/tasks/T06/"],
+      "candidateSourceOwnership": [
+        "AGENTS.md",
+        "docs/capability-ledger.md",
+        "app/docs/technical-debt-register.md",
+        "app/docs/deployment.md"
+      ],
+      "scopeGate": "fresh finding accepted; implementation scope confirmed; no prohibited expansion",
+      "attempt": 0
+    },
+    {
+      "id": "T07",
+      "title": "Reconcile canonical capability and lifecycle data",
+      "phase": "candidate-execution",
+      "status": "queued",
+      "dependencies": ["T01", "T03", "T04"],
+      "model": "gpt-6-luna",
+      "reasoningEffort": "low",
+      "goalBudgetTokens": 300000,
+      "authorizedCeilingTokens": 2000000,
+      "reservedTokens": 2000000,
+      "inputs": [
+        "app/src/data/",
+        "scripts/check-roadmap-evidence.mjs",
+        "scripts/check-version-status.mjs"
+      ],
+      "findings": [
+        {
+          "path": "docs/replit-upstream-readiness-hardening-directive.md",
+          "lines": "96-135",
+          "tier": "confirmed-file; dated claims require revalidation"
+        },
+        {
+          "path": "app/docs/PRD-06-product-convergence-and-distribution-experience.md",
+          "lines": "137-147",
+          "tier": "confirmed-file; dated claims require revalidation"
+        }
+      ],
+      "steps": [
+        "Locate existing capability authority and generated data before proposing new structure.",
+        "Compare badges, counts, support declarations against source/tests; close if already satisfied.",
+        "Repair only verified drift and regenerate via existing commands."
+      ],
+      "acceptance": [
+        "Public claims/counts trace to one current authority.",
+        "Generated data matches canonical sources.",
+        "No unsupported compatibility or completeness claim remains."
+      ],
+      "commands": [
+        "pnpm run check:roadmap-evidence",
+        "pnpm run check:version-status",
+        "pnpm run check:generated"
+      ],
+      "outputDirectory": ".local/delegation-2026-10-05/tasks/T07",
+      "writePaths": [".local/delegation-2026-10-05/tasks/T07/"],
+      "candidateSourceOwnership": [
+        "app/src/data/",
+        "scripts/check-roadmap-evidence.mjs",
+        "scripts/check-version-status.mjs"
+      ],
+      "scopeGate": "fresh finding accepted; implementation scope confirmed; no prohibited expansion",
+      "attempt": 0
+    },
+    {
+      "id": "T08",
+      "title": "Close evidenced DSL documentation and negative-case gaps",
+      "phase": "candidate-execution",
+      "status": "queued",
+      "dependencies": ["T03", "T04"],
+      "model": "gpt-6-luna",
+      "reasoningEffort": "low",
+      "goalBudgetTokens": 350000,
+      "authorizedCeilingTokens": 2000000,
+      "reservedTokens": 2000000,
+      "inputs": [
+        "app/src/lib/bpmn-parser.ts",
+        "app/src/lib/bpmn-error.ts",
+        "app/src/lib/__tests__/bpmn-parser.test.ts",
+        "app/standards/bpmn-beta-standard.md",
+        "app/docs/dsl-spec.md",
+        "app/examples/"
+      ],
+      "findings": [
+        {
+          "path": "docs/replit-upstream-readiness-hardening-directive.md",
+          "lines": "156-190",
+          "tier": "confirmed-file; dated claims require revalidation"
+        }
+      ],
+      "steps": [
+        "Compare parser/standard/examples with the selected unsupported-syntax findings.",
+        "Add focused negative cases or correct documentation; no new semantics without scope decision.",
+        "For an authorized DSL change update parser tests, examples and dsl-spec together."
+      ],
+      "acceptance": [
+        "Documented syntax parses and unsupported input fails visibly.",
+        "bpmn-beta identity/descriptive subset remains accurate.",
+        "No BPMN XML/runtime semantics or invented syntax is introduced."
+      ],
+      "commands": ["Focused parser and corpus tests"],
+      "outputDirectory": ".local/delegation-2026-10-05/tasks/T08",
+      "writePaths": [".local/delegation-2026-10-05/tasks/T08/"],
+      "candidateSourceOwnership": [
+        "app/src/lib/bpmn-parser.ts",
+        "app/src/lib/bpmn-error.ts",
+        "app/src/lib/__tests__/bpmn-parser.test.ts",
+        "app/standards/bpmn-beta-standard.md",
+        "app/docs/dsl-spec.md",
+        "app/examples/"
+      ],
+      "scopeGate": "fresh finding accepted; implementation scope confirmed; no prohibited expansion",
+      "attempt": 0
+    },
+    {
+      "id": "T09",
+      "title": "Verify and repair theme/rendering parity",
+      "phase": "candidate-execution",
+      "status": "queued",
+      "dependencies": ["T03", "T04"],
+      "model": "gpt-6-luna",
+      "reasoningEffort": "low",
+      "goalBudgetTokens": 350000,
+      "authorizedCeilingTokens": 2000000,
+      "reservedTokens": 2000000,
+      "inputs": [
+        "app/src/lib/bpmn-styles.ts",
+        "app/src/lib/bpmn-shapes.ts",
+        "app/src/lib/bpmn-renderer.tsx",
+        "app/src/lib/bpmn-plugin.ts",
+        "app/src/lib/__tests__/"
+      ],
+      "findings": [
+        {
+          "path": "app/docs/technical-debt-register.md",
+          "lines": "20",
+          "tier": "confirmed-file; dated claims require revalidation"
+        },
+        {
+          "path": "docs/replit-upstream-readiness-hardening-directive.md",
+          "lines": "191-205",
+          "tier": "confirmed-file; dated claims require revalidation"
+        }
+      ],
+      "steps": [
+        "Trace theme/style/shapes contracts across React and imperative SVG.",
+        "Reproduce any TD-008 mismatch using existing focused tests; close if already satisfied.",
+        "Patch the smallest evidenced mismatch and add a focused regression."
+      ],
+      "acceptance": [
+        "Supported theme cases produce expected shapes/styles in both paths.",
+        "Untrusted labels remain escaped.",
+        "Focused renderer/integration/snapshot checks pass."
+      ],
+      "commands": ["Focused styles, renderer and plugin integration tests"],
+      "outputDirectory": ".local/delegation-2026-10-05/tasks/T09",
+      "writePaths": [".local/delegation-2026-10-05/tasks/T09/"],
+      "candidateSourceOwnership": [
+        "app/src/lib/bpmn-styles.ts",
+        "app/src/lib/bpmn-shapes.ts",
+        "app/src/lib/bpmn-renderer.tsx",
+        "app/src/lib/bpmn-plugin.ts",
+        "app/src/lib/__tests__/"
+      ],
+      "scopeGate": "fresh finding accepted; implementation scope confirmed; no prohibited expansion",
+      "attempt": 0
+    },
+    {
+      "id": "T10",
+      "title": "Bound Mermaid package and CDN compatibility claims",
+      "phase": "candidate-execution",
+      "status": "queued",
+      "dependencies": ["T03", "T05"],
+      "model": "gpt-6-luna",
+      "reasoningEffort": "low",
+      "goalBudgetTokens": 350000,
+      "authorizedCeilingTokens": 2000000,
+      "reservedTokens": 2000000,
+      "inputs": [
+        "docs/mermaid-compatibility.md",
+        "lib/bpmn-plugin/README.md",
+        "fixtures/plugin-smoke/",
+        "app/e2e/browser-cdn.spec.ts"
+      ],
+      "findings": [
+        {
+          "path": "docs/replit-upstream-readiness-hardening-directive.md",
+          "lines": "136-155",
+          "tier": "confirmed-file; dated claims require revalidation"
+        },
+        {
+          "path": "docs/capability-ledger.md",
+          "lines": "30-34",
+          "tier": "confirmed-file; dated claims require revalidation"
+        }
+      ],
+      "steps": [
+        "Run existing packed consumer and strict browser-host path for declared targets.",
+        "Build a passing matrix from observed runs; retain unknown peer versions.",
+        "Narrow claims or propose an explicit migration; dependency changes require project authorization."
+      ],
+      "acceptance": [
+        "Package peer intent is distinguished from proved support.",
+        "CDN versions/load path and strict security proof are exact.",
+        "No live-editor or legacy script-tag promise lacks evidence."
+      ],
+      "commands": [
+        "pnpm run plugin:smoke",
+        "pnpm run check:browser-cdn",
+        "Focused host-demo/browser-cdn E2E"
+      ],
+      "outputDirectory": ".local/delegation-2026-10-05/tasks/T10",
+      "writePaths": [".local/delegation-2026-10-05/tasks/T10/"],
+      "candidateSourceOwnership": [
+        "docs/mermaid-compatibility.md",
+        "lib/bpmn-plugin/README.md",
+        "fixtures/plugin-smoke/",
+        "app/e2e/browser-cdn.spec.ts"
+      ],
+      "scopeGate": "fresh finding accepted; implementation scope confirmed; no prohibited expansion",
+      "attempt": 0
+    },
+    {
+      "id": "T11",
+      "title": "Resolve current release dependency/license blockers",
+      "phase": "candidate-execution",
+      "status": "queued",
+      "dependencies": ["T03", "T05"],
+      "model": "gpt-6-luna",
+      "reasoningEffort": "low",
+      "goalBudgetTokens": 350000,
+      "authorizedCeilingTokens": 2000000,
+      "reservedTokens": 2000000,
+      "inputs": ["scripts/check-release-gates.mjs", "docs/release-gates.md"],
+      "findings": [
+        {
+          "path": "docs/release-gates.md",
+          "lines": "9-31",
+          "tier": "confirmed-file; dated claims require revalidation"
+        }
+      ],
+      "steps": [
+        "Generate a fresh gate report to this task's private output folder.",
+        "Verify only reported unknown licenses/advisories using authoritative package/release sources.",
+        "Fix checker defects narrowly; prepare reviewable upgrade/mitigation proposals where runtime migrations are required."
+      ],
+      "acceptance": [
+        "All reported blockers have evidence and disposition.",
+        "Gate decision reflects real failures rather than overriding thresholds.",
+        "Any dependency migration has separate compatibility verification."
+      ],
+      "commands": [
+        "pnpm run check:release-gates -- --output <task-report.json>"
+      ],
+      "outputDirectory": ".local/delegation-2026-10-05/tasks/T11",
+      "writePaths": [".local/delegation-2026-10-05/tasks/T11/"],
+      "candidateSourceOwnership": [
+        "scripts/check-release-gates.mjs",
+        "docs/release-gates.md"
+      ],
+      "scopeGate": "fresh finding accepted; implementation scope confirmed; no prohibited expansion",
+      "attempt": 0
+    },
+    {
+      "id": "T12",
+      "title": "Diagnose browser worked-example navigation failures",
+      "phase": "candidate-execution",
+      "status": "queued",
+      "dependencies": ["T01", "T05"],
+      "model": "gpt-6-luna",
+      "reasoningEffort": "low",
+      "goalBudgetTokens": 400000,
+      "authorizedCeilingTokens": 2000000,
+      "reservedTokens": 2000000,
+      "inputs": [
+        "app/e2e/",
+        "app/src/pages/VendorOnboardingExample.tsx",
+        "app/src/pages/PurchaseApprovalExample.tsx",
+        "app/src/pages/EmployeeOffboardingExample.tsx"
+      ],
+      "findings": [
+        {
+          "path": "docs/capability-ledger.md",
+          "lines": "18-38",
+          "tier": "confirmed-file; dated claims require revalidation"
+        }
+      ],
+      "steps": [
+        "Identify the exact eight historically failed cases and current selector/page paths.",
+        "Run those cases only, inspect traces and classify product/test/environment root cause.",
+        "Patch narrowly only if the defect remains; keep browser evidence by engine/OS."
+      ],
+      "acceptance": [
+        "Targeted cases pass or each remaining failure has a reproducible bounded cause.",
+        "Chromium success is not presented as Firefox/WebKit/Windows proof.",
+        "No baseline update hides unresolved behavior."
+      ],
+      "commands": ["Targeted worked-example E2E cases"],
+      "outputDirectory": ".local/delegation-2026-10-05/tasks/T12",
+      "writePaths": [".local/delegation-2026-10-05/tasks/T12/"],
+      "candidateSourceOwnership": [
+        "app/e2e/",
+        "app/src/pages/VendorOnboardingExample.tsx",
+        "app/src/pages/PurchaseApprovalExample.tsx",
+        "app/src/pages/EmployeeOffboardingExample.tsx"
+      ],
+      "scopeGate": "fresh finding accepted; implementation scope confirmed; no prohibited expansion",
+      "attempt": 0
+    },
+    {
+      "id": "T13",
+      "title": "Complete bounded keyboard, touch and accessibility evidence",
+      "phase": "candidate-execution",
+      "status": "queued",
+      "dependencies": ["T12"],
+      "model": "gpt-6-luna",
+      "reasoningEffort": "low",
+      "goalBudgetTokens": 400000,
+      "authorizedCeilingTokens": 2000000,
+      "reservedTokens": 2000000,
+      "inputs": [
+        "app/e2e/",
+        "app/src/components/",
+        "app/src/pages/Playground.tsx"
+      ],
+      "findings": [
+        {
+          "path": "docs/replit-upstream-readiness-hardening-directive.md",
+          "lines": "247-259",
+          "tier": "confirmed-file; dated claims require revalidation"
+        },
+        {
+          "path": "app/docs/PRD-06-product-convergence-and-distribution-experience.md",
+          "lines": "145,226-246",
+          "tier": "confirmed-file; dated claims require revalidation"
+        }
+      ],
+      "steps": [
+        "Select existing critical create/render/download and walkthrough flows.",
+        "Run focused keyboard/touch/axe checks; seek human assistive-technology evidence only for claims requiring it.",
+        "Correct demonstrated defects and document untested environments."
+      ],
+      "acceptance": [
+        "Primary actions work in observed keyboard/mobile scope.",
+        "Screen-reader claims remain limited to actual review.",
+        "Existing theme tokens and static architecture remain intact."
+      ],
+      "commands": [
+        "Focused accessibility/E2E checks",
+        "Human AT acceptance only if actually performed"
+      ],
+      "outputDirectory": ".local/delegation-2026-10-05/tasks/T13",
+      "writePaths": [".local/delegation-2026-10-05/tasks/T13/"],
+      "candidateSourceOwnership": [
+        "app/e2e/",
+        "app/src/components/",
+        "app/src/pages/Playground.tsx"
+      ],
+      "scopeGate": "fresh finding accepted; implementation scope confirmed; no prohibited expansion",
+      "attempt": 0
+    },
+    {
+      "id": "T14",
+      "title": "Verify generation, public downloads and packaging provenance",
+      "phase": "candidate-execution",
+      "status": "queued",
+      "dependencies": ["T02", "T05"],
+      "model": "gpt-6-luna",
+      "reasoningEffort": "low",
+      "goalBudgetTokens": 250000,
+      "authorizedCeilingTokens": 2000000,
+      "reservedTokens": 2000000,
+      "inputs": [
+        "app/scripts/generate-skill-files.mjs",
+        "scripts/package-skills.mjs",
+        "skills/",
+        "context/"
+      ],
+      "findings": [
+        {
+          "path": "docs/replit-upstream-readiness-hardening-directive.md",
+          "lines": "234-246",
+          "tier": "confirmed-file; dated claims require revalidation"
+        },
+        {
+          "path": "app/docs/PRD-06-product-convergence-and-distribution-experience.md",
+          "lines": "177-187,241-246",
+          "tier": "confirmed-file; dated claims require revalidation"
+        }
+      ],
+      "steps": [
+        "Map canonical sources to generated downloads and package manifest.",
+        "Regenerate only through existing commands, compare expected artifact contents and source hashes.",
+        "Keep build/dependency/report output ignored."
+      ],
+      "acceptance": [
+        "All declared downloads resolve and match expected types/contents.",
+        "No hand edits to generated files.",
+        "Canonical source changes pass required skill checks."
+      ],
+      "commands": [
+        "pnpm run check:generated",
+        "pnpm run skill:validate",
+        "pnpm run skill:package -- --dry-run"
+      ],
+      "outputDirectory": ".local/delegation-2026-10-05/tasks/T14",
+      "writePaths": [".local/delegation-2026-10-05/tasks/T14/"],
+      "candidateSourceOwnership": [
+        "app/scripts/generate-skill-files.mjs",
+        "scripts/package-skills.mjs",
+        "skills/",
+        "context/"
+      ],
+      "scopeGate": "fresh finding accepted; implementation scope confirmed; no prohibited expansion",
+      "attempt": 0
+    },
+    {
+      "id": "T15",
+      "title": "Verify and close Start Here/starter-pack workflow gaps",
+      "phase": "candidate-execution",
+      "status": "queued",
+      "dependencies": ["T07", "T14"],
+      "model": "gpt-6-luna",
+      "reasoningEffort": "low",
+      "goalBudgetTokens": 250000,
+      "authorizedCeilingTokens": 2000000,
+      "reservedTokens": 2000000,
+      "inputs": [
+        "app/src/components/skills/StartHerePanel.tsx",
+        "app/src/pages/AgentSkills.tsx",
+        "app/src/__tests__/starter-pack-assets.test.ts",
+        "app/scripts/generate-skill-files.mjs"
+      ],
+      "findings": [
+        {
+          "path": "app/docs/PRD-06-product-convergence-and-distribution-experience.md",
+          "lines": "140-141,241-246",
+          "tier": "confirmed-file; dated claims require revalidation"
+        }
+      ],
+      "steps": [
+        "Locate the actual route and starter-pack modules, amend ownership if names differ.",
+        "Verify minimum sequence, prerequisites, direct template/skill links and pack contents.",
+        "Repair missing workflow information narrowly; close if current route already meets acceptance."
+      ],
+      "acceptance": [
+        "First workflow has an explicit outcome and usable prerequisites.",
+        "All listed links and pack contents resolve to validated artifacts.",
+        "No extension is promoted into core without owner decision."
+      ],
+      "commands": ["Focused starter-pack/route checks"],
+      "outputDirectory": ".local/delegation-2026-10-05/tasks/T15",
+      "writePaths": [".local/delegation-2026-10-05/tasks/T15/"],
+      "candidateSourceOwnership": [
+        "app/src/components/skills/StartHerePanel.tsx",
+        "app/src/pages/AgentSkills.tsx",
+        "app/src/__tests__/starter-pack-assets.test.ts",
+        "app/scripts/generate-skill-files.mjs"
+      ],
+      "scopeGate": "fresh finding accepted; implementation scope confirmed; no prohibited expansion",
+      "attempt": 0
+    },
+    {
+      "id": "T16",
+      "title": "Verify primary home and playground completion paths",
+      "phase": "candidate-execution",
+      "status": "queued",
+      "dependencies": ["T07", "T13"],
+      "model": "gpt-6-luna",
+      "reasoningEffort": "low",
+      "goalBudgetTokens": 300000,
+      "authorizedCeilingTokens": 2000000,
+      "reservedTokens": 2000000,
+      "inputs": [
+        "app/src/pages/Home.tsx",
+        "app/src/pages/Playground.tsx",
+        "app/src/__tests__/",
+        "app/e2e/playground-error-highlight.spec.ts"
+      ],
+      "findings": [
+        {
+          "path": "app/docs/PRD-06-product-convergence-and-distribution-experience.md",
+          "lines": "137-139,228-239",
+          "tier": "confirmed-file; dated claims require revalidation"
+        }
+      ],
+      "steps": [
+        "Check Create a diagram, Use with Mermaid and Start a process workflow CTAs.",
+        "Verify copy source, .mmd download, valid current SVG download and actionable errors.",
+        "Repair demonstrated failures in place; keep entered source and current valid-preview contract."
+      ],
+      "acceptance": [
+        "Each home intent reaches its route in one activation.",
+        "Downloads correspond to current diagram and keyboard actions work.",
+        "Invalid input remains editable with actionable error feedback."
+      ],
+      "commands": ["Focused playground/home E2E or existing component tests"],
+      "outputDirectory": ".local/delegation-2026-10-05/tasks/T16",
+      "writePaths": [".local/delegation-2026-10-05/tasks/T16/"],
+      "candidateSourceOwnership": [
+        "app/src/pages/Home.tsx",
+        "app/src/pages/Playground.tsx",
+        "app/src/__tests__/",
+        "app/e2e/playground-error-highlight.spec.ts"
+      ],
+      "scopeGate": "fresh finding accepted; implementation scope confirmed; no prohibited expansion",
+      "attempt": 0
+    },
+    {
+      "id": "T17",
+      "title": "Verify initial bundle and route loading budgets",
+      "phase": "candidate-execution",
+      "status": "queued",
+      "dependencies": ["T05", "T16"],
+      "model": "gpt-6-luna",
+      "reasoningEffort": "low",
+      "goalBudgetTokens": 250000,
+      "authorizedCeilingTokens": 2000000,
+      "reservedTokens": 2000000,
+      "inputs": [
+        "app/src/App.tsx",
+        "app/vite.config.ts",
+        "scripts/check-bundle-size.mjs"
+      ],
+      "findings": [
+        {
+          "path": "app/docs/PRD-06-product-convergence-and-distribution-experience.md",
+          "lines": "147,167-175",
+          "tier": "confirmed-file; dated claims require revalidation"
+        },
+        {
+          "path": "docs/capability-ledger.md",
+          "lines": "191-204",
+          "tier": "confirmed-file; dated claims require revalidation"
+        }
+      ],
+      "steps": [
+        "Measure current build with existing budget checker.",
+        "Identify a concrete over-budget initial route before changing loading.",
+        "Make a small existing-dependency loading fix only if justified; avoid large refactor."
+      ],
+      "acceptance": [
+        "Initial gzip budget passes with recorded revision.",
+        "Deferred routes still load and navigate correctly.",
+        "No extra dependency is introduced."
+      ],
+      "commands": [
+        "pnpm run build",
+        "pnpm run check:bundle-size",
+        "Focused route smoke"
+      ],
+      "outputDirectory": ".local/delegation-2026-10-05/tasks/T17",
+      "writePaths": [".local/delegation-2026-10-05/tasks/T17/"],
+      "candidateSourceOwnership": [
+        "app/src/App.tsx",
+        "app/vite.config.ts",
+        "scripts/check-bundle-size.mjs"
+      ],
+      "scopeGate": "fresh finding accepted; implementation scope confirmed; no prohibited expansion",
+      "attempt": 0
+    },
+    {
+      "id": "T18",
+      "title": "Reconcile PNS schema and lifecycle contracts",
+      "phase": "candidate-execution",
+      "status": "queued",
+      "dependencies": ["T02", "T04"],
+      "model": "gpt-6-luna",
+      "reasoningEffort": "low",
+      "goalBudgetTokens": 350000,
+      "authorizedCeilingTokens": 2000000,
+      "reservedTokens": 2000000,
+      "inputs": [
+        "docs/pns-schema.md",
+        "skills/okhp3-process-narrative-authoring/",
+        "skills/okhp3-process-validation-scoring/",
+        "context/"
+      ],
+      "findings": [
+        {
+          "path": "docs/external-review/2026-08-29-bpmn-interchange-equilibrium-review.md",
+          "lines": "44-74",
+          "tier": "confirmed-file; dated claims require revalidation"
+        }
+      ],
+      "steps": [
+        "Identify specific conflicting PNS fields/lifecycle states in current contracts.",
+        "Propose one evidence-backed canonical schema, preserving field provenance and approval status.",
+        "Repair only settled contract drift; document decisions that need owner choice."
+      ],
+      "acceptance": [
+        "Competing schema descriptions are explicitly reconciled or left pending.",
+        "Diagram-derived drafts cannot become approved PNS by conversion alone.",
+        "Focused skill tests and validation pass."
+      ],
+      "commands": [
+        "Focused narrative/validation skill tests",
+        "pnpm run skill:validate"
+      ],
+      "outputDirectory": ".local/delegation-2026-10-05/tasks/T18",
+      "writePaths": [".local/delegation-2026-10-05/tasks/T18/"],
+      "candidateSourceOwnership": [
+        "docs/pns-schema.md",
+        "skills/okhp3-process-narrative-authoring/",
+        "skills/okhp3-process-validation-scoring/",
+        "context/"
+      ],
+      "scopeGate": "fresh finding accepted; implementation scope confirmed; no prohibited expansion",
+      "attempt": 0
+    },
+    {
+      "id": "T19",
+      "title": "Verify reverse reconstruction and stable trace metadata",
+      "phase": "candidate-execution",
+      "status": "queued",
+      "dependencies": ["T18", "T08"],
+      "model": "gpt-6-luna",
+      "reasoningEffort": "low",
+      "goalBudgetTokens": 400000,
+      "authorizedCeilingTokens": 2000000,
+      "reservedTokens": 2000000,
+      "inputs": [
+        "skills/okhp3-bpmn-to-process-narrative/",
+        "skills/okhp3-visual-process-modeling/",
+        "evals/bpmn-traceability/"
+      ],
+      "findings": [
+        {
+          "path": "docs/external-review/2026-08-29-bpmn-interchange-equilibrium-review.md",
+          "lines": "44-74",
+          "tier": "confirmed-file; dated claims require revalidation"
+        }
+      ],
+      "steps": [
+        "Run existing normal/lossy/malformed textual bpmn-beta cases.",
+        "Track PNS IDs, source lines and sidecar metadata through forward/reverse steps.",
+        "Repair proven losses without fabricating roles, controls, KPIs, rationale or approval."
+      ],
+      "acceptance": [
+        "encoded/inferred/not-encoded/unknown/conflict fields remain visible.",
+        "Image-only cases retain host capability/human confirmation limits.",
+        "No lossless or full conformance claim exceeds evidence."
+      ],
+      "commands": [
+        "Focused reverse/visual skill tests",
+        "Traceability evaluation cases"
+      ],
+      "outputDirectory": ".local/delegation-2026-10-05/tasks/T19",
+      "writePaths": [".local/delegation-2026-10-05/tasks/T19/"],
+      "candidateSourceOwnership": [
+        "skills/okhp3-bpmn-to-process-narrative/",
+        "skills/okhp3-visual-process-modeling/",
+        "evals/bpmn-traceability/"
+      ],
+      "scopeGate": "fresh finding accepted; implementation scope confirmed; no prohibited expansion",
+      "attempt": 0
+    },
+    {
+      "id": "T20",
+      "title": "Prepare independent recoverability and holdout evaluation",
+      "phase": "candidate-execution",
+      "status": "queued",
+      "dependencies": ["T18", "T19"],
+      "model": "gpt-6-luna",
+      "reasoningEffort": "low",
+      "goalBudgetTokens": 350000,
+      "authorizedCeilingTokens": 2000000,
+      "reservedTokens": 2000000,
+      "inputs": ["skills/okhp3-bpmn-recoverability-audit/", "evals/"],
+      "findings": [
+        {
+          "path": "docs/external-review/2026-08-29-skill-remaster-equilibrium-review.md",
+          "lines": "85-94",
+          "tier": "confirmed-file; dated claims require revalidation"
+        },
+        {
+          "path": "docs/external-review/2026-08-29-bpmn-interchange-equilibrium-review.md",
+          "lines": "44-74",
+          "tier": "confirmed-file; dated claims require revalidation"
+        }
+      ],
+      "steps": [
+        "Define protected paired-source cases with lawful, public/synthetic inputs.",
+        "Keep development-case tuning separate from unseen holdout review.",
+        "Run available existing audit checks; record independent outcome review as unknown until performed."
+      ],
+      "acceptance": [
+        "Holdout status/provenance and field-loss scores are inspectable.",
+        "Structural tests are distinguished from actual task-quality evidence.",
+        "Release readiness remains bounded by missing independent evidence."
+      ],
+      "commands": [
+        "Focused recoverability tests",
+        "Recorded independent holdout review if available"
+      ],
+      "outputDirectory": ".local/delegation-2026-10-05/tasks/T20",
+      "writePaths": [".local/delegation-2026-10-05/tasks/T20/"],
+      "candidateSourceOwnership": [
+        "skills/okhp3-bpmn-recoverability-audit/",
+        "evals/"
+      ],
+      "scopeGate": "fresh finding accepted; implementation scope confirmed; no prohibited expansion",
+      "attempt": 0
+    },
+    {
+      "id": "T21",
+      "title": "Prepare distribution and catalog promotion decision",
+      "phase": "candidate-execution",
+      "status": "queued",
+      "dependencies": ["T14", "T20"],
+      "model": "gpt-6-luna",
+      "reasoningEffort": "low",
+      "goalBudgetTokens": 200000,
+      "authorizedCeilingTokens": 2000000,
+      "reservedTokens": 2000000,
+      "inputs": ["docs/bp-skill-overview.md", "docs/agent-skills-install.md"],
+      "findings": [
+        {
+          "path": "docs/external-review/2026-08-29-skill-remaster-equilibrium-review.md",
+          "lines": "63-94",
+          "tier": "confirmed-file; dated claims require revalidation"
+        }
+      ],
+      "steps": [
+        "Separate the 15-skill core, extensions, host-local packages and cross-repository mirrors.",
+        "Prepare exact version/hash/provenance manifest and owner promotion decision.",
+        "Do not copy to another repository or publish under this task."
+      ],
+      "acceptance": [
+        "Catalog scope/counts reflect explicit accepted decisions.",
+        "Promotion packet names exact sources/targets and verification commands.",
+        "Unperformed external publication remains unknown."
+      ],
+      "commands": ["Manifest/source-reference validation"],
+      "outputDirectory": ".local/delegation-2026-10-05/tasks/T21",
+      "writePaths": [".local/delegation-2026-10-05/tasks/T21/"],
+      "candidateSourceOwnership": [
+        "docs/bp-skill-overview.md",
+        "docs/agent-skills-install.md"
+      ],
+      "scopeGate": "fresh finding accepted; implementation scope confirmed; no prohibited expansion",
+      "attempt": 0
+    },
+    {
+      "id": "T22",
+      "title": "Prepare bounded upstream maintainer contribution packet",
+      "phase": "candidate-execution",
+      "status": "queued",
+      "dependencies": ["T06", "T10", "T11", "T13", "T20"],
+      "model": "gpt-6-luna",
+      "reasoningEffort": "low",
+      "goalBudgetTokens": 250000,
+      "authorizedCeilingTokens": 2000000,
+      "reservedTokens": 2000000,
+      "inputs": ["docs/upstream-contribution-readiness-2026-08-24.md"],
+      "findings": [
+        {
+          "path": "docs/replit-upstream-readiness-hardening-directive.md",
+          "lines": "260-294,376-406",
+          "tier": "confirmed-file; dated claims require revalidation"
+        },
+        {
+          "path": "docs/upstream-contribution-readiness-2026-08-24.md",
+          "lines": "112-169",
+          "tier": "confirmed-file; dated claims require revalidation"
+        }
+      ],
+      "steps": [
+        "Summarize accepted evidence, descriptive subset, exclusions and exact maintainer ask.",
+        "Refresh only necessary public primary sources; preserve contributor/prior-art credit.",
+        "Prepare a review packet; sending messages/PR comments is a separate explicitly authorized action."
+      ],
+      "acceptance": [
+        "Every readiness claim has current evidence and boundaries.",
+        "External maintainer acceptance/adoption is not promised.",
+        "No outreach is sent by this assignment."
+      ],
+      "commands": ["Source/date/link and claim review"],
+      "outputDirectory": ".local/delegation-2026-10-05/tasks/T22",
+      "writePaths": [".local/delegation-2026-10-05/tasks/T22/"],
+      "candidateSourceOwnership": [
+        "docs/upstream-contribution-readiness-2026-08-24.md"
+      ],
+      "scopeGate": "fresh finding accepted; implementation scope confirmed; no prohibited expansion",
+      "attempt": 0
+    },
+    {
+      "id": "T23",
+      "title": "Assemble final regression and release recommendation",
+      "phase": "candidate-execution",
+      "status": "queued",
+      "dependencies": [
+        "T05",
+        "T06",
+        "T07",
+        "T08",
+        "T09",
+        "T10",
+        "T11",
+        "T12",
+        "T13",
+        "T14",
+        "T15",
+        "T16",
+        "T17",
+        "T18",
+        "T19",
+        "T20",
+        "T21",
+        "T22"
+      ],
+      "model": "gpt-6-luna",
+      "reasoningEffort": "low",
+      "goalBudgetTokens": 500000,
+      "authorizedCeilingTokens": 2000000,
+      "reservedTokens": 2000000,
+      "inputs": [],
+      "findings": [
+        {
+          "path": "docs/release-gates.md",
+          "lines": "1-31",
+          "tier": "confirmed-file; dated claims require revalidation"
+        },
+        {
+          "path": "app/docs/PRD-06-product-convergence-and-distribution-experience.md",
+          "lines": "253-257",
+          "tier": "confirmed-file; dated claims require revalidation"
+        }
+      ],
+      "steps": [
+        "Inventory changed paths and accepted task receipts at one exact revision.",
+        "Run required final checks appropriate to accepted source changes once, recording local/CI/browser/public evidence separately.",
+        "Return GO/GO-WITH-LIMITS/NO-GO with failures and next tasks; publication is not implied."
+      ],
+      "acceptance": [
+        "Required checks have inspectable logs/exit codes and exact revision.",
+        "No unresolved blocker is waived by summary.",
+        "Deployment/npm/Replit parity claims are separate and only asserted if verified."
+      ],
+      "commands": [
+        "typecheck; app tests; skill tests; generated; skill validation; evals; build; focused browser/release gates"
+      ],
+      "outputDirectory": ".local/delegation-2026-10-05/tasks/T23",
+      "writePaths": [".local/delegation-2026-10-05/tasks/T23/"],
+      "candidateSourceOwnership": [],
+      "scopeGate": "fresh finding accepted; implementation scope confirmed; no prohibited expansion",
+      "attempt": 0
+    }
+  ],
+  "newTaskIntake": [],
+  "events": [],
+  "deliverableStatus": "Reusable task template. Initialize a private run before assigning delegates."
+}
