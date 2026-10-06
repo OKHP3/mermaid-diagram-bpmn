@@ -28,7 +28,7 @@ t4 ==> e2`;
 
 // Verbatim from Andreas Emrich's 2026-05-24 comment on mermaid-js/mermaid#7699.
 // This is the author's later proposed simple/default layer, shown exactly as published.
-// Reviewed against the primary issue on 2026-09-17; nothing added or paraphrased.
+// Reviewed against the primary issue on 2026-10-06; nothing added or paraphrased.
 const DFKI_7699 = `bpmn
   start --> review[Review Request] --> approved{Approved?}
   approved -- Yes --> accepted[Approved]
@@ -141,7 +141,7 @@ const SYNTAXES = [
         "Separate community work includes @derari's prototype and @filipsajdak's draft BPMN PR series",
         "The tiered syntax and its normalization rules are still proposed, not specified",
         "The original detailed form remains attribute-heavy for advanced elements",
-        "Issue is open and marked Status: Approved (reviewed 2026-09-17)",
+        "Issue is open and marked Status: Approved (reviewed 2026-10-06)",
     ],
   },
   {
@@ -546,7 +546,7 @@ export default function SyntaxComparison() {
               nothing added, combined, or paraphrased. The issue also includes earlier detailed and
               pool examples. The cited Emrich &amp; Hollax 2025 paper remains described there as in
               preparation. The source check records what the issue says, but cannot prove that the paper
-              has no DOI or preprint; reviewed 2026-09-17.
+              has no DOI or preprint; reviewed 2026-10-06.
             </p>
             <p className="mt-2 text-xs text-muted-foreground leading-relaxed">
               A separate contributor, @filipsajdak, linked a native BPMN PR series on September 10.
