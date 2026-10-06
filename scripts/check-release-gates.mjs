@@ -1,7 +1,7 @@
-import { execFileSync } from "node:child_process";
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname, isAbsolute, join } from "node:path";
 import { checkComparisonEvidence } from "./check-comparison-evidence.mjs";
+import { executeCommand, parseCommandJson, auditVulnerabilities } from "./release-gate-command.mjs";
 
 const root = process.cwd();
 const output = process.argv.includes("--output")
@@ -22,18 +22,20 @@ const allowedLicenses = new Set([
 ]);
 
 const read = (file) => readFileSync(join(root, file), "utf8");
-const command = (name, args) => {
-  try {
-    return execFileSync(name, args, { cwd: root, encoding: "utf8", stdio: ["ignore", "pipe", "pipe"] });
-  } catch (error) {
-    return error.stdout?.toString() ?? "";
-  }
-};
+const command = (name, args) => executeCommand(name, args);
 
-const audit = JSON.parse(command("pnpm", ["audit", "--json"]) || "{}");
-const vulnerabilities = audit.metadata?.vulnerabilities ?? {};
+const auditResult = command("pnpm", ["audit", "--json"]);
+const audit = parseCommandJson(auditResult, "pnpm audit", { allowNonzero: true });
+if (!audit || typeof audit !== "object" || Array.isArray(audit) || !audit.metadata?.vulnerabilities || typeof audit.metadata.vulnerabilities !== "object") {
+  throw new Error("pnpm audit returned JSON without metadata.vulnerabilities");
+}
+const vulnerabilities = auditVulnerabilities(audit);
 // Release licensing applies to shipped dependencies, not build-time tooling.
-const licensesJson = JSON.parse(command("pnpm", ["licenses", "list", "--prod", "--json"]) || "{}");
+const licenseResult = command("pnpm", ["licenses", "list", "--prod", "--json"]);
+const licensesJson = parseCommandJson(licenseResult, "pnpm licenses list");
+if (!licensesJson || typeof licensesJson !== "object" || Array.isArray(licensesJson) || Object.hasOwn(licensesJson, "error") || Object.keys(licensesJson).length === 0) {
+  throw new Error("pnpm licenses list returned invalid license data");
+}
 const licenseNames = Object.keys(licensesJson).filter((name) => name !== "error");
 const unknownLicenses = licenseNames.filter((name) => !allowedLicenses.has(name));
 const mermaidFindings = Object.values(audit.advisories ?? {})
@@ -131,8 +133,8 @@ const gates = [
 const report = {
   schema: "bpmn-for-mermaid/release-gate-report@1",
   generatedAt: new Date().toISOString(),
-  revision: command("git", ["rev-parse", "HEAD"]).trim() || "unknown",
-  runtime: { node: process.version, pnpm: command("pnpm", ["--version"]).trim() },
+  revision: command("git", ["rev-parse", "HEAD"]).stdout.trim() || "unknown",
+  runtime: { node: process.version, pnpm: command("pnpm", ["--version"]).stdout.trim() },
   decision: gates.some((gate) => gate.status === "fail") ? "NO-GO" : "GO-WITH-LIMITS",
   gates,
   releaseBoundary: "Static browser-first descriptive BPMN subset; no backend, accounts, telemetry, or executable BPMN semantics.",

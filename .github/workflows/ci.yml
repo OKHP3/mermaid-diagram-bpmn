@@ -36,6 +36,9 @@ jobs:
       - name: Safety and portability release gate
         run: pnpm run check:release-gates -- --output release-gate-report.json
 
+      - name: Test release gate command failure detection
+        run: node --test scripts/check-release-gates.test.mjs
+
       - name: Upload release gate report on failure
         if: failure()
         uses: actions/upload-artifact@v7

@@ -184,6 +184,7 @@ pnpm run eval:run
 pnpm run technology:check
 pnpm run technology:test
 node scripts/test-delegation-controller.mjs
+node --test scripts/check-release-gates.test.mjs
 ```
 
 The application build generates `app/public/skills/`,

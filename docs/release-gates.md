@@ -23,9 +23,12 @@ This is a browser-first, static product. The boundaries under review are the Rea
 
 The report is deliberately a release decision, not a claim that every check has universal evidence:
 
-- Dependency high/critical findings are cleared by workspace overrides for transitive `brace-expansion`, `lodash-es`, and `uuid`.
-- Mermaid `11.4.1` still has moderate/low advisories. It is the exact tested Mermaid target and the browser-CDN contract, so upgrading it is a compatibility change requiring a new integration/browser/CDN review. This is visible as a warning and is not silently described as vulnerability-free.
-- The local environment provides Linux/Chromium evidence. Firefox and WebKit launch evidence must come from the CI matrix; no Windows or assistive-technology result is inferred.
+- The 2026-10-06 lockfile audit reports zero high/critical findings after patching the existing transitive overrides to `brace-expansion` 5.0.11 and `source-map-js` 1.2.2. Earlier override repairs remain in place. [Brace expansion advisory](https://github.com/advisories/GHSA-qhr7-859c-m2p7) and [source map advisory](https://github.com/advisories/GHSA-68fv-2mgg-jv7q) identify the patched versions.
+- Three low and two moderate findings remain visible in DOMPurify, KaTeX, brace expansion, and the build-time PostCSS selector parser. Packaging uses repository-owned patterns; build-time selectors come from repository source. Sanitizer and math dependencies remain subject to the tested Mermaid compatibility pair and strict browser-host contract. This bounded mitigation is not a vulnerability-free claim; dependency changes require integration/browser/CDN review.
+- The declared and locked Mermaid target is `11.17.2`. An older local install at `11.4.1` is an environment mismatch, not the canonical compatibility contract.
+- Browser evidence must identify its actual host. Firefox and WebKit launch evidence comes from the CI matrix; no Windows or assistive-technology result is inferred from Linux checks.
 - Unknown license metadata remains a blocking finding until each package is identified from authoritative package metadata or removed.
 
 The machine-readable report includes the revision, Node/pnpm versions, observed advisories/licenses, each gate owner and escalation path, the browser evidence scope, and the final `NO-GO` or `GO-WITH-LIMITS` decision. CI uploads it when the gate fails so it can be attached to a release review and compared with later runs.
+
+Run with the declared pnpm version. Missing commands, malformed audit JSON, and failed license lookups stop the gate; they cannot become empty successful results. Windows uses the pnpm command shim. Regression cases run with `node --test scripts/check-release-gates.test.mjs` and in CI.
