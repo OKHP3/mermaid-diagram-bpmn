@@ -40,8 +40,11 @@ plugin or BPMN execution platform.
   host is verified by `app/src/lib/__tests__/bpmn-plugin-integration.test.ts`,
   which runs real `mermaid@11.17.2` against two corpus examples and is a
   merge-blocking CI check. See `docs/mermaid-compatibility.md` for the full
-  evidence record. What remains: a real package boundary and a browser-host
-  demo without `securityLevel: "loose"` (Phases 2 and 3 of PRD-04).
+  evidence record. The package boundary exists under `lib/bpmn-plugin`, with a
+  clean-install fixture in `fixtures/plugin-smoke`. The real-browser host demo
+  uses strict security; its coverage is in `app/e2e/host-demo.spec.ts`. The
+  happy-dom integration harness uses loose security for its SVG parser limits.
+  Verify the relevant test results before making a compatibility claim.
 - The 15 source skills and five evaluation suites are present. Generated skill
   and context copies are present under `app/public/`.
 - The application is intended to be static and browser-only. GitHub Pages is
