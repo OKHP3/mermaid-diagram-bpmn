@@ -10,117 +10,17 @@
 
 const BLOCKING_RULES = new Set(['V1', 'V2', 'V3', 'V5', 'V6', 'V8']);
 
-// ─── V1: PNS schema completeness ─────────────────────────────────────────────
-function checkV1(pns) {
-  const errors = [];
-  if (!pns) { errors.push('V1: pns is null or undefined'); return { rule: 'V1', severity: 'error', status: 'fail', errors, warnings: [] }; }
-  const required = ['pns_version', 'process_id', 'process_name', 'process_owner', 'department', 'status'];
-  for (const f of required) {
-    if (!pns[f]) errors.push(`V1: required field "${f}" is missing or empty`);
-  }
-  const sections = ['process_box', 'activity_sequence', 'roles_and_raci', 'business_rules',
-    'decision_points', 'exception_paths', 'kpis', 'systems_and_integrations',
-    'controls_and_compliance', 'open_questions', 'babok_core_concepts', 'revision_history', 'validation'];
-  for (const s of sections) {
-    if (!(s in pns)) errors.push(`V1: required section "${s}" is missing`);
-  }
-  return { rule: 'V1', severity: 'error', status: errors.length === 0 ? 'pass' : 'fail', errors, warnings: [] };
-}
+import { validatePns } from './validate-pns.mjs';
+import { scorePnsQuality } from './score-pns-quality.mjs';
 
-// ─── V2: Activity/rule completeness ──────────────────────────────────────────
-function checkV2(pns) {
-  const errors = [];
-  const activities = pns?.activity_sequence?.activities || [];
-  for (const a of activities) {
-    if (!a.description) errors.push(`V2: activity "${a.id}" has no description`);
-    if (!a.actor_role_id) errors.push(`V2: activity "${a.id}" has no actor_role_id`);
-  }
-  const rules = Array.isArray(pns?.business_rules) ? pns.business_rules : [];
-  for (const r of rules) {
-    if (!r.source) errors.push(`V2: business rule "${r.id}" has no source`);
-  }
-  return { rule: 'V2', severity: 'error', status: errors.length === 0 ? 'pass' : 'fail', errors, warnings: [] };
-}
-
-// ─── V3: RACI coverage ───────────────────────────────────────────────────────
-function checkV3(pns) {
-  const errors = [];
-  const matrix = pns?.roles_and_raci?.raci_matrix || [];
-  const activityIds = new Set((pns?.activity_sequence?.activities || []).map(a => a.id));
-  for (const entry of matrix) {
-    if (!entry.accountable) errors.push(`V3: RACI entry "${entry.activity_id}" has no accountable`);
-    if (!Array.isArray(entry.responsible) || entry.responsible.length === 0) {
-      errors.push(`V3: RACI entry "${entry.activity_id}" has no responsible`);
-    }
-  }
-  for (const id of activityIds) {
-    if (!matrix.some(e => e.activity_id === id)) {
-      errors.push(`V3: activity "${id}" has no RACI entry`);
-    }
-  }
-  return { rule: 'V3', severity: 'error', status: errors.length === 0 ? 'pass' : 'fail', errors, warnings: [] };
-}
-
-// ─── V4: Activity description style (warning) ────────────────────────────────
-const SUBORDINATE_CONJUNCTIONS = ['when ', 'if ', 'after ', 'before ', 'while '];
-
-function checkV4(pns) {
-  const warnings = [];
-  const activities = pns?.activity_sequence?.activities || [];
-  for (const a of activities) {
-    const desc = typeof a.description === 'string' ? a.description : '';
-    if (!desc) continue;
-    if (desc.includes(';')) {
-      warnings.push(`V4: activity "${a.id}" description contains a semicolon — split into separate activities`);
-    }
-    if (desc.length > 200) {
-      warnings.push(`V4: activity "${a.id}" description exceeds 200 characters (${desc.length})`);
-    }
-    const lower = desc.trimStart().toLowerCase();
-    for (const conj of SUBORDINATE_CONJUNCTIONS) {
-      if (lower.startsWith(conj)) {
-        warnings.push(`V4: activity "${a.id}" description begins with subordinate conjunction "${conj.trim()}" — rewrite as imperative`);
-        break;
-      }
-    }
-  }
-  return { rule: 'V4', severity: 'warning', status: warnings.length === 0 ? 'pass' : 'warn', errors: [], warnings };
-}
-
-// ─── V5: KPI measurability ───────────────────────────────────────────────────
-function checkV5(pns) {
-  const errors = [];
-  const kpis = Array.isArray(pns?.kpis) ? pns.kpis : [];
-  for (const k of kpis) {
-    if (!k.formula) errors.push(`V5: KPI "${k.id}" has no formula`);
-    if (!k.data_source) errors.push(`V5: KPI "${k.id}" has no data_source`);
-  }
-  return { rule: 'V5', severity: 'error', status: errors.length === 0 ? 'pass' : 'fail', errors, warnings: [] };
-}
-
-// ─── V6: Decision/exception completeness ─────────────────────────────────────
-function checkV6(pns) {
-  const errors = [];
-  const dps = Array.isArray(pns?.decision_points) ? pns.decision_points : [];
-  for (const d of dps) {
-    if (!Array.isArray(d.outcomes) || d.outcomes.length < 2) {
-      errors.push(`V6: decision_point "${d.id}" has fewer than 2 outcomes`);
-    }
-  }
-  const excs = Array.isArray(pns?.exception_paths) ? pns.exception_paths : [];
-  for (const e of excs) {
-    if (!e.handling) errors.push(`V6: exception_path "${e.id}" has empty handling`);
-  }
-  return { rule: 'V6', severity: 'error', status: errors.length === 0 ? 'pass' : 'fail', errors, warnings: [] };
-}
-
-// ─── V7: Controls coverage (warning) ─────────────────────────────────────────
-function checkV7(pns) {
-  const warnings = [];
-  if (!Array.isArray(pns?.controls_and_compliance) || pns.controls_and_compliance.length === 0) {
-    warnings.push('V7: controls_and_compliance is empty — add at least one control');
-  }
-  return { rule: 'V7', severity: 'warning', status: warnings.length === 0 ? 'pass' : 'warn', errors: [], warnings };
+function checkPns(pns) {
+  const result = validatePns(pns);
+  return ['V1', 'V2', 'V3', 'V4', 'V5', 'V6', 'V7'].map(rule => {
+    const errors = result.errors.filter(message => message.startsWith(`[${rule}]`));
+    const warnings = result.warnings.filter(message => message.startsWith(`[${rule}]`));
+    return { rule, severity: ['V4', 'V7'].includes(rule) ? 'warning' : 'error',
+      status: errors.length ? 'fail' : warnings.length ? 'warn' : 'pass', errors, warnings };
+  });
 }
 
 // ─── V8: PIR completeness gate ───────────────────────────────────────────────
@@ -134,10 +34,7 @@ function checkV8(pir) {
   if (score < 0) errors.push('V8: pir.validation.completeness_score is missing or not a number');
   else if (score < 70) errors.push(`V8: PIR completeness_score is ${score} — must be ≥70`);
 
-  if (ready !== true) {
-    if (score >= 70) warnings.push('V8: ready_for_narrative is not explicitly true despite score ≥70');
-    else errors.push('V8: ready_for_narrative is not true');
-  }
+  if (ready !== true) errors.push('V8: ready_for_narrative must be explicitly true');
 
   return { rule: 'V8', severity: 'error', status: errors.length === 0 ? 'pass' : 'fail', errors, warnings };
 }
@@ -167,22 +64,6 @@ function checkV9(bpmn) {
   return { rule: 'V9', severity: 'warning', status: warnings.length === 0 ? 'pass' : 'warn', errors: [], warnings };
 }
 
-// ─── Scoring helpers ──────────────────────────────────────────────────────────
-function scorePns(pns) {
-  const stored = pns?.validation?.pns_quality_score;
-  if (typeof stored === 'number') return stored;
-  let score = 0;
-  if (pns?.process_box?.trigger) score += 15;
-  const acts = pns?.activity_sequence?.activities || [];
-  if (acts.length >= 3) score += 15;
-  if ((pns?.roles_and_raci?.roles || []).length >= 2) score += 10;
-  if ((Array.isArray(pns?.business_rules) ? pns.business_rules : []).length > 0) score += 10;
-  if ((Array.isArray(pns?.decision_points) ? pns.decision_points : []).length > 0) score += 10;
-  if ((Array.isArray(pns?.exception_paths) ? pns.exception_paths : []).length > 0) score += 10;
-  if ((Array.isArray(pns?.kpis) ? pns.kpis : []).length > 0) score += 10;
-  return score;
-}
-
 // ─── Main export ──────────────────────────────────────────────────────────────
 /**
  * @param {{ pir?: object, pns?: object, bpmn?: string }} opts
@@ -198,17 +79,7 @@ export function runValidationSuite(opts = {}) {
   const v8 = checkV8(pir || {});
   rulesRun.push(v8);
 
-  if (pns) {
-    rulesRun.push(checkV1(pns));
-    rulesRun.push(checkV2(pns));
-    rulesRun.push(checkV3(pns));
-    rulesRun.push(checkV4(pns));   // V4: style warnings (was missing)
-    rulesRun.push(checkV5(pns));
-    rulesRun.push(checkV6(pns));
-    rulesRun.push(checkV7(pns));
-  } else {
-    warnings.push('pns not provided — V1–V7 checks skipped');
-  }
+  rulesRun.push(...checkPns(pns));
 
   if (bpmn) {
     rulesRun.push(checkV9(bpmn));
@@ -224,7 +95,7 @@ export function runValidationSuite(opts = {}) {
 
   // Scores
   const pirScore = v8.status === 'pass' ? 100 : 30;
-  const pnsScore = pns ? scorePns(pns) : 0;
+  const pnsScore = pns ? scorePnsQuality(pns).score : 0;
   const bpmnScore = bpmn
     ? (checkV9(bpmn).status === 'pass' ? 100 : 60)
     : 0;
@@ -241,7 +112,7 @@ export function runValidationSuite(opts = {}) {
 
   // Publication gate: band must be A or B AND no blocking-rule errors
   const hasBlockingErrors = rulesRun.some(r => BLOCKING_RULES.has(r.rule) && r.status === 'fail');
-  const readyForPublication = (band === 'A' || band === 'B') && !hasBlockingErrors;
+  const readyForPublication = pnsScore >= 75 && (band === 'A' || band === 'B') && !hasBlockingErrors;
 
   const report = {
     rules_run: rulesRun.map(r => ({
@@ -266,11 +137,24 @@ export function runValidationSuite(opts = {}) {
 
 // ─── CLI entrypoint ───────────────────────────────────────────────────────────
 if (process.argv[1] && new URL(import.meta.url).pathname === process.argv[1]) {
-  const result = runValidationSuite({});
+  const { loadFile } = await import('./parse-yaml-minimal.mjs');
+  const args = process.argv.slice(2);
+  const opts = {};
+  for (let index = 0; index < args.length; index += 2) {
+    const option = args[index];
+    const file = args[index + 1];
+    if (!['--pir', '--pns', '--bpmn'].includes(option) || !file) {
+      console.error('Usage: node run-validation-suite.mjs --pir <pir.yaml> --pns <pns.yaml> [--bpmn <bpmn.mmd>]');
+      process.exit(1);
+    }
+    opts[option.slice(2)] = option === '--bpmn'
+      ? (await import('node:fs')).readFileSync(file, 'utf8')
+      : await loadFile(file);
+  }
+  const result = runValidationSuite(opts);
   console.log('Composite score:', result.report.composite_score, '| Band:', result.report.band);
   console.log('Ready for publication:', result.report.ready_for_publication);
-  if (result.errors.length > 0) {
-    for (const e of result.errors) console.error('ERROR:', e);
-    process.exit(1);
-  }
+  for (const error of result.errors) console.error('ERROR:', error);
+  for (const warning of result.warnings) console.warn('WARN:', warning);
+  process.exit(result.valid ? 0 : 1);
 }

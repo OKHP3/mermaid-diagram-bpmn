@@ -10,7 +10,7 @@ metadata:
   author: "OverKill Hill P³"
   project: "BP-SKILL: Business Process Agent Skill Suite"
   category: "process-documentation"
-  standards_refs: "ISO 9001:2015 §4.4.1 (Quality Management System and its processes); BABOK v3 §7 (Solution Evaluation); BABOK v3 Core Concept Model; BPM CBOK v4 §5 (Process Analysis)"
+  standards_refs: "ISO 9001:2015 §4.4.1 (Quality Management System and its processes); BABOK v3 requirements analysis and design definition; BABOK v3 Core Concept Model; BPM CBOK v4 §5 (Process Analysis)"
   produces: "pns.yaml, pns.md"
   consumes: "pir.yaml, stakeholder-register.yaml"
   depends_on: "okhp3-process-intake-and-scope; okhp3-stakeholder-and-role-mapping"
@@ -93,6 +93,9 @@ Minimum 3 activities for full quality score.
 
 `{ id, question, owner_role_id, target_resolution_date }`. Record gaps: do not invent content.
 
+All 13 keys are top-level in `pns.yaml`, alongside metadata. Use `assets/pns-template.yaml`;
+do not add a `sections` wrapper. See `references/pns-schema.md` for the nine-state lifecycle.
+
 ### 11. babok_core_concepts
 
 Minimum 4 of 6 fields populated (≥20 chars each): `change`, `need`, `solution`, `stakeholders`, `value`, `context`.
@@ -125,7 +128,9 @@ Run: `node scripts/validate-pns.mjs <pns.yaml>`
 
 ## Quality Score and Publication Gate
 
-Weighted 0–100. Publication threshold: **≥75**.
+Weighted 0-100. A score of at least 75 also requires no blocking validation errors.
+An unresolved question marked `must_resolve_before_publish: true` blocks publication.
+Human approval is a separate requirement.
 
 | Section | Max pts |
 |---|---|

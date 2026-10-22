@@ -1,0 +1,46 @@
+# BP-SKILL PNS YAML template. See docs/pns-schema.md.
+# Empty fields are unresolved input, never approval or publication evidence.
+pns_version: "0.1"
+process_id: ""
+process_name: ""
+process_owner: ""
+department: ""
+status: draft-intake
+approval_state: draft
+version: "0.1.0"
+created_date: ""
+last_modified_date: ""
+pir_ref: ""
+apqc_pcf_mapping: ""
+process_box:
+  trigger: ""
+  inputs: []
+  outputs: []
+  criteria: ""
+  resources: ""
+  responsibilities: ""
+  risks: ""
+activity_sequence:
+  activities: []
+roles_and_raci:
+  roles: []
+  raci_matrix: []
+business_rules: []
+decision_points: []
+exception_paths: []
+kpis: []
+systems_and_integrations: []
+controls_and_compliance: []
+open_questions: []
+babok_core_concepts:
+  change: ""
+  need: ""
+  solution: ""
+  stakeholders: ""
+  value: ""
+  context: ""
+revision_history: []
+validation:
+  pns_quality_score: null
+  ready_for_publication: false
+  ready_for_bpmn_modeling: false

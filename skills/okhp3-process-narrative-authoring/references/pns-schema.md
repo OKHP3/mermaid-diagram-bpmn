@@ -6,19 +6,21 @@ The Process Narrative Specification passes through 9 states:
 
 | State | Description | Trigger |
 |---|---|---|
-| `draft` | Initial authoring in progress | PNS created from PIR |
-| `review-ready` | All 13 sections present, V1–V7 errors resolved | `validate-pns.mjs` passes |
-| `under-review` | Distributed to stakeholders for review | Reviewer assigned |
-| `revisions-requested` | Reviewers have returned comments | Comments recorded in `open_questions[]` |
-| `revised` | Author has addressed review comments | All `open_questions[]` resolved |
-| `approved` | All required approvers have signed off | APPROVALS.yaml updated |
-| `published` | Bundle assembled and distributed | `build-publication-bundle.mjs` succeeds |
-| `superseded` | A newer version has been published | `revision_history[]` updated |
-| `retired` | Process is no longer in use | `status: retired` set |
+| `draft-intake` | Intake is being drafted | Process intake |
+| `scoped` | Boundary and stakeholders identified | Scope completion |
+| `elicited` | Elicitation evidence recorded | Interview capture |
+| `documented-as-is` | Current state captured | As-is capture |
+| `modeled` | Narrative authored | Narrative authoring |
+| `analyzed` | Gaps and exceptions analyzed | Gap analysis |
+| `validated` | Blocking checks passed | Validation and scoring |
+| `packaged` | Review bundle assembled | Publication packaging |
+| `published` | Required human approvals recorded and bundle released | Owner-controlled publication |
 
-Valid transitions: `draft → review-ready → under-review → revisions-requested → revised → under-review → approved → published → superseded | retired`
+Advance one state at a time using `scripts/check-pns-status-transition.mjs` in the repository.
+A score or bundle does not grant approval. Optional `approval_state` records document review
+separately (for example `draft`, `under-review`, or `approved`). It is not a lifecycle status.
 
-## Required YAML Frontmatter
+## Required Top-Level YAML Metadata
 
 ```yaml
 pns_version: "0.1"
@@ -26,7 +28,8 @@ process_id: ""
 process_name: ""
 process_owner: ""          # role, not person
 department: ""
-status: draft              # one of the 9 lifecycle states above
+status: draft-intake       # one of the 9 lifecycle states above
+approval_state: draft     # optional, separate owner review state
 created_date: ""           # ISO 8601
 last_modified_date: ""     # ISO 8601
 pir_ref: ""                # process_id from the source PIR
@@ -34,6 +37,10 @@ apqc_pcf_mapping: ""       # APQC PCF category code (e.g. "4.1.1")
 ```
 
 ## 13 Required Body Sections
+
+All section keys are top-level siblings of the metadata in `pns.yaml`. Do not wrap them
+in `sections`. The Markdown companion is a human-readable rendering, not another schema.
+The canonical blank template is `assets/pns-template.yaml`.
 
 | Section key | ISO/BABOK reference | Required fields |
 |---|---|---|
@@ -78,5 +85,7 @@ Every `business_rules[].applies_to` must be `"all"` or reference a valid `activi
 | apqc_pcf_mapping | 5 | field non-empty |
 | **Total** | **100** | |
 
-Publication threshold: **≥75** → `ready_for_publication: true`
-BPMN modeling threshold: **≥75** → `ready_for_bpmn_modeling: true`
+Publication threshold: **≥75**, no V1-V7 blocking errors, and no unresolved question with
+`must_resolve_before_publish: true` (unless explicitly `resolved: true`). The full suite
+also requires the V8 PIR gate. Human approval remains a separate publication requirement.
+BPMN modeling threshold: **≥75** after blocking validation errors are resolved.

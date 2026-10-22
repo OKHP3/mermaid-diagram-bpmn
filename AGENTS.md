@@ -241,6 +241,16 @@ For a DSL change, update the parser tests, canonical examples, and
 `app/docs/dsl-spec.md`. Check both the rendering contract and BPMN notation
 against the standards files.
 
+## PNS contract maintenance
+
+`pns.yaml` is the canonical flat machine handoff; `PNS.md` is a human companion.
+See `docs/pns-schema.md`. The authoring skill owns the validator, scorer, and blank
+YAML template. The validation-scoring skill bundles generated validator/scorer copies
+for portability. Run `node scripts/sync-pns-validator.mjs` after changing either
+implementation; `skill:generate` also refreshes them and `check:generated` rejects drift.
+Do not edit those bundled copies directly. Run `pnpm run skill:test` and `eval:run`
+after contract changes, including the cross-consumer PNS tests.
+
 ## Generated and canonical files
 
 Canonical sources that may be edited intentionally:

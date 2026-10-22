@@ -22,7 +22,7 @@ export function generateRaci(pns) {
     return { valid: false, errors, warnings, raci: null };
   }
 
-  const sections = pns.sections || {};
+  const sections = pns;
   const raciData = sections.roles_and_raci || {};
   const acts = (sections.activity_sequence && sections.activity_sequence.activities) || [];
   const roles = Array.isArray(raciData.roles) ? raciData.roles : [];

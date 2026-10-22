@@ -5,9 +5,10 @@
 **Artifact:** pns.yaml
 
 **Checks:**
-- All required top-level fields present: `pns_version`, `process_id`, `process_name`, `process_owner`, `department`, `status`, `pir_ref`
+- All required top-level fields present: `pns_version`, `process_id`, `process_name`, `process_owner`, `department`, `status`
 - `status` is one of the 9 valid lifecycle states
-- All 13 section keys present in the YAML body
+- All 13 section keys present at the top level of the YAML body
+- No unresolved open question marked `must_resolve_before_publish: true`
 - `babok_core_concepts` has at least 4 fields populated with ≥20 characters each
 
 **Remediation:** Add missing fields or populate sparse `babok_core_concepts` entries.
@@ -120,6 +121,9 @@
 | PIR (V8) | 20% |
 | PNS (V1–V7) | 60% |
 | BPMN (V9) | 20% |
+
+The PNS score is recomputed with the bundled canonical scorer; stored scores are not trusted.
+Without a diagram, weights are PIR 25% and PNS 75%. With a diagram:
 
 Composite = (PIR_score × 0.20) + (PNS_score × 0.60) + (BPMN_score × 0.20)
 

@@ -7,6 +7,7 @@
  * Named exports: buildPublicationBundle(dir, opts) → { valid, errors, warnings, manifest, approvals }
  */
 
+import { parseYaml } from './parse-yaml-minimal.mjs';
 import { existsSync, readdirSync, statSync, readFileSync } from 'node:fs';
 import { join, basename } from 'node:path';
 import { createHash } from 'node:crypto';
@@ -53,9 +54,9 @@ export function buildPublicationBundle(dir, opts = {}) {
   const reportPath = join(dir, 'validation-report.yaml');
   if (existsSync(reportPath)) {
     const reportContent = readFileSync(reportPath, 'utf8');
-    const readyMatch = reportContent.match(/ready_for_publication:\s*(true|false)/);
-    if (readyMatch && readyMatch[1] === 'false') {
-      errors.push('BUNDLE-1: validation-report.yaml has ready_for_publication: false — resolve errors before bundling');
+    const report = parseYaml(reportContent);
+    if (report.ready_for_publication !== true) {
+      errors.push('BUNDLE-1: validation-report.yaml must explicitly declare ready_for_publication: true — resolve errors before bundling');
     }
   } else {
     errors.push('BUNDLE-1: validation-report.yaml is missing — run okhp3-process-validation-scoring first');

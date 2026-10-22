@@ -29,10 +29,32 @@ export function parseYaml(text) {
     if (raw === 'null' || raw === '~') return null;
     if (raw === 'true') return true;
     if (raw === 'false') return false;
-    const stripped = raw.replace(/^["']|["']$/g, '');
-    const num = Number(stripped);
-    if (stripped !== '' && !isNaN(num)) return num;
-    return stripped;
+    if (raw.startsWith('"') && raw.endsWith('"')) return JSON.parse(raw);
+    if (raw.startsWith("'") && raw.endsWith("'")) return raw.slice(1, -1).replaceAll("''", "'");
+    if (raw.startsWith('[') && raw.endsWith(']')) {
+      const values = [];
+      let value = '', quote = '', depth = 0, escaped = false;
+      for (const char of raw.slice(1, -1)) {
+        if (quote) {
+          value += char;
+          if (escaped) escaped = false;
+          else if (char === '\\' && quote === '"') escaped = true;
+          else if (char === quote) quote = '';
+        } else if ((char === '"' || char === "'") && !value.trim()) {
+          quote = char;
+          value += char;
+        } else if (char === '[') { depth++; value += char; }
+        else if (char === ']') { depth--; value += char; }
+        else if (char === ',' && depth === 0) { values.push(coerce(value.trim())); value = ''; }
+        else value += char;
+      }
+      if (quote || depth !== 0) throw new SyntaxError('Unclosed inline YAML sequence');
+      if (value.trim()) values.push(coerce(value.trim()));
+      return values;
+    }
+    const num = Number(raw);
+    if (raw !== '' && !isNaN(num)) return num;
+    return raw;
   }
 
   function parseObject(minIndent) {

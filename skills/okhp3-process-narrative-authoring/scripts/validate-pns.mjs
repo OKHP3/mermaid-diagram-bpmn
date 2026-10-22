@@ -9,7 +9,7 @@
 
 import { loadFile } from './parse-yaml-minimal.mjs';
 
-const REQUIRED_TOP_LEVEL = ['pns_version', 'process_id', 'process_name', 'process_owner_role_id', 'version', 'status'];
+const REQUIRED_TOP_LEVEL = ['pns_version', 'process_id', 'process_name', 'process_owner', 'department', 'status'];
 const VALID_STATUSES = [
   'draft-intake',
   'scoped',
@@ -25,7 +25,7 @@ const REQUIRED_SECTIONS = [
   'process_box', 'activity_sequence', 'roles_and_raci',
   'business_rules', 'decision_points', 'exception_paths',
   'kpis', 'systems_and_integrations', 'controls_and_compliance',
-  'open_questions', 'revision_history', 'validation',
+  'open_questions', 'babok_core_concepts', 'revision_history', 'validation',
 ];
 const BABOK_FIELDS = ['change', 'need', 'solution', 'stakeholders', 'value', 'context'];
 const SUBORDINATE_CONJUNCTIONS = ['When ', 'If ', 'After ', 'Before ', 'Once ', 'While '];
@@ -65,11 +65,23 @@ export function validatePns(pns) {
     errors.push(`[V1] babok_core_concepts requires at least 4 of 6 fields populated (≥20 chars each) — found ${populatedBabok.length}`);
   }
 
-  const sections = pns.sections || {};
+  const sections = pns;
   for (const sectionKey of REQUIRED_SECTIONS) {
     if (!Object.prototype.hasOwnProperty.call(sections, sectionKey)) {
-      errors.push(`[V1] Missing required section: sections.${sectionKey}`);
+      errors.push(`[V1] Missing required section: ${sectionKey}`);
     }
+  }
+
+  if (Array.isArray(pns.open_questions) && pns.open_questions.some(q => q?.must_resolve_before_publish === true && q?.resolved !== true)) {
+    errors.push('[V1] Unresolved open question blocks publication');
+  }
+
+  const box = pns.process_box || {};
+  for (const key of ['trigger', 'criteria', 'resources', 'responsibilities', 'risks']) {
+    if (!String(box[key] || '').trim()) errors.push(`[V1] process_box.${key} must be populated`);
+  }
+  for (const key of ['inputs', 'outputs']) {
+    if (!Array.isArray(box[key]) || box[key].length === 0) errors.push(`[V1] process_box.${key} must be a non-empty array`);
   }
 
   // ─── V2: Traceability ─────────────────────────────────────────────────────
@@ -110,14 +122,19 @@ export function validatePns(pns) {
   const raciData = sections.roles_and_raci || {};
   const raciMatrix = Array.isArray(raciData.raci_matrix) ? raciData.raci_matrix : [];
   const raciActivityIds = new Set(raciMatrix.map((r) => r.activity_id));
+  if (raciActivityIds.size !== raciMatrix.length) errors.push('[V3] Each activity must have exactly one RACI entry');
   const activityIds = activities.map((a) => a.id).filter(Boolean);
 
+  if (activities.length > 0 && definedRoleIds.size === 0) errors.push('[V3] Activity roles must be declared');
   for (const entry of raciMatrix) {
-    if (!entry.accountable || String(entry.accountable).trim() === '') {
+    if (typeof entry.accountable !== 'string' || entry.accountable.trim() === '' || (definedRoleIds.size > 0 && !definedRoleIds.has(entry.accountable))) {
       errors.push(`[V3] RACI entry for activity "${entry.activity_id || '(no id)'}" is missing an Accountable role`);
     }
     const responsible = Array.isArray(entry.responsible) ? entry.responsible : [];
     const validResponsible = responsible.filter((r) => r && String(r).trim() !== '');
+    for (const role of validResponsible) {
+      if (!definedRoleIds.has(role)) errors.push(`[V3] Responsible role "${role}" is not declared`);
+    }
     if (validResponsible.length === 0) {
       errors.push(`[V3] RACI entry for activity "${entry.activity_id || '(no id)'}" has no Responsible role`);
     }
@@ -143,6 +160,9 @@ export function validatePns(pns) {
       for (const r of (Array.isArray(entry.informed) ? entry.informed : [])) {
         if (r) rolesInMatrix.add(String(r).trim());
       }
+    }
+    for (const roleId of rolesInMatrix) {
+      if (!definedRoleIds.has(roleId)) errors.push(`[V3] RACI role "${roleId}" is not declared`);
     }
     for (const roleId of definedRoleIds) {
       if (!rolesInMatrix.has(roleId)) {
@@ -227,7 +247,7 @@ export function validatePns(pns) {
     for (const ctrl of controls) {
       const covered = Array.isArray(ctrl.activities_covered) ? ctrl.activities_covered : [];
       for (const id of covered) coveredActivities.add(id);
-      if (ctrl.waiver && String(ctrl.waiver).trim() !== '') hasGlobalWaiver = true;
+      if (ctrl.waiver && !['none', 'no', 'false'].includes(String(ctrl.waiver).trim().toLowerCase()) && String(ctrl.waiver).trim() !== '') hasGlobalWaiver = true;
     }
     if (!hasGlobalWaiver) {
       for (const id of activityIds) {

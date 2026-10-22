@@ -14,9 +14,9 @@ Agent Skills are the AI analogue of standard operating procedures. They are SKIL
 
 BP-SKILL packages the full business process documentation lifecycle as 15 core SKILL.md files. The repository also carries support/meta skills and two recommended reverse-direction extensions that are not yet in the public application catalog. The architecture has three layers:
 
-**Skills** — 15 executable instruction sets, one per stage of the process documentation lifecycle. Each skill declares what it consumes, what it produces, and which BABOK/BPM CBOK/APQC standards it satisfies. Skills are portable across any Agent Skills-compatible platform: Claude Code, OpenAI Codex CLI, GitHub Copilot, Gemini CLI, Cursor, VS Code extensions.
+**Skills** — 15 executable instruction sets, one per stage of the process documentation lifecycle. Each skill declares what it consumes, what it produces, and which BABOK/BPM CBOK/APQC sources inform it. The skills use the portable Agent Skills format. Runtime and model behavior must be checked on each host, including Claude Code, OpenAI Codex CLI, GitHub Copilot, Gemini CLI, Cursor, VS Code extensions.
 
-**PNS.md** — the central handoff artifact. Process Narrative Specification. Every skill in the pipeline either reads PNS.md, enriches it with new sections, or validates it against a 10-state lifecycle and 9 traceability rules. PNS.md is what turns 15 independent skills into a pipeline.
+**pns.yaml** is the central machine handoff; **PNS.md** is its human companion. Process Narrative Specification. Every skill in the pipeline either reads pns.yaml, enriches it with new sections, or validates it against a nine-state lifecycle and nine validation rules. The PNS contract connects the 15 skills.
 
 **Variable Layer** — 9 context files that sit in your repository's `context/` directory. They encode organisation-specific vocabulary, role names, process taxonomy, and compliance requirements so that every skill produces output calibrated to your organisation, not generic boilerplate.
 
@@ -24,7 +24,7 @@ BP-SKILL packages the full business process documentation lifecycle as 15 core S
 
 ## Why bpmn-beta is the visual output layer, not the whole product
 
-Practitioners who encounter this repository through the [live playground](https://okhp3.github.io/mermaid-diagram-bpmn/playground) often assume bpmn-beta is the product. It is one output of one skill. Skill 06 (`okhp3-visual-process-modeling`) reads a completed PNS.md and produces a bpmn-beta diagram — a text-first BPMN representation in a Mermaid-compatible code fence. The diagram is the deliverable that gets embedded in Confluence, pasted into a GitHub PR, or dropped into a README. Everything upstream of that diagram — discovery, stakeholder mapping, narrative authoring, gap analysis, gap remediation, validation — is handled by the other 14 skills.
+Practitioners who encounter this repository through the [live playground](https://okhp3.github.io/mermaid-diagram-bpmn/playground) often assume bpmn-beta is the product. It is one output of one skill. Skill 06 (`okhp3-visual-process-modeling`) reads a completed pns.yaml and produces a bpmn-beta diagram — a text-first BPMN representation in a Mermaid-compatible code fence. The diagram is the deliverable that gets embedded in Confluence, pasted into a GitHub PR, or dropped into a README. Everything upstream of that diagram — discovery, stakeholder mapping, narrative authoring, gap analysis, gap remediation, validation — is handled by the other 14 skills.
 
 ---
 
@@ -36,23 +36,23 @@ Practitioners who encounter this repository through the [live playground](https:
 
 **02 okhp3-stakeholder-and-role-mapping** [core] — Stakeholder identification and RACI pre-assignment. Maps roles to APQC PCF activities. Produces a Stakeholder Register.
 
-**03 okhp3-elicitation-interviews** [core] — Interview guide generation and facilitation support. Produces structured elicitation notes conforming to BABOK v3 elicitation technique requirements.
+**03 okhp3-elicitation-interviews** [core] — Interview guide generation and facilitation support. Produces structured elicitation notes aligned with BABOK v3 elicitation techniques.
 
 ### Layer 2 — Narrative
 
 **04 okhp3-as-is-process-capture** [core] — Converts elicitation notes into a structured as-is process description with numbered activity sequence, decision points, and exception paths.
 
-**05 okhp3-process-narrative-authoring** [core] — Authors or refines the full PNS.md, populating all 13 required sections from elicitation inputs.
+**05 okhp3-process-narrative-authoring** [core] — Authors or refines the full PNS YAML, populating all 13 required sections from elicitation inputs.
 
 **07 okhp3-process-gap-exception-analysis** [core] — Identifies gaps between as-is and target-state, exception paths not documented in the narrative, and missing handoff points.
 
 **08 okhp3-future-state-change-strategy** [extension] — Documents the target state process and the change approach required to reach it.
 
-**10 okhp3-process-validation-scoring** [core] — Runs the 9 traceability checks (V1-V9) against PNS.md and produces a quality score (0-100) with a defect list.
+**10 okhp3-process-validation-scoring** [core] — Runs the 9 traceability checks (V1-V9) against pns.yaml and produces a quality score (0-100) with a defect list.
 
 ### Layer 3 — Visual and Decision Modeling
 
-**06 okhp3-visual-process-modeling** [core] — Converts PNS.md activity sequence into a bpmn-beta diagram. The visual output layer.
+**06 okhp3-visual-process-modeling** [core] — Converts PNS YAML activity sequence into a bpmn-beta diagram. The visual output layer.
 
 **09 okhp3-decision-model-authoring** [extension] — Documents decision points as DMN 1.4 decision tables with input/output columns and rule rows.
 
@@ -60,7 +60,7 @@ Practitioners who encounter this repository through the [live playground](https:
 
 **11 okhp3-process-measures-controls** [extension] — Defines KPIs, SLAs, and internal controls for each process activity.
 
-**12 okhp3-sop-work-instructions** [core] — Generates SOPs and role-level work instructions from the validated PNS.md.
+**12 okhp3-sop-work-instructions** [core] — Generates SOPs and role-level work instructions from the validated pns.yaml.
 
 ### Layer 5 — Governance
 
@@ -84,11 +84,11 @@ These extensions complete the text-to-diagram-to-text interchange concept withou
 
 ---
 
-## PNS.md as the central handoff artifact
+## PNS YAML and its Markdown companion
 
-PNS.md is not just a document. It is a typed artifact with a YAML frontmatter schema, a 10-state lifecycle (`draft` through `archived`), 13 required sections, 7 optional sections, and 9 traceability validation rules. Every skill in the pipeline declares whether it reads PNS.md, enriches it, or validates it. This declaration is in the SKILL.md frontmatter (`metadata.consumes` and `metadata.produces`).
+The machine handoff `pns.yaml` has top-level metadata and 13 section keys, with nine lifecycle states from `draft-intake` through `published`. The Markdown companion presents the same evidence for people. See the canonical schema reference for the enforced rules. Every skill in the pipeline declares whether it reads pns.yaml, enriches it, or validates it. This declaration is in the SKILL.md frontmatter (`metadata.consumes` and `metadata.produces`).
 
-The quality scoring skill (10) runs V1-V9 checks against PNS.md and produces a score: 90-100 means publish-ready, 75-89 means minor defects, 50-74 means rework required, below 50 means fundamental gaps. A PNS.md that scores below 75 does not proceed to skills 12-15.
+The quality scoring skill (10) runs V1-V9 checks against pns.yaml and produces a score: 90-100 means the highest technical quality band, 75-89 means minor defects, 50-74 means rework required, below 50 means fundamental gaps. A PNS that scores below 75 or has blocking defects does not proceed to publication. Human approval is recorded separately.
 
 See [docs/pns-schema.md](./pns-schema.md) for the full schema reference.
 

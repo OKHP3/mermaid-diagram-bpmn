@@ -39,7 +39,7 @@ export function generateSop(pns) {
   const status = pns.status || 'draft';
 
   if (!processId) warnings.push('pns.process_id is empty');
-  if (status !== 'approved') warnings.push(`pns.status is "${status}" — SOP should be generated from an approved PNS`);
+  if (pns.approval_state !== 'approved') warnings.push('PNS approval_state is not approved; obtain owner approval before publication');
 
   const lines = [];
 
@@ -183,18 +183,13 @@ export function generateSop(pns) {
 
 // ─── CLI entrypoint ──────────────────────────────────────────────────────────
 if (process.argv[1] && new URL(import.meta.url).pathname === process.argv[1]) {
-  const { readFileSync } = await import('node:fs');
+  const { loadFile } = await import('./parse-yaml-minimal.mjs');
   const filePath = process.argv[2];
   if (!filePath) {
     console.error('Usage: node generate-sop.mjs <pns.yaml>');
     process.exit(1);
   }
-  const raw = readFileSync(filePath, 'utf8');
-  const pns = {
-    process_id: raw.match(/process_id:\s*(\S+)/)?.[1] || '',
-    process_name: raw.match(/process_name:\s*(.+)/)?.[1]?.trim().replace(/^"|"$/g, '') || '',
-    status: raw.match(/^status:\s*(\S+)/m)?.[1] || 'draft',
-  };
+  const pns = await loadFile(filePath);
   const result = generateSop(pns);
   if (!result.valid) {
     for (const e of result.errors) console.error('ERROR:', e);

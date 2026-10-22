@@ -121,7 +121,7 @@ function parseStringItems(arrayBody) {
  */
 function extractPnsStatus(items) {
   for (const item of items) {
-    const m = item.match(/PNS\.md\s*\[([^\]]+)\]/);
+    const m = item.match(/(?:PNS\.md|pns\.yaml)\s*\[([^\]]+)\]/);
     if (m) {
       // "modeled or analyzed" → "modeled"
       const first = m[1].split(/\s+or\s+/)[0].trim();

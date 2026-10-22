@@ -3,7 +3,7 @@ process_id: proc-purchase-order-approval
 process_name: "Purchase Order Approval"
 process_owner: null
 department: null
-status: draft
+status: draft-intake
 created_date: 2026-08-29
 last_modified_date: 2026-08-29
 pir_ref: null

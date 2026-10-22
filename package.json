@@ -7,7 +7,7 @@
     "build": "pnpm run typecheck && pnpm -r --if-present run build",
     "typecheck:libs": "tsc --build",
     "typecheck": "pnpm run typecheck:libs && pnpm -r --filter \"./app\" --filter \"./scripts\" --if-present run typecheck",
-    "check:generated": "node scripts/extract-pns-transitions.mjs --check && node scripts/extract-skill-deps.mjs --check",
+    "check:generated": "node scripts/extract-pns-transitions.mjs --check && node scripts/extract-skill-deps.mjs --check && node scripts/sync-pns-validator.mjs --check",
     "regen:generated": "node scripts/extract-pns-transitions.mjs && node scripts/extract-skill-deps.mjs",
     "skill:validate": "node scripts/validate-skills.mjs",
     "skill:validate:agents": "node scripts/validate-agent-skills.mjs",

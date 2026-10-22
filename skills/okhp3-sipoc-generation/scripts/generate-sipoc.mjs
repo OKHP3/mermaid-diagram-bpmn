@@ -28,7 +28,7 @@ export function generateSipoc(pns) {
     return { valid: false, errors, warnings, sipoc: null };
   }
 
-  const sections = pns.sections || {};
+  const sections = pns;
   const pb = sections.process_box || {};
   const acts = (sections.activity_sequence && sections.activity_sequence.activities) || [];
 

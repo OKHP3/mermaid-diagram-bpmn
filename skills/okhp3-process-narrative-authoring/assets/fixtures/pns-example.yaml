@@ -3,7 +3,8 @@ process_id: proc-purchase-approval
 process_name: Purchase Order Approval
 process_owner: Finance Manager
 department: Finance
-status: approved
+status: validated
+approval_state: approved
 created_date: "2026-05-02"
 last_modified_date: "2026-05-10"
 pir_ref: proc-purchase-approval
@@ -73,6 +74,15 @@ activity_sequence:
       preconditions: Decision recorded
       postconditions: Requester notified within 1 business day
 
+    - id: act-003-escalate
+      description: Review escalated purchase request for Director approval
+      actor_role_id: role-director
+      inputs: [Reviewed Request]
+      outputs: [Approval Decision]
+      systems: [ERP Portal]
+      preconditions: Purchase exceeds the Finance Manager approval limit
+      postconditions: Director decision recorded
+
 roles_and_raci:
   roles:
     - role_id: role-requester
@@ -113,6 +123,12 @@ roles_and_raci:
       responsible: [role-finance-manager]
       accountable: role-finance-manager
       consulted: []
+      informed: [role-requester]
+
+    - activity_id: act-003-escalate
+      responsible: [role-director]
+      accountable: role-director
+      consulted: [role-finance-manager]
       informed: [role-requester]
 
 business_rules:

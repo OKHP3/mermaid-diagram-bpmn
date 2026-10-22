@@ -96,14 +96,13 @@ export function generateMeasuresRegister(pns) {
 
 // ─── CLI entrypoint ──────────────────────────────────────────────────────────
 if (process.argv[1] && new URL(import.meta.url).pathname === process.argv[1]) {
-  const { readFileSync } = await import('node:fs');
+  const { loadFile } = await import('./parse-yaml-minimal.mjs');
   const filePath = process.argv[2];
   if (!filePath) {
     console.error('Usage: node generate-measures-register.mjs <pns.yaml>');
     process.exit(1);
   }
-  const raw = readFileSync(filePath, 'utf8');
-  const pns = { process_id: raw.match(/process_id:\s*(\S+)/)?.[1] || '', kpis: [], controls_and_compliance: [] };
+  const pns = await loadFile(filePath);
   const result = generateMeasuresRegister(pns);
   if (!result.valid) {
     for (const e of result.errors) console.error('ERROR:', e);

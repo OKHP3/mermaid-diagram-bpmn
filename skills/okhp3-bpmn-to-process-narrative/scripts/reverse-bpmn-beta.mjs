@@ -452,7 +452,7 @@ export function reverseBpmnBeta(source, opts = {}) {
     process_name: title || accTitle || pools[0]?.name || null,
     process_owner: null,
     department: null,
-    status: 'draft',
+    status: 'draft-intake',
     created_date: date,
     last_modified_date: date,
     pir_ref: null,

@@ -8,6 +8,7 @@
  * Export: scorePnsQuality(pns) => { valid, errors[], warnings[], score, ready_for_publication, breakdown }
  */
 
+import { validatePns } from './validate-pns.mjs';
 import { loadFile } from './parse-yaml-minimal.mjs';
 
 const BABOK_FIELDS = ['change', 'need', 'solution', 'stakeholders', 'value', 'context'];
@@ -26,7 +27,7 @@ export function scorePnsQuality(pns) {
     return { valid: false, errors, warnings, score: 0, ready_for_publication: false, breakdown: {} };
   }
 
-  const sections = pns.sections || {};
+  const sections = pns;
   const breakdown = {};
   let total = 0;
 
@@ -156,13 +157,16 @@ export function scorePnsQuality(pns) {
     total += pts;
   }
 
-  const ready_for_publication = total >= PUBLICATION_THRESHOLD;
-  if (!ready_for_publication) {
+  const validation = validatePns(pns);
+  errors.push(...validation.errors);
+  warnings.push(...validation.warnings);
+  const ready_for_publication = validation.valid && total >= PUBLICATION_THRESHOLD;
+  if (total < PUBLICATION_THRESHOLD) {
     warnings.push(`Score ${total} is below the publication threshold of ${PUBLICATION_THRESHOLD}`);
   }
 
   return {
-    valid: true,
+    valid: validation.valid,
     errors,
     warnings,
     score: total,
