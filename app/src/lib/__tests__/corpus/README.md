@@ -16,8 +16,8 @@ parser. The full `BpmnDb` state (nodes, flows, pools, lanes, accTitle,
 accDescription) is captured with `toMatchSnapshot()`. Snapshots live in
 `__tests__/__snapshots__/bpmn-parser-corpus.test.ts.snap`.
 
-**These are the parity tests.** When the Langium port lands, the same snapshots
-assert behavioral equivalence between the two parsers.
+**These are the parity tests.** If a parser migration is approved, the same
+snapshots must assert behavioral equivalence before replacing the current parser.
 
 ### 2. Invariant tests (named, per-example)
 

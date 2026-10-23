@@ -169,6 +169,15 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
+      - name: Use the standard Ubuntu archive for WebKit dependencies
+        if: matrix.browser == 'webkit'
+        # The Azure mirror repeatedly stalled on WebKit's larger native package set.
+        # Keep Ubuntu's signed package indexes and the existing browser checks.
+        run: |
+          if [ -f /etc/apt/apt-mirrors.txt ]; then
+            printf '%s\n' 'https://archive.ubuntu.com/ubuntu/' | sudo tee /etc/apt/apt-mirrors.txt
+          fi
+
       - name: Install Playwright ${{ matrix.browser }} browser
         # Install each engine with its runtime libraries. The matrix exposes
         # browser-specific SVG/DOMPurify differences as separate CI jobs.

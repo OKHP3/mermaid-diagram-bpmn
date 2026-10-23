@@ -59,8 +59,6 @@ overrides:
   '@expo/ngrok-bin>@expo/ngrok-bin-win32-ia32': '-'
   '@expo/ngrok-bin>@expo/ngrok-bin-win32-x64': '-'
   '@tailwindcss/oxide>@tailwindcss/oxide-android-arm64': '-'
-  '@tailwindcss/oxide>@tailwindcss/oxide-darwin-arm64': '-'
-  '@tailwindcss/oxide>@tailwindcss/oxide-darwin-x64': '-'
   '@tailwindcss/oxide>@tailwindcss/oxide-freebsd-x64': '-'
   '@tailwindcss/oxide>@tailwindcss/oxide-linux-arm-gnueabihf': '-'
   '@tailwindcss/oxide>@tailwindcss/oxide-linux-arm64-gnu': '-'
@@ -72,8 +70,6 @@ overrides:
   esbuild>@esbuild/android-arm: '-'
   esbuild>@esbuild/android-arm64: '-'
   esbuild>@esbuild/android-x64: '-'
-  esbuild>@esbuild/darwin-arm64: '-'
-  esbuild>@esbuild/darwin-x64: '-'
   esbuild>@esbuild/freebsd-arm64: '-'
   esbuild>@esbuild/freebsd-x64: '-'
   esbuild>@esbuild/linux-arm: '-'
@@ -94,8 +90,6 @@ overrides:
   esbuild>@esbuild/win32-ia32: '-'
   esbuild>@esbuild/win32-x64: '-'
   lightningcss>lightningcss-android-arm64: '-'
-  lightningcss>lightningcss-darwin-arm64: '-'
-  lightningcss>lightningcss-darwin-x64: '-'
   lightningcss>lightningcss-freebsd-x64: '-'
   lightningcss>lightningcss-linux-arm-gnueabihf: '-'
   lightningcss>lightningcss-linux-arm64-gnu: '-'
@@ -113,13 +107,11 @@ overrides:
   postcss@<8.5.10: '>=8.5.10'
   brace-expansion: 5.0.11
   source-map-js: 1.2.2
-  dompurify: 3.4.13
+  dompurify: 3.4.17
   lodash-es: 4.18.1
   uuid: 11.1.1
   rollup>@rollup/rollup-android-arm-eabi: '-'
   rollup>@rollup/rollup-android-arm64: '-'
-  rollup>@rollup/rollup-darwin-arm64: '-'
-  rollup>@rollup/rollup-darwin-x64: '-'
   rollup>@rollup/rollup-freebsd-arm64: '-'
   rollup>@rollup/rollup-freebsd-x64: '-'
   rollup>@rollup/rollup-linux-arm-gnueabihf: '-'

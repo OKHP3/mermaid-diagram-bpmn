@@ -1,5 +1,9 @@
 # Upstream Mermaid Contribution Readiness — 2026-08-24 (reassessed 2026-08-26)
 
+> Historical August assessment. The [October 22 compliance audit](external-review/2026-10-22-mermaid-compliance-closeout.md)
+> refreshes parser guidance, upstream coordination, and the current source
+> target. The dated August checks below remain historical evidence.
+
 ## Decision
 
 **NO-GO for opening a Mermaid core pull request now.**  

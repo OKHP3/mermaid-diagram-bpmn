@@ -94,10 +94,10 @@ const VERSION_LADDER: VersionStep[] = [
   },
   {
     version: "V0.7",
-    title: "Langium parser",
+    title: "Parser formalization",
     status: "planned",
     deliverables: [
-      "Formal Langium grammar covering all bpmn-beta syntax",
+      "Confirm syntax and distribution with the existing upstream BPMN effort before a parser migration",
       "Error recovery — invalid lines produce a diagnostic, not a crash",
       "Parser snapshot + visual regression test suite",
       "LSP support: hover, completion, and diagnostics in VS Code",
@@ -288,9 +288,9 @@ const CONTRIBUTION_STEPS: { n: string; title: string; body: React.ReactNode; sta
   },
   {
     n: "05",
-    title: "Convert parser to Langium",
+    title: "Agree on the core parser path",
     status: "pending",
-    body: "Replace hand-written line parser with a formal Langium grammar. Add error recovery, better diagnostics, LSP support, and upstream Mermaid compatibility. Establish Langium parity branch before replacing the prototype parser.",
+    body: "Keep the existing parser for the external plugin. Coordinate with Mermaid #8160 and #7699 before a core migration. Current guidance targets Chevrotain next to the diagram; verify corpus parity and diagnostics before replacing the parser.",
   },
   {
     n: "06",
@@ -314,7 +314,7 @@ const CONTRIBUTION_STEPS: { n: string; title: string; body: React.ReactNode; sta
     n: "09",
     title: "Propose upstream inclusion",
     status: "pending",
-    body: "Once syntax is stable and tests are solid, open a formal Mermaid PR proposing bpmn as a core diagram type.",
+    body: "Coordinate with the existing BPMN PR series under #8160 on syntax and core-versus-external distribution before proposing a separate core contribution. Maintainer acceptance remains unverified.",
   },
 ];
 
@@ -331,7 +331,7 @@ const READINESS_STEPS: ReadinessStep[] = [
     icon: GitBranch,
     title: "Parser",
     current: "Hand-written line parser with stack-based block parsing for pools and lanes.",
-    target: "Formal Langium grammar with error recovery, better diagnostics, and upstream Mermaid compatibility.",
+    target: "A formal parser following current maintainer direction, with corpus parity and useful diagnostics. Current core guidance targets Chevrotain.",
     status: "experimental",
   },
   {

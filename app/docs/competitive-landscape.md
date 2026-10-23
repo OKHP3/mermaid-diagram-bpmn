@@ -1,5 +1,10 @@
 # BPMN for Mermaid (bpmn-beta): Competitive Landscape, Market Validation, and Strategic Positioning
 
+> Parser and upstream coordination update (2026-10-22): see the
+> [reconciled audit](../../docs/external-review/2026-10-22-mermaid-compliance-closeout.md)
+> and DEC-025. The dated research and proposals below retain their historical
+> context; their Langium assumptions do not schedule a parser migration.
+
 ## TL;DR
 
 - **No released tool today lets you author BPMN-semantic diagrams in a readable, Mermaid-native text DSL without either BPMN XML or a heavyweight bpmn-js/modeler runtime.** That is the genuine, defensible whitespace bpmn-beta occupies — but the competing DFKI proposal (Mermaid issue #7699, filed 2026-05-02 by Andreas Emrich) targets the same gap with an evolving tiered syntax, so positioning must be sharp on working evidence and clarity, not just on "BPMN in Mermaid."
