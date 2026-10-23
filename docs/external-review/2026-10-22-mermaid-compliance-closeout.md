@@ -136,3 +136,10 @@ must pass on this updated source before integration. The October 22 results
 above remain historical; final results belong to the closeout receipt. This
 override changes the source application's resolved dependency, not previously
 published Mermaid CDN bundles or plugin bytes.
+
+
+The WebKit CI setup was repeatedly delayed while downloading native packages
+from the Azure Ubuntu mirror. Its job now selects the standard Ubuntu archive
+for that dependency-installation step. Ubuntu package authentication, browser
+preflight, and every test remain enabled. The configured workflow must pass
+before this environment repair is treated as complete.
