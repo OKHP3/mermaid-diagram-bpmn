@@ -137,7 +137,7 @@ Completed 2026-08-04 via PRD-04. See `docs/mermaid-compatibility.md` for the ful
 Keep the existing parser for the published external plugin. A new core parser
 is conditional on maintainer direction and a separately scoped implementation
 decision. The current Mermaid guide targets a co-located Chevrotain parser;
-Langium remains supported for existing upstream diagrams. DEC-023 supersedes
+Langium remains supported for existing upstream diagrams. DEC-025 supersedes
 the earlier Langium assumption in DEC-013. See the
 [October 22 audit](external-review/2026-10-22-mermaid-compliance-closeout.md).
 

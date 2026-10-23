@@ -86,7 +86,7 @@ Engage on #7699 publicly within 7 days of prototype stabilization. Frame `bpmn-b
 
 ## DEC-013: Parser strategy = hand-written prototype → Langium plugin
 
-**Status:** Superseded by DEC-023 (2026-10-22). The proposal below is retained
+**Status:** Superseded by DEC-025 (2026-10-22). The proposal below is retained
 as historical context and does not authorize a parser migration.
 
 Keep the hand-written line parser as the prototype/playground engine for DSL iteration. Port to Langium when packaging for npm publication. Add a parity test corpus asserting both parsers produce equivalent ASTs for the canonical example set.
@@ -191,7 +191,7 @@ The four events are narrow enough that, before the project has an audience, the 
 
 ---
 
-## DEC-023: External parser retained; core parser follows current upstream direction
+## DEC-025: External parser retained; core parser follows current upstream direction
 
 **Status:** Accepted (2026-10-22 documentation reconciliation)
 
