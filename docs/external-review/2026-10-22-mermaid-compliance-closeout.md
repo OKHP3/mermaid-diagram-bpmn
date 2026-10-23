@@ -119,3 +119,20 @@ BPMN conformance, independent adoption, and Mermaid 12 support remain future
 project decisions. None is a condition for completing this bounded audit.
 The next project action is to use current maintainer direction before scoping
 core work; retain the external plugin's tested contract in the meantime.
+
+
+## October 23 security-gate follow-up
+
+The fresh PR check rejected the pinned DOMPurify 3.4.13 dependency with one
+critical and one high advisory. A local audit reproduced the gate failure.
+The existing override was updated to patched 3.4.17, following the maintainer's
+[release](https://github.com/cure53/DOMPurify/releases/tag/3.4.17) and advisories
+[GHSA-cg2g-xh64-v4q7](https://github.com/cure53/DOMPurify/security/advisories/GHSA-cg2g-xh64-v4q7)
+and [GHSA-mrv2-3pqr-j5jr](https://github.com/cure53/DOMPurify/security/advisories/GHSA-mrv2-3pqr-j5jr),
+retrieved October 23. The npm audit classifies these as critical/high, while
+the maintainer pages label them Low; both sources agree on patched 3.4.17.
+The release gate and strict-browser compatibility checks
+must pass on this updated source before integration. The October 22 results
+above remain historical; final results belong to the closeout receipt. This
+override changes the source application's resolved dependency, not previously
+published Mermaid CDN bundles or plugin bytes.
