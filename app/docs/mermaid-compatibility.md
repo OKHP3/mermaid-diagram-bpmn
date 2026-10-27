@@ -1,6 +1,11 @@
 # Mermaid Compatibility Reference
 ## `mermaid-diagram-bpmn` / `bpmn-beta`
 
+> Historical reference: the sections below retain the August 2026 adapter
+> design and test record. Use [the current compatibility record](../../docs/mermaid-compatibility.md)
+> for the declared Mermaid target and evidence boundaries. Dated examples and
+> version ranges below do not establish current compatibility.
+
 **Last updated:** 2026-08-24
 **Current evidence baseline:** [Maturity Evidence Baseline — 2026-08-22](../../docs/maturity-evidence-baseline-2026-08-22.md)
 **Target repos:** `mermaid-js/mermaid` (≥ 10), `mermaid-js/mermaid-live-editor`

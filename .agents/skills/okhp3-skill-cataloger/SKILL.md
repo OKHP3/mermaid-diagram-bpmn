@@ -11,7 +11,7 @@ description: >
 license: MIT
 metadata:
   author: "Jamie Hill (OverKill Hill P³)"
-  version: "1.7.0"
+  version: "1.7.1"
   category: "universal"
   origin: "okhp3/skillz"
   homepage: "https://overkillhill.com"
