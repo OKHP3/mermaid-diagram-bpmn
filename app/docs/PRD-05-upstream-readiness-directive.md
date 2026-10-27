@@ -1,4 +1,9 @@
 # PRD-05: Upstream Readiness & Hardening Directive
+
+> Parser and upstream coordination update (2026-10-22): see the
+> [reconciled audit](../../docs/external-review/2026-10-22-mermaid-compliance-closeout.md)
+> and DEC-025. The dated research and proposals below retain their historical
+> context; their Langium assumptions do not schedule a parser migration.
 ## BPMN for Mermaid (`OKHP3/mermaid-diagram-bpmn`)
 
 | Field | Value |

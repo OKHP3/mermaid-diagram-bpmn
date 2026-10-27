@@ -83,10 +83,15 @@ See `docs/version-checklist.md` V0.5 for the full criterion list.
 
 ---
 
-## V0.7 — Langium parser (Planned, after V0.6)
+## V0.7: Parser formalization (Planned, conditional)
 
-Replace the hand-written parser with a formal grammar.
-See `docs/version-checklist.md` V0.7 for the full criterion list.
+Retain the hand-written parser for the external plugin. Before scheduling a
+core parser migration, coordinate with Mermaid #8160/#7699 on syntax and the
+core-versus-external path. Current upstream guidance targets Chevrotain next to
+the diagram, rather than a new Langium module in the shared parser package.
+See `docs/version-checklist.md` V0.7 and DEC-025 for the decision boundary.
+The [October 22 audit](../../docs/external-review/2026-10-22-mermaid-compliance-closeout.md)
+records the source evidence and compatibility limits.
 
 ---
 

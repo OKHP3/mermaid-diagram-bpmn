@@ -86,7 +86,8 @@ Engage on #7699 publicly within 7 days of prototype stabilization. Frame `bpmn-b
 
 ## DEC-013: Parser strategy = hand-written prototype → Langium plugin
 
-**Status:** Proposed
+**Status:** Superseded by DEC-025 (2026-10-22). The proposal below is retained
+as historical context and does not authorize a parser migration.
 
 Keep the hand-written line parser as the prototype/playground engine for DSL iteration. Port to Langium when packaging for npm publication. Add a parity test corpus asserting both parsers produce equivalent ASTs for the canonical example set.
 
@@ -186,3 +187,27 @@ The four events are narrow enough that, before the project has an audience, the 
 **Alternatives considered:**
 - Enable now: rejected — no baseline question, cost not justified.
 - Remove the infrastructure: not chosen — the implementation is already written, tested, and documented; removal would lose zero-PII tracking capability that may become useful. Revisit if the infrastructure becomes a maintenance burden.
+
+
+---
+
+## DEC-025: External parser retained; core parser follows current upstream direction
+
+**Status:** Accepted (2026-10-22 documentation reconciliation)
+
+Keep the existing parser, public `bpmn-beta` keyword, and `BPMNDiagram` detector
+id for the published external plugin. Packaging does not require Langium, and
+the current Mermaid guide targets Chevrotain for new core diagrams. DEC-013's
+Langium premise is superseded; no parser rewrite is authorized by this record.
+
+Coordinate through the existing #8160/#7699 work before proposing a separate
+core implementation or choosing its syntax. The existing external-plugin path
+remains the supported project direction. An upstream guide or approved issue
+does not establish acceptance of this repository.
+
+**Evidence:** [October 22 compliance audit](../../docs/external-review/2026-10-22-mermaid-compliance-closeout.md),
+[Mermaid contribution guide](https://mermaid.ai/open-source/community/new-diagram.html),
+and [upstream tracker #8160](https://github.com/mermaid-js/mermaid/issues/8160).
+The current runtime target remains Mermaid 11.17.2; Mermaid 12 guidance does
+not establish runtime compatibility. Theme cache isolation and the remaining
+core checklist must be reviewed if core work is separately approved.

@@ -16,7 +16,7 @@ const RISKS: Risk[] = [
   { label: "Maintainer reluctance", severity: "Medium", mitigation: "Plugin-first path. Tests, examples, and docs reduce the review surface." },
   { label: "User expectation of XML export", severity: "Medium", mitigation: "Mark XML interchange as a future milestone in every public communication." },
   { label: "Mermaid theming conflicts", severity: "Medium", mitigation: "Use existing Mermaid theme variables. Do not introduce new theme properties in v1." },
-  { label: "Overengineering the grammar", severity: "Medium", mitigation: "Hand-written parser is fine for the prototype. Langium migration when the grammar is proven." },
+  { label: "Overengineering the grammar", severity: "Medium", mitigation: "Retain the external parser. Agree on scope with the existing upstream BPMN effort before a core migration." },
 ];
 
 const SEVERITY_COLORS: Record<string, string> = {
@@ -232,7 +232,7 @@ export default function About() {
         <div className="flex flex-col gap-3">
           {[
             { label: "Not an official Mermaid diagram type", intentional: false, note: "The plugin adapter (@okhp3/mermaid-diagram-bpmn) registers via registerExternalDiagrams() and is source-verified against mermaid.render(). Upstream core inclusion requires community review and is not yet proposed." },
-            { label: "Parser is hand-written", intentional: false, note: "Good for iteration; insufficient for upstream-quality grammar maturity. Strategy: hand-written prototype first, Langium for plugin v1." },
+            { label: "Parser is hand-written", intentional: false, note: "The external plugin retains this parser. A core migration depends on maintainer direction; current guidance targets Chevrotain." },
             { label: "Pool/lane layout is approximate", intentional: false, note: "Pools and lanes render correctly (source-verified against mermaid.render()), but layout quality is prototype-grade — pool widths may not align and cross-lane routing is approximate. Verify output before relying on it." },
             { label: "Message flow routing is experimental", intentional: false, note: "Message flows (~~>) and cross-pool routing are experimental. Class-level rendering works; routing geometry is approximate." },
             { label: "No BPMN XML import/export", intentional: true, note: "Intentional for v1. User writes lightweight DSL, not BPMN XML. XML is deliberately decoupled from diagram authoring." },
