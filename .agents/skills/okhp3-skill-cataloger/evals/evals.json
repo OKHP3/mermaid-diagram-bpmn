@@ -1,8 +1,8 @@
 {
   "skill_name": "okhp3-skill-cataloger",
-  "skill_version": "1.7.0",
+  "skill_version": "1.7.1",
   "status": "designed_not_run",
-  "notes": "Three discriminating evals are defined; no live benchmark results are claimed.",
+  "notes": "The three unchanged workflow cases remain designed, not run, for 1.7.1. The YAML block-description fix has deterministic regression coverage; no fresh live benchmark or unseen release holdout is claimed.",
   "evals": [
     {
       "id": "cataloger-1",

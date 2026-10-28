@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-gen-skills-readme.py — okhp3-skill-cataloger v1.6.1
+gen-skills-readme.py — okhp3-skill-cataloger v1.7.1
 OverKill Hill P³ · https://overkillhill.com · https://github.com/OKHP3
 =======================================================
 Bundled with the okhp3-skill-cataloger Agent Skill.
@@ -28,6 +28,9 @@ Two modes of operation:
     $ python3 scripts/gen-skills-readme.py --full --no-absorb-readme
 
 No external dependencies. Python 3.9+ only.
+
+What changed in v1.7.1 vs v1.7.0:
+  - Read descriptions using folded or literal YAML blocks with chomping markers.
 
 What changed in v1.6.1 vs v1.6.0:
   - Normalize generated catalog output to one final newline.
@@ -98,7 +101,7 @@ if hasattr(sys.stdout, "reconfigure"):
 if hasattr(sys.stderr, "reconfigure"):
     sys.stderr.reconfigure(encoding="utf-8")
 
-CATALOGER_VERSION = "1.7.0"
+CATALOGER_VERSION = "1.7.1"
 OKHP3_HOMEPAGE    = "https://overkillhill.com"
 OKHP3_GITHUB      = "https://github.com/OKHP3"
 
@@ -179,7 +182,7 @@ def parse_frontmatter(filepath: Path) -> dict:
             continue
         key, value = kv.group(1).strip(), kv.group(2).strip()
 
-        if value in ("|", ">"):
+        if value in ("|", ">", "|-", ">-", "|+", ">+"):
             current_key, in_block = key, True
         elif value == "":
             nested_key, in_nested = key, True
