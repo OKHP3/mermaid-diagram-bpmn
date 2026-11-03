@@ -18,10 +18,15 @@ export default function Privacy() {
         </h1>
         <p className="text-sm text-muted-foreground leading-relaxed">
           This site collects the minimum signal needed to understand whether the
-          tools are being used. No personal data is collected, stored, or shared.
+          tools are being used. Diagram processing happens in your browser. Your drafts are stored on this device as described below.
         </p>
       </div>
 
+      <section className="mb-10">
+        <h2 className="text-base font-semibold mb-4">Your diagrams and saved drafts</h2>
+        <p className="text-sm text-muted-foreground leading-relaxed mb-3">The workbench saves edits in this browser's local storage. Drafts remain on this device until you remove them using Recover saved work or clear the site's browser data. Other people using the same browser profile can access them. Private browsing, storage limits, or clearing browser data can remove recovery copies. Download source to keep a durable backup.</p>
+        <p className="text-sm text-muted-foreground leading-relaxed">Edited source is also encoded in the address bar for sharing. A shared URL contains the process text and may appear in browser history or synced history. Anyone with the link can read it. Share only process information you intend to disclose.</p>
+      </section>
       {/* What we measure */}
       <section className="mb-10">
         <h2 className="text-base font-semibold text-foreground mb-4 pb-2 border-b border-border flex items-center gap-2">

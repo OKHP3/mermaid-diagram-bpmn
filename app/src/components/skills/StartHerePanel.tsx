@@ -13,6 +13,7 @@
  * environment — not in the browser.
  */
 
+import { Link } from "wouter";
 import { useEffect, useRef, useState } from "react";
 import { BookOpen, FileText, ArrowRight, Check, Copy } from "lucide-react";
 import { ZipDownloadButton } from "./ZipDownloadButton";
@@ -30,7 +31,7 @@ const STARTER_SKILL_NAME = "Process Intake & Scope";
 const STARTER_CONTEXT_FILES = [
   {
     filename: "organization-profile.md",
-    purpose: "Describe your organisation — name, sector, key roles, terminology",
+    purpose: "Describe your organization — name, sector, key roles, terminology",
   },
   {
     filename: "process-taxonomy.md",
@@ -52,7 +53,7 @@ Licensed MIT (code) / CC-BY-4.0 (documentation)
     Skill 01 of 15 — the recommended entry point to the BP-SKILL pipeline.
 
   context/organization-profile.md
-    Fill in your organisation's name, sector, roles, and terminology.
+    Fill in your organization's name, sector, roles, and terminology.
 
   context/process-taxonomy.md
     Define your process hierarchy so skills name processes consistently.
@@ -60,9 +61,9 @@ Licensed MIT (code) / CC-BY-4.0 (documentation)
 ## Quick start
 
 1. Copy SKILL.md to your agent platform's skills directory
-   (e.g. ~/.claude/skills/ for Claude Code, .github/copilot/ for Copilot)
+   following that platform's installation instructions. Keep the skill folder and SKILL.md together.
 
-2. Fill in the two context files with your organisation's details.
+2. Fill in the two context files with your organization's details.
 
 3. Ask your agent:
    "Scope the [process name] process using the Process Intake & Scope skill"
@@ -76,7 +77,7 @@ grows as you run more skills in the 15-step BP-SKILL pipeline.
 
 ## Next steps
 
-Run all 15 skills in pipeline order. Visit the full catalog for details:
+Choose the next skill according to your process needs and its required inputs. Visit the full catalog for details:
 https://github.com/OKHP3/mermaid-diagram-bpmn
 
 ## Important
@@ -183,7 +184,7 @@ export function StartHerePanel({ onBrowseAll }: StartHerePanelProps) {
       {/* Heading */}
       <p className="forge-eyebrow mb-3">Getting Started · Minimum Viable Setup</p>
       <h2 className="text-2xl sm:text-3xl font-bold text-foreground mb-3 leading-tight">
-        Four things. Five minutes. First process documented.
+        Start with the process you need to understand.
       </h2>
       <p className="text-sm text-muted-foreground leading-relaxed max-w-2xl mb-10">
         You do not need all 15 skills to get value. Start with one skill, two context files,
@@ -212,13 +213,13 @@ export function StartHerePanel({ onBrowseAll }: StartHerePanelProps) {
           </div>
           <div className="flex items-center gap-1.5 mt-auto pt-1">
             <BookOpen size={11} className="text-muted-foreground" />
-            <a
+            <Link
               href={`/skills/${STARTER_SKILL_ID}`}
               className="text-xs text-primary hover:underline underline-offset-2"
               data-testid="start-here-skill-link"
             >
               View skill specification →
-            </a>
+            </Link>
           </div>
         </div>
 
@@ -254,21 +255,18 @@ export function StartHerePanel({ onBrowseAll }: StartHerePanelProps) {
         >
           <div className="flex items-center gap-2">
             <span className="w-6 h-6 rounded-full bg-primary/10 flex items-center justify-center text-[10px] font-bold text-primary shrink-0">3</span>
-            <p className="text-[10px] font-mono uppercase tracking-widest text-muted-foreground/60">Central handoff artifact</p>
+            <p className="text-[10px] font-mono uppercase tracking-widest text-muted-foreground/60">Your first outputs</p>
           </div>
           <div>
             <p className="text-sm font-semibold text-foreground">
-              <code className="font-mono">PNS.md</code>
+              <code className="font-mono">pir.yaml</code> + <code className="font-mono">scope-statement.md</code>
             </p>
             <p className="text-xs text-muted-foreground mt-1 leading-relaxed">
-              The Process Narrative Specification. Every skill either reads or advances it — from{" "}
-              <code className="font-mono text-[10px] bg-muted px-1 rounded">draft-intake</code> through to{" "}
-              <code className="font-mono text-[10px] bg-muted px-1 rounded">published</code>.
-              Your first run produces the intake and scope sections.
+              A process intake record and a scope statement. Review the boundaries, people, and desired outcome before describing the process in detail.
             </p>
           </div>
           <p className="text-[10px] text-muted-foreground/70 italic mt-auto pt-1">
-            One document. 13 required sections. ISO 9001 / BABOK / IEEE 29148 aligned.
+            Later skills can develop the shared Process Narrative Specification (PNS.md).
           </p>
           <FirstAgentPrompt />
         </div>

@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect, useCallback, useMemo } from "react";
+import { useState, useRef, useEffect, useLayoutEffect, useCallback, useMemo } from "react";
 import { BpmnRenderer } from "@/lib/bpmn-renderer";
 import { BPMN_EXAMPLES, DEFAULT_EXAMPLE_ID } from "@/lib/bpmn-examples";
 import { EXPORT_THEME, getStyles } from "@/lib/bpmn-styles";
@@ -26,6 +26,8 @@ import { lint } from "@/lib/bpmn-lint";
 import type { LintWarning } from "@/lib/bpmn-lint";
 import { validate } from "@/lib/bpmn-validate";
 import { trackEvent } from "@/lib/analytics";
+import { useWorkbenchDrafts, type WorkbenchDraft } from "@/hooks/useWorkbenchDrafts";
+import { WorkbenchDrafts } from "@/components/WorkbenchDrafts";
 import { StatusRibbon } from "@/components/StatusRibbon";
 
 const MIN_SCALE = 0.15;
@@ -46,6 +48,7 @@ interface ErrorInfo {
 interface SourceDiagnostics {
   parseError: ErrorInfo | null;
   allWarnings: DiagnosticWarning[];
+  labels?: { id: string; label: string }[];
 }
 
 /**
@@ -71,6 +74,7 @@ function getSourceDiagnostics(source: string): SourceDiagnostics {
     const validationErrs = validate(db);
     return {
       parseError: null,
+      labels: nodes.map(node => ({ id: node.id, label: node.label || node.id })),
       allWarnings: [
         ...lintWarns,
         ...validationErrs.map(e => ({ code: e.code, message: e.message, nodeId: e.nodeId, sourceLine: e.line })),
@@ -122,7 +126,21 @@ function toFilenameSlug(name: string): string {
     || "diagram";
 }
 
+type WorkspaceView = "diagram" | "source" | "split";
+
 export default function Playground() {
+  const [workspaceView, setWorkspaceView] = useState<WorkspaceView>(() => {
+    const view = new URLSearchParams(window.location.search).get("view");
+    return view === "source" || view === "split" ? view : "diagram";
+  });
+  const drafts = useWorkbenchDrafts();
+  const [previousWork, setPreviousWork] = useState<{ source: string; example: string | null } | null>(null);
+  function changeView(view: WorkspaceView) {
+    setWorkspaceView(view);
+    const url = new URL(window.location.href);
+    url.searchParams.set("view", view);
+    history.replaceState(null, "", url.toString());
+  }
   // Initialise from URL params (?src= or ?example=) on first render to avoid a
   // flash of the default content when a shared link is opened.
   const [source, setSource] = useState<string>(() => computeInitialState().source);
@@ -152,8 +170,22 @@ export default function Playground() {
 
   // Ref for the container holding the rendered BpmnRenderer SVG
   const svgContainerRef = useRef<HTMLDivElement>(null);
+  // Fit the workbench viewport to rendered content, including pools and labels.
+  // The shared renderer retains its layout contract for other consumers.
+  useLayoutEffect(() => {
+    if (workspaceView === "source") return;
+    const svg = svgContainerRef.current?.querySelector("svg");
+    if (!svg || typeof svg.getBBox !== "function") return;
+    try {
+      const bounds = svg.getBBox();
+      if (bounds.width > 0 && bounds.height > 0) {
+        const padding = 30;
+        svg.setAttribute("viewBox", `${bounds.x - padding} ${bounds.y - padding} ${bounds.width + padding * 2} ${bounds.height + padding * 2}`);
+      }
+    } catch { /* Hidden SVGs can lack geometry; retain the renderer viewport. */ }
+  }, [source, workspaceView]);
 
-  const { parseError, allWarnings } = useMemo(
+  const { parseError, allWarnings, labels = [] } = useMemo(
     () => getSourceDiagnostics(source),
     [source],
   );
@@ -457,6 +489,12 @@ export default function Playground() {
   function selectExample(id: string) {
     const ex = BPMN_EXAMPLES.find(e => e.id === id);
     if (ex) {
+      if (ex.source === source) return;
+      if (activeExample === null) {
+        if (!drafts.save(source) && !window.confirm("This draft could not be saved in this browser. Download its source before replacing it. Replace it anyway?")) return;
+        setPreviousWork({ source, example: activeExample });
+      }
+      drafts.start();
       userChangedSourceRef.current = true;
       cancelPendingSourceUrlSync();
       setSource(ex.source);
@@ -473,6 +511,8 @@ export default function Playground() {
   }
 
   function handleSourceChange(val: string) {
+    drafts.save(val);
+    setPreviousWork(null);
     userChangedSourceRef.current = true;
     setSource(val);
     setActiveExample(null);
@@ -488,6 +528,17 @@ export default function Playground() {
       void synchronizeSourceUrl(val, version);
     }, URL_SYNC_DEBOUNCE_MS);
   }
+
+  function restoreSource(value: string, example: string | null = null) {
+    if (activeExample === null && !drafts.save(source)
+      && !window.confirm("This draft could not be saved. Download its source before restoring other work. Restore anyway?")) return;
+    drafts.start();
+    handleSourceChange(value);
+    setActiveExample(example);
+    resetView();
+  }
+
+  function restoreDraft(draft: WorkbenchDraft) { restoreSource(draft.source); }
 
   // ── Copy / Download handlers ────────────────────────────────────────────────
 
@@ -623,86 +674,39 @@ export default function Playground() {
         : "Copy source to clipboard";
 
   return (
-    <div className="flex flex-col flex-1 h-full">
+    <div className="workbench flex flex-col flex-1" data-view={workspaceView}>
 
       {/* Status ribbon */}
       <StatusRibbon />
 
-      {/* Sub-header */}
-      <div className="border-b border-border px-4 sm:px-6 py-4 bg-card/70">
-        <div className="max-w-7xl mx-auto">
-          <div className="flex items-baseline gap-3">
-            <h1 className="text-lg font-bold text-foreground" data-testid="heading-playground">
-              bpmn-beta Playground
-            </h1>
-            <span className="forge-eyebrow">Proof-of-concept · No bpmn-js</span>
-          </div>
-          <p className="text-xs text-muted-foreground mt-0.5">
-            Write bpmn-beta DSL source on the left — the diagram renders live on the right.
-          </p>
+      <div className="workbench-heading">
+        <div>
+          <p className="workbench-eyebrow">BPMN for Mermaid / Workbench</p>
+          <h1 data-testid="heading-playground">{source.match(/^accTitle:\s*(.+)$/m)?.[1] || "Your process diagram"}</h1>
+          <p className="workbench-subtitle">Understand the process. Edit its source. Take the result with you.</p>
         </div>
+        <label className="workbench-example-label">Try an example
+          <select data-testid="select-example" value={activeExample ?? ""} onChange={e => selectExample(e.target.value)}>
+            <option value="" disabled>Your draft</option>
+            {BPMN_EXAMPLES.map(ex => <option key={ex.id} value={ex.id}>{ex.name}{ex.experimental ? " (experimental)" : ""}</option>)}
+          </select>
+        </label>
       </div>
-
-      {/* Example selector */}
-      <div className="border-b border-border px-4 sm:px-6 py-2.5 bg-muted/30">
-        <div className="max-w-7xl mx-auto forge-tabs">
-          <span className="forge-eyebrow mr-1 shrink-0">Examples</span>
-          {BPMN_EXAMPLES.map(ex => (
-            <button
-              key={ex.id}
-              onClick={() => selectExample(ex.id)}
-              className={`${activeExample === ex.id ? "forge-tab-active" : "forge-tab"} flex items-center gap-1.5`}
-              data-testid={`button-example-${ex.id}`}
-            >
-              {ex.name}
-              {ex.experimental && (
-                <FlaskConical size={9} className={activeExample === ex.id ? "opacity-80" : "text-amber-500"} aria-label="Experimental" />
-              )}
-            </button>
-          ))}
+      <div className="workbench-controls">
+        <div className="workbench-view-tabs" role="tablist" aria-label="Workspace view">
+          {(["diagram", "source", "split"] as const).map((view, index, views) => <button
+            key={view} id={`workspace-tab-${view}`} role="tab" aria-selected={workspaceView === view}
+            aria-controls="workbench-panels" tabIndex={workspaceView === view ? 0 : -1}
+            onClick={() => changeView(view)} onKeyDown={event => {
+              const next = event.key === "ArrowRight" ? (index + 1) % 3 : event.key === "ArrowLeft" ? (index + 2) % 3 : event.key === "Home" ? 0 : event.key === "End" ? 2 : null;
+              if (next === null) return;
+              event.preventDefault(); changeView(views[next]);
+              document.getElementById(`workspace-tab-${views[next]}`)?.focus();
+            }}>
+            {view[0].toUpperCase() + view.slice(1)}
+          </button>)}
         </div>
-      </div>
-
-      {/* Experimental notice */}
-      {activeExampleDef?.experimental && (
-        <div
-          className="px-4 sm:px-6 py-2 flex items-center gap-2 text-xs forge-experimental-notice"
-        >
-          <FlaskConical size={11} className="text-amber-600 shrink-0" />
-          <span className="text-foreground/80">
-            <span className="font-semibold text-foreground">Experimental support.</span>
-            {" "}Pools and lanes render with known layout limitations — cross-lane flow ordering and message flow routing are approximate.
-          </span>
-        </div>
-      )}
-
-      {/* Two-panel workspace */}
-      <div className="flex-1 flex flex-col md:flex-row min-h-0 max-w-7xl mx-auto w-full">
-
-        {/* Source panel */}
-        <div
-          className="flex flex-col md:w-1/2 border-b md:border-b-0 md:border-r min-h-[280px] md:min-h-0 border-[var(--okh-header-border)]"
-        >
-          {/* Source panel toolbar */}
-          <div className="forge-code-panel-tab flex items-center gap-2 px-4 py-2 border-b">
-            <span className="text-xs font-mono shrink-0">source.bpmn-beta</span>
-
-            {/* Accessible live region for copy state announcements */}
-            <span
-              role="status"
-              aria-live="polite"
-              aria-atomic="true"
-              className="sr-only"
-              data-testid="copy-live-region"
-            >
-              {copyState === "copied"
-                ? "Source copied to clipboard"
-                : copyState === "error"
-                  ? "Copy failed. Clipboard access denied or source is empty."
-                  : ""}
-            </span>
-
-            <div className="ml-auto flex items-center gap-1">
+        <div className="workbench-exports" role="group" aria-label="Export and share">
               {/* Copy button */}
               <button
                 onClick={handleCopy}
@@ -771,6 +775,84 @@ export default function Playground() {
                 </span>
               </button>
 
+
+            {/* SVG export button */}
+            <button
+              onClick={handleExportSvg}
+              disabled={!!parseError || !source.trim()}
+              aria-label={
+                svgExportState === "done"
+                  ? "SVG downloaded"
+                  : "Download rendered diagram as SVG file"
+              }
+              data-testid="button-export-svg"
+              title="Download rendered diagram as SVG"
+              className={`flex items-center gap-1 px-2 py-1 rounded text-xs transition-colors ${
+                !!parseError || !source.trim()
+                  ? "text-muted-foreground/40 cursor-not-allowed"
+                  : svgExportState === "done"
+                    ? "text-emerald-600 dark:text-emerald-400"
+                    : "text-muted-foreground hover:text-foreground hover:bg-muted/70"
+              }`}
+            >
+              <FileDown size={13} />
+              <span>{svgExportState === "done" ? "Saved!" : "SVG"}</span>
+            </button>
+
+
+        </div>
+            {/* Accessible live region for copy state announcements */}
+            <span
+              role="status"
+              aria-live="polite"
+              aria-atomic="true"
+              className="sr-only"
+              data-testid="copy-live-region"
+            >
+              {copyState === "copied"
+                ? "Source copied to clipboard"
+                : copyState === "error"
+                  ? "Copy failed. Clipboard access denied or source is empty."
+                  : ""}
+            </span>
+
+
+        <span role="status" aria-live="polite" className="sr-only">{svgExportState === "done" ? "SVG downloaded" : ""}{shareState === "copied" ? "Shareable link copied" : ""}</span>
+      </div>
+      <WorkbenchDrafts drafts={drafts.drafts} saveState={drafts.saveState} onRestore={restoreDraft} onForget={drafts.forget} />
+      {previousWork && <div className="workbench-notice" role="status">Previous work is available.
+        <button className="workbench-action" onClick={() => restoreSource(previousWork.source, previousWork.example)}>Undo example change</button>
+      </div>}
+      {workspaceView === "diagram" && (parseError || allWarnings.length > 0) && <div className="workbench-notice" role="status">
+        <span>{parseError ? parseError.message : `${allWarnings.length} process warnings to review.`}</span>
+        <button className="workbench-action" onClick={() => changeView("source")}>Review source</button>
+      </div>}
+
+      {/* Experimental notice */}
+      {activeExampleDef?.experimental && (
+        <div
+          className="px-4 sm:px-6 py-2 flex items-center gap-2 text-xs forge-experimental-notice"
+        >
+          <FlaskConical size={11} className="text-amber-600 shrink-0" />
+          <span className="text-foreground/80">
+            <span className="font-semibold text-foreground">Experimental support.</span>
+            {" "}Pools and lanes render with known layout limitations — cross-lane flow ordering and message flow routing are approximate.
+          </span>
+        </div>
+      )}
+
+      {/* Two-panel workspace */}
+      <div id="workbench-panels" role="tabpanel" aria-labelledby={`workspace-tab-${workspaceView}`} className="workbench-panels">
+
+        {/* Source panel */}
+        <div
+          className="workbench-source" hidden={workspaceView === "diagram"}
+        >
+          {/* Source panel toolbar */}
+          <div className="forge-code-panel-tab flex items-center gap-2 px-4 py-2 border-b">
+            <label htmlFor="workbench-source" className="text-xs font-mono shrink-0">Editable bpmn-beta source</label>
+
+            <div className="ml-auto flex items-center gap-1">
               {/* Parse error badge */}
               {parseError && (
                 <span
@@ -895,6 +977,7 @@ export default function Playground() {
               />
             )}
             <textarea
+              id="workbench-source"
               ref={sourceEditorRef}
               className="absolute inset-0 w-full h-full p-4 text-sm resize-none focus-visible:outline-none leading-relaxed code-area bg-transparent"
               value={source}
@@ -923,7 +1006,7 @@ export default function Playground() {
         </div>
 
         {/* Preview panel */}
-        <div className="flex flex-col md:w-1/2 min-h-[320px] md:min-h-0 bg-card">
+        <div className="workbench-preview" hidden={workspaceView === "source"}>
 
           {/* Preview toolbar */}
           <div className="flex items-center gap-2 px-3 py-1.5 border-b border-border bg-muted/30 shrink-0">
@@ -934,29 +1017,6 @@ export default function Playground() {
                 Experimental
               </span>
             )}
-
-            {/* SVG export button */}
-            <button
-              onClick={handleExportSvg}
-              disabled={!!parseError || !source.trim()}
-              aria-label={
-                svgExportState === "done"
-                  ? "SVG downloaded"
-                  : "Download rendered diagram as SVG file"
-              }
-              data-testid="button-export-svg"
-              title="Download rendered diagram as SVG"
-              className={`flex items-center gap-1 px-2 py-1 rounded text-xs transition-colors ${
-                !!parseError || !source.trim()
-                  ? "text-muted-foreground/40 cursor-not-allowed"
-                  : svgExportState === "done"
-                    ? "text-emerald-600 dark:text-emerald-400"
-                    : "text-muted-foreground hover:text-foreground hover:bg-muted/70"
-              }`}
-            >
-              <FileDown size={13} />
-              <span>{svgExportState === "done" ? "Saved!" : "SVG"}</span>
-            </button>
 
             {/* Zoom controls */}
             <div className="ml-auto flex items-center gap-0.5">
@@ -980,7 +1040,7 @@ export default function Playground() {
                 aria-label="Reset view"
                 className="p-1.5 rounded hover:bg-muted/70 text-muted-foreground hover:text-foreground transition-colors"
               >
-                <Maximize2 size={13} />
+                <span className="flex items-center gap-1"><Maximize2 size={16} /><span className="text-xs">Fit</span></span>
               </button>
               <button
                 onClick={() => zoomStep(1.2)}
@@ -1016,14 +1076,14 @@ export default function Playground() {
                 height: "100%",
               }}
             >
-              <div ref={svgContainerRef} style={{ width: "100%", height: "100%" }}>
+              <div ref={svgContainerRef} className="workbench-renderer" style={{ width: "100%", height: "100%" }}>
                 <BpmnRenderer source={source} />
               </div>
             </div>
 
             {/* Affordance hint — always visible; closes TD-016 */}
             <div
-              className="absolute bottom-2 right-3 text-xs text-muted-foreground/40 font-mono pointer-events-none select-none"
+              className="absolute bottom-2 right-3 text-xs text-muted-foreground font-mono pointer-events-none select-none"
               data-testid="canvas-hint"
             >
               scroll to zoom · drag or touch to pan · +/− keys
@@ -1054,6 +1114,13 @@ export default function Playground() {
           </div>
         </div>
       )}
+      <div className="workbench-finish">
+        <p>A rendered diagram is a starting point for review. Confirm owners, decisions, and exceptions with the people doing the work.</p>
+        <p>Download .mmd to edit later or SVG for documents. Share links include your diagram source.</p>
+        {labels.length > 0 && <details><summary>Read all diagram labels ({labels.length})</summary>
+          <ul>{labels.map(node => <li key={node.id}><code>{node.id}</code> {node.label}</li>)}</ul>
+        </details>}
+      </div>
     </div>
   );
 }

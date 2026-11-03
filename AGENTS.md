@@ -119,6 +119,14 @@ installed separately and is not a workspace importer.
 
 ## Architecture and data flow
 
+The analyst workbench at `/playground` provides Diagram, Source, and Split views
+through the optional `view` query parameter. Both panels stay mounted so canvas
+gestures and SVG export remain available. `useWorkbenchDrafts` saves edits in
+versioned browser-local records, one writer per mounted editor. Restoring opens
+a copy and never silently replaces another tab's source. Keep recovery, storage
+failure, example switching, and shared URL regression coverage when changing it.
+The privacy page documents local retention and source-bearing shared URLs.
+
 Preserve this application pipeline:
 
 ```text

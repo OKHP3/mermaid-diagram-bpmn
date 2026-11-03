@@ -36,6 +36,15 @@ The current maturity evidence baseline (2026-08-22) records the distinction betw
 
 ## Using the plugin
 
+For process owners and analysts, start in the [workbench](https://okhp3.github.io/mermaid-diagram-bpmn/playground).
+Choose an example, then use Diagram, Source, or Split view to review and refine it.
+Edits are saved as separate recovery drafts in this browser. Use **Recover saved work**
+to open a copy of an earlier draft, and download `.mmd` source for a durable backup.
+Shared URLs include the source text; share only process information you intend to disclose.
+SVG export, source downloads, and all developer and skill routes remain available.
+
+### Mermaid integration
+
 ```bash
 npm install @okhp3/mermaid-diagram-bpmn
 npm install mermaid          # peer dependency

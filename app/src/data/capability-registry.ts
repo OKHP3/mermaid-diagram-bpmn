@@ -216,8 +216,9 @@ export const BPMN_CAPABILITIES: BpmnCapability[] = [
   },
   {
     id: 'intermediate-events',
-    label: 'Intermediate events',
-    tier: 'deferred',
+    label: 'Plain intermediate events',
+    tier: 'source-verified',
+    evidence: 'bpmn-plugin-integration.test.ts: plain intermediate event renders a double ring',
   },
   {
     id: 'event-markers',
@@ -234,11 +235,7 @@ export const BPMN_CAPABILITIES: BpmnCapability[] = [
     label: 'Parser-enforced BPMN domain rules',
     tier: 'deferred',
   },
-  {
-    id: 'shape-extraction',
-    label: 'Shape extraction from renderer',
-    tier: 'deferred',
-  },
+
 
   // ── out of scope ──────────────────────────────────────────────────────────
   { id: 'xml-import-export',    label: 'BPMN XML import / export',        tier: 'out-of-scope' },

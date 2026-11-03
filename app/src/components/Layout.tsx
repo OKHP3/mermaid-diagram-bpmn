@@ -12,8 +12,8 @@ import { loadMermaidHostDemo } from "@/lib/route-loaders";
 // Learn  ▾: Walkthrough · DSL Reference · Architecture · Roadmap · About
 
 const PRODUCT_NAV = [
-  { href: "/playground", label: "Playground"   },
-  { href: "/skills",     label: "Agent Skills" },
+  { href: "/playground", label: "Workbench", testId: "nav-playground"},
+  { href: "/skills",     label: "Process skills", testId: "nav-agent-skills"},
 ] as const;
 
 const PLUGIN_LINKS = [
@@ -153,7 +153,7 @@ function NavDropdown({
               onFocus={() => onRouteIntent?.(link.href)}
               onKeyDown={(e: React.KeyboardEvent<HTMLAnchorElement>) => handleItemKeyDown(e, idx)}
               className={`forge-nav-dropdown-item block px-4 py-2 text-sm${isLinkActive(link.href, location) ? " forge-nav-dropdown-item--active" : ""}`}
-              data-testid={`nav-${link.label.toLowerCase().replace(/\s+/g, "-")}`}
+                  data-testid={`nav-${link.label.toLowerCase().replace(/\s+/g, "-")}`}
               role="menuitem"
             >
               {link.label}
@@ -170,18 +170,19 @@ function NavDropdown({
 function useDarkMode() {
   const [dark, setDark] = useState(() => {
     if (typeof window === "undefined") return false;
-    return localStorage.getItem("theme") === "dark";
+    try { return localStorage.getItem("theme") === "dark"; } catch { return false; }
   });
 
   useEffect(() => {
     const root = document.documentElement;
     if (dark) {
       root.classList.add("dark");
-      localStorage.setItem("theme", "dark");
+
     } else {
       root.classList.remove("dark");
-      localStorage.setItem("theme", "light");
+
     }
+    try { localStorage.setItem("theme", dark ? "dark" : "light"); } catch { /* Theme remains usable without storage. */ }
   }, [dark]);
 
   return [dark, setDark] as const;
@@ -236,7 +237,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
               alt="BPMN for Mermaid icon"
               className="w-7 h-7 rounded-md object-cover ring-1 ring-white/10"
             />
-            <div className="hidden sm:flex flex-col leading-tight gap-px">
+            <div className="flex flex-col leading-tight gap-px">
               <span className="font-semibold text-sm forge-brand-title">
                 BPMN for Mermaid
               </span>
@@ -257,7 +258,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
                   key={link.href}
                   href={link.href}
                   className={`relative px-3 py-1.5 rounded text-sm forge-nav-link${isActive ? " forge-nav-link--active" : ""}`}
-                  data-testid={`nav-${link.label.toLowerCase().replace(/\s+/g, "-")}`}
+                  data-testid={link.testId}
                 >
                   {link.label}
                   {isActive && (
@@ -269,7 +270,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
 
             {/* Plugin ▾ — Use with Mermaid */}
             <NavDropdown
-              label="Plugin"
+              label="For developers"
               links={PLUGIN_LINKS}
               location={location}
               testId="nav-plugin-dropdown"
@@ -279,7 +280,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
 
             {/* Learn ▾ — shared context */}
             <NavDropdown
-              label="Learn"
+              label="Guides"
               links={LEARN_LINKS}
               location={location}
               testId="nav-learn-dropdown"
@@ -353,7 +354,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
               className="mt-2 pt-2 flex flex-col gap-0.5"
               style={{ borderTop: "1px solid var(--okh-header-border)" }}
             >
-              <span className="forge-mobile-nav-label px-3 pb-0.5">Plugin</span>
+              <span className="forge-mobile-nav-label px-3 pb-0.5">For developers</span>
               {PLUGIN_LINKS.map(link => (
                 <Link
                   key={link.href}
@@ -371,7 +372,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
               className="mt-2 pt-2 flex flex-col gap-0.5"
               style={{ borderTop: "1px solid var(--okh-header-border)" }}
             >
-              <span className="forge-mobile-nav-label px-3 pb-0.5">Learn</span>
+              <span className="forge-mobile-nav-label px-3 pb-0.5">Guides</span>
               {LEARN_LINKS.map(link => (
                 <Link
                   key={link.href}

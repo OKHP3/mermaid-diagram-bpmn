@@ -216,18 +216,18 @@ test.describe('Playground — desktop 1280×800', () => {
   });
 
   test('source textarea is visible', async ({ page }) => {
-    await loadPage(page, '/playground', '[data-testid="textarea-bpmn-source"]');
+    await loadPage(page, '/playground?view=split', '[data-testid="textarea-bpmn-source"]');
     await expect(page.locator('[data-testid="textarea-bpmn-source"]')).toBeVisible();
   });
 
-  test('at least one example tab is rendered', async ({ page }) => {
-    await loadPage(page, '/playground', '[data-testid^="button-example-"]');
-    const count = await page.locator('[data-testid^="button-example-"]').count();
-    expect(count, 'At least one example tab button').toBeGreaterThan(0);
+  test('example selector contains all available processes', async ({ page }) => {
+    await loadPage(page, '/playground', '[data-testid="select-example"]');
+    const count = await page.locator('[data-testid="select-example"] option').count();
+    expect(count, 'Example selector options').toBeGreaterThanOrEqual(9);
   });
 
   test('visual snapshot', async ({ page }) => {
-    await loadPage(page, '/playground', '[data-testid="textarea-bpmn-source"]');
+    await loadPage(page, '/playground?view=split', '[data-testid="textarea-bpmn-source"]');
     // Brief pause for the initial diagram render to complete
     await page.waitForTimeout(800);
     await expect(page).toHaveScreenshot('playground-desktop.png', { maxDiffPixelRatio: 0.03 });
@@ -250,7 +250,7 @@ test.describe('Playground — mobile 375×812', () => {
   });
 
   test('source textarea is accessible at 375 px (width ≥ 300 px)', async ({ page }) => {
-    await loadPage(page, '/playground', '[data-testid="textarea-bpmn-source"]');
+    await loadPage(page, '/playground?view=split', '[data-testid="textarea-bpmn-source"]');
     const textarea = page.locator('[data-testid="textarea-bpmn-source"]');
     await expect(textarea).toBeVisible();
     const box = await textarea.boundingBox();
@@ -259,7 +259,7 @@ test.describe('Playground — mobile 375×812', () => {
   });
 
   test('visual snapshot', async ({ page }) => {
-    await loadPage(page, '/playground', '[data-testid="textarea-bpmn-source"]');
+    await loadPage(page, '/playground?view=split', '[data-testid="textarea-bpmn-source"]');
     await page.waitForTimeout(500);
     await expect(page).toHaveScreenshot('playground-mobile.png', { maxDiffPixelRatio: 0.03 });
   });

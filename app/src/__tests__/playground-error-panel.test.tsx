@@ -169,7 +169,7 @@ describe("Playground error panel — line number surfacing", () => {
     setSource(SOURCE_WITH_NESTED_POOL);
     expect(screen.getByTestId("editor-error-line-highlight")).not.toBeNull();
 
-    fireEvent.click(screen.getByTestId("button-example-01-linear"));
+    fireEvent.change(screen.getByTestId("select-example"), { target: { value: "01-linear" } });
 
     expect(screen.queryByTestId("editor-error-line-highlight")).toBeNull();
   });

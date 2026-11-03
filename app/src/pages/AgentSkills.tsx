@@ -57,7 +57,7 @@ function buildContextEntries() {
 }
 
 export default function AgentSkills() {
-  const [activeSection, setActiveSection] = useState("standard");
+  const [activeSection, setActiveSection] = useState("start-here");
   const [statusFilter, setStatusFilter] = useState<"all" | "core" | "extension">("all");
   const [layerFilter, setLayerFilter] = useState<number | null>(null);
   const [search, setSearch] = useState("");
@@ -149,20 +149,16 @@ export default function AgentSkills() {
 
         <p className="text-sm text-muted-foreground leading-relaxed max-w-3xl mb-8">
           The Agent Skills open standard (<ExternalLinkAnchor href="https://agentskills.io" className="text-primary underline-offset-2 hover:underline">agentskills.io</ExternalLinkAnchor>) defines a SKILL.md file format for packaging
-          reusable AI agent capabilities as modular, portable, filesystem-resident instruction sets. As of
-          May 2026, the format is adopted by Claude Code, OpenAI Codex, GitHub Copilot, Gemini CLI, Cursor,
-          VS Code, and 30+ other platforms. A lifecycle-complete, BPMN-integrated business process skill
-          suite has been absent from that ecosystem — until now.
+          reusable AI agent capabilities as modular, portable, filesystem-resident instruction sets. Check your agent platform's installation instructions and supported capabilities before use. Skills are downloaded here and run in your own agent environment.
         </p>
 
         {/* Gap callout */}
         <blockquote className="forge-callout mb-8 max-w-2xl">
           <p className="text-sm font-semibold text-foreground mb-1">
-            The SKILL.md ecosystem spans 93,000–164,000+ files across public registries.
+            Build on the process knowledge you already have.
           </p>
           <p className="text-sm text-muted-foreground leading-relaxed">
-            No lifecycle-complete, BPMN-integrated business process skill suite has been
-            identified in those registries. BP-SKILL fills that gap.
+            Start with intake and scope, then choose the skills that help you document, review, and improve your process.
           </p>
         </blockquote>
 
@@ -184,7 +180,7 @@ export default function AgentSkills() {
         {/* Platform badges */}
         <div className="mb-8">
           <p className="text-[10px] font-mono uppercase tracking-widest text-muted-foreground/60 mb-3">
-            Works on all Agent Skills-compatible platforms
+            Agent platforms to check for SKILL.md support
           </p>
           <div className="flex flex-wrap gap-2">
             {["Claude Code", "OpenAI Codex", "GitHub Copilot", "Gemini CLI", "Cursor", "VS Code"].map((p) => (

@@ -50,8 +50,8 @@ async function expectExample(
   nodeLabel: string,
 ) {
   await expect(sourceEditor(page)).toHaveValue(source);
-  await expect(page.locator(`[data-testid="button-example-${id}"]`)).toHaveClass(/forge-tab-active/);
-  await expect(page.locator('[data-testid^="button-example-"].forge-tab-active')).toHaveCount(1);
+  await expect(page.getByTestId('select-example')).toHaveValue(id);
+
   await expectRenderedDiagram(page, diagramTitle, nodeLabel);
 }
 
@@ -69,7 +69,7 @@ test('loads a versioned compressed custom source without selecting an example', 
   await page.goto(`playground?src=${encodeCompressedSource(CUSTOM_SOURCE)}`);
 
   await expect(sourceEditor(page)).toHaveValue(CUSTOM_SOURCE);
-  await expect(page.locator('[data-testid^="button-example-"].forge-tab-active')).toHaveCount(0);
+  await expect(page.getByTestId('select-example')).toHaveValue('');
   await expectRenderedDiagram(page, 'Shared URL approval path', 'URL proof');
 });
 

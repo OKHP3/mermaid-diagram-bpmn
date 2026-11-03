@@ -1,5 +1,5 @@
 import { FlaskConical } from "lucide-react";
-import { ExternalLinkAnchor } from "@/components/ExternalLinkAnchor";
+import { Link } from "wouter";
 
 export function StatusRibbon() {
   return (
@@ -13,13 +13,13 @@ export function StatusRibbon() {
       <FlaskConical size={13} className="text-primary shrink-0" />
       <p className="text-xs text-foreground/80 leading-relaxed">
         <span className="font-semibold text-foreground">Prototype.</span>
-        {" "}DSL unstable · Not full BPMN 2.0 · No BPMN XML import/export · No bpmn-js runtime ·{" "}
-        <ExternalLinkAnchor
-          href="https://github.com/OKHP3/mermaid-diagram-bpmn"
+        {" "}A descriptive BPMN subset for documenting processes. Syntax may change. {" "}
+        <Link
+          href="/release"
           className="text-primary underline-offset-2 hover:underline font-medium"
         >
-          OKHP3/mermaid-diagram-bpmn
-        </ExternalLinkAnchor>
+          Current support
+        </Link>
       </p>
     </div>
   );

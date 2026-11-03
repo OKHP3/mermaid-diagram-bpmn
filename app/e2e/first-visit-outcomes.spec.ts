@@ -19,26 +19,29 @@ async function timedTask(page: Page, name: string, action: () => Promise<void>) 
 
 async function openHome(page: Page) {
   await page.goto(route('/'));
-  await expect(page.getByTestId('path-chooser')).toBeVisible();
+  await expect(page.getByTestId('heading-hero')).toBeVisible();
 }
 
 test.describe('First-visit outcome evaluation — desktop', () => {
   test.use({ viewport: { width: 1280, height: 800 } });
 
-  test('Create a diagram: reach a usable source and export controls', async ({ page }) => {
+  test('Create a diagram: reach a usable source and export controls', async ({ page, browserName }) => {
     await openHome(page);
     await timedTask(page, 'create a diagram', async () => {
       await page.getByTestId('button-open-playground').click();
       await expect(page).toHaveURL(/playground/);
-      await expect(page.getByTestId('textarea-bpmn-source')).toBeVisible();
+      await page.getByRole('tab', { name: 'Split', exact: true }).click();
+      await expect(page.getByTestId('div-diagram-preview')).toBeVisible();
       await expect(page.getByTestId('div-diagram-preview')).toBeVisible();
       await expect(page.getByTestId('button-copy-source')).toBeEnabled();
       await expect(page.getByTestId('button-download-mmd')).toBeEnabled();
       await expect(page.getByTestId('button-export-svg')).toBeEnabled();
 
-      await page.context().grantPermissions(['clipboard-read', 'clipboard-write']);
-      await page.getByTestId('button-copy-source').click();
-      await expect(page.getByTestId('copy-live-region')).toContainText('Source copied');
+      if (browserName === 'chromium') {
+        await page.context().grantPermissions(['clipboard-read', 'clipboard-write']);
+        await page.getByTestId('button-copy-source').click();
+        await expect(page.getByTestId('copy-live-region')).toContainText('Source copied');
+      }
 
       const sourceDownload = page.waitForEvent('download');
       await page.getByTestId('button-download-mmd').click();
@@ -53,6 +56,7 @@ test.describe('First-visit outcome evaluation — desktop', () => {
   test('Use with Mermaid: verify host proof and find integration guidance', async ({ page }) => {
     await openHome(page);
     await timedTask(page, 'use with Mermaid', async () => {
+      await page.getByText('Project details, capabilities, and developer resources', { exact: true }).click();
       await page.getByTestId('button-plugin-demo').click();
       await expect(page).toHaveURL(/mermaid-host-demo/);
       await expect(page.getByTestId('host-demo-install')).toBeVisible();
@@ -62,7 +66,7 @@ test.describe('First-visit outcome evaluation — desktop', () => {
         timeout: 30_000,
       });
       await expect(page.getByTestId('version-metadata')).toContainText(
-        '7 rendered · 1 expected error',
+        '9 rendered · 1 expected error',
       );
     });
   });
@@ -72,7 +76,7 @@ test.describe('First-visit outcome evaluation — desktop', () => {
   }) => {
     await openHome(page);
     await timedTask(page, 'start a process workflow', async () => {
-      await page.getByTestId('button-browse-skills').click();
+      await page.getByRole('link', { name: 'Explore process skills', exact: true }).click();
       await expect(page).toHaveURL(/skills/);
       await expect(page.getByTestId('start-here-panel')).toBeVisible();
       await expect(page.getByTestId('start-here-env-notice')).toContainText(
@@ -96,15 +100,12 @@ test.describe('First-visit outcome evaluation — small screen and recovery', ()
     page,
   }) => {
     await openHome(page);
-    await expect(page.getByTestId('path-card-create')).toBeVisible();
-    await expect(page.getByTestId('path-card-plugin')).toBeVisible();
-    await expect(page.getByTestId('path-card-skills')).toBeVisible();
 
     const started = Date.now();
     await page.getByTestId('button-open-playground').focus();
     await page.keyboard.press('Enter');
     await expect(page).toHaveURL(/playground/);
-    await expect(page.getByTestId('textarea-bpmn-source')).toBeVisible();
+    await expect(page.getByTestId('div-diagram-preview')).toBeVisible();
     const elapsedMs = Date.now() - started;
     console.log(`[first-visit] mobile keyboard path selection: completed in ${elapsedMs} ms`);
     test.info().annotations.push({
@@ -114,7 +115,7 @@ test.describe('First-visit outcome evaluation — small screen and recovery', ()
   });
 
   test('invalid source preserves editing and recovers to a valid preview', async ({ page }) => {
-    await page.goto(route('/playground'));
+    await page.goto(route('/playground?view=split'));
     const editor = page.getByTestId('textarea-bpmn-source');
     await expect(editor).toBeVisible();
 

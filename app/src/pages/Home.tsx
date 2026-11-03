@@ -22,7 +22,7 @@ const PATH_CARDS = [
     audience: "Developers · Analysts · Technical writers",
     heading: "Write BPMN as text",
     body: "Author process diagrams in a readable DSL. Commit them to Git, diff them in pull requests, render them in browser — no XML, no heavy modeler.",
-    cta: { label: "Open Playground", href: "/playground", testId: "button-open-playground" },
+    cta: { label: "Open Playground", href: "/playground", testId: "button-open-editor-details" },
     limitation: "Prototype parser — not production-grade.",
     testId: "path-card-create",
   },
@@ -190,45 +190,37 @@ export default function Home() {
       {/* Status ribbon */}
       <StatusRibbon />
 
-      {/* ── Above-the-fold chooser ───────────────────────────────────────── */}
-      <section className="max-w-7xl mx-auto w-full px-4 sm:px-6 pt-10 pb-8 md:pt-14 md:pb-10">
-
-        {/* Compact brand heading */}
-        <div className="mb-7">
-          <p className="forge-eyebrow mb-4" data-testid="badge-status">
-            The Forge — Contributor Prototype
-          </p>
-          <div className="flex items-center gap-4 mb-3">
-            <img
-              src={`${import.meta.env.BASE_URL}icon.png`}
-              alt="BPMN for Mermaid"
-              className="w-12 h-12 rounded-xl object-cover shrink-0 shadow-md"
-              data-testid="img-hero-icon"
-            />
-            <h1
-              className="text-3xl sm:text-4xl font-bold tracking-tight text-foreground leading-tight"
-              data-testid="heading-hero"
-            >
-              BPMN for Mermaid
-            </h1>
+      <section className="analyst-hero">
+        <div className="analyst-hero-copy">
+          <p className="workbench-eyebrow" data-testid="badge-status">BPMN for Mermaid / For process owners and analysts</p>
+          <h1 data-testid="heading-hero">Make the way work happens clear.</h1>
+          <p>Start with a familiar process. See who does what, follow the decisions, and shape a diagram your team can review.</p>
+          <div className="analyst-hero-actions">
+            <Link href="/playground?example=02-gateway&view=diagram" className="forge-btn-primary" data-testid="button-open-playground">Try purchase approval <ArrowRight size={17} /></Link>
+            <Link href="/playground?view=split" className="forge-btn-outline">Open editor</Link>
           </div>
-          <p className="text-sm text-muted-foreground max-w-2xl leading-relaxed">
-            Two tools, one workbench — a Mermaid diagram plugin and a suite of agent skills for
-            business process modeling. Pick the path that matches what you're trying to do.
-          </p>
+          <p className="analyst-reassurance">No account required. Works in your browser. Keep your source and SVG.</p>
         </div>
-
-        {/* Three intent-led path cards */}
-        <div
-          className="grid grid-cols-1 md:grid-cols-3 gap-4"
-          data-testid="path-chooser"
-        >
-          {PATH_CARDS.map(card => (
-            <PathCard key={card.id} card={card} />
-          ))}
-        </div>
+        <figure className="analyst-example" aria-label="Purchase approval illustration">
+          <figcaption><span className="workbench-eyebrow">A familiar place to begin</span><h2>Purchase approval</h2><p>One request. A clear decision. A visible next step.</p></figcaption>
+          <ol className="analyst-process-path"><li><span>01 / REQUESTER</span><strong>Submit request</strong></li><li aria-hidden="true" className="analyst-process-arrow">↓</li><li><span>02 / APPROVER</span><strong>Review purchase</strong></li></ol>
+          <div className="analyst-decision"><span>Approved?</span></div>
+          <div className="analyst-outcomes"><p><span>YES</span>Process order</p><p><span>NO</span>Notify requester</p></div>
+          <p className="analyst-example-note">Illustrated overview. Open the example to explore the complete diagram.</p>
+        </figure>
       </section>
-
+      <section className="analyst-next" aria-label="Your next step">
+        <div><span className="workbench-eyebrow">01 / Understand</span><h2>See the process</h2><p>Explore examples, follow a decision, and inspect every step's full label.</p></div>
+        <div><span className="workbench-eyebrow">02 / Refine</span><h2>Make it your own</h2><p>Switch to Source or Split view. Check warnings as you describe how work happens.</p></div>
+        <div><span className="workbench-eyebrow">03 / Keep</span><h2>Take it to your team</h2><p>Download an SVG for review and keep the editable source for the next revision.</p></div>
+      </section>
+      <section className="analyst-resources" aria-label="Continue learning">
+        <div><h2>Need help describing the process?</h2><p>Follow a worked example or download portable skills to use with your own agent.</p></div>
+        <div><Link href="/walkthrough" className="forge-btn-outline">Follow a walkthrough</Link><Link href="/skills" className="forge-btn-outline">Explore process skills</Link></div>
+      </section>
+      <details className="analyst-project-details">
+        <summary>Project details, capabilities, and developer resources</summary>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 px-4 sm:px-6 py-6" data-testid="path-chooser">{PATH_CARDS.map(card => <PathCard key={card.id} card={card} />)}</div>
       {/* ── Project context (below the chooser) ─────────────────────────── */}
       <section className="border-t border-border">
         <div className="max-w-7xl mx-auto w-full px-4 sm:px-6 py-10">
@@ -247,9 +239,9 @@ export default function Home() {
               A Mermaid-native diagram type for business process modeling. Text-first, version-controllable,
               Markdown-compatible. Write BPMN the way you write flowcharts — then commit it.
               The process-structure and notation layer of the{" "}
-              <a href="/about" className="text-primary underline underline-offset-2 hover:text-primary/80">
+              <Link href="/about" className="text-primary underline underline-offset-2 hover:text-primary/80">
                 OKHP³ Visual Language Stack
-              </a>.
+              </Link>.
             </p>
 
             {/* Project thesis card */}
@@ -370,8 +362,8 @@ export default function Home() {
                 coherent, lifecycle-complete, BPMN-integrated skill suite.
               </p>
               <blockquote className="forge-callout mb-5">
-                <p className="text-xs font-semibold text-foreground mb-0.5">The SKILL.md ecosystem spans 93,000–164,000+ files across public registries.</p>
-                <p className="text-xs text-muted-foreground">No lifecycle-complete, BPMN-integrated business process skill suite has been identified. BP-SKILL fills that gap.</p>
+                <p className="text-xs font-semibold text-foreground mb-0.5">Portable process skills, from intake to publication.</p>
+                <p className="text-xs text-muted-foreground">Choose the skills needed for your process and run them in a compatible agent environment.</p>
               </blockquote>
               <div className="flex flex-wrap gap-3">
                 <Link href="/skills" className="forge-btn-primary inline-flex items-center gap-2">
@@ -565,6 +557,7 @@ t3 ==> e2`}</pre>
         </div>
       </section>
 
+      </details>
     </div>
   );
 }
