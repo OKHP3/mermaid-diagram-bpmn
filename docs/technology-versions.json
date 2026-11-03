@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-03T02:16:52.738Z",
+  "generatedAt": "2026-11-03T09:21:29.812Z",
   "complete": true,
   "errors": [],
   "inventory": {
@@ -108,8 +108,8 @@
         "path": "app/package.json",
         "field": "devDependencies",
         "declared": "catalog:",
-        "effective": "6.1.2",
-        "resolved": "6.1.2",
+        "effective": "6.2.1",
+        "resolved": "6.2.1",
         "kind": "workspace"
       },
       {
@@ -860,7 +860,7 @@
         "2.0.0"
       ],
       "@vitejs/plugin-react": [
-        "6.1.2"
+        "6.2.1"
       ],
       "@vitest/mocker": [
         "5.0.5"
@@ -1434,7 +1434,7 @@
       "@types/node": "26.6.6",
       "@types/react": "19.3.0",
       "@types/react-dom": "19.3.0",
-      "@vitejs/plugin-react": "6.1.2",
+      "@vitejs/plugin-react": "6.2.1",
       "class-variance-authority": "^0.7.1",
       "clsx": "2.1.1",
       "drizzle-orm": "^0.45.2",
@@ -3989,7 +3989,7 @@
         "3": "3.1.0",
         "4": "4.7.0",
         "5": "5.2.0",
-        "6": "6.1.2"
+        "6": "6.2.1"
       },
       "source": "https://registry.npmjs.org/%40vitejs%2Fplugin-react"
     },
@@ -4802,9 +4802,9 @@
       "source": "https://registry.npmjs.org/cytoscape-fcose"
     },
     "d3": {
-      "latest": "7.9.0",
-      "latestTag": "7.9.0",
-      "published": "2024-03-12T22:15:07.703Z",
+      "latest": "7.9.1",
+      "latestTag": "7.9.1",
+      "published": "2026-11-03T08:38:55.145Z",
       "engines": {
         "node": ">=12"
       },
@@ -4815,7 +4815,7 @@
         "4": "4.13.0",
         "5": "5.16.0",
         "6": "6.7.0",
-        "7": "7.9.0"
+        "7": "7.9.1"
       },
       "matureByMajor": {
         "1": "1.29.5",
@@ -4829,9 +4829,9 @@
       "source": "https://registry.npmjs.org/d3"
     },
     "d3-array": {
-      "latest": "3.2.4",
-      "latestTag": "3.2.4",
-      "published": "2023-05-30T21:53:24.048Z",
+      "latest": "3.2.5",
+      "latestTag": "3.2.5",
+      "published": "2026-11-03T05:14:48.100Z",
       "engines": {
         "node": ">=12"
       },
@@ -4839,7 +4839,7 @@
         "0": "0.8.1",
         "1": "1.2.4",
         "2": "2.12.1",
-        "3": "3.2.4"
+        "3": "3.2.5"
       },
       "matureByMajor": {
         "0": "0.8.1",
@@ -4850,9 +4850,9 @@
       "source": "https://registry.npmjs.org/d3-array"
     },
     "d3-axis": {
-      "latest": "3.0.0",
-      "latestTag": "3.0.0",
-      "published": "2021-06-09T03:35:37.066Z",
+      "latest": "3.0.1",
+      "latestTag": "3.0.1",
+      "published": "2026-11-03T08:19:00.264Z",
       "engines": {
         "node": ">=12"
       },
@@ -4860,7 +4860,7 @@
         "0": "0.4.1",
         "1": "1.0.12",
         "2": "2.1.0",
-        "3": "3.0.0"
+        "3": "3.0.1"
       },
       "matureByMajor": {
         "0": "0.4.1",
@@ -4871,9 +4871,9 @@
       "source": "https://registry.npmjs.org/d3-axis"
     },
     "d3-brush": {
-      "latest": "3.0.0",
-      "latestTag": "3.0.0",
-      "published": "2021-06-10T00:04:10.328Z",
+      "latest": "3.0.1",
+      "latestTag": "3.0.1",
+      "published": "2026-11-03T07:30:02.980Z",
       "engines": {
         "node": ">=12"
       },
@@ -4881,7 +4881,7 @@
         "0": "0.2.3",
         "1": "1.1.6",
         "2": "2.1.0",
-        "3": "3.0.0"
+        "3": "3.0.1"
       },
       "matureByMajor": {
         "0": "0.2.3",
@@ -4892,9 +4892,9 @@
       "source": "https://registry.npmjs.org/d3-brush"
     },
     "d3-chord": {
-      "latest": "3.0.1",
-      "latestTag": "3.0.1",
-      "published": "2021-06-05T18:26:14.475Z",
+      "latest": "3.0.2",
+      "latestTag": "3.0.2",
+      "published": "2026-11-03T08:22:23.948Z",
       "engines": {
         "node": ">=12"
       },
@@ -4902,7 +4902,7 @@
         "0": "0.0.2",
         "1": "1.0.6",
         "2": "2.0.0",
-        "3": "3.0.1"
+        "3": "3.0.2"
       },
       "matureByMajor": {
         "0": "0.0.2",
@@ -4913,9 +4913,9 @@
       "source": "https://registry.npmjs.org/d3-chord"
     },
     "d3-color": {
-      "latest": "3.1.0",
-      "latestTag": "3.1.0",
-      "published": "2022-03-28T22:46:28.202Z",
+      "latest": "3.1.1",
+      "latestTag": "3.1.1",
+      "published": "2026-11-03T05:01:08.553Z",
       "engines": {
         "node": ">=12"
       },
@@ -4923,7 +4923,7 @@
         "0": "0.5.0",
         "1": "1.4.1",
         "2": "2.0.0",
-        "3": "3.1.0"
+        "3": "3.1.1"
       },
       "matureByMajor": {
         "0": "0.5.0",
@@ -4934,9 +4934,9 @@
       "source": "https://registry.npmjs.org/d3-color"
     },
     "d3-contour": {
-      "latest": "4.0.2",
-      "latestTag": "4.0.2",
-      "published": "2023-01-11T16:36:10.656Z",
+      "latest": "4.0.3",
+      "latestTag": "4.0.3",
+      "published": "2026-11-03T05:19:14.372Z",
       "engines": {
         "node": ">=12"
       },
@@ -4945,7 +4945,7 @@
         "1": "1.3.2",
         "2": "2.0.0",
         "3": "3.1.0",
-        "4": "4.0.2"
+        "4": "4.0.3"
       },
       "matureByMajor": {
         "0": "0.0.1",
@@ -4957,9 +4957,9 @@
       "source": "https://registry.npmjs.org/d3-contour"
     },
     "d3-delaunay": {
-      "latest": "6.0.4",
-      "latestTag": "6.0.4",
-      "published": "2023-04-01T02:39:11.886Z",
+      "latest": "6.0.5",
+      "latestTag": "6.0.5",
+      "published": "2026-11-03T05:35:55.378Z",
       "engines": {
         "node": ">=12"
       },
@@ -4968,7 +4968,7 @@
         "3": "3.1.7",
         "4": "4.1.5",
         "5": "5.3.0",
-        "6": "6.0.4"
+        "6": "6.0.5"
       },
       "matureByMajor": {
         "2": "2.0.1",
@@ -4980,9 +4980,9 @@
       "source": "https://registry.npmjs.org/d3-delaunay"
     },
     "d3-dispatch": {
-      "latest": "3.0.1",
-      "latestTag": "3.0.1",
-      "published": "2021-06-05T18:30:49.693Z",
+      "latest": "3.0.2",
+      "latestTag": "3.0.2",
+      "published": "2026-11-03T04:55:56.600Z",
       "engines": {
         "node": ">=12"
       },
@@ -4990,7 +4990,7 @@
         "0": "0.5.0",
         "1": "1.0.6",
         "2": "2.0.0",
-        "3": "3.0.1"
+        "3": "3.0.2"
       },
       "matureByMajor": {
         "0": "0.5.0",
@@ -5001,9 +5001,9 @@
       "source": "https://registry.npmjs.org/d3-dispatch"
     },
     "d3-drag": {
-      "latest": "3.0.0",
-      "latestTag": "3.0.0",
-      "published": "2021-06-09T16:00:59.516Z",
+      "latest": "3.0.1",
+      "latestTag": "3.0.1",
+      "published": "2026-11-03T07:35:59.878Z",
       "engines": {
         "node": ">=12"
       },
@@ -5011,7 +5011,7 @@
         "0": "0.3.1",
         "1": "1.2.5",
         "2": "2.0.0",
-        "3": "3.0.0"
+        "3": "3.0.1"
       },
       "matureByMajor": {
         "0": "0.3.1",
@@ -5022,9 +5022,9 @@
       "source": "https://registry.npmjs.org/d3-drag"
     },
     "d3-dsv": {
-      "latest": "3.0.1",
-      "latestTag": "3.0.1",
-      "published": "2021-06-05T18:32:05.522Z",
+      "latest": "3.0.2",
+      "latestTag": "3.0.2",
+      "published": "2026-11-03T05:51:47.144Z",
       "engines": {
         "node": ">=12"
       },
@@ -5032,7 +5032,7 @@
         "0": "0.4.0",
         "1": "1.2.0",
         "2": "2.0.0",
-        "3": "3.0.1"
+        "3": "3.0.2"
       },
       "matureByMajor": {
         "0": "0.4.0",
@@ -5043,9 +5043,9 @@
       "source": "https://registry.npmjs.org/d3-dsv"
     },
     "d3-ease": {
-      "latest": "3.0.1",
-      "latestTag": "3.0.1",
-      "published": "2021-06-05T18:33:15.216Z",
+      "latest": "3.0.2",
+      "latestTag": "3.0.2",
+      "published": "2026-11-03T04:52:25.088Z",
       "engines": {
         "node": ">=12"
       },
@@ -5053,7 +5053,7 @@
         "0": "0.8.0",
         "1": "1.0.7",
         "2": "2.0.0",
-        "3": "3.0.1"
+        "3": "3.0.2"
       },
       "matureByMajor": {
         "0": "0.8.0",
@@ -5064,9 +5064,9 @@
       "source": "https://registry.npmjs.org/d3-ease"
     },
     "d3-fetch": {
-      "latest": "3.0.1",
-      "latestTag": "3.0.1",
-      "published": "2021-06-05T18:34:14.207Z",
+      "latest": "3.0.2",
+      "latestTag": "3.0.2",
+      "published": "2026-11-03T04:46:19.757Z",
       "engines": {
         "node": ">=12"
       },
@@ -5074,7 +5074,7 @@
         "0": "0.1.0",
         "1": "1.2.0",
         "2": "2.0.0",
-        "3": "3.0.1"
+        "3": "3.0.2"
       },
       "matureByMajor": {
         "0": "0.1.0",
@@ -5085,9 +5085,9 @@
       "source": "https://registry.npmjs.org/d3-fetch"
     },
     "d3-force": {
-      "latest": "3.0.0",
-      "latestTag": "3.0.0",
-      "published": "2021-06-05T19:11:01.836Z",
+      "latest": "3.0.1",
+      "latestTag": "3.0.1",
+      "published": "2026-11-03T05:58:34.497Z",
       "engines": {
         "node": ">=12"
       },
@@ -5095,7 +5095,7 @@
         "0": "0.7.1",
         "1": "1.2.1",
         "2": "2.1.1",
-        "3": "3.0.0"
+        "3": "3.0.1"
       },
       "matureByMajor": {
         "0": "0.7.1",
@@ -5106,9 +5106,9 @@
       "source": "https://registry.npmjs.org/d3-force"
     },
     "d3-format": {
-      "latest": "3.1.2",
-      "latestTag": "3.1.2",
-      "published": "2026-01-14T18:36:25.869Z",
+      "latest": "3.1.3",
+      "latestTag": "3.1.3",
+      "published": "2026-11-03T06:33:07.495Z",
       "engines": {
         "node": ">=12"
       },
@@ -5116,7 +5116,7 @@
         "0": "0.6.0",
         "1": "1.4.5",
         "2": "2.0.0",
-        "3": "3.1.2"
+        "3": "3.1.3"
       },
       "matureByMajor": {
         "0": "0.6.0",
@@ -5127,9 +5127,9 @@
       "source": "https://registry.npmjs.org/d3-format"
     },
     "d3-geo": {
-      "latest": "3.1.1",
-      "latestTag": "3.1.1",
-      "published": "2024-03-12T22:06:03.888Z",
+      "latest": "3.1.2",
+      "latestTag": "3.1.2",
+      "published": "2026-11-03T06:09:32.104Z",
       "engines": {
         "node": ">=12"
       },
@@ -5137,7 +5137,7 @@
         "0": "0.1.0",
         "1": "1.12.1",
         "2": "2.0.2",
-        "3": "3.1.1"
+        "3": "3.1.2"
       },
       "matureByMajor": {
         "0": "0.1.0",
@@ -5148,9 +5148,9 @@
       "source": "https://registry.npmjs.org/d3-geo"
     },
     "d3-hierarchy": {
-      "latest": "3.1.2",
-      "latestTag": "3.1.2",
-      "published": "2022-04-02T22:20:25.115Z",
+      "latest": "3.1.3",
+      "latestTag": "3.1.3",
+      "published": "2026-11-03T06:15:17.396Z",
       "engines": {
         "node": ">=12"
       },
@@ -5158,7 +5158,7 @@
         "0": "0.3.0",
         "1": "1.1.9",
         "2": "2.0.0",
-        "3": "3.1.2"
+        "3": "3.1.3"
       },
       "matureByMajor": {
         "0": "0.3.0",
@@ -5169,9 +5169,9 @@
       "source": "https://registry.npmjs.org/d3-hierarchy"
     },
     "d3-interpolate": {
-      "latest": "3.0.1",
-      "latestTag": "3.0.1",
-      "published": "2021-06-05T18:38:34.549Z",
+      "latest": "3.0.2",
+      "latestTag": "3.0.2",
+      "published": "2026-11-03T05:26:54.842Z",
       "engines": {
         "node": ">=12"
       },
@@ -5179,7 +5179,7 @@
         "0": "0.9.0",
         "1": "1.4.0",
         "2": "2.0.1",
-        "3": "3.0.1"
+        "3": "3.0.2"
       },
       "matureByMajor": {
         "0": "0.9.0",
@@ -5190,9 +5190,9 @@
       "source": "https://registry.npmjs.org/d3-interpolate"
     },
     "d3-path": {
-      "latest": "3.1.0",
-      "latestTag": "3.1.0",
-      "published": "2022-12-19T21:50:21.362Z",
+      "latest": "3.1.1",
+      "latestTag": "3.1.1",
+      "published": "2026-11-03T03:44:36.051Z",
       "engines": {
         "node": ">=12"
       },
@@ -5200,7 +5200,7 @@
         "0": "0.2.0",
         "1": "1.0.9",
         "2": "2.0.0",
-        "3": "3.1.0"
+        "3": "3.1.1"
       },
       "matureByMajor": {
         "0": "0.2.0",
@@ -5211,9 +5211,9 @@
       "source": "https://registry.npmjs.org/d3-path"
     },
     "d3-polygon": {
-      "latest": "3.0.1",
-      "latestTag": "3.0.1",
-      "published": "2021-06-05T18:39:45.950Z",
+      "latest": "3.0.2",
+      "latestTag": "3.0.2",
+      "published": "2026-11-03T03:33:40.707Z",
       "engines": {
         "node": ">=12"
       },
@@ -5221,7 +5221,7 @@
         "0": "0.3.0",
         "1": "1.0.6",
         "2": "2.0.0",
-        "3": "3.0.1"
+        "3": "3.0.2"
       },
       "matureByMajor": {
         "0": "0.3.0",
@@ -5232,9 +5232,9 @@
       "source": "https://registry.npmjs.org/d3-polygon"
     },
     "d3-quadtree": {
-      "latest": "3.0.1",
-      "latestTag": "3.0.1",
-      "published": "2021-06-05T18:40:52.989Z",
+      "latest": "3.0.2",
+      "latestTag": "3.0.2",
+      "published": "2026-11-03T04:16:58.053Z",
       "engines": {
         "node": ">=12"
       },
@@ -5242,7 +5242,7 @@
         "0": "0.8.0",
         "1": "1.0.7",
         "2": "2.0.0",
-        "3": "3.0.1"
+        "3": "3.0.2"
       },
       "matureByMajor": {
         "0": "0.8.0",
@@ -5253,9 +5253,9 @@
       "source": "https://registry.npmjs.org/d3-quadtree"
     },
     "d3-random": {
-      "latest": "3.0.1",
-      "latestTag": "3.0.1",
-      "published": "2021-06-05T18:41:51.228Z",
+      "latest": "3.0.2",
+      "latestTag": "3.0.2",
+      "published": "2026-11-03T03:56:45.525Z",
       "engines": {
         "node": ">=12"
       },
@@ -5263,7 +5263,7 @@
         "0": "0.3.0",
         "1": "1.1.2",
         "2": "2.2.2",
-        "3": "3.0.1"
+        "3": "3.0.2"
       },
       "matureByMajor": {
         "0": "0.3.0",
@@ -5287,9 +5287,9 @@
       "source": "https://registry.npmjs.org/d3-sankey"
     },
     "d3-scale": {
-      "latest": "4.0.2",
-      "latestTag": "4.0.2",
-      "published": "2021-09-24T17:43:03.930Z",
+      "latest": "4.0.3",
+      "latestTag": "4.0.3",
+      "published": "2026-11-03T06:52:58.884Z",
       "engines": {
         "node": ">=12"
       },
@@ -5298,7 +5298,7 @@
         "1": "1.0.7",
         "2": "2.2.2",
         "3": "3.3.0",
-        "4": "4.0.2"
+        "4": "4.0.3"
       },
       "matureByMajor": {
         "0": "0.9.3",
@@ -5310,9 +5310,9 @@
       "source": "https://registry.npmjs.org/d3-scale"
     },
     "d3-scale-chromatic": {
-      "latest": "3.1.0",
-      "latestTag": "3.1.0",
-      "published": "2024-03-12T21:00:11.077Z",
+      "latest": "3.1.1",
+      "latestTag": "3.1.1",
+      "published": "2026-11-03T06:45:09.653Z",
       "engines": {
         "node": ">=12"
       },
@@ -5320,7 +5320,7 @@
         "0": "0.3.0",
         "1": "1.5.0",
         "2": "2.0.0",
-        "3": "3.1.0"
+        "3": "3.1.1"
       },
       "matureByMajor": {
         "0": "0.3.0",
@@ -5331,9 +5331,9 @@
       "source": "https://registry.npmjs.org/d3-scale-chromatic"
     },
     "d3-selection": {
-      "latest": "3.0.0",
-      "latestTag": "3.0.0",
-      "published": "2021-06-07T17:40:48.511Z",
+      "latest": "3.0.1",
+      "latestTag": "3.0.1",
+      "published": "2026-11-03T07:09:36.485Z",
       "engines": {
         "node": ">=12"
       },
@@ -5341,7 +5341,7 @@
         "0": "0.9.0",
         "1": "1.4.2",
         "2": "2.0.0",
-        "3": "3.0.0"
+        "3": "3.0.1"
       },
       "matureByMajor": {
         "0": "0.9.0",
@@ -5352,9 +5352,9 @@
       "source": "https://registry.npmjs.org/d3-selection"
     },
     "d3-shape": {
-      "latest": "3.2.0",
-      "latestTag": "3.2.0",
-      "published": "2022-12-20T23:39:17.478Z",
+      "latest": "3.2.1",
+      "latestTag": "3.2.1",
+      "published": "2026-11-03T04:29:45.265Z",
       "engines": {
         "node": ">=12"
       },
@@ -5362,7 +5362,7 @@
         "0": "0.7.1",
         "1": "1.3.7",
         "2": "2.1.0",
-        "3": "3.2.0"
+        "3": "3.2.1"
       },
       "matureByMajor": {
         "0": "0.7.1",
@@ -5373,9 +5373,9 @@
       "source": "https://registry.npmjs.org/d3-shape"
     },
     "d3-time": {
-      "latest": "3.1.0",
-      "latestTag": "3.1.0",
-      "published": "2022-12-02T23:58:08.483Z",
+      "latest": "3.1.1",
+      "latestTag": "3.1.1",
+      "published": "2026-11-03T06:24:07.226Z",
       "engines": {
         "node": ">=12"
       },
@@ -5383,7 +5383,7 @@
         "0": "0.3.2",
         "1": "1.1.0",
         "2": "2.1.1",
-        "3": "3.1.0"
+        "3": "3.1.1"
       },
       "matureByMajor": {
         "0": "0.3.2",
@@ -5394,9 +5394,9 @@
       "source": "https://registry.npmjs.org/d3-time"
     },
     "d3-time-format": {
-      "latest": "4.1.0",
-      "latestTag": "4.1.0",
-      "published": "2021-12-04T17:02:51.666Z",
+      "latest": "4.1.1",
+      "latestTag": "4.1.1",
+      "published": "2026-11-03T06:29:02.962Z",
       "engines": {
         "node": ">=12"
       },
@@ -5405,7 +5405,7 @@
         "1": "1.1.0",
         "2": "2.3.0",
         "3": "3.0.0",
-        "4": "4.1.0"
+        "4": "4.1.1"
       },
       "matureByMajor": {
         "0": "0.4.0",
@@ -5417,9 +5417,9 @@
       "source": "https://registry.npmjs.org/d3-time-format"
     },
     "d3-timer": {
-      "latest": "3.0.1",
-      "latestTag": "3.0.1",
-      "published": "2021-06-05T18:43:06.805Z",
+      "latest": "3.0.2",
+      "latestTag": "3.0.2",
+      "published": "2026-11-03T04:36:27.380Z",
       "engines": {
         "node": ">=12"
       },
@@ -5427,7 +5427,7 @@
         "0": "0.5.1",
         "1": "1.0.10",
         "2": "2.0.0",
-        "3": "3.0.1"
+        "3": "3.0.2"
       },
       "matureByMajor": {
         "0": "0.5.1",
@@ -5438,9 +5438,9 @@
       "source": "https://registry.npmjs.org/d3-timer"
     },
     "d3-transition": {
-      "latest": "3.0.1",
-      "latestTag": "3.0.1",
-      "published": "2021-06-09T23:50:41.294Z",
+      "latest": "3.0.2",
+      "latestTag": "3.0.2",
+      "published": "2026-11-03T07:24:52.973Z",
       "engines": {
         "node": ">=12"
       },
@@ -5448,7 +5448,7 @@
         "0": "0.3.1",
         "1": "1.3.2",
         "2": "2.0.0",
-        "3": "3.0.1"
+        "3": "3.0.2"
       },
       "matureByMajor": {
         "0": "0.3.1",
@@ -5459,9 +5459,9 @@
       "source": "https://registry.npmjs.org/d3-transition"
     },
     "d3-zoom": {
-      "latest": "3.0.0",
-      "latestTag": "3.0.0",
-      "published": "2021-06-10T00:49:18.125Z",
+      "latest": "3.0.1",
+      "latestTag": "3.0.1",
+      "published": "2026-11-03T07:42:47.983Z",
       "engines": {
         "node": ">=12"
       },
@@ -5469,7 +5469,7 @@
         "0": "0.3.1",
         "1": "1.8.3",
         "2": "2.0.0",
-        "3": "3.0.0"
+        "3": "3.0.1"
       },
       "matureByMajor": {
         "0": "0.3.1",
@@ -5648,9 +5648,9 @@
       "source": "https://registry.npmjs.org/elkjs"
     },
     "enhanced-resolve": {
-      "latest": "5.26.0",
-      "latestTag": "5.26.0",
-      "published": "2026-09-29T12:29:05.534Z",
+      "latest": "5.26.1",
+      "latestTag": "5.26.1",
+      "published": "2026-11-03T09:15:19.164Z",
       "engines": {
         "node": ">=10.13.0"
       },
@@ -5659,7 +5659,7 @@
         "2": "2.3.0",
         "3": "3.4.1",
         "4": "4.5.0",
-        "5": "5.26.0"
+        "5": "5.26.1"
       },
       "matureByMajor": {
         "0": "0.9.1",
@@ -6386,13 +6386,13 @@
       "source": "https://registry.npmjs.org/lodash-es"
     },
     "lucide-react": {
-      "latest": "1.66.0",
-      "latestTag": "1.66.0",
-      "published": "2026-10-31T06:12:30.583Z",
+      "latest": "1.67.0",
+      "latestTag": "1.67.0",
+      "published": "2026-11-03T06:12:32.280Z",
       "engines": {},
       "stableByMajor": {
         "0": "0.577.0",
-        "1": "1.66.0"
+        "1": "1.67.0"
       },
       "matureByMajor": {
         "0": "0.577.0",
@@ -6535,7 +6535,7 @@
         "8": "8.0.7",
         "9": "9.0.9",
         "10": "10.2.6",
-        "11": "11.0.3"
+        "11": "11.0.4"
       },
       "source": "https://registry.npmjs.org/minimatch"
     },
@@ -7842,7 +7842,7 @@
     "selectedLine": "3.11.18",
     "source": "https://www.python.org/downloads/"
   },
-  "sourceCommit": "8a81f220c753f02cf8571fc59226940fb6d5b13c",
-  "auditNode": "v24.11.1",
+  "sourceCommit": "01d533f34e5c615e8bb6e142ca05eb84490ab992",
+  "auditNode": "v26.13.0",
   "sourceDirty": true
 }
