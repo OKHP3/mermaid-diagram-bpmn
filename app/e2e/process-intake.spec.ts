@@ -91,6 +91,7 @@ test("purchase brief, focused handoff, imported source and workbench remain one 
     .getByRole("button", { name: "Open diagram workbench", exact: true })
     .click();
   await page.getByRole("tab", { name: "Split", exact: true }).click();
+  await expect(page.getByTestId("select-example")).toHaveCount(0);
   await expect(page.getByTestId("textarea-bpmn-source")).toHaveValue(source);
   await expect(
     page.getByTestId("div-diagram-preview").locator("svg"),

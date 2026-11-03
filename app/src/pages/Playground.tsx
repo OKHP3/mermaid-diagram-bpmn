@@ -492,6 +492,7 @@ export default function Playground({ processSession }: { processSession?: { sour
   }
 
   function selectExample(id: string) {
+    if (processSession) return;
     const ex = BPMN_EXAMPLES.find(e => e.id === id);
     if (ex) {
       if (ex.source === source) return;
@@ -692,12 +693,12 @@ export default function Playground({ processSession }: { processSession?: { sour
           <h1 data-testid="heading-playground">{source.match(/^accTitle:\s*(.+)$/m)?.[1] || "Your process diagram"}</h1>
           <p className="workbench-subtitle">Understand the process. Edit its source. Take the result with you.</p>
         </div>
-        <label className="workbench-example-label">Try an example
+        {!processSession && <label className="workbench-example-label">Try an example
           <select data-testid="select-example" value={activeExample ?? ""} onChange={e => selectExample(e.target.value)}>
             <option value="" disabled>Your draft</option>
             {BPMN_EXAMPLES.map(ex => <option key={ex.id} value={ex.id}>{ex.name}{ex.experimental ? " (experimental)" : ""}</option>)}
           </select>
-        </label>
+        </label>}
       </div>
       <div className="workbench-controls">
         <div className="workbench-view-tabs" role="tablist" aria-label="Workspace view">
