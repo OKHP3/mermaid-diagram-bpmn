@@ -22,7 +22,7 @@ const PATH_CARDS = [
     audience: "Developers · Analysts · Technical writers",
     heading: "Write BPMN as text",
     body: "Author process diagrams in a readable DSL. Commit them to Git, diff them in pull requests, render them in browser — no XML, no heavy modeler.",
-    cta: { label: "Open Playground", href: "/playground", testId: "button-open-editor-details" },
+    cta: { label: "Open Workbench", href: "/playground", testId: "button-open-playground-details" },
     limitation: "Prototype parser — not production-grade.",
     testId: "path-card-create",
   },

@@ -817,7 +817,7 @@ export default function Playground() {
             </span>
 
 
-        <span role="status" aria-live="polite" className="sr-only">{svgExportState === "done" ? "SVG downloaded" : ""}{shareState === "copied" ? "Shareable link copied" : ""}</span>
+        <span role="status" aria-live="polite" className="sr-only">{[svgExportState === "done" && "SVG downloaded.", shareState === "copied" && "Shareable link copied."].filter(Boolean).join(" ")}</span>
       </div>
       <WorkbenchDrafts drafts={drafts.drafts} saveState={drafts.saveState} onRestore={restoreDraft} onForget={drafts.forget} />
       {previousWork && <div className="workbench-notice" role="status">Previous work is available.
