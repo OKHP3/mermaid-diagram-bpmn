@@ -717,6 +717,7 @@
 .intake-page h1, .intake-page h2 { font-family: var(--app-font-sans); }
 .intake-page .forge-btn-primary { background: var(--okh-forge-teal); color: var(--okh-header-text); }
 .intake-page .forge-btn-primary:hover { background: var(--okh-forge-teal); filter: brightness(1.15); }
+.intake-page .forge-btn-outline:hover { color: hsl(var(--foreground)); border-color: hsl(var(--foreground)); }
 .intake-heading, .intake-save-strip, .intake-layout { width: min(1180px, calc(100% - 48px)); margin-inline: auto; }
 .intake-heading { display: flex; align-items: center; justify-content: space-between; gap: 28px; padding: 48px 0 30px; }
 .intake-heading h1 { font-size: clamp(2rem, 4vw, 3rem); font-weight: 650; letter-spacing: -.035em; line-height: 1.15; margin: 12px 0 16px; }
@@ -765,7 +766,7 @@
 .intake-questions { list-style: disc; padding-left: 20px; line-height: 1.75; margin-block: 12px; overflow-wrap: anywhere; }
 .intake-handoff-steps { list-style: decimal-leading-zero; padding-left: 28px; margin-block: 28px; }
 .intake-handoff-steps li { padding-left: 12px; margin-bottom: 26px; }
-.intake-handoff-steps li::marker { color: var(--okh-forge-teal); font-size: 12px; font-weight: 650; }
+.intake-handoff-steps li::marker { color: hsl(var(--foreground)); font-size: 12px; font-weight: 650; }
 .intake-handoff-steps p { color: hsl(var(--muted-foreground)); font-size: 14px; line-height: 1.7; margin-top: 6px; }
 .intake-actions { display: flex; gap: 12px; flex-wrap: wrap; margin-block: 20px; }
 .intake-step-footer { display: flex; justify-content: flex-end; gap: 14px; border-top: 1px solid hsl(var(--border)); padding-top: 24px; margin-top: 24px; }
@@ -779,7 +780,7 @@
 .intake-import-preview h3 { font-weight: 650; font-size: 18px; }
 .intake-import-preview p { margin-top: 12px; font-size: 14px; line-height: 1.7; }
 .intake-content pre { max-height: 350px; overflow: auto; padding: 16px; font-size: 12px; white-space: pre-wrap; overflow-wrap: anywhere; background: hsl(var(--muted)); }
-.intake-error { color: hsl(var(--destructive)); margin-block: 16px; font-size: 14px; overflow-wrap: anywhere; }
+.intake-error { color: hsl(var(--foreground)); border-left: 3px solid hsl(var(--destructive)); padding-left: 12px; margin-block: 16px; font-size: 14px; overflow-wrap: anywhere; }
 .intake-checks { display: grid; grid-template-columns: repeat(3, 1fr); margin-block: 28px; border-block: 1px solid hsl(var(--border)); }
 .intake-checks > div { padding: 22px 16px 22px 0; }
 .intake-checks span { display: block; font-size: 11px; text-transform: uppercase; letter-spacing: .06em; color: hsl(var(--muted-foreground)); }

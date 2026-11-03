@@ -3,6 +3,7 @@ import {
   blankBundle,
   purchaseBundle,
   readBundle,
+  serializeBundle,
   importProcessFile,
   intakeQuestions,
   diagramCheck,
@@ -18,6 +19,29 @@ import { validatePir } from "../../../skills/okhp3-process-intake-and-scope/scri
 
 const validSource = 'bpmn-beta\nstart s "Start"\nend e "End"\nflow s -> e';
 describe("process bundle contract", () => {
+  it("accepts leading comments using the same header detector as the workbench", () => {
+    const commented = `%% Process evidence\n\n${validSource}`;
+    const bundle = importProcessFile("returned.mmd", commented, blankBundle());
+    expect(bundle.diagram.source).toBe(commented);
+    expect(diagramCheck(commented).error).toBeNull();
+    expect(
+      diagramCheck(readBundle(serializeBundle(bundle)).diagram.source).error,
+    ).toBeNull();
+  });
+  it("rejects source that fits alone but cannot fit in its complete downloadable bundle", () => {
+    const source = "bpmn-beta\n%%" + "é".repeat(499_980);
+    expect(new TextEncoder().encode(source).length).toBeLessThan(1_000_000);
+    expect(() => importProcessFile("large.mmd", source, blankBundle())).toThrow(
+      /1 MB/,
+    );
+  });
+  it("accounts for JSON formatting and escaping while preserving accepted large source", () => {
+    const source = "bpmn-beta\n%%" + "é".repeat(400_000);
+    const bundle = importProcessFile("large.mmd", source, blankBundle());
+    expect(readBundle(serializeBundle(bundle)).diagram.source).toBe(source);
+    bundle.diagram.source = "bpmn-beta\n%%" + '"'.repeat(499_980);
+    expect(() => serializeBundle(bundle)).toThrow(/1 MB/);
+  });
   it("keeps unknown facts empty and provides questions without inventing validation or approval", () => {
     const bundle = blankBundle();
     expect(bundle.pir.validation).toEqual({

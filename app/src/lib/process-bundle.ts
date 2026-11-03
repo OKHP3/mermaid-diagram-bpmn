@@ -1,4 +1,5 @@
 import { parse } from "./bpmn-parser";
+import { detect } from "./bpmn-detector";
 import { lint } from "./bpmn-lint";
 import { validate } from "./bpmn-validate";
 
@@ -313,12 +314,26 @@ export function readBundle(text: string): ProcessBundle {
   }
   checkShape(value, bundleShape, "Bundle");
   const bundle = value as ProcessBundle;
+  // Reserve the complete formatted export, including JSON escaping and UTF-8.
+  if (
+    new TextEncoder().encode(JSON.stringify(bundle, null, 2)).length >
+    MAX_BUNDLE_BYTES
+  )
+    throw new Error(
+      "The complete saved bundle would exceed 1 MB. Keep the original file and reduce its content before importing.",
+    );
   if (
     bundle.review.status === "review-recorded" &&
     (!bundle.review.reviewer.trim() || !bundle.review.notes.trim())
   )
     throw new Error("A recorded review needs a reviewer and review notes.");
   return bundle;
+}
+
+export function serializeBundle(bundle: ProcessBundle): string {
+  const text = JSON.stringify(bundle, null, 2);
+  readBundle(text);
+  return text;
 }
 
 export function intakeQuestions(bundle: ProcessBundle): string[] {
@@ -365,7 +380,7 @@ export function diagramCheck(source: string): {
   if (!source.trim())
     return { error: "No diagram supplied yet.", warnings: [] };
   try {
-    if (!/^\s*bpmn-beta(?:\s|$)/.test(source))
+    if (!detect(source))
       throw new Error(
         "Expected bpmn-beta source. Other Mermaid diagrams and BPMN XML are not supported here.",
       );
@@ -393,11 +408,11 @@ export function importProcessFile(
     throw new Error(
       "Choose a process bundle (.json) or bpmn-beta source (.mmd). Unzip handoff packages first. YAML, BPMN XML and other file types are not imported.",
     );
-  if (text.length > 500_000 || !/^\s*bpmn-beta(?:\s|$)/.test(text))
+  if (text.length > 500_000 || !detect(text))
     throw new Error(
       "Choose bpmn-beta source under 500,000 characters. Keep unsupported content in its original file.",
     );
-  return {
+  const imported: ProcessBundle = {
     ...current,
     diagram: {
       source: text,
@@ -405,6 +420,8 @@ export function importProcessFile(
     },
     review: { status: "not-reviewed", reviewer: "", notes: "" },
   };
+  serializeBundle(imported);
+  return imported;
 }
 
 /** Quoted scalar YAML preserves multiline strings and special characters. */

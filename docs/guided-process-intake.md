@@ -17,7 +17,7 @@ Syntax diagnostics, open questions and a reported stakeholder review are separat
 
 The import boundary validates required shapes, enums, supported versions, dates, stable IDs, duplicate IDs and text/list limits. Unsupported fields are rejected with an explicit message instead of being silently discarded. All supported optional PIR fields survive a round trip even when the form has no dedicated editor for them. An unmatched step owner is retained and exposed as an unresolved question. Imported review assertions are labeled as reported, not verified.
 
-Limits: 1 MB per imported file, 500,000 source characters, 10,000 characters per other text field, 200 entries per collection. A `.mmd` file must have a `bpmn-beta` header; syntax errors remain available for repair. YAML, ZIP, BPMN XML and other Mermaid formats are not imported. Unzip the handoff and select its JSON or source file. Additional PNS, mapping, narrative and evidence files remain outside the envelope and should be retained alongside it.
+Limits: 1 MB per imported file and complete formatted JSON export, 500,000 source characters, 10,000 characters per other text field, 200 entries per collection. Import and edit checks reserve the full UTF-8 envelope, including JSON escaping, so accepted data can be downloaded and reopened. Oversized edits leave the previous version intact with a visible error. A `.mmd` file must have a `bpmn-beta` header; the shared detector permits leading comments, and syntax errors remain available for repair. YAML, ZIP, BPMN XML and other Mermaid formats are not imported. Unzip the handoff and select its JSON or source file. Additional PNS, mapping, narrative and evidence files remain outside the envelope and should be retained alongside it.
 
 ## Handoff package
 

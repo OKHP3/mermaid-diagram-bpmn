@@ -1,4 +1,9 @@
-import { intakeQuestions, toYaml, type ProcessBundle } from "./process-bundle";
+import {
+  intakeQuestions,
+  toYaml,
+  serializeBundle,
+  type ProcessBundle,
+} from "./process-bundle";
 
 export const AGENT_TARGETS = {
   codex: {
@@ -85,7 +90,7 @@ export function handoffFiles(
   target: AgentTarget,
 ): Record<string, string> {
   return {
-    "process-bundle.json": JSON.stringify(bundle, null, 2),
+    "process-bundle.json": serializeBundle(bundle),
     "pir.yaml": toYaml(bundle.pir) + "\n",
     "validate-intake.mjs": `import { readFileSync } from "node:fs";\nimport { validatePir } from "./${AGENT_TARGETS[target].directory}/okhp3-process-intake-and-scope/scripts/validate-pir.mjs";\nimport { scoreIntakeCompleteness } from "./${AGENT_TARGETS[target].directory}/okhp3-process-intake-and-scope/scripts/score-intake-completeness.mjs";\nconst bundle = JSON.parse(readFileSync(new URL("process-bundle.json", import.meta.url), "utf8"));\nif (bundle.format !== "bpmn-process-bundle" || bundle.version !== 1 || bundle.pir?.pir_version !== "0.1") throw new Error("Unsupported process bundle version");\nconst validation = validatePir(bundle.pir);\nconst completeness = scoreIntakeCompleteness(bundle.pir);\nconsole.log(JSON.stringify({ validation, completeness }, null, 2));\nprocess.exitCode = validation.valid ? 0 : 1;\n`,
     "scope-statement.md": `# Scope statement\n\nProcess: ${bundle.pir.process_name || "Not yet named"}\n\nProcess ID: ${bundle.pir.process_id}\n\n## Purpose\n${bundle.scope.purpose || "Unknown"}\n\n## Trigger\n${bundle.pir.trigger.description || "Unknown"}\n\n## Intended outcomes\n${bundle.pir.outputs.map((output) => `- ${output.name}`).join("\n") || "Unknown"}\n\n## Exclusions\n${bundle.scope.exclusions || "Not supplied"}\n\n## Evidence and context\n${bundle.scope.evidence || "Not supplied"}\n\n## Open questions\n${

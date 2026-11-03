@@ -14,7 +14,8 @@ async function downloadText(download: Download) {
   return Buffer.concat(chunks);
 }
 test("purchase brief, focused handoff, imported source and workbench remain one process", async ({
-  page, browserName,
+  page,
+  browserName,
 }, testInfo) => {
   await page.goto("intake");
   await page.getByRole("button", { name: "Use purchase starter" }).click();
@@ -54,24 +55,30 @@ test("purchase brief, focused handoff, imported source and workbench remain one 
       mkdirSync(dirname(destination), { recursive: true });
       writeFileSync(destination, bytes);
     }
-    const check = spawnSync(process.execPath, [join(root, "validate-intake.mjs")], { encoding: "utf8" });
+    const check = spawnSync(
+      process.execPath,
+      [join(root, "validate-intake.mjs")],
+      { encoding: "utf8" },
+    );
     expect(check.status).toBe(1); // The illustrative starter intentionally has gaps.
     const report = JSON.parse(check.stdout);
     expect(report.validation.errors.length).toBeGreaterThan(0);
-    expect(report.validation.errors.some((error: string) => error.includes("pir_version"))).toBe(false);
+    expect(
+      report.validation.errors.some((error: string) =>
+        error.includes("pir_version"),
+      ),
+    ).toBe(false);
     expect(typeof report.completeness.score).toBe("number");
   }
   await page
     .getByRole("button", { name: "Review result", exact: true })
     .last()
     .click();
-  await page
-    .getByLabel("Import process result")
-    .setInputFiles({
-      name: "diagram.mmd",
-      mimeType: "text/plain",
-      buffer: Buffer.from(source),
-    });
+  await page.getByLabel("Import process result").setInputFiles({
+    name: "diagram.mmd",
+    mimeType: "text/plain",
+    buffer: Buffer.from(source),
+  });
   await expect(
     page.getByRole("region", { name: "Import preview" }),
   ).toContainText("Review before applying");
@@ -107,16 +114,40 @@ test("purchase brief, focused handoff, imported source and workbench remain one 
   );
 });
 
-test("intake controls and labels pass accessibility checks in both themes", async ({ page }) => {
+test("intake controls and labels pass accessibility checks in both themes", async ({
+  page,
+}) => {
   await page.goto("intake");
   await page.getByRole("button", { name: "Use purchase starter" }).click();
   for (const theme of ["light", "dark"]) {
-    await page.evaluate(theme => { document.documentElement.classList.toggle("dark", theme === "dark"); }, theme);
+    await page.evaluate((theme) => {
+      document.documentElement.classList.toggle("dark", theme === "dark");
+    }, theme);
     await page.addScriptTag({ content: axe.source });
-    for (const label of ["01 Process brief", "02 People & steps", "03 Agent handoff", "04 Review result"]) {
+    for (const label of [
+      "01 Process brief",
+      "02 People & steps",
+      "03 Agent handoff",
+      "04 Review result",
+    ]) {
       await page.getByRole("button", { name: label }).click();
-      const violations = await page.evaluate(async () => (await (window as any).axe.run(".intake-page", { runOnly: { type: "tag", values: ["wcag2a", "wcag2aa", "wcag21aa"] } })).violations);
-      expect(violations.map((v: any) => ({ id: v.id, nodes: v.nodes.map((n: any) => n.target) }))).toEqual([]);
+      const violations = await page.evaluate(
+        async () =>
+          (
+            await (window as any).axe.run(".intake-page", {
+              runOnly: {
+                type: "tag",
+                values: ["wcag2a", "wcag2aa", "wcag21aa"],
+              },
+            })
+          ).violations,
+      );
+      expect(
+        violations.map((v: any) => ({
+          id: v.id,
+          nodes: v.nodes.map((n: any) => n.target),
+        })),
+      ).toEqual([]);
     }
   }
 });
@@ -157,24 +188,20 @@ test("unsupported imports do not replace current work and recorded review resets
   await page.goto("intake");
   await page.getByRole("button", { name: "Use purchase starter" }).click();
   await page.getByRole("button", { name: "04 Review result" }).click();
-  await page
-    .getByLabel("Import process result")
-    .setInputFiles({
-      name: "future.json",
-      mimeType: "application/json",
-      buffer: Buffer.from('{"format":"bpmn-process-bundle","version":99}'),
-    });
+  await page.getByLabel("Import process result").setInputFiles({
+    name: "future.json",
+    mimeType: "application/json",
+    buffer: Buffer.from('{"format":"bpmn-process-bundle","version":99}'),
+  });
   await expect(page.getByRole("alert")).toContainText("only bundle version 1");
   await expect(
     page.getByRole("region", { name: "Import preview" }),
   ).toHaveCount(0);
-  await page
-    .getByLabel("Import process result")
-    .setInputFiles({
-      name: "diagram.mmd",
-      mimeType: "text/plain",
-      buffer: Buffer.from(source),
-    });
+  await page.getByLabel("Import process result").setInputFiles({
+    name: "diagram.mmd",
+    mimeType: "text/plain",
+    buffer: Buffer.from(source),
+  });
   await page.getByRole("button", { name: "Apply imported copy" }).click();
   await page.getByText("Record a stakeholder review", { exact: true }).click();
   await page.getByLabel("Reviewer (role or name)").fill("Process owner");
@@ -249,13 +276,11 @@ test("clearing embedded source preserves the editor for repair", async ({
 }) => {
   await page.goto("intake");
   await page.getByRole("button", { name: "04 Review result" }).click();
-  await page
-    .getByLabel("Import process result")
-    .setInputFiles({
-      name: "diagram.mmd",
-      mimeType: "text/plain",
-      buffer: Buffer.from(source),
-    });
+  await page.getByLabel("Import process result").setInputFiles({
+    name: "diagram.mmd",
+    mimeType: "text/plain",
+    buffer: Buffer.from(source),
+  });
   await page.getByRole("button", { name: "Apply imported copy" }).click();
   await page
     .getByRole("button", { name: "Open diagram workbench", exact: true })

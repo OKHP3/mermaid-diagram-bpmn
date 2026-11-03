@@ -17,6 +17,7 @@ import {
   purchaseBundle,
   newId,
   readBundle,
+  serializeBundle,
   importProcessFile,
   intakeQuestions,
   diagramCheck,
@@ -87,6 +88,7 @@ export default function ProcessIntake() {
   const [candidate, setCandidate] = useState<ProcessBundle | null>(null);
   const [message, setMessage] = useState("");
   const [importError, setImportError] = useState("");
+  const [editError, setEditError] = useState("");
   const [busy, setBusy] = useState(false);
   const [reviewer, setReviewer] = useState("");
   const [reviewNotes, setReviewNotes] = useState("");
@@ -125,9 +127,20 @@ export default function ProcessIntake() {
           review: { status: "not-reviewed" as const, reviewer: "", notes: "" },
         }
       : next;
+    let serialized: string;
+    try {
+      serialized = serializeBundle(changed);
+    } catch (error) {
+      setEditError(
+        `That change could not be applied: ${(error as Error).message} Your previous version is unchanged.`,
+      );
+      return false;
+    }
+    setEditError("");
     setBundle(changed);
-    drafts.save(JSON.stringify(changed));
+    drafts.save(serialized);
     setMessage("");
+    return true;
   }
   function updatePir(changes: Partial<ProcessIntakeRecord>) {
     update({ ...bundle, pir: { ...bundle.pir, ...changes } });
@@ -190,7 +203,7 @@ export default function ProcessIntake() {
   function downloadBundle() {
     downloadText(
       "process-bundle.json",
-      JSON.stringify(bundle, null, 2),
+      serializeBundle(bundle),
       "application/json",
     );
     setMessage(
@@ -216,7 +229,14 @@ export default function ProcessIntake() {
         </button>
       </header>
       <div className="intake-save-strip">
-        <button className="intake-text-link" onClick={() => { if (replace(blankBundle())) navigate(0); }}>Start a new brief</button>
+        <button
+          className="intake-text-link"
+          onClick={() => {
+            if (replace(blankBundle())) navigate(0);
+          }}
+        >
+          Start a new brief
+        </button>
         <p role="status">
           {drafts.saveState === "saved"
             ? "Brief saved in this browser."
@@ -240,12 +260,30 @@ export default function ProcessIntake() {
                 >
                   Open copy
                 </button>
-                <button className="intake-text-link" aria-label={`Remove saved brief ${item.bundle.pir.process_name || "Untitled process"}`} onClick={() => { if (window.confirm("Remove this saved brief from this browser? Download a process bundle first if you need to keep it.")) drafts.forget(item.draft); }}>Remove</button>
+                <button
+                  className="intake-text-link"
+                  aria-label={`Remove saved brief ${item.bundle.pir.process_name || "Untitled process"}`}
+                  onClick={() => {
+                    if (
+                      window.confirm(
+                        "Remove this saved brief from this browser? Download a process bundle first if you need to keep it.",
+                      )
+                    )
+                      drafts.forget(item.draft);
+                  }}
+                >
+                  Remove
+                </button>
               </div>
             ))}
           </div>
         </details>
       </div>
+      {editError && (
+        <p className="intake-error intake-save-strip" role="alert">
+          {editError}
+        </p>
+      )}
       <div className="intake-layout">
         <aside className="intake-sidebar">
           <nav aria-label="Guided intake steps">
@@ -1063,7 +1101,7 @@ export default function ProcessIntake() {
                     !!sourceCheck.error
                   }
                   onClick={() => {
-                    update(
+                    const recorded = update(
                       {
                         ...bundle,
                         review: {
@@ -1074,7 +1112,7 @@ export default function ProcessIntake() {
                       },
                       false,
                     );
-                    setMessage(
+                    if (recorded) setMessage(
                       "Review recorded for this version. Download a process bundle to keep the record.",
                     );
                   }}
