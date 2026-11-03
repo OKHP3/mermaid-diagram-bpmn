@@ -119,8 +119,9 @@ test.describe('Home — desktop 1280×800', () => {
     await expect(page.locator('[data-testid="heading-hero"]')).toBeVisible();
   });
 
-  test('3 path cards are rendered', async ({ page }) => {
-    await loadPage(page, '/', '[data-testid="path-chooser"]');
+  test('developer and skill paths remain available in project details', async ({ page }) => {
+    await loadPage(page, '/', '[data-testid="heading-hero"]');
+    await page.getByText('Project details, capabilities, and developer resources', { exact: true }).click();
     await expect(page.locator('[data-testid^="path-card-"]')).toHaveCount(3);
   });
 
@@ -175,7 +176,8 @@ test.describe('Home — mobile 375×812', () => {
   });
 
   test('path cards are visible (stacked single column)', async ({ page }) => {
-    await loadPage(page, '/', '[data-testid="path-chooser"]');
+    await loadPage(page, '/', '[data-testid="heading-hero"]');
+    await page.getByText('Project details, capabilities, and developer resources', { exact: true }).click();
     const cards = page.locator('[data-testid^="path-card-"]');
     await expect(cards).toHaveCount(3);
     await expect(cards.first()).toBeVisible();
