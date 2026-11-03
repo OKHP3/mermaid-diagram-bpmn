@@ -6,6 +6,8 @@
  * check. HTTP error responses are UNAVAILABLE (exit code 1).
  */
 
+import { resolve } from "node:path";
+import { fileURLToPath } from "node:url";
 import { REQUIRED_EVIDENCE } from "./check-roadmap-evidence.mjs";
 
 export const DEFAULT_TIMEOUT_MS = 8_000;
@@ -99,6 +101,6 @@ function main() {
   });
 }
 
-if (process.argv[1] && new URL(import.meta.url).pathname === process.argv[1]) {
+if (process.argv[1] && fileURLToPath(import.meta.url) === resolve(process.argv[1])) {
   main();
 }
