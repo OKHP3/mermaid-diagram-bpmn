@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "wouter";
 import { CheckCheck, FlaskConical, Clock, Wrench, GitBranch, Database, Puzzle, Palette, Shield, AlignVerticalJustifyStart, CircleDot } from "lucide-react";
 import { ExternalLinkAnchor, ExternalLinkRow } from "@/components/ExternalLinkAnchor";
 
@@ -254,9 +255,9 @@ const CONTRIBUTION_STEPS: { n: string; title: string; body: React.ReactNode; sta
         and plugin entry point. Parser, renderer, layout, shape library, styles, accessibility.{" "}
         <span className="text-muted-foreground">
           Evidence:{" "}
-          <a href="/mermaid-host-demo" className="text-primary hover:underline underline-offset-2">
+          <Link href="/mermaid-host-demo" className="text-primary hover:underline underline-offset-2">
             live Mermaid plugin demo
-          </a>{" "}
+          </Link>{" "}
           and{" "}
           <ExternalLinkAnchor
             href="https://www.npmjs.com/package/@okhp3/mermaid-diagram-bpmn"
@@ -278,9 +279,9 @@ const CONTRIBUTION_STEPS: { n: string; title: string; body: React.ReactNode; sta
         compliance. Add CONTRIBUTING, SECURITY, and CODE_OF_CONDUCT files.{" "}
         <span className="text-muted-foreground">
           Evidence:{" "}
-          <a href="/dsl" className="text-primary hover:underline underline-offset-2">
+          <Link href="/dsl" className="text-primary hover:underline underline-offset-2">
             DSL Reference and supported element matrix
-          </a>
+          </Link>
           .
         </span>
       </>
