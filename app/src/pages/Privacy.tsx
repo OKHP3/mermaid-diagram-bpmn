@@ -29,6 +29,11 @@ export default function Privacy() {
       </section>
       {/* What we measure */}
       <section className="mb-10">
+        <h2 className="text-base font-semibold mb-4">Guided process intake and agent handoff</h2>
+        <p className="text-sm text-muted-foreground leading-relaxed mb-3">Guided intake stores process briefs, imported source, evidence notes and review records in this browser's local storage. Use Saved briefs to remove a recovery copy, or clear this site's browser data. Download a process bundle for a durable backup. Other people using the same browser profile can access these records.</p>
+        <p className="text-sm text-muted-foreground leading-relaxed">The brief is not encoded in the address bar. The embedded workbench's Share control creates a link containing diagram source only. Handoff packages are created on your device; the app does not send them to an agent. Review their contents before sharing them in your chosen agent environment, where that provider's policies apply.</p>
+      </section>
+      <section className="mb-10">
         <h2 className="text-base font-semibold text-foreground mb-4 pb-2 border-b border-border flex items-center gap-2">
           <BarChart2 size={15} className="text-primary" />
           What we measure

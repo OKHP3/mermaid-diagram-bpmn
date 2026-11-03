@@ -33,6 +33,11 @@ plugin or BPMN execution platform.
 - The parser, typed `BpmnDb`, layout engine, React SVG renderer, detector, and
   source-level Mermaid adapter are present under `app/src/lib/`.
 - The playground and documentation routes are present under `app/src/pages/`.
+- Guided process intake and agent handoff are available at `/intake`. The
+  version 1 process bundle wraps the existing PIR 0.1 contract, scope, diagram
+  source and a reported review. Skills execute in the user's agent environment,
+  not in the browser. See `docs/guided-process-intake.md` for import, recovery,
+  handoff packaging and verification boundaries.
 - Pools, lanes, message flows, task markers, gateways, accessibility metadata,
   and multiple example diagrams are represented in the current source.
 - `app/src/lib/bpmn-plugin.ts` is an adapter source file. End-to-end validation

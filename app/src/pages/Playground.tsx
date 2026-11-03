@@ -128,7 +128,7 @@ function toFilenameSlug(name: string): string {
 
 type WorkspaceView = "diagram" | "source" | "split";
 
-export default function Playground() {
+export default function Playground({ processSession }: { processSession?: { source: string; onChange: (source: string) => void } } = {}) {
   const [workspaceView, setWorkspaceView] = useState<WorkspaceView>(() => {
     const view = new URLSearchParams(window.location.search).get("view");
     return view === "source" || view === "split" ? view : "diagram";
@@ -137,14 +137,17 @@ export default function Playground() {
   const [previousWork, setPreviousWork] = useState<{ source: string; example: string | null } | null>(null);
   function changeView(view: WorkspaceView) {
     setWorkspaceView(view);
+    if (processSession) return;
     const url = new URL(window.location.href);
     url.searchParams.set("view", view);
     history.replaceState(null, "", url.toString());
   }
   // Initialise from URL params (?src= or ?example=) on first render to avoid a
   // flash of the default content when a shared link is opened.
-  const [source, setSource] = useState<string>(() => computeInitialState().source);
-  const [activeExample, setActiveExample] = useState<string | null>(() => computeInitialState().activeExample);
+  const [localSource, setLocalSource] = useState<string>(() => computeInitialState().source);
+  const source = processSession?.source ?? localSource;
+  function setSource(value: string) { setLocalSource(value); processSession?.onChange(value); }
+  const [activeExample, setActiveExample] = useState<string | null>(() => processSession ? null : computeInitialState().activeExample);
   const [editorScrollTop, setEditorScrollTop] = useState(0);
   const sourceEditorRef = useRef<HTMLTextAreaElement>(null);
   const [activeLintWarningLine, setActiveLintWarningLine] = useState<number | null>(null);
@@ -208,6 +211,7 @@ export default function Playground() {
   // Hydrate arbitrary ?src= links after the Compression Streams API decodes
   // them. A user edit or example selection always wins over a late decode.
   useEffect(() => {
+    if (processSession) return;
     let disposed = false;
     const search = window.location.search;
 
@@ -465,6 +469,7 @@ export default function Playground() {
   }
 
   async function synchronizeSourceUrl(sourceToSync: string, version: number) {
+    if (processSession) return;
     const url = new URL(window.location.href);
     url.searchParams.delete('example');
 
@@ -501,6 +506,7 @@ export default function Playground() {
       setActiveExample(ex.id);
       setActiveLintWarningLine(null);
       resetView();
+      if (processSession) return;
       // Keep the address bar shareable: canonical examples use the lightweight
       // ?example=<id> form so the URL remains human-readable.
       const url = new URL(window.location.href);
@@ -639,6 +645,7 @@ export default function Playground() {
     // Build the shareable URL fresh so Share remains correct even when clicked
     // before a pending address-bar synchronization has completed.
     const url = new URL(window.location.href);
+    if (processSession) { url.pathname = `${import.meta.env.BASE_URL}playground`; url.search = ""; }
     if (activeExample) {
       url.searchParams.set('example', activeExample);
       url.searchParams.delete('src');
@@ -677,7 +684,7 @@ export default function Playground() {
     <div className="workbench flex flex-col flex-1" data-view={workspaceView}>
 
       {/* Status ribbon */}
-      <StatusRibbon />
+      {!processSession && <StatusRibbon />}
 
       <div className="workbench-heading">
         <div>

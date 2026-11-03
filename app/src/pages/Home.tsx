@@ -215,8 +215,8 @@ export default function Home() {
         <div><span className="workbench-eyebrow">03 / Keep</span><h2>Take it to your team</h2><p>Download an SVG for review and keep the editable source for the next revision.</p></div>
       </section>
       <section className="analyst-resources" aria-label="Continue learning">
-        <div><h2>Need help describing the process?</h2><p>Follow a worked example or download portable skills to use with your own agent.</p></div>
-        <div><Link href="/walkthrough" className="forge-btn-outline">Follow a walkthrough</Link><Link href="/skills" className="forge-btn-outline">Explore process skills</Link></div>
+        <div><h2>Start with the process you know.</h2><p>Capture a brief, carry the right questions to your agent, and bring back a diagram to review.</p></div>
+        <div><Link href="/intake" className="forge-btn-primary">Describe your process <ArrowRight size={16} /></Link><Link href="/walkthrough" className="forge-btn-outline">Follow a walkthrough</Link><Link href="/skills" className="forge-btn-outline">Explore process skills</Link></div>
       </section>
       <details className="analyst-project-details">
         <summary>Project details, capabilities, and developer resources</summary>

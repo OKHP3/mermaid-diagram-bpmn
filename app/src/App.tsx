@@ -12,6 +12,7 @@ import Home from "@/pages/Home";
 // only by MermaidHostDemo, so lazy-loading that route removes mermaid from the
 // initial bundle entirely.  All other routes benefit from smaller initial JS.
 const Playground              = lazy(() => import("@/pages/Playground"));
+const ProcessIntake           = lazy(() => import("@/pages/ProcessIntake"));
 const Architecture            = lazy(() => import("@/pages/Architecture"));
 const DslReference            = lazy(() => import("@/pages/DslReference"));
 const Roadmap                 = lazy(() => import("@/pages/Roadmap"));
@@ -50,7 +51,8 @@ function Router() {
       <Suspense fallback={<PageLoading />}>
         <Switch>
           <Route path="/" component={Home} />
-          <Route path="/playground" component={Playground} />
+          <Route path="/playground"><Playground /></Route>
+          <Route path="/intake" component={ProcessIntake} />
           <Route path="/architecture" component={Architecture} />
           <Route path="/dsl" component={DslReference} />
           <Route path="/roadmap" component={Roadmap} />

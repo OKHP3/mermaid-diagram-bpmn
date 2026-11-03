@@ -27,6 +27,19 @@
 
 import { test, expect, type Page } from '@playwright/test';
 
+for (const mobile of [false, true]) {
+  for (const dark of [false, true]) {
+    test(`guided intake ${mobile ? 'mobile' : 'desktop'} ${dark ? 'dark' : 'light'}`, async ({ page }) => {
+      await page.setViewportSize(mobile ? { width: 375, height: 812 } : { width: 1280, height: 800 });
+      if (dark) await loadDarkPage(page, 'intake', '#intake-stage-title');
+      else await loadPage(page, 'intake', '#intake-stage-title');
+      await expect(page.getByRole('heading', { name: 'Start with what you know.' })).toBeVisible();
+      await assertNoHorizontalOverflow(page, 'Guided intake');
+      await expect(page).toHaveScreenshot(`intake-${mobile ? 'mobile' : 'desktop'}-${dark ? 'dark' : 'light'}.png`, { maxDiffPixelRatio: 0.02 });
+    });
+  }
+}
+
 // ── Viewport definitions ──────────────────────────────────────────────────────
 
 const DESKTOP = { width: 1280, height: 800 };
