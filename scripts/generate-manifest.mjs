@@ -47,7 +47,7 @@ const mermaidVersionTarget = (() => {
 })();
 
 // ── Evidence tiers ───────────────────────────────────────────────────────────
-// Sourced from the dated maturity evidence baseline and CI config.
+// Dated evidence from completed CI and earlier maturity records.
 // Tiers: supported | provisional | disputed | blocked
 
 const EVIDENCE_TIERS = [
@@ -55,22 +55,22 @@ const EVIDENCE_TIERS = [
     id: 'playground-renders',
     claim: 'React Playground renders supported DSL syntax',
     evidence:
-      'Application test suite — 839/839 tests across 46 files on 2026-08-22',
+      '868 tests across 47 files passed on Linux in CI run 41567449202, November 3, 2026',
     tier: 'confirmed',
   },
   {
     id: 'mermaid-integration',
     claim: 'Mermaid source adapter tested via real mermaid.render()',
     evidence:
-      'bpmn-plugin-integration.test.ts and packed plugin smoke validate the current Mermaid target; see September 20 compatibility review',
+      'Mermaid 12.2.0 source integration and 12 packed-plugin smoke assertions passed in CI run 41567449202, November 3, 2026',
     tier: 'supported',
   },
   {
     id: 'e2e-browser',
-    claim: 'Plugin renders correctly in a real Chromium browser',
+    claim: 'Plugin renders in Chromium, Firefox, and WebKit on Linux',
     evidence:
-      'Chromium host-demo checks pass; full Chromium run is blocked at 49/57 by 8 worked-example node-navigation timeouts on 2026-08-22',
-    tier: 'blocked',
+      'CI run 41567449202 passed 93 Chromium, 88 Firefox, and 88 WebKit browser cases on November 3, 2026; native Windows/macOS and assistive technology remain separate',
+    tier: 'browser-verified',
   },
   {
     id: 'accessibility',

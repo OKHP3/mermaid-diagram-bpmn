@@ -13,9 +13,9 @@ Write readable process models as a Markdown code fence. No XML. No bpmn-js runti
 ## Install
 
 ```bash
-npm install @okhp3/mermaid-diagram-bpmn
+npm install --save-exact @okhp3/mermaid-diagram-bpmn@0.1.1
 # peer dependency
-npm install mermaid
+npm install --save-exact mermaid@12.2.0
 ```
 
 ---
@@ -132,7 +132,9 @@ pool order "Order Process" {
 |---|---|
 | 0.1.x | `mermaid@12.2.0` |
 
-`MERMAID_VERSION_TARGET` is exported for version-pin assertions:
+The current repository build exports `MERMAID_VERSION_TARGET` for version-pin
+assertions. The previously published 0.1.1 package retains its original build
+target; the tested CDN pairing above does not republish that package.
 
 ```typescript
 import { MERMAID_VERSION_TARGET } from '@okhp3/mermaid-diagram-bpmn';

@@ -5,6 +5,13 @@
 Current adapter target: `mermaid@12.2.0`.
 Current CDN target: `mermaid@12.2.0` with the published plugin 0.1.1.
 
+Verified November 3, 2026: [main CI run 41567449202](https://github.com/OKHP3/mermaid-diagram-bpmn/actions/runs/41567449202)
+passed 868 unit tests, 12 packed-plugin assertions, 93 Chromium, 88 Firefox,
+88 WebKit cases, and 62 visual comparisons. The browser matrix ran on Linux;
+native Windows/macOS and assistive-technology coverage are not implied.
+The published plugin remains 0.1.1; its original exported build target is
+distinct from this repository's rebuilt source package and tested CDN pairing.
+
 The app manifest is canonical. The source target, exact peer contract, standalone
 fixture, browser example, and generated release manifest move together.
 An update is a candidate until its full CI run passes. The daily updater opens

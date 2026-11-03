@@ -175,7 +175,7 @@ export default function PluginInstallation() {
           <CodeBlock
             language="bash"
             testId="code-install"
-            code={`npm install @okhp3/mermaid-diagram-bpmn\nnpm install mermaid`}
+            code={`npm install --save-exact @okhp3/mermaid-diagram-bpmn@${NPM_VERSION} mermaid@12.2.0`}
             onCopy={() => trackEvent('plugin-copy')}
           />
         ) : (
@@ -190,7 +190,7 @@ export default function PluginInstallation() {
         <p className="mt-3 text-sm text-muted-foreground">
           Or with pnpm:{" "}
           <code className="font-mono text-xs bg-muted px-1.5 py-0.5 rounded">
-            pnpm add @okhp3/mermaid-diagram-bpmn mermaid
+            pnpm add --save-exact @okhp3/mermaid-diagram-bpmn@{NPM_VERSION} mermaid@12.2.0
           </code>
         </p>
       </Section>

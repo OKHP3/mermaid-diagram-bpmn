@@ -7,7 +7,7 @@ export const targets = [
   ['app/src/lib/bpmn-plugin.ts', /(?<=MERMAID_VERSION_TARGET = ')\d+\.\d+\.\d+(?=')/g, 1],
   ['app/public/browser-cdn-example.html', /(?<=mermaid@)\d+\.\d+\.\d+/g, 2],
   ['app/e2e/browser-cdn.spec.ts', /(?<=mermaid@)\d+\.\d+\.\d+/g, 1],
-  ['app/src/pages/PluginInstallation.tsx', /(?<=mermaid@)\d+\.\d+\.\d+/g, 1],
+  ['app/src/pages/PluginInstallation.tsx', /(?<=mermaid@)\d+\.\d+\.\d+/g, 3],
   ['app/src/__tests__/a11y.test.tsx', /(?<=MERMAID_VERSION_TARGET: ')\d+\.\d+\.\d+(?=')/g, 1],
   ['scripts/check-browser-cdn.mjs', /(?<=mermaid@)\d+\.\d+\.\d+/g, 1],
   ['scripts/check-release-gates.mjs', /(?<=Mermaid remains pinned at )\d+\.\d+\.\d+/g, 1],
@@ -17,7 +17,7 @@ export const targets = [
   ['docs/mermaid-compatibility.md', /(?<=Current adapter target: `mermaid@)\d+\.\d+\.\d+/g, 1],
   ['docs/mermaid-compatibility.md', /(?<=Current CDN target: `mermaid@)\d+\.\d+\.\d+/g, 1],
   ['app/docs/competitive-landscape.md', /(?<=declared and locked Mermaid target is )\d+\.\d+\.\d+/g, 1],
-  ['lib/bpmn-plugin/README.md', /(?<=mermaid@)\d+\.\d+\.\d+/g, 3],
+  ['lib/bpmn-plugin/README.md', /(?<=mermaid@)\d+\.\d+\.\d+/g, 4],
   ['lib/bpmn-plugin/README.md', /(?<=console\.log\(MERMAID_VERSION_TARGET\); \/\/ ')\d+\.\d+\.\d+(?=')/g, 1],
 ];
 
