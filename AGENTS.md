@@ -38,6 +38,10 @@ plugin or BPMN execution platform.
   source and a reported review. Skills execute in the user's agent environment,
   not in the browser. See `docs/guided-process-intake.md` for import, recovery,
   handoff packaging and verification boundaries.
+- Transcript sessions at `/sessions` retain source revisions in tab memory,
+  prepare external-agent handoffs, and require claim-level evidence review before
+  applying candidate changes. See `docs/transcript-sessions.md`. Live provider
+  feeds and in-browser AI remain outside the implemented scope.
 - Pools, lanes, message flows, task markers, gateways, accessibility metadata,
   and multiple example diagrams are represented in the current source.
 - `app/src/lib/bpmn-plugin.ts` is an adapter source file. End-to-end validation
@@ -208,6 +212,7 @@ pnpm run technology:test
 pnpm run vendor:update
 pnpm run vendor:check
 pnpm run vendor:test
+pnpm run vendor:watch
 pnpm run plugin:smoke
 node scripts/test-delegation-controller.mjs
 node --test scripts/check-release-gates.test.mjs
@@ -237,7 +242,9 @@ workflow retains reports as artifacts. The daily coordinated updater proposes
 exact stable dependency/runtime pins after the release-maturity window and full
 CI; Dependabot proposes GitHub Actions updates. See `docs/vendor-maintenance.md`.
 Runtime, fixture, CDN, and compatibility migrations follow the maintenance plan.
-The automation does not merge updates or publish new application versions.
+The hourly Mermaid release watcher reports fresh releases immediately and
+  dispatches the coordinated updater after the same maturity window when a newer
+  candidate is needed. The automation does not merge updates or publish new application versions.
 The other commands may also require the installed dependency tree.
 
 The optional delegation program is documented in `docs/delegation/README.md`.

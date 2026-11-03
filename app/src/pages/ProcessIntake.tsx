@@ -239,6 +239,7 @@ export default function ProcessIntake() {
             Turn a process conversation into a brief, a focused agent handoff,
             and a diagram your team can review.
           </p>
+          <Link href="/sessions" className="intake-text-link">Have a meeting transcript? Start a transcript session.</Link>
         </div>
         <button className="forge-btn-outline" onClick={downloadBundle}>
           <Download size={16} />

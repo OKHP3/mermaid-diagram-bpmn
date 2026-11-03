@@ -13,6 +13,7 @@ import Home from "@/pages/Home";
 // initial bundle entirely.  All other routes benefit from smaller initial JS.
 const Playground              = lazy(() => import("@/pages/Playground"));
 const ProcessIntake           = lazy(() => import("@/pages/ProcessIntake"));
+const TranscriptSession       = lazy(() => import("@/pages/TranscriptSession"));
 const Architecture            = lazy(() => import("@/pages/Architecture"));
 const DslReference            = lazy(() => import("@/pages/DslReference"));
 const Roadmap                 = lazy(() => import("@/pages/Roadmap"));
@@ -53,6 +54,7 @@ function Router() {
           <Route path="/" component={Home} />
           <Route path="/playground"><Playground /></Route>
           <Route path="/intake" component={ProcessIntake} />
+          <Route path="/sessions" component={TranscriptSession} />
           <Route path="/architecture" component={Architecture} />
           <Route path="/dsl" component={DslReference} />
           <Route path="/roadmap" component={Roadmap} />

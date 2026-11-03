@@ -1,0 +1,50 @@
+name: Mermaid release detection
+on:
+  schedule:
+    - cron: "23 * * * *"
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: mermaid-release-detection
+  cancel-in-progress: false
+jobs:
+  detect:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: read
+      actions: write
+    steps:
+      - uses: actions/checkout@v7.0.1
+      - uses: actions/setup-node@v7.1.0
+        with:
+          node-version-file: .node-version
+      - name: Test stable detection and maturity boundaries
+        run: node --test scripts/watch-mermaid-release.test.mjs
+      - name: Read the existing candidate without replacing main
+        run: |
+          branch=automation/coordinated-dependency-updates
+          refs="$(git ls-remote --heads origin "$branch")"
+          if [ -n "$refs" ]; then
+            git fetch origin "refs/heads/$branch"
+            git show FETCH_HEAD:app/package.json > candidate-package.json
+            echo "MERMAID_CANDIDATE_VERSION=$(node -p 'JSON.parse(require("fs").readFileSync("candidate-package.json")).devDependencies.mermaid')" >> "$GITHUB_ENV"
+          fi
+      - name: Detect releases, including versions waiting for maturity
+        id: release
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: node scripts/watch-mermaid-release.mjs --output release-detection/mermaid.json
+      - name: Dispatch the coordinated compatibility pipeline when eligible
+        if: steps.release.outputs.dispatch == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh workflow run coordinated-dependency-updates.yml --repo "$GITHUB_REPOSITORY" --ref main
+      - uses: actions/upload-artifact@v7.0.2
+        if: always()
+        with:
+          name: mermaid-release-detection
+          path: release-detection/
+          if-no-files-found: warn
+          retention-days: 30

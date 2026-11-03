@@ -36,3 +36,9 @@ Intake content is not put in the address bar. The embedded workbench suppresses 
 ## Verification
 
 `app/src/__tests__/process-bundle.test.ts` covers transport validation, canonical PIR compatibility, unknowns, lossless JSON round trips, source import, YAML quoting, package completeness and platform instructions. `app/e2e/process-intake.spec.ts` exercises the complete purchase path, actual ZIP contents and Node validation adapter, import previews, recovery across tabs, review invalidation, source repair, storage denial, mobile layout and accessibility. It runs in the existing Chromium, Firefox and WebKit CI matrix. Visual baselines include intake desktop/mobile in both themes. Existing workbench, plugin, skill and release gates remain required.
+
+## Transcript-driven sessions
+
+Use [Transcript sessions](transcript-sessions.md) at `/sessions` for meeting
+excerpts, explicit/keyword checkpoints and claim-level source review. The
+separate session envelope preserves this version 1 process-bundle contract.

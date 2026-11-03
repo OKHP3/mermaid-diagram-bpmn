@@ -27,6 +27,11 @@ export default function Privacy() {
         <p className="text-sm text-muted-foreground leading-relaxed mb-3">The workbench saves edits in this browser's local storage. Drafts remain on this device until you remove them using Recover saved work or clear the site's browser data. Other people using the same browser profile can access them. Private browsing, storage limits, or clearing browser data can remove recovery copies. Download source to keep a durable backup.</p>
         <p className="text-sm text-muted-foreground leading-relaxed">Edited source is also encoded in the address bar for sharing. A shared URL contains the process text and may appear in browser history or synced history. Anyone with the link can read it. Share only process information you intend to disclose.</p>
       </section>
+      <section className="mb-10">
+        <h2 className="text-base font-semibold mb-4">Transcript sessions</h2>
+        <p className="text-sm text-muted-foreground leading-relaxed mb-3">Transcript sessions stay in tab memory. They are not automatically written to browser storage or sent to a meeting service or agent. Download a session to retain its transcript revisions, process facts, source references and reported reviews. Refreshing or closing this tab loses the in-memory copy. Session and activation IDs identify local artifacts, not analytics visitors.</p>
+        <p className="text-sm text-muted-foreground leading-relaxed">A session handoff includes the selected activation's full source revision, speaker-to-role context and process brief. Review or redact these files before sharing them with your agent. The app does not execute an agent. A compatible process bundle omits transcript evidence; shared diagram links contain diagram source only. Downloaded files follow your device and storage provider's retention rules.</p>
+      </section>
       {/* What we measure */}
       <section className="mb-10">
         <h2 className="text-base font-semibold mb-4">Guided process intake and agent handoff</h2>
@@ -82,7 +87,7 @@ export default function Privacy() {
             "No cookies — ever.",
             "No IP addresses stored by this site.",
             "No device fingerprinting.",
-            "No user accounts or session IDs.",
+            "No user accounts or analytics session IDs.",
             "No names, email addresses, or any other personal identifiers.",
             "No tracking across other websites.",
             "No data sold or shared with third parties.",
