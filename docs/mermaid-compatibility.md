@@ -1,5 +1,32 @@
 # Mermaid compatibility
 
+## Current vendor pins
+
+Current adapter target: `mermaid@12.2.0`.
+Current CDN target: `mermaid@12.2.0` with the published plugin 0.1.1.
+
+The app manifest is canonical. The source target, exact peer contract, standalone
+fixture, browser example, and generated release manifest move together.
+An update is a candidate until its full CI run passes. The daily updater opens
+a review PR only after explicit CI, including three browsers and visual checks.
+It does not publish new plugin bytes to npm or merge unreviewed candidates.
+
+Mermaid 12 requires ES2024-capable browsers (including Safari 17.4+) and Node
+22.12 or newer. Bundled consumers import the `mermaid` package. Production
+browser examples keep strict security. The happy-dom source/packed tests use
+loose security only for that DOM harness's SVG limitations.
+
+## November 3, 2026 migration evidence
+
+Replit Free tested Mermaid 12.2.0 with the existing `bpmn-beta` external diagram
+registration. The integration suite, production build, packed-plugin smoke,
+CDN asset check, and Chromium tests passed. Firefox and WebKit executables were
+absent there; GitHub CI supplies the complete three-browser and visual checks.
+The earlier records below remain evidence for their original versions only.
+See the PR and CI results for the final reviewed source revision.
+
+## Historical compatibility record
+
 ## September 20, 2026 compatibility refresh
 
 The application and current source adapter target Mermaid 11.17.2. The exact

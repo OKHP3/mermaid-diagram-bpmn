@@ -19,15 +19,15 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v7
+        uses: actions/checkout@v7.0.1
 
       - name: Setup pnpm
-        uses: pnpm/action-setup@v6
+        uses: pnpm/action-setup@v6.1.0
 
       - name: Setup Node.js
-        uses: actions/setup-node@v7
+        uses: actions/setup-node@v7.1.0
         with:
-          node-version: "24"
+          node-version-file: .node-version
           cache: "pnpm"
 
       - name: Install dependencies
@@ -41,7 +41,7 @@ jobs:
 
       - name: Upload release gate report on failure
         if: failure()
-        uses: actions/upload-artifact@v7
+        uses: actions/upload-artifact@v7.0.2
         with:
           name: release-gate-report
           path: release-gate-report.json
@@ -52,6 +52,19 @@ jobs:
 
       - name: Test technology inventory and release lookup failure detection
         run: pnpm run technology:test
+
+      - name: Verify coordinated stable vendor pins and update failure handling
+        run: |
+          pnpm run vendor:test
+          pnpm run vendor:check
+
+      - name: Set up the pinned Python maintenance runtime
+        uses: actions/setup-python@v7.1.0
+        with:
+          python-version-file: .python-version
+
+      - name: Test Python maintenance tooling
+        run: python -m unittest discover -s skills/okhp3-skill-promotion/tests -p 'test_*.py'
 
       - name: Test delegation scheduler and receipt rejection gates
         run: node scripts/test-delegation-controller.mjs
@@ -155,15 +168,15 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v7
+        uses: actions/checkout@v7.0.1
 
       - name: Setup pnpm
-        uses: pnpm/action-setup@v6
+        uses: pnpm/action-setup@v6.1.0
 
       - name: Setup Node.js
-        uses: actions/setup-node@v7
+        uses: actions/setup-node@v7.1.0
         with:
-          node-version: "24"
+          node-version-file: .node-version
           cache: "pnpm"
 
       - name: Install dependencies
@@ -196,7 +209,7 @@ jobs:
 
       - name: Upload Playwright report on failure
         if: failure()
-        uses: actions/upload-artifact@v7
+        uses: actions/upload-artifact@v7.0.2
         with:
           name: playwright-report-${{ matrix.browser }}
           path: app/playwright-report/
@@ -213,18 +226,18 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v7
+        uses: actions/checkout@v7.0.1
         with:
           # Use the GITHUB_TOKEN with write permission so git push works.
           token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Setup pnpm
-        uses: pnpm/action-setup@v6
+        uses: pnpm/action-setup@v6.1.0
 
       - name: Setup Node.js
-        uses: actions/setup-node@v7
+        uses: actions/setup-node@v7.1.0
         with:
-          node-version: "24"
+          node-version-file: .node-version
           cache: "pnpm"
 
       - name: Install dependencies
@@ -266,12 +279,12 @@ jobs:
       # Fails if any screenshot differs by more than the threshold defined in
       # the spec (maxDiffPixelRatio: 0.02 / 0.03).
       - name: Compare visual snapshots (pull request)
-        if: github.event_name == 'pull_request'
+        if: github.event_name == 'pull_request' || github.event_name == 'workflow_dispatch'
         run: pnpm --filter @workspace/mermaid-diagram-bpmn run test:e2e:visual
 
       - name: Upload visual regression report on failure
         if: failure()
-        uses: actions/upload-artifact@v7
+        uses: actions/upload-artifact@v7.0.2
         with:
           name: visual-regression-report
           path: |

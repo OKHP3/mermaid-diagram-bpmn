@@ -1,0 +1,7 @@
+{
+  "minimumReleaseAgeHours": 24,
+  "pnpmMajor": 11,
+  "pnpmException": "pnpm 12 two-document lockfiles currently prevent GitHub dependency-graph security alerts. Use the latest stable pnpm 11 patch until GitHub documents support and the migration passes CI.",
+  "pnpmExceptionSource": "https://docs.github.com/en/code-security/reference/supply-chain-security/supported-ecosystems-and-repositories",
+  "replitRuntimePolicy": "Replit modules are provider-managed. CI uses the current stable Node LTS and Python bugfix release. Keep the verified Replit modules until their replacements are available and tested."
+}

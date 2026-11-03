@@ -1,5 +1,9 @@
 # Technology inventory and update maintenance
 
+Current maintenance policy: [vendor-maintenance.md](vendor-maintenance.md).
+The dated tables and addenda below retain their original observation context;
+the generated version report and current manifests take precedence.
+
 Reviewed: September 26, 2026 (America/Chicago). Retrieval timestamps use UTC.
 Baseline before this refresh: `bdb952daea855ee13d231ac119da5fe3cc26bdff`, verified against GitHub main and Replit.
 
@@ -171,6 +175,43 @@ Require CI for the exact PR commit, including Linux browser/visual jobs. After a
 | Revised automation active           | Not yet verified                  | Local implementation                         | Merge and run once on GitHub       |
 
 Next action: land the maintenance files, run the hosted audit once, and process candidates through CI and deployment checks.
+
+## November 3, 2026 dependency and runtime addendum
+
+The active application/fixture/CDN target is now Mermaid 12.2.0. The previous
+dated inventory above remains unchanged; see [mermaid-compatibility.md](mermaid-compatibility.md)
+for the current test evidence. The package workspaces are on Mermaid 12.2.0,
+Vite 8.3.5, happy-dom 21.0.4, lucide-react 1.66.0, and @types/node 26.6.6.
+React/React DOM 19.3.1, TypeScript 7.0.2, and Playwright 1.64.1 were already
+current. The 24-hour release-maturity policy was preserved: plugin-react 6.2.1,
+Tailwind 4.3.4, and Vitest 5.1.0 were not yet mature at retrieval, so their
+previous pins remain until a later coordinated candidate.
+
+### Runtime support and availability
+
+- **Node.js:** CI pins Node 26.13.0 in `.node-version`. Replit selects
+  `nodejs-24` (observed 24.22.1); its available Node modules are 20, 22, and 24
+  only. Node 24 remains LTS and meets Mermaid 12's Node 22.12+ requirement.
+  Revisit the provider exception when Replit exposes the current LTS.
+  Source: [Node.js previous releases](https://nodejs.org/en/about/previous-releases)
+  and [Mermaid Open Source](https://mermaid.ai/open-source/).
+- **Python:** `.replit` selects Python 3.11. The available Replit Python modules
+  include 3.10–3.13, not 3.14 or 3.15. Python is used for maintenance only;
+  there is no Python app or pip manifest. Python 3.14/3.15 are the current
+  bug-fix-support lines while 3.11 is security-only, so do not claim a runtime
+  Replit upgrade until the toolchain is actually available and tested. CI pins
+  Python 3.15.2 in `.python-version` and tests the maintenance tooling.
+  Source: [Python version status](https://devguide.python.org/versions/).
+- **pnpm:** the repository pins 11.28.10. pnpm 12.17.0 uses a
+  two-document lock format that GitHub documents as disabling dependency-graph
+  security alerts for pnpm; do not adopt it without an alert-preserving plan.
+  The updater follows stable pnpm 11 patches until that limitation is resolved.
+  See [vendor maintenance](vendor-maintenance.md) for migration validation and
+  the full exception policy.
+  Source: [GitHub supported ecosystems](https://docs.github.com/en/code-security/reference/supply-chain-security/supported-ecosystems-and-repositories).
+
+The checks completed for this update are recorded in the handoff; three-browser
+and visual-comparison results remain separate from the local Chromium run.
 
 ## September 20 dependency convergence
 

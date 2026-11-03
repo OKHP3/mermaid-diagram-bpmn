@@ -52,7 +52,7 @@ import {
 // Add `mermaid` as a devDependency pinned to this version when running
 // the plugin integration tests.
 // ---------------------------------------------------------------------------
-export const MERMAID_VERSION_TARGET = '11.17.2';
+export const MERMAID_VERSION_TARGET = '12.2.0';
 
 // ---------------------------------------------------------------------------
 // Shared DiagramDB instance

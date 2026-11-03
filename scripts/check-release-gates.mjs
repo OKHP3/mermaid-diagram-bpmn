@@ -1,7 +1,7 @@
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname, isAbsolute, join } from "node:path";
 import { checkComparisonEvidence } from "./check-comparison-evidence.mjs";
-import { executeCommand, parseCommandJson, auditVulnerabilities } from "./release-gate-command.mjs";
+import { executeCommand, parseCommandJson, auditVulnerabilities, licenseEvidence, packageManagerEvidence } from "./release-gate-command.mjs";
 
 const root = process.cwd();
 const output = process.argv.includes("--output")
@@ -14,6 +14,7 @@ const allowedLicenses = new Set([
   "BSD-3-Clause",
   "BlueOak-1.0.0",
   "CC0-1.0",
+  "EPL-2.0",
   "ISC",
   "MIT",
   "MPL-2.0",
@@ -30,14 +31,13 @@ if (!audit || typeof audit !== "object" || Array.isArray(audit) || !audit.metada
   throw new Error("pnpm audit returned JSON without metadata.vulnerabilities");
 }
 const vulnerabilities = auditVulnerabilities(audit);
-// Release licensing applies to shipped dependencies, not build-time tooling.
-const licenseResult = command("pnpm", ["licenses", "list", "--prod", "--json"]);
+// Application runtime imports are declared in devDependencies in this static
+// workspace. Scan every workspace dependency; --prod would miss shipped code.
+const licenseResult = command("pnpm", ["licenses", "list", "--recursive", "--json"]);
 const licensesJson = parseCommandJson(licenseResult, "pnpm licenses list");
-if (!licensesJson || typeof licensesJson !== "object" || Array.isArray(licensesJson) || Object.hasOwn(licensesJson, "error") || Object.keys(licensesJson).length === 0) {
-  throw new Error("pnpm licenses list returned invalid license data");
-}
-const licenseNames = Object.keys(licensesJson).filter((name) => name !== "error");
-const unknownLicenses = licenseNames.filter((name) => !allowedLicenses.has(name));
+const licensing = licenseEvidence(licensesJson, allowedLicenses);
+const installedPnpm = command("pnpm", ["--version"]).stdout.trim();
+const reproducibility = packageManagerEvidence(JSON.parse(read("package.json")).packageManager, installedPnpm, existsSync(join(root, "pnpm-lock.yaml")));
 const mermaidFindings = Object.values(audit.advisories ?? {})
   .filter((advisory) => advisory.module_name === "mermaid")
   .map((advisory) => ({
@@ -62,16 +62,17 @@ const gates = [
     interpretation: "Critical or high advisories block publication; moderate and low advisories remain visible.",
     escalation: "Upgrade or replace the affected dependency, then rerun the report.",
     evidence: vulnerabilities,
-    limitation: mermaidFindings.length ? `Mermaid remains pinned at 11.17.2 with ${mermaidFindings.length} advisory findings; review before changing the tested compatibility pair.` : null,
+    limitation: mermaidFindings.length ? `Mermaid remains pinned at 12.2.0 with ${mermaidFindings.length} advisory findings; review before changing the tested compatibility pair.` : null,
   },
   {
     id: "licenses",
     owner: "Release engineering",
-    status: unknownLicenses.length === 0 ? "pass" : "fail",
-    command: "pnpm licenses list --json",
+    status: licensing.unknown.length === 0 ? "pass" : "fail",
+    command: "pnpm licenses list --recursive --json",
     interpretation: "Every distributed dependency must use an approved permissive or weak-copyleft license.",
     escalation: "Identify an SPDX license or replace the dependency; do not publish an unknown license.",
-    evidence: { observed: licenseNames, unknown: unknownLicenses },
+    evidence: licensing,
+    limitation: "Three exact Replit development tools have missing metadata and are excluded from production builds. See docs/vendor-maintenance.md for license-file evidence and bundled notices.",
   },
   {
     id: "source-safety",
@@ -122,11 +123,11 @@ const gates = [
   {
     id: "reproducibility",
     owner: "Release engineering",
-    status: existsSync(join(root, "pnpm-lock.yaml")) && read("package.json").includes('"packageManager": "pnpm@10.26.1"') ? "pass" : "fail",
+    status: reproducibility.matches ? "pass" : "fail",
     command: "pnpm install --frozen-lockfile && pnpm run build",
     interpretation: "The lockfile, declared package manager, generated assets, and build must reproduce from a clean checkout.",
     escalation: "Regenerate and commit the lockfile/generated assets or stop publication.",
-    evidence: { lockfile: "present", packageManager: "pnpm@10.26.1" },
+    evidence: reproducibility,
   },
 ];
 
@@ -134,7 +135,7 @@ const report = {
   schema: "bpmn-for-mermaid/release-gate-report@1",
   generatedAt: new Date().toISOString(),
   revision: command("git", ["rev-parse", "HEAD"]).stdout.trim() || "unknown",
-  runtime: { node: process.version, pnpm: command("pnpm", ["--version"]).stdout.trim() },
+  runtime: { node: process.version, pnpm: installedPnpm },
   decision: gates.some((gate) => gate.status === "fail") ? "NO-GO" : "GO-WITH-LIMITS",
   gates,
   releaseBoundary: "Static browser-first descriptive BPMN subset; no backend, accounts, telemetry, or executable BPMN semantics.",

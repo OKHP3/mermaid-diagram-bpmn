@@ -141,6 +141,8 @@ export function collectInventory(files, readFile) {
       (actions[match[1]] ??= []).push({ ref: unquote(match[2]), path });
     for (const match of text.matchAll(/\bnode-version:\s*["']?([^\s"']+)/g))
       nodeLines.push({ path, version: match[1] });
+    for (const match of text.matchAll(/\bnode-version-file:\s*["']?([^\s"']+)/g))
+      nodeLines.push({ path, version: readFile(match[1]).trim() });
   }
   const replit = readFile(".replit");
   const packageManager = JSON.parse(readFile("package.json")).packageManager;
@@ -160,12 +162,14 @@ export function collectInventory(files, readFile) {
     packageManager,
     replitNode: replit.match(/"nodejs-([^"\s]+)"/)?.[1],
     replitPython: replit.match(/"python-([^"\s]+)"/)?.[1],
+    pythonPin: files.includes('.python-version') ? readFile('.python-version').trim() : null,
     nixChannel: replit.match(/channel\s*=\s*"([^"]+)"/)?.[1],
     pythonFiles: files.filter((path) => path.endsWith(".py")),
     sources: unique([
       "pnpm-lock.yaml",
       "pnpm-workspace.yaml",
       ".replit",
+      ...files.filter((file) => ['.node-version', '.python-version'].includes(file)),
       ...manifests,
       ...Object.values(actions)
         .flat()
@@ -404,7 +408,7 @@ export function formatReport(report) {
         ],
         [
           "Python tooling",
-          `Replit ${i.replitPython}`,
+          `Replit ${i.replitPython}; CI ${i.pythonPin ?? 'not declared'}`,
           `[${report.python?.latest ?? "UNKNOWN"}](https://www.python.org/downloads/)`,
           report.python?.selectedLine,
         ],
