@@ -20,7 +20,7 @@ These are snapshot observations, not upgrades performed by this change. npm comp
 | Tailwind CSS / Vite adapter | 4.3.3 / 4.3.3               | 4.3.3 / 4.3.3                             | Current                                                               |
 | Vitest                      | 5.0.2                       | 5.0.2                                     | Major update; all required checks passed                              |
 | Playwright                  | 1.63.0                      | 1.63.0                                    | Current; test all three engines                                       |
-| Mermaid                     | 12.2.0                      | 12.2.0                                    | Exact tested target; daily coordinated updates run compatibility gates |
+| Mermaid                     | 11.17.2                     | 12.0.0                                    | Stay on 11.x until compatibility migration passes                     |
 | lucide-react                | 1.48.0                      | 1.48.0                                    | Current; visual checks passed                                         |
 | wouter                      | 3.11.0                      | 3.11.1                                    | Hold until the 24-hour release-maturity window passes                  |
 | happy-dom                   | 20.14.5                     | 20.14.5                                   | Current                                                               |
@@ -171,6 +171,41 @@ Require CI for the exact PR commit, including Linux browser/visual jobs. After a
 | Revised automation active           | Not yet verified                  | Local implementation                         | Merge and run once on GitHub       |
 
 Next action: land the maintenance files, run the hosted audit once, and process candidates through CI and deployment checks.
+
+## November 3, 2026 dependency and runtime addendum
+
+The active application/fixture/CDN target is now Mermaid 12.2.0. The previous
+dated inventory above remains unchanged; see [mermaid-compatibility.md](mermaid-compatibility.md)
+for the current test evidence. The package workspaces are on Mermaid 12.2.0,
+Vite 8.3.5, happy-dom 21.0.4, lucide-react 1.66.0, and @types/node 26.6.6.
+React/React DOM 19.3.1, TypeScript 7.0.2, and Playwright 1.64.1 were already
+current. The 24-hour release-maturity policy was preserved: plugin-react 6.2.1,
+Tailwind 4.3.4, and Vitest 5.1.0 were not yet mature at retrieval, so their
+previous pins remain until a later coordinated candidate.
+
+### Runtime support and availability
+
+- **Node.js:** CI and this Replit use Node 24; `.replit` selects `nodejs-24`
+  (24.22.1). Node 26.13.0 is an official LTS release, but the available Replit
+  Node modules are 20, 22, and 24 only. Keep Node 24, which is LTS and meets
+  Mermaid 12's Node 22.12+ requirement. Revisit Node 26 when Replit exposes it.
+  Source: [Node.js previous releases](https://nodejs.org/en/about/previous-releases)
+  and [Mermaid Open Source](https://mermaid.ai/open-source/).
+- **Python:** `.replit` selects Python 3.11. The available Replit Python modules
+  include 3.10–3.13, not 3.14 or 3.15. Python is used for maintenance only;
+  there is no Python app or pip manifest. Python 3.14/3.15 are the current
+  bug-fix-support lines while 3.11 is security-only, so do not claim a runtime
+  upgrade until the toolchain is actually available and tested.
+  Source: [Python version status](https://devguide.python.org/versions/).
+- **pnpm:** the repository remains pinned to 10.26.1. pnpm 12.17.0 uses a
+  two-file lock format that GitHub documents as disabling dependency-graph
+  security alerts for pnpm; do not adopt it without an alert-preserving plan.
+  pnpm 11.28.10 is the supported one-lockfile alternative to evaluate with
+  lockfile, install, security-alert, and CI tests before changing the pin.
+  Source: [GitHub supported ecosystems](https://docs.github.com/en/code-security/reference/supply-chain-security/supported-ecosystems-and-repositories).
+
+The checks completed for this update are recorded in the handoff; three-browser
+and visual-comparison results remain separate from the local Chromium run.
 
 ## September 20 dependency convergence
 
