@@ -15,6 +15,7 @@ for (let i = 0; i < args.length; i += 2) {
   }
   options[args[i].slice(2)] = args[i + 1];
 }
+if (!options.url) throw new Error('A local production preview URL is required: --url http://localhost:4174/.');
 const base = new URL(options.url);
 if (!['localhost', '127.0.0.1', '[::1]'].includes(base.hostname) || base.protocol !== 'http:' || base.search || base.hash) {
   throw new Error('Measure a local production preview with no query or fragment. Live visits are a separate check.');

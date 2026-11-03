@@ -3,8 +3,9 @@ import { test, expect, type Download } from '@playwright/test';
 const diagram = 'bpmn-beta\nstart s "Request"\ntask:user t "Review quote"\nend e "Decision"\nflow s -> t\nflow t -> e';
 async function contents(download: Download) {
   const stream = await download.createReadStream();
+  if (!stream) throw new Error(`Could not read downloaded bundle: ${await download.failure() ?? 'download stream unavailable'}`);
   const chunks: Buffer[] = [];
-  for await (const chunk of stream!) chunks.push(Buffer.from(chunk));
+  for await (const chunk of stream) chunks.push(Buffer.from(chunk));
   return Buffer.concat(chunks);
 }
 
