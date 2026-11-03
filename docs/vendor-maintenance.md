@@ -109,3 +109,9 @@ pnpm run technology:check -- --output docs/technology-versions.md --json docs/te
 Run full CI before merge. On Windows, use `pnpm run plugin:smoke` so child
 processes inherit the selected package manager. The plugin declaration-copy
 step uses Node APIs and does not require Unix `cp`.
+
+In Replit, prefix these commands with `corepack`: its Nix pnpm 10 launcher was
+observed looping during the pnpm 11 migration. Corepack invokes the declared
+version directly. Replit's artifact commands and post-merge hook use this path;
+the hook sets `CI=true` for unattended replacement of the generated dependency
+directory during a package-manager migration. No paid Agent mode is needed.

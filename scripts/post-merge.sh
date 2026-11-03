@@ -1,3 +1,3 @@
 #!/bin/bash
 set -e
-pnpm install --frozen-lockfile
+CI=true corepack pnpm install --frozen-lockfile

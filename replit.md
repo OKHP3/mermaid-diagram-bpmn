@@ -1,12 +1,20 @@
 # BPMN for Mermaid — mermaid-diagram-bpmn
 
-A contributor-facing prototype and documentation workspace for a Mermaid-native `bpmn-beta` diagram type. Serves as the development environment before the GitHub repository is created.
+A contributor-facing prototype and documentation workspace for a Mermaid-native `bpmn-beta` diagram type. GitHub `OKHP3/mermaid-diagram-bpmn` is canonical; Replit is the development and preview environment. See `AGENTS.md` for the authoritative guide.
 
 ## Related work
 
 - Andreas Emrich (DFKI) filed [mermaid-js/mermaid#7699](https://github.com/mermaid-js/mermaid/issues/7699) on 2026-05-02 with a metadata-heavy DSL proposal. Our `bpmn-beta` is a deliberately readable alternative. See Notion proposal for engagement strategy.
 
 ## Run & Operate
+
+Use `corepack pnpm` in Replit to invoke the exact `packageManager` declared in
+the root manifest. The provider's Nix pnpm 10.26.1 launcher was observed looping
+while trying to bootstrap pnpm 11.28.10. Corepack resolved the declared version.
+The artifact's development/build commands and post-merge install use Corepack
+so reopening the workspace does not depend on a temporary shell workaround.
+For a non-interactive first install after a package-manager migration, use
+`CI=true corepack pnpm install --frozen-lockfile`.
 
 - `pnpm run typecheck` — full typecheck across all packages
 - `pnpm run build` — typecheck + build all packages
@@ -18,11 +26,14 @@ A contributor-facing prototype and documentation workspace for a Mermaid-native 
 - **Monorepo tool**: pnpm workspaces
 - **Node.js version**: 24
 - **Package manager**: pnpm
-- **TypeScript version**: 5.9
-- **Frontend**: React + Vite 7 + Tailwind CSS v4
+- **TypeScript version**: exact root manifest pin
+- **Frontend**: React + Vite + Tailwind CSS, with exact active catalog pins
 - **Routing**: wouter
-- **Test runner**: Vitest 3.x (unit + corpus tests)
-- **API/DB**: Express 5 + Drizzle ORM (provisioned but unused by BPMN frontend)
+- **Test runner**: exact application Vitest pin (unit + corpus tests)
+- **API/DB**: none; the application is static and browser-only
+
+Current versions and supported-runtime exceptions are recorded in
+`docs/technology-versions.md` and `docs/vendor-maintenance.md`.
 
 ## Where things live
 

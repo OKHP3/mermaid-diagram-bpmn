@@ -15,10 +15,10 @@ paths = [ "/" ]
 localPort = 20820
 
 [services.development]
-run = "pnpm --filter @workspace/mermaid-diagram-bpmn run dev"
+run = "corepack pnpm --filter @workspace/mermaid-diagram-bpmn run dev"
 
 [services.production]
-build = [ "pnpm", "--filter", "@workspace/mermaid-diagram-bpmn", "run", "build" ]
+build = [ "corepack", "pnpm", "--filter", "@workspace/mermaid-diagram-bpmn", "run", "build" ]
 publicDir = "app/dist/public"
 serve = "static"
 

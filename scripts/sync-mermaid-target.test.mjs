@@ -34,3 +34,12 @@ test('detects a changed synchronization target rather than silently leaving drif
   assert.throws(() => synchronizationPlan((file) => file === 'app/src/lib/bpmn-plugin.ts'
     ? read(file).replace('MERMAID_VERSION_TARGET =', 'CHANGED_TARGET =') : candidateRead(file)), /Synchronization contract changed/);
 });
+
+test('a Windows checkout does not create false version drift from line endings', () => {
+  assert.equal(synchronizationPlan(file => read(file).replace(/\r?\n/g, '\r\n')).size, 0);
+});
+
+test('a missing fixture test dependency fails before silently deleting its pin', () => {
+  assert.throws(() => synchronizationPlan(file => file === 'app/package.json'
+    ? JSON.stringify({devDependencies:{mermaid:'12.2.0'}}) : read(file)), /happy-dom fixture pin/);
+});

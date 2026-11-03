@@ -174,6 +174,10 @@ Manifests and the lockfile take precedence over dated prose version lists.
 
 Run from the repository root after dependencies are installed:
 
+In Replit, use `corepack pnpm` for the commands below. The provider's older
+pnpm launcher can loop while bootstrapping the declared newer version. The
+Replit artifact and post-merge hook use Corepack; see `replit.md`.
+
 ```bash
 pnpm install
 pnpm run typecheck

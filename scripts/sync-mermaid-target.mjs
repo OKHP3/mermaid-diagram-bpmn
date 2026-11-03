@@ -25,6 +25,7 @@ export function synchronizationPlan(read) {
   const app = JSON.parse(read('app/package.json'));
   const version = app.dependencies?.mermaid ?? app.devDependencies?.mermaid;
   if (!/^\d+\.\d+\.\d+$/.test(version ?? '')) throw new Error(`Expected exact stable Mermaid pin, got ${version}`);
+  if (!/^\d+\.\d+\.\d+$/.test(app.devDependencies?.['happy-dom'] ?? '')) throw new Error('Expected exact stable happy-dom fixture pin');
   const output = new Map();
   for (const [file, pattern, count] of targets) {
     const text = output.get(file) ?? read(file);
@@ -41,7 +42,7 @@ export function synchronizationPlan(read) {
     } else manifest.peerDependencies.mermaid = version;
     output.set(file, `${JSON.stringify(manifest, null, 2)}\n`);
   }
-  return new Map([...output].filter(([file, content]) => content !== read(file)));
+  return new Map([...output].filter(([file, content]) => content.replace(/\r\n/g, '\n') !== read(file).replace(/\r\n/g, '\n')));
 }
 
 if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
