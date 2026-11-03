@@ -401,6 +401,24 @@ test('warning navigation resets after source edits and follows updated line numb
   await expect(textarea).toBeFocused();
 });
 
+test('warning highlight clears when edits remove all warnings', async ({ page }) => {
+  await openPlaygroundWith(page, SOURCE_ORPHAN_NODE);
+
+  const panel = page.locator('[data-testid="div-lint-warnings"]');
+  const textarea = page.locator('[data-testid="textarea-bpmn-source"]');
+  const highlight = page.locator('[data-testid="editor-lint-warning-line-highlight"]');
+
+  await expect(panel).toBeVisible();
+  await page.getByRole('button', { name: 'Go to line 4 for ORPHAN_NODE' }).click();
+  await expect(highlight).toHaveAttribute('data-lint-warning-line', '4');
+
+  await textarea.fill(SOURCE_VALID);
+
+  await expect(panel).toHaveCount(0);
+  await expect(page.locator('[data-testid="badge-lint-warnings"]')).toHaveCount(0);
+  await expect(highlight).toHaveCount(0);
+});
+
 test('valid diagram — no warning panel appears and the diagram renders', async ({ page }) => {
   await openPlaygroundWith(page, SOURCE_VALID);
 
