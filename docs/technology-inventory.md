@@ -1,5 +1,9 @@
 # Technology inventory and update maintenance
 
+Current maintenance policy: [vendor-maintenance.md](vendor-maintenance.md).
+The dated tables and addenda below retain their original observation context;
+the generated version report and current manifests take precedence.
+
 Reviewed: September 26, 2026 (America/Chicago). Retrieval timestamps use UTC.
 Baseline before this refresh: `bdb952daea855ee13d231ac119da5fe3cc26bdff`, verified against GitHub main and Replit.
 

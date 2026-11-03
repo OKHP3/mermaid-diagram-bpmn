@@ -150,21 +150,23 @@ introduce flowchart metadata syntax as bpmn-beta syntax.
 
 The declared and checked-in stack is:
 
-- Node.js 24 compatibility line in Replit and GitHub Actions
-- pnpm 10, declared as `pnpm@10.26.1` in the root manifest
-- TypeScript 7.0.2
-- React 19.3.0 and Vite 8.3.0
+- Current stable Node LTS pinned in `.node-version` for CI; Replit provides Node 24
+- Supported pnpm version pinned exactly in the root `packageManager`
+- TypeScript, React, and Vite pinned exactly in manifests and the workspace catalog
 - Tailwind CSS 4 through the Vite plugin
 - wouter for client-side routing
-- Vitest 5.0.2 for application tests
+- Vitest for application tests, pinned in `app/package.json`
 - ESM JavaScript for root validation and packaging scripts
 
-Replit provisions Python 3.11. Python files support repository and skill
-maintenance; there is no Python web application or pip manifest.
+CI tests maintenance scripts with the exact stable Python in `.python-version`.
+Replit still provisions Python 3.11 because current bugfix-support modules are
+unavailable there. Python files support repository and skill maintenance;
+there is no Python web application or pip manifest.
 Older notes mention Express and Drizzle; the current application architecture
 does not use a backend, API, or database.
 
-See `docs/technology-inventory.md` for the dated inventory and maintenance plan,
+See `docs/vendor-maintenance.md` for the active maintenance policy and exceptions,
+`docs/technology-inventory.md` for the dated inventory,
 and `docs/technology-versions.md` / `.json` for generated package/action evidence.
 Manifests and the lockfile take precedence over dated prose version lists.
 
@@ -186,6 +188,10 @@ pnpm run check:generated
 pnpm run eval:run
 pnpm run technology:check
 pnpm run technology:test
+pnpm run vendor:update
+pnpm run vendor:check
+pnpm run vendor:test
+pnpm run plugin:smoke
 node scripts/test-delegation-controller.mjs
 node --test scripts/check-release-gates.test.mjs
 ```
@@ -203,7 +209,9 @@ access and accepts `--output <markdown-path>`, `--json <json-path>`, and `--ci`.
 Failed lookups fail the audit and remain explicit in its report. The audit uses
 Node built-ins and Git without installing application dependencies. Offline
 regression tests run with `pnpm run technology:test` and in CI. The weekly
-workflow retains reports as artifacts; Dependabot proposes grouped updates.
+workflow retains reports as artifacts. The daily coordinated updater proposes
+exact stable dependency/runtime pins after the release-maturity window and full
+CI; Dependabot proposes GitHub Actions updates. See `docs/vendor-maintenance.md`.
 Runtime, fixture, CDN, and compatibility migrations follow the maintenance plan.
 The automation does not merge updates or publish new application versions.
 The other commands may also require the installed dependency tree.

@@ -10,27 +10,27 @@ allowBuilds:
 autoInstallPeers: false
 
 catalog:
-  '@replit/vite-plugin-cartographer': ^0.6.1
-  '@replit/vite-plugin-dev-banner': ^0.1.1
-  '@replit/vite-plugin-runtime-error-modal': ^0.0.6
-  '@tailwindcss/vite': ^4.3.3
+  '@replit/vite-plugin-cartographer': 0.6.1
+  '@replit/vite-plugin-dev-banner': 0.1.2
+  '@replit/vite-plugin-runtime-error-modal': 0.0.6
+  '@tailwindcss/vite': 4.3.3
   '@tanstack/react-query': ^5.90.21
-  '@types/node': ^26.6.6
-  '@types/react': ^19.3.0
-  '@types/react-dom': ^19.3.0
-  '@vitejs/plugin-react': ^6.1.2
+  '@types/node': 26.6.6
+  '@types/react': 19.3.0
+  '@types/react-dom': 19.3.0
+  '@vitejs/plugin-react': 6.1.2
   class-variance-authority: ^0.7.1
-  clsx: ^2.1.1
+  clsx: 2.1.1
   drizzle-orm: ^0.45.2
-  fflate: ^0.8.3
+  fflate: 0.8.3
   framer-motion: ^13.1.1
-  lucide-react: ^1.66.0
+  lucide-react: 1.66.0
   react: 19.3.1
   react-dom: 19.3.1
-  tailwind-merge: ^3.7.0
-  tailwindcss: ^4.3.3
-  tsx: ^4.23.15
-  vite: ^8.3.5
+  tailwind-merge: 3.7.0
+  tailwindcss: 4.3.3
+  tsx: 4.23.15
+  vite: 8.3.5
   wouter: ^3.13.0
   zod: ^4.4.3
 
@@ -88,7 +88,6 @@ overrides:
   esbuild>@esbuild/sunos-x64: '-'
   esbuild>@esbuild/win32-arm64: '-'
   esbuild>@esbuild/win32-ia32: '-'
-  esbuild>@esbuild/win32-x64: '-'
   lightningcss>lightningcss-android-arm64: '-'
   lightningcss>lightningcss-freebsd-x64: '-'
   lightningcss>lightningcss-linux-arm-gnueabihf: '-'
@@ -105,7 +104,7 @@ overrides:
   picomatch@<2.3.2: '>=2.3.2'
   picomatch@>=4.0.0 <4.0.4: '>=4.0.4'
   postcss@<8.5.10: '>=8.5.10'
-  brace-expansion: 5.0.11
+  brace-expansion: 5.0.12
   source-map-js: 1.2.2
   dompurify: 3.4.17
   lodash-es: 4.18.1
@@ -130,5 +129,3 @@ overrides:
   rollup>@rollup/rollup-openharmony-arm64: '-'
   rollup>@rollup/rollup-win32-arm64-msvc: '-'
   rollup>@rollup/rollup-win32-ia32-msvc: '-'
-  rollup>@rollup/rollup-win32-x64-gnu: '-'
-  rollup>@rollup/rollup-win32-x64-msvc: '-'

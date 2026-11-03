@@ -15,7 +15,7 @@
  */
 
 import { execFileSync, execSync } from 'node:child_process';
-import { existsSync, readdirSync, rmSync } from 'node:fs';
+import { existsSync, readdirSync, rmSync, readFileSync } from 'node:fs';
 import { join, dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -24,6 +24,9 @@ const ROOT = resolve(HERE, '..');
 const PLUGIN_DIR = join(ROOT, 'lib', 'bpmn-plugin');
 const FIXTURE_DIR = join(ROOT, 'fixtures', 'plugin-smoke');
 const VERBOSE = process.argv.includes('--verbose');
+const releaseAgeHours = JSON.parse(readFileSync(join(ROOT, '.github/vendor-update-policy.json'), 'utf8')).minimumReleaseAgeHours;
+if (!Number.isInteger(releaseAgeHours) || releaseAgeHours < 24) throw new Error('Invalid fixture release-maturity policy');
+const maturityOption = `--config.minimumReleaseAge=${releaseAgeHours * 60}`;
 
 const RESET = '\x1b[0m';
 const GREEN = '\x1b[32m';
@@ -37,6 +40,17 @@ function step(label) {
 
 function run(cmd, args, cwd) {
   if (VERBOSE) console.log(`  ${DIM}$ ${cmd} ${args.join(' ')}${RESET}`);
+  // Use the invoking pinned pnpm CLI on Windows, where .cmd shims cannot be
+  // executed directly by execFileSync. No shell interpolation is necessary.
+  if (cmd === 'pnpm' && /pnpm\.(?:cjs|mjs|js)$/.test(process.env.npm_execpath ?? '')) {
+    execFileSync(process.execPath, [process.env.npm_execpath, ...args], {
+      cwd, stdio: VERBOSE ? 'inherit' : 'pipe',
+    });
+    return;
+  }
+  if (cmd === 'pnpm' && process.platform === 'win32') {
+    throw new Error('Run this check with pnpm run plugin:smoke so the pinned CLI is available.');
+  }
   execFileSync(cmd, args, { cwd, stdio: VERBOSE ? 'inherit' : 'pipe' });
 }
 
@@ -77,8 +91,8 @@ step('Install packed tarball into fixture');
 const pluginInstall = join(FIXTURE_DIR, 'node_modules', '@okhp3');
 if (existsSync(pluginInstall)) rmSync(pluginInstall, { recursive: true });
 
-run('pnpm', ['install', '--ignore-workspace'], FIXTURE_DIR);
-run('pnpm', ['add', '--ignore-workspace', `./${tarball}`], FIXTURE_DIR);
+run('pnpm', ['install', '--ignore-workspace', maturityOption], FIXTURE_DIR);
+run('pnpm', ['add', '--ignore-workspace', maturityOption, `./${tarball}`], FIXTURE_DIR);
 console.log(`  ${GREEN}✔${RESET} Installed`);
 
 // ── 5. Run smoke assertions ───────────────────────────────────────────────────

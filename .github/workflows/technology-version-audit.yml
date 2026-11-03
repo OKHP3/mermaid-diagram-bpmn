@@ -33,7 +33,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v7.1.0
         with:
-          node-version: "24"
+          node-version-file: .node-version
 
       # The audit uses Node built-ins and committed manifests/lockfiles. It can
       # report drift even when the application dependency installation is broken.

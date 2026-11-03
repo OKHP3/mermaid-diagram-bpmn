@@ -7,37 +7,37 @@ settings:
 catalogs:
   default:
     '@replit/vite-plugin-cartographer':
-      specifier: ^0.6.1
+      specifier: 0.6.1
       version: 0.6.1
     '@replit/vite-plugin-dev-banner':
-      specifier: ^0.1.1
+      specifier: 0.1.2
       version: 0.1.2
     '@replit/vite-plugin-runtime-error-modal':
-      specifier: ^0.0.6
+      specifier: 0.0.6
       version: 0.0.6
     '@tailwindcss/vite':
-      specifier: ^4.3.3
+      specifier: 4.3.3
       version: 4.3.3
     '@types/node':
-      specifier: ^26.6.6
+      specifier: 26.6.6
       version: 26.6.6
     '@types/react':
-      specifier: ^19.3.0
+      specifier: 19.3.0
       version: 19.3.0
     '@types/react-dom':
-      specifier: ^19.3.0
+      specifier: 19.3.0
       version: 19.3.0
     '@vitejs/plugin-react':
-      specifier: ^6.1.2
+      specifier: 6.1.2
       version: 6.1.2
     clsx:
-      specifier: ^2.1.1
+      specifier: 2.1.1
       version: 2.1.1
     fflate:
-      specifier: ^0.8.3
+      specifier: 0.8.3
       version: 0.8.3
     lucide-react:
-      specifier: ^1.66.0
+      specifier: 1.66.0
       version: 1.66.0
     react:
       specifier: 19.3.1
@@ -46,16 +46,16 @@ catalogs:
       specifier: 19.3.1
       version: 19.3.1
     tailwind-merge:
-      specifier: ^3.7.0
+      specifier: 3.7.0
       version: 3.7.0
     tailwindcss:
-      specifier: ^4.3.3
+      specifier: 4.3.3
       version: 4.3.3
     tsx:
-      specifier: ^4.23.15
+      specifier: 4.23.15
       version: 4.23.15
     vite:
-      specifier: ^8.3.5
+      specifier: 8.3.5
       version: 8.3.5
 
 overrides:
@@ -100,7 +100,6 @@ overrides:
   esbuild>@esbuild/sunos-x64: '-'
   esbuild>@esbuild/win32-arm64: '-'
   esbuild>@esbuild/win32-ia32: '-'
-  esbuild>@esbuild/win32-x64: '-'
   lightningcss>lightningcss-android-arm64: '-'
   lightningcss>lightningcss-freebsd-x64: '-'
   lightningcss>lightningcss-linux-arm-gnueabihf: '-'
@@ -117,7 +116,7 @@ overrides:
   picomatch@<2.3.2: '>=2.3.2'
   picomatch@>=4.0.0 <4.0.4: '>=4.0.4'
   postcss@<8.5.10: '>=8.5.10'
-  brace-expansion: 5.0.11
+  brace-expansion: 5.0.12
   source-map-js: 1.2.2
   dompurify: 3.4.17
   lodash-es: 4.18.1
@@ -142,24 +141,22 @@ overrides:
   rollup>@rollup/rollup-openharmony-arm64: '-'
   rollup>@rollup/rollup-win32-arm64-msvc: '-'
   rollup>@rollup/rollup-win32-ia32-msvc: '-'
-  rollup>@rollup/rollup-win32-x64-gnu: '-'
-  rollup>@rollup/rollup-win32-x64-msvc: '-'
 
 importers:
 
   .:
     devDependencies:
       prettier:
-        specifier: ^3.9.10
+        specifier: 3.9.10
         version: 3.9.10
       typescript:
-        specifier: ~7.0.2
+        specifier: 7.0.2
         version: 7.0.2
 
   app:
     devDependencies:
       '@playwright/test':
-        specifier: ^1.64.1
+        specifier: 1.64.1
         version: 1.64.1
       '@replit/vite-plugin-cartographer':
         specifier: 'catalog:'
@@ -171,16 +168,16 @@ importers:
         specifier: 'catalog:'
         version: 0.0.6
       '@tailwindcss/typography':
-        specifier: ^0.5.20
+        specifier: 0.5.20
         version: 0.5.20(tailwindcss@4.3.3)
       '@tailwindcss/vite':
         specifier: 'catalog:'
         version: 4.3.3(vite@8.3.5(@types/node@26.6.6)(esbuild@0.28.1)(jiti@2.7.0)(tsx@4.23.15))
       '@testing-library/dom':
-        specifier: ^10.4.2
+        specifier: 10.4.2
         version: 10.4.2
       '@testing-library/react':
-        specifier: ^16.3.3
+        specifier: 16.3.3
         version: 16.3.3(@testing-library/dom@10.4.2)(@types/react-dom@19.3.0(@types/react@19.3.0))(@types/react@19.3.0)(react-dom@19.3.1(react@19.3.1))(react@19.3.1)
       '@types/node':
         specifier: 'catalog:'
@@ -195,7 +192,7 @@ importers:
         specifier: 'catalog:'
         version: 6.1.2(vite@8.3.5(@types/node@26.6.6)(esbuild@0.28.1)(jiti@2.7.0)(tsx@4.23.15))
       axe-core:
-        specifier: ^4.14.0
+        specifier: 4.14.0
         version: 4.14.0
       clsx:
         specifier: 'catalog:'
@@ -204,7 +201,7 @@ importers:
         specifier: 'catalog:'
         version: 0.8.3
       happy-dom:
-        specifier: ^21.0.4
+        specifier: 21.0.4
         version: 21.0.4
       lucide-react:
         specifier: 'catalog:'
@@ -225,16 +222,16 @@ importers:
         specifier: 'catalog:'
         version: 4.3.3
       tw-animate-css:
-        specifier: ^1.4.0
+        specifier: 1.4.0
         version: 1.4.0
       vite:
         specifier: 'catalog:'
         version: 8.3.5(@types/node@26.6.6)(esbuild@0.28.1)(jiti@2.7.0)(tsx@4.23.15)
       vitest:
-        specifier: ^5.0.5
+        specifier: 5.0.5
         version: 5.0.5(@types/node@26.6.6)(happy-dom@21.0.4)(vite@8.3.5(@types/node@26.6.6)(esbuild@0.28.1)(jiti@2.7.0)(tsx@4.23.15))
       wouter:
-        specifier: ^3.13.0
+        specifier: 3.13.0
         version: 3.13.0(react@19.3.1)
 
   lib/bpmn-plugin:
@@ -249,7 +246,7 @@ importers:
   scripts:
     dependencies:
       archiver:
-        specifier: ^8.0.0
+        specifier: 8.0.0
         version: 8.0.0
     devDependencies:
       '@types/node':
@@ -340,6 +337,12 @@ packages:
     engines: {node: '>=18'}
     cpu: [x64]
     os: [linux]
+
+  '@esbuild/win32-x64@0.28.1':
+    resolution: {integrity: sha512-bm4Mowrv+GXMlpWX++EcXw/iLyd1o3+bJkC2DkWXYVvgZCqD/bSj9ctZeAMC3cIxgjRVR2Dufaiu4YPxr5gW1A==}
+    engines: {node: '>=18'}
+    cpu: [x64]
+    os: [win32]
 
   '@iconify/types@2.0.0':
     resolution: {integrity: sha512-+wluvCrRhXrhyOmRDJ3q8mux9JkKy5SJ/v8ol2tu4FVjyYvtEzkc/3pK15ET6RKg4b4w4BmTk1+gsCUhf21Ykg==}
@@ -926,8 +929,8 @@ packages:
   base64-js@1.5.1:
     resolution: {integrity: sha512-AKpaYlHn8t4SVbOHCy+b5+KKgvR4vrsD8vbvrbiQJps7fKDTkjkDry6ji0rUJjC0kzbNePLwzxq8iypo41qeWA==}
 
-  brace-expansion@5.0.11:
-    resolution: {integrity: sha512-awigjhi6cLTh90bdw6+QJ9CtmJmyYhEIi70iCbc8Rozn04Fw9FeQIBjv/E22FFGuCGx1bLJyUfB64x/szUSXUg==}
+  brace-expansion@5.0.12:
+    resolution: {integrity: sha512-YovQ3rzhaLMIrDjNDMkNS01tea93qhEhG5xy8f6+R0l+dw3Ki+5sCoIoI942iuLZTHWogWktgwVDhU09iNEimQ==}
     engines: {node: 20 || >=22}
 
   buffer-crc32@1.0.0:
@@ -1798,6 +1801,9 @@ snapshots:
   '@esbuild/linux-x64@0.28.1':
     optional: true
 
+  '@esbuild/win32-x64@0.28.1':
+    optional: true
+
   '@iconify/types@2.0.0': {}
 
   '@iconify/utils@3.1.7':
@@ -2270,7 +2276,7 @@ snapshots:
 
   base64-js@1.5.1: {}
 
-  brace-expansion@5.0.11:
+  brace-expansion@5.0.12:
     dependencies:
       balanced-match: 4.0.4
 
@@ -2552,6 +2558,7 @@ snapshots:
       '@esbuild/darwin-arm64': 0.28.1
       '@esbuild/darwin-x64': 0.28.1
       '@esbuild/linux-x64': 0.28.1
+      '@esbuild/win32-x64': 0.28.1
 
   estree-walker@3.0.3:
     dependencies:
@@ -2725,7 +2732,7 @@ snapshots:
 
   minimatch@10.2.5:
     dependencies:
-      brace-expansion: 5.0.11
+      brace-expansion: 5.0.12
 
   modern-screenshot@4.6.8: {}
 

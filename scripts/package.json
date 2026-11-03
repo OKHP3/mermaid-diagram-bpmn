@@ -15,6 +15,6 @@
     "tsx": "catalog:"
   },
   "dependencies": {
-    "archiver": "^8.0.0"
+    "archiver": "8.0.0"
   }
 }

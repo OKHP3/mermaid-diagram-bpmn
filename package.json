@@ -44,12 +44,15 @@
     "manifest:check": "node scripts/generate-manifest.mjs --check",
     "content:hook:install": "node scripts/install-content-hook.mjs",
     "content:hook:remove": "node scripts/install-content-hook.mjs --remove",
-    "content:hook:test": "node --test scripts/install-content-hook.test.mjs"
+    "content:hook:test": "node --test scripts/install-content-hook.test.mjs",
+    "vendor:update": "node scripts/update-vendor-pins.mjs --write && node scripts/sync-mermaid-target.mjs && node scripts/generate-manifest.mjs",
+    "vendor:check": "node scripts/check-vendor-policy.mjs && node scripts/sync-mermaid-target.mjs --check && node scripts/generate-manifest.mjs --check",
+    "vendor:test": "node --test scripts/update-vendor-pins.test.mjs scripts/sync-mermaid-target.test.mjs"
   },
   "private": true,
-  "packageManager": "pnpm@10.26.1",
+  "packageManager": "pnpm@11.28.10",
   "devDependencies": {
-    "typescript": "~7.0.2",
-    "prettier": "^3.9.10"
+    "typescript": "7.0.2",
+    "prettier": "3.9.10"
   }
 }

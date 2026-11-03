@@ -1,5 +1,32 @@
 # Mermaid compatibility
 
+## Current vendor pins
+
+Current adapter target: `mermaid@12.2.0`.
+Current CDN target: `mermaid@12.2.0` with the published plugin 0.1.1.
+
+The app manifest is canonical. The source target, exact peer contract, standalone
+fixture, browser example, and generated release manifest move together.
+An update is a candidate until its full CI run passes. The daily updater opens
+a review PR only after explicit CI, including three browsers and visual checks.
+It does not publish new plugin bytes to npm or merge unreviewed candidates.
+
+Mermaid 12 requires ES2024-capable browsers (including Safari 17.4+) and Node
+22.12 or newer. Bundled consumers import the `mermaid` package. Production
+browser examples keep strict security. The happy-dom source/packed tests use
+loose security only for that DOM harness's SVG limitations.
+
+## November 3, 2026 migration evidence
+
+Replit Free tested Mermaid 12.2.0 with the existing `bpmn-beta` external diagram
+registration. The integration suite, production build, packed-plugin smoke,
+CDN asset check, and Chromium tests passed. Firefox and WebKit executables were
+absent there; GitHub CI supplies the complete three-browser and visual checks.
+The earlier records below remain evidence for their original versions only.
+See the PR and CI results for the final reviewed source revision.
+
+## Historical compatibility record
+
 ## September 20, 2026 compatibility refresh
 
 The application and current source adapter target Mermaid 11.17.2. The exact
@@ -26,20 +53,6 @@ both exact URLs; Chromium E2E exercises the published pair in strict mode.
 The packed smoke fixture tests the current source package separately. Its
 results must not be presented as evidence that npm received a new release.
 
-The source integration tests use happy-dom and `securityLevel: "loose"` because
-its SVG parsing differs from a browser. This setting is limited to that test
-harness. The real-browser host demo and standalone CDN example retain strict
-security. CI tests Chromium, Firefox and WebKit and compares Linux visual
-baselines. Their run results are the evidence for browser compatibility.
-
-The standalone CDN example pins Mermaid 12.2.0 together with the already
-published `@okhp3/mermaid-diagram-bpmn@0.1.1`. Updating the application and test
-fixture does not publish new plugin bytes to npm. The CDN checker verifies
-both exact URLs; Chromium E2E exercises the published pair in strict mode.
-
-The packed smoke fixture tests the current source package separately. Its
-results must not be presented as evidence that npm received a new release.
-
 ## Evidence locations
 
 - `app/src/lib/__tests__/bpmn-plugin-integration.test.ts`: real Mermaid source integration.
@@ -52,23 +65,3 @@ results must not be presented as evidence that npm received a new release.
 Historical August evidence used Mermaid 11.4.1. It is not evidence for this
 new target. See current CI runs and the release manifest for the reviewed
 source revision and retained limitations.
-
-## November 3, 2026 compatibility refresh
-
-The application and current source adapter target Mermaid 12.2.0. The exact
-pin is in `app/package.json`; `MERMAID_VERSION_TARGET` in
-`app/src/lib/bpmn-plugin.ts`, the source package peer declaration and packed
-consumer fixture must match it. Mermaid 12.2.0 is the tested compatibility
-point; this does not claim every Mermaid 12.x release is compatible.
-
-The real integration suite exercises `registerExternalDiagrams()` and
-`mermaid.render()` against flat and pool/lane corpus examples, theme binding,
-and invalid-input diagnostics. The current `bpmn-beta` identifier renders
-through the external-diagram registration against Mermaid 12.2.0; this confirms
-the tested pair does not collide in this release.
-
-The published CDN example remains a client-only native ESM import with strict
-security and the already-published plugin 0.1.1. Passing local checks do not
-publish new npm bytes. The packed fixture validates the current source package,
-not a new npm release. Current browser evidence: Chromium E2E passed; Firefox
-and WebKit were not run locally because their browser executables are absent.

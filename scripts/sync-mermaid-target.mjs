@@ -1,46 +1,59 @@
-import fs from 'node:fs';
-import path from 'node:path';
+import { readFileSync, writeFileSync } from 'node:fs';
+import { resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const appPackage = JSON.parse(fs.readFileSync(path.join(root, 'app/package.json'), 'utf8'));
-const version = appPackage.dependencies?.mermaid ?? appPackage.devDependencies?.mermaid;
-if (!/^\d+\.\d+\.\d+$/.test(version ?? '')) {
-  throw new Error(`Expected an exact stable Mermaid pin in app/package.json; got ${version}`);
-}
-
-const files = [
-  'app/src/lib/bpmn-plugin.ts',
-  'app/public/browser-cdn-example.html',
-  'app/e2e/browser-cdn.spec.ts',
-  'app/src/pages/PluginInstallation.tsx',
-  'scripts/check-browser-cdn.mjs',
-  'scripts/check-release-gates.mjs',
-  'README.md',
-  'docs/mermaid-compatibility.md',
-  'docs/release-gates.md',
-  'app/docs/competitive-landscape.md',
-  'lib/bpmn-plugin/README.md',
+const root = fileURLToPath(new URL('..', import.meta.url));
+export const targets = [
+  ['app/src/lib/bpmn-plugin.ts', /(?<=MERMAID_VERSION_TARGET = ')\d+\.\d+\.\d+(?=')/g, 1],
+  ['app/public/browser-cdn-example.html', /(?<=mermaid@)\d+\.\d+\.\d+/g, 2],
+  ['app/e2e/browser-cdn.spec.ts', /(?<=mermaid@)\d+\.\d+\.\d+/g, 1],
+  ['app/src/pages/PluginInstallation.tsx', /(?<=mermaid@)\d+\.\d+\.\d+/g, 1],
+  ['app/src/__tests__/a11y.test.tsx', /(?<=MERMAID_VERSION_TARGET: ')\d+\.\d+\.\d+(?=')/g, 1],
+  ['scripts/check-browser-cdn.mjs', /(?<=mermaid@)\d+\.\d+\.\d+/g, 1],
+  ['scripts/check-release-gates.mjs', /(?<=Mermaid remains pinned at )\d+\.\d+\.\d+/g, 1],
+  ['README.md', /(?<=browser-tested against `mermaid@)\d+\.\d+\.\d+/g, 1],
+  ['AGENTS.md', /(?<=which runs real `mermaid@)\d+\.\d+\.\d+/g, 1],
+  ['docs/version-checklist.md', /(?<=mermaid@)\d+\.\d+\.\d+/g, 2],
+  ['docs/mermaid-compatibility.md', /(?<=Current adapter target: `mermaid@)\d+\.\d+\.\d+/g, 1],
+  ['docs/mermaid-compatibility.md', /(?<=Current CDN target: `mermaid@)\d+\.\d+\.\d+/g, 1],
+  ['app/docs/competitive-landscape.md', /(?<=declared and locked Mermaid target is )\d+\.\d+\.\d+/g, 1],
+  ['lib/bpmn-plugin/README.md', /(?<=mermaid@)\d+\.\d+\.\d+/g, 3],
+  ['lib/bpmn-plugin/README.md', /(?<=console\.log\(MERMAID_VERSION_TARGET\); \/\/ ')\d+\.\d+\.\d+(?=')/g, 1],
 ];
-for (const relativePath of files) {
-  const absolutePath = path.join(root, relativePath);
-  let text = fs.readFileSync(absolutePath, 'utf8');
-  text = text.replace(/mermaid@(\d+\.\d+\.\d+)/g, `mermaid@${version}`);
-  text = text.replace(/MERMAID_VERSION_TARGET = '(\d+\.\d+\.\d+)'/, `MERMAID_VERSION_TARGET = '${version}'`);
-  text = text.replace(/Mermaid (\d+\.\d+\.\d+)/g, `Mermaid ${version}`);
-  text = text.replace(/at (\d+\.\d+\.\d+) with \${mermaidFindings.length}/g, `at ${version} with \${mermaidFindings.length}`);
-  fs.writeFileSync(absolutePath, text);
-}
 
-for (const relativePath of ['fixtures/plugin-smoke/package.json', 'lib/bpmn-plugin/package.json']) {
-  const absolutePath = path.join(root, relativePath);
-  const manifest = JSON.parse(fs.readFileSync(absolutePath, 'utf8'));
-  if (relativePath.startsWith('fixtures/')) {
-    const field = manifest.dependencies?.mermaid !== undefined ? 'dependencies' : 'devDependencies';
-    manifest[field].mermaid = version;
+export function synchronizationPlan(read) {
+  const app = JSON.parse(read('app/package.json'));
+  const version = app.dependencies?.mermaid ?? app.devDependencies?.mermaid;
+  if (!/^\d+\.\d+\.\d+$/.test(version ?? '')) throw new Error(`Expected exact stable Mermaid pin, got ${version}`);
+  const output = new Map();
+  for (const [file, pattern, count] of targets) {
+    const text = output.get(file) ?? read(file);
+    const matches = [...text.matchAll(pattern)];
+    if (matches.length !== count) throw new Error(`Synchronization contract changed: ${file}, expected ${count} matches, found ${matches.length}`);
+    output.set(file, text.replace(pattern, version));
   }
-  else manifest.peerDependencies.mermaid = version;
-  fs.writeFileSync(absolutePath, `${JSON.stringify(manifest, null, 2)}\n`);
+  for (const file of ['fixtures/plugin-smoke/package.json', 'lib/bpmn-plugin/package.json']) {
+    const manifest = JSON.parse(read(file));
+    if (file.startsWith('fixtures/')) {
+      const field = manifest.dependencies?.mermaid !== undefined ? 'dependencies' : 'devDependencies';
+      manifest[field].mermaid = version;
+      manifest[field]['happy-dom'] = app.devDependencies['happy-dom'];
+    } else manifest.peerDependencies.mermaid = version;
+    output.set(file, `${JSON.stringify(manifest, null, 2)}\n`);
+  }
+  return new Map([...output].filter(([file, content]) => content !== read(file)));
 }
 
-console.log(`Synchronized Mermaid ${version} across source, CDN, fixture, and current compatibility docs.`);
+if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
+  try {
+    const plan = synchronizationPlan((file) => readFileSync(resolve(root, file), 'utf8'));
+    for (const [file, content] of plan) {
+      console.log(`${process.argv.includes('--check') ? 'Drift' : 'Updated'}: ${file}`);
+      if (!process.argv.includes('--check')) writeFileSync(resolve(root, file), content);
+    }
+    if (process.argv.includes('--check') && plan.size) process.exitCode = 1;
+  } catch (error) {
+    console.error(error.message);
+    process.exitCode = 1;
+  }
+}

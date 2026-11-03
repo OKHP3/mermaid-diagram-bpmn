@@ -27,7 +27,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v7.1.0
         with:
-          node-version: "24"
+          node-version-file: .node-version
           cache: "pnpm"
 
       - name: Install dependencies
@@ -52,6 +52,19 @@ jobs:
 
       - name: Test technology inventory and release lookup failure detection
         run: pnpm run technology:test
+
+      - name: Verify coordinated stable vendor pins and update failure handling
+        run: |
+          pnpm run vendor:test
+          pnpm run vendor:check
+
+      - name: Set up the pinned Python maintenance runtime
+        uses: actions/setup-python@v7.1.0
+        with:
+          python-version-file: .python-version
+
+      - name: Test Python maintenance tooling
+        run: python -m unittest discover -s skills/okhp3-skill-promotion/tests -p 'test_*.py'
 
       - name: Test delegation scheduler and receipt rejection gates
         run: node scripts/test-delegation-controller.mjs
@@ -163,7 +176,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v7.1.0
         with:
-          node-version: "24"
+          node-version-file: .node-version
           cache: "pnpm"
 
       - name: Install dependencies
@@ -224,7 +237,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v7.1.0
         with:
-          node-version: "24"
+          node-version-file: .node-version
           cache: "pnpm"
 
       - name: Install dependencies
@@ -266,7 +279,7 @@ jobs:
       # Fails if any screenshot differs by more than the threshold defined in
       # the spec (maxDiffPixelRatio: 0.02 / 0.03).
       - name: Compare visual snapshots (pull request)
-        if: github.event_name == 'pull_request'
+        if: github.event_name == 'pull_request' || github.event_name == 'workflow_dispatch'
         run: pnpm --filter @workspace/mermaid-diagram-bpmn run test:e2e:visual
 
       - name: Upload visual regression report on failure

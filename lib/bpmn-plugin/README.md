@@ -136,7 +136,7 @@ pool order "Order Process" {
 
 ```typescript
 import { MERMAID_VERSION_TARGET } from '@okhp3/mermaid-diagram-bpmn';
-console.log(MERMAID_VERSION_TARGET); // '11.17.2'
+console.log(MERMAID_VERSION_TARGET); // '12.2.0'
 ```
 
 ---

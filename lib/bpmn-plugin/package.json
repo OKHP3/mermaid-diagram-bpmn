@@ -40,7 +40,7 @@
   },
   "homepage": "https://okhp3.github.io/mermaid-diagram-bpmn/",
   "scripts": {
-    "build": "vite build --config vite.config.ts && cp index.d.ts dist/index.d.ts && cp index.d.ts dist/index.d.cts",
+    "build": "vite build --config vite.config.ts && node ../../scripts/copy-plugin-types.mjs",
     "typecheck": "tsc -p tsconfig.json --noEmit",
     "pack:dry-run": "pnpm pack --dry-run"
   },
