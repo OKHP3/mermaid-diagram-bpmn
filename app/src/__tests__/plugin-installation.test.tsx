@@ -120,10 +120,12 @@ describe("PluginInstallation — npm status badge", () => {
     expect(badge.textContent!.toLowerCase()).toContain("published");
   });
 
-  it("install section contains the npm install command when published", () => {
+  it("both published install commands save exact pins for the tested Mermaid target", () => {
     setup();
     const section = screen.getByTestId("section-install");
-    expect(section.textContent).toContain("npm install @okhp3/mermaid-diagram-bpmn");
+    expect(section.textContent).toMatch(/npm install --save-exact @okhp3\/mermaid-diagram-bpmn@\d+\.\d+\.\d+ mermaid@/);
+    expect(section.textContent).toMatch(/pnpm add --save-exact @okhp3\/mermaid-diagram-bpmn@\d+\.\d+\.\d+ mermaid@/);
+    expect(section.textContent?.split(`mermaid@${MERMAID_VERSION_TARGET}`).length).toBe(3);
   });
 });
 
