@@ -43,7 +43,15 @@ const VIEWS = [
   "Process & diagram",
 ];
 // Retain the draft across client-side navigation, never in browser storage.
-let memory: { session: Session; text: string; dirty: boolean } | undefined;
+let memory:
+  | {
+      session: Session;
+      text: string;
+      dirty: boolean;
+      sourceName: string;
+      captureState: TranscriptRevision["state"];
+    }
+  | undefined;
 const SAMPLE = `00:00:05 Alex: We are describing how purchase requests work today. I submit the request in the procurement portal.
 00:00:18 Morgan: Finance reviews requests over $5,000.
 00:00:29 Sam: I think it is $2,500 for our department. We should check the policy.
@@ -104,9 +112,12 @@ export default function TranscriptSession() {
   );
   const [view, setView] = useState(0),
     [text, setText] = useState(memory?.text ?? ""),
-    [sourceName, setSourceName] = useState("workshop.txt");
-  const [captureState, setCaptureState] =
-    useState<TranscriptRevision["state"]>("ongoing");
+    [sourceName, setSourceName] = useState(
+      memory?.sourceName ?? "workshop.txt",
+    );
+  const [captureState, setCaptureState] = useState<TranscriptRevision["state"]>(
+    memory?.captureState ?? "ongoing",
+  );
   const [selectedRevision, setSelectedRevision] = useState(""),
     [sourcePage, setSourcePage] = useState(0);
   const [filter, setFilter] = useState(""),
@@ -127,8 +138,8 @@ export default function TranscriptSession() {
   const currentRef = useRef(session);
   currentRef.current = session;
   useEffect(() => {
-    memory = { session, text, dirty };
-  }, [session, text, dirty]);
+    memory = { session, text, dirty, sourceName, captureState };
+  }, [session, text, dirty, sourceName, captureState]);
   useEffect(() => {
     document.title = `${VIEWS[view]} | Transcript session | BPMN for Mermaid`;
   }, [view]);
@@ -189,20 +200,24 @@ export default function TranscriptSession() {
     currentRef.current = next;
     setDirty(true);
   }
-  async function run(work: () => Promise<void> | void) {
-    setBusy(true);
+  function run(work: () => Promise<void> | void) {
     setError("");
     setMessage("");
-    try {
-      await work();
-    } catch (e) {
+    const report = (e: unknown) =>
       setError(
         e instanceof Error
           ? e.message
           : "The action could not complete. Current work is retained.",
       );
-    } finally {
-      setBusy(false);
+    try {
+      const pending = work();
+      // Synchronous form edits must not disable the focused input on each key.
+      if (pending instanceof Promise) {
+        setBusy(true);
+        void pending.catch(report).finally(() => setBusy(false));
+      }
+    } catch (e) {
+      report(e);
     }
   }
   function changeView(next: number) {
@@ -321,6 +336,13 @@ export default function TranscriptSession() {
           <Download size={16} /> Save session
         </button>
       </header>
+      <button
+        className="forge-btn-outline mb-4"
+        disabled={busy}
+        onClick={() => setIncoming(emptySession())}
+      >
+        Start a new session
+      </button>
       <div className="session-retention">
         <strong>{dirty ? "Changes in memory" : "Memory-only session"}</strong>
         <span>
@@ -403,12 +425,19 @@ export default function TranscriptSession() {
               className="forge-btn-primary"
               onClick={() =>
                 run(() => {
+                  if (text.trim())
+                    throw new Error(
+                      "Add or clear the pasted transcript before opening another session. Your current work is retained.",
+                    );
                   setPrevious(session);
                   commit({
                     ...incoming,
                     rules: { ...incoming.rules, mode: "suggest" },
                   });
                   setIncoming(null);
+                  setResultPreview(null);
+                  setNotes({});
+                  setReviewer("");
                   setSelectedRevision("");
                   setApprovedSource(null);
                   heading.current?.focus();

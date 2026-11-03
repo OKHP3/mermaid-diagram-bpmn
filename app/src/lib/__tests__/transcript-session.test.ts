@@ -382,3 +382,14 @@ describe("evidence review and compatibility", () => {
     );
   });
 });
+
+it("keeps multiline and same-line VTT voice spans attached to the right speaker", () => {
+  const source =
+    "WEBVTT\n\n00:00:01.000 --> 00:00:09.000\n<v Alex>Finance reviews\nrequests over $5,000.</v>\n<v Pat>Check $2,500.</v><v Sam>Unconfirmed.</v>\n";
+  const passages = transcriptSegments(source, "teams.vtt");
+  expect(passages.map((p) => [p.speaker, p.text, p.line])).toEqual([
+    ["Alex", "Finance reviews\nrequests over $5,000.", 4],
+    ["Pat", "Check $2,500.", 6],
+    ["Sam", "Unconfirmed.", 6],
+  ]);
+});

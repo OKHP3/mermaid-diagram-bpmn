@@ -83,9 +83,7 @@ source text. Oversized input fails without truncating or silently discarding it.
 Session content is memory-only. Client-side navigation retains the current
 session and pasted text in this tab; refresh/close loses that copy. Unsaved
 session navigation and unloading show a warning where supported. Downloaded
-session files are the durable recovery path. Source filenames and unfinished
-review-note fields are not separately persisted across navigation. Import opens
-a copy with one previous session available in memory.
+session files are the durable recovery path. Unfinished review-note fields are not separately persisted across navigation. Import and Start a new session open a preview first, with one previous session available in memory after opening the copy. Add or clear pasted text before changing sessions.
 
 Session evidence is not written to localStorage, included in share URLs or sent
 to an API. A handoff download contains one activation's complete source revision,

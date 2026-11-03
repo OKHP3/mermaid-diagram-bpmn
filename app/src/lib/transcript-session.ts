@@ -150,15 +150,29 @@ export function transcriptSegments(raw: string, name: string): Segment[] {
     fail("The transcript is empty or contains binary data.");
   const lines = raw.replace(/^\uFEFF/, "").split(/\r?\n/);
   const segments: Segment[] = [];
-  const add = (text: string, line: number, timestamp = "") => {
+  const add = (
+    text: string,
+    line: number,
+    timestamp = "",
+    explicitSpeaker?: string,
+  ) => {
     const voice = text.match(
       /^<v(?:\.[\w-]+)*\s+([^>]+)>([\s\S]*?)(?:<\/v>)?$/,
     );
     const labeled = text.match(
       /^(?:\*\*)?([^:<>{}\n]{1,80}?)(?:\*\*)?:\s*(?:\*\*)?(.+)$/,
     );
-    const speaker = (voice?.[1] ?? labeled?.[1] ?? "").trim();
-    const body = (voice?.[2] ?? labeled?.[2] ?? text).trim();
+    const speaker = (
+      explicitSpeaker ??
+      voice?.[1] ??
+      labeled?.[1] ??
+      ""
+    ).trim();
+    const body = (
+      explicitSpeaker !== undefined
+        ? text
+        : (voice?.[2] ?? labeled?.[2] ?? text)
+    ).trim();
     if (body)
       segments.push({
         id: `seg-${segments.length + 1}`,
@@ -195,10 +209,30 @@ export function transcriptSegments(raw: string, name: string): Segment[] {
       const text: string[] = [];
       while (i < lines.length && lines[i].trim()) text.push(lines[i++]);
       if (!text.length) fail("A VTT cue contains no text.");
-      // Multiple voice lines retain separate speaker attribution.
-      if (text.some((l) => /^<v[ .]/.test(l)))
-        text.forEach((l, n) => add(l, start + n + 1, timing[1]));
-      else add(text.join("\n"), start + 1, timing[1]);
+      // Voice spans may cross lines or share one line. Keep attribution until
+      // the closing tag or next voice, while retaining raw markup separately.
+      const cue = text.join("\n");
+      const tags = [...cue.matchAll(/<v(?:\.[\w-]+)*\s+([^>]+)>|<\/v>/g)];
+      if (!tags.length) add(cue, start + 1, timing[1]);
+      else {
+        let cursor = 0,
+          speaker = "";
+        const passage = (end: number) => {
+          const value = cue.slice(cursor, end);
+          const leading = value.match(/^\s*/)?.[0] ?? "";
+          const line =
+            start +
+            1 +
+            (cue.slice(0, cursor + leading.length).match(/\n/g)?.length ?? 0);
+          add(value, line, timing[1], speaker);
+        };
+        for (const tag of tags) {
+          passage(tag.index!);
+          speaker = tag[1]?.trim() ?? "";
+          cursor = tag.index! + tag[0].length;
+        }
+        passage(cue.length);
+      }
     }
   } else {
     lines.forEach((line, index) => {

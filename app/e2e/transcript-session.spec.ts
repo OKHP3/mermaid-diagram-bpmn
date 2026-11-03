@@ -26,6 +26,18 @@ test("transcript, six-skill handoff, evidence review, apply and saved-session re
   page,
 }) => {
   await workshop(page);
+  await page
+    .getByLabel("Session name", { exact: true })
+    .pressSequentially("Procurement workshop");
+  await expect(page.getByLabel("Session name", { exact: true })).toHaveValue(
+    "Procurement workshop",
+  );
+  await page
+    .getByLabel("Role or roles for Alex")
+    .pressSequentially("Requester");
+  await expect(page.getByLabel("Role or roles for Alex")).toHaveValue(
+    "Requester",
+  );
   await page.getByRole("button", { name: "02 Activations" }).click();
   await expect(
     page.getByRole("heading", { name: "Activations", exact: true }),
@@ -185,23 +197,19 @@ test("file validation preserves the current session and source text remains iner
   page,
 }) => {
   await workshop(page);
-  await page
-    .getByLabel("Import transcript file")
-    .setInputFiles({
-      name: "binary.txt",
-      mimeType: "text/plain",
-      buffer: Buffer.from([0xff, 0xfe, 0x00]),
-    });
+  await page.getByLabel("Import transcript file").setInputFiles({
+    name: "binary.txt",
+    mimeType: "text/plain",
+    buffer: Buffer.from([0xff, 0xfe, 0x00]),
+  });
   await expect(page.getByRole("alert")).toContainText("UTF-8");
-  await page
-    .getByLabel("Import transcript file")
-    .setInputFiles({
-      name: "export.vtt",
-      mimeType: "text/vtt",
-      buffer: Buffer.from(
-        "WEBVTT\n\n00:00:01.000 --> 00:00:03.000\n<v Alex><img src=x onerror=alert(1)></v>\n",
-      ),
-    });
+  await page.getByLabel("Import transcript file").setInputFiles({
+    name: "export.vtt",
+    mimeType: "text/vtt",
+    buffer: Buffer.from(
+      "WEBVTT\n\n00:00:01.000 --> 00:00:03.000\n<v Alex><img src=x onerror=alert(1)></v>\n",
+    ),
+  });
   await expect(page.locator(".session-source")).toContainText(
     "<img src=x onerror=alert(1)>",
   );
@@ -234,6 +242,11 @@ for (const theme of ["light", "dark"])
       });
     });
     await workshop(page);
+    if (theme === "dark")
+      await page.getByRole("button", { name: "Toggle dark mode" }).click();
+    await expect(page.locator("html")).toHaveClass(
+      theme === "dark" ? /dark/ : /^(?!.*dark)/,
+    );
     for (const name of ["02 Activations", "03 Evidence review", "01 Sources"]) {
       await page.getByRole("button", { name }).click();
       expect(
@@ -265,3 +278,23 @@ for (const theme of ["light", "dark"])
       JSON.parse((await downloaded(await saved)).toString()).revisions,
     ).toHaveLength(1);
   });
+
+test("new-session preview keeps the current session recoverable", async ({
+  page,
+}) => {
+  await workshop(page);
+  await page.getByRole("button", { name: "Start a new session" }).click();
+  await page.getByRole("button", { name: "Keep current session" }).click();
+  await expect(
+    page.getByLabel("Source revision").locator("option"),
+  ).toHaveCount(1);
+  await page.getByRole("button", { name: "Start a new session" }).click();
+  await page.getByRole("button", { name: "Open imported copy" }).click();
+  await expect(page.getByLabel("Source revision")).toHaveCount(0);
+  await page
+    .getByRole("button", { name: "Return to previous in-memory session" })
+    .click();
+  await expect(
+    page.getByLabel("Source revision").locator("option"),
+  ).toHaveCount(1);
+});
