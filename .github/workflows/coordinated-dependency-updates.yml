@@ -44,7 +44,7 @@ jobs:
           node-version-file: .node-version
       - name: Select mature stable vendor pins, including future Mermaid majors
         run: |
-          node --test scripts/update-vendor-pins.test.mjs scripts/sync-mermaid-target.test.mjs
+          node --test scripts/update-vendor-pins.test.mjs scripts/sync-mermaid-target.test.mjs scripts/release-manifest-state.test.mjs
           node scripts/update-vendor-pins.mjs --write
           node scripts/sync-mermaid-target.mjs
           node scripts/generate-manifest.mjs

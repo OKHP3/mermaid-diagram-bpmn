@@ -47,7 +47,7 @@
     "content:hook:test": "node --test scripts/install-content-hook.test.mjs",
     "vendor:update": "node scripts/update-vendor-pins.mjs --write && node scripts/sync-mermaid-target.mjs && node scripts/generate-manifest.mjs",
     "vendor:check": "node scripts/check-vendor-policy.mjs && node scripts/sync-mermaid-target.mjs --check && node scripts/generate-manifest.mjs --check",
-    "vendor:test": "node --test scripts/update-vendor-pins.test.mjs scripts/sync-mermaid-target.test.mjs"
+    "vendor:test": "node --test scripts/update-vendor-pins.test.mjs scripts/sync-mermaid-target.test.mjs scripts/release-manifest-state.test.mjs"
   },
   "private": true,
   "packageManager": "pnpm@11.28.10",

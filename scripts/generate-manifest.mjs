@@ -21,6 +21,7 @@
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import { retainUnchangedManifestDate } from './release-manifest-state.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, '..');
@@ -203,5 +204,6 @@ if (CHECK_MODE) {
 
 const outDir = path.dirname(OUT_PATH);
 if (!fs.existsSync(outDir)) fs.mkdirSync(outDir, { recursive: true });
-fs.writeFileSync(OUT_PATH, JSON.stringify(manifest, null, 2) + '\n', 'utf8');
+const previous = fs.existsSync(OUT_PATH) ? JSON.parse(fs.readFileSync(OUT_PATH, 'utf8')) : undefined;
+fs.writeFileSync(OUT_PATH, JSON.stringify(retainUnchangedManifestDate(manifest, previous), null, 2) + '\n', 'utf8');
 console.log(`Wrote app/public/release-manifest.json`);
