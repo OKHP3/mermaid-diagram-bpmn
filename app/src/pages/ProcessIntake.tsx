@@ -1,4 +1,4 @@
-import { lazy, Suspense, useEffect, useMemo, useRef, useState, useId } from "react";
+import { lazy, Suspense, useEffect, useLayoutEffect, useMemo, useRef, useState, useId } from "react";
 import { Link } from "wouter";
 import {
   ArrowRight,
@@ -96,13 +96,19 @@ export default function ProcessIntake() {
   const heading = useRef<HTMLHeadingElement>(null);
   const importHeading = useRef<HTMLHeadingElement>(null);
   const importInput = useRef<HTMLInputElement>(null);
+  const focusStage = useRef(false);
   useEffect(() => {
     document.title = `${STAGES[stage]} | Guided intake | BPMN for Mermaid`;
   }, [stage]);
-  useEffect(() => {
+  useLayoutEffect(() => {
+    if (focusStage.current) {
+      focusStage.current = false;
+      heading.current?.focus();
+    }
+  }, [stage, candidate]);
+  useLayoutEffect(() => {
     if (!candidate || stage !== 3) return;
-    const frame = requestAnimationFrame(() => importHeading.current?.focus());
-    return () => cancelAnimationFrame(frame);
+    importHeading.current?.focus();
   }, [candidate, stage]);
   const drafts = useWorkbenchDrafts({
     prefix: INTAKE_DRAFT_PREFIX,
@@ -174,9 +180,10 @@ export default function ProcessIntake() {
     return true;
   }
   function navigate(next: number) {
+    if (next === stage) heading.current?.focus();
+    else focusStage.current = true;
     setStage(next);
     setMessage("");
-    requestAnimationFrame(() => heading.current?.focus());
   }
   async function chooseFile(file: File | undefined) {
     if (!file) return;
@@ -1009,7 +1016,7 @@ export default function ProcessIntake() {
                     <button
                       className="forge-btn-primary"
                       onClick={() => {
-                        if (replace(candidate)) requestAnimationFrame(() => heading.current?.focus());
+                        if (replace(candidate)) focusStage.current = true;
                       }}
                     >
                       Apply imported copy

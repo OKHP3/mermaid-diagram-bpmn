@@ -212,7 +212,10 @@ jobs:
         uses: actions/upload-artifact@v7.0.2
         with:
           name: playwright-report-${{ matrix.browser }}
-          path: app/playwright-report/
+          path: |
+            app/playwright-report/
+            app/test-results/
+            app/e2e-results.json
           retention-days: 14
 
   visual-regression:

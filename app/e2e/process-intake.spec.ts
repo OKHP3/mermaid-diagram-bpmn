@@ -219,6 +219,7 @@ test("unsupported imports do not replace current work and recorded review resets
   await page
     .getByLabel("Process name", { exact: true })
     .fill("Purchase approval revised");
+  await expect(page.getByLabel("Process name", { exact: true })).toHaveValue("Purchase approval revised");
   await page.getByRole("button", { name: "04 Review result" }).click();
   await expect(page.getByText("Not recorded", { exact: true })).toBeVisible();
 });
