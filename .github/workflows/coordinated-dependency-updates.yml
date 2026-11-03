@@ -5,11 +5,6 @@ on:
     - cron: "15 9 * * *"
   workflow_dispatch:
 
-permissions:
-  contents: write
-  pull-requests: write
-  actions: write
-
 jobs:
   candidate:
     runs-on: ubuntu-latest
