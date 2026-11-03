@@ -71,6 +71,30 @@ Sources: [Mermaid releases](https://github.com/mermaid-js/mermaid/releases),
 
 ## Local maintenance
 
+### License evidence after the pnpm 11 migration
+
+The release gate scans all workspace dependencies with `licenses list
+--recursive --json`. This static application's runtime imports are declared in
+`devDependencies`; `--prod` at the workspace root would silently omit them.
+Empty or malformed scans fail. The package-manager gate compares the actual
+running version with the exact manifest declaration instead of an old constant.
+
+Mermaid bundles `elkjs` under EPL-2.0, an approved weak-copyleft license in this
+project's release policy. `khroma@2.1.0` lacks SPDX metadata, but its installed
+`license` file is MIT; the gate verifies the reviewed file's SHA-256. Every
+production build includes `third-party-notices.txt` with both installed vendor
+license texts and upstream source locations. These libraries are unmodified.
+Sources: [ELK license](https://github.com/kieler/elkjs/blob/master/LICENSE.md)
+and [Khroma license](https://github.com/fabiospampinato/khroma/blob/master/license).
+
+Three Replit Vite tools have missing license metadata. The gate records their
+exact reviewed versions separately, and the Vite configuration includes them
+only for `serve`, never `build`. This is a development-only exception, not a
+license claim. A changed version or any other unknown license blocks the
+candidate until reviewed. No blanket `Unknown` allowance is used.
+
+### Commands
+
 Use the exact pnpm in `packageManager`, then run:
 
 ```sh
