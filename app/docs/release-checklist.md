@@ -66,6 +66,10 @@ Run `pnpm run check:roadmap-evidence` to confirm that
 - [ ] DSL Reference route: `/dsl`
 - [ ] Maintainer reviewed that each source still supports the nearby evidence claim;
   this review is separate from contribution-readiness status decisions
+- [ ] `pnpm run check:roadmap-live-evidence` — all four external sources report
+  reachable; an `UNVERIFIED` result is not a pass and needs a retry or manual review
+- [ ] `pnpm --filter @workspace/mermaid-diagram-bpmn run test:e2e:roadmap-evidence`
+  — browser confirms both internal evidence routes load
 
 ---
 
