@@ -28,7 +28,7 @@ test("detects a fresh stable release without advancing before maturity", () => {
   assert.equal(r.latest, "12.3.0");
   assert.equal(r.status, "waiting-for-maturity");
   assert.equal(r.dispatch, false);
-  assert.equal(r.eligibleAt, "2026-11-04T13:18:31.144Z");
+  assert.equal(r.latestEligibleAt, "2026-11-04T13:18:31.144Z");
 });
 test("dispatches at the maturity boundary and avoids repeating an existing candidate", () => {
   const now = Date.parse("2026-11-04T13:18:31.144Z");
@@ -119,4 +119,24 @@ test("does not downgrade newer pins or dispatch future or deprecated releases", 
     ).latest,
     "12.2.0",
   );
+});
+
+test("reports the actual eligible dispatch separately from a newer immature release", () => {
+  const state = releaseState(
+    metadata,
+    releases,
+    "12.1.0",
+    undefined,
+    24,
+    Date.parse("2026-11-03T18:00:00Z"),
+  );
+  assert.equal(state.latest, "12.3.0");
+  assert.equal(state.dispatch, true);
+  assert.deepEqual(state.dispatchTarget, {
+    version: "12.2.0",
+    eligibleAt: "2026-11-02T00:00:00.000Z",
+    releaseUrl: releases[0].html_url,
+  });
+  assert.equal(state.latestEligibleAt, "2026-11-04T13:18:31.144Z");
+  assert.equal(state.latestReleaseUrl, releases[1].html_url);
 });

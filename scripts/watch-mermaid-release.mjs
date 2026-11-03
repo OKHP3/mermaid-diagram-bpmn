@@ -76,13 +76,22 @@ export function releaseState(
     candidate: candidate ?? null,
     latest,
     eligible: eligible ?? null,
-    publishedAt: new Date(releaseTime(latest)).toISOString(),
-    eligibleAt: new Date(
+    latestPublishedAt: new Date(releaseTime(latest)).toISOString(),
+    latestEligibleAt: new Date(
       releaseTime(latest) + ageHours * 3_600_000,
     ).toISOString(),
     status,
     dispatch,
-    releaseUrl: vendor.get(latest).html_url,
+    latestReleaseUrl: vendor.get(latest).html_url,
+    dispatchTarget: dispatch
+      ? {
+          version: eligible,
+          eligibleAt: new Date(
+            releaseTime(eligible) + ageHours * 3_600_000,
+          ).toISOString(),
+          releaseUrl: vendor.get(eligible).html_url,
+        }
+      : null,
   };
 }
 
@@ -140,7 +149,7 @@ if (
     if (process.env.GITHUB_STEP_SUMMARY)
       appendFileSync(
         process.env.GITHUB_STEP_SUMMARY,
-        `## Mermaid release detection\n\nPinned: ${result.current}. Latest stable: ${result.latest}. Candidate: ${result.candidate ?? "none"}.\n\nStatus: **${result.status}**. Eligible at ${result.eligibleAt}.\n\n[Vendor release](${result.releaseUrl}). Detection is separate from compatibility validation, merge and deployment.\n`,
+        `## Mermaid release detection\n\nPinned: ${result.current}. Latest stable: ${result.latest}. Candidate: ${result.candidate ?? "none"}.\n\nStatus: **${result.status}**. Latest release eligible at ${result.latestEligibleAt}.\n\n[Latest vendor release](${result.latestReleaseUrl}). ${result.dispatchTarget ? `Dispatching candidate ${result.dispatchTarget.version}, eligible since ${result.dispatchTarget.eligibleAt}: ${result.dispatchTarget.releaseUrl}.` : "No new candidate dispatch requested."} Detection is separate from compatibility validation, merge and deployment.\n`,
       );
   } catch (error) {
     console.error(error.message);
