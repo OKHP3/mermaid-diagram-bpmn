@@ -52,3 +52,15 @@ test('mobile views, keyboard selection, and full labels remain usable', async ({
   const svgBox = await canvas.locator('svg').boundingBox();
   expect(svgBox!.height).toBeLessThanOrEqual(canvasBox!.height + 1);
 });
+test('a long warning list remains scrollable without hiding the source editor', async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto('playground?view=source');
+  const editor = page.getByTestId('textarea-bpmn-source');
+  await editor.fill('bpmn-beta\n' + Array.from({ length: 30 }, (_, i) => `task t${i} "Disconnected ${i}"`).join('\n'));
+  const warnings = page.getByTestId('div-lint-warnings');
+  await expect(warnings).toBeVisible();
+  expect(await warnings.evaluate(el => el.scrollHeight > el.clientHeight)).toBe(true);
+  expect((await editor.boundingBox())!.height).toBeGreaterThan(160);
+  await editor.fill(source);
+  await expect(warnings).toBeHidden();
+});

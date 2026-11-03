@@ -657,6 +657,7 @@
 .workbench-source[hidden], .workbench-preview[hidden] { display: none; }
 .workbench-renderer > div { width: 100%; height: 100%; }
 .workbench-source textarea { font-size: 13px; line-height: 1.65; }
+.workbench-source [data-testid="div-lint-warnings"] { max-height: 160px; overflow-y: auto; flex-shrink: 0; }
 .workbench[data-view="split"] .workbench-panels { grid-template-columns: minmax(0, .85fr) minmax(0, 1.15fr); }
 .workbench[data-view="split"] .workbench-source { border-right: 1px solid hsl(var(--border)); }
 .workbench-preview > div:first-child button { min-width: 38px; min-height: 40px; }
