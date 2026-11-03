@@ -1,5 +1,5 @@
 import { Link } from "wouter";
-import type { CSSProperties } from "react";
+import { useEffect, type CSSProperties } from "react";
 import { ArrowRight, GitBranch, FileCode2, Layers, CheckCircle2, CheckCheck, FlaskConical, Clock, XCircle, Users, Building2, Bot, BookOpen, GitPullRequest } from "lucide-react";
 import { StatusRibbon } from "@/components/StatusRibbon";
 import { ExternalLinkAnchor } from "@/components/ExternalLinkAnchor";
@@ -184,6 +184,7 @@ function MatrixCol({ icon: Icon, label, items, iconClass, headerClass }: MatrixC
 // ── Page ──────────────────────────────────────────────────────────────────────
 
 export default function Home() {
+  useEffect(() => { document.title = "BPMN for Mermaid"; }, []);
   return (
     <div className="flex flex-col">
 

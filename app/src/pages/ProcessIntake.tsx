@@ -1,4 +1,4 @@
-import { lazy, Suspense, useMemo, useRef, useState, useId } from "react";
+import { lazy, Suspense, useEffect, useMemo, useRef, useState, useId } from "react";
 import { Link } from "wouter";
 import {
   ArrowRight,
@@ -94,6 +94,16 @@ export default function ProcessIntake() {
   const [reviewNotes, setReviewNotes] = useState("");
   const [diagramView, setDiagramView] = useState(false);
   const heading = useRef<HTMLHeadingElement>(null);
+  const importHeading = useRef<HTMLHeadingElement>(null);
+  const importInput = useRef<HTMLInputElement>(null);
+  useEffect(() => {
+    document.title = `${STAGES[stage]} | Guided intake | BPMN for Mermaid`;
+  }, [stage]);
+  useEffect(() => {
+    if (!candidate || stage !== 3) return;
+    const frame = requestAnimationFrame(() => importHeading.current?.focus());
+    return () => cancelAnimationFrame(frame);
+  }, [candidate, stage]);
   const drafts = useWorkbenchDrafts({
     prefix: INTAKE_DRAFT_PREFIX,
     noun: "process brief",
@@ -950,6 +960,7 @@ export default function ProcessIntake() {
                   </small>
                 </span>
                 <input
+                  ref={importInput}
                   aria-label="Import process result"
                   type="file"
                   accept=".json,.mmd"
@@ -969,7 +980,7 @@ export default function ProcessIntake() {
                   className="intake-import-preview"
                   aria-label="Import preview"
                 >
-                  <h3>Review before applying</h3>
+                  <h3 ref={importHeading} tabIndex={-1}>Review before applying</h3>
                   <p>
                     <strong>
                       {candidate.pir.process_name || "Untitled process"}
@@ -997,13 +1008,18 @@ export default function ProcessIntake() {
                   <div className="intake-actions">
                     <button
                       className="forge-btn-primary"
-                      onClick={() => replace(candidate)}
+                      onClick={() => {
+                        if (replace(candidate)) requestAnimationFrame(() => heading.current?.focus());
+                      }}
                     >
                       Apply imported copy
                     </button>
                     <button
                       className="forge-btn-outline"
-                      onClick={() => setCandidate(null)}
+                      onClick={() => {
+                        setCandidate(null);
+                        importInput.current?.focus();
+                      }}
                     >
                       Cancel import
                     </button>

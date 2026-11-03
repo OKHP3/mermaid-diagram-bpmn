@@ -129,6 +129,10 @@ function toFilenameSlug(name: string): string {
 type WorkspaceView = "diagram" | "source" | "split";
 
 export default function Playground({ processSession }: { processSession?: { source: string; onChange: (source: string) => void } } = {}) {
+  const embedded = Boolean(processSession);
+  useEffect(() => {
+    if (!embedded) document.title = "Workbench | BPMN for Mermaid";
+  }, [embedded]);
   const [workspaceView, setWorkspaceView] = useState<WorkspaceView>(() => {
     const view = new URLSearchParams(window.location.search).get("view");
     return view === "source" || view === "split" ? view : "diagram";

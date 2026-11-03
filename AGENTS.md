@@ -213,6 +213,13 @@ node scripts/test-delegation-controller.mjs
 node --test scripts/check-release-gates.test.mjs
 ```
 
+Phase 3's analyst study and manual assistive technology protocol is maintained
+in `docs/experience-evaluation.md`. The development-only
+`app/scripts/measure-experience.mjs` records repeated local production-preview
+measurements to an explicit absolute output path. Keep raw reports and private
+participant records in the owner's approved project artifact home. Automated
+checks do not count as analyst sessions or screen reader observations.
+
 The application build generates `app/public/skills/`,
 `app/public/context/`, and `app/dist/public/`. The first two are generated
 static inputs and the last is build output. Do not hand-edit them. When

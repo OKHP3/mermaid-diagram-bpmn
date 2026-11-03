@@ -778,6 +778,8 @@
 .intake-file input::file-selector-button { padding: 10px 14px; border: 1px solid hsl(var(--border)); border-radius: 5px; margin-right: 12px; cursor: pointer; }
 .intake-import-preview { padding: 24px; background: hsl(var(--muted)); border: 1px solid hsl(var(--border)); margin-top: 24px; border-radius: 8px; overflow-wrap: anywhere; }
 .intake-import-preview h3 { font-weight: 650; font-size: 18px; }
+.intake-content h2, .intake-import-preview h3 { scroll-margin-top: 80px; }
+.intake-content h2:focus-visible, .intake-import-preview h3:focus-visible { outline: 2px solid hsl(var(--primary)); outline-offset: 4px; }
 .intake-import-preview p { margin-top: 12px; font-size: 14px; line-height: 1.7; }
 .intake-content pre { max-height: 350px; overflow: auto; padding: 16px; font-size: 12px; white-space: pre-wrap; overflow-wrap: anywhere; background: hsl(var(--muted)); }
 .intake-error { color: hsl(var(--foreground)); border-left: 3px solid hsl(var(--destructive)); padding-left: 12px; margin-block: 16px; font-size: 14px; overflow-wrap: anywhere; }
