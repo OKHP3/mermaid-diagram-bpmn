@@ -32,6 +32,8 @@
     "check:dfki-7699:test": "node --test scripts/check-dfki-7699.test.mjs",
     "check:roadmap-evidence": "node scripts/check-roadmap-evidence.mjs",
     "check:roadmap-evidence:test": "node --test scripts/check-roadmap-evidence.test.mjs",
+    "check:roadmap-live-evidence": "node scripts/check-roadmap-live-evidence.mjs",
+    "check:roadmap-live-evidence:test": "node --test scripts/check-roadmap-live-evidence.test.mjs",
     "check:comparison-evidence": "node scripts/check-comparison-evidence.mjs",
     "check:comparison-evidence:test": "node --test scripts/check-comparison-evidence.test.mjs",
     "check:version-status": "node scripts/check-version-status.mjs",
