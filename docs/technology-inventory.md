@@ -20,7 +20,7 @@ These are snapshot observations, not upgrades performed by this change. npm comp
 | Tailwind CSS / Vite adapter | 4.3.3 / 4.3.3               | 4.3.3 / 4.3.3                             | Current                                                               |
 | Vitest                      | 5.0.2                       | 5.0.2                                     | Major update; all required checks passed                              |
 | Playwright                  | 1.63.0                      | 1.63.0                                    | Current; test all three engines                                       |
-| Mermaid                     | 11.17.2                     | 12.0.0                                    | Stay on 11.x until compatibility migration passes                     |
+| Mermaid                     | 12.2.0                      | 12.2.0                                    | Exact tested target; daily coordinated updates run compatibility gates |
 | lucide-react                | 1.48.0                      | 1.48.0                                    | Current; visual checks passed                                         |
 | wouter                      | 3.11.0                      | 3.11.1                                    | Hold until the 24-hour release-maturity window passes                  |
 | happy-dom                   | 20.14.5                     | 20.14.5                                   | Current                                                               |

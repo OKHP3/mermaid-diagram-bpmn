@@ -89,7 +89,7 @@ is contributor recognition, not maintainer endorsement or a decision about core
 integration versus external plugins. The contributor also flags a potential
 `bpmn-beta` detector collision if native support ships in
 [#2623](https://github.com/mermaid-js/mermaid/issues/2623#issuecomment-5615197016).
-The project's declared and locked Mermaid target is 11.17.2; this source review does not
+The project's declared and locked Mermaid target is 12.2.0; this source review does not
 extend that compatibility claim. The older dated observations below remain
 historical; they do not describe the current number of competing implementations.
 The public comparison now links this series. The DFKI author's examples remain
@@ -320,7 +320,7 @@ A pure open-source plugin is unlikely to be a revenue product on its own. The pl
 - File a comment on Mermaid issue #7699 introducing bpmn-beta as prior art, professionally and without confrontation.
 
 **Phase D outreach completed 2026-08-05:**
-A comment was posted on Mermaid issue #7699 introducing `bpmn-beta` as a working prototype with a different DSL approach. Comment URL: https://github.com/mermaid-js/mermaid/issues/7699#issuecomment-5196155299. The comment included: repo link, live demo link, side-by-side syntax comparison, `mermaid@11.4.1` integration test reference, and three open questions inviting maintainer input before a Langium grammar port. See `app/docs/decisions.md` DEC-012 for the full execution record.
+A comment was posted on Mermaid issue #7699 introducing `bpmn-beta` as a working prototype with a different DSL approach. Comment URL: https://github.com/mermaid-js/mermaid/issues/7699#issuecomment-5196155299. The comment included: repo link, live demo link, side-by-side syntax comparison, `mermaid@12.2.0` integration test reference, and three open questions inviting maintainer input before a Langium grammar port. See `app/docs/decisions.md` DEC-012 for the full execution record.
 
 Comments were also posted on issue #2623 (https://github.com/mermaid-js/mermaid/issues/2623#issuecomment-5198000488) and issue #660 (https://github.com/mermaid-js/mermaid/issues/660#issuecomment-5198000626) on the same date.
 

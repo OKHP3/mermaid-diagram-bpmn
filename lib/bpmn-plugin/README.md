@@ -61,7 +61,7 @@ For a no-bundler proof, use the exact tested pair below in a modern browser:
 ```html
 <script type="module">
   const [{ default: mermaid }, { bpmnPlugin }] = await Promise.all([
-    import('https://cdn.jsdelivr.net/npm/mermaid@11.17.2/+esm'),
+    import('https://cdn.jsdelivr.net/npm/mermaid@12.2.0/+esm'),
     import('https://cdn.jsdelivr.net/npm/@okhp3/mermaid-diagram-bpmn@0.1.1/dist/index.mjs'),
   ]);
   mermaid.initialize({ startOnLoad: false, securityLevel: 'strict' });
@@ -71,7 +71,7 @@ For a no-bundler proof, use the exact tested pair below in a modern browser:
 </script>
 ```
 
-This is a supported proof for `mermaid@11.17.2` with
+This is a supported proof for `mermaid@12.2.0` with
 `@okhp3/mermaid-diagram-bpmn@0.1.1`, using native browser ESM and the default
 strict Mermaid security boundary. The plugin must load after Mermaid
 registration is available; the example registers it explicitly before
@@ -130,7 +130,7 @@ pool order "Order Process" {
 
 | Plugin version | Mermaid target |
 |---|---|
-| 0.1.x | `mermaid@11.17.2` |
+| 0.1.x | `mermaid@12.2.0` |
 
 `MERMAID_VERSION_TARGET` is exported for version-pin assertions:
 

@@ -2,7 +2,8 @@
 # BPMN for Mermaid is a personal OverKill Hill P³ project by Jamie Hill.
 #
 # Update policy:
-# - Dependabot opens PRs for npm and GitHub Actions dependency updates.
+# - Daily npm updates are coordinated by coordinated-dependency-updates.yml.
+# - Dependabot owns GitHub Actions updates only.
 # - The deployment workflow validates the production build on pushes to main.
 # - All PRs require human review and merge.
 # - Mermaid major version upgrades require manual review of the plugin contract
@@ -12,45 +13,6 @@
 
 version: 2
 updates:
-  - package-ecosystem: "npm"
-    directory: "/"
-    schedule:
-      interval: "daily"
-    cooldown:
-      default-days: 1
-    open-pull-requests-limit: 5
-    labels:
-      - "dependencies"
-      - "npm"
-    commit-message:
-      prefix: "chore(deps)"
-    groups:
-      react:
-        patterns: ["react", "react-dom", "@types/react", "@types/react-dom"]
-        update-types: ["minor", "patch"]
-      tailwind:
-        patterns: ["tailwindcss", "@tailwindcss/*", "tailwind-merge"]
-        update-types: ["minor", "patch"]
-      tooling-and-utilities:
-        patterns: ["*"]
-        exclude-patterns:
-          [
-            "mermaid",
-            "lucide-react",
-            "react",
-            "react-dom",
-            "@types/react",
-            "@types/react-dom",
-            "tailwindcss",
-            "@tailwindcss/*",
-            "tailwind-merge",
-          ]
-        update-types: ["minor", "patch"]
-    ignore:
-      # Mermaid major version upgrades require plugin contract review: handle manually.
-      - dependency-name: "mermaid"
-        update-types: ["version-update:semver-major"]
-
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:

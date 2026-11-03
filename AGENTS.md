@@ -38,7 +38,7 @@ plugin or BPMN execution platform.
 - `app/src/lib/bpmn-plugin.ts` is an adapter source file. End-to-end validation
   against a live Mermaid `registerExternalDiagrams()` and `mermaid.render()`
   host is verified by `app/src/lib/__tests__/bpmn-plugin-integration.test.ts`,
-  which runs real `mermaid@11.17.2` against two corpus examples and is a
+  which runs real `mermaid@12.2.0` against two corpus examples and is a
   merge-blocking CI check. See `docs/mermaid-compatibility.md` for the full
   evidence record. The package boundary exists under `lib/bpmn-plugin`, with a
   clean-install fixture in `fixtures/plugin-smoke`. The real-browser host demo

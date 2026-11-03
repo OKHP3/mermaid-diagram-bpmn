@@ -25,7 +25,7 @@ The report is deliberately a release decision, not a claim that every check has 
 
 - The 2026-10-06 lockfile audit reports zero high/critical findings after patching the existing transitive overrides to `brace-expansion` 5.0.11 and `source-map-js` 1.2.2. Earlier override repairs remain in place. [Brace expansion advisory](https://github.com/advisories/GHSA-qhr7-859c-m2p7) and [source map advisory](https://github.com/advisories/GHSA-68fv-2mgg-jv7q) identify the patched versions.
 - Three low and two moderate findings remain visible in DOMPurify, KaTeX, brace expansion, and the build-time PostCSS selector parser. Packaging uses repository-owned patterns; build-time selectors come from repository source. Sanitizer and math dependencies remain subject to the tested Mermaid compatibility pair and strict browser-host contract. This bounded mitigation is not a vulnerability-free claim; dependency changes require integration/browser/CDN review.
-- The declared and locked Mermaid target is `11.17.2`. An older local install at `11.4.1` is an environment mismatch, not the canonical compatibility contract.
+- The declared and locked Mermaid target is `12.2.0`. The exact pinned target is covered by the source integration suite, fixture, and CDN/browser checks; see `docs/mermaid-compatibility.md`.
 - Browser evidence must identify its actual host. Firefox and WebKit launch evidence comes from the CI matrix; no Windows or assistive-technology result is inferred from Linux checks.
 - Unknown license metadata remains a blocking finding until each package is identified from authoritative package metadata or removed.
 

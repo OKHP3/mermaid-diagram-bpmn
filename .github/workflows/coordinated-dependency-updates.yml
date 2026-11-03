@@ -1,0 +1,88 @@
+name: Coordinated dependency updates
+
+on:
+  schedule:
+    - cron: "15 9 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+  actions: write
+
+jobs:
+  candidate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v7.0.1
+      - uses: pnpm/action-setup@v6.1.0
+      - uses: actions/setup-node@v7.1.0
+        with:
+          node-version: "24"
+          cache: pnpm
+      - name: Create or continue the single candidate branch
+        env:
+          BRANCH: automation/coordinated-dependency-updates
+        run: |
+          git fetch origin main
+          if git ls-remote --exit-code origin "refs/heads/$BRANCH" >/dev/null 2>&1; then
+            git fetch origin "$BRANCH"
+            git switch --create "$BRANCH" "refs/remotes/origin/$BRANCH"
+          else
+            git switch --create "$BRANCH" origin/main
+          fi
+          git merge --no-edit origin/main
+      - run: pnpm install --frozen-lockfile
+      - name: Update all workspace dependencies, including Mermaid majors
+        run: pnpm update --recursive --latest
+      - name: Synchronize Mermaid fixture and browser integrations
+        run: node scripts/sync-mermaid-target.mjs
+      - run: pnpm run manifest:generate
+      - run: pnpm install --no-frozen-lockfile
+      - name: Commit and push the candidate branch
+        id: candidate
+        env:
+          BRANCH: automation/coordinated-dependency-updates
+        run: |
+          git add -u
+          if git diff --cached --quiet; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "chore(deps): coordinated stable dependency update"
+          git push origin "HEAD:refs/heads/$BRANCH"
+          echo "changed=true" >> "$GITHUB_OUTPUT"
+      - name: Dispatch and wait for full CI on the candidate ref
+        if: steps.candidate.outputs.changed == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          BRANCH: automation/coordinated-dependency-updates
+          REPOSITORY: ${{ github.repository }}
+        run: |
+          sha="$(git rev-parse HEAD)"
+          gh workflow run ci.yml --repo "$REPOSITORY" --ref "$BRANCH"
+          run_id=""
+          for attempt in $(seq 1 36); do
+            run_id="$(gh run list --repo "$REPOSITORY" --workflow ci.yml --branch "$BRANCH" --event workflow_dispatch --limit 10 --json databaseId,headSha --jq ".[] | select(.headSha == \"$sha\") | .databaseId" | head -n 1)"
+            if [ -n "$run_id" ]; then break; fi
+            sleep 5
+          done
+          test -n "$run_id" || { echo "Could not find dispatched CI run for $sha"; exit 1; }
+          gh run watch "$run_id" --repo "$REPOSITORY" --exit-status
+      - name: Open or update the review PR after successful CI
+        if: steps.candidate.outputs.changed == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          BRANCH: automation/coordinated-dependency-updates
+          REPOSITORY: ${{ github.repository }}
+        run: |
+          body="Daily coordinated candidate. The full CI workflow was explicitly dispatched for this branch and passed. Mermaid majors, fixture/CDN synchronization, and the lockfile are included. No release is performed."
+          number="$(gh pr list --repo "$REPOSITORY" --head "$BRANCH" --base main --json number --jq '.[0].number // empty')"
+          if [ -n "$number" ]; then
+            gh pr edit "$number" --repo "$REPOSITORY" --title "chore(deps): coordinated stable dependency update" --body "$body"
+          else
+            gh pr create --repo "$REPOSITORY" --base main --head "$BRANCH" --title "chore(deps): coordinated stable dependency update" --body "$body"
+          fi
