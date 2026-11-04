@@ -46,18 +46,58 @@ test("follows redirects and records the final successful URL", async () => {
   assert.ok(results[0].finalUrl.includes("www.github.com"));
 });
 
-test("reports definitive missing pages as unavailable", async () => {
+for (const httpStatus of [404, 410]) {
+  test(`reports HTTP ${httpStatus} as definitively unavailable`, async () => {
+    const results = await checkRoadmapLiveEvidence({
+      fetchImpl: async (url) => ({
+        status: url.includes("issues/2623") ? httpStatus : 200,
+        url,
+        redirected: false,
+      }),
+    });
+    const unavailable = results.find(({ id }) => id === "mermaid-issue-2623");
+
+    assert.equal(unavailable.status, "unavailable");
+    assert.equal(unavailable.httpStatus, httpStatus);
+    assert.equal(roadmapLiveEvidenceExitCode(results), 1);
+  });
+}
+
+for (const httpStatus of [301, 302, 303, 307, 308, 429, 500, 502, 503, 504]) {
+  test(`keeps HTTP ${httpStatus} unverified with a non-zero exit code`, async () => {
+    const results = await checkRoadmapLiveEvidence({
+      fetchImpl: async (url, options) => {
+        assert.equal(options.redirect, "follow");
+        return {
+          status: url.includes("issues/2623") ? httpStatus : 200,
+          url,
+          redirected: false,
+        };
+      },
+    });
+    const unverified = results.find(({ id }) => id === "mermaid-issue-2623");
+
+    assert.equal(unverified.status, "unverified");
+    assert.equal(unverified.httpStatus, httpStatus);
+    assert.equal(unverified.reason, `HTTP ${httpStatus}`);
+    assert.ok(results
+      .filter(({ id }) => id !== unverified.id)
+      .every(({ status }) => status === "reachable"));
+    assert.equal(roadmapLiveEvidenceExitCode(results), 2);
+  });
+}
+
+test("preserves missing-page failure when another source is rate limited", async () => {
   const results = await checkRoadmapLiveEvidence({
     fetchImpl: async (url) => ({
-      status: url.includes("issues/2623") ? 404 : 200,
+      status: url.includes("issues/2623") ? 404 : url.includes("npmjs.com") ? 429 : 200,
       url,
       redirected: false,
     }),
   });
-  const unavailable = results.find(({ id }) => id === "mermaid-issue-2623");
 
-  assert.equal(unavailable.status, "unavailable");
-  assert.equal(unavailable.httpStatus, 404);
+  assert.equal(results.find(({ id }) => id === "mermaid-issue-2623").status, "unavailable");
+  assert.equal(results.find(({ id }) => id === "published-npm-package").status, "unverified");
   assert.equal(roadmapLiveEvidenceExitCode(results), 1);
 });
 
