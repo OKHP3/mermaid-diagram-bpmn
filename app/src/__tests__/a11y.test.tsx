@@ -84,7 +84,7 @@ vi.mock('mermaid', () => ({
 // bpmn-plugin
 vi.mock('@/lib/bpmn-plugin', () => ({
   bpmnPlugin:            { id: 'bpmn-beta', detector: () => false, loader: async () => ({}) },
-  MERMAID_VERSION_TARGET: '12.2.0',
+  MERMAID_VERSION_TARGET: '12.3.0',
 }));
 
 // bpmn-renderer — avoid full parse pipeline in the Playground a11y test

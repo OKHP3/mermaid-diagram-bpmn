@@ -23,7 +23,7 @@
     "README.md"
   ],
   "peerDependencies": {
-    "mermaid": "12.2.0"
+    "mermaid": "12.3.0"
   },
   "keywords": [
     "mermaid",

@@ -15,7 +15,7 @@ Write readable process models as a Markdown code fence. No XML. No bpmn-js runti
 ```bash
 npm install --save-exact @okhp3/mermaid-diagram-bpmn@0.1.1
 # peer dependency
-npm install --save-exact mermaid@12.2.0
+npm install --save-exact mermaid@12.3.0
 ```
 
 ---
@@ -61,7 +61,7 @@ For a no-bundler proof, use the exact tested pair below in a modern browser:
 ```html
 <script type="module">
   const [{ default: mermaid }, { bpmnPlugin }] = await Promise.all([
-    import('https://cdn.jsdelivr.net/npm/mermaid@12.2.0/+esm'),
+    import('https://cdn.jsdelivr.net/npm/mermaid@12.3.0/+esm'),
     import('https://cdn.jsdelivr.net/npm/@okhp3/mermaid-diagram-bpmn@0.1.1/dist/index.mjs'),
   ]);
   mermaid.initialize({ startOnLoad: false, securityLevel: 'strict' });
@@ -71,7 +71,7 @@ For a no-bundler proof, use the exact tested pair below in a modern browser:
 </script>
 ```
 
-This is a supported proof for `mermaid@12.2.0` with
+This is a supported proof for `mermaid@12.3.0` with
 `@okhp3/mermaid-diagram-bpmn@0.1.1`, using native browser ESM and the default
 strict Mermaid security boundary. The plugin must load after Mermaid
 registration is available; the example registers it explicitly before
@@ -130,7 +130,7 @@ pool order "Order Process" {
 
 | Plugin version | Mermaid target |
 |---|---|
-| 0.1.x | `mermaid@12.2.0` |
+| 0.1.x | `mermaid@12.3.0` |
 
 The current repository build exports `MERMAID_VERSION_TARGET` for version-pin
 assertions. The previously published 0.1.1 package retains its original build
@@ -138,7 +138,7 @@ target; the tested CDN pairing above does not republish that package.
 
 ```typescript
 import { MERMAID_VERSION_TARGET } from '@okhp3/mermaid-diagram-bpmn';
-console.log(MERMAID_VERSION_TARGET); // '12.2.0'
+console.log(MERMAID_VERSION_TARGET); // '12.3.0'
 ```
 
 ---

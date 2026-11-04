@@ -89,7 +89,7 @@ is contributor recognition, not maintainer endorsement or a decision about core
 integration versus external plugins. The contributor also flags a potential
 `bpmn-beta` detector collision if native support ships in
 [#2623](https://github.com/mermaid-js/mermaid/issues/2623#issuecomment-5615197016).
-The project's declared and locked Mermaid target is 12.2.0; this source review does not
+The project's declared and locked Mermaid target is 12.3.0; this source review does not
 extend that compatibility claim. The older dated observations below remain
 historical; they do not describe the current number of competing implementations.
 The public comparison now links this series. The DFKI author's examples remain

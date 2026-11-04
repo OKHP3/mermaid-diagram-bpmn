@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-04T09:22:19.714Z",
+  "generatedAt": "2026-11-04T13:27:13.093Z",
   "complete": true,
   "errors": [],
   "inventory": {
@@ -161,9 +161,9 @@
         "name": "mermaid",
         "path": "app/package.json",
         "field": "devDependencies",
-        "declared": "12.2.0",
-        "effective": "12.2.0",
-        "resolved": "12.2.0",
+        "declared": "12.3.0",
+        "effective": "12.3.0",
+        "resolved": "12.3.0",
         "kind": "workspace"
       },
       {
@@ -260,8 +260,8 @@
         "name": "mermaid",
         "path": "fixtures/plugin-smoke/package.json",
         "field": "dependencies",
-        "declared": "12.2.0",
-        "effective": "12.2.0",
+        "declared": "12.3.0",
+        "effective": "12.3.0",
         "resolved": null,
         "kind": "standalone fixture"
       },
@@ -287,8 +287,8 @@
         "name": "mermaid",
         "path": "lib/bpmn-plugin/package.json",
         "field": "peerDependencies",
-        "declared": "12.2.0",
-        "effective": "12.2.0",
+        "declared": "12.3.0",
+        "effective": "12.3.0",
         "resolved": null,
         "kind": "peer contract"
       },
@@ -1099,7 +1099,7 @@
         "3.4.17"
       ],
       "elkjs": [
-        "0.9.3"
+        "0.12.1"
       ],
       "enhanced-resolve": [
         "5.24.5"
@@ -1228,7 +1228,7 @@
         "16.4.2"
       ],
       "mermaid": [
-        "12.2.0"
+        "12.3.0"
       ],
       "minimatch": [
         "10.2.5"
@@ -1394,9 +1394,6 @@
       ],
       "util-deprecate": [
         "1.0.2"
-      ],
-      "uuid": [
-        "11.1.1"
       ],
       "vite": [
         "8.3.5"
@@ -4330,7 +4327,7 @@
       "matureByMajor": {
         "1": "1.7.1",
         "2": "2.4.4",
-        "3": "3.9.3"
+        "3": "3.9.4"
       },
       "source": "https://registry.npmjs.org/bare-os"
     },
@@ -6516,7 +6513,7 @@
         "9": "9.4.3",
         "10": "10.9.8",
         "11": "11.17.2",
-        "12": "12.2.0"
+        "12": "12.3.0"
       },
       "source": "https://registry.npmjs.org/mermaid"
     },
@@ -7593,25 +7590,6 @@
       },
       "source": "https://registry.npmjs.org/util-deprecate"
     },
-    "uuid": {
-      "latest": "14.0.3",
-      "latestTag": "14.0.3",
-      "published": "2026-10-10T00:30:19.423Z",
-      "engines": {},
-      "stableByMajor": {
-        "11": "11.1.1",
-        "12": "12.0.1",
-        "13": "13.0.2",
-        "14": "14.0.3"
-      },
-      "matureByMajor": {
-        "11": "11.1.1",
-        "12": "12.0.1",
-        "13": "13.0.2",
-        "14": "14.0.3"
-      },
-      "source": "https://registry.npmjs.org/uuid"
-    },
     "vite": {
       "latest": "8.3.5",
       "latestTag": "8.3.5",
@@ -7854,7 +7832,7 @@
     "selectedLine": "3.11.18",
     "source": "https://www.python.org/downloads/"
   },
-  "sourceCommit": "e9b23c162bf32bcf07fac040c9d109e65510f9a5",
+  "sourceCommit": "e4df3b9cd8ae520dbe552514f6e7e837a6c2f403",
   "auditNode": "v26.13.0",
   "sourceDirty": true
 }
