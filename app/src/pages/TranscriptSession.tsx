@@ -179,6 +179,11 @@ export default function TranscriptSession() {
     useState<ProviderSnapshot | null>(null);
   const [notes, setNotes] = useState<Record<string, string>>({}),
     [approvedSource, setApprovedSource] = useState<string | null>(null);
+  const [expandedClaims, setExpandedClaims] = useState<Record<string, boolean>>(
+    {},
+  );
+  const claimSummaries = useRef(new Map<string, HTMLElement>()),
+    focusClaim = useRef<string | null>(null);
   const heading = useRef<HTMLHeadingElement>(null),
     preview = useRef<HTMLHeadingElement>(null),
     focusView = useRef(false);
@@ -199,6 +204,14 @@ export default function TranscriptSession() {
   useLayoutEffect(() => {
     if (incoming || resultPreview || providerPreview) preview.current?.focus();
   }, [incoming, resultPreview, providerPreview]);
+  useLayoutEffect(() => {
+    if (focusClaim.current) {
+      const summary = claimSummaries.current.get(focusClaim.current);
+      summary?.focus();
+      summary?.scrollIntoView({ block: "start" });
+      focusClaim.current = null;
+    }
+  }, [expandedClaims]);
   useEffect(() => {
     if (
       !dirty &&
@@ -1146,6 +1159,10 @@ export default function TranscriptSession() {
                   source = session.revisions.find(
                     (r) => r.id === result.revisionId,
                   )!;
+                const pending = result.claims.filter(
+                  (claim) =>
+                    !candidate.reviews.some((r) => r.path === claim.path),
+                );
                 return (
                   <article
                     className="session-candidate"
@@ -1156,12 +1173,75 @@ export default function TranscriptSession() {
                       {activation.status.replaceAll("-", " ")}
                     </h3>
                     <p>
-                      Every changed field is shown below. Review records are
-                      reported by the named reviewer; imported records are not
-                      independent approval verification.
+                      Expand each changed fact to compare it with its sources.
+                      Review records are reported by the named reviewer;
+                      imported records are not independent approval
+                      verification.
                     </p>
                     <ExecutionReport execution={result.execution} />
-                    {result.claims.map((claim) => {
+                    <p
+                      className="session-review-progress"
+                      aria-live="polite"
+                      aria-atomic="true"
+                    >
+                      {
+                        candidate.reviews.filter(
+                          (r) => r.decision === "accepted",
+                        ).length
+                      }{" "}
+                      accepted
+                      {" · "}
+                      {pending.length} unreviewed
+                      {" · "}
+                      {
+                        candidate.reviews.filter(
+                          (r) => r.decision === "rejected",
+                        ).length
+                      }{" "}
+                      rejected
+                      {" · "}
+                      {
+                        candidate.reviews.filter(
+                          (r) => r.decision === "unresolved",
+                        ).length
+                      }{" "}
+                      unresolved
+                      {" · "}
+                      {result.claims.length} total
+                    </p>
+                    <div className="session-actions">
+                      <button
+                        className="forge-btn-outline"
+                        disabled={!pending.length}
+                        onClick={() => {
+                          const key = `${result.activationId}:${pending[0].path}`;
+                          focusClaim.current = key;
+                          setExpandedClaims((v) => ({ ...v, [key]: true }));
+                        }}
+                      >
+                        Next unreviewed fact
+                      </button>
+                      {[true, false].map((open) => (
+                        <button
+                          key={String(open)}
+                          className="forge-btn-outline"
+                          onClick={() =>
+                            setExpandedClaims((v) => ({
+                              ...v,
+                              ...Object.fromEntries(
+                                result.claims.map((claim) => [
+                                  `${result.activationId}:${claim.path}`,
+                                  open,
+                                ]),
+                              ),
+                            }))
+                          }
+                        >
+                          {open ? "Expand all facts" : "Collapse all facts"}
+                        </button>
+                      ))}
+                    </div>
+                    {result.claims.map((claim, index) => {
                       const change = changes.find(
                         (c) => c.path === claim.path,
                       )!;
@@ -1170,8 +1250,31 @@ export default function TranscriptSession() {
                       );
                       const key = `${result.activationId}:${claim.path}`;
                       return (
-                        <section className="session-claim" key={claim.path}>
-                          <h4>{claim.path}</h4>
+                        <details
+                          className="session-claim"
+                          key={claim.path}
+                          open={expandedClaims[key] ?? index === 0}
+                          onToggle={(event) => {
+                            const open = event.currentTarget.open;
+                            setExpandedClaims((v) =>
+                              (v[key] ?? index === 0) === open
+                                ? v
+                                : { ...v, [key]: open },
+                            );
+                          }}
+                        >
+                          <summary
+                            ref={(node) => {
+                              if (node) claimSummaries.current.set(key, node);
+                              else claimSummaries.current.delete(key);
+                            }}
+                          >
+                            <span>
+                              Fact {index + 1} of {result.claims.length}
+                            </span>{" "}
+                            <strong>{claim.path}</strong>{" "}
+                            <span>{recorded?.decision ?? "pending"}</span>
+                          </summary>
                           <p>
                             <strong>{claim.kind}</strong>
                             {claim.analystAdded
@@ -1249,7 +1352,7 @@ export default function TranscriptSession() {
                               </div>
                             </>
                           )}
-                        </section>
+                        </details>
                       );
                     })}
                     <button

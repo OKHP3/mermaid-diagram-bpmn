@@ -28,6 +28,16 @@ receipt. Imported review names and notes are reported records, not authenticated
 approvals. Evidence references make statements reviewable; they do not prove
 truth, speaker identity, authority or agreement.
 
+Long candidates use a disclosure for each changed fact, with its path and
+disposition always visible. The first fact starts expanded. Expand any fact to
+read its before/after values, citations and review controls, or use Expand all
+facts for the complete comparison. Next unreviewed fact opens and focuses the
+earliest fact that has no recorded disposition. Progress counts distinguish accepted,
+unreviewed, rejected and unresolved facts. Opening or closing a fact never records
+a review or clears an unfinished note, and recording a decision leaves the fact
+open. Collapsed facts still require individual review before applying the candidate. Disclosure
+state is temporary; saved sessions retain the review records, not this view state.
+
 ## Activation and correction rules
 
 Modes are manual, suggest and auto-draft. Auto-draft only queues a bounded task;

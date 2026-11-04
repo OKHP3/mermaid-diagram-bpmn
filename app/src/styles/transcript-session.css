@@ -215,6 +215,24 @@
   border-top: 1px solid hsl(var(--border));
   padding-block: 24px;
 }
+.session-claim > summary {
+  cursor: pointer;
+  scroll-margin-top: 96px;
+  font-size: 14px;
+  line-height: 1.75;
+}
+.session-claim > summary > * {
+  margin-right: 12px;
+}
+.session-claim > summary > strong {
+  overflow-wrap: anywhere;
+}
+.session-claim[open] > summary {
+  margin-bottom: 16px;
+}
+.session-review-progress {
+  font-variant-numeric: tabular-nums;
+}
 .session-claim p {
   font-size: 14px;
   line-height: 1.75;
