@@ -314,8 +314,7 @@ test.describe('Vendor Onboarding — packaged process marker', () => {
 test.describe('Vendor Onboarding — packaged process marker on mobile', () => {
   test.use({ viewport: { width: 375, height: 812 } });
 
-  test('final timeline marker remains readable without horizontal overflow', async ({ page, browserName }) => {
-    test.skip(browserName !== 'chromium', 'Narrow-screen completion-marker coverage runs in Chromium.');
+  test('final timeline marker remains readable without horizontal overflow', async ({ page }) => {
     await loadVendorOnboardingPage(page);
 
     const markerLabel = page.getByText('PROC-2025-211 packaged', { exact: true });
