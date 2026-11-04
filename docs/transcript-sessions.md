@@ -3,7 +3,9 @@
 Phase 4A adds `/sessions`, linked from Guided intake. It accepts pasted text and
 UTF-8 `.txt`, `.md` and `.vtt` files at any meeting checkpoint. It does not join,
 record, transcribe or listen to meetings. Teams, Notion and other capture tools
-must supply an export or copied excerpt. Live provider adapters remain Phase 4B.
+must supply an export or copied excerpt. Phase 4B adds a bounded Notion snapshot
+bridge and reported execution receipts; see [the pilot guide](session-bridge-pilot.md).
+Live provider feeds remain outside implemented scope.
 
 ## From source to reviewed process
 
@@ -54,10 +56,12 @@ candidate reviews and prior applied process revisions remain available.
 The version 1 `bpmn-transcript-session` envelope wraps the existing version 1
 `bpmn-process-bundle` and PIR 0.1. It contains source revisions/passages, speaker
 role context, activation snapshots, candidate results, claim reviews and process
-history. Strict imports reject unknown fields and unsupported versions.
+history. Source revisions can also retain optional Notion snapshot provenance.
+Strict imports reject unknown fields and unsupported versions.
 
 The version 1 `bpmn-session-result` contains `sessionId`, `activationId`,
-`baseHash`, `revisionId`, `bundle` and `claims`. Each changed fact has a unique
+`baseHash`, `revisionId`, `bundle` and `claims`, plus an optional reported
+`execution` receipt checked against source and result hashes. Each changed fact has a unique
 path and a claim with `kind` (current/policy/proposal/question/uncertain),
 `citations` (segment IDs), `analystAdded` and `conflicts` (other claim paths).
 Every changed fact needs a resolvable source reference or an explicit

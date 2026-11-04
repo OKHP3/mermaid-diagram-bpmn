@@ -40,8 +40,10 @@ plugin or BPMN execution platform.
   handoff packaging and verification boundaries.
 - Transcript sessions at `/sessions` retain source revisions in tab memory,
   prepare external-agent handoffs, and require claim-level evidence review before
-  applying candidate changes. See `docs/transcript-sessions.md`. Live provider
-  feeds and in-browser AI remain outside the implemented scope.
+  applying candidate changes. See `docs/transcript-sessions.md`. Phase 4B supports
+  externally prepared Notion snapshots and reported agent execution receipts;
+  see `docs/session-bridge-pilot.md`. Live provider feeds and in-browser AI remain
+  outside the implemented scope. Hash bindings detect mismatches, not authenticity.
 - Pools, lanes, message flows, task markers, gateways, accessibility metadata,
   and multiple example diagrams are represented in the current source.
 - `app/src/lib/bpmn-plugin.ts` is an adapter source file. End-to-end validation
@@ -214,6 +216,7 @@ pnpm run vendor:check
 pnpm run vendor:test
 pnpm run vendor:watch
 pnpm run plugin:smoke
+pnpm run session:bridge:test
 node scripts/test-delegation-controller.mjs
 node --test scripts/check-release-gates.test.mjs
 ```
@@ -246,6 +249,13 @@ The hourly Mermaid release watcher reports fresh releases immediately and
   dispatches the coordinated updater after the same maturity window when a newer
   candidate is needed. The automation does not merge updates or publish new application versions.
 The other commands may also require the installed dependency tree.
+
+`scripts/session-bridge.mjs` uses Node 24+ and no dependencies to prepare one
+Notion snapshot from a complete connector fetch result, or record a reported
+external-agent execution against a session result. It never invokes providers
+or agents. Require an explicit absolute artifact output and preserve existing
+files. Use observed fetch time, not conversion time. The UI and saved-session
+reader share `app/src/lib/session-bridge.ts` validation with this helper.
 
 The optional delegation program is documented in `docs/delegation/README.md`.
 Its controller and regression checks use Node built-ins. Runtime registries,

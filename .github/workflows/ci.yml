@@ -69,6 +69,9 @@ jobs:
       - name: Test delegation scheduler and receipt rejection gates
         run: node scripts/test-delegation-controller.mjs
 
+      - name: Test session bridge transport boundaries
+        run: pnpm run session:bridge:test
+
       - name: Build app (produces the manifest for the bundle-size gate)
         run: pnpm --filter @workspace/mermaid-diagram-bpmn run build
 
