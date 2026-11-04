@@ -54,8 +54,8 @@ test("bridge CLI binds actual inputs, preserves fetch time and refuses replaceme
     await assert.rejects(main(args), /do not match/);
     const fetchedAt = "2026-11-04T06:31:55.694Z";
     const response = {
-      id: "40e812e0ced481c586ecd49051a601a2",
-      url: "https://app.notion.com/p/40e812e0ced481c586ecd49051a601a2",
+      id: "00000000000040008000000000000001",
+      url: "https://app.notion.com/p/00000000000040008000000000000001",
       title: "Synthetic CLI fixture",
       page_last_edited_at: "2026-11-04T06:31:55.677Z",
       text: `Here is the result of "fetch" for the Page as of ${fetchedAt}:\n<content>\n## Transcript\n\n\`\`\`txt\n${raw}\n\`\`\`\n</content>`,

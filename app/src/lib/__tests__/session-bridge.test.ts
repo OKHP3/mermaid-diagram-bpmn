@@ -23,8 +23,8 @@ const raw =
 const edited = "2026-11-04T06:31:55.677Z",
   fetched = "2026-11-04T06:32:00.000Z";
 const page = {
-  id: "40e812e0-ced4-81c5-86ec-d49051a601a2",
-  url: "https://app.notion.com/p/40e812e0ced481c586ecd49051a601a2?pvs=204",
+  id: "00000000-0000-4000-8000-000000000001",
+  url: "https://app.notion.com/p/00000000000040008000000000000001?pvs=204",
   title: "Synthetic workshop",
   page_last_edited_at: edited,
   text: `<page>\n<content>\n## Transcript\n\n\`\`\`txt\n${raw}\n\`\`\`\n\n## Notes\nA summary is not a transcript.\n</content>\n</page>`,
@@ -85,7 +85,7 @@ describe("bounded provider snapshot", () => {
     { unknown_block_ids: ["block"] },
     { text: "<content>\n## Summary\nAlex approved everything.\n</content>" },
     { text: page.text + page.text },
-    { url: "https://attacker.example/40e812e0ced481c586ecd49051a601a2" },
+    { url: "https://attacker.example/00000000000040008000000000000001" },
     { page_last_edited_at: "2026-02-30T06:00:00Z" },
     { page_last_edited_at: "2027-01-01T00:00:00Z" },
   ])(
