@@ -2,8 +2,9 @@
 /**
  * Probe the external sources linked by the public Roadmap.
  *
- * Network failures are reported as UNVERIFIED (exit code 2), not as a clean
- * check. HTTP error responses are UNAVAILABLE (exit code 1).
+ * Network failures and inconclusive HTTP responses, including rate limits,
+ * server errors, and unresolved redirects, are UNVERIFIED (exit code 2).
+ * Only definitive 404/410 responses are UNAVAILABLE (exit code 1).
  */
 
 import { resolve } from "node:path";

@@ -217,6 +217,7 @@ pnpm run vendor:test
 pnpm run vendor:watch
 pnpm run plugin:smoke
 pnpm run session:bridge:test
+pnpm run check:roadmap-live-evidence:test
 node scripts/test-delegation-controller.mjs
 node --test scripts/check-release-gates.test.mjs
 ```
@@ -249,6 +250,11 @@ The hourly Mermaid release watcher reports fresh releases immediately and
   dispatches the coordinated updater after the same maturity window when a newer
   candidate is needed. The automation does not merge updates or publish new application versions.
 The other commands may also require the installed dependency tree.
+
+CI runs the offline Roadmap response-classification tests. Rate limits, server
+errors, unresolved redirects, and network failures remain `UNVERIFIED` with
+exit code 2; definitive HTTP 404/410 responses remain `UNAVAILABLE` with exit
+code 1. A live probe is separate from these mocked regression tests.
 
 `scripts/session-bridge.mjs` uses Node 24+ and no dependencies to prepare one
 Notion snapshot from a complete connector fetch result, or record a reported
