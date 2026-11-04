@@ -150,6 +150,7 @@ test("Notion snapshot preview, duplicate recovery and reported agent execution",
 test("transcript, six-skill handoff, evidence review, apply and saved-session recovery", async ({
   page,
 }) => {
+  await page.setViewportSize({ width: 320, height: 812 });
   await workshop(page);
   await page
     .getByLabel("Session name", { exact: true })
@@ -237,10 +238,99 @@ test("transcript, six-skill handoff, evidence review, apply and saved-session re
   await page.getByLabel("Reviewer name or role").fill("Test analyst");
   const claims = page.locator(".session-claim");
   await expect(claims).toHaveCount(3);
+  const progress = page.locator(".session-review-progress");
+  await expect(progress).toHaveText(
+    "0 accepted · 3 unreviewed · 0 rejected · 0 unresolved · 3 total",
+  );
+  await expect(page.locator(".session-claim[open]")).toHaveCount(1);
+  const firstSummary = claims.nth(0).locator("summary");
+  await expect(firstSummary).toHaveAccessibleName(
+    "Fact 1 of 3 /pir/process_name pending",
+  );
+  await firstSummary.focus();
+  await firstSummary.press("Space");
+  await expect(claims.nth(0)).not.toHaveAttribute("open");
+  await firstSummary.press("Enter");
+  await claims.nth(0).getByRole("textbox").fill("Unfinished note retained.");
+  await page.getByRole("button", { name: "Collapse all facts" }).click();
+  await expect(page.locator(".session-claim[open]")).toHaveCount(0);
+  await page.getByRole("button", { name: "Next unreviewed fact" }).click();
+  await expect(firstSummary).toBeFocused();
+  await expect(claims.nth(0).getByRole("textbox")).toHaveValue(
+    "Unfinished note retained.",
+  );
+  // A decision neither hides the evidence nor moves the user's focus.
+  await claims
+    .nth(0)
+    .getByRole("button", { name: "Accept fact" })
+    .press("Enter");
+  await expect(claims.nth(0)).toHaveAttribute("open");
+  await expect(
+    claims.nth(0).getByRole("button", { name: "Accept fact" }),
+  ).toBeFocused();
+  await page.getByRole("button", { name: "Next unreviewed fact" }).click();
+  await expect(claims.nth(1).locator("summary")).toBeFocused();
+  await claims.nth(1).getByRole("textbox").fill("Need a revised question.");
+  await claims.nth(1).getByRole("button", { name: "Reject fact" }).click();
+  await page.getByRole("button", { name: "Next unreviewed fact" }).click();
+  await expect(claims.nth(2).locator("summary")).toBeFocused();
+  await claims.nth(2).getByRole("textbox").fill("Keep diagram unresolved.");
+  await claims.nth(2).getByRole("button", { name: "Keep unresolved" }).click();
+  await expect(progress).toHaveText(
+    "1 accepted · 0 unreviewed · 1 rejected · 1 unresolved · 3 total",
+  );
+  await expect(
+    page.getByRole("button", { name: "Next unreviewed fact" }),
+  ).toBeDisabled();
+  await page.getByRole("button", { name: "Collapse all facts" }).click();
+  await page.getByRole("button", { name: "Apply reviewed candidate" }).click();
+  await expect(page.getByRole("alert")).toContainText("Rejected or unresolved");
+  const partialDownload = page.waitForEvent("download");
+  await page.getByRole("button", { name: "Save session", exact: true }).click();
+  const partial = JSON.parse(
+    (await downloaded(await partialDownload)).toString(),
+  );
+  expect(partial.process.pir.process_name).toBe("");
+  expect(partial.candidates[0].reviews).toHaveLength(3);
+  await page.reload();
+  await page
+    .getByLabel("Open saved session")
+    .setInputFiles(upload("partial.json", partial));
+  await page.getByRole("button", { name: "Open imported copy" }).click();
+  await page.getByRole("button", { name: "03 Evidence review" }).click();
+  await expect(progress).toHaveText(
+    "1 accepted · 0 unreviewed · 1 rejected · 1 unresolved · 3 total",
+  );
+  await expect(claims.nth(1).locator("summary")).toContainText("rejected");
+  await expect(claims.nth(2).locator("summary")).toContainText("unresolved");
+  await expect(page.locator(".session-claim[open]")).toHaveCount(1);
+  await page.getByRole("button", { name: "Expand all facts" }).click();
+  await expect(page.locator(".session-claim[open]")).toHaveCount(3);
   await expect(claims.nth(1)).toContainText(
     "Finance reviews requests over $5,000.",
   );
   await expect(claims.nth(1)).toContainText("I think it is $2,500");
+  expect(
+    await page.evaluate(
+      () => document.documentElement.scrollWidth <= innerWidth,
+    ),
+  ).toBe(true);
+  await page.addScriptTag({ content: axe.source });
+  const violations = await page.evaluate(async () =>
+    (
+      await (window as any).axe.run(
+        document.querySelector(".session-workspace"),
+        {
+          runOnly: ["wcag2a", "wcag2aa", "wcag21aa", "wcag22aa"],
+        },
+      )
+    ).violations.map((v: any) => ({
+      id: v.id,
+      nodes: v.nodes.map((n: any) => n.target),
+    })),
+  );
+  expect(violations).toEqual([]);
+  await page.getByLabel("Reviewer name or role").fill("Test analyst");
   for (let i = 0; i < 3; i++) {
     await claims
       .nth(i)
