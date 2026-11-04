@@ -11,6 +11,89 @@ test('edited source survives reload and can be recovered without replacing the e
   await expect(page.getByTestId('textarea-bpmn-source')).toHaveValue(source);
   await expect(page.getByTestId('heading-playground')).toHaveText('Recovery example');
 });
+const sourceBeforeRestore = [
+  'bpmn-beta',
+  'accTitle: Before restoring a draft',
+  'start s1 "Start"',
+  'task t1 "Connected task"',
+  'task beforeOrphan "Before restore orphan"',
+  'end e1 "End"',
+  's1 --> t1',
+  't1 --> e1',
+].join('\n');
+
+const sourceWithShiftedWarning = [
+  'bpmn-beta',
+  'accTitle: Restored warning draft',
+  '%% Context retained in this saved draft',
+  '%% The warning belongs to a different source line',
+  '%% Restoring must clear the previous selection',
+  'start savedStart "Start"',
+  'task savedTask "Connected saved task"',
+  'task restoredOrphan "Restored orphan"',
+  'end savedEnd "End"',
+  'savedStart --> savedTask',
+  'savedTask --> savedEnd',
+].join('\n');
+
+for (const draft of [
+  { name: 'warning-free', title: 'Recovery example', source, warningLine: null },
+  { name: 'shifted-warning', title: 'Restored warning draft', source: sourceWithShiftedWarning, warningLine: 8 },
+]) {
+  test(`restoring a ${draft.name} draft clears the previous warning selection`, async ({ page }) => {
+    await page.goto('playground?view=split');
+    const editor = page.getByTestId('textarea-bpmn-source');
+    await editor.fill(draft.source);
+    await expect(page.getByTestId('draft-save-status')).toContainText('Draft saved');
+
+    // A new editing session preserves the saved draft as a recovery input.
+    await page.goto('playground?example=01-linear&view=split');
+    await editor.fill(sourceBeforeRestore);
+    await expect(page.getByTestId('draft-save-status')).toContainText('Draft saved');
+    const highlight = page.getByTestId('editor-lint-warning-line-highlight');
+    await page.getByRole('button', { name: 'Go to line 5 for ORPHAN_NODE', exact: true }).press('Enter');
+    await expect(highlight).toHaveAttribute('data-lint-warning-line', '5');
+
+    const savedSources = await page.evaluate(() => Object.entries(localStorage)
+      .filter(([key]) => key.startsWith('bpmn-workbench:draft:v1:'))
+      .map(([key, value]) => ({ key, source: JSON.parse(value).source as string })));
+    expect(savedSources.map(record => record.source)).toEqual(expect.arrayContaining([draft.source, sourceBeforeRestore]));
+
+    const recovery = page.getByTestId('draft-recovery');
+    await recovery.locator('summary').click();
+    await recovery.getByRole('listitem')
+      .filter({ has: page.getByText(draft.title, { exact: true }) })
+      .getByRole('button', { name: 'Restore draft', exact: true }).click();
+    await expect(editor).toHaveValue(draft.source);
+    await expect(page.getByTestId('heading-playground')).toHaveText(draft.title);
+    await expect(highlight).toHaveCount(0);
+    await expect(page.getByTestId('lint-warning-ORPHAN_NODE-beforeOrphan')).toHaveCount(0);
+
+    if (draft.warningLine === null) {
+      await expect(page.getByTestId('div-lint-warnings')).toHaveCount(0);
+      await expect(page.getByTestId('badge-lint-warnings')).toHaveCount(0);
+    } else {
+      await expect(page.getByTestId('div-lint-warnings')).toBeVisible();
+      await expect(page.getByTestId('badge-lint-warnings')).toHaveText('1 warning');
+      await expect(page.getByTestId('lint-warning-ORPHAN_NODE-restoredOrphan')).toBeVisible();
+      await page.getByRole('button', {
+        name: `Go to line ${draft.warningLine} for ORPHAN_NODE`, exact: true,
+      }).press('Enter');
+      await expect(highlight).toHaveAttribute('data-lint-warning-line', String(draft.warningLine));
+      await expect(editor).toBeFocused();
+      await expect(editor).toHaveValue(draft.source);
+    }
+
+    // Restoring creates a copy; neither saved source may be overwritten.
+    expect(await page.evaluate(records => records.map(({ key }) => {
+      const value = localStorage.getItem(key);
+      return value === null ? null : JSON.parse(value).source;
+    }), savedSources)).toEqual(savedSources.map(record => record.source));
+    await expect(recovery.getByText(draft.title, { exact: true })).toBeVisible();
+    await expect(recovery.getByText('Before restoring a draft', { exact: true })).toBeVisible();
+  });
+}
+
 test('a second tab saves separately and never changes the first editor', async ({ page, context }) => {
   await page.goto('playground?view=split');
   await page.getByTestId('textarea-bpmn-source').fill(source);
