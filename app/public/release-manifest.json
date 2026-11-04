@@ -2,9 +2,9 @@
   "schemaVersion": "1",
   "pluginPackage": "@okhp3/mermaid-diagram-bpmn",
   "pluginVersion": "0.1.1",
-  "mermaidVersionTarget": "12.2.0",
-  "mermaidCompatRange": "12.2.0",
-  "generatedDate": "2026-11-03",
+  "mermaidVersionTarget": "12.3.0",
+  "mermaidCompatRange": "12.3.0",
+  "generatedDate": "2026-11-04",
   "evidenceTiers": [
     {
       "id": "playground-renders",

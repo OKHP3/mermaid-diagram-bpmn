@@ -1,5 +1,8 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
+import { createRequire } from "node:module";
+import { readFileSync } from "node:fs";
+import { dirname, join } from "node:path";
 import { commandExecutable, executeCommand, parseCommandJson, auditVulnerabilities, licenseEvidence, packageManagerEvidence } from "./release-gate-command.mjs";
 
 test("uses the Windows pnpm command shim and keeps native commands unchanged", () => {
@@ -73,4 +76,58 @@ test("package-manager verification follows the exact declaration and rejects mis
   for (const args of [["pnpm@11.28.10","10.26.1",true], ["pnpm@11.28.10","11.28.10",false], ["pnpm@next","next",true]]) {
     assert.equal(packageManagerEvidence(...args).matches, false);
   }
+});
+
+const elkExpression = "EPL-2.0 OR GPL-3.0-or-later";
+const reviewedElk = { name: "elkjs", versions: ["0.12.1"], paths: ["fixture"] };
+
+function installedElkLicense() {
+  const appRequire = createRequire(new URL("../app/package.json", import.meta.url));
+  const mermaidRequire = createRequire(appRequire.resolve("mermaid"));
+  return readFileSync(join(dirname(mermaidRequire.resolve("elkjs/package.json")), "LICENSE.md"));
+}
+
+test("reviewed ELK license bytes resolve to the already allowed EPL alternative", () => {
+  const licenseBytes = installedElkLicense();
+  const readPaths = [];
+  const result = licenseEvidence({ [elkExpression]: [reviewedElk] }, new Set(["EPL-2.0"]), path => {
+    readPaths.push(path);
+    return licenseBytes;
+  });
+  assert.deepEqual(readPaths, [join("fixture", "LICENSE.md")]);
+  assert.deepEqual(result.unknown, []);
+  assert.deepEqual(result.resolved, [{ name: "elkjs", versions: ["0.12.1"], license: "EPL-2.0",
+    declaredLicense: elkExpression, evidence: "Selected reviewed EPL-2.0 alternative; verified installed LICENSE.md SHA-256" }]);
+});
+
+test("ELK resolution does not approve other packages, versions, policies or expressions", () => {
+  const cases = [
+    [elkExpression, { ...reviewedElk, name: "other-library" }, new Set(["EPL-2.0"])],
+    [elkExpression, { ...reviewedElk, versions: ["0.12.2"] }, new Set(["EPL-2.0"])],
+    [elkExpression, { ...reviewedElk, versions: ["0.12.1", "0.12.2"] }, new Set(["EPL-2.0"])],
+    [elkExpression, reviewedElk, new Set(["MIT"])],
+    ...["GPL-3.0-or-later", "EPL-2.0 AND GPL-3.0-or-later", "MIT OR Unreviewed", "Unknown"]
+      .map(expression => [expression, reviewedElk, new Set(["EPL-2.0", "MIT"])]),
+  ];
+  for (const [expression, pkg, allowed] of cases) {
+    const result = licenseEvidence({ [expression]: [pkg] }, allowed, () => assert.fail("Unreviewed metadata must not reach file verification"));
+    assert.equal(result.unknown.length, 1, expression);
+    assert.deepEqual(result.resolved, []);
+  }
+});
+
+test("ELK resolution rejects absent or changed license evidence at every installed path", () => {
+  for (const paths of [undefined, [], "fixture", [""], [null], ["changed"]]) {
+    const result = licenseEvidence({ [elkExpression]: [{ ...reviewedElk, paths }] }, new Set(["EPL-2.0"]), () => Buffer.from("changed license"));
+    assert.equal(result.unknown.length, 1);
+    assert.deepEqual(result.resolved, []);
+  }
+  const licenseBytes = installedElkLicense();
+  const mixed = licenseEvidence({ [elkExpression]: [{ ...reviewedElk, paths: ["verified", "changed"] }] }, new Set(["EPL-2.0"]), path =>
+    path === join("verified", "LICENSE.md") ? licenseBytes : Buffer.from("changed license"));
+  assert.equal(mixed.unknown.length, 1);
+  assert.deepEqual(mixed.resolved, []);
+  assert.throws(() => licenseEvidence({ [elkExpression]: [reviewedElk] }, new Set(["EPL-2.0"]), () => {
+    throw new Error("Missing installed license file");
+  }), /Missing installed license/);
 });

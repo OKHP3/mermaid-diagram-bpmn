@@ -80,6 +80,20 @@ export function licenseEvidence(data, allowed, readFile = readFileSync) {
           continue;
         }
       }
+      // ELK 0.12.1 offers EPL-2.0 as an alternative. Resolve only the reviewed
+      // package and bytes; do not accept arbitrary OR/AND expressions or GPL.
+      if (license === "EPL-2.0 OR GPL-3.0-or-later" && allowed.has("EPL-2.0") &&
+          pkg.name === "elkjs" && pkg.versions.length === 1 && pkg.versions[0] === "0.12.1" &&
+          Array.isArray(pkg.paths) && pkg.paths.length > 0) {
+        const verified = pkg.paths.every(path => typeof path === "string" && path.length > 0 &&
+          createHash("sha256").update(readFile(join(path, "LICENSE.md"))).digest("hex") ===
+            "637e81f4a1b6b4079535c499fca05e238cf7605c1ff5b76d60d7da7ce96700c9");
+        if (verified) {
+          evidence.resolved.push({ name: pkg.name, versions: pkg.versions, license: "EPL-2.0",
+            declaredLicense: license, evidence: "Selected reviewed EPL-2.0 alternative; verified installed LICENSE.md SHA-256" });
+          continue;
+        }
+      }
       evidence.unknown.push({ name: pkg.name, versions: pkg.versions, license });
     }
   }

@@ -104,6 +104,15 @@ project's release policy. `khroma@2.1.0` lacks SPDX metadata, but its installed
 `license` file is MIT; the gate verifies the reviewed file's SHA-256. Every
 production build includes `third-party-notices.txt` with both installed vendor
 license texts and upstream source locations. These libraries are unmodified.
+For `elkjs@0.12.1`, the publisher declares `EPL-2.0 OR GPL-3.0-or-later`.
+The gate selects the already approved EPL-2.0 alternative only for that exact
+package, version and expression, and verifies every installed `LICENSE.md`
+against SHA-256 `637e81f4a1b6b4079535c499fca05e238cf7605c1ff5b76d60d7da7ce96700c9`.
+The installed file matches the publisher's
+[release source license](https://github.com/kieler/elkjs/blob/624ae90aa37110033a8af59c5ccbb292708b4317/LICENSE.md)
+and [manifest](https://github.com/kieler/elkjs/blob/624ae90aa37110033a8af59c5ccbb292708b4317/package.json).
+Changed bytes, versions, missing files and unreviewed expressions still block
+release. This does not add GPL-only or AND expressions to the allowed licenses.
 Sources: [ELK license](https://github.com/kieler/elkjs/blob/master/LICENSE.md)
 and [Khroma license](https://github.com/fabiospampinato/khroma/blob/master/license).
 

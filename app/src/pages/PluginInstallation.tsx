@@ -46,7 +46,7 @@ const KNOWN_LIMITS = [
     id: "cdn-contract",
     label: "Browser CDN path is narrowly supported",
     detail:
-      "The tested no-bundler path uses native ESM with mermaid@12.2.0 and @okhp3/mermaid-diagram-bpmn@0.1.1 from jsDelivr. Legacy script tags, CommonJS loading, other Mermaid versions, and arbitrary loaders are outside the contract.",
+      "The tested no-bundler path uses native ESM with mermaid@12.3.0 and @okhp3/mermaid-diagram-bpmn@0.1.1 from jsDelivr. Legacy script tags, CommonJS loading, other Mermaid versions, and arbitrary loaders are outside the contract.",
   },
 ] as const;
 
@@ -175,7 +175,7 @@ export default function PluginInstallation() {
           <CodeBlock
             language="bash"
             testId="code-install"
-            code={`npm install --save-exact @okhp3/mermaid-diagram-bpmn@${NPM_VERSION} mermaid@12.2.0`}
+            code={`npm install --save-exact @okhp3/mermaid-diagram-bpmn@${NPM_VERSION} mermaid@12.3.0`}
             onCopy={() => trackEvent('plugin-copy')}
           />
         ) : (
@@ -190,7 +190,7 @@ export default function PluginInstallation() {
         <p className="mt-3 text-sm text-muted-foreground">
           Or with pnpm:{" "}
           <code className="font-mono text-xs bg-muted px-1.5 py-0.5 rounded">
-            pnpm add --save-exact @okhp3/mermaid-diagram-bpmn@{NPM_VERSION} mermaid@12.2.0
+            pnpm add --save-exact @okhp3/mermaid-diagram-bpmn@{NPM_VERSION} mermaid@12.3.0
           </code>
         </p>
       </Section>
