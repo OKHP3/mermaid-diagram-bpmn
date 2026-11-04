@@ -310,3 +310,64 @@ test.describe('Vendor Onboarding — packaged process marker', () => {
     await expect(marker.locator('code')).toHaveText('packaged');
   });
 });
+
+test.describe('Vendor Onboarding — packaged process marker on mobile', () => {
+  test.use({ viewport: { width: 375, height: 812 } });
+
+  test('final timeline marker remains readable without horizontal overflow', async ({ page }) => {
+    await loadVendorOnboardingPage(page);
+
+    const markerLabel = page.getByText('PROC-2025-211 packaged', { exact: true });
+    await expect(markerLabel).toBeAttached({ timeout: 15_000 });
+    await markerLabel.scrollIntoViewIfNeeded();
+    await expect(markerLabel).toBeVisible();
+
+    const marker = markerLabel.locator('..');
+    const completionText = marker.locator('span').filter({ hasText: 'All 15 skills complete.' });
+    const lifecycleCode = marker.locator('code');
+
+    await expect(completionText).toBeVisible();
+    await expect(lifecycleCode).toBeVisible();
+    await expect(lifecycleCode).toHaveText('packaged');
+
+    const pageWidth = await page.evaluate(() => ({
+      documentWidth: Math.max(document.documentElement.scrollWidth, document.body.scrollWidth),
+      viewportWidth: document.documentElement.clientWidth,
+    }));
+    expect(
+      pageWidth.documentWidth,
+      'The mobile page must not introduce horizontal overflow',
+    ).toBeLessThanOrEqual(pageWidth.viewportWidth);
+  });
+});
+
+test.describe('Vendor Onboarding — packaged process marker on smallest phones', () => {
+  test.use({ viewport: { width: 320, height: 812 } });
+
+  test('final timeline marker remains readable without horizontal overflow', async ({ page, browserName }) => {
+    test.skip(browserName !== 'chromium', 'Smallest-phone completion-marker coverage runs in Chromium.');
+    await loadVendorOnboardingPage(page);
+
+    const markerLabel = page.getByText('PROC-2025-211 packaged', { exact: true });
+    await expect(markerLabel).toBeAttached({ timeout: 15_000 });
+    await markerLabel.scrollIntoViewIfNeeded();
+    await expect(markerLabel).toBeVisible();
+
+    const marker = markerLabel.locator('..');
+    const completionText = marker.locator('span').filter({ hasText: 'All 15 skills complete.' });
+    const lifecycleCode = marker.locator('code');
+
+    await expect(completionText).toBeVisible();
+    await expect(lifecycleCode).toBeVisible();
+    await expect(lifecycleCode).toHaveText('packaged');
+
+    const pageWidth = await page.evaluate(() => ({
+      documentWidth: Math.max(document.documentElement.scrollWidth, document.body.scrollWidth),
+      viewportWidth: document.documentElement.clientWidth,
+    }));
+    expect(
+      pageWidth.documentWidth,
+      'The mobile page must not introduce horizontal overflow',
+    ).toBeLessThanOrEqual(pageWidth.viewportWidth);
+  });
+});

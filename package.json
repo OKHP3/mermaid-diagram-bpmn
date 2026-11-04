@@ -16,6 +16,7 @@
     "eval:run": "node scripts/run-eval-suite.mjs",
     "technology:check": "node scripts/check-technology-versions.mjs",
     "technology:test": "node --test scripts/technology-inventory.test.mjs",
+    "session:bridge:test": "node --test scripts/session-bridge.test.mjs",
     "brand:check": "node scripts/check-forge-profile.mjs",
     "brand:check:test": "node --test scripts/check-forge-profile.test.mjs",
     "check:generated:test": "node --test scripts/check-generated.test.mjs",
@@ -32,6 +33,8 @@
     "check:dfki-7699:test": "node --test scripts/check-dfki-7699.test.mjs",
     "check:roadmap-evidence": "node scripts/check-roadmap-evidence.mjs",
     "check:roadmap-evidence:test": "node --test scripts/check-roadmap-evidence.test.mjs",
+    "check:roadmap-live-evidence": "node scripts/check-roadmap-live-evidence.mjs",
+    "check:roadmap-live-evidence:test": "node --test scripts/check-roadmap-live-evidence.test.mjs",
     "check:comparison-evidence": "node scripts/check-comparison-evidence.mjs",
     "check:comparison-evidence:test": "node --test scripts/check-comparison-evidence.test.mjs",
     "check:version-status": "node scripts/check-version-status.mjs",
@@ -47,7 +50,8 @@
     "content:hook:test": "node --test scripts/install-content-hook.test.mjs",
     "vendor:update": "node scripts/update-vendor-pins.mjs --write && node scripts/sync-mermaid-target.mjs && node scripts/generate-manifest.mjs",
     "vendor:check": "node scripts/check-vendor-policy.mjs && node scripts/sync-mermaid-target.mjs --check && node scripts/generate-manifest.mjs --check",
-    "vendor:test": "node --test scripts/update-vendor-pins.test.mjs scripts/sync-mermaid-target.test.mjs scripts/release-manifest-state.test.mjs"
+    "vendor:watch": "node scripts/watch-mermaid-release.mjs",
+    "vendor:test": "node --test scripts/update-vendor-pins.test.mjs scripts/sync-mermaid-target.test.mjs scripts/release-manifest-state.test.mjs scripts/watch-mermaid-release.test.mjs"
   },
   "private": true,
   "packageManager": "pnpm@11.28.10",

@@ -238,7 +238,7 @@ const MERMAID_CITATION_SOURCES = [
   [CHECKLIST_PATH,   CHECKLIST_LABEL,   true],
   [VERSION_DOC_PATH, VERSION_DOC_LABEL, true],
   [LEDGER_PATH,      LEDGER_LABEL,      true],
-  [README_PATH,      'README.md',       true],
+  [README_PATH,      README_LABEL,      true],
   [ROADMAP_PATH,     'app/docs/roadmap.md', false],
 ];
 
@@ -281,7 +281,7 @@ const PLUGIN_CITATION_SOURCES = [
   [CHECKLIST_PATH,   CHECKLIST_LABEL,   true],
   [VERSION_DOC_PATH, VERSION_DOC_LABEL, true],
   [LEDGER_PATH,      LEDGER_LABEL,      true],
-  [README_PATH,      'README.md',       true],
+  [README_PATH,      README_LABEL,      true],
   [ROADMAP_PATH,     'app/docs/roadmap.md', false],
 ];
 

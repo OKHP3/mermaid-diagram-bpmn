@@ -33,6 +33,17 @@ plugin or BPMN execution platform.
 - The parser, typed `BpmnDb`, layout engine, React SVG renderer, detector, and
   source-level Mermaid adapter are present under `app/src/lib/`.
 - The playground and documentation routes are present under `app/src/pages/`.
+- Guided process intake and agent handoff are available at `/intake`. The
+  version 1 process bundle wraps the existing PIR 0.1 contract, scope, diagram
+  source and a reported review. Skills execute in the user's agent environment,
+  not in the browser. See `docs/guided-process-intake.md` for import, recovery,
+  handoff packaging and verification boundaries.
+- Transcript sessions at `/sessions` retain source revisions in tab memory,
+  prepare external-agent handoffs, and require claim-level evidence review before
+  applying candidate changes. See `docs/transcript-sessions.md`. Phase 4B supports
+  externally prepared Notion snapshots and reported agent execution receipts;
+  see `docs/session-bridge-pilot.md`. Live provider feeds and in-browser AI remain
+  outside the implemented scope. Hash bindings detect mismatches, not authenticity.
 - Pools, lanes, message flows, task markers, gateways, accessibility metadata,
   and multiple example diagrams are represented in the current source.
 - `app/src/lib/bpmn-plugin.ts` is an adapter source file. End-to-end validation
@@ -203,10 +214,19 @@ pnpm run technology:test
 pnpm run vendor:update
 pnpm run vendor:check
 pnpm run vendor:test
+pnpm run vendor:watch
 pnpm run plugin:smoke
+pnpm run session:bridge:test
 node scripts/test-delegation-controller.mjs
 node --test scripts/check-release-gates.test.mjs
 ```
+
+Phase 3's analyst study and manual assistive technology protocol is maintained
+in `docs/experience-evaluation.md`. The development-only
+`app/scripts/measure-experience.mjs` records repeated local production-preview
+measurements to an explicit absolute output path. Keep raw reports and private
+participant records in the owner's approved project artifact home. Automated
+checks do not count as analyst sessions or screen reader observations.
 
 The application build generates `app/public/skills/`,
 `app/public/context/`, and `app/dist/public/`. The first two are generated
@@ -225,8 +245,17 @@ workflow retains reports as artifacts. The daily coordinated updater proposes
 exact stable dependency/runtime pins after the release-maturity window and full
 CI; Dependabot proposes GitHub Actions updates. See `docs/vendor-maintenance.md`.
 Runtime, fixture, CDN, and compatibility migrations follow the maintenance plan.
-The automation does not merge updates or publish new application versions.
+The hourly Mermaid release watcher reports fresh releases immediately and
+  dispatches the coordinated updater after the same maturity window when a newer
+  candidate is needed. The automation does not merge updates or publish new application versions.
 The other commands may also require the installed dependency tree.
+
+`scripts/session-bridge.mjs` uses Node 24+ and no dependencies to prepare one
+Notion snapshot from a complete connector fetch result, or record a reported
+external-agent execution against a session result. It never invokes providers
+or agents. Require an explicit absolute artifact output and preserve existing
+files. Use observed fetch time, not conversion time. The UI and saved-session
+reader share `app/src/lib/session-bridge.ts` validation with this helper.
 
 The optional delegation program is documented in `docs/delegation/README.md`.
 Its controller and regression checks use Node built-ins. Runtime registries,

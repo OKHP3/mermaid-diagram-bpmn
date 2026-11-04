@@ -12,6 +12,7 @@ import { loadMermaidHostDemo } from "@/lib/route-loaders";
 // Learn  ▾: Walkthrough · DSL Reference · Architecture · Roadmap · About
 
 const PRODUCT_NAV = [
+  { href: "/intake", label: "Guided intake", testId: "nav-intake" },
   { href: "/playground", label: "Workbench", testId: "nav-playground"},
   { href: "/skills",     label: "Process skills", testId: "nav-agent-skills"},
 ] as const;

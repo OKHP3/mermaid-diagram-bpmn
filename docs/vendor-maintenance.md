@@ -37,6 +37,26 @@ also be dispatched manually. It maintains one candidate branch and review PR.
    history is never force-pushed. No update is automatically merged or published
    to npm. Merging the reviewed PR triggers the normal validated Pages workflow.
 
+The **Mermaid release detection** workflow runs hourly at minute 23 and can be
+manually dispatched. It compares stable, dated, nondeprecated npm releases with
+matching official `mermaid@X.Y.Z` GitHub releases, excluding tiny-package tags.
+Its artifact and job summary report both newly detected and eligible versions.
+A newly published release is visible immediately without bypassing the 24-hour
+maturity window. GitHub scheduled jobs may be delayed; cadence is not a guarantee
+of exact execution time.
+
+Once eligible, a version newer than both main and the existing candidate
+explicitly dispatches the coordinated pipeline above. An existing candidate
+avoids repeated hourly dispatches; the daily pipeline retries failed unchanged
+candidates. Missing publisher metadata fails detection. Detection never edits
+pins, proves compatibility, merges or deploys by itself. Use `pnpm run
+vendor:watch` for the same read-only check locally; `--output <path>` retains JSON.
+
+On November 3, 2026 this check detected Mermaid 12.3.0 from both publishers.
+The later npm publication timestamp was 13:18:31.144 UTC, making it eligible on
+November 4 at 13:18:31.144 UTC (7:18 a.m. Central). This is detection evidence,
+not a claim that 12.3.0 passed the adapter compatibility suite.
+
 Dependabot owns GitHub Actions version updates. Its normal npm version updater
 is replaced by this coordinated workflow so it cannot split the Mermaid pin
 from its integration files. GitHub security alerts and security updates remain

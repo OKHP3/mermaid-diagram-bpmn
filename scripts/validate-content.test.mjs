@@ -302,6 +302,91 @@ test('validate-content annotates stale plugin citations with the logical source 
   );
 });
 
+function assertCitationAnnotation({
+  sourcePath,
+  overrideKey,
+  sourceLabel,
+  injectedLine,
+  staleCitation,
+  remediation,
+}) {
+  const realContent = readFileSync(sourcePath, 'utf-8');
+  const staleContent = `${realContent.trimEnd()}\n${injectedLine}\n`;
+  const expectedLine = staleContent.split('\n').length - 1;
+  const stalePath = writeTmp(staleContent, '.md');
+
+  const { exitCode, output } = runValidator({
+    [overrideKey]: stalePath,
+    VALIDATE_CONTENT_GITHUB_ANNOTATIONS: 'true',
+  });
+
+  assert.equal(exitCode, 1, `expected exit 1 for stale citation; output:\n${output}`);
+  const annotationPrefix =
+    `::error file=${sourceLabel} (override),line=${expectedLine}::`;
+  const annotation = output
+    .split(/\r?\n/)
+    .find((line) => line.startsWith(annotationPrefix));
+
+  assert.ok(
+    annotation,
+    `expected annotation for ${sourceLabel} at line ${expectedLine}; output:\n${output}`,
+  );
+  assert.ok(
+    annotation.includes(staleCitation),
+    `annotation should identify ${staleCitation}; got:\n${annotation}`,
+  );
+  assert.ok(
+    annotation.includes(remediation),
+    `annotation should include remediation "${remediation}"; got:\n${annotation}`,
+  );
+}
+
+test('validate-content annotates stale Mermaid citations in capability-ledger.md', () => {
+  assertCitationAnnotation({
+    sourcePath: REAL_LEDGER,
+    overrideKey: 'CONTENT_LEDGER_OVERRIDE',
+    sourceLabel: 'docs/capability-ledger.md',
+    injectedLine: 'mermaid@0.0.0 cited here for annotation testing',
+    staleCitation: 'mermaid@0.0.0',
+    remediation: 'Update the citation or the target constant.',
+  });
+});
+
+test('validate-content annotates stale plugin citations in capability-ledger.md', () => {
+  assertCitationAnnotation({
+    sourcePath: REAL_LEDGER,
+    overrideKey: 'CONTENT_LEDGER_OVERRIDE',
+    sourceLabel: 'docs/capability-ledger.md',
+    injectedLine:
+      '@okhp3/mermaid-diagram-bpmn@0.0.0 cited here for annotation testing',
+    staleCitation: '@okhp3/mermaid-diagram-bpmn@0.0.0',
+    remediation: 'Update the citation or bump the package version.',
+  });
+});
+
+test('validate-content annotates stale Mermaid citations in README.md', () => {
+  assertCitationAnnotation({
+    sourcePath: REAL_README,
+    overrideKey: 'CONTENT_README_OVERRIDE',
+    sourceLabel: 'README.md',
+    injectedLine: 'mermaid@0.0.0 cited here for annotation testing',
+    staleCitation: 'mermaid@0.0.0',
+    remediation: 'Update the citation or the target constant.',
+  });
+});
+
+test('validate-content annotates stale plugin citations in README.md', () => {
+  assertCitationAnnotation({
+    sourcePath: REAL_README,
+    overrideKey: 'CONTENT_README_OVERRIDE',
+    sourceLabel: 'README.md',
+    injectedLine:
+      '@okhp3/mermaid-diagram-bpmn@0.0.0 cited here for annotation testing',
+    staleCitation: '@okhp3/mermaid-diagram-bpmn@0.0.0',
+    remediation: 'Update the citation or bump the package version.',
+  });
+});
+
 test('validate-content exits 1 when Home.tsx contains the stale "89,000+" ecosystem figure', () => {
   const realContent = readFileSync(REAL_HOME, 'utf-8');
   const staleContent = realContent +

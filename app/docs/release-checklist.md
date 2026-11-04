@@ -26,7 +26,7 @@ Use this checklist before tagging and deploying any release.
 ## Pre-release: tests and typecheck
 
 - [ ] `pnpm --filter @workspace/mermaid-diagram-bpmn run check:browser` — confirm Chromium can launch before local E2E work; if native libraries are missing, check `.replit` `[nix]` and run `playwright install --with-deps chromium`
-- [ ] `pnpm --filter @workspace/mermaid-diagram-bpmn run test` — all tests pass (see `docs/version-checklist.md` for current count; 880 as of 2026-11-03)
+- [ ] `pnpm --filter @workspace/mermaid-diagram-bpmn run test` — all tests pass (see `docs/version-checklist.md` for current count; 966 as of 2026-11-04)
 - [ ] `pnpm --filter @workspace/mermaid-diagram-bpmn run typecheck` — zero errors
 - [ ] No `console.log` in any lib module (test files excepted)
 
@@ -66,6 +66,10 @@ Run `pnpm run check:roadmap-evidence` to confirm that
 - [ ] DSL Reference route: `/dsl`
 - [ ] Maintainer reviewed that each source still supports the nearby evidence claim;
   this review is separate from contribution-readiness status decisions
+- [ ] `pnpm run check:roadmap-live-evidence` — all four external sources report
+  reachable; an `UNVERIFIED` result is not a pass and needs a retry or manual review
+- [ ] `pnpm --filter @workspace/mermaid-diagram-bpmn run test:e2e:roadmap-evidence`
+  — browser confirms both internal evidence routes load
 
 ---
 
