@@ -1,6 +1,7 @@
 import { test, expect, type Download } from "@playwright/test";
 import { strFromU8, unzipSync } from "fflate";
 import axe from "axe-core";
+import { bridgeHash } from "../src/lib/session-bridge";
 
 async function downloaded(download: Download) {
   const stream = await download.createReadStream(),
@@ -21,6 +22,130 @@ async function workshop(page: import("@playwright/test").Page) {
     page.getByRole("heading", { name: "Retained source passages" }),
   ).toBeVisible();
 }
+
+test("Notion snapshot preview, duplicate recovery and reported agent execution", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 320, height: 812 });
+  await page.goto("sessions");
+  await page.getByLabel("Paste transcript").fill("Keep this unfinished note.");
+  const raw =
+    "00:00:05 Alex: Purchase request review.\n00:00:18 Alex: process capture checkpoint";
+  const snapshot = {
+    format: "bpmn-provider-snapshot",
+    version: 1,
+    raw,
+    source: {
+      provider: "notion",
+      pageId: "00000000000040008000000000000001",
+      url: "https://www.notion.so/00000000000040008000000000000001",
+      title: "Synthetic workshop",
+      kind: "synthetic",
+      editedAt: "2026-11-04T06:31:55.677Z",
+      fetchedAt: "2026-11-04T06:32:00.000Z",
+      transcriptHash: await bridgeHash(raw),
+    },
+  };
+  await page.getByText("Notion snapshot pilot", { exact: true }).click();
+  await page
+    .getByLabel("Import provider snapshot")
+    .setInputFiles(upload("provider.json", snapshot));
+  await expect(
+    page.getByRole("heading", { name: "Preview Notion snapshot" }),
+  ).toBeFocused();
+  await expect(page.locator(".session-preview")).toContainText(
+    "Synthetic test dialogue",
+  );
+  await expect(
+    page.getByRole("heading", { name: "Retained source passages" }),
+  ).toHaveCount(0);
+  await page.getByRole("button", { name: "Start a new session" }).click();
+  await page.getByRole("button", { name: "Open imported copy" }).click();
+  await expect(page.getByRole("alert")).toContainText(
+    "finish any snapshot preview",
+  );
+  await page.getByRole("button", { name: "Keep current session" }).click();
+  expect(
+    await page.evaluate(
+      () => document.documentElement.scrollWidth <= innerWidth,
+    ),
+  ).toBe(true);
+  await page.getByRole("button", { name: "Add snapshot revision" }).click();
+  await expect(page.getByLabel("Paste transcript")).toHaveValue(
+    "Keep this unfinished note.",
+  );
+  await page
+    .getByLabel("Import provider snapshot")
+    .setInputFiles(upload("provider.json", snapshot));
+  await page.getByRole("button", { name: "Add snapshot revision" }).click();
+  await expect(page.getByRole("status")).toContainText("already retained");
+  await page.getByLabel("Paste transcript").fill("");
+  await page.getByRole("button", { name: "02 Activations" }).click();
+  await page.getByRole("button", { name: "Queue this suggestion" }).click();
+  await page.getByRole("checkbox", { name: /Include this activation/ }).check();
+  const pack = page.waitForEvent("download");
+  await page.getByRole("button", { name: "Download session handoff" }).click();
+  const files = unzipSync(await downloaded(await pack));
+  const source = JSON.parse(strFromU8(files["session-source.json"]));
+  expect(source.revision.source).toEqual(snapshot.source);
+  const result = JSON.parse(strFromU8(files["session-result.json"]));
+  result.bundle.pir.process_name = "Purchase request review";
+  result.claims = [
+    {
+      path: "/pir/process_name",
+      kind: "current",
+      citations: ["seg-1"],
+      analystAdded: false,
+      conflicts: [],
+    },
+  ];
+  result.execution = {
+    agent: "Browser test fixture",
+    runId: "synthetic-only-01a0b751-de15-7f51-ae14-4caadb8f0c4b",
+    startedAt: snapshot.source.fetchedAt,
+    completedAt: snapshot.source.fetchedAt,
+    sourceHash: source.revision.hash,
+    resultHash: await bridgeHash(result),
+  };
+  await page.getByRole("button", { name: "03 Evidence review" }).click();
+  const altered = structuredClone(result);
+  altered.bundle.pir.process_name = "Altered result";
+  await page
+    .getByLabel("Import agent result")
+    .setInputFiles(upload("altered.json", altered));
+  await expect(page.getByRole("alert")).toContainText("receipt does not match");
+  await page
+    .getByLabel("Import agent result")
+    .setInputFiles(upload("result.json", result));
+  await expect(page.locator(".session-preview")).toContainText(
+    "Reported execution: Browser test fixture",
+  );
+  await page.getByRole("button", { name: "Keep candidate for review" }).click();
+  await page.getByRole("button", { name: "Apply reviewed candidate" }).click();
+  await expect(page.getByRole("alert")).toContainText(
+    "Review every changed fact",
+  );
+  const saved = page.waitForEvent("download");
+  await page.getByRole("button", { name: "Save session", exact: true }).click();
+  const retained = JSON.parse((await downloaded(await saved)).toString());
+  expect(retained.revisions).toHaveLength(1);
+  expect(retained.activations).toHaveLength(1);
+  expect(retained.process.pir.process_name).toBe("");
+  await page.reload();
+  await page
+    .getByLabel("Open saved session")
+    .setInputFiles(upload("saved.json", retained));
+  await page.getByRole("button", { name: "Open imported copy" }).click();
+  await page.getByRole("button", { name: "03 Evidence review" }).click();
+  await expect(page.locator(".session-candidate")).toContainText(
+    "Reported execution: Browser test fixture",
+  );
+  expect(
+    await page.evaluate(
+      () => document.documentElement.scrollWidth <= innerWidth,
+    ),
+  ).toBe(true);
+});
 
 test("transcript, six-skill handoff, evidence review, apply and saved-session recovery", async ({
   page,

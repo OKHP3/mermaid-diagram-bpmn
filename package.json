@@ -16,6 +16,7 @@
     "eval:run": "node scripts/run-eval-suite.mjs",
     "technology:check": "node scripts/check-technology-versions.mjs",
     "technology:test": "node --test scripts/technology-inventory.test.mjs",
+    "session:bridge:test": "node --test scripts/session-bridge.test.mjs",
     "brand:check": "node scripts/check-forge-profile.mjs",
     "brand:check:test": "node --test scripts/check-forge-profile.test.mjs",
     "check:generated:test": "node --test scripts/check-generated.test.mjs",

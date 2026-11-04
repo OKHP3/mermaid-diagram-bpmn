@@ -6,6 +6,14 @@ import {
   diagramCheck,
   type ProcessBundle,
 } from "./process-bundle";
+import {
+  readProviderSnapshot,
+  validateProviderSource,
+  validateExecutionShape,
+  verifyExecution,
+  type ProviderSource,
+  type ExecutionReceipt,
+} from "./session-bridge";
 
 export const MAX_SESSION_BYTES = 8_000_000;
 export const MAX_TRANSCRIPT_BYTES = 500_000;
@@ -25,6 +33,7 @@ export interface TranscriptRevision {
   hash: string;
   state: "ongoing" | "final" | "unknown";
   segments: Segment[];
+  source?: ProviderSource;
 }
 export interface Activation {
   id: string;
@@ -64,6 +73,7 @@ export interface SessionResult {
   revisionId: string;
   bundle: ProcessBundle;
   claims: EvidenceClaim[];
+  execution?: ExecutionReceipt;
 }
 export interface Candidate {
   result: SessionResult;
@@ -250,6 +260,24 @@ export function transcriptSegments(raw: string, name: string): Segment[] {
 
 const normalized = (value: string) =>
   value.trim().toLowerCase().replace(/[.!]$/, "").replace(/\s+/g, " ");
+export async function addProviderSnapshot(
+  session: TranscriptSession,
+  input: string,
+  state: TranscriptRevision["state"],
+): Promise<TranscriptSession> {
+  const snapshot = await readProviderSnapshot(input);
+  const next = await addTranscript(
+    session,
+    snapshot.raw,
+    "notion-transcript.txt",
+    state,
+  );
+  // An identical passage set keeps its original attribution and activation history.
+  if (next === session) return session;
+  next.revisions[next.revisions.length - 1].source = snapshot.source;
+  serializeSession(next);
+  return next;
+}
 export async function addTranscript(
   session: TranscriptSession,
   raw: string,
@@ -409,14 +437,30 @@ function shape(value: unknown, schema: Shape, path = "Session"): void {
       fail(`${path}: expected an object.`);
     const record = value as Record<string, unknown>;
     for (const key of Object.keys(record))
-      if (!Object.hasOwn(schema, key))
+      if (
+        !Object.keys(schema).some(
+          (field) => (field.endsWith("?") ? field.slice(0, -1) : field) === key,
+        )
+      )
         fail(`${path}: unsupported field ${key}.`);
-    for (const [key, child] of Object.entries(schema))
+    for (const [field, child] of Object.entries(schema)) {
+      const optional = field.endsWith("?"),
+        key = optional ? field.slice(0, -1) : field;
+      if (optional && !Object.hasOwn(record, key)) continue;
       shape(record[key], child, `${path}.${key}`);
+    }
     return;
   }
   if (schema === "bundle") {
     readBundle(JSON.stringify(value));
+    return;
+  }
+  if (schema === "provider") {
+    validateProviderSource(value);
+    return;
+  }
+  if (schema === "execution") {
+    validateExecutionShape(value);
     return;
   }
   if (schema === "boolean") {
@@ -469,6 +513,7 @@ const resultShape: Shape = {
   revisionId: "text",
   bundle: "bundle",
   claims: [claimShape],
+  "execution?": "execution",
 };
 const sessionShape: Shape = {
   format: "=bpmn-transcript-session",
@@ -484,6 +529,7 @@ const sessionShape: Shape = {
       hash: "text",
       state: "=ongoing|final|unknown",
       segments: [segmentShape],
+      "source?": "provider",
     },
   ],
   activations: [activationShape],
@@ -596,6 +642,17 @@ export function importResult(
     );
   return { result, reviews: [] };
 }
+export async function importVerifiedResult(
+  text: string,
+  session: TranscriptSession,
+): Promise<Candidate> {
+  const candidate = importResult(text, session);
+  await verifyExecution(
+    candidate.result,
+    session.revisions.find((r) => r.id === candidate.result.revisionId)!.hash,
+  );
+  return candidate;
+}
 export function serializeSession(session: TranscriptSession): string {
   shape(session, sessionShape);
   if (
@@ -657,6 +714,8 @@ export async function readSession(text: string): Promise<TranscriptSession> {
       fail(
         "Source hash or passage references do not match the retained transcript.",
       );
+    if (revision.source && revision.source.transcriptHash !== revision.hash)
+      fail("Provider provenance does not match the retained transcript.");
   }
   for (const activation of session.activations) {
     if (
@@ -670,6 +729,11 @@ export async function readSession(text: string): Promise<TranscriptSession> {
     )
       fail("An activation has an invalid base or source reference.");
   }
+  for (const candidate of session.candidates)
+    await verifyExecution(
+      candidate.result,
+      session.revisions.find((r) => r.id === candidate.result.revisionId)!.hash,
+    );
   return session;
 }
 export async function applyCandidate(
@@ -677,6 +741,10 @@ export async function applyCandidate(
   candidate: Candidate,
 ): Promise<TranscriptSession> {
   validateResult(candidate.result, session);
+  await verifyExecution(
+    candidate.result,
+    session.revisions.find((r) => r.id === candidate.result.revisionId)!.hash,
+  );
   const result = candidate.result,
     activation = session.activations.find((a) => a.id === result.activationId)!;
   if (activation.status !== "result-received")
@@ -776,5 +844,7 @@ export function sessionHandoff(
     "FACT-PATHS.md":
       "# Fact paths\n\nUse /pir/process_name, /scope/purpose and similar object paths. Key arrays of objects by URI-encoded id (or role_id), for example /pir/steps/step-1/description. Include /pir/steps/$order with the ordered ID list when adding, removing or reordering keyed entries. Keyed collections (actors, inputs, outputs, steps, exceptions, business_rules and controls) include a $order fact even when empty. Arrays without IDs (open_questions and systems) use their collection path as one fact. Include every added or removed leaf. The browser lists missing paths on import. Computed validation, reported bundle review and diagram provenance are excluded. Diagram source remains /diagram/source and needs evidence.\n",
     "process-bundle.json": serializeBundle(activation.base),
+    "EXECUTION-RECEIPT.md":
+      "# Report the external execution\n\nRun the task in your selected agent, then report the actual agent, run identifier, start and completion time. Never invent an execution. In the canonical repository, use Node 24+ and scripts/session-bridge.mjs receipt --input session-result.json --source session-source.json --agent NAME --run-id ID --started-at UTC --output ABSOLUTE.json. The helper only records your report and binds source/result hashes; it does not invoke an agent or authenticate the report. Import the returned JSON for evidence review. Manual results without receipts remain supported and are labeled execution not reported. Do not place a receipt on an empty template and describe it as executed work. See docs/session-bridge-pilot.md.\n",
   };
 }

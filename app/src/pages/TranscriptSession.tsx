@@ -23,7 +23,8 @@ import {
   emptySession,
   addTranscript,
   activate,
-  importResult,
+  importVerifiedResult,
+  addProviderSnapshot,
   readSession,
   serializeSession,
   applyCandidate,
@@ -34,6 +35,50 @@ import {
   type Candidate,
   type ClaimReview,
 } from "@/lib/transcript-session";
+import {
+  MAX_BRIDGE_BYTES,
+  readProviderSnapshot,
+  type ProviderSnapshot,
+  type ExecutionReceipt,
+  type ProviderSource,
+} from "@/lib/session-bridge";
+
+function SourceOrigin({ source }: { source: ProviderSource }) {
+  return (
+    <p className="intake-help">
+      {source.kind === "synthetic"
+        ? "Synthetic test dialogue"
+        : source.kind === "meeting-transcript"
+          ? "Meeting transcript"
+          : "Transcript block"}
+      {" · "}
+      <a href={source.url} target="_blank" rel="noreferrer">
+        {source.title}
+      </a>
+      {" · Notion revision "}
+      {source.editedAt}
+      {" · Fetched "}
+      {source.fetchedAt}. This is a retained snapshot; later edits require a
+      fresh import.
+    </p>
+  );
+}
+function ExecutionReport({ execution }: { execution?: ExecutionReceipt }) {
+  return (
+    <p className="intake-help">
+      {execution ? (
+        <>
+          Reported execution: <strong>{execution.agent}</strong> ·{" "}
+          {execution.runId} · {execution.completedAt}. Source and result hashes
+          match. This report does not authenticate the agent or verify its
+          conclusions.
+        </>
+      ) : (
+        "Execution not reported. Review this manual result against its source."
+      )}
+    </p>
+  );
+}
 
 const Playground = lazy(() => import("./Playground"));
 const VIEWS = [
@@ -130,6 +175,8 @@ export default function TranscriptSession() {
     [previous, setPrevious] = useState<Session | null>(null);
   const [resultPreview, setResultPreview] = useState<Candidate | null>(null),
     [reviewer, setReviewer] = useState("");
+  const [providerPreview, setProviderPreview] =
+    useState<ProviderSnapshot | null>(null);
   const [notes, setNotes] = useState<Record<string, string>>({}),
     [approvedSource, setApprovedSource] = useState<string | null>(null);
   const heading = useRef<HTMLHeadingElement>(null),
@@ -150,10 +197,17 @@ export default function TranscriptSession() {
     }
   }, [view]);
   useLayoutEffect(() => {
-    if (incoming || resultPreview) preview.current?.focus();
-  }, [incoming, resultPreview]);
+    if (incoming || resultPreview || providerPreview) preview.current?.focus();
+  }, [incoming, resultPreview, providerPreview]);
   useEffect(() => {
-    if (!dirty && !text.trim() && !incoming && !resultPreview) return;
+    if (
+      !dirty &&
+      !text.trim() &&
+      !incoming &&
+      !resultPreview &&
+      !providerPreview
+    )
+      return;
     const unload = (event: BeforeUnloadEvent) => {
       event.preventDefault();
       event.returnValue = "";
@@ -193,7 +247,7 @@ export default function TranscriptSession() {
       window.removeEventListener("beforeunload", unload);
       document.removeEventListener("click", navigate, true);
     };
-  }, [dirty, text, incoming, resultPreview]);
+  }, [dirty, text, incoming, resultPreview, providerPreview]);
   function commit(next: Session) {
     serializeSession(next);
     setSession(next);
@@ -425,9 +479,9 @@ export default function TranscriptSession() {
               className="forge-btn-primary"
               onClick={() =>
                 run(() => {
-                  if (text.trim())
+                  if (text.trim() || providerPreview)
                     throw new Error(
-                      "Add or clear the pasted transcript before opening another session. Your current work is retained.",
+                      "Add or clear the pasted transcript and finish any snapshot preview before opening another session. Your current work is retained.",
                     );
                   setPrevious(session);
                   commit({
@@ -462,6 +516,10 @@ export default function TranscriptSession() {
             className="forge-btn-outline mb-4"
             onClick={() =>
               run(() => {
+                if (text.trim() || providerPreview || resultPreview)
+                  throw new Error(
+                    "Finish the current transcript or import preview before switching sessions. Your current work is retained.",
+                  );
                 const current = session;
                 commit(previous);
                 setPrevious(current);
@@ -568,6 +626,43 @@ export default function TranscriptSession() {
                     session. A repeated identical source is ignored. Corrected
                     sources remain separate revisions.
                   </p>
+                  <details className="intake-details mt-6">
+                    <summary>Notion snapshot pilot</summary>
+                    <p>
+                      Ask your connected agent to fetch one transcript from
+                      Notion and prepare a provider snapshot using the session
+                      bridge helper. Preview it here before adding evidence. The
+                      browser does not connect to Notion or listen to meetings.
+                    </p>
+                    <p>
+                      <a
+                        href="https://github.com/OKHP3/mermaid-diagram-bpmn/blob/main/docs/session-bridge-pilot.md"
+                        target="_blank"
+                        rel="noreferrer"
+                      >
+                        Snapshot preparation instructions
+                      </a>
+                    </p>
+                    <label className="intake-field">
+                      <span>Import provider snapshot</span>
+                      <input
+                        type="file"
+                        accept=".json"
+                        onChange={(e) => {
+                          const file = e.target.files?.[0];
+                          e.target.value = "";
+                          if (file)
+                            run(async () =>
+                              setProviderPreview(
+                                await readProviderSnapshot(
+                                  await fileText(file, MAX_BRIDGE_BYTES),
+                                ),
+                              ),
+                            );
+                        }}
+                      />
+                    </label>
+                  </details>
                 </div>
                 <aside className="session-context">
                   <FileText size={24} />
@@ -610,9 +705,68 @@ export default function TranscriptSession() {
                   </p>
                 </aside>
               </div>
+              {providerPreview && (
+                <section className="session-preview">
+                  <h3 ref={preview} tabIndex={-1}>
+                    Preview Notion snapshot
+                  </h3>
+                  <SourceOrigin source={providerPreview.source} />
+                  <details>
+                    <summary>Read the complete retained transcript</summary>
+                    <pre className="whitespace-pre-wrap break-words">
+                      {providerPreview.raw}
+                    </pre>
+                  </details>
+                  <p>
+                    Capture state: {captureState}. Adding this source may
+                    suggest or queue a task under your keyword settings. It
+                    never runs an agent or changes the accepted process.
+                  </p>
+                  <div className="session-actions">
+                    <button
+                      className="forge-btn-primary"
+                      onClick={() =>
+                        run(async () => {
+                          const current = currentRef.current;
+                          const next = await addProviderSnapshot(
+                            current,
+                            JSON.stringify(providerPreview),
+                            captureState,
+                          );
+                          if (next !== current) {
+                            commit(next);
+                            setSelectedRevision(next.revisions.at(-1)!.id);
+                            setSourcePage(0);
+                            setFilter("");
+                          }
+                          setMessage(
+                            next === current
+                              ? "This transcript is already retained. Original attribution and activations are unchanged."
+                              : "Notion snapshot added. Review passages and activations next.",
+                          );
+                          setProviderPreview(null);
+                          heading.current?.focus();
+                        })
+                      }
+                    >
+                      Add snapshot revision
+                    </button>
+                    <button
+                      className="forge-btn-outline"
+                      onClick={() => {
+                        setProviderPreview(null);
+                        heading.current?.focus();
+                      }}
+                    >
+                      Cancel snapshot import
+                    </button>
+                  </div>
+                </section>
+              )}
               {revision && (
                 <section className="session-source">
                   <h3>Retained source passages</h3>
+                  {revision.source && <SourceOrigin source={revision.source} />}
                   <label className="intake-field">
                     <span>Source revision</span>
                     <select
@@ -922,7 +1076,7 @@ export default function TranscriptSession() {
                     if (file)
                       run(async () =>
                         setResultPreview(
-                          importResult(
+                          await importVerifiedResult(
                             await fileText(file, MAX_SESSION_BYTES),
                             session,
                           ),
@@ -941,11 +1095,12 @@ export default function TranscriptSession() {
                     evidence records. The accepted process will remain unchanged
                     until review and apply.
                   </p>
+                  <ExecutionReport execution={resultPreview.result.execution} />
                   <button
                     className="forge-btn-primary"
                     onClick={() =>
-                      run(() => {
-                        importResult(
+                      run(async () => {
+                        await importVerifiedResult(
                           JSON.stringify(resultPreview.result),
                           session,
                         );
@@ -1005,6 +1160,7 @@ export default function TranscriptSession() {
                       reported by the named reviewer; imported records are not
                       independent approval verification.
                     </p>
+                    <ExecutionReport execution={result.execution} />
                     {result.claims.map((claim) => {
                       const change = changes.find(
                         (c) => c.path === claim.path,
