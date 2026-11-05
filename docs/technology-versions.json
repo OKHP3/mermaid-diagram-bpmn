@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-04T13:27:13.093Z",
+  "generatedAt": "2026-11-05T09:22:55.678Z",
   "complete": true,
   "errors": [],
   "inventory": {
@@ -153,8 +153,8 @@
         "path": "app/package.json",
         "field": "devDependencies",
         "declared": "catalog:",
-        "effective": "1.67.0",
-        "resolved": "1.67.0",
+        "effective": "1.68.0",
+        "resolved": "1.68.0",
         "kind": "workspace"
       },
       {
@@ -1215,7 +1215,7 @@
         "4.18.1"
       ],
       "lucide-react": [
-        "1.67.0"
+        "1.68.0"
       ],
       "lz-string": [
         "1.5.0"
@@ -1432,7 +1432,7 @@
       "drizzle-orm": "^0.45.2",
       "fflate": "0.8.3",
       "framer-motion": "^13.1.1",
-      "lucide-react": "1.67.0",
+      "lucide-react": "1.68.0",
       "react": "19.3.1",
       "react-dom": "19.3.1",
       "tailwind-merge": "3.7.0",
@@ -1860,7 +1860,7 @@
         "node": "^22.18.0 || >=24.11.0"
       },
       "stableByMajor": {
-        "7": "7.29.12",
+        "7": "7.29.13",
         "8": "8.1.0"
       },
       "matureByMajor": {
@@ -1894,7 +1894,7 @@
         "node": "^22.18.0 || >=24.11.0"
       },
       "stableByMajor": {
-        "7": "7.29.11",
+        "7": "7.29.13",
         "8": "8.0.8"
       },
       "matureByMajor": {
@@ -1928,7 +1928,7 @@
         "node": "^22.18.0 || >=24.11.0"
       },
       "stableByMajor": {
-        "7": "7.29.12",
+        "7": "7.29.13",
         "8": "8.1.0"
       },
       "matureByMajor": {
@@ -1943,7 +1943,7 @@
       "published": "2026-11-02T12:08:32.900Z",
       "engines": {},
       "stableByMajor": {
-        "7": "7.29.10",
+        "7": "7.29.13",
         "8": "8.1.0"
       },
       "matureByMajor": {
@@ -1977,7 +1977,7 @@
         "node": "^22.18.0 || >=24.11.0"
       },
       "stableByMajor": {
-        "7": "7.29.12",
+        "7": "7.29.13",
         "8": "8.1.0"
       },
       "matureByMajor": {
@@ -2764,13 +2764,13 @@
       "source": "https://registry.npmjs.org/%40tailwindcss%2Fvite"
     },
     "@tanstack/react-query": {
-      "latest": "5.105.3",
-      "latestTag": "5.105.3",
-      "published": "2026-11-02T20:39:13.878Z",
+      "latest": "5.106.1",
+      "latestTag": "5.106.1",
+      "published": "2026-11-05T08:07:42.091Z",
       "engines": {},
       "stableByMajor": {
         "4": "4.44.0",
-        "5": "5.105.3"
+        "5": "5.106.1"
       },
       "matureByMajor": {
         "4": "4.44.0",
@@ -4364,14 +4364,14 @@
       "source": "https://registry.npmjs.org/bare-stream"
     },
     "bare-url": {
-      "latest": "2.5.5",
-      "latestTag": "2.5.5",
-      "published": "2026-10-12T15:09:21.857Z",
+      "latest": "2.5.6",
+      "latestTag": "2.5.6",
+      "published": "2026-11-04T14:23:56.125Z",
       "engines": {},
       "stableByMajor": {
         "0": "0.3.8",
         "1": "1.2.4",
-        "2": "2.5.5"
+        "2": "2.5.6"
       },
       "matureByMajor": {
         "0": "0.3.8",
@@ -4833,7 +4833,7 @@
         "4": "4.13.0",
         "5": "5.16.0",
         "6": "6.7.0",
-        "7": "7.9.1"
+        "7": "7.9.2"
       },
       "source": "https://registry.npmjs.org/d3"
     },
@@ -4984,7 +4984,7 @@
         "3": "3.1.7",
         "4": "4.1.5",
         "5": "5.3.0",
-        "6": "6.0.5"
+        "6": "6.0.6"
       },
       "source": "https://registry.npmjs.org/d3-delaunay"
     },
@@ -5946,7 +5946,7 @@
         "11": "11.18.2",
         "12": "12.43.0",
         "13": "13.5.1",
-        "14": "14.9.0"
+        "14": "14.9.1"
       },
       "source": "https://registry.npmjs.org/framer-motion"
     },
@@ -6395,17 +6395,17 @@
       "source": "https://registry.npmjs.org/lodash-es"
     },
     "lucide-react": {
-      "latest": "1.68.0",
-      "latestTag": "1.68.0",
-      "published": "2026-11-04T06:10:53.831Z",
+      "latest": "1.69.0",
+      "latestTag": "1.69.0",
+      "published": "2026-11-05T06:12:23.066Z",
       "engines": {},
       "stableByMajor": {
         "0": "0.577.0",
-        "1": "1.68.0"
+        "1": "1.69.0"
       },
       "matureByMajor": {
         "0": "0.577.0",
-        "1": "1.67.0"
+        "1": "1.68.0"
       },
       "source": "https://registry.npmjs.org/lucide-react"
     },
@@ -6748,9 +6748,9 @@
       "source": "https://registry.npmjs.org/playwright-core"
     },
     "pnpm": {
-      "latest": "12.17.0",
+      "latest": "12.18.0",
       "latestTag": "12.16.1",
-      "published": "2026-10-30T14:23:51.302Z",
+      "published": "2026-11-05T00:56:16.339Z",
       "engines": {
         "node": ">=18"
       },
@@ -6763,8 +6763,8 @@
         "8": "8.15.9",
         "9": "9.15.9",
         "10": "10.34.9",
-        "11": "11.28.10",
-        "12": "12.17.0"
+        "11": "11.28.11",
+        "12": "12.18.0"
       },
       "matureByMajor": {
         "3": "3.8.1",
@@ -7544,16 +7544,16 @@
       "source": "https://registry.npmjs.org/typescript"
     },
     "undici-types": {
-      "latest": "8.12.3",
-      "latestTag": "8.12.3",
-      "published": "2026-10-19T14:07:58.069Z",
+      "latest": "8.12.4",
+      "latestTag": "8.12.4",
+      "published": "2026-11-05T08:55:41.494Z",
       "engines": {},
       "stableByMajor": {
         "0": "0.0.1",
         "5": "5.28.4",
         "6": "6.29.1",
-        "7": "7.30.1",
-        "8": "8.12.3"
+        "7": "7.30.2",
+        "8": "8.12.4"
       },
       "matureByMajor": {
         "0": "0.0.1",
@@ -7591,9 +7591,9 @@
       "source": "https://registry.npmjs.org/util-deprecate"
     },
     "vite": {
-      "latest": "8.3.5",
-      "latestTag": "8.3.5",
-      "published": "2026-10-21T06:38:54.907Z",
+      "latest": "8.3.6",
+      "latestTag": "8.3.6",
+      "published": "2026-11-05T05:40:52.195Z",
       "engines": {
         "node": "^20.19.0 || >=22.12.0"
       },
@@ -7605,7 +7605,7 @@
         "5": "5.4.21",
         "6": "6.4.5",
         "7": "7.3.7",
-        "8": "8.3.5"
+        "8": "8.3.6"
       },
       "matureByMajor": {
         "0": "0.20.10",
@@ -7832,7 +7832,7 @@
     "selectedLine": "3.11.18",
     "source": "https://www.python.org/downloads/"
   },
-  "sourceCommit": "e4df3b9cd8ae520dbe552514f6e7e837a6c2f403",
+  "sourceCommit": "9db7ef49e9a0ba041c3619262a35ba7f518afbe4",
   "auditNode": "v26.13.0",
   "sourceDirty": true
 }
