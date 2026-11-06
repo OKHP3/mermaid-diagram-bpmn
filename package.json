@@ -54,7 +54,7 @@
     "vendor:test": "node --test scripts/update-vendor-pins.test.mjs scripts/sync-mermaid-target.test.mjs scripts/release-manifest-state.test.mjs scripts/watch-mermaid-release.test.mjs"
   },
   "private": true,
-  "packageManager": "pnpm@11.28.10",
+  "packageManager": "pnpm@11.28.11",
   "devDependencies": {
     "typescript": "7.0.2",
     "prettier": "3.9.10"
