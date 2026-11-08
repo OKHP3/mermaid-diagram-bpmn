@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-07T09:20:27.004Z",
+  "generatedAt": "2026-11-08T09:20:45.376Z",
   "complete": true,
   "errors": [],
   "inventory": {
@@ -54,8 +54,8 @@
         "path": "app/package.json",
         "field": "devDependencies",
         "declared": "catalog:",
-        "effective": "4.3.4",
-        "resolved": "4.3.4",
+        "effective": "4.3.5",
+        "resolved": "4.3.5",
         "kind": "workspace"
       },
       {
@@ -198,8 +198,8 @@
         "path": "app/package.json",
         "field": "devDependencies",
         "declared": "catalog:",
-        "effective": "4.3.4",
-        "resolved": "4.3.4",
+        "effective": "4.3.5",
+        "resolved": "4.3.5",
         "kind": "workspace"
       },
       {
@@ -638,31 +638,31 @@
         "1.0.1"
       ],
       "@tailwindcss/node": [
-        "4.3.4"
+        "4.3.5"
       ],
       "@tailwindcss/oxide-darwin-arm64": [
-        "4.3.4"
+        "4.3.5"
       ],
       "@tailwindcss/oxide-darwin-x64": [
-        "4.3.4"
+        "4.3.5"
       ],
       "@tailwindcss/oxide-linux-x64-gnu": [
-        "4.3.4"
+        "4.3.5"
       ],
       "@tailwindcss/oxide-wasm32-wasi": [
-        "4.3.4"
+        "4.3.5"
       ],
       "@tailwindcss/oxide-win32-x64-msvc": [
-        "4.3.4"
+        "4.3.5"
       ],
       "@tailwindcss/oxide": [
-        "4.3.4"
+        "4.3.5"
       ],
       "@tailwindcss/typography": [
         "0.5.20"
       ],
       "@tailwindcss/vite": [
-        "4.3.4"
+        "4.3.5"
       ],
       "@testing-library/dom": [
         "10.4.2"
@@ -1351,7 +1351,7 @@
         "3.7.0"
       ],
       "tailwindcss": [
-        "4.3.4"
+        "4.3.5"
       ],
       "tapable": [
         "2.3.3"
@@ -1421,7 +1421,7 @@
       "@replit/vite-plugin-cartographer": "0.6.1",
       "@replit/vite-plugin-dev-banner": "0.1.2",
       "@replit/vite-plugin-runtime-error-modal": "0.0.6",
-      "@tailwindcss/vite": "4.3.4",
+      "@tailwindcss/vite": "4.3.5",
       "@tanstack/react-query": "^5.90.21",
       "@types/node": "26.6.6",
       "@types/react": "19.3.0",
@@ -1436,7 +1436,7 @@
       "react": "19.3.1",
       "react-dom": "19.3.1",
       "tailwind-merge": "3.7.0",
-      "tailwindcss": "4.3.4",
+      "tailwindcss": "4.3.5",
       "tsx": "4.23.15",
       "vite": "8.3.6",
       "wouter": "^3.13.0",
@@ -2643,7 +2643,7 @@
         "4": "4.3.5"
       },
       "matureByMajor": {
-        "4": "4.3.4"
+        "4": "4.3.5"
       },
       "source": "https://registry.npmjs.org/%40tailwindcss%2Fnode"
     },
@@ -2658,7 +2658,7 @@
         "4": "4.3.5"
       },
       "matureByMajor": {
-        "4": "4.3.4"
+        "4": "4.3.5"
       },
       "source": "https://registry.npmjs.org/%40tailwindcss%2Foxide"
     },
@@ -2673,7 +2673,7 @@
         "4": "4.3.5"
       },
       "matureByMajor": {
-        "4": "4.3.4"
+        "4": "4.3.5"
       },
       "source": "https://registry.npmjs.org/%40tailwindcss%2Foxide-darwin-arm64"
     },
@@ -2688,7 +2688,7 @@
         "4": "4.3.5"
       },
       "matureByMajor": {
-        "4": "4.3.4"
+        "4": "4.3.5"
       },
       "source": "https://registry.npmjs.org/%40tailwindcss%2Foxide-darwin-x64"
     },
@@ -2703,7 +2703,7 @@
         "4": "4.3.5"
       },
       "matureByMajor": {
-        "4": "4.3.4"
+        "4": "4.3.5"
       },
       "source": "https://registry.npmjs.org/%40tailwindcss%2Foxide-linux-x64-gnu"
     },
@@ -2718,7 +2718,7 @@
         "4": "4.3.5"
       },
       "matureByMajor": {
-        "4": "4.3.4"
+        "4": "4.3.5"
       },
       "source": "https://registry.npmjs.org/%40tailwindcss%2Foxide-wasm32-wasi"
     },
@@ -2733,7 +2733,7 @@
         "4": "4.3.5"
       },
       "matureByMajor": {
-        "4": "4.3.4"
+        "4": "4.3.5"
       },
       "source": "https://registry.npmjs.org/%40tailwindcss%2Foxide-win32-x64-msvc"
     },
@@ -2759,7 +2759,7 @@
         "4": "4.3.5"
       },
       "matureByMajor": {
-        "4": "4.3.4"
+        "4": "4.3.5"
       },
       "source": "https://registry.npmjs.org/%40tailwindcss%2Fvite"
     },
@@ -2774,7 +2774,7 @@
       },
       "matureByMajor": {
         "4": "4.44.0",
-        "5": "5.106.1"
+        "5": "5.107.1"
       },
       "source": "https://registry.npmjs.org/%40tanstack%2Freact-query"
     },
@@ -4614,7 +4614,7 @@
         "12": "12.1.0",
         "13": "13.1.0",
         "14": "14.0.3",
-        "15": "15.0.0"
+        "15": "15.1.0"
       },
       "source": "https://registry.npmjs.org/commander"
     },
@@ -5742,7 +5742,7 @@
       },
       "matureByMajor": {
         "0": "0.0.1",
-        "1": "1.53.1"
+        "1": "1.53.2"
       },
       "source": "https://registry.npmjs.org/es-toolkit"
     },
@@ -5946,7 +5946,7 @@
         "11": "11.18.2",
         "12": "12.43.0",
         "13": "13.5.1",
-        "14": "14.9.1"
+        "14": "14.10.1"
       },
       "source": "https://registry.npmjs.org/framer-motion"
     },
@@ -7338,7 +7338,7 @@
         "1": "1.9.6",
         "2": "2.2.19",
         "3": "3.4.19",
-        "4": "4.3.4"
+        "4": "4.3.5"
       },
       "source": "https://registry.npmjs.org/tailwindcss"
     },
@@ -7832,7 +7832,7 @@
     "selectedLine": "3.11.18",
     "source": "https://www.python.org/downloads/"
   },
-  "sourceCommit": "c0f1e0e5b8c43620f630fca5be735e251c252e8c",
+  "sourceCommit": "f00e37b10ecdaee001bdea3ed997c1dc891f12bb",
   "auditNode": "v26.13.0",
   "sourceDirty": true
 }
