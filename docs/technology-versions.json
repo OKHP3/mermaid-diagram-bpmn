@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-08T09:20:45.376Z",
+  "generatedAt": "2026-11-09T09:25:12.325Z",
   "complete": true,
   "errors": [],
   "inventory": {
@@ -2622,12 +2622,12 @@
       "source": "https://registry.npmjs.org/%40rolldown%2Fbinding-win32-x64-msvc"
     },
     "@rolldown/pluginutils": {
-      "latest": "1.0.1",
-      "latestTag": "1.0.1",
-      "published": "2026-05-13T03:52:29.927Z",
+      "latest": "1.1.0",
+      "latestTag": "1.1.0",
+      "published": "2026-11-09T07:04:55.568Z",
       "engines": {},
       "stableByMajor": {
-        "1": "1.0.1"
+        "1": "1.1.0"
       },
       "matureByMajor": {
         "1": "1.0.1"
@@ -3978,9 +3978,9 @@
       "source": "https://registry.npmjs.org/%40upsetjs%2Fvenn.js"
     },
     "@vitejs/plugin-react": {
-      "latest": "6.2.1",
-      "latestTag": "6.2.1",
-      "published": "2026-11-02T09:18:16.564Z",
+      "latest": "6.3.0",
+      "latestTag": "6.3.0",
+      "published": "2026-11-09T06:12:31.033Z",
       "engines": {
         "node": "^20.19.0 || >=22.12.0"
       },
@@ -3990,7 +3990,7 @@
         "3": "3.1.0",
         "4": "4.7.0",
         "5": "5.2.0",
-        "6": "6.2.1"
+        "6": "6.3.0"
       },
       "matureByMajor": {
         "1": "1.3.2",
@@ -4066,9 +4066,9 @@
       "source": "https://registry.npmjs.org/abort-controller"
     },
     "ansi-regex": {
-      "latest": "6.5.0",
-      "latestTag": "6.5.0",
-      "published": "2026-10-29T13:35:20.896Z",
+      "latest": "6.6.0",
+      "latestTag": "6.6.0",
+      "published": "2026-11-08T11:31:30.760Z",
       "engines": {
         "node": ">=12"
       },
@@ -4079,7 +4079,7 @@
         "3": "3.0.1",
         "4": "4.1.1",
         "5": "5.0.1",
-        "6": "6.5.0"
+        "6": "6.6.0"
       },
       "matureByMajor": {
         "0": "0.2.1",
@@ -6840,9 +6840,9 @@
       "source": "https://registry.npmjs.org/postcss"
     },
     "postcss-selector-parser": {
-      "latest": "7.1.7",
-      "latestTag": "7.1.7",
-      "published": "2026-10-20T09:08:33.097Z",
+      "latest": "7.2.0",
+      "latestTag": "7.2.0",
+      "published": "2026-11-08T19:13:24.247Z",
       "engines": {
         "node": ">=4"
       },
@@ -6853,8 +6853,8 @@
         "3": "3.1.2",
         "4": "4.0.0",
         "5": "5.0.0",
-        "6": "6.1.5",
-        "7": "7.1.7"
+        "6": "6.1.6",
+        "7": "7.2.0"
       },
       "matureByMajor": {
         "0": "0.0.5",
@@ -7702,9 +7702,9 @@
       "source": "https://registry.npmjs.org/wouter"
     },
     "ws": {
-      "latest": "8.22.1",
-      "latestTag": "8.22.1",
-      "published": "2026-10-31T09:58:47.842Z",
+      "latest": "8.22.2",
+      "latestTag": "8.22.2",
+      "published": "2026-11-08T14:55:20.195Z",
       "engines": {
         "node": ">=10.0.0"
       },
@@ -7717,7 +7717,7 @@
         "5": "5.2.7",
         "6": "6.2.6",
         "7": "7.5.13",
-        "8": "8.22.1"
+        "8": "8.22.2"
       },
       "matureByMajor": {
         "0": "0.8.1",
@@ -7832,7 +7832,7 @@
     "selectedLine": "3.11.18",
     "source": "https://www.python.org/downloads/"
   },
-  "sourceCommit": "f00e37b10ecdaee001bdea3ed997c1dc891f12bb",
+  "sourceCommit": "cc47a8305f0b0caaf1549b574cbd3ae0864d1f14",
   "auditNode": "v26.13.0",
-  "sourceDirty": true
+  "sourceDirty": false
 }
