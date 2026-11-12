@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-11T17:10:52.036Z",
+  "generatedAt": "2026-11-12T17:37:18.802Z",
   "complete": true,
   "errors": [],
   "inventory": {
@@ -153,8 +153,8 @@
         "path": "app/package.json",
         "field": "devDependencies",
         "declared": "catalog:",
-        "effective": "1.71.0",
-        "resolved": "1.71.0",
+        "effective": "1.72.0",
+        "resolved": "1.72.0",
         "kind": "workspace"
       },
       {
@@ -216,8 +216,8 @@
         "path": "app/package.json",
         "field": "devDependencies",
         "declared": "catalog:",
-        "effective": "8.3.7",
-        "resolved": "8.3.7",
+        "effective": "8.3.8",
+        "resolved": "8.3.8",
         "kind": "workspace"
       },
       {
@@ -279,8 +279,8 @@
         "path": "lib/bpmn-plugin/package.json",
         "field": "devDependencies",
         "declared": "catalog:",
-        "effective": "8.3.7",
-        "resolved": "8.3.7",
+        "effective": "8.3.8",
+        "resolved": "8.3.8",
         "kind": "workspace"
       },
       {
@@ -305,9 +305,9 @@
         "name": "prettier",
         "path": "package.json",
         "field": "devDependencies",
-        "declared": "3.9.10",
-        "effective": "3.9.10",
-        "resolved": "3.9.10",
+        "declared": "3.10.0",
+        "effective": "3.10.0",
+        "resolved": "3.10.0",
         "kind": "workspace"
       },
       {
@@ -920,7 +920,7 @@
         "1.5.1"
       ],
       "brace-expansion": [
-        "5.0.12"
+        "5.0.13"
       ],
       "buffer-crc32": [
         "1.0.0"
@@ -1215,7 +1215,7 @@
         "4.18.1"
       ],
       "lucide-react": [
-        "1.71.0"
+        "1.72.0"
       ],
       "lz-string": [
         "1.5.0"
@@ -1279,7 +1279,7 @@
         "8.5.32"
       ],
       "prettier": [
-        "3.9.10"
+        "3.10.0"
       ],
       "pretty-format": [
         "27.5.1"
@@ -1396,7 +1396,7 @@
         "1.0.2"
       ],
       "vite": [
-        "8.3.7"
+        "8.3.8"
       ],
       "vitest": [
         "5.1.0"
@@ -1432,13 +1432,13 @@
       "drizzle-orm": "^0.45.2",
       "fflate": "0.8.3",
       "framer-motion": "^13.1.1",
-      "lucide-react": "1.71.0",
+      "lucide-react": "1.72.0",
       "react": "19.3.1",
       "react-dom": "19.3.1",
       "tailwind-merge": "3.7.0",
       "tailwindcss": "4.3.5",
       "tsx": "4.23.15",
-      "vite": "8.3.7",
+      "vite": "8.3.8",
       "wouter": "^3.13.0",
       "zod": "^4.4.3"
     },
@@ -1526,7 +1526,7 @@
       "picomatch@<2.3.2": ">=2.3.2",
       "picomatch@>=4.0.0 <4.0.4": ">=4.0.4",
       "postcss@<8.5.10": ">=8.5.10",
-      "brace-expansion": "5.0.12",
+      "brace-expansion": "5.0.13",
       "source-map-js": "1.2.2",
       "dompurify": "3.4.17",
       "lodash-es": "4.18.1",
@@ -1853,15 +1853,15 @@
       "source": "https://registry.npmjs.org/%40babel%2Fcode-frame"
     },
     "@babel/generator": {
-      "latest": "8.1.0",
-      "latestTag": "8.1.0",
-      "published": "2026-11-02T12:07:27.670Z",
+      "latest": "8.1.2",
+      "latestTag": "8.1.2",
+      "published": "2026-11-11T19:54:06.079Z",
       "engines": {
         "node": "^22.18.0 || >=24.11.0"
       },
       "stableByMajor": {
-        "7": "7.29.13",
-        "8": "8.1.0"
+        "7": "7.29.14",
+        "8": "8.1.2"
       },
       "matureByMajor": {
         "7": "7.29.13",
@@ -1887,15 +1887,15 @@
       "source": "https://registry.npmjs.org/%40babel%2Fhelper-globals"
     },
     "@babel/helper-string-parser": {
-      "latest": "8.0.8",
-      "latestTag": "8.0.8",
-      "published": "2026-10-23T14:50:36.068Z",
+      "latest": "8.1.2",
+      "latestTag": "8.1.2",
+      "published": "2026-11-11T19:56:42.636Z",
       "engines": {
         "node": "^22.18.0 || >=24.11.0"
       },
       "stableByMajor": {
-        "7": "7.29.13",
-        "8": "8.0.8"
+        "7": "7.29.14",
+        "8": "8.1.2"
       },
       "matureByMajor": {
         "7": "7.29.13",
@@ -1921,15 +1921,15 @@
       "source": "https://registry.npmjs.org/%40babel%2Fhelper-validator-identifier"
     },
     "@babel/parser": {
-      "latest": "8.1.0",
-      "latestTag": "8.1.0",
-      "published": "2026-11-02T12:09:07.667Z",
+      "latest": "8.1.2",
+      "latestTag": "8.1.2",
+      "published": "2026-11-11T19:55:24.020Z",
       "engines": {
         "node": "^22.18.0 || >=24.11.0"
       },
       "stableByMajor": {
-        "7": "7.29.13",
-        "8": "8.1.0"
+        "7": "7.29.14",
+        "8": "8.1.2"
       },
       "matureByMajor": {
         "7": "7.29.13",
@@ -1938,13 +1938,13 @@
       "source": "https://registry.npmjs.org/%40babel%2Fparser"
     },
     "@babel/runtime": {
-      "latest": "8.1.0",
-      "latestTag": "8.1.0",
-      "published": "2026-11-02T12:08:32.900Z",
+      "latest": "8.1.2",
+      "latestTag": "8.1.2",
+      "published": "2026-11-11T19:55:46.357Z",
       "engines": {},
       "stableByMajor": {
-        "7": "7.29.13",
-        "8": "8.1.0"
+        "7": "7.29.14",
+        "8": "8.1.2"
       },
       "matureByMajor": {
         "7": "7.29.13",
@@ -1953,15 +1953,15 @@
       "source": "https://registry.npmjs.org/%40babel%2Fruntime"
     },
     "@babel/template": {
-      "latest": "8.0.0",
-      "latestTag": "8.0.0",
-      "published": "2026-06-16T13:33:09.318Z",
+      "latest": "8.1.2",
+      "latestTag": "8.1.2",
+      "published": "2026-11-11T19:54:58.278Z",
       "engines": {
         "node": "^22.18.0 || >=24.11.0"
       },
       "stableByMajor": {
         "7": "7.29.7",
-        "8": "8.0.0"
+        "8": "8.1.2"
       },
       "matureByMajor": {
         "7": "7.29.7",
@@ -1970,15 +1970,15 @@
       "source": "https://registry.npmjs.org/%40babel%2Ftemplate"
     },
     "@babel/traverse": {
-      "latest": "8.1.0",
-      "latestTag": "8.1.0",
-      "published": "2026-11-02T12:08:12.598Z",
+      "latest": "8.1.2",
+      "latestTag": "8.1.2",
+      "published": "2026-11-11T19:54:29.507Z",
       "engines": {
         "node": "^22.18.0 || >=24.11.0"
       },
       "stableByMajor": {
-        "7": "7.29.13",
-        "8": "8.1.0"
+        "7": "7.29.14",
+        "8": "8.1.2"
       },
       "matureByMajor": {
         "7": "7.29.13",
@@ -1987,15 +1987,15 @@
       "source": "https://registry.npmjs.org/%40babel%2Ftraverse"
     },
     "@babel/types": {
-      "latest": "8.1.0",
-      "latestTag": "8.1.0",
-      "published": "2026-11-02T12:07:44.482Z",
+      "latest": "8.1.2",
+      "latestTag": "8.1.2",
+      "published": "2026-11-11T19:56:52.587Z",
       "engines": {
         "node": "^22.18.0 || >=24.11.0"
       },
       "stableByMajor": {
-        "7": "7.29.11",
-        "8": "8.1.0"
+        "7": "7.29.14",
+        "8": "8.1.2"
       },
       "matureByMajor": {
         "7": "7.29.11",
@@ -2383,7 +2383,7 @@
       },
       "matureByMajor": {
         "0": "0.0.0",
-        "1": "1.3.1"
+        "1": "1.3.2"
       },
       "source": "https://registry.npmjs.org/%40rolldown%2Fbinding-android-arm-eabi"
     },
@@ -2398,7 +2398,7 @@
         "1": "1.3.2"
       },
       "matureByMajor": {
-        "1": "1.3.1"
+        "1": "1.3.2"
       },
       "source": "https://registry.npmjs.org/%40rolldown%2Fbinding-android-arm64"
     },
@@ -2415,7 +2415,7 @@
       },
       "matureByMajor": {
         "0": "0.15.1",
-        "1": "1.3.1"
+        "1": "1.3.2"
       },
       "source": "https://registry.npmjs.org/%40rolldown%2Fbinding-darwin-arm64"
     },
@@ -2432,7 +2432,7 @@
       },
       "matureByMajor": {
         "0": "0.15.1",
-        "1": "1.3.1"
+        "1": "1.3.2"
       },
       "source": "https://registry.npmjs.org/%40rolldown%2Fbinding-darwin-x64"
     },
@@ -2449,7 +2449,7 @@
       },
       "matureByMajor": {
         "0": "0.15.1",
-        "1": "1.3.1"
+        "1": "1.3.2"
       },
       "source": "https://registry.npmjs.org/%40rolldown%2Fbinding-freebsd-x64"
     },
@@ -2466,7 +2466,7 @@
       },
       "matureByMajor": {
         "0": "0.15.1",
-        "1": "1.3.1"
+        "1": "1.3.2"
       },
       "source": "https://registry.npmjs.org/%40rolldown%2Fbinding-linux-arm-gnueabihf"
     },
@@ -2483,7 +2483,7 @@
       },
       "matureByMajor": {
         "0": "0.15.1",
-        "1": "1.3.1"
+        "1": "1.3.2"
       },
       "source": "https://registry.npmjs.org/%40rolldown%2Fbinding-linux-arm64-gnu"
     },
@@ -2500,7 +2500,7 @@
       },
       "matureByMajor": {
         "0": "0.15.1",
-        "1": "1.3.1"
+        "1": "1.3.2"
       },
       "source": "https://registry.npmjs.org/%40rolldown%2Fbinding-linux-arm64-musl"
     },
@@ -2517,7 +2517,7 @@
       },
       "matureByMajor": {
         "0": "0.0.0",
-        "1": "1.3.1"
+        "1": "1.3.2"
       },
       "source": "https://registry.npmjs.org/%40rolldown%2Fbinding-linux-ppc64-gnu"
     },
@@ -2534,7 +2534,7 @@
       },
       "matureByMajor": {
         "0": "0.0.0",
-        "1": "1.3.1"
+        "1": "1.3.2"
       },
       "source": "https://registry.npmjs.org/%40rolldown%2Fbinding-linux-s390x-gnu"
     },
@@ -2551,7 +2551,7 @@
       },
       "matureByMajor": {
         "0": "0.15.1",
-        "1": "1.3.1"
+        "1": "1.3.2"
       },
       "source": "https://registry.npmjs.org/%40rolldown%2Fbinding-linux-x64-gnu"
     },
@@ -2568,7 +2568,7 @@
       },
       "matureByMajor": {
         "0": "0.15.1",
-        "1": "1.3.1"
+        "1": "1.3.2"
       },
       "source": "https://registry.npmjs.org/%40rolldown%2Fbinding-linux-x64-musl"
     },
@@ -2583,7 +2583,7 @@
         "1": "1.3.2"
       },
       "matureByMajor": {
-        "1": "1.3.1"
+        "1": "1.3.2"
       },
       "source": "https://registry.npmjs.org/%40rolldown%2Fbinding-openharmony-arm64"
     },
@@ -2600,7 +2600,7 @@
       },
       "matureByMajor": {
         "0": "0.15.1",
-        "1": "1.3.1"
+        "1": "1.3.2"
       },
       "source": "https://registry.npmjs.org/%40rolldown%2Fbinding-win32-arm64-msvc"
     },
@@ -2617,7 +2617,7 @@
       },
       "matureByMajor": {
         "0": "0.15.1",
-        "1": "1.3.1"
+        "1": "1.3.2"
       },
       "source": "https://registry.npmjs.org/%40rolldown%2Fbinding-win32-x64-msvc"
     },
@@ -4332,14 +4332,14 @@
       "source": "https://registry.npmjs.org/bare-os"
     },
     "bare-path": {
-      "latest": "3.1.2",
-      "latestTag": "3.1.2",
-      "published": "2026-09-01T07:14:42.842Z",
+      "latest": "3.1.3",
+      "latestTag": "3.1.3",
+      "published": "2026-11-12T10:05:07.028Z",
       "engines": {},
       "stableByMajor": {
         "1": "1.1.2",
         "2": "2.1.3",
-        "3": "3.1.2"
+        "3": "3.1.3"
       },
       "matureByMajor": {
         "1": "1.1.2",
@@ -4412,11 +4412,11 @@
       },
       "matureByMajor": {
         "0": "0.0.0",
-        "1": "1.1.21",
-        "2": "2.1.7",
-        "3": "3.0.9",
+        "1": "1.1.22",
+        "2": "2.1.8",
+        "3": "3.0.10",
         "4": "4.0.1",
-        "5": "5.0.12"
+        "5": "5.0.13"
       },
       "source": "https://registry.npmjs.org/brace-expansion"
     },
@@ -5657,9 +5657,9 @@
       "source": "https://registry.npmjs.org/elkjs"
     },
     "enhanced-resolve": {
-      "latest": "5.26.1",
-      "latestTag": "5.26.1",
-      "published": "2026-11-03T09:15:19.164Z",
+      "latest": "5.27.0",
+      "latestTag": "5.27.0",
+      "published": "2026-11-12T15:35:34.751Z",
       "engines": {
         "node": ">=10.13.0"
       },
@@ -5668,7 +5668,7 @@
         "2": "2.3.0",
         "3": "3.4.1",
         "4": "4.5.0",
-        "5": "5.26.1"
+        "5": "5.27.0"
       },
       "matureByMajor": {
         "0": "0.9.1",
@@ -5910,9 +5910,9 @@
       "source": "https://registry.npmjs.org/fflate"
     },
     "framer-motion": {
-      "latest": "14.12.0",
-      "latestTag": "14.12.0",
-      "published": "2026-11-10T08:54:12.835Z",
+      "latest": "14.13.0",
+      "latestTag": "14.13.0",
+      "published": "2026-11-12T14:37:32.739Z",
       "engines": {},
       "stableByMajor": {
         "0": "0.20.2",
@@ -5929,7 +5929,7 @@
         "11": "11.18.2",
         "12": "12.43.0",
         "13": "13.5.1",
-        "14": "14.12.0"
+        "14": "14.13.0"
       },
       "matureByMajor": {
         "0": "0.20.2",
@@ -5968,13 +5968,13 @@
       "source": "https://registry.npmjs.org/fsevents"
     },
     "graceful-fs": {
-      "latest": "4.2.11",
-      "latestTag": "4.2.11",
-      "published": "2023-03-16T19:30:19.323Z",
+      "latest": "4.2.12",
+      "latestTag": "4.2.12",
+      "published": "2026-11-12T12:06:24.936Z",
       "engines": {},
       "stableByMajor": {
         "3": "3.0.12",
-        "4": "4.2.11"
+        "4": "4.2.12"
       },
       "matureByMajor": {
         "3": "3.0.12",
@@ -6405,7 +6405,7 @@
       },
       "matureByMajor": {
         "0": "0.577.0",
-        "1": "1.71.0"
+        "1": "1.72.0"
       },
       "source": "https://registry.npmjs.org/lucide-react"
     },
@@ -6544,7 +6544,7 @@
         "8": "8.0.7",
         "9": "9.0.9",
         "10": "10.2.6",
-        "11": "11.0.6"
+        "11": "11.0.8"
       },
       "source": "https://registry.npmjs.org/minimatch"
     },
@@ -6748,9 +6748,9 @@
       "source": "https://registry.npmjs.org/playwright-core"
     },
     "pnpm": {
-      "latest": "12.19.0",
+      "latest": "12.20.0",
       "latestTag": "12.18.0",
-      "published": "2026-11-10T01:24:37.162Z",
+      "published": "2026-11-12T00:23:01.043Z",
       "engines": {
         "node": ">=18"
       },
@@ -6764,7 +6764,7 @@
         "9": "9.15.9",
         "10": "10.34.9",
         "11": "11.28.11",
-        "12": "12.19.0"
+        "12": "12.20.0"
       },
       "matureByMajor": {
         "3": "3.8.1",
@@ -6840,9 +6840,9 @@
       "source": "https://registry.npmjs.org/postcss"
     },
     "postcss-selector-parser": {
-      "latest": "7.2.0",
-      "latestTag": "7.2.0",
-      "published": "2026-11-08T19:13:24.247Z",
+      "latest": "7.2.1",
+      "latestTag": "7.2.1",
+      "published": "2026-11-12T15:55:09.262Z",
       "engines": {
         "node": ">=4"
       },
@@ -6854,7 +6854,7 @@
         "4": "4.0.0",
         "5": "5.0.0",
         "6": "6.1.6",
-        "7": "7.2.0"
+        "7": "7.2.1"
       },
       "matureByMajor": {
         "0": "0.0.5",
@@ -6864,14 +6864,14 @@
         "4": "4.0.0",
         "5": "5.0.0",
         "6": "6.1.6",
-        "7": "7.2.0"
+        "7": "7.1.8"
       },
       "source": "https://registry.npmjs.org/postcss-selector-parser"
     },
     "prettier": {
-      "latest": "3.10.0",
-      "latestTag": "3.10.0",
-      "published": "2026-11-11T12:30:48.716Z",
+      "latest": "3.10.1",
+      "latestTag": "3.10.1",
+      "published": "2026-11-12T07:06:22.298Z",
       "engines": {
         "node": ">=14"
       },
@@ -6879,13 +6879,13 @@
         "0": "0.22.0",
         "1": "1.19.1",
         "2": "2.8.8",
-        "3": "3.10.0"
+        "3": "3.10.1"
       },
       "matureByMajor": {
         "0": "0.22.0",
         "1": "1.19.1",
         "2": "2.8.8",
-        "3": "3.9.10"
+        "3": "3.10.0"
       },
       "source": "https://registry.npmjs.org/prettier"
     },
@@ -7132,7 +7132,7 @@
       },
       "matureByMajor": {
         "0": "0.15.1",
-        "1": "1.3.1"
+        "1": "1.3.2"
       },
       "source": "https://registry.npmjs.org/rolldown"
     },
@@ -7617,7 +7617,7 @@
         "5": "5.4.21",
         "6": "6.4.6",
         "7": "7.3.8",
-        "8": "8.3.7"
+        "8": "8.3.8"
       },
       "source": "https://registry.npmjs.org/vite"
     },
@@ -7834,7 +7834,7 @@
     "selectedLine": "3.11.18",
     "source": "https://www.python.org/downloads/"
   },
-  "sourceCommit": "aa60455d465ca43732cc8bdf2282ee656a9730db",
+  "sourceCommit": "244416625c9688d0a2238273630bc4695c2498b0",
   "auditNode": "v26.13.1",
   "sourceDirty": true
 }
