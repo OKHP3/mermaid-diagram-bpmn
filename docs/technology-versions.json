@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-13T09:22:17.948Z",
+  "generatedAt": "2026-11-14T09:20:20.855Z",
   "complete": true,
   "errors": [],
   "inventory": {
@@ -2254,7 +2254,7 @@
         "0": "0.1.0",
         "1": "1.0.0",
         "2": "2.0.0",
-        "3": "3.1.2"
+        "3": "3.1.3"
       },
       "source": "https://registry.npmjs.org/%40jridgewell%2Fresolve-uri"
     },
@@ -2317,14 +2317,14 @@
       "source": "https://registry.npmjs.org/%40oxc-project%2Ftypes"
     },
     "@playwright/test": {
-      "latest": "1.65.0",
-      "latestTag": "1.65.0",
-      "published": "2026-11-05T18:30:18.050Z",
+      "latest": "1.65.1",
+      "latestTag": "1.65.1",
+      "published": "2026-11-13T21:12:37.610Z",
       "engines": {
         "node": ">=20"
       },
       "stableByMajor": {
-        "1": "1.65.0"
+        "1": "1.65.1"
       },
       "matureByMajor": {
         "1": "1.65.0"
@@ -2630,7 +2630,7 @@
         "1": "1.1.1"
       },
       "matureByMajor": {
-        "1": "1.1.0"
+        "1": "1.1.1"
       },
       "source": "https://registry.npmjs.org/%40rolldown%2Fpluginutils"
     },
@@ -4344,7 +4344,7 @@
       "matureByMajor": {
         "1": "1.1.2",
         "2": "2.1.3",
-        "3": "3.1.2"
+        "3": "3.1.3"
       },
       "source": "https://registry.npmjs.org/bare-path"
     },
@@ -4376,7 +4376,7 @@
       "matureByMajor": {
         "0": "0.3.8",
         "1": "1.2.4",
-        "2": "2.5.6"
+        "2": "2.5.7"
       },
       "source": "https://registry.npmjs.org/bare-url"
     },
@@ -5675,7 +5675,7 @@
         "2": "2.3.0",
         "3": "3.4.1",
         "4": "4.5.0",
-        "5": "5.26.1"
+        "5": "5.27.0"
       },
       "source": "https://registry.npmjs.org/enhanced-resolve"
     },
@@ -5910,9 +5910,9 @@
       "source": "https://registry.npmjs.org/fflate"
     },
     "framer-motion": {
-      "latest": "14.13.0",
-      "latestTag": "14.13.0",
-      "published": "2026-11-12T14:37:32.739Z",
+      "latest": "14.14.0",
+      "latestTag": "14.14.0",
+      "published": "2026-11-13T14:51:13.754Z",
       "engines": {},
       "stableByMajor": {
         "0": "0.20.2",
@@ -5929,7 +5929,7 @@
         "11": "11.18.2",
         "12": "12.43.0",
         "13": "13.5.1",
-        "14": "14.13.0"
+        "14": "14.14.0"
       },
       "matureByMajor": {
         "0": "0.20.2",
@@ -5946,7 +5946,7 @@
         "11": "11.18.2",
         "12": "12.43.0",
         "13": "13.5.1",
-        "14": "14.12.0"
+        "14": "14.13.0"
       },
       "source": "https://registry.npmjs.org/framer-motion"
     },
@@ -5978,7 +5978,7 @@
       },
       "matureByMajor": {
         "3": "3.0.12",
-        "4": "4.2.11"
+        "4": "4.2.12"
       },
       "source": "https://registry.npmjs.org/graceful-fs"
     },
@@ -6395,13 +6395,13 @@
       "source": "https://registry.npmjs.org/lodash-es"
     },
     "lucide-react": {
-      "latest": "1.72.0",
-      "latestTag": "1.72.0",
-      "published": "2026-11-11T06:15:40.696Z",
+      "latest": "1.73.0",
+      "latestTag": "1.73.0",
+      "published": "2026-11-14T06:15:14.805Z",
       "engines": {},
       "stableByMajor": {
         "0": "0.577.0",
-        "1": "1.72.0"
+        "1": "1.73.0"
       },
       "matureByMajor": {
         "0": "0.577.0",
@@ -6714,15 +6714,15 @@
       "source": "https://registry.npmjs.org/picomatch"
     },
     "playwright": {
-      "latest": "1.65.0",
-      "latestTag": "1.65.0",
-      "published": "2026-11-05T18:28:14.786Z",
+      "latest": "1.65.1",
+      "latestTag": "1.65.1",
+      "published": "2026-11-13T21:15:10.738Z",
       "engines": {
         "node": ">=20"
       },
       "stableByMajor": {
         "0": "0.18.0",
-        "1": "1.65.0"
+        "1": "1.65.1"
       },
       "matureByMajor": {
         "0": "0.18.0",
@@ -6731,15 +6731,15 @@
       "source": "https://registry.npmjs.org/playwright"
     },
     "playwright-core": {
-      "latest": "1.65.0",
-      "latestTag": "1.65.0",
-      "published": "2026-11-05T20:17:40.688Z",
+      "latest": "1.65.1",
+      "latestTag": "1.65.1",
+      "published": "2026-11-13T21:36:08.743Z",
       "engines": {
         "node": ">=20"
       },
       "stableByMajor": {
         "0": "0.18.0",
-        "1": "1.65.0"
+        "1": "1.65.1"
       },
       "matureByMajor": {
         "0": "0.18.0",
@@ -6748,9 +6748,9 @@
       "source": "https://registry.npmjs.org/playwright-core"
     },
     "pnpm": {
-      "latest": "12.20.0",
+      "latest": "12.21.0",
       "latestTag": "12.18.0",
-      "published": "2026-11-12T00:23:01.043Z",
+      "published": "2026-11-13T21:01:11.515Z",
       "engines": {
         "node": ">=18"
       },
@@ -6763,8 +6763,8 @@
         "8": "8.15.9",
         "9": "9.15.9",
         "10": "10.34.9",
-        "11": "11.28.11",
-        "12": "12.20.0"
+        "11": "11.28.12",
+        "12": "12.21.0"
       },
       "matureByMajor": {
         "3": "3.8.1",
@@ -6809,9 +6809,9 @@
       "source": "https://registry.npmjs.org/points-on-path"
     },
     "postcss": {
-      "latest": "8.5.32",
-      "latestTag": "8.5.32",
-      "published": "2026-10-26T20:36:42.832Z",
+      "latest": "8.5.33",
+      "latestTag": "8.5.33",
+      "published": "2026-11-13T22:46:13.565Z",
       "engines": {
         "node": "^10 || ^12 || >=14"
       },
@@ -6824,7 +6824,7 @@
         "5": "5.2.18",
         "6": "6.0.23",
         "7": "7.0.39",
-        "8": "8.5.32"
+        "8": "8.5.33"
       },
       "matureByMajor": {
         "0": "0.3.5",
@@ -6864,7 +6864,7 @@
         "4": "4.0.0",
         "5": "5.0.0",
         "6": "6.1.6",
-        "7": "7.1.8"
+        "7": "7.2.1"
       },
       "source": "https://registry.npmjs.org/postcss-selector-parser"
     },
@@ -7345,16 +7345,16 @@
       "source": "https://registry.npmjs.org/tailwindcss"
     },
     "tapable": {
-      "latest": "2.3.3",
-      "latestTag": "2.3.3",
-      "published": "2026-04-21T13:37:30.215Z",
+      "latest": "2.3.4",
+      "latestTag": "2.3.4",
+      "published": "2026-11-13T15:55:31.665Z",
       "engines": {
         "node": ">=6"
       },
       "stableByMajor": {
         "0": "0.2.9",
         "1": "1.1.3",
-        "2": "2.3.3"
+        "2": "2.3.4"
       },
       "matureByMajor": {
         "0": "0.2.9",
@@ -7727,10 +7727,10 @@
         "2": "2.3.1",
         "3": "3.3.3",
         "4": "4.1.0",
-        "5": "5.2.7",
-        "6": "6.2.6",
-        "7": "7.5.13",
-        "8": "8.22.2"
+        "5": "5.2.8",
+        "6": "6.2.7",
+        "7": "7.5.14",
+        "8": "8.23.0"
       },
       "source": "https://registry.npmjs.org/ws"
     },
@@ -7834,7 +7834,7 @@
     "selectedLine": "3.11.18",
     "source": "https://www.python.org/downloads/"
   },
-  "sourceCommit": "ec95059ca7701940d22588eeff6ad5763615e1a4",
+  "sourceCommit": "091b89045864cd620f5d5eaa883adc2318f1f75a",
   "auditNode": "v26.13.1",
-  "sourceDirty": true
+  "sourceDirty": false
 }
