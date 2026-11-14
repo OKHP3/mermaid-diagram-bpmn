@@ -19,7 +19,7 @@
     "test:e2e:update-snapshots": "playwright test e2e/visual-regression.spec.ts --project=chromium --update-snapshots"
   },
   "devDependencies": {
-    "@playwright/test": "1.64.1",
+    "@playwright/test": "1.65.0",
     "@replit/vite-plugin-cartographer": "catalog:",
     "@replit/vite-plugin-dev-banner": "catalog:",
     "@replit/vite-plugin-runtime-error-modal": "catalog:",
