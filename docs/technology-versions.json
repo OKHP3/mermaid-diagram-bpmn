@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-14T09:20:20.855Z",
+  "generatedAt": "2026-11-15T09:20:30.743Z",
   "complete": true,
   "errors": [],
   "inventory": {
@@ -8,9 +8,9 @@
         "name": "@playwright/test",
         "path": "app/package.json",
         "field": "devDependencies",
-        "declared": "1.65.0",
-        "effective": "1.65.0",
-        "resolved": "1.65.0",
+        "declared": "1.65.1",
+        "effective": "1.65.1",
+        "resolved": "1.65.1",
         "kind": "workspace"
       },
       {
@@ -153,8 +153,8 @@
         "path": "app/package.json",
         "field": "devDependencies",
         "declared": "catalog:",
-        "effective": "1.72.0",
-        "resolved": "1.72.0",
+        "effective": "1.73.0",
+        "resolved": "1.73.0",
         "kind": "workspace"
       },
       {
@@ -578,7 +578,7 @@
         "0.156.0"
       ],
       "@playwright/test": [
-        "1.65.0"
+        "1.65.1"
       ],
       "@replit/vite-plugin-cartographer": [
         "0.6.1"
@@ -1215,7 +1215,7 @@
         "4.18.1"
       ],
       "lucide-react": [
-        "1.72.0"
+        "1.73.0"
       ],
       "lz-string": [
         "1.5.0"
@@ -1261,10 +1261,10 @@
         "4.0.7"
       ],
       "playwright-core": [
-        "1.65.0"
+        "1.65.1"
       ],
       "playwright": [
-        "1.65.0"
+        "1.65.1"
       ],
       "points-on-curve": [
         "0.2.0"
@@ -1432,7 +1432,7 @@
       "drizzle-orm": "^0.45.2",
       "fflate": "0.8.3",
       "framer-motion": "^13.1.1",
-      "lucide-react": "1.72.0",
+      "lucide-react": "1.73.0",
       "react": "19.3.1",
       "react-dom": "19.3.1",
       "tailwind-merge": "3.7.0",
@@ -1744,7 +1744,7 @@
         "version": "26.13.1"
       }
     ],
-    "packageManager": "pnpm@11.28.11",
+    "packageManager": "pnpm@11.28.12",
     "replitNode": "24",
     "replitPython": "3.11",
     "pythonPin": "3.15.2",
@@ -2327,7 +2327,7 @@
         "1": "1.65.1"
       },
       "matureByMajor": {
-        "1": "1.65.0"
+        "1": "1.65.1"
       },
       "source": "https://registry.npmjs.org/%40playwright%2Ftest"
     },
@@ -5612,15 +5612,15 @@
       "source": "https://registry.npmjs.org/dom-accessibility-api"
     },
     "dompurify": {
-      "latest": "3.4.17",
-      "latestTag": "3.4.17",
-      "published": "2026-10-12T12:41:28.880Z",
+      "latest": "3.4.18",
+      "latestTag": "3.4.18",
+      "published": "2026-11-14T14:18:25.242Z",
       "engines": {},
       "stableByMajor": {
         "0": "0.9.0",
         "1": "1.0.11",
         "2": "2.5.9",
-        "3": "3.4.17"
+        "3": "3.4.18"
       },
       "matureByMajor": {
         "0": "0.9.0",
@@ -5946,7 +5946,7 @@
         "11": "11.18.2",
         "12": "12.43.0",
         "13": "13.5.1",
-        "14": "14.13.0"
+        "14": "14.14.0"
       },
       "source": "https://registry.npmjs.org/framer-motion"
     },
@@ -6405,7 +6405,7 @@
       },
       "matureByMajor": {
         "0": "0.577.0",
-        "1": "1.72.0"
+        "1": "1.73.0"
       },
       "source": "https://registry.npmjs.org/lucide-react"
     },
@@ -6726,7 +6726,7 @@
       },
       "matureByMajor": {
         "0": "0.18.0",
-        "1": "1.65.0"
+        "1": "1.65.1"
       },
       "source": "https://registry.npmjs.org/playwright"
     },
@@ -6743,13 +6743,13 @@
       },
       "matureByMajor": {
         "0": "0.18.0",
-        "1": "1.65.0"
+        "1": "1.65.1"
       },
       "source": "https://registry.npmjs.org/playwright-core"
     },
     "pnpm": {
       "latest": "12.21.0",
-      "latestTag": "12.18.0",
+      "latestTag": "12.21.0",
       "published": "2026-11-13T21:01:11.515Z",
       "engines": {
         "node": ">=18"
@@ -6775,8 +6775,8 @@
         "8": "8.15.9",
         "9": "9.15.9",
         "10": "10.34.9",
-        "11": "11.28.11",
-        "12": "12.20.0"
+        "11": "11.28.12",
+        "12": "12.21.0"
       },
       "source": "https://registry.npmjs.org/pnpm"
     },
@@ -6835,7 +6835,7 @@
         "5": "5.2.18",
         "6": "6.0.23",
         "7": "7.0.39",
-        "8": "8.5.32"
+        "8": "8.5.33"
       },
       "source": "https://registry.npmjs.org/postcss"
     },
@@ -7359,7 +7359,7 @@
       "matureByMajor": {
         "0": "0.2.9",
         "1": "1.1.3",
-        "2": "2.3.3"
+        "2": "2.3.4"
       },
       "source": "https://registry.npmjs.org/tapable"
     },
@@ -7834,7 +7834,7 @@
     "selectedLine": "3.11.18",
     "source": "https://www.python.org/downloads/"
   },
-  "sourceCommit": "091b89045864cd620f5d5eaa883adc2318f1f75a",
+  "sourceCommit": "29b36bd4e75d28170443350a160ef4877d18c046",
   "auditNode": "v26.13.1",
-  "sourceDirty": false
+  "sourceDirty": true
 }
