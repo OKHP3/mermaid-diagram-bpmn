@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-15T09:20:30.743Z",
+  "generatedAt": "2026-11-16T09:29:22.592Z",
   "complete": true,
   "errors": [],
   "inventory": {
@@ -1096,7 +1096,7 @@
         "0.5.16"
       ],
       "dompurify": [
-        "3.4.17"
+        "3.4.18"
       ],
       "elkjs": [
         "0.12.1"
@@ -1528,7 +1528,7 @@
       "postcss@<8.5.10": ">=8.5.10",
       "brace-expansion": "5.0.13",
       "source-map-js": "1.2.2",
-      "dompurify": "3.4.17",
+      "dompurify": "3.4.18",
       "lodash-es": "4.18.1",
       "uuid": "11.1.1",
       "rollup>@rollup/rollup-android-arm-eabi": "-",
@@ -5626,7 +5626,7 @@
         "0": "0.9.0",
         "1": "1.0.11",
         "2": "2.5.9",
-        "3": "3.4.17"
+        "3": "3.4.18"
       },
       "source": "https://registry.npmjs.org/dompurify"
     },
@@ -5713,15 +5713,15 @@
       "source": "https://registry.npmjs.org/entities"
     },
     "es-module-lexer": {
-      "latest": "3.0.4",
-      "latestTag": "3.0.4",
-      "published": "2026-10-15T04:35:33.820Z",
+      "latest": "3.0.5",
+      "latestTag": "3.0.5",
+      "published": "2026-11-16T07:30:02.232Z",
       "engines": {},
       "stableByMajor": {
         "0": "0.10.5",
         "1": "1.7.0",
         "2": "2.3.2",
-        "3": "3.0.4"
+        "3": "3.0.5"
       },
       "matureByMajor": {
         "0": "0.10.5",
@@ -7834,7 +7834,7 @@
     "selectedLine": "3.11.18",
     "source": "https://www.python.org/downloads/"
   },
-  "sourceCommit": "29b36bd4e75d28170443350a160ef4877d18c046",
+  "sourceCommit": "52368379c31970cc7780b3e31f1cd9cc2324669c",
   "auditNode": "v26.13.1",
   "sourceDirty": true
 }
