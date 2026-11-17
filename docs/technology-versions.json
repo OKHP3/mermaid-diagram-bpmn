@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-16T09:29:22.592Z",
+  "generatedAt": "2026-11-17T09:22:36.884Z",
   "complete": true,
   "errors": [],
   "inventory": {
@@ -2304,12 +2304,12 @@
       "source": "https://registry.npmjs.org/%40mermaid-js%2Fparser"
     },
     "@oxc-project/types": {
-      "latest": "0.158.0",
-      "latestTag": "0.158.0",
-      "published": "2026-11-09T11:09:19.820Z",
+      "latest": "0.159.0",
+      "latestTag": "0.159.0",
+      "published": "2026-11-16T11:32:46.682Z",
       "engines": {},
       "stableByMajor": {
-        "0": "0.158.0"
+        "0": "0.159.0"
       },
       "matureByMajor": {
         "0": "0.158.0"
@@ -4216,9 +4216,9 @@
       "source": "https://registry.npmjs.org/async"
     },
     "axe-core": {
-      "latest": "4.14.0",
-      "latestTag": "4.14.0",
-      "published": "2026-10-05T17:43:36.099Z",
+      "latest": "4.14.1",
+      "latestTag": "4.14.1",
+      "published": "2026-11-16T11:56:28.504Z",
       "engines": {
         "node": ">=4"
       },
@@ -4226,7 +4226,7 @@
         "1": "1.1.1",
         "2": "2.6.1",
         "3": "3.5.6",
-        "4": "4.14.0"
+        "4": "4.14.1"
       },
       "matureByMajor": {
         "1": "1.1.1",
@@ -4364,14 +4364,14 @@
       "source": "https://registry.npmjs.org/bare-stream"
     },
     "bare-url": {
-      "latest": "2.5.7",
-      "latestTag": "2.5.7",
-      "published": "2026-11-13T07:50:03.490Z",
+      "latest": "2.5.8",
+      "latestTag": "2.5.8",
+      "published": "2026-11-17T08:17:50.564Z",
       "engines": {},
       "stableByMajor": {
         "0": "0.3.8",
         "1": "1.2.4",
-        "2": "2.5.7"
+        "2": "2.5.8"
       },
       "matureByMajor": {
         "0": "0.3.8",
@@ -5727,7 +5727,7 @@
         "0": "0.10.5",
         "1": "1.7.0",
         "2": "2.3.2",
-        "3": "3.0.4"
+        "3": "3.0.5"
       },
       "source": "https://registry.npmjs.org/es-module-lexer"
     },
@@ -6395,13 +6395,13 @@
       "source": "https://registry.npmjs.org/lodash-es"
     },
     "lucide-react": {
-      "latest": "1.73.0",
-      "latestTag": "1.73.0",
-      "published": "2026-11-14T06:15:14.805Z",
+      "latest": "1.74.0",
+      "latestTag": "1.74.0",
+      "published": "2026-11-17T06:12:51.800Z",
       "engines": {},
       "stableByMajor": {
         "0": "0.577.0",
-        "1": "1.73.0"
+        "1": "1.74.0"
       },
       "matureByMajor": {
         "0": "0.577.0",
@@ -6438,9 +6438,9 @@
       "source": "https://registry.npmjs.org/magic-string"
     },
     "marked": {
-      "latest": "18.2.0",
-      "latestTag": "18.2.0",
-      "published": "2026-11-09T23:05:41.759Z",
+      "latest": "18.2.1",
+      "latestTag": "18.2.1",
+      "published": "2026-11-16T17:22:22.604Z",
       "engines": {
         "node": ">= 20"
       },
@@ -6463,7 +6463,7 @@
         "15": "15.0.12",
         "16": "16.4.2",
         "17": "17.0.6",
-        "18": "18.2.0"
+        "18": "18.2.1"
       },
       "matureByMajor": {
         "0": "0.8.2",
@@ -6518,9 +6518,9 @@
       "source": "https://registry.npmjs.org/mermaid"
     },
     "minimatch": {
-      "latest": "11.0.8",
-      "latestTag": "11.0.8",
-      "published": "2026-11-11T09:50:19.549Z",
+      "latest": "11.0.9",
+      "latestTag": "11.0.9",
+      "published": "2026-11-16T21:52:08.927Z",
       "engines": {
         "node": "20 || >=22"
       },
@@ -6533,7 +6533,7 @@
         "8": "8.0.7",
         "9": "9.0.9",
         "10": "10.2.6",
-        "11": "11.0.8"
+        "11": "11.0.9"
       },
       "matureByMajor": {
         "3": "3.1.5",
@@ -7834,7 +7834,7 @@
     "selectedLine": "3.11.18",
     "source": "https://www.python.org/downloads/"
   },
-  "sourceCommit": "52368379c31970cc7780b3e31f1cd9cc2324669c",
+  "sourceCommit": "a78a596a42e25a26aae8b236285faa0e1239ff9a",
   "auditNode": "v26.13.1",
-  "sourceDirty": true
+  "sourceDirty": false
 }
