@@ -31,7 +31,7 @@
     "@types/react": "catalog:",
     "@types/react-dom": "catalog:",
     "@vitejs/plugin-react": "catalog:",
-    "axe-core": "4.14.0",
+    "axe-core": "4.14.1",
     "clsx": "catalog:",
     "fflate": "catalog:",
     "happy-dom": "21.0.4",
