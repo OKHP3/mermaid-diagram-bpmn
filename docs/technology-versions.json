@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-19T09:22:27.839Z",
+  "generatedAt": "2026-11-20T09:21:51.406Z",
   "complete": true,
   "errors": [],
   "inventory": {
@@ -153,8 +153,8 @@
         "path": "app/package.json",
         "field": "devDependencies",
         "declared": "catalog:",
-        "effective": "1.75.0",
-        "resolved": "1.75.0",
+        "effective": "1.76.0",
+        "resolved": "1.76.0",
         "kind": "workspace"
       },
       {
@@ -1215,7 +1215,7 @@
         "4.18.1"
       ],
       "lucide-react": [
-        "1.75.0"
+        "1.76.0"
       ],
       "lz-string": [
         "1.5.0"
@@ -1333,7 +1333,7 @@
         "0.28.0"
       ],
       "source-map-js": [
-        "1.2.2"
+        "1.2.3"
       ],
       "std-env": [
         "4.3.0"
@@ -1433,7 +1433,7 @@
       "drizzle-orm": "^0.45.2",
       "fflate": "0.8.3",
       "framer-motion": "^13.1.1",
-      "lucide-react": "1.75.0",
+      "lucide-react": "1.76.0",
       "react": "19.3.1",
       "react-dom": "19.3.1",
       "tailwind-merge": "3.7.0",
@@ -1528,7 +1528,7 @@
       "picomatch@>=4.0.0 <4.0.4": ">=4.0.4",
       "postcss@<8.5.10": ">=8.5.10",
       "brace-expansion": "5.0.13",
-      "source-map-js": "1.2.2",
+      "source-map-js": "1.2.3",
       "dompurify": "3.4.18",
       "lodash-es": "4.18.1",
       "uuid": "11.1.1",
@@ -2384,7 +2384,7 @@
       },
       "matureByMajor": {
         "0": "0.0.0",
-        "1": "1.3.2"
+        "1": "1.3.3"
       },
       "source": "https://registry.npmjs.org/%40rolldown%2Fbinding-android-arm-eabi"
     },
@@ -2399,7 +2399,7 @@
         "1": "1.3.3"
       },
       "matureByMajor": {
-        "1": "1.3.2"
+        "1": "1.3.3"
       },
       "source": "https://registry.npmjs.org/%40rolldown%2Fbinding-android-arm64"
     },
@@ -2416,7 +2416,7 @@
       },
       "matureByMajor": {
         "0": "0.15.1",
-        "1": "1.3.2"
+        "1": "1.3.3"
       },
       "source": "https://registry.npmjs.org/%40rolldown%2Fbinding-darwin-arm64"
     },
@@ -2433,7 +2433,7 @@
       },
       "matureByMajor": {
         "0": "0.15.1",
-        "1": "1.3.2"
+        "1": "1.3.3"
       },
       "source": "https://registry.npmjs.org/%40rolldown%2Fbinding-darwin-x64"
     },
@@ -2450,7 +2450,7 @@
       },
       "matureByMajor": {
         "0": "0.15.1",
-        "1": "1.3.2"
+        "1": "1.3.3"
       },
       "source": "https://registry.npmjs.org/%40rolldown%2Fbinding-freebsd-x64"
     },
@@ -2467,7 +2467,7 @@
       },
       "matureByMajor": {
         "0": "0.15.1",
-        "1": "1.3.2"
+        "1": "1.3.3"
       },
       "source": "https://registry.npmjs.org/%40rolldown%2Fbinding-linux-arm-gnueabihf"
     },
@@ -2484,7 +2484,7 @@
       },
       "matureByMajor": {
         "0": "0.15.1",
-        "1": "1.3.2"
+        "1": "1.3.3"
       },
       "source": "https://registry.npmjs.org/%40rolldown%2Fbinding-linux-arm64-gnu"
     },
@@ -2501,7 +2501,7 @@
       },
       "matureByMajor": {
         "0": "0.15.1",
-        "1": "1.3.2"
+        "1": "1.3.3"
       },
       "source": "https://registry.npmjs.org/%40rolldown%2Fbinding-linux-arm64-musl"
     },
@@ -2518,7 +2518,7 @@
       },
       "matureByMajor": {
         "0": "0.0.0",
-        "1": "1.3.2"
+        "1": "1.3.3"
       },
       "source": "https://registry.npmjs.org/%40rolldown%2Fbinding-linux-ppc64-gnu"
     },
@@ -2535,7 +2535,7 @@
       },
       "matureByMajor": {
         "0": "0.0.0",
-        "1": "1.3.2"
+        "1": "1.3.3"
       },
       "source": "https://registry.npmjs.org/%40rolldown%2Fbinding-linux-s390x-gnu"
     },
@@ -2552,7 +2552,7 @@
       },
       "matureByMajor": {
         "0": "0.15.1",
-        "1": "1.3.2"
+        "1": "1.3.3"
       },
       "source": "https://registry.npmjs.org/%40rolldown%2Fbinding-linux-x64-gnu"
     },
@@ -2569,7 +2569,7 @@
       },
       "matureByMajor": {
         "0": "0.15.1",
-        "1": "1.3.2"
+        "1": "1.3.3"
       },
       "source": "https://registry.npmjs.org/%40rolldown%2Fbinding-linux-x64-musl"
     },
@@ -2584,7 +2584,7 @@
         "1": "1.3.3"
       },
       "matureByMajor": {
-        "1": "1.3.2"
+        "1": "1.3.3"
       },
       "source": "https://registry.npmjs.org/%40rolldown%2Fbinding-openharmony-arm64"
     },
@@ -2601,7 +2601,7 @@
       },
       "matureByMajor": {
         "0": "0.15.1",
-        "1": "1.3.2"
+        "1": "1.3.3"
       },
       "source": "https://registry.npmjs.org/%40rolldown%2Fbinding-win32-arm64-msvc"
     },
@@ -2618,7 +2618,7 @@
       },
       "matureByMajor": {
         "0": "0.15.1",
-        "1": "1.3.2"
+        "1": "1.3.3"
       },
       "source": "https://registry.npmjs.org/%40rolldown%2Fbinding-win32-x64-msvc"
     },
@@ -2765,13 +2765,13 @@
       "source": "https://registry.npmjs.org/%40tailwindcss%2Fvite"
     },
     "@tanstack/react-query": {
-      "latest": "5.108.0",
-      "latestTag": "5.108.0",
-      "published": "2026-11-17T13:45:33.768Z",
+      "latest": "5.108.1",
+      "latestTag": "5.108.1",
+      "published": "2026-11-19T14:03:03.906Z",
       "engines": {},
       "stableByMajor": {
         "4": "4.44.0",
-        "5": "5.108.0"
+        "5": "5.108.1"
       },
       "matureByMajor": {
         "4": "4.44.0",
@@ -4293,9 +4293,9 @@
       "source": "https://registry.npmjs.org/bare-events"
     },
     "bare-fs": {
-      "latest": "4.8.4",
-      "latestTag": "4.8.4",
-      "published": "2026-10-09T19:25:06.621Z",
+      "latest": "4.8.5",
+      "latestTag": "4.8.5",
+      "published": "2026-11-19T18:12:00.071Z",
       "engines": {
         "bare": ">=1.28.0"
       },
@@ -4303,7 +4303,7 @@
         "1": "1.13.3",
         "2": "2.3.5",
         "3": "3.1.1",
-        "4": "4.8.4"
+        "4": "4.8.5"
       },
       "matureByMajor": {
         "1": "1.13.3",
@@ -6396,17 +6396,17 @@
       "source": "https://registry.npmjs.org/lodash-es"
     },
     "lucide-react": {
-      "latest": "1.76.0",
-      "latestTag": "1.76.0",
-      "published": "2026-11-19T06:14:21.092Z",
+      "latest": "1.77.0",
+      "latestTag": "1.77.0",
+      "published": "2026-11-20T06:17:09.215Z",
       "engines": {},
       "stableByMajor": {
         "0": "0.577.0",
-        "1": "1.76.0"
+        "1": "1.77.0"
       },
       "matureByMajor": {
         "0": "0.577.0",
-        "1": "1.75.0"
+        "1": "1.76.0"
       },
       "source": "https://registry.npmjs.org/lucide-react"
     },
@@ -7133,7 +7133,7 @@
       },
       "matureByMajor": {
         "0": "0.15.1",
-        "1": "1.3.2"
+        "1": "1.3.3"
       },
       "source": "https://registry.npmjs.org/rolldown"
     },
@@ -7219,19 +7219,19 @@
       "source": "https://registry.npmjs.org/scheduler"
     },
     "source-map-js": {
-      "latest": "1.2.3",
-      "latestTag": "1.2.3",
-      "published": "2026-11-18T19:36:48.278Z",
+      "latest": "1.2.4",
+      "latestTag": "1.2.4",
+      "published": "2026-11-19T12:11:53.805Z",
       "engines": {
-        "node": ">=0.10.0"
+        "node": ">=6.0.0"
       },
       "stableByMajor": {
         "0": "0.6.2",
-        "1": "1.2.3"
+        "1": "1.2.4"
       },
       "matureByMajor": {
         "0": "0.6.2",
-        "1": "1.2.2"
+        "1": "1.2.3"
       },
       "source": "https://registry.npmjs.org/source-map-js"
     },
@@ -7306,20 +7306,20 @@
       "source": "https://registry.npmjs.org/stylis"
     },
     "tailwind-merge": {
-      "latest": "3.7.0",
-      "latestTag": "3.7.0",
-      "published": "2026-09-12T20:10:15.257Z",
+      "latest": "3.7.1",
+      "latestTag": "3.7.1",
+      "published": "2026-11-19T23:08:45.734Z",
       "engines": {},
       "stableByMajor": {
         "0": "0.9.0",
         "1": "1.14.0",
         "2": "2.6.2",
-        "3": "3.7.0"
+        "3": "3.7.1"
       },
       "matureByMajor": {
         "0": "0.9.0",
         "1": "1.14.0",
-        "2": "2.6.1",
+        "2": "2.6.2",
         "3": "3.7.0"
       },
       "source": "https://registry.npmjs.org/tailwind-merge"
@@ -7430,7 +7430,7 @@
         "3": "3.1.1",
         "4": "4.1.0",
         "5": "5.1.0",
-        "6": "6.2.3"
+        "6": "6.2.4"
       },
       "source": "https://registry.npmjs.org/tinybench"
     },
@@ -7547,16 +7547,16 @@
       "source": "https://registry.npmjs.org/typescript"
     },
     "undici-types": {
-      "latest": "8.12.4",
-      "latestTag": "8.12.4",
-      "published": "2026-11-05T08:55:41.494Z",
+      "latest": "8.13.0",
+      "latestTag": "8.13.0",
+      "published": "2026-11-20T06:50:21.440Z",
       "engines": {},
       "stableByMajor": {
         "0": "0.0.1",
         "5": "5.28.4",
         "6": "6.29.1",
         "7": "7.30.2",
-        "8": "8.12.4"
+        "8": "8.13.0"
       },
       "matureByMajor": {
         "0": "0.0.1",
@@ -7835,7 +7835,7 @@
     "selectedLine": "3.11.18",
     "source": "https://www.python.org/downloads/"
   },
-  "sourceCommit": "bbaa5b0e81958cbe2ea9b709d08075d6e9f3935f",
+  "sourceCommit": "9e46d809d674f994f068e395ed213d8fcfe41174",
   "auditNode": "v26.13.1",
   "sourceDirty": true
 }
