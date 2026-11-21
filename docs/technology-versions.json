@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-20T09:21:51.406Z",
+  "generatedAt": "2026-11-21T09:20:34.770Z",
   "complete": true,
   "errors": [],
   "inventory": {
@@ -153,8 +153,8 @@
         "path": "app/package.json",
         "field": "devDependencies",
         "declared": "catalog:",
-        "effective": "1.76.0",
-        "resolved": "1.76.0",
+        "effective": "1.77.0",
+        "resolved": "1.77.0",
         "kind": "workspace"
       },
       {
@@ -189,8 +189,8 @@
         "path": "app/package.json",
         "field": "devDependencies",
         "declared": "catalog:",
-        "effective": "3.7.0",
-        "resolved": "3.7.0",
+        "effective": "3.7.1",
+        "resolved": "3.7.1",
         "kind": "workspace"
       },
       {
@@ -1215,7 +1215,7 @@
         "4.18.1"
       ],
       "lucide-react": [
-        "1.76.0"
+        "1.77.0"
       ],
       "lz-string": [
         "1.5.0"
@@ -1333,7 +1333,7 @@
         "0.28.0"
       ],
       "source-map-js": [
-        "1.2.3"
+        "1.2.4"
       ],
       "std-env": [
         "4.3.0"
@@ -1349,7 +1349,7 @@
         "4.4.0"
       ],
       "tailwind-merge": [
-        "3.7.0"
+        "3.7.1"
       ],
       "tailwindcss": [
         "4.3.5"
@@ -1433,10 +1433,10 @@
       "drizzle-orm": "^0.45.2",
       "fflate": "0.8.3",
       "framer-motion": "^13.1.1",
-      "lucide-react": "1.76.0",
+      "lucide-react": "1.77.0",
       "react": "19.3.1",
       "react-dom": "19.3.1",
-      "tailwind-merge": "3.7.0",
+      "tailwind-merge": "3.7.1",
       "tailwindcss": "4.3.5",
       "tsx": "4.23.15",
       "vite": "8.3.8",
@@ -1528,7 +1528,7 @@
       "picomatch@>=4.0.0 <4.0.4": ">=4.0.4",
       "postcss@<8.5.10": ">=8.5.10",
       "brace-expansion": "5.0.13",
-      "source-map-js": "1.2.3",
+      "source-map-js": "1.2.4",
       "dompurify": "3.4.18",
       "lodash-es": "4.18.1",
       "uuid": "11.1.1",
@@ -1854,15 +1854,15 @@
       "source": "https://registry.npmjs.org/%40babel%2Fcode-frame"
     },
     "@babel/generator": {
-      "latest": "8.1.2",
-      "latestTag": "8.1.2",
-      "published": "2026-11-11T19:54:06.079Z",
+      "latest": "8.1.3",
+      "latestTag": "8.1.3",
+      "published": "2026-11-20T17:25:35.051Z",
       "engines": {
         "node": "^22.18.0 || >=24.11.0"
       },
       "stableByMajor": {
-        "7": "7.29.14",
-        "8": "8.1.2"
+        "7": "7.29.15",
+        "8": "8.1.3"
       },
       "matureByMajor": {
         "7": "7.29.14",
@@ -1888,15 +1888,15 @@
       "source": "https://registry.npmjs.org/%40babel%2Fhelper-globals"
     },
     "@babel/helper-string-parser": {
-      "latest": "8.1.2",
-      "latestTag": "8.1.2",
-      "published": "2026-11-11T19:56:42.636Z",
+      "latest": "8.1.3",
+      "latestTag": "8.1.3",
+      "published": "2026-11-20T17:25:18.390Z",
       "engines": {
         "node": "^22.18.0 || >=24.11.0"
       },
       "stableByMajor": {
-        "7": "7.29.14",
-        "8": "8.1.2"
+        "7": "7.29.15",
+        "8": "8.1.3"
       },
       "matureByMajor": {
         "7": "7.29.14",
@@ -1922,15 +1922,15 @@
       "source": "https://registry.npmjs.org/%40babel%2Fhelper-validator-identifier"
     },
     "@babel/parser": {
-      "latest": "8.1.2",
-      "latestTag": "8.1.2",
-      "published": "2026-11-11T19:55:24.020Z",
+      "latest": "8.1.3",
+      "latestTag": "8.1.3",
+      "published": "2026-11-20T17:26:02.259Z",
       "engines": {
         "node": "^22.18.0 || >=24.11.0"
       },
       "stableByMajor": {
-        "7": "7.29.14",
-        "8": "8.1.2"
+        "7": "7.29.15",
+        "8": "8.1.3"
       },
       "matureByMajor": {
         "7": "7.29.14",
@@ -1939,13 +1939,13 @@
       "source": "https://registry.npmjs.org/%40babel%2Fparser"
     },
     "@babel/runtime": {
-      "latest": "8.1.2",
-      "latestTag": "8.1.2",
-      "published": "2026-11-11T19:55:46.357Z",
+      "latest": "8.1.3",
+      "latestTag": "8.1.3",
+      "published": "2026-11-20T17:26:57.587Z",
       "engines": {},
       "stableByMajor": {
-        "7": "7.29.14",
-        "8": "8.1.2"
+        "7": "7.29.15",
+        "8": "8.1.3"
       },
       "matureByMajor": {
         "7": "7.29.14",
@@ -1971,15 +1971,15 @@
       "source": "https://registry.npmjs.org/%40babel%2Ftemplate"
     },
     "@babel/traverse": {
-      "latest": "8.1.2",
-      "latestTag": "8.1.2",
-      "published": "2026-11-11T19:54:29.507Z",
+      "latest": "8.1.3",
+      "latestTag": "8.1.3",
+      "published": "2026-11-20T17:26:39.534Z",
       "engines": {
         "node": "^22.18.0 || >=24.11.0"
       },
       "stableByMajor": {
-        "7": "7.29.14",
-        "8": "8.1.2"
+        "7": "7.29.15",
+        "8": "8.1.3"
       },
       "matureByMajor": {
         "7": "7.29.14",
@@ -1988,15 +1988,15 @@
       "source": "https://registry.npmjs.org/%40babel%2Ftraverse"
     },
     "@babel/types": {
-      "latest": "8.1.2",
-      "latestTag": "8.1.2",
-      "published": "2026-11-11T19:56:52.587Z",
+      "latest": "8.1.3",
+      "latestTag": "8.1.3",
+      "published": "2026-11-20T17:26:00.593Z",
       "engines": {
         "node": "^22.18.0 || >=24.11.0"
       },
       "stableByMajor": {
-        "7": "7.29.14",
-        "8": "8.1.2"
+        "7": "7.29.15",
+        "8": "8.1.3"
       },
       "matureByMajor": {
         "7": "7.29.14",
@@ -2765,17 +2765,17 @@
       "source": "https://registry.npmjs.org/%40tailwindcss%2Fvite"
     },
     "@tanstack/react-query": {
-      "latest": "5.108.1",
-      "latestTag": "5.108.1",
-      "published": "2026-11-19T14:03:03.906Z",
+      "latest": "5.108.2",
+      "latestTag": "5.108.2",
+      "published": "2026-11-20T13:37:18.547Z",
       "engines": {},
       "stableByMajor": {
         "4": "4.44.0",
-        "5": "5.108.1"
+        "5": "5.108.2"
       },
       "matureByMajor": {
         "4": "4.44.0",
-        "5": "5.108.0"
+        "5": "5.108.1"
       },
       "source": "https://registry.npmjs.org/%40tanstack%2Freact-query"
     },
@@ -4309,7 +4309,7 @@
         "1": "1.13.3",
         "2": "2.3.5",
         "3": "3.1.1",
-        "4": "4.8.4"
+        "4": "4.8.5"
       },
       "source": "https://registry.npmjs.org/bare-fs"
     },
@@ -6406,7 +6406,7 @@
       },
       "matureByMajor": {
         "0": "0.577.0",
-        "1": "1.76.0"
+        "1": "1.77.0"
       },
       "source": "https://registry.npmjs.org/lucide-react"
     },
@@ -7231,7 +7231,7 @@
       },
       "matureByMajor": {
         "0": "0.6.2",
-        "1": "1.2.3"
+        "1": "1.2.4"
       },
       "source": "https://registry.npmjs.org/source-map-js"
     },
@@ -7320,7 +7320,7 @@
         "0": "0.9.0",
         "1": "1.14.0",
         "2": "2.6.2",
-        "3": "3.7.0"
+        "3": "3.7.1"
       },
       "source": "https://registry.npmjs.org/tailwind-merge"
     },
@@ -7547,23 +7547,23 @@
       "source": "https://registry.npmjs.org/typescript"
     },
     "undici-types": {
-      "latest": "8.13.0",
-      "latestTag": "8.13.0",
-      "published": "2026-11-20T06:50:21.440Z",
+      "latest": "8.13.1",
+      "latestTag": "8.13.1",
+      "published": "2026-11-20T21:01:47.557Z",
       "engines": {},
       "stableByMajor": {
         "0": "0.0.1",
         "5": "5.28.4",
         "6": "6.29.1",
         "7": "7.30.2",
-        "8": "8.13.0"
+        "8": "8.13.1"
       },
       "matureByMajor": {
         "0": "0.0.1",
         "5": "5.28.4",
         "6": "6.29.1",
         "7": "7.30.2",
-        "8": "8.12.4"
+        "8": "8.13.0"
       },
       "source": "https://registry.npmjs.org/undici-types"
     },
@@ -7835,7 +7835,7 @@
     "selectedLine": "3.11.18",
     "source": "https://www.python.org/downloads/"
   },
-  "sourceCommit": "9e46d809d674f994f068e395ed213d8fcfe41174",
+  "sourceCommit": "c6d51cf051eafc948a40ca911363c759cdf5ec7c",
   "auditNode": "v26.13.1",
   "sourceDirty": true
 }
