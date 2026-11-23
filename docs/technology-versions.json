@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-22T09:20:30.100Z",
+  "generatedAt": "2026-11-23T09:26:09.708Z",
   "complete": true,
   "errors": [],
   "inventory": {
@@ -2765,13 +2765,13 @@
       "source": "https://registry.npmjs.org/%40tailwindcss%2Fvite"
     },
     "@tanstack/react-query": {
-      "latest": "5.108.2",
-      "latestTag": "5.108.2",
-      "published": "2026-11-20T13:37:18.547Z",
+      "latest": "5.108.3",
+      "latestTag": "5.108.3",
+      "published": "2026-11-22T20:09:32.864Z",
       "engines": {},
       "stableByMajor": {
         "4": "4.44.0",
-        "5": "5.108.2"
+        "5": "5.108.3"
       },
       "matureByMajor": {
         "4": "4.44.0",
@@ -5613,15 +5613,15 @@
       "source": "https://registry.npmjs.org/dom-accessibility-api"
     },
     "dompurify": {
-      "latest": "3.4.18",
-      "latestTag": "3.4.18",
-      "published": "2026-11-14T14:18:25.242Z",
+      "latest": "3.5.0",
+      "latestTag": "3.5.0",
+      "published": "2026-11-22T14:32:04.961Z",
       "engines": {},
       "stableByMajor": {
         "0": "0.9.0",
         "1": "1.0.11",
         "2": "2.5.9",
-        "3": "3.4.18"
+        "3": "3.5.0"
       },
       "matureByMajor": {
         "0": "0.9.0",
@@ -6218,7 +6218,7 @@
         "7": "7.0.0",
         "8": "8.0.3",
         "9": "9.0.1",
-        "10": "10.0.0"
+        "10": "10.0.1"
       },
       "source": "https://registry.npmjs.org/js-tokens"
     },
@@ -6396,13 +6396,13 @@
       "source": "https://registry.npmjs.org/lodash-es"
     },
     "lucide-react": {
-      "latest": "1.77.0",
-      "latestTag": "1.77.0",
-      "published": "2026-11-20T06:17:09.215Z",
+      "latest": "1.78.0",
+      "latestTag": "1.78.0",
+      "published": "2026-11-23T06:15:39.886Z",
       "engines": {},
       "stableByMajor": {
         "0": "0.577.0",
-        "1": "1.77.0"
+        "1": "1.78.0"
       },
       "matureByMajor": {
         "0": "0.577.0",
@@ -6749,9 +6749,9 @@
       "source": "https://registry.npmjs.org/playwright-core"
     },
     "pnpm": {
-      "latest": "12.22.0",
+      "latest": "12.23.0",
       "latestTag": "12.21.0",
-      "published": "2026-11-17T20:01:11.036Z",
+      "published": "2026-11-22T13:21:28.438Z",
       "engines": {
         "node": ">=18"
       },
@@ -6764,8 +6764,8 @@
         "8": "8.15.9",
         "9": "9.15.9",
         "10": "10.34.9",
-        "11": "11.28.13",
-        "12": "12.22.0"
+        "11": "11.29.0",
+        "12": "12.23.0"
       },
       "matureByMajor": {
         "3": "3.8.1",
@@ -7835,7 +7835,7 @@
     "selectedLine": "3.11.18",
     "source": "https://www.python.org/downloads/"
   },
-  "sourceCommit": "b96fd3511d070ba4af3ba5e0831aa567c09d771e",
+  "sourceCommit": "79e8313e74e835a3d8f045ead8a1fae248daa030",
   "auditNode": "v26.13.1",
   "sourceDirty": false
 }
