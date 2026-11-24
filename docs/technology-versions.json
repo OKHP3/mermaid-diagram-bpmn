@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-23T09:26:09.708Z",
+  "generatedAt": "2026-11-24T09:23:01.350Z",
   "complete": true,
   "errors": [],
   "inventory": {
@@ -153,8 +153,8 @@
         "path": "app/package.json",
         "field": "devDependencies",
         "declared": "catalog:",
-        "effective": "1.77.0",
-        "resolved": "1.77.0",
+        "effective": "1.78.0",
+        "resolved": "1.78.0",
         "kind": "workspace"
       },
       {
@@ -1096,7 +1096,7 @@
         "0.5.16"
       ],
       "dompurify": [
-        "3.4.18"
+        "3.5.0"
       ],
       "elkjs": [
         "0.12.1"
@@ -1215,7 +1215,7 @@
         "4.18.1"
       ],
       "lucide-react": [
-        "1.77.0"
+        "1.78.0"
       ],
       "lz-string": [
         "1.5.0"
@@ -1433,7 +1433,7 @@
       "drizzle-orm": "^0.45.2",
       "fflate": "0.8.3",
       "framer-motion": "^13.1.1",
-      "lucide-react": "1.77.0",
+      "lucide-react": "1.78.0",
       "react": "19.3.1",
       "react-dom": "19.3.1",
       "tailwind-merge": "3.7.1",
@@ -1529,7 +1529,7 @@
       "postcss@<8.5.10": ">=8.5.10",
       "brace-expansion": "5.0.13",
       "source-map-js": "1.2.4",
-      "dompurify": "3.4.18",
+      "dompurify": "3.5.0",
       "lodash-es": "4.18.1",
       "uuid": "11.1.1",
       "rollup>@rollup/rollup-android-arm-eabi": "-",
@@ -1745,7 +1745,7 @@
         "version": "26.13.1"
       }
     ],
-    "packageManager": "pnpm@11.28.13",
+    "packageManager": "pnpm@11.29.0",
     "replitNode": "24",
     "replitPython": "3.11",
     "pythonPin": "3.15.2",
@@ -2305,12 +2305,12 @@
       "source": "https://registry.npmjs.org/%40mermaid-js%2Fparser"
     },
     "@oxc-project/types": {
-      "latest": "0.159.0",
-      "latestTag": "0.159.0",
-      "published": "2026-11-16T11:32:46.682Z",
+      "latest": "0.160.0",
+      "latestTag": "0.160.0",
+      "published": "2026-11-23T10:51:20.243Z",
       "engines": {},
       "stableByMajor": {
-        "0": "0.159.0"
+        "0": "0.160.0"
       },
       "matureByMajor": {
         "0": "0.159.0"
@@ -2765,17 +2765,17 @@
       "source": "https://registry.npmjs.org/%40tailwindcss%2Fvite"
     },
     "@tanstack/react-query": {
-      "latest": "5.108.3",
-      "latestTag": "5.108.3",
-      "published": "2026-11-22T20:09:32.864Z",
+      "latest": "5.108.4",
+      "latestTag": "5.108.4",
+      "published": "2026-11-23T13:20:10.775Z",
       "engines": {},
       "stableByMajor": {
         "4": "4.44.0",
-        "5": "5.108.3"
+        "5": "5.108.4"
       },
       "matureByMajor": {
         "4": "4.44.0",
-        "5": "5.108.2"
+        "5": "5.108.3"
       },
       "source": "https://registry.npmjs.org/%40tanstack%2Freact-query"
     },
@@ -4293,9 +4293,9 @@
       "source": "https://registry.npmjs.org/bare-events"
     },
     "bare-fs": {
-      "latest": "4.8.5",
-      "latestTag": "4.8.5",
-      "published": "2026-11-19T18:12:00.071Z",
+      "latest": "4.8.7",
+      "latestTag": "4.8.7",
+      "published": "2026-11-23T14:59:19.572Z",
       "engines": {
         "bare": ">=1.28.0"
       },
@@ -4303,7 +4303,7 @@
         "1": "1.13.3",
         "2": "2.3.5",
         "3": "3.1.1",
-        "4": "4.8.5"
+        "4": "4.8.7"
       },
       "matureByMajor": {
         "1": "1.13.3",
@@ -4397,9 +4397,9 @@
       "source": "https://registry.npmjs.org/base64-js"
     },
     "brace-expansion": {
-      "latest": "5.0.13",
-      "latestTag": "5.0.13",
-      "published": "2026-11-11T12:27:55.676Z",
+      "latest": "5.1.0",
+      "latestTag": "5.1.0",
+      "published": "2026-11-23T15:56:32.039Z",
       "engines": {
         "node": "20 || >=22"
       },
@@ -4409,7 +4409,7 @@
         "2": "2.1.8",
         "3": "3.0.10",
         "4": "4.0.1",
-        "5": "5.0.13"
+        "5": "5.1.0"
       },
       "matureByMajor": {
         "0": "0.0.0",
@@ -5627,7 +5627,7 @@
         "0": "0.9.0",
         "1": "1.0.11",
         "2": "2.5.9",
-        "3": "3.4.18"
+        "3": "3.5.0"
       },
       "source": "https://registry.npmjs.org/dompurify"
     },
@@ -6396,17 +6396,17 @@
       "source": "https://registry.npmjs.org/lodash-es"
     },
     "lucide-react": {
-      "latest": "1.78.0",
-      "latestTag": "1.78.0",
-      "published": "2026-11-23T06:15:39.886Z",
+      "latest": "1.79.0",
+      "latestTag": "1.79.0",
+      "published": "2026-11-24T06:12:06.077Z",
       "engines": {},
       "stableByMajor": {
         "0": "0.577.0",
-        "1": "1.78.0"
+        "1": "1.79.0"
       },
       "matureByMajor": {
         "0": "0.577.0",
-        "1": "1.77.0"
+        "1": "1.78.0"
       },
       "source": "https://registry.npmjs.org/lucide-react"
     },
@@ -6439,9 +6439,9 @@
       "source": "https://registry.npmjs.org/magic-string"
     },
     "marked": {
-      "latest": "18.2.1",
-      "latestTag": "18.2.1",
-      "published": "2026-11-16T17:22:22.604Z",
+      "latest": "18.3.0",
+      "latestTag": "18.3.0",
+      "published": "2026-11-24T02:52:39.598Z",
       "engines": {
         "node": ">= 20"
       },
@@ -6464,7 +6464,7 @@
         "15": "15.0.12",
         "16": "16.4.2",
         "17": "17.0.6",
-        "18": "18.2.1"
+        "18": "18.3.0"
       },
       "matureByMajor": {
         "0": "0.8.2",
@@ -6750,7 +6750,7 @@
     },
     "pnpm": {
       "latest": "12.23.0",
-      "latestTag": "12.21.0",
+      "latestTag": "12.23.0",
       "published": "2026-11-22T13:21:28.438Z",
       "engines": {
         "node": ">=18"
@@ -6776,8 +6776,8 @@
         "8": "8.15.9",
         "9": "9.15.9",
         "10": "10.34.9",
-        "11": "11.28.13",
-        "12": "12.22.0"
+        "11": "11.29.0",
+        "12": "12.23.0"
       },
       "source": "https://registry.npmjs.org/pnpm"
     },
@@ -7365,15 +7365,15 @@
       "source": "https://registry.npmjs.org/tapable"
     },
     "tar-stream": {
-      "latest": "3.2.2",
-      "latestTag": "3.2.2",
-      "published": "2026-10-02T16:33:13.226Z",
+      "latest": "3.3.0",
+      "latestTag": "3.3.0",
+      "published": "2026-11-23T12:23:54.451Z",
       "engines": {},
       "stableByMajor": {
         "0": "0.4.7",
         "1": "1.6.2",
         "2": "2.2.0",
-        "3": "3.2.2"
+        "3": "3.3.0"
       },
       "matureByMajor": {
         "0": "0.4.7",
@@ -7410,9 +7410,9 @@
       "source": "https://registry.npmjs.org/text-decoder"
     },
     "tinybench": {
-      "latest": "6.2.4",
-      "latestTag": "6.2.4",
-      "published": "2026-11-18T21:07:46.757Z",
+      "latest": "6.2.5",
+      "latestTag": "6.2.5",
+      "published": "2026-11-23T13:53:22.117Z",
       "engines": {
         "node": ">=20.0.0"
       },
@@ -7422,7 +7422,7 @@
         "3": "3.1.1",
         "4": "4.1.0",
         "5": "5.1.0",
-        "6": "6.2.4"
+        "6": "6.2.5"
       },
       "matureByMajor": {
         "1": "1.0.2",
@@ -7835,7 +7835,7 @@
     "selectedLine": "3.11.18",
     "source": "https://www.python.org/downloads/"
   },
-  "sourceCommit": "79e8313e74e835a3d8f045ead8a1fae248daa030",
+  "sourceCommit": "7e75d1358fe392f50fdaa65db777e1bdd85428b7",
   "auditNode": "v26.13.1",
-  "sourceDirty": false
+  "sourceDirty": true
 }
