@@ -32,7 +32,8 @@ describe("SyntaxComparison — reviewed competitive surface", () => {
       expect(derariCode?.textContent).toContain(heading);
     }
 
-    expect(pageText).toContain(`reviewed ${sourceBaseline.reviewedAt}`);
+    expect(pageText).toContain(`automated source check ${sourceBaseline.reviewedAt}`);
+    expect(pageText).toContain(`automated source recheck on ${sourceBaseline.reviewedAt}`);
     expect(container.querySelector('a[href="https://github.com/mermaid-js/mermaid/issues/8160"]')).not.toBeNull();
     expect(pageText).toContain("does not establish maintainer endorsement");
     expect(pageText).toContain("checked 2026-08-21");
