@@ -1,4 +1,5 @@
 import { ExternalLink } from "lucide-react";
+import sourceBaseline from "../../../docs/dfki-7699-source-baseline.json";
 
 // ── Syntax examples ──────────────────────────────────────────────────────────
 
@@ -28,7 +29,7 @@ t4 ==> e2`;
 
 // Verbatim from Andreas Emrich's 2026-05-24 comment on mermaid-js/mermaid#7699.
 // This is the author's later proposed simple/default layer, shown exactly as published.
-// Reviewed against the primary issue on 2026-10-06; nothing added or paraphrased.
+// Rechecked against the primary issue on the baseline date; nothing added or paraphrased.
 const DFKI_7699 = `bpmn
   start --> review[Review Request] --> approved{Approved?}
   approved -- Yes --> accepted[Approved]
@@ -141,7 +142,7 @@ const SYNTAXES = [
         "Separate community work includes @derari's prototype and @filipsajdak's draft BPMN PR series",
         "The tiered syntax and its normalization rules are still proposed, not specified",
         "The original detailed form remains attribute-heavy for advanced elements",
-        "Issue is open and marked Status: Approved (reviewed 2026-10-06)",
+        `Issue is open and marked Status: Approved; automated source check ${sourceBaseline.reviewedAt}`,
     ],
   },
   {
@@ -545,8 +546,9 @@ export default function SyntaxComparison() {
               — the later 2026-05-24 author update by Andreas Emrich. It is reproduced exactly, with
               nothing added, combined, or paraphrased. The issue also includes earlier detailed and
               pool examples. The cited Emrich &amp; Hollax 2025 paper remains described there as in
-              preparation. The source check records what the issue says, but cannot prove that the paper
-              has no DOI or preprint; reviewed 2026-10-06.
+              preparation. The automated source recheck on {sourceBaseline.reviewedAt} found no newer
+              DOI or preprint link in the issue material reviewed. Publication status remains
+              unverified; the check cannot prove that no DOI or preprint exists.
             </p>
             <p className="mt-2 text-xs text-muted-foreground leading-relaxed">
               A separate contributor, @filipsajdak, linked a native BPMN PR series on September 10.

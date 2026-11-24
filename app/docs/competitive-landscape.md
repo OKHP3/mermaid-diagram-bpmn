@@ -9,7 +9,7 @@
 
 - **No released tool today lets you author BPMN-semantic diagrams in a readable, Mermaid-native text DSL without either BPMN XML or a heavyweight bpmn-js/modeler runtime.** That is the genuine, defensible whitespace bpmn-beta occupies — but the competing DFKI proposal (Mermaid issue #7699, filed 2026-05-02 by Andreas Emrich) targets the same gap with an evolving tiered syntax, so positioning must be sharp on working evidence and clarity, not just on "BPMN in Mermaid."
 - **Market-size claims in the source document need correction.** There is no credible "$300 billion BPM industry" figure: the BPM *software* market is roughly USD 21.51B in 2025 per Fortune Business Insights (growing at 17.2% CAGR to USD 91.87B by 2034), while the much larger Business Process *Outsourcing* (BPO) market is ~USD 300–415B in 2025. These are entirely different markets and the source document conflates them. BPMN being "the de facto standard for process modeling" is well-supported in the literature; that one stands.
-- **The realistic path is the external plugin first, with patient upstream advocacy second.** Mermaid Chart (the commercial entity behind core Mermaid) has raised USD 7.5M and is targeting ServiceNow-class workflow automation as its long-term vision — BPMN is strategically adjacent to that vision, which is a tailwind. But the parallel DFKI proposal #7699 already has the maintainers' attention (with a forthcoming academic paper as backing), so a community contributor proposing bpmn-beta must differentiate on syntax quality, working prototype evidence, and LLM-friendliness rather than novelty alone.
+- **The realistic path is the external plugin first, with patient upstream advocacy second.** Mermaid Chart (the commercial entity behind core Mermaid) has raised USD 7.5M and is targeting ServiceNow-class workflow automation as its long-term vision — BPMN is strategically adjacent to that vision, which is a tailwind. But the parallel DFKI proposal #7699 already has the maintainers' attention. Its issue describes a scientific reference paper as being prepared; the current issue and project references reviewed here provide no linked DOI or preprint, and publication status remains unverified. A community contributor proposing bpmn-beta must differentiate on syntax quality, working prototype evidence, and LLM-friendliness rather than novelty alone.
 
 ---
 
@@ -73,7 +73,7 @@ Key facts about the proposal:
 
 **Honest comparative read:** The original detailed form is close to an attribute dictionary (`type:event,subtype:none,behaviour:start,label:,lane:,pool:`), but the later simple/default layer is intentionally Mermaid-like. The DFKI author does not yet publish a grammar, normalization rules, or a public implementation, so that proposed syntax should not be treated as settled. bpmn-beta's differentiation must rest on a working, documented implementation and clear scope rather than on claiming that the competing proposal is inherently verbose.
 
-**Source review, 2026-10-06:** The issue remains open with the same labels and
+**Source review, 2026-10-06 (historical):** The issue remained open with the same labels and
 the same two author-authored examples. Its latest timestamp reflects
 [OKHP3's 2026-09-28 BP-SKILL comment](https://github.com/mermaid-js/mermaid/issues/7699#issuecomment-5876479011),
 which discusses portable process-capture methods and asks for a core-versus-external
@@ -94,6 +94,18 @@ extend that compatibility claim. The older dated observations below remain
 historical; they do not describe the current number of competing implementations.
 The public comparison now links this series. The DFKI author's examples remain
 unchanged, and this review does not establish a DOI or preprint for the cited paper.
+
+**Automated source recheck, 2026-11-24:** The live issue remains open and has
+eight comments. The issue body and all comments were compared with the preceding
+review; the two author-authored fenced examples retain the same fingerprint.
+The tracked update is `2026-11-17T21:39:53Z`, and the only label difference
+from the 2026-10-06 baseline is the addition of `Triage: AI Classified`.
+This is metadata drift, not a new proposal, author example, or maintainer
+decision. The issue still describes the paper as being prepared. No newer DOI
+or preprint link was found in the changed issue material or the repository's
+project references; publication status remains unverified. This was an
+automated source comparison, not a human review or confirmation that no
+publication exists.
 
 ### 1.4 Implications for bpmn-beta
 
