@@ -50,7 +50,14 @@ test.describe('Syntax comparison public evidence', () => {
 
     await expect(
       page.getByText('DFKI #7699 example source', { exact: true }).locator('..'),
-    ).toContainText(`reviewed ${sourceBaseline.reviewedAt}`);
+    ).toContainText(
+      `The automated source recheck on ${sourceBaseline.reviewedAt} found no newer DOI or preprint link in the issue material reviewed.`,
+    );
+    await expect(
+      page.getByText('DFKI #7699 example source', { exact: true }).locator('..'),
+    ).toContainText(
+      'Publication status remains unverified; the check cannot prove that no DOI or preprint exists.',
+    );
     await expect(page.getByRole('link', { name: 'Mermaid issue #8160' }))
       .toHaveAttribute('href', 'https://github.com/mermaid-js/mermaid/issues/8160');
     await expect(
