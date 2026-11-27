@@ -19,11 +19,11 @@ catalogs:
       specifier: 4.3.5
       version: 4.3.5
     '@types/node':
-      specifier: 26.6.10
-      version: 26.6.10
+      specifier: 26.6.11
+      version: 26.6.11
     '@types/react':
-      specifier: 19.3.2
-      version: 19.3.2
+      specifier: 19.3.3
+      version: 19.3.3
     '@types/react-dom':
       specifier: 19.3.0
       version: 19.3.0
@@ -37,8 +37,8 @@ catalogs:
       specifier: 0.8.3
       version: 0.8.3
     lucide-react:
-      specifier: 1.80.0
-      version: 1.80.0
+      specifier: 1.81.0
+      version: 1.81.0
     react:
       specifier: 19.3.1
       version: 19.3.1
@@ -172,25 +172,25 @@ importers:
         version: 0.5.20(tailwindcss@4.3.5)
       '@tailwindcss/vite':
         specifier: 'catalog:'
-        version: 4.3.5(vite@8.3.8(@types/node@26.6.10)(esbuild@0.28.1)(jiti@2.7.0)(tsx@4.23.15))
+        version: 4.3.5(vite@8.3.8(@types/node@26.6.11)(esbuild@0.28.1)(jiti@2.7.0)(tsx@4.23.15))
       '@testing-library/dom':
         specifier: 10.4.2
         version: 10.4.2
       '@testing-library/react':
         specifier: 16.3.3
-        version: 16.3.3(@testing-library/dom@10.4.2)(@types/react-dom@19.3.0(@types/react@19.3.2))(@types/react@19.3.2)(react-dom@19.3.1(react@19.3.1))(react@19.3.1)
+        version: 16.3.3(@testing-library/dom@10.4.2)(@types/react-dom@19.3.0(@types/react@19.3.3))(@types/react@19.3.3)(react-dom@19.3.1(react@19.3.1))(react@19.3.1)
       '@types/node':
         specifier: 'catalog:'
-        version: 26.6.10
+        version: 26.6.11
       '@types/react':
         specifier: 'catalog:'
-        version: 19.3.2
+        version: 19.3.3
       '@types/react-dom':
         specifier: 'catalog:'
-        version: 19.3.0(@types/react@19.3.2)
+        version: 19.3.0(@types/react@19.3.3)
       '@vitejs/plugin-react':
         specifier: 'catalog:'
-        version: 6.3.0(vite@8.3.8(@types/node@26.6.10)(esbuild@0.28.1)(jiti@2.7.0)(tsx@4.23.15))
+        version: 6.3.0(vite@8.3.8(@types/node@26.6.11)(esbuild@0.28.1)(jiti@2.7.0)(tsx@4.23.15))
       axe-core:
         specifier: 4.14.1
         version: 4.14.1
@@ -205,7 +205,7 @@ importers:
         version: 21.0.4
       lucide-react:
         specifier: 'catalog:'
-        version: 1.80.0(@types/react@19.3.2)(react@19.3.1)
+        version: 1.81.0(@types/react@19.3.3)(react@19.3.1)
       mermaid:
         specifier: 12.3.0
         version: 12.3.0
@@ -226,10 +226,10 @@ importers:
         version: 1.4.0
       vite:
         specifier: 'catalog:'
-        version: 8.3.8(@types/node@26.6.10)(esbuild@0.28.1)(jiti@2.7.0)(tsx@4.23.15)
+        version: 8.3.8(@types/node@26.6.11)(esbuild@0.28.1)(jiti@2.7.0)(tsx@4.23.15)
       vitest:
-        specifier: 5.1.1
-        version: 5.1.1(@types/node@26.6.10)(happy-dom@21.0.4)(vite@8.3.8(@types/node@26.6.10)(esbuild@0.28.1)(jiti@2.7.0)(tsx@4.23.15))
+        specifier: 5.1.2
+        version: 5.1.2(@types/node@26.6.11)(happy-dom@21.0.4)(vite@8.3.8(@types/node@26.6.11)(esbuild@0.28.1)(jiti@2.7.0)(tsx@4.23.15))
       wouter:
         specifier: 3.13.0
         version: 3.13.0(react@19.3.1)
@@ -238,10 +238,10 @@ importers:
     devDependencies:
       '@types/node':
         specifier: 'catalog:'
-        version: 26.6.10
+        version: 26.6.11
       vite:
         specifier: 'catalog:'
-        version: 8.3.8(@types/node@26.6.10)(esbuild@0.28.1)(jiti@2.7.0)(tsx@4.23.15)
+        version: 8.3.8(@types/node@26.6.11)(esbuild@0.28.1)(jiti@2.7.0)(tsx@4.23.15)
 
   scripts:
     dependencies:
@@ -251,7 +251,7 @@ importers:
     devDependencies:
       '@types/node':
         specifier: 'catalog:'
-        version: 26.6.10
+        version: 26.6.11
       tsx:
         specifier: 'catalog:'
         version: 4.23.15
@@ -669,16 +669,16 @@ packages:
   '@types/geojson@7946.0.16':
     resolution: {integrity: sha512-6C8nqWur3j98U6+lXDfTUWIfgvZU+EumvpHKcYjujKH7woYyLj2sUmff0tRhrqM7BohUw7Pz3ZB1jj2gW9Fvmg==}
 
-  '@types/node@26.6.10':
-    resolution: {integrity: sha512-WJuPHoGB8WNQuTksNF7SOQpnH02PXeDYz4iueWbBT6/hTWnShY5F3T/hoJA3fY9+uYReDZ7pyTKKx83jQa7aGg==}
+  '@types/node@26.6.11':
+    resolution: {integrity: sha512-uUyQ2XLEz+EXh34lmS3GhKrkqn/8FU7KUiKRpk347At2bmnMVWss45yz8b4FG/tUtmV1tV/+TVkITItPROyeeQ==}
 
   '@types/react-dom@19.3.0':
     resolution: {integrity: sha512-ZI7bU42mZXXKHn/qNLEw2IrbiINU7X5+vfgdixBHkCNpYWXjKgfQ/P+uyGb5CjOLB9UcnTeg3rylQtV2hym44Q==}
     peerDependencies:
       '@types/react': ^19.3.0
 
-  '@types/react@19.3.2':
-    resolution: {integrity: sha512-0QJbb58RxWJL3VAa5tvk7QhJamz0S+MpFL2xDuF/+THRR+kldyhPjRZ1iwvK45AEHZ1BVGS3otPsl7QlNVRizQ==}
+  '@types/react@19.3.3':
+    resolution: {integrity: sha512-K8uWpJc4teiuOPdiP1umjeA9rGMgVPiXuoL66fcS1QlwBT1WMqY8PORmub9FadopIs+RCW6siYEs7Lpq+vDlog==}
 
   '@types/trusted-types@2.0.7':
     resolution: {integrity: sha512-ScaPdn1dQczgbl0QFTeTOmVHFULt394XJgOQNoyVhZ6r2vLnMLJfBPd53SB52T/3G36VI1/g2MZaX0cwDuXsfw==}
@@ -828,8 +828,8 @@ packages:
       oxc-transform-react:
         optional: true
 
-  '@vitest/mocker@5.1.1':
-    resolution: {integrity: sha512-b2OgTB4+3ImWIVafXKazJXwLKwQxUNnix6b3xUvUTMh7RyXlrtzoxfZr8aEz9zkHOMAS4K5lu3TvFWoiVeVTQg==}
+  '@vitest/mocker@5.1.2':
+    resolution: {integrity: sha512-UGc97wUIy0Ji2+9GxzHEJiOhiwkaukgE7VYcUNnjpX3sWnwQ8XogmNXX4WyOukxYgKb8Nh2XFa7KId0ZjpmVhQ==}
     peerDependencies:
       msw: ^2.4.9 || ^3.0.0
       vite: ^6.0.0 || ^7.0.0 || ^8.0.0
@@ -839,8 +839,8 @@ packages:
       vite:
         optional: true
 
-  '@vitest/spy@5.1.1':
-    resolution: {integrity: sha512-6K8C6alQG1/Yc8/ZI22iJS7JEsxPdVzqtqDq+/xM4Z0mGVykemMVjLhqMy/q6/IHYG3kKD8hKSwRen/ZdyI9vQ==}
+  '@vitest/spy@5.1.2':
+    resolution: {integrity: sha512-PQl0/3+p9GaY71+MHywN6oyHfLhVDD5kcbm7oNRldA2F0ExMU3S8RQdnpteJ9gFAdK5P6KCgE6LqCpUgy57KzA==}
 
   abort-controller@3.0.0:
     resolution: {integrity: sha512-h8lQ8tacZYnR3vNQTgibj+tODHI5/+l06Au2Pcriv/Gmet0eaj4TwWH41sO9wnHDiQsEj19q0drzdWdeAHtweg==}
@@ -1336,8 +1336,8 @@ packages:
   lodash-es@4.18.1:
     resolution: {integrity: sha512-J8xewKD/Gk22OZbhpOVSwcs60zhd95ESDwezOFuA3/099925PdHJ7OFHNTGtajL3AlZkykD32HykiMo+BIBI8A==}
 
-  lucide-react@1.80.0:
-    resolution: {integrity: sha512-f9cQkUMFp2ZrOek9FucpRqQVI67gT09clXcHs3yCvdhJnsK4RW4og/rqoC0YAHd6FV/GPkeiIR3Rdxr2pPRwHA==}
+  lucide-react@1.81.0:
+    resolution: {integrity: sha512-U+CisvFQ84m+xUJAKKA4q+mykGB1LAmu196hOblQbuNYJgD43iHwpmfYuqcFYHXJu2oqRih5JoH3f5LxwsUegg==}
     peerDependencies:
       '@types/react': '*'
       react: ^16.5.1 || ^17.0.0 || ^18.0.0 || ^19.0.0
@@ -1617,20 +1617,20 @@ packages:
       yaml:
         optional: true
 
-  vitest@5.1.1:
-    resolution: {integrity: sha512-trVmzUFOSraCZcI3uZIMD5FqBh4atFkC/XuJP/IU7qtyQay0FCs3Ia+0QiQ2JJwGyWG/xrcBoJNel2+O7kEZ0g==}
+  vitest@5.1.2:
+    resolution: {integrity: sha512-VIa2wXV208WraXUbzH+dQUrGcFpPuaiRA8HlhXS8R6/sy9cynw6OMqGj8fmAlH1hot7huTCtWUE14+FdXU3eLw==}
     engines: {node: ^22.12.0 || ^24.0.0 || >=26.0.0}
     hasBin: true
     peerDependencies:
       '@edge-runtime/vm': '*'
       '@opentelemetry/api': ^1.9.0
       '@types/node': ^22.0.0 || >=24.0.0
-      '@vitest/browser-playwright': 5.1.1
-      '@vitest/browser-preview': 5.1.1
+      '@vitest/browser-playwright': 5.1.2
+      '@vitest/browser-preview': 5.1.2
       '@vitest/browser-webdriverio': ^5.0.0-beta.5 || >=5.0.0
-      '@vitest/coverage-istanbul': 5.1.1
-      '@vitest/coverage-v8': 5.1.1
-      '@vitest/ui': 5.1.1
+      '@vitest/coverage-istanbul': 5.1.2
+      '@vitest/coverage-v8': 5.1.2
+      '@vitest/ui': 5.1.2
       happy-dom: '*'
       jsdom: '*'
       vite: ^6.4.0 || ^7.0.0 || ^8.0.0
@@ -1913,12 +1913,12 @@ snapshots:
       postcss-selector-parser: 6.0.10
       tailwindcss: 4.3.5
 
-  '@tailwindcss/vite@4.3.5(vite@8.3.8(@types/node@26.6.10)(esbuild@0.28.1)(jiti@2.7.0)(tsx@4.23.15))':
+  '@tailwindcss/vite@4.3.5(vite@8.3.8(@types/node@26.6.11)(esbuild@0.28.1)(jiti@2.7.0)(tsx@4.23.15))':
     dependencies:
       '@tailwindcss/node': 4.3.5
       '@tailwindcss/oxide': 4.3.5
       tailwindcss: 4.3.5
-      vite: 8.3.8(@types/node@26.6.10)(esbuild@0.28.1)(jiti@2.7.0)(tsx@4.23.15)
+      vite: 8.3.8(@types/node@26.6.11)(esbuild@0.28.1)(jiti@2.7.0)(tsx@4.23.15)
 
   '@testing-library/dom@10.4.2':
     dependencies:
@@ -1931,15 +1931,15 @@ snapshots:
       picocolors: 1.1.1
       pretty-format: 27.5.1
 
-  '@testing-library/react@16.3.3(@testing-library/dom@10.4.2)(@types/react-dom@19.3.0(@types/react@19.3.2))(@types/react@19.3.2)(react-dom@19.3.1(react@19.3.1))(react@19.3.1)':
+  '@testing-library/react@16.3.3(@testing-library/dom@10.4.2)(@types/react-dom@19.3.0(@types/react@19.3.3))(@types/react@19.3.3)(react-dom@19.3.1(react@19.3.1))(react@19.3.1)':
     dependencies:
       '@babel/runtime': 7.29.7
       '@testing-library/dom': 10.4.2
       react: 19.3.1
       react-dom: 19.3.1(react@19.3.1)
     optionalDependencies:
-      '@types/react': 19.3.2
-      '@types/react-dom': 19.3.0(@types/react@19.3.2)
+      '@types/react': 19.3.3
+      '@types/react-dom': 19.3.0(@types/react@19.3.3)
 
   '@types/aria-query@5.0.4': {}
 
@@ -2071,15 +2071,15 @@ snapshots:
 
   '@types/geojson@7946.0.16': {}
 
-  '@types/node@26.6.10':
+  '@types/node@26.6.11':
     dependencies:
       undici-types: 8.9.0
 
-  '@types/react-dom@19.3.0(@types/react@19.3.2)':
+  '@types/react-dom@19.3.0(@types/react@19.3.3)':
     dependencies:
-      '@types/react': 19.3.2
+      '@types/react': 19.3.3
 
-  '@types/react@19.3.2':
+  '@types/react@19.3.3':
     dependencies:
       csstype: 3.2.3
 
@@ -2090,7 +2090,7 @@ snapshots:
 
   '@types/ws@8.18.1':
     dependencies:
-      '@types/node': 26.6.10
+      '@types/node': 26.6.11
 
   '@typescript/typescript-aix-ppc64@7.0.2':
     optional: true
@@ -2157,21 +2157,21 @@ snapshots:
       d3-selection: 3.0.0
       d3-transition: 3.0.1(d3-selection@3.0.0)
 
-  '@vitejs/plugin-react@6.3.0(vite@8.3.8(@types/node@26.6.10)(esbuild@0.28.1)(jiti@2.7.0)(tsx@4.23.15))':
+  '@vitejs/plugin-react@6.3.0(vite@8.3.8(@types/node@26.6.11)(esbuild@0.28.1)(jiti@2.7.0)(tsx@4.23.15))':
     dependencies:
       '@rolldown/pluginutils': 1.0.1
-      vite: 8.3.8(@types/node@26.6.10)(esbuild@0.28.1)(jiti@2.7.0)(tsx@4.23.15)
+      vite: 8.3.8(@types/node@26.6.11)(esbuild@0.28.1)(jiti@2.7.0)(tsx@4.23.15)
 
-  '@vitest/mocker@5.1.1(vite@8.3.8(@types/node@26.6.10)(esbuild@0.28.1)(jiti@2.7.0)(tsx@4.23.15))':
+  '@vitest/mocker@5.1.2(vite@8.3.8(@types/node@26.6.11)(esbuild@0.28.1)(jiti@2.7.0)(tsx@4.23.15))':
     dependencies:
       '@jridgewell/trace-mapping': 0.3.31
-      '@vitest/spy': 5.1.1
+      '@vitest/spy': 5.1.2
       estree-walker: 3.0.3
       magic-string: 1.4.5
     optionalDependencies:
-      vite: 8.3.8(@types/node@26.6.10)(esbuild@0.28.1)(jiti@2.7.0)(tsx@4.23.15)
+      vite: 8.3.8(@types/node@26.6.11)(esbuild@0.28.1)(jiti@2.7.0)(tsx@4.23.15)
 
-  '@vitest/spy@5.1.1': {}
+  '@vitest/spy@5.1.2': {}
 
   abort-controller@3.0.0:
     dependencies:
@@ -2253,7 +2253,7 @@ snapshots:
 
   buffer-image-size@0.6.4:
     dependencies:
-      '@types/node': 26.6.10
+      '@types/node': 26.6.11
 
   buffer@6.0.3:
     dependencies:
@@ -2562,7 +2562,7 @@ snapshots:
 
   happy-dom@21.0.4:
     dependencies:
-      '@types/node': 26.6.10
+      '@types/node': 26.6.11
       '@types/whatwg-mimetype': 3.0.2
       '@types/ws': 8.18.1
       buffer-image-size: 0.6.4
@@ -2634,11 +2634,11 @@ snapshots:
 
   lodash-es@4.18.1: {}
 
-  lucide-react@1.80.0(@types/react@19.3.2)(react@19.3.1):
+  lucide-react@1.81.0(@types/react@19.3.3)(react@19.3.1):
     dependencies:
       react: 19.3.1
     optionalDependencies:
-      '@types/react': 19.3.2
+      '@types/react': 19.3.3
 
   lz-string@1.5.0: {}
 
@@ -2915,7 +2915,7 @@ snapshots:
 
   util-deprecate@1.0.2: {}
 
-  vite@8.3.8(@types/node@26.6.10)(esbuild@0.28.1)(jiti@2.7.0)(tsx@4.23.15):
+  vite@8.3.8(@types/node@26.6.11)(esbuild@0.28.1)(jiti@2.7.0)(tsx@4.23.15):
     dependencies:
       lightningcss: 1.33.0
       picomatch: 4.0.7
@@ -2923,16 +2923,16 @@ snapshots:
       rolldown: 1.2.18
       tinyglobby: 0.2.17
     optionalDependencies:
-      '@types/node': 26.6.10
+      '@types/node': 26.6.11
       esbuild: 0.28.1
       fsevents: 2.3.3
       jiti: 2.7.0
       tsx: 4.23.15
 
-  vitest@5.1.1(@types/node@26.6.10)(happy-dom@21.0.4)(vite@8.3.8(@types/node@26.6.10)(esbuild@0.28.1)(jiti@2.7.0)(tsx@4.23.15)):
+  vitest@5.1.2(@types/node@26.6.11)(happy-dom@21.0.4)(vite@8.3.8(@types/node@26.6.11)(esbuild@0.28.1)(jiti@2.7.0)(tsx@4.23.15)):
     dependencies:
       '@types/chai': 5.2.3
-      '@vitest/mocker': 5.1.1(vite@8.3.8(@types/node@26.6.10)(esbuild@0.28.1)(jiti@2.7.0)(tsx@4.23.15))
+      '@vitest/mocker': 5.1.2(vite@8.3.8(@types/node@26.6.11)(esbuild@0.28.1)(jiti@2.7.0)(tsx@4.23.15))
       chai: 6.3.0
       es-module-lexer: 2.3.2
       expect-type: 1.4.0
@@ -2943,10 +2943,10 @@ snapshots:
       tinybench: 6.2.3
       tinyexec: 1.3.1
       tinyglobby: 0.2.17
-      vite: 8.3.8(@types/node@26.6.10)(esbuild@0.28.1)(jiti@2.7.0)(tsx@4.23.15)
+      vite: 8.3.8(@types/node@26.6.11)(esbuild@0.28.1)(jiti@2.7.0)(tsx@4.23.15)
       why-is-node-running: 3.2.1
     optionalDependencies:
-      '@types/node': 26.6.10
+      '@types/node': 26.6.11
       happy-dom: 21.0.4
     transitivePeerDependencies:
       - msw
